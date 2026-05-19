@@ -35,6 +35,8 @@ describe('paid wizard preview copy contract', () => {
     expect(section13Flow).toContain('Review & pack choice');
     expect(section13Flow).toContain('Continue to document preview');
     expect(section13Flow).toContain('Download and manage outputs');
+    expect(section13Flow).toContain('Save and come back later');
+    expect(section13Flow).not.toContain('Email a recovery link');
     expect(section13Flow).not.toContain('Generate and manage outputs');
   });
 });

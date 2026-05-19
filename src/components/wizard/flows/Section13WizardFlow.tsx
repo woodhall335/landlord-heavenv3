@@ -465,9 +465,6 @@ export function Section13WizardFlow({
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [orderStatus, setOrderStatus] = useState<Section13OrderStatus | null>(null);
-  const [recoveryEmail, setRecoveryEmail] = useState('');
-  const [recoverySending, setRecoverySending] = useState(false);
-  const [recoveryMessage, setRecoveryMessage] = useState<string | null>(null);
   const [evidenceFiles, setEvidenceFiles] = useState<File[]>([]);
   const [evidenceUploads, setEvidenceUploads] = useState<Section13EvidenceUpload[]>([]);
   const [evidenceUploading, setEvidenceUploading] = useState(false);
@@ -654,13 +651,6 @@ export function Section13WizardFlow({
     };
   }, []);
 
-  useEffect(() => {
-    if (recoveryEmail.trim()) return;
-    if (effectiveState.landlord.landlordEmail?.trim()) {
-      setRecoveryEmail(effectiveState.landlord.landlordEmail.trim());
-    }
-  }, [effectiveState.landlord.landlordEmail, recoveryEmail]);
-
   async function continueToSharedCheckoutPreview() {
     setCheckoutLoading(true);
     setCheckoutError(null);
@@ -749,48 +739,6 @@ export function Section13WizardFlow({
 
     throw new Error('Could not load Section 13 support status');
   }, [caseId]);
-
-  async function handleSendRecoveryLink() {
-    const email = recoveryEmail.trim();
-    if (!email) {
-      setRecoveryMessage('Enter an email address before requesting a recovery link.');
-      return;
-    }
-
-    setRecoverySending(true);
-    setRecoveryMessage(null);
-
-    try {
-      await persistDraft({ awaitingPayment: true });
-
-      const response = await fetch('/api/section13/send-recovery-link', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...getSessionTokenHeaders(),
-        },
-        body: JSON.stringify({
-          caseId,
-          email,
-        }),
-      });
-
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok) {
-        throw new Error(data.error || 'Recovery link could not be sent');
-      }
-
-      setRecoveryMessage(
-        data.emailSent
-          ? 'Recovery link sent. The link is valid for 7 days.'
-          : data.warning || 'We saved your draft, but the recovery email could not be sent.'
-      );
-    } catch (error: any) {
-      setRecoveryMessage(error?.message || 'Recovery link could not be sent');
-    } finally {
-      setRecoverySending(false);
-    }
-  }
 
   async function handleEvidenceUpload() {
     if (evidenceFiles.length === 0) {
@@ -2565,38 +2513,6 @@ export function Section13WizardFlow({
                   Save and come back later
                 </button>
               </div>
-            </div>
-
-            <div className="rounded-2xl border border-gray-200 p-4">
-              <p className="text-sm font-semibold text-gray-950">Email a recovery link</p>
-              <p className="mt-2 text-sm text-gray-700">
-                Save this draft outside the current browser. We will email a one-time recovery link valid for 7 days.
-              </p>
-              <div className="mt-4 grid gap-3 md:grid-cols-[1fr_auto]">
-                {renderTextInput('Email address', recoveryEmail, setRecoveryEmail, {
-                  type: 'email',
-                  placeholder: 'name@example.com',
-                })}
-                <div className="flex items-end">
-                  <Button
-                    variant="secondary"
-                    onClick={() => void handleSendRecoveryLink()}
-                    disabled={recoverySending || !recoveryEmail.trim()}
-                  >
-                    {recoverySending ? (
-                      <>
-                        <RiLoader4Line className="mr-2 h-4 w-4 animate-spin" />
-                        Sending link
-                      </>
-                    ) : (
-                      <>Email recovery link</>
-                    )}
-                  </Button>
-                </div>
-              </div>
-              {recoveryMessage ? (
-                <p className="mt-3 text-sm text-violet-900">{recoveryMessage}</p>
-              ) : null}
             </div>
           </div>
         );

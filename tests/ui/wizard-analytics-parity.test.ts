@@ -40,4 +40,20 @@ describe('wizard analytics parity', () => {
     expect(tenancySource).toContain("product: product || 'tenancy_agreement'");
     expect(tenancySource).toContain('markStepCompleted(current.id');
   });
+
+  it('tracks checkout starts when resuming a pending checkout session', () => {
+    const sharedPreviewSource = readSource('src/app/(app)/wizard/preview/[caseId]/page.tsx');
+    const legacyPreviewSource = readSource('src/components/preview/PreviewPageLayout.tsx');
+
+    for (const source of [sharedPreviewSource, legacyPreviewSource]) {
+      const pendingBranch = source.slice(
+        source.indexOf("if (data.status === 'pending')"),
+        source.indexOf('// New checkout session')
+      );
+
+      expect(pendingBranch).toContain('trackBeginCheckout(product, productName, priceValue, caseId)');
+      expect(pendingBranch).toContain('trackCheckoutStarted({ product, caseId })');
+      expect(pendingBranch).toContain('window.location.href = data.checkout_url');
+    }
+  });
 });

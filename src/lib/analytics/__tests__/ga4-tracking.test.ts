@@ -23,6 +23,7 @@ describe('GA4 analytics dispatch', () => {
     delete (window as any).gtag;
     delete (window as any).fbq;
     window.sessionStorage.clear();
+    vi.useRealTimers();
   });
 
   it('suppresses duplicate page-scoped view events with the same dedupe key', async () => {
@@ -150,6 +151,38 @@ describe('GA4 analytics dispatch', () => {
         case_id: 'case-review-1',
         source: 'product_page',
         topic: 'eviction',
+      })
+    );
+  });
+
+  it('retries wizard events when GA loads after the wizard page mounts', async () => {
+    vi.useFakeTimers();
+    delete (window as any).gtag;
+    delete (window as any).fbq;
+
+    const { trackWizardStartWithAttribution } = await import('../../analytics');
+
+    trackWizardStartWithAttribution({
+      product: 'section13_standard',
+      jurisdiction: 'england',
+      src: 'product_page',
+      topic: 'general',
+      flowSessionId: 'flow-session-1',
+    });
+
+    expect(gtag).not.toHaveBeenCalled();
+
+    (window as any).gtag = gtag;
+    await vi.advanceTimersByTimeAsync(500);
+
+    expect(gtag).toHaveBeenCalledWith(
+      'event',
+      'wizard_start',
+      expect.objectContaining({
+        product: 'section13_standard',
+        jurisdiction: 'england',
+        source: 'product_page',
+        topic: 'general',
       })
     );
   });

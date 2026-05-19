@@ -37,6 +37,9 @@ import {
 import { normalizeWizardStep } from './analytics/wizard-step-taxonomy';
 import { getWizardAttribution } from './wizard/wizardAttribution';
 
+const ANALYTICS_RETRY_DELAY_MS = 500;
+const ANALYTICS_MAX_RETRY_ATTEMPTS = 60;
+
 /**
  * Track a custom event in both Google Analytics and Facebook Pixel
  */
@@ -45,7 +48,19 @@ export function trackEvent(
   eventParams?: Record<string, any>,
   dispatchOptions?: AnalyticsDispatchOptions
 ): void {
-  if (isMarketingGrowthEventName(eventName)) {
+  trackEventInternal(eventName, eventParams, dispatchOptions, {
+    retryAttempt: 0,
+    recordGrowthEvent: true,
+  });
+}
+
+function trackEventInternal(
+  eventName: string,
+  eventParams: Record<string, any> | undefined,
+  dispatchOptions: AnalyticsDispatchOptions | undefined,
+  options: { retryAttempt: number; recordGrowthEvent: boolean }
+): void {
+  if (options.recordGrowthEvent && isMarketingGrowthEventName(eventName)) {
     recordMarketingGrowthEvent(eventName, eventParams as MarketingGrowthEventPayload);
   }
 
@@ -55,6 +70,17 @@ export function trackEvent(
     typeof window !== 'undefined' && typeof window.fbq === 'function';
 
   if (!hasGoogleTracking && !hasFacebookTracking) {
+    if (
+      typeof window !== 'undefined' &&
+      options.retryAttempt < ANALYTICS_MAX_RETRY_ATTEMPTS
+    ) {
+      window.setTimeout(() => {
+        trackEventInternal(eventName, eventParams, dispatchOptions, {
+          retryAttempt: options.retryAttempt + 1,
+          recordGrowthEvent: false,
+        });
+      }, ANALYTICS_RETRY_DELAY_MS);
+    }
     return;
   }
 

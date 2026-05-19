@@ -596,12 +596,46 @@ function getForm4AOverlayMap(rulesVersion: string): Section13FormOverlayMap {
   );
 }
 
+function splitLongWord(word: string, font: PDFFont, fontSize: number, maxWidth: number): string[] {
+  if (font.widthOfTextAtSize(word, fontSize) <= maxWidth) {
+    return [word];
+  }
+
+  const chunks: string[] = [];
+  let remaining = word;
+
+  while (remaining.length > 0) {
+    let low = 1;
+    let high = remaining.length;
+    let best = 1;
+
+    while (low <= high) {
+      const mid = Math.floor((low + high) / 2);
+      const candidate = remaining.slice(0, mid);
+      if (font.widthOfTextAtSize(candidate, fontSize) <= maxWidth) {
+        best = mid;
+        low = mid + 1;
+      } else {
+        high = mid - 1;
+      }
+    }
+
+    chunks.push(remaining.slice(0, best));
+    remaining = remaining.slice(best);
+  }
+
+  return chunks;
+}
+
 function wrapText(text: string, font: PDFFont, fontSize: number, maxWidth: number): string[] {
   const paragraphs = safeText(text).split('\n');
   const lines: string[] = [];
 
   for (const paragraph of paragraphs) {
-    const words = paragraph.split(/\s+/).filter(Boolean);
+    const words = paragraph
+      .split(/\s+/)
+      .filter(Boolean)
+      .flatMap((word) => splitLongWord(word, font, fontSize, maxWidth));
     if (words.length === 0) {
       lines.push('');
       continue;
@@ -1102,7 +1136,7 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
           comparable.distanceMiles != null ? `${comparable.distanceMiles.toFixed(2)} miles away` : null,
           comparable.sourceDateValue ? `source date ${formatDateUk(comparable.sourceDateValue)}` : null,
         ].filter(Boolean).join(' | '),
-        `Source: ${comparable.source}${comparable.sourceUrl ? ` | ${comparable.sourceUrl}` : ''}`,
+        `Source: ${comparable.source}${comparable.sourceUrl ? ' | listing link saved in case file' : ''}`,
       ].filter(Boolean);
 
       for (const detail of detailLines) {
@@ -2331,19 +2365,19 @@ async function buildJustificationReportPdf(
       lines: buildComparableOverviewLines(resolvedState, resolvedComparables, snapshot),
     },
     {
-      heading: 'Comparable listings',
+      heading: 'Recorded listing cards',
       variant: 'comparable_cards',
       lines: [
-        'These thumbnail cards give the landlord and tenant a quick visual reference for the local listings used in the market analysis. The figures below still control the calculation; the thumbnails are included to make the evidence easier to follow.',
+        'These thumbnail cards give the landlord and tenant a quick visual reference for the recorded local listings. Some listings may be context-only or excluded; the comparable schedule below controls which figures are used in the market calculation.',
       ],
       comparableCards: resolvedComparables.slice(0, 8),
     },
     {
-      heading: 'Comparable picture',
+      heading: 'Market evidence picture',
       lines: [
         preview?.previewSummary || 'No comparable summary available.',
         ...(preview?.marketCalculation?.explanationText || []),
-        ...buildComparableHighlights(resolvedState, resolvedComparables, snapshot),
+        ...buildComparableHighlights(resolvedState, resolvedComparables, snapshot, 6),
       ],
     },
     {

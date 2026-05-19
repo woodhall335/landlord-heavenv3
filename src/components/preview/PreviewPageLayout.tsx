@@ -184,6 +184,9 @@ export function PreviewPageLayout({
 
       if (data.status === 'pending') {
         // Reusing existing checkout session
+        const priceValue = parseFloat(price.replace(/[Â£,]/g, '')) || 0;
+        trackBeginCheckout(product, productName, priceValue, caseId);
+        trackCheckoutStarted({ product, caseId });
         window.location.href = data.checkout_url;
         return;
       }
