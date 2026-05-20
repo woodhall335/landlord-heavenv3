@@ -68,6 +68,14 @@ export default function HmoSharedHouseTenancyAgreementPage() {
         primaryCtaHref={hmoWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
+        workflowImageLink={{
+          href: hmoWizardHref,
+          desktopSrc: '/images/hmo-tenancy-desktop.webp',
+          mobileSrc: '/images/hmo-tenancy-mobile.webp',
+          alt: 'HMO shared house tenancy agreement workflow',
+          width: 1024,
+          height: 1536,
+        }}
         legacyNotice="If you searched for an HMO tenancy agreement, shared house agreement, or sharers' tenancy agreement in England, this is the dedicated option for shared occupation from 1 May 2026 rather than a standard residential pack with shared-house points bolted on afterwards."
         introTitle="Choose this when the property is being shared"
         introBody={[
