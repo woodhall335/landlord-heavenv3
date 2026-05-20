@@ -587,6 +587,7 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
     comparisonBlock,
     objectionBlock,
     midPageCta,
+    beforeWhyYouNeedThis,
     whyYouNeedThis,
     howThisHelps,
     howItWorks,
@@ -713,6 +714,7 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
       {comparisonBlock ? <ComparisonBlock content={comparisonBlock} analytics={analytics} /> : null}
       {objectionBlock ? <ObjectionBlock content={objectionBlock} /> : null}
       {midPageCta ? <CtaBand cta={midPageCta} analytics={analytics} sectionId="next-step" ctaPosition="section" /> : null}
+      {beforeWhyYouNeedThis ? <>{beforeWhyYouNeedThis}</> : null}
 
       <InfoCards
         title={whyYouNeedThis.title}

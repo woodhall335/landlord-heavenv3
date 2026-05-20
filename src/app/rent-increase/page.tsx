@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
@@ -115,7 +116,7 @@ export default function RentIncreaseLandingPage() {
         'Check the current rent, proposed rent, estimated market range, evidence strength, and challenge risk using current advertised rents for similar homes nearby, then choose the right Section 13 pack.',
       feature:
         'Prepare a market-supported rent increase file, not just a notice.',
-      mediaSrc: '/images/wizard-icons/41-rent.png',
+      mediaSrc: '/images/increase-rent-hero.webp',
       mediaAlt: 'Section 13 rent increase workflow',
       showReviewPill: true,
       reviewPillLayout: 'stacked',
@@ -178,29 +179,33 @@ export default function RentIncreaseLandingPage() {
             </p>
           </div>
           <div className="rounded-[2rem] border border-[#D8C8FF] bg-white p-5 shadow-[0_14px_34px_rgba(24,11,49,0.05)]">
-            <div className="grid gap-3 sm:grid-cols-2">
-              {[
-                ['Estimated market range', '£1,250 - £1,375 pcm'],
-                ['Proposed rent', '£1,325 pcm'],
-                ['Evidence strength', 'Good local comparables'],
-                ['Challenge risk', 'Moderate'],
-                ['Recommended pack', 'Supported Rent Increase Pack'],
-                ['Nearby comparable rents', '£1,275 / £1,325 / £1,350'],
-              ].map(([label, value]) => (
-                <div key={label} className="rounded-2xl border border-[#E8E1F8] bg-[#F7F1FF] p-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[#6D28D9]">
-                    {label}
-                  </p>
-                  <p className="mt-2 text-lg font-semibold text-[#17142B]">{value}</p>
-                </div>
-              ))}
-            </div>
+            <Image
+              src="/images/rent-increase-overview.webp"
+              alt="Rent increase market overview report"
+              width={1100}
+              height={840}
+              className="h-auto w-full rounded-[1.5rem] object-cover"
+            />
             <p className="mt-4 text-sm leading-6 text-[#5B5470]">
               Example preview only. The generated file uses the landlord's property details and current comparable advertised rents.
             </p>
           </div>
         </div>
       </div>
+    ),
+    beforeWhyYouNeedThis: (
+      <section className="scroll-mt-24 bg-white py-10 md:py-12" aria-label="Real market data preview">
+        <picture>
+          <source media="(max-width: 767px)" srcSet="/images/real-market-data-mobile.webp" />
+          <Image
+            src="/images/real-market-data-desktop.webp"
+            alt="Real market rental data report preview"
+            width={1920}
+            height={980}
+            className="h-auto w-full"
+          />
+        </picture>
+      </section>
     ),
     whatYouGet: {
       title: 'Compare the packs',

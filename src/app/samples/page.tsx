@@ -20,21 +20,29 @@ const sampleDirectoryGroups = [
   {
     title: 'Eviction and possession',
     body: 'Notice-stage and court-stage packs for rent arrears possession work.',
+    imageSrc: '/images/sample-eviction-possession.webp',
+    imageAlt: 'Eviction and possession sample documents',
     slugs: ['section-8-notice-example', 'complete-eviction-pack-example'],
   },
   {
     title: 'Debt recovery',
     body: 'Pre-action and claim documents for unpaid rent after the tenancy route is clear.',
+    imageSrc: '/images/sample-debt-recovery.webp',
+    imageAlt: 'Debt recovery sample documents',
     slugs: ['money-claim-online-example'],
   },
   {
     title: 'Rent increase',
     body: 'Section 13 Form 4A and tribunal-ready evidence samples for England rent increases.',
+    imageSrc: '/images/sample-increase-rent.webp',
+    imageAlt: 'Rent increase sample documents',
     slugs: ['form-4a-example', 'section-13-defence-pack-example'],
   },
   {
     title: 'Tenancy agreements',
     body: 'Agreement samples for standard, premium, student, HMO/shared house, and lodger lets.',
+    imageSrc: '/images/sample-tenancy-agreements.webp',
+    imageAlt: 'Tenancy agreement sample documents',
     slugs: [
       'standard-tenancy-agreement-example',
       'premium-tenancy-agreement-example',
@@ -157,22 +165,33 @@ export default function SamplesPage() {
               );
 
               return (
-                <article key={group.title} className="rounded-lg border border-[#E8E1D7] bg-[#FCFBF8] p-5">
-                  <h3 className="text-lg font-semibold text-[#141B2D]">{group.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-[#546075]">{group.body}</p>
-                  <div className="mt-5 space-y-2">
-                    {groupSamples.map((sample) => (
-                      <Link
-                        key={sample.samplePath}
-                        href={sample.samplePath}
-                        className="block rounded-lg border border-[#E8E1D7] bg-white px-3 py-3 text-sm font-semibold text-[#141B2D] transition hover:border-[#C7B4FF] hover:text-[#5B21B6]"
-                      >
-                        {sample.productName}
-                        <span className="mt-1 block text-xs font-medium leading-5 text-[#6B7280]">
-                          {sample.targetKeyword}
-                        </span>
-                      </Link>
-                    ))}
+                <article key={group.title} className="overflow-hidden rounded-lg border border-[#E8E1D7] bg-[#FCFBF8]">
+                  <div className="relative h-40 w-full">
+                    <Image
+                      src={group.imageSrc}
+                      alt={group.imageAlt}
+                      fill
+                      className="object-cover"
+                      sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                    />
+                  </div>
+                  <div className="p-5">
+                    <h3 className="text-lg font-semibold text-[#141B2D]">{group.title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-[#546075]">{group.body}</p>
+                    <div className="mt-5 space-y-2">
+                      {groupSamples.map((sample) => (
+                        <Link
+                          key={sample.samplePath}
+                          href={sample.samplePath}
+                          className="block rounded-lg border border-[#E8E1D7] bg-white px-3 py-3 text-sm font-semibold text-[#141B2D] transition hover:border-[#C7B4FF] hover:text-[#5B21B6]"
+                        >
+                          {sample.productName}
+                          <span className="mt-1 block text-xs font-medium leading-5 text-[#6B7280]">
+                            {sample.targetKeyword}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
                   </div>
                 </article>
               );

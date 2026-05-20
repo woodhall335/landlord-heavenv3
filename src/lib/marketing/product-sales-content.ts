@@ -126,6 +126,7 @@ export interface ProductSalesPageContent {
   comparisonBlock?: ProductSalesComparisonBlock;
   objectionBlock?: ProductSalesObjectionBlock;
   midPageCta?: ProductSalesCta;
+  beforeWhyYouNeedThis?: ReactNode;
   whyYouNeedThis: {
     title: string;
     intro: ReactNode;
