@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
@@ -120,6 +121,23 @@ export default function NoticeOnlyPage() {
         intro="Stage 1 covers preparing and serving the notice, then waiting for the notice period to end before any court claim."
       />
     ),
+    afterPostHeroContent: (
+      <section className="scroll-mt-24 bg-white py-10 md:py-12" aria-label="Notice stage route">
+        <a href="/wizard" className="block w-full">
+          <picture>
+            <source media="(max-width: 767px)" srcSet="/images/notice-stage-mobile.webp" />
+            <Image
+              src="/images/notice-stage-desktop.webp"
+              alt="Choose the notice stage route"
+              width={1672}
+              height={941}
+              className="h-auto w-full"
+              sizes="100vw"
+            />
+          </picture>
+        </a>
+      </section>
+    ),
     earlyProofBand: {
       priceLabel: product.displayPrice,
       valueSummary:
@@ -135,35 +153,6 @@ export default function NoticeOnlyPage() {
         'You need to serve correctly first and want the service record ready before deciding about court.',
       notFor:
         'You already expect to issue a possession claim and want the notice plus court forms prepared together.',
-    },
-    decisionBlock: {
-      title: 'Choose Stage 1 if you need to serve the notice first',
-      intro:
-        'This is for landlords who need a solicitor-approved notice and service file prepared before deciding whether court action is needed.',
-      cards: [
-        {
-          eyebrow: 'Choose this route',
-          title: 'Serve the notice properly now',
-          body:
-            'Prepare Form 3A, N215, the arrears schedule, service instructions, and checks in one Stage 1 file you can rely on if the tenant does not leave.',
-          tone: 'positive',
-        },
-        {
-          eyebrow: 'Choose the other route',
-          title: 'Choose Stage 2 if you already need court forms',
-          body:
-            'If you already expect a possession claim, the Complete Pack is the better fit because it includes this notice file plus N5, N119, and court-stage support.',
-          tone: 'warning',
-        },
-      ],
-      primary: {
-        label: 'Create my Section 8 notice',
-        href: descriptor.wizardHref,
-      },
-      secondary: {
-        label: 'Need court papers too?',
-        href: '/products/complete-pack',
-      },
     },
     whatYouGet: {
       title: 'What you get in Stage 1',
@@ -289,7 +278,7 @@ export default function NoticeOnlyPage() {
           href: '/products/notice-only',
           ctaLabel: 'This is my route',
           priceLabel: product.displayPrice,
-          imageSrc: '/images/notice.webp',
+          imageSrc: '/images/section-8-notice.webp',
           imageAlt: 'Section 8 notice stage',
         },
         {
@@ -304,7 +293,7 @@ export default function NoticeOnlyPage() {
             'Gives you the possession route from notice through claim without buying Stage 1 separately first.',
           href: '/products/complete-pack',
           ctaLabel: 'See the full court route',
-          imageSrc: '/images/claim.webp',
+          imageSrc: '/images/section-8-court-paperwork.webp',
           imageAlt: 'Section 8 court route',
         },
       ],

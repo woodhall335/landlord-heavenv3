@@ -7,7 +7,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, type ComponentType } from 'react';
+import { useEffect } from 'react';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { Container } from '@/components/ui';
 import { Hero, TrustBar } from '@/components/landing';
@@ -23,13 +23,11 @@ import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats'
 import {
   RiArrowRightLine,
   RiCheckLine,
-  RiFileCheckLine,
   RiFileTextLine,
   RiFlashlightLine,
   RiHome6Line,
   RiMoneyPoundCircleLine,
   RiScales3Line,
-  RiShieldCheckLine,
 } from 'react-icons/ri';
 import { clsx } from 'clsx';
 
@@ -47,14 +45,6 @@ type RouteCard = {
   accent: keyof typeof accentIconByType;
   routeIntent: string;
   product: string;
-};
-
-type ValueCard = {
-  title: string;
-  body: string;
-  imageSrc: string;
-  imageAlt: string;
-  icon: ComponentType<{ className?: string }>;
 };
 
 type PreviewCard = {
@@ -208,33 +198,6 @@ const routeCardOverridesByProduct: Record<string, Partial<RouteCard>> = {
       'Positioned around the updated England framework from 1 May 2026, including the post-Renters\' Rights assured periodic routes.',
   },
 };
-
-const whyLandlordsUseCards: ValueCard[] = [
-  {
-      title: 'Identify the Problem',
-    body:
-      'We help you work out whether you need a Section 8 notice, court papers, a money claim, a rent increase, or a new tenancy agreement before you lose time on the wrong route.',
-    imageSrc: '/images/Start-with-the-step-that-fits-the- problem.webp',
-    imageAlt: 'Start with the step that fits the problem card image',
-    icon: RiFlashlightLine,
-  },
-  {
-      title: 'We Check Compliance',
-    body:
-      'We flag the details that often cause notices, claims, court forms, and rent increase paperwork to go wrong so you can fix them before you serve, file, or send anything.',
-    imageSrc: '/images/Catch-weak-spots-before-they-slow-you-down.webp',
-    imageAlt: 'Catch weak spots before they slow you down card image',
-    icon: RiShieldCheckLine,
-  },
-  {
-    title: 'Get paperwork that holds together',
-    body:
-      'Your paperwork should match the problem you are dealing with, whether that is possession, arrears, a rent increase, or a new tenancy, and it should read like one joined-up file.',
-    imageSrc: '/images/Get-paperwork-that-holds-together.webp',
-    imageAlt: 'Get paperwork that holds together card image',
-    icon: RiFileCheckLine,
-  },
-];
 
 const previewCards: PreviewCard[] = [
   {
@@ -463,54 +426,28 @@ export default function HomeContent() {
       </section>
 
       <section className="pb-16 pt-4 md:pb-20">
-        <Container>
-            <div className="mx-auto max-w-3xl text-center">
-              <span className="public-eyebrow">Why landlords use us</span>
-              <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
-                Clarity first. Legal detail second.
-              </h2>
-              <p className="mt-4 text-lg leading-8 text-[#5d5672]">
-                The fastest way to lose momentum is to start the wrong route. We
-                keep the next step obvious, then help you tighten the paperwork
-                before you serve, file, or send anything.
-              </p>
-            </div>
-
-          <div className="mt-10 grid gap-6 lg:grid-cols-3">
-            {whyLandlordsUseCards.map((card) => {
-              const Icon = card.icon;
-
-              return (
-                <article
-                  key={card.title}
-                  className={clsx(
-                    'overflow-hidden rounded-[2rem] border p-6',
-                    PUBLIC_LAYOUT_CLASSES.card
-                  )}
-                >
-                  <div className="relative aspect-[16/11] overflow-hidden rounded-[1.7rem] public-image-frame">
-                    <Image
-                      src={card.imageSrc}
-                      alt={card.imageAlt}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                      className="object-cover"
-                    />
-                  </div>
-                    <div className="mt-6 flex items-start gap-4">
-                      <div className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#f4ebff] text-[#7c3aed]">
-                        <Icon className="h-6 w-6" />
-                      </div>
-                      <h3 className="line-clamp-2 flex-1 pt-1 text-2xl font-semibold leading-tight text-[#1d1532]">
-                        {card.title}
-                      </h3>
-                    </div>
-                    <p className="mt-4 text-[15px] leading-7 text-[#5a516d]">{card.body}</p>
-                  </article>
-              );
-            })}
-          </div>
-        </Container>
+        <TrackedLink
+          href="/wizard"
+          pagePath="/"
+          pageType="homepage"
+          ctaLabel="Clarity section"
+          ctaPosition="section"
+          eventName="homepage_primary_cta_click"
+          routeIntent="wizard"
+          className="block w-full"
+        >
+          <picture>
+            <source media="(max-width: 767px)" srcSet="/images/clarity-mobile.webp" />
+            <Image
+              src="/images/clarity-desktop.webp"
+              alt="Clarity first. Legal detail second."
+              width={1672}
+              height={941}
+              className="h-auto w-full"
+              sizes="100vw"
+            />
+          </picture>
+        </TrackedLink>
       </section>
 
       <section className="pb-16 pt-4 md:pb-20">

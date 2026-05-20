@@ -12,11 +12,15 @@ describe('Section 8 eviction product pages', () => {
 
     expect(source).toContain('Solicitor-approved Section 8 notice and service file');
     expect(source).toContain('Prepare the notice file properly before anything goes to the tenant');
-    expect(source).toContain('Choose Stage 1 if you need to serve the notice first');
+    expect(source).toContain('/images/notice-stage-desktop.webp');
+    expect(source).toContain('/images/notice-stage-mobile.webp');
+    expect(source).toContain('href="/wizard"');
     expect(source).toContain('8-document notice and service file');
     expect(source).toContain('Form 3A Section 8 notice, N215 certificate of service, rent arrears schedule, service instructions, validity checklist, compliance declaration, case summary, and what-happens-next guide');
     expect(source).toContain('Stage 1 = serve correctly');
     expect(source).toContain("imageSrc: '/images/notice-only-pack.webp'");
+    expect(source).toContain("imageSrc: '/images/section-8-notice.webp'");
+    expect(source).toContain("imageSrc: '/images/section-8-court-paperwork.webp'");
     expect(source).toContain("imageSrc: '/images/how-it-works-notice-only.webp'");
     expect(source).toContain('This is more than a blank form.');
     expect(source).toContain('N215 Certificate of Service');
@@ -31,10 +35,13 @@ describe('Section 8 eviction product pages', () => {
 
     expect(source).toContain('Solicitor-approved Section 8 court and possession file');
     expect(source).toContain('Prepare the full possession file, not just the court forms');
-    expect(source).toContain('Choose Stage 2 if you need the court and possession file too');
-    expect(source).toContain('You do not need to buy Stage 1 separately first');
+    expect(source).toContain('/images/complete-stage-desktop.webp');
+    expect(source).toContain('/images/complete-stage-mobile.webp');
+    expect(source).toContain('href="/wizard"');
     expect(source).toContain('Stage 2 = serve, issue, evidence, and prepare for hearing');
     expect(source).toContain("imageSrc: '/images/complete-pack.webp'");
+    expect(source).toContain("imageSrc: '/images/section-8-notice.webp'");
+    expect(source).toContain("imageSrc: '/images/section-8-court-paperwork.webp'");
     expect(source).toContain("imageSrc: '/images/how-it-works-complete-pack.webp'");
     expect(source).toContain('Everything in Stage 1');
     expect(source).toContain('What you get in the combined pack');

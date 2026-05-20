@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
@@ -120,6 +121,23 @@ export default function CompleteEvictionPackPage() {
         intro="The Complete Pack carries the same England Section 8 case from notice, through expiry, into claim and hearing preparation."
       />
     ),
+    afterPostHeroContent: (
+      <section className="scroll-mt-24 bg-white py-10 md:py-12" aria-label="Complete pack stage route">
+        <a href="/wizard" className="block w-full">
+          <picture>
+            <source media="(max-width: 767px)" srcSet="/images/complete-stage-mobile.webp" />
+            <Image
+              src="/images/complete-stage-desktop.webp"
+              alt="Choose the complete court and possession route"
+              width={1672}
+              height={941}
+              className="h-auto w-full"
+              sizes="100vw"
+            />
+          </picture>
+        </a>
+      </section>
+    ),
     earlyProofBand: {
       priceLabel: product.displayPrice,
       valueSummary:
@@ -135,35 +153,6 @@ export default function CompleteEvictionPackPage() {
         'The case is likely to go to court, or you want the notice and possession claim prepared together from the start.',
       notFor:
         'You only need to serve the notice first and want to decide about court later.',
-    },
-    decisionBlock: {
-      title: 'Choose Stage 2 if you need the court and possession file too',
-      intro:
-        'This page is for landlords who need more than a notice. It keeps the solicitor-approved notice file, service record, N5, N119, evidence, and hearing support in one possession file.',
-      cards: [
-        {
-          eyebrow: 'Choose this route',
-          title: 'Prepare the full possession route now',
-          body:
-            'Use the Complete Pack when the case may need possession proceedings and you want the notice, issue, evidence, and hearing paperwork to match from day one.',
-          tone: 'positive',
-        },
-        {
-          eyebrow: 'Important fit point',
-          title: 'You do not need to buy Stage 1 separately first',
-          body:
-            'The Complete Pack already includes the Stage 1 notice and service file. If you also want N5, N119, a witness statement, and hearing support, start here.',
-          tone: 'neutral',
-        },
-      ],
-      primary: {
-        label: 'Prepare my court pack',
-        href: descriptor.wizardHref,
-      },
-      secondary: {
-        label: 'I only need the notice',
-        href: '/products/notice-only',
-      },
     },
     whatYouGet: {
       title: 'What you get in the combined pack',
@@ -288,7 +277,7 @@ export default function CompleteEvictionPackPage() {
             'Lets you serve the notice properly and move onward later only if needed.',
           href: '/products/notice-only',
           ctaLabel: 'See the notice-first route',
-          imageSrc: '/images/notice.webp',
+          imageSrc: '/images/section-8-notice.webp',
           imageAlt: 'Serve Section 8 notice first',
         },
         {
@@ -304,7 +293,7 @@ export default function CompleteEvictionPackPage() {
           href: '/products/complete-pack',
           ctaLabel: 'This is my route',
           priceLabel: product.displayPrice,
-          imageSrc: '/images/hearing.webp',
+          imageSrc: '/images/section-8-court-paperwork.webp',
           imageAlt: 'Section 8 claim and hearing route',
         },
       ],

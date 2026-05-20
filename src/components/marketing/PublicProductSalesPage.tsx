@@ -581,6 +581,7 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
     analytics,
     hero,
     postHeroContent,
+    afterPostHeroContent,
     earlyProofBand,
     decisionBlock,
     whatYouGet,
@@ -622,6 +623,7 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
       ) : null}
       <UniversalHero {...hero} preTitleLabel={heroPreTitleLabel}>{hero.children}</UniversalHero>
       {postHeroContent ? <section className="scroll-mt-24 bg-white py-10 md:py-12"><Container><div className="mx-auto max-w-6xl">{postHeroContent}</div></Container></section> : null}
+      {afterPostHeroContent ? <>{afterPostHeroContent}</> : null}
       {decisionBlock ? <DecisionBlock content={decisionBlock} analytics={analytics} /> : null}
       {earlyProofBand ? <EarlyProofBand content={earlyProofBand} /> : null}
 

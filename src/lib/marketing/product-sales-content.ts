@@ -108,6 +108,7 @@ export interface ProductSalesPageContent {
   };
   hero: ProductSalesHero;
   postHeroContent?: ReactNode;
+  afterPostHeroContent?: ReactNode;
   earlyProofBand?: ProductSalesEarlyProofBand;
   decisionBlock?: ProductSalesDecisionBlock;
   whatYouGet: {
