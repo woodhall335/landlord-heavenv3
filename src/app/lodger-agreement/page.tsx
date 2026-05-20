@@ -67,6 +67,14 @@ export default function LodgerAgreementEnglandPage() {
         primaryCtaHref={lodgerWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
+        workflowImageLink={{
+          href: lodgerWizardHref,
+          desktopSrc: '/images/lodger-tenancy-desktop.webp',
+          mobileSrc: '/images/lodger-tenancy-mobile.webp',
+          alt: 'Lodger agreement workflow',
+          width: 1024,
+          height: 1536,
+        }}
         legacyNotice="If you searched for a lodger agreement, room let agreement, lodger agreement template, or resident-landlord agreement in England, this is the dedicated option for a room let in your own home from 1 May 2026 rather than a standard tenancy agreement adapted afterwards."
         introTitle="Choose this when you are renting out a room in your own home"
         introBody={[
