@@ -66,6 +66,14 @@ export default function PremiumTenancyAgreementPage() {
         primaryCtaHref={premiumWizardHref}
         secondaryCtaLabel="Read assured periodic guide"
         secondaryCtaHref="/assured-periodic-tenancy-agreement"
+        workflowImageLink={{
+          href: premiumWizardHref,
+          desktopSrc: '/images/premium-tenancy-desktop.webp',
+          mobileSrc: '/images/premium-tenancy-mobile.webp',
+          alt: 'Premium tenancy agreement workflow',
+          width: 1024,
+          height: 1536,
+        }}
         legacyNotice="If you were searching for a premium tenancy agreement, premium periodic tenancy agreement, updated AST replacement, or current England tenancy agreement with fuller drafting, this is the more detailed periodic route for ordinary residential lets that need stronger management and handover wording."
         introTitle="For an ordinary periodic tenancy with more detail built in"
         introBody={[
