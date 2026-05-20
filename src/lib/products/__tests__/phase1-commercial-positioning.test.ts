@@ -30,7 +30,7 @@ describe('Phase 1 commercial positioning', () => {
 
     expect(completePackSource).toContain('Solicitor-approved Section 8 court and possession file');
     expect(completePackSource).toContain('Prepare the full possession file, not just the court forms');
-    expect(completePackSource).toContain('The Complete Pack already includes the Stage 1 notice and service file');
+    expect(completePackSource).toContain('/images/complete-stage-desktop.webp');
     expect(completePackSource).toContain('N5, N119, witness statement, court readiness status, and evidence collection checklist');
 
     expect(rentIncreaseHubSource).toContain("reviewPillLayout: 'stacked'");
@@ -42,7 +42,11 @@ describe('Phase 1 commercial positioning', () => {
     expect(source).toContain('Prepare a landlord money claim pack');
     expect(source).toContain('<GoldenPackProof data={sampleProof}');
     expect(source).not.toContain('What is included in the Money Claim Pack');
-    expect(source).toContain('Choose this when the job is getting money back');
+    expect(source).toContain('/images/money-claim-desktop.webp');
+    expect(source).toContain('/images/money-claim-mobile.webp');
+    expect(source).toContain('/images/money-claim-wizard.webp');
+    expect(source).toContain("imageSrc: '/images/money-claim-selector.webp'");
+    expect(source).toContain("imageSrc: '/images/section-8-court-paperwork.webp'");
   });
 
   it('removes England-default routing to old notice aliases and regional tenancy aliases from high-prominence surfaces', () => {

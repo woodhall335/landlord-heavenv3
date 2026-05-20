@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
@@ -111,39 +113,29 @@ export default function MoneyClaimPage() {
       showTrustPositioningBar: true,
       trustPositioningPreset: 'money_claim',
     },
-    decisionBlock: {
-      title: 'Choose this when the job is getting money back',
-      intro:
-        'This page is for landlords whose main goal is getting unpaid rent, damage, bills, or guarantor debt paid back. If the urgent issue is getting the tenant out, start with the possession route instead.',
-      cards: [
-        {
-          eyebrow: 'Best fit',
-          tone: 'positive',
-          title: 'Choose this if you need to chase debt properly',
-          body:
-            'Use this pack when the tenant owes money and you want the letter before claim, figures, and court paperwork kept together from the start.',
-        },
-        {
-          eyebrow: 'Choose a different route',
-          tone: 'warning',
-          title: 'Do not start here if the main problem is getting possession',
-          body:
-            'If the real pressure point is serving notice or starting possession proceedings, use the Section 8 route first and keep any money claim separate unless you need both.',
-        },
-      ],
-      primary: {
-        label: 'Prepare my money claim',
-        href: descriptor.wizardHref,
-      },
-      secondary: {
-        label: 'Need possession instead?',
-        href: '/products/complete-pack',
-      },
-    },
+    afterPostHeroContent: (
+      <section className="scroll-mt-24 bg-white py-10 md:py-12" aria-label="Money claim route">
+        <Link href="/wizard" className="block w-full">
+          <picture>
+            <source media="(max-width: 767px)" srcSet="/images/money-claim-mobile.webp" />
+            <Image
+              src="/images/money-claim-desktop.webp"
+              alt="Choose the money claim route"
+              width={1672}
+              height={941}
+              className="h-auto w-full"
+              sizes="100vw"
+            />
+          </picture>
+        </Link>
+      </section>
+    ),
     earlyProofBand: {
       priceLabel: product.displayPrice,
       valueSummary:
         'Preview the debt-recovery file before you pay. It includes the demand letter, schedules, claim wording, and follow-through guidance.',
+      imageSrc: '/images/money-claim-wizard.webp',
+      imageAlt: 'Money claim wizard preview',
       includedBullets: [
         'Letter before claim',
         'Reply form and financial statement',
@@ -182,6 +174,8 @@ export default function MoneyClaimPage() {
             'Best when recovering money is the main job.',
           href: descriptor.landingHref,
           ctaLabel: 'Prepare my money claim',
+          imageSrc: '/images/money-claim-selector.webp',
+          imageAlt: 'Money claim pack route',
         },
         {
           name: 'Stage 2: Section 8 Court & Possession Pack',
@@ -196,6 +190,8 @@ export default function MoneyClaimPage() {
             'Best when possession is the real next step.',
           href: '/products/complete-pack',
           ctaLabel: 'Compare the possession route',
+          imageSrc: '/images/section-8-court-paperwork.webp',
+          imageAlt: 'Section 8 court and possession pack route',
         },
       ],
     },
