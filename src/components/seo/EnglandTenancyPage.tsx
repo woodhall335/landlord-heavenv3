@@ -87,6 +87,14 @@ interface EnglandTenancyPageProps {
   faqs?: EnglandTenancyFaq[];
   finalCtaBody?: ReactNode;
   salesContent?: EnglandTenancySalesContent;
+  workflowImageLink?: {
+    href: string;
+    desktopSrc: string;
+    mobileSrc: string;
+    alt: string;
+    width: number;
+    height: number;
+  };
 }
 
 const tenancyPositioningCards = [
@@ -209,6 +217,7 @@ export function EnglandTenancyPage({
   faqs = [],
   finalCtaBody,
   salesContent,
+  workflowImageLink,
 }: EnglandTenancyPageProps) {
   const isSalesMode = Boolean(salesContent);
   const shouldShowPackBreakdown =
@@ -268,57 +277,77 @@ export function EnglandTenancyPage({
               </div>
             </section>
 
-            <section className="mb-12 rounded-[2rem] border border-[#D8C8FF] bg-[#F7F2FF] p-6 shadow-[0_14px_32px_rgba(91,86,232,0.08)] md:p-8">
-              <div className="max-w-3xl">
-                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
-                  Why landlords choose the workflow
-                </p>
-                <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
-                  Create the agreement from your facts, not from a static form
-                </h2>
-                <p className="mt-4 text-base leading-8 text-[#546075] md:text-lg">
-                  This is fixed-price, solicitor-approved document preparation for routine landlord setup. It helps you follow the procedure, validate the key tenancy facts, and preview the agreement before payment.
-                </p>
-              </div>
-              <div className="mt-8 grid gap-5 md:grid-cols-3">
-                {tenancyPositioningCards.map((card) => (
-                  <article key={card.title} className="rounded-[1.5rem] border border-[#E4DAFF] bg-white p-5">
-                    <h3 className="text-lg font-semibold text-[#141B2D]">{card.title}</h3>
-                    <p className="mt-3 text-sm leading-7 text-[#546075] md:text-base">{card.body}</p>
-                  </article>
-                ))}
-              </div>
-            </section>
+            {workflowImageLink ? (
+              <section className="mb-12">
+                <Link href={workflowImageLink.href} className="block w-full">
+                  <picture>
+                    <source media="(max-width: 767px)" srcSet={workflowImageLink.mobileSrc} />
+                    <Image
+                      src={workflowImageLink.desktopSrc}
+                      alt={workflowImageLink.alt}
+                      width={workflowImageLink.width}
+                      height={workflowImageLink.height}
+                      className="h-auto w-full"
+                      sizes="100vw"
+                    />
+                  </picture>
+                </Link>
+              </section>
+            ) : (
+              <>
+                <section className="mb-12 rounded-[2rem] border border-[#D8C8FF] bg-[#F7F2FF] p-6 shadow-[0_14px_32px_rgba(91,86,232,0.08)] md:p-8">
+                  <div className="max-w-3xl">
+                    <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
+                      Why landlords choose the workflow
+                    </p>
+                    <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
+                      Create the agreement from your facts, not from a static form
+                    </h2>
+                    <p className="mt-4 text-base leading-8 text-[#546075] md:text-lg">
+                      This is fixed-price, solicitor-approved document preparation for routine landlord setup. It helps you follow the procedure, validate the key tenancy facts, and preview the agreement before payment.
+                    </p>
+                  </div>
+                  <div className="mt-8 grid gap-5 md:grid-cols-3">
+                    {tenancyPositioningCards.map((card) => (
+                      <article key={card.title} className="rounded-[1.5rem] border border-[#E4DAFF] bg-white p-5">
+                        <h3 className="text-lg font-semibold text-[#141B2D]">{card.title}</h3>
+                        <p className="mt-3 text-sm leading-7 text-[#546075] md:text-base">{card.body}</p>
+                      </article>
+                    ))}
+                  </div>
+                </section>
 
-            <section className="mb-12 grid gap-8 lg:grid-cols-2">
-              <div className="rounded-[2rem] border border-[#D9EAD7] bg-[#F5FBF2] p-6 shadow-[0_14px_32px_rgba(29,92,54,0.06)]">
-                <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
-                  Choose this agreement if
-                </h2>
-                <ul className="mt-5 space-y-3 text-[#465066]">
-                  {idealFor.map((item) => (
-                    <li key={item} className="flex items-start gap-3 leading-7">
-                      <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#2F855A]" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                <section className="mb-12 grid gap-8 lg:grid-cols-2">
+                  <div className="rounded-[2rem] border border-[#D9EAD7] bg-[#F5FBF2] p-6 shadow-[0_14px_32px_rgba(29,92,54,0.06)]">
+                    <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
+                      Choose this agreement if
+                    </h2>
+                    <ul className="mt-5 space-y-3 text-[#465066]">
+                      {idealFor.map((item) => (
+                        <li key={item} className="flex items-start gap-3 leading-7">
+                          <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#2F855A]" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
 
-              <div className="rounded-[2rem] border border-[#F0DCC7] bg-[#FFF8F1] p-6 shadow-[0_14px_32px_rgba(124,72,18,0.06)]">
-                <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
-                  Choose a different agreement if
-                </h2>
-                <ul className="mt-5 space-y-3 text-[#465066]">
-                  {notFor.map((item) => (
-                    <li key={item} className="flex items-start gap-3 leading-7">
-                      <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#C26A1B]" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </section>
+                  <div className="rounded-[2rem] border border-[#F0DCC7] bg-[#FFF8F1] p-6 shadow-[0_14px_32px_rgba(124,72,18,0.06)]">
+                    <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
+                      Choose a different agreement if
+                    </h2>
+                    <ul className="mt-5 space-y-3 text-[#465066]">
+                      {notFor.map((item) => (
+                        <li key={item} className="flex items-start gap-3 leading-7">
+                          <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#C26A1B]" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </section>
+              </>
+            )}
 
             <section className="mb-12 grid gap-8 lg:grid-cols-2">
               <div className="rounded-[2rem] border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]">

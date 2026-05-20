@@ -77,6 +77,14 @@ export default function StandardTenancyAgreementPage() {
         primaryCtaHref={standardWizardHref}
         secondaryCtaLabel="Read periodic tenancy guide"
         secondaryCtaHref="/periodic-tenancy-agreement"
+        workflowImageLink={{
+          href: standardWizardHref,
+          desktopSrc: '/images/standard-tenancy-desktop.webp',
+          mobileSrc: '/images/standard-tenancy-mobile.webp',
+          alt: 'Standard tenancy agreement workflow',
+          width: 1086,
+          height: 1448,
+        }}
         legacyNotice="If you were searching for a standard tenancy agreement, basic tenancy agreement, updated AST replacement, or current England tenancy agreement, this is the standard periodic tenancy agreement route for a straightforward whole-property let."
         introTitle="For a straightforward standard periodic tenancy"
         introBody={[
