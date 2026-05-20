@@ -13,7 +13,7 @@ import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/struc
 const canonicalUrl = getCanonicalUrl('/student-tenancy-agreement');
 const englandHubHref = '/products/ast';
 const studentWizardHref =
-  '/wizard?product=england_student_tenancy_agreement&src=student_tenancy_page&topic=tenancy';
+  '/wizard/flow?type=tenancy_agreement&product=england_student_tenancy_agreement&src=student_tenancy_page&topic=tenancy';
 const studentSampleProof = getGoldenPackProofData('england_student_tenancy_agreement');
 const studentSamplePage = getProductSamplePageByPackKey('england_student_tenancy_agreement');
 
@@ -68,6 +68,14 @@ export default function StudentTenancyAgreementPage() {
         primaryCtaHref={studentWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
+        workflowImageLink={{
+          href: studentWizardHref,
+          desktopSrc: '/images/student-tenancy-desktop.webp',
+          mobileSrc: '/images/student-tenancy-mobile.webp',
+          alt: 'Student tenancy agreement workflow',
+          width: 1024,
+          height: 1536,
+        }}
         legacyNotice="If you were searching for a student tenancy agreement template, a student house agreement, or a student tenancy agreement with guarantor wording, this is the dedicated England student option from 1 May 2026 rather than a generic residential agreement adapted after the fact."
         introTitle="Built for student households"
         introBody={[
