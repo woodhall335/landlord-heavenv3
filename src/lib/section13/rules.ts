@@ -339,7 +339,14 @@ export function buildSection13DefensibilitySummarySentence(
   state: Pick<Section13State, 'proposal' | 'tenancy'>,
   preview: Pick<
     Section13PreviewMetrics,
-    'proposedRentMonthly' | 'median' | 'evidenceBandLabel' | 'sourceBackedCount' | 'freshComparableCount' | 'proposedPositionLabel'
+    | 'proposedRentMonthly'
+    | 'median'
+    | 'rawMedian'
+    | 'evidenceBandLabel'
+    | 'sourceBackedCount'
+    | 'freshComparableCount'
+    | 'proposedPositionLabel'
+    | 'justificationAdjustmentPercent'
   > | null | undefined
 ): string {
   if (!preview || preview.proposedRentMonthly == null || preview.median == null) {
@@ -353,7 +360,12 @@ export function buildSection13DefensibilitySummarySentence(
         ? 'above'
         : 'aligned with';
 
-  return `Your proposed rent (${formatCurrencyValue(state.proposal.proposedRentAmount)}) sits ${relativePosition} the median comparable rent (${formatCurrencyValue(preview.median)} pcm), with ${preview.evidenceBandLabel.toLowerCase()} based on ${preview.freshComparableCount} recent source-backed comparable${preview.freshComparableCount === 1 ? '' : 's'}.`;
+  const adjustmentText =
+    preview.justificationAdjustmentPercent > 0 && preview.rawMedian != null
+      ? ` after selected justification factors move the raw median from ${formatCurrencyValue(preview.rawMedian)} pcm by ${preview.justificationAdjustmentPercent}%`
+      : '';
+
+  return `Your proposed rent (${formatCurrencyValue(state.proposal.proposedRentAmount)}) sits ${relativePosition} the justified median comparable rent (${formatCurrencyValue(preview.median)} pcm)${adjustmentText}, with ${preview.evidenceBandLabel.toLowerCase()} based on ${preview.freshComparableCount} recent source-backed comparable${preview.freshComparableCount === 1 ? '' : 's'}.`;
 }
 
 export function buildSection13JustificationSummaryText(
@@ -364,11 +376,16 @@ export function buildSection13JustificationSummaryText(
     Section13PreviewMetrics,
     | 'proposedRentMonthly'
     | 'median'
+    | 'rawMedian'
     | 'upperQuartile'
+    | 'rawUpperQuartile'
     | 'challengeBandLabel'
     | 'evidenceBandLabel'
     | 'evidenceBand'
     | 'challengeReasonSummary'
+    | 'justificationAdjustmentPercent'
+    | 'justificationAdjustmentCapped'
+    | 'justificationAdjustmentFactors'
   > | null | undefined
 ): string {
   if (!preview || preview.proposedRentMonthly == null || preview.median == null) {
@@ -381,6 +398,10 @@ export function buildSection13JustificationSummaryText(
       : preview.proposedRentMonthly > preview.median
         ? 'above'
         : 'equal to';
+  const adjustmentText =
+    preview.justificationAdjustmentPercent > 0 && preview.rawMedian != null
+      ? ` Selected justification factors (${preview.justificationAdjustmentFactors.join(', ')}) add ${preview.justificationAdjustmentPercent}%${preview.justificationAdjustmentCapped ? ' after the cap' : ''}, moving the median from ${formatCurrencyValue(preview.rawMedian)} per month to ${formatCurrencyValue(preview.median)} per month.`
+      : '';
 
   if (
     preview.evidenceBand === 'strong' &&
@@ -389,17 +410,17 @@ export function buildSection13JustificationSummaryText(
   ) {
     const scoreText =
       state.adjustments?.justificationScore != null
-        ? ` The selected justification factors score ${state.adjustments.justificationScore}/100 (${state.adjustments.justificationBand || 'Unbanded'}), but this does not override the market pricing risk.`
+        ? ` The selected justification factors score ${state.adjustments.justificationScore}/100 (${state.adjustments.justificationBand || 'Unbanded'}), but the proposed figure still sits above the justified market position.`
         : '';
-    return `The proposed rent of ${formatCurrencyValue(state.proposal.proposedRentAmount)} ${describeRentFrequency(state.tenancy.currentRentFrequency)} is ${position} the adjusted median market rent of ${formatCurrencyValue(preview.median)} per month. The evidence base is strong, but the proposed figure still sits above the supported market position and is likely to attract challenge.${scoreText} ${preview.challengeReasonSummary || ''}`.trim();
+    return `The proposed rent of ${formatCurrencyValue(state.proposal.proposedRentAmount)} ${describeRentFrequency(state.tenancy.currentRentFrequency)} is ${position} the justified median market rent of ${formatCurrencyValue(preview.median)} per month.${adjustmentText} The evidence base is strong, but the proposed figure still sits above the supported market position and is likely to attract challenge.${scoreText} ${preview.challengeReasonSummary || ''}`.trim();
   }
 
   const scoreText =
     state.adjustments?.justificationScore != null
-      ? ` The selected justification factors score ${state.adjustments.justificationScore}/100 (${state.adjustments.justificationBand || 'Unbanded'}), with an evidence-capped explained uplift of ${formatCurrencyValue(state.adjustments.evidenceCappedJustifiedIncrease || 0)}.`
+      ? ` The selected justification factors score ${state.adjustments.justificationScore}/100 (${state.adjustments.justificationBand || 'Unbanded'}).`
       : '';
 
-  return `The proposed rent of ${formatCurrencyValue(state.proposal.proposedRentAmount)} ${describeRentFrequency(state.tenancy.currentRentFrequency)} is ${position} the adjusted median market rent of ${formatCurrencyValue(preview.median)} per month. Based on the comparables analysed under section 13(4) of the Housing Act 1988 (as amended), the proposed increase is presented as reasonable with a ${preview.challengeBandLabel.toLowerCase()} and ${preview.evidenceBandLabel.toLowerCase()}.${scoreText}`;
+  return `The proposed rent of ${formatCurrencyValue(state.proposal.proposedRentAmount)} ${describeRentFrequency(state.tenancy.currentRentFrequency)} is ${position} the justified median market rent of ${formatCurrencyValue(preview.median)} per month.${adjustmentText} Based on the comparables analysed under section 13(4) of the Housing Act 1988 (as amended), the proposed increase is presented as reasonable with a ${preview.challengeBandLabel.toLowerCase()} and ${preview.evidenceBandLabel.toLowerCase()}.${scoreText}`;
 }
 
 export function validateSection13StartDate(input: {
@@ -518,6 +539,9 @@ export function computeSection13Preview(state: Section13State, comparables: Sect
   const lowerQuartile = marketCalculation.marketLow;
   const median = marketCalculation.marketMedian;
   const upperQuartile = marketCalculation.marketHigh;
+  const rawLowerQuartile = marketCalculation.rawMarketLow;
+  const rawMedian = marketCalculation.rawMarketMedian;
+  const rawUpperQuartile = marketCalculation.rawMarketHigh;
   const proposedRentMonthly = state.proposal.proposedRentAmount == null
     ? null
     : getMonthlyEquivalent(state.proposal.proposedRentAmount, state.tenancy.currentRentFrequency);
@@ -576,9 +600,19 @@ export function computeSection13Preview(state: Section13State, comparables: Sect
     sourceBackedCount,
     freshComparableCount,
     userOverrideCount,
+    rawLowerQuartile: rawLowerQuartile == null ? null : Number(rawLowerQuartile.toFixed(2)),
+    rawMedian: rawMedian == null ? null : Number(rawMedian.toFixed(2)),
+    rawUpperQuartile: rawUpperQuartile == null ? null : Number(rawUpperQuartile.toFixed(2)),
     lowerQuartile: lowerQuartile == null ? null : Number(lowerQuartile.toFixed(2)),
     median: median == null ? null : Number(median.toFixed(2)),
     upperQuartile: upperQuartile == null ? null : Number(upperQuartile.toFixed(2)),
+    justifiedMarketLow: marketCalculation.justifiedMarketLow,
+    justifiedMarketMedian: marketCalculation.justifiedMarketMedian,
+    justifiedMarketHigh: marketCalculation.justifiedMarketHigh,
+    justificationAdjustmentPercent: marketCalculation.justificationAdjustmentPercent,
+    justificationAdjustmentFactors: marketCalculation.justificationAdjustmentFactors,
+    justificationAdjustmentCapped: marketCalculation.justificationAdjustmentCapped,
+    olderFallbackSearchUsed: marketCalculation.olderFallbackSearchUsed,
     proposedRentMonthly: proposedRentMonthly == null ? null : Number(proposedRentMonthly.toFixed(2)),
     proposedPositionLabel,
     challengeBand,
@@ -593,10 +627,12 @@ export function computeSection13Preview(state: Section13State, comparables: Sect
       {
         proposedRentMonthly: proposedRentMonthly == null ? null : Number(proposedRentMonthly.toFixed(2)),
         median: median == null ? null : Number(median.toFixed(2)),
+        rawMedian: rawMedian == null ? null : Number(rawMedian.toFixed(2)),
         evidenceBandLabel: getEvidenceBandLabel(evidenceBand),
         sourceBackedCount,
         freshComparableCount,
         proposedPositionLabel,
+        justificationAdjustmentPercent: marketCalculation.justificationAdjustmentPercent,
       }
     ),
     canAutoGenerateJustification,

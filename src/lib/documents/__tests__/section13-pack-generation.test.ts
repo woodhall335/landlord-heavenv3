@@ -81,6 +81,7 @@ function buildState() {
   state.comparablesMeta.bedrooms = 2;
   state.adjustments.manualJustification =
     'The proposed rent reflects recent local listings and the improved condition of the property.';
+  state.adjustments.justificationFactors = ['excellent_condition', 'recent_refurbishment', 'parking_or_garage'];
 
   const comparables = [
     buildComparable(0, 1240),
@@ -645,6 +646,24 @@ describe('Section 13 document generation hardening', () => {
 
     expect(justificationText).toContain('Key points');
     expect(justificationText).toContain('Comparable overview');
+    expect(justificationText).toContain('Justification-weighted calculation');
+    expect(justificationText).toContain('Selected justification factors: Excellent condition, Recent refurbishment, Parking or garage.');
+    expect(justificationText).toContain('Justification adjustment: 25%');
+    expect(justificationText).toContain('Raw comparable range');
+    expect(justificationText).toContain('Adjusted supportable range');
+    expect(justificationText).toContain('Statutory and tribunal framing');
+    expect(justificationText).toContain(
+      'Housing Act 1988 section 13(2) and section 13(4), as amended for assured tenancies from 1 May 2026'
+    );
+    expect(justificationText).toContain(
+      'served with at least two months notice, aligned to the tenancy period, and timed so that the 52-week / 53-week anti-drift rule is satisfied'
+    );
+    expect(justificationText).toContain(
+      'the open-market rent for the property on comparable terms rather than the size of the increase from the previous rent alone'
+    );
+    expect(justificationText).toContain(
+      'Unsupported or stale comparables weaken the landlord position even where the notice itself is valid'
+    );
     expect(justificationText).toContain(
       'Comparable base: 8 comparable two-bedroom properties used in the market calculation'
     );

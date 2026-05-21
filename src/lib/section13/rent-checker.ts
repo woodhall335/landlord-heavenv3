@@ -103,9 +103,16 @@ export interface RentCheckerResult {
   moneyImpactValue: string;
   monthlyDiff: number;
   annualDiff: number;
+  rawMarketLow: number | null;
+  rawMarketMedian: number | null;
+  rawMarketHigh: number | null;
   marketLow: number | null;
   marketMedian: number | null;
   marketHigh: number | null;
+  justificationAdjustmentPercent: number;
+  justificationAdjustmentFactors: string[];
+  justificationAdjustmentCapped: boolean;
+  olderFallbackSearchUsed: boolean;
   currentRent: number;
   proposedRent: number | null;
   currentPositionLabel: string;
@@ -147,6 +154,7 @@ export interface RentCheckerAnalysisArgs {
   comparables: Section13Comparable[];
   scrapeSource: string;
   scrapeSummary: string;
+  searchFallbackMode?: 'exact' | 'parent_type' | 'older_2_year' | 'parent_type_and_older_2_year' | null;
   now?: Date;
 }
 
@@ -300,7 +308,11 @@ function buildComparableListings(
   }));
 }
 
-function buildSyntheticState(input: RentCheckerInput, now = new Date()): Section13State {
+function buildSyntheticState(
+  input: RentCheckerInput,
+  now = new Date(),
+  searchFallbackMode?: RentCheckerAnalysisArgs['searchFallbackMode']
+): Section13State {
   const selectedPlan: Section13ProductSku = 'section13_standard';
   const base = createEmptySection13State(selectedPlan);
   const serviceDate = now.toISOString().slice(0, 10);
@@ -357,6 +369,7 @@ function buildSyntheticState(input: RentCheckerInput, now = new Date()): Section
       lastScrapeAt: now.toISOString(),
       lastScrapeSource: 'rent_checker',
       lastScrapeSummary: 'Rent checker comparable search',
+      searchFallbackMode: searchFallbackMode || null,
     },
     adjustments: {
       ...base.adjustments,
@@ -562,9 +575,10 @@ export function buildRentCheckerResult({
   comparables,
   scrapeSource,
   scrapeSummary,
+  searchFallbackMode,
   now = new Date(),
 }: RentCheckerAnalysisArgs): RentCheckerResult {
-  const syntheticState = buildSyntheticState(input, now);
+  const syntheticState = buildSyntheticState(input, now, searchFallbackMode);
   const preview = computeSection13Preview(syntheticState, comparables, now);
   const calculation = preview.marketCalculation;
 
@@ -634,9 +648,16 @@ export function buildRentCheckerResult({
     showDefenceSecondary: false,
     monthlyDiff,
     annualDiff,
+    rawMarketLow: preview.rawLowerQuartile,
+    rawMarketMedian: preview.rawMedian,
+    rawMarketHigh: preview.rawUpperQuartile,
     marketLow,
     marketMedian,
     marketHigh,
+    justificationAdjustmentPercent: preview.justificationAdjustmentPercent,
+    justificationAdjustmentFactors: preview.justificationAdjustmentFactors,
+    justificationAdjustmentCapped: preview.justificationAdjustmentCapped,
+    olderFallbackSearchUsed: preview.olderFallbackSearchUsed,
     currentRent: currentRentMonthly,
     proposedRent: proposedRentMonthly,
     currentPositionLabel,

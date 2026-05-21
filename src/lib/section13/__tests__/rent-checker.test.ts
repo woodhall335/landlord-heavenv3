@@ -130,7 +130,7 @@ describe('buildRentCheckerResult', () => {
     expect(result.challengeRisk).toBe('high');
     expect(result.headline).toContain('above the supported market position');
     expect(result.subheadline).toContain('Evidence strength is strong');
-    expect(result.challengeExplanation).toContain('proposed rent is high compared with the market calculation');
+    expect(result.challengeExplanation).toContain('proposed rent is high compared with the justified market calculation');
     expect(result.saferRangeGuidance).toBeTruthy();
   });
 

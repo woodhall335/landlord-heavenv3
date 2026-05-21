@@ -158,7 +158,7 @@ describe('Section 13 evidence and preview metrics', () => {
 
     expect(preview.evidenceBand).toBe('strong');
     expect(preview.challengeBand).toBe('higher_likelihood');
-    expect(preview.challengeReasonSummary).toContain('proposed rent is high compared with the market calculation');
+    expect(preview.challengeReasonSummary).toContain('proposed rent is high compared with the justified market calculation');
     expect(preview.saferRangeGuidance).toContain('£');
   });
 

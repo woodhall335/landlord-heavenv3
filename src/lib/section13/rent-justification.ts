@@ -36,6 +36,12 @@ export interface Section13JustificationFactor {
   kind: 'selected' | 'market_check';
 }
 
+export interface Section13JustificationAdjustmentFactor {
+  id: Section13JustificationFactorId;
+  label: string;
+  percent: number;
+}
+
 export interface Section13RentJustificationInput {
   selectedFactors: string[];
   currentRent: number | null | undefined;
@@ -50,8 +56,13 @@ export interface Section13RentJustificationInput {
 export interface Section13RentJustificationResult {
   selectedFactors: Section13JustificationFactorId[];
   appliedFactors: Section13JustificationFactor[];
+  adjustmentFactors: Section13JustificationAdjustmentFactor[];
   score: number;
   band: Section13JustificationBand;
+  justificationAdjustmentPercent: number;
+  justificationAdjustmentCapped: boolean;
+  adjustedMarketLow: number | null;
+  adjustedMarketHigh: number | null;
   marketHeadroom: number | null;
   proposedIncrease: number | null;
   evidenceCappedJustifiedIncrease: number | null;
@@ -99,6 +110,30 @@ export const SECTION13_SELECTABLE_JUSTIFICATION_FACTORS: Section13JustificationF
   { id: 'energy_efficiency_improvements', label: 'Energy efficiency improvements', weight: 6, kind: 'selected' },
   { id: 'bills_included', label: 'Bills included', weight: 5, kind: 'selected' },
 ];
+
+export const SECTION13_JUSTIFICATION_ADJUSTMENT_CAP_PERCENT = 30;
+
+export const SECTION13_JUSTIFICATION_FACTOR_ADJUSTMENTS: Record<
+  Section13JustificationFactorId,
+  number
+> = {
+  excellent_condition: 12,
+  good_condition: 7,
+  recent_refurbishment: 8,
+  new_kitchen_or_bathroom: 6,
+  strong_transport_links: 5,
+  desirable_schools_or_amenities: 5,
+  parking_or_garage: 5,
+  garden_or_outdoor_space: 4,
+  good_furnishing: 4,
+  energy_efficiency_improvements: 4,
+  bills_included: 3,
+  five_strong_comparables: 0,
+  proposed_within_market_range: 0,
+  proposed_above_market_high: 0,
+  below_average_condition: 0,
+  weak_comparable_evidence: 0,
+};
 
 export const SECTION13_MARKET_CHECK_FACTORS: Section13JustificationFactor[] = [
   { id: 'five_strong_comparables', label: 'At least 5 strong comparables', weight: 15, kind: 'market_check' },
@@ -148,6 +183,45 @@ function getFactor(id: Section13JustificationFactorId): Section13JustificationFa
   return ALL_FACTORS.find((item) => item.id === id)!;
 }
 
+export function normalizeSection13JustificationFactors(
+  factors: string[] | null | undefined
+): Section13JustificationFactorId[] {
+  const selected = factors?.filter((factor): factor is Section13JustificationFactorId =>
+    SECTION13_SELECTABLE_JUSTIFICATION_FACTORS.some((item) => item.id === factor)
+  ) || [];
+  const unique = [...new Set(selected)];
+  if (unique.includes('excellent_condition') && unique.includes('good_condition')) {
+    return unique.filter((factor) => factor !== 'good_condition');
+  }
+  return unique;
+}
+
+export function calculateSection13JustificationAdjustment(
+  factors: string[] | null | undefined
+): {
+  selectedFactors: Section13JustificationFactorId[];
+  adjustmentFactors: Section13JustificationAdjustmentFactor[];
+  percent: number;
+  capped: boolean;
+} {
+  const selectedFactors = normalizeSection13JustificationFactors(factors);
+  const adjustmentFactors = selectedFactors
+    .map((id) => ({
+      id,
+      label: getFactor(id).label,
+      percent: SECTION13_JUSTIFICATION_FACTOR_ADJUSTMENTS[id] || 0,
+    }))
+    .filter((factor) => factor.percent > 0);
+  const rawPercent = adjustmentFactors.reduce((sum, factor) => sum + factor.percent, 0);
+  const percent = Math.min(SECTION13_JUSTIFICATION_ADJUSTMENT_CAP_PERCENT, rawPercent);
+  return {
+    selectedFactors,
+    adjustmentFactors,
+    percent,
+    capped: rawPercent > percent,
+  };
+}
+
 function getMarketCheckFactors(input: Section13RentJustificationInput): Section13JustificationFactorId[] {
   const factors: Section13JustificationFactorId[] = [];
   const evidenceStrength = normalizeEvidenceStrength(input.evidenceStrength);
@@ -187,18 +261,21 @@ function getMarketCheckFactors(input: Section13RentJustificationInput): Section1
 export function calculateSection13RentJustification(
   input: Section13RentJustificationInput
 ): Section13RentJustificationResult {
-  const selectedFactors = input.selectedFactors.filter((factor): factor is Section13JustificationFactorId =>
-    SECTION13_SELECTABLE_JUSTIFICATION_FACTORS.some((item) => item.id === factor)
-  );
+  const selectedFactors = normalizeSection13JustificationFactors(input.selectedFactors);
+  const justificationAdjustment = calculateSection13JustificationAdjustment(selectedFactors);
   const appliedFactorIds = [...new Set([...selectedFactors, ...getMarketCheckFactors(input)])];
   const rawScore = appliedFactorIds.reduce((sum, id) => sum + getFactor(id).weight, 0);
   const score = Math.min(100, Math.max(0, rawScore));
   const band = getJustificationBand(score);
   const currentRent = input.currentRent == null ? null : Number(input.currentRent);
   const proposedRent = input.proposedRent == null ? null : Number(input.proposedRent);
+  const marketLow = input.marketLow == null ? null : Number(input.marketLow);
   const marketHigh = input.marketHigh == null ? null : Number(input.marketHigh);
+  const adjustmentMultiplier = 1 + justificationAdjustment.percent / 100;
+  const adjustedMarketLow = marketLow == null ? null : roundMoney(marketLow * adjustmentMultiplier);
+  const adjustedMarketHigh = marketHigh == null ? null : roundMoney(marketHigh * adjustmentMultiplier);
   const marketHeadroom =
-    currentRent == null || marketHigh == null ? null : roundMoney(marketHigh - currentRent);
+    currentRent == null || adjustedMarketHigh == null ? null : roundMoney(adjustedMarketHigh - currentRent);
   const proposedIncrease =
     currentRent == null || proposedRent == null ? null : roundMoney(proposedRent - currentRent);
   const evidenceCappedJustifiedIncrease =
@@ -212,9 +289,12 @@ export function calculateSection13RentJustification(
       ? null
       : roundMoney(proposedIncrease - evidenceCappedJustifiedIncrease);
   const proposedAboveMarketHigh =
-    proposedRent != null && marketHigh != null && proposedRent > marketHigh;
+    proposedRent != null && adjustedMarketHigh != null && proposedRent > adjustedMarketHigh;
 
   let summary = `Justification score is ${score}/100 (${band}).`;
+  if (justificationAdjustment.percent > 0) {
+    summary += ` Selected factors adjust the supportable market range by ${justificationAdjustment.percent}%${justificationAdjustment.capped ? ' after the 30% cap' : ''}.`;
+  }
   if (marketHeadroom != null && marketHeadroom <= 0) {
     summary += ' The current evidence does not support an uplift above the current rent.';
   } else if (proposedIncrease != null && proposedIncrease <= 0) {
@@ -240,8 +320,13 @@ export function calculateSection13RentJustification(
   return {
     selectedFactors,
     appliedFactors: appliedFactorIds.map(getFactor),
+    adjustmentFactors: justificationAdjustment.adjustmentFactors,
     score,
     band,
+    justificationAdjustmentPercent: justificationAdjustment.percent,
+    justificationAdjustmentCapped: justificationAdjustment.capped,
+    adjustedMarketLow,
+    adjustedMarketHigh,
     marketHeadroom,
     proposedIncrease,
     evidenceCappedJustifiedIncrease,

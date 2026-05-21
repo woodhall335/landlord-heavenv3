@@ -78,9 +78,18 @@ export function RentJustificationBuilder({
       : 'rounded-3xl border border-slate-200 bg-white p-6 shadow-sm';
 
   function toggleFactor(factorId: string) {
-    setSelectedFactors((prev) =>
-      prev.includes(factorId) ? prev.filter((item) => item !== factorId) : [...prev, factorId]
-    );
+    setSelectedFactors((prev) => {
+      if (prev.includes(factorId)) {
+        return prev.filter((item) => item !== factorId);
+      }
+      const withoutConflictingCondition =
+        factorId === 'excellent_condition'
+          ? prev.filter((item) => item !== 'good_condition')
+          : factorId === 'good_condition'
+            ? prev.filter((item) => item !== 'excellent_condition')
+            : prev;
+      return [...withoutConflictingCondition, factorId];
+    });
   }
 
   return (
@@ -89,7 +98,7 @@ export function RentJustificationBuilder({
         <div>
           <h3 className="text-xl font-semibold text-slate-950">Justify this rent</h3>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
-            Tick the factors that genuinely apply. The score explains the uplift, but it stays capped by the market evidence.
+            Tick the factors that genuinely apply. They now adjust the supportable range directly, capped at 30%.
           </p>
         </div>
         <span className="inline-flex w-fit rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-indigo-700">
@@ -119,21 +128,25 @@ export function RentJustificationBuilder({
 
       <div className="mt-5 grid gap-3 md:grid-cols-4">
         <div className="rounded-2xl bg-slate-50 p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Market headroom</p>
-          <p className="mt-2 text-lg font-semibold text-slate-950">{formatMoney(result.marketHeadroom)}</p>
-        </div>
-        <div className="rounded-2xl bg-slate-50 p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Proposed uplift</p>
-          <p className="mt-2 text-lg font-semibold text-slate-950">{formatMoney(result.proposedIncrease)}</p>
-        </div>
-        <div className="rounded-2xl bg-slate-50 p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Explained uplift</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Justification uplift</p>
           <p className="mt-2 text-lg font-semibold text-slate-950">
-            {formatMoney(result.evidenceCappedJustifiedIncrease)}
+            {result.justificationAdjustmentPercent}%
           </p>
         </div>
         <div className="rounded-2xl bg-slate-50 p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Unexplained</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Adjusted range</p>
+          <p className="mt-2 text-lg font-semibold text-slate-950">
+            {result.adjustedMarketLow != null && result.adjustedMarketHigh != null
+              ? `${formatMoney(result.adjustedMarketLow)} - ${formatMoney(result.adjustedMarketHigh)}`
+              : 'Unavailable'}
+          </p>
+        </div>
+        <div className="rounded-2xl bg-slate-50 p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Supported headroom</p>
+          <p className="mt-2 text-lg font-semibold text-slate-950">{formatMoney(result.marketHeadroom)}</p>
+        </div>
+        <div className="rounded-2xl bg-slate-50 p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Still unsupported</p>
           <p className="mt-2 text-lg font-semibold text-slate-950">{formatMoney(result.unexplainedIncrease)}</p>
         </div>
       </div>

@@ -41,7 +41,7 @@ export interface LiveComparableScrapeSuccess {
   source: Exclude<ComparableSearchOutcome, 'insufficient_live_evidence'>;
   summary: string;
   sourceStatuses: ComparableSourceStatus[];
-  searchFallbackMode?: 'exact' | 'parent_type' | null;
+  searchFallbackMode?: 'exact' | 'parent_type' | 'older_2_year' | 'parent_type_and_older_2_year' | null;
 }
 
 export interface LiveComparableScrapeFailure {
@@ -52,7 +52,7 @@ export interface LiveComparableScrapeFailure {
   sourceStatuses: ComparableSourceStatus[];
   reason: 'insufficient_live_comparables';
   retryable: true;
-  searchFallbackMode?: 'exact' | 'parent_type' | null;
+  searchFallbackMode?: 'exact' | 'parent_type' | 'older_2_year' | 'parent_type_and_older_2_year' | null;
 }
 
 export type LiveComparableScrapeResult =
@@ -1153,6 +1153,18 @@ export async function scrapeLiveComparables(
   const parentPropertyType = getParentSearchPropertyType(propertyType);
   const rawSearchType = String(propertyType || '').trim().toLowerCase().replace(/_/g, '-');
   if (!parentPropertyType || parentPropertyType === rawSearchType) {
+    if (exactResult.comparables.length > 0) {
+      return {
+        success: true,
+        comparables: exactResult.comparables,
+        source: 'blended_live',
+        summary: `Current live evidence was thin, so older comparable evidence up to 2 years was included in the calculation. Imported ${exactResult.comparables.length} comparable listing${
+          exactResult.comparables.length === 1 ? '' : 's'
+        } from ${formatSearchScope(normalizedPostcode, propertyType)}.`,
+        sourceStatuses: exactResult.sourceStatuses,
+        searchFallbackMode: 'older_2_year',
+      };
+    }
     return exactResult;
   }
 
@@ -1169,6 +1181,31 @@ export async function scrapeLiveComparables(
   const combinedStatuses = [...exactResult.sourceStatuses, ...parentResult.sourceStatuses];
 
   if (combinedComparables.length < MIN_LIVE_COMPARABLES) {
+    if (combinedComparables.length > 0) {
+      const successfulSources = combinedStatuses.filter((item) => item.ok && item.count > 0);
+      const source: LiveComparableScrapeSuccess['source'] =
+        successfulSources.some((item) => item.source === 'rightmove') &&
+        successfulSources.some((item) => item.source === 'openrent')
+          ? 'blended_live'
+          : successfulSources[0]?.source === 'openrent'
+            ? 'openrent_live'
+            : 'rightmove_live';
+
+      return {
+        success: true,
+        comparables: combinedComparables,
+        source,
+        summary: `Current live evidence was thin, so older comparable evidence up to 2 years was included in the calculation. Imported ${combinedComparables.length} comparable listing${
+          combinedComparables.length === 1 ? '' : 's'
+        } after first searching ${formatSearchScope(
+          normalizedPostcode,
+          propertyType
+        )} and then broadening to ${formatSearchScope(normalizedPostcode, parentPropertyType)}.`,
+        sourceStatuses: combinedStatuses,
+        searchFallbackMode: 'parent_type_and_older_2_year',
+      };
+    }
+
     return {
       success: false,
       comparables: combinedComparables,

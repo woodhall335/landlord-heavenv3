@@ -2321,6 +2321,20 @@ async function buildJustificationReportPdf(
     snapshot,
   });
   const manualJustification = resolvedState.adjustments.manualJustification?.trim();
+  const justificationFactors = preview?.justificationAdjustmentFactors || [];
+  const justificationAdjustmentLines = [
+    justificationFactors.length > 0
+      ? `Selected justification factors: ${justificationFactors.join(', ')}.`
+      : 'No selected justification factors have been applied to the supportable range.',
+    `Justification adjustment: ${preview?.justificationAdjustmentPercent || 0}%${
+      preview?.justificationAdjustmentCapped ? ' after the 30% cap' : ''
+    }.`,
+    `Raw comparable range: lower quartile ${formatCurrency(preview?.rawLowerQuartile)} pcm | median ${formatCurrency(preview?.rawMedian)} pcm | upper quartile ${formatCurrency(preview?.rawUpperQuartile)} pcm.`,
+    `Adjusted supportable range: lower quartile ${formatCurrency(preview?.lowerQuartile)} pcm | median ${formatCurrency(preview?.median)} pcm | upper quartile ${formatCurrency(preview?.upperQuartile)} pcm.`,
+    preview?.proposedRentMonthly != null && preview?.upperQuartile != null && preview.proposedRentMonthly > preview.upperQuartile
+      ? `The proposed rent of ${formatCurrency(preview.proposedRentMonthly)} pcm remains above the adjusted supportable range.`
+      : `The proposed rent of ${formatCurrency(preview?.proposedRentMonthly)} pcm is assessed against the adjusted supportable range.`,
+  ];
   const lines: SectionBlock[] = [
     {
       variant: 'intro',
@@ -2352,6 +2366,15 @@ async function buildJustificationReportPdf(
       ],
     },
     {
+      heading: 'Statutory and tribunal framing',
+      lines: [
+        'This report is prepared on the basis of Housing Act 1988 section 13(2) and section 13(4), as amended for assured tenancies from 1 May 2026.',
+        'The new rent must be proposed on the current Form 4A, served with at least two months notice, aligned to the tenancy period, and timed so that the 52-week / 53-week anti-drift rule is satisfied.',
+        'If the tenant refers the notice to the tribunal, the question is the open-market rent for the property on comparable terms rather than the size of the increase from the previous rent alone.',
+        'Comparable selection, adjustment discipline, and evidence freshness are therefore central. Unsupported or stale comparables weaken the landlord position even where the notice itself is valid.',
+      ],
+    },
+    {
       heading: 'Recorded reasoning',
       lines: [
         buildJustificationNarrativeText(resolvedState, snapshot),
@@ -2359,6 +2382,10 @@ async function buildJustificationReportPdf(
           ? `Case-specific note: ${manualJustification}`
           : 'No separate manual note was added. The proposal should therefore be explained by reference to the comparable analysis and recorded adjustments only.',
       ],
+    },
+    {
+      heading: 'Justification-weighted calculation',
+      lines: justificationAdjustmentLines,
     },
     {
       heading: 'Condition and adjustment check',
@@ -2395,17 +2422,17 @@ async function buildJustificationReportPdf(
       heading: 'Comparables and adjustments',
       lines: buildComparableLines(resolvedState, snapshot),
     },
-      {
-        heading: 'Final checks before service or filing',
-        lines: [
-          SECTION13_TRIBUNAL_WARNING,
-          'Check that Form 4A is the current prescribed notice and that the completed notice matches the final figures in the report.',
-          'Confirm that at least two months notice is given, that the proposed start date aligns with the tenancy period, and that the 52/53-week timing rule has been checked.',
-          'Check that the service date, proposed start date, and rent figures match the final Form 4A notice, the proof of service record, and the comparable evidence file before sending or relying on them.',
-          'If the tenant queries the increase, respond using the same market evidence. If a revised figure or later start date is agreed, record that agreement in writing so it does not conflict with the notice file.',
-        ],
-      },
-    ];
+    {
+      heading: 'Final checks before service or filing',
+      lines: [
+        SECTION13_TRIBUNAL_WARNING,
+        'Check that Form 4A is the current prescribed notice and that the completed notice matches the final figures in the report.',
+        'Confirm that at least two months notice is given, that the proposed start date aligns with the tenancy period, and that the 52/53-week timing rule has been checked.',
+        'Check that the service date, proposed start date, and rent figures match the final Form 4A notice, the proof of service record, and the comparable evidence file before sending or relying on them.',
+        'If the tenant queries the increase, respond using the same market evidence. If a revised figure or later start date is agreed, record that agreement in writing so it does not conflict with the notice file.',
+      ],
+    },
+  ];
 
   return createNarrativePdf(
     'Rent Increase Justification Report',

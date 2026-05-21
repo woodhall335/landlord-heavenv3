@@ -8,6 +8,7 @@ import type {
   Section13State,
 } from './types';
 import { getReliableComparableDistanceMiles } from './comparable-distance';
+import { calculateSection13JustificationAdjustment } from './rent-justification';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const PRIMARY_FRESHNESS_DAYS = 90;
@@ -520,6 +521,8 @@ function buildExplanationText(calculation: {
   fresh90UsedCount: number;
   freshnessWindowUsed: 90 | 180 | 730;
   adjustmentsApplied: boolean;
+  justificationAdjustmentPercent: number;
+  justificationAdjustmentCapped: boolean;
 }): string[] {
   const lines = [
     `Median calculated from ${calculation.usedComparableCount} comparable listing${
@@ -530,6 +533,14 @@ function buildExplanationText(calculation: {
 
   if (calculation.adjustmentsApplied) {
     lines.push('Median uses adjusted monthly rents, not raw listing prices.');
+  }
+
+  if (calculation.justificationAdjustmentPercent > 0) {
+    lines.push(
+      `Selected rent-justification factors increase the supportable range by ${calculation.justificationAdjustmentPercent}%${
+        calculation.justificationAdjustmentCapped ? ' after the 30% cap' : ''
+      }.`
+    );
   }
 
   if (calculation.freshnessWindowUsed === 180) {
@@ -545,7 +556,7 @@ function buildExplanationText(calculation: {
   }
 
   if (calculation.fresh90UsedCount < calculation.usedComparableCount) {
-    lines.push('Some included comparables are older than 90 days, which softens the evidence strength.');
+    lines.push('Some included comparables are older than 90 days, so check the listing dates before relying on them.');
   }
 
   return lines;
@@ -653,6 +664,13 @@ export function buildSection13MarketCalculation(
   const marketLow = percentile(usedAdjusted, 0.25);
   const marketMedian = percentile(usedAdjusted, 0.5);
   const marketHigh = percentile(usedAdjusted, 0.75);
+  const justificationAdjustment = calculateSection13JustificationAdjustment(
+    state.adjustments.justificationFactors || []
+  );
+  const adjustmentMultiplier = 1 + justificationAdjustment.percent / 100;
+  const justifiedMarketLow = marketLow == null ? null : marketLow * adjustmentMultiplier;
+  const justifiedMarketMedian = marketMedian == null ? null : marketMedian * adjustmentMultiplier;
+  const justifiedMarketHigh = marketHigh == null ? null : marketHigh * adjustmentMultiplier;
   const sourceBackedUsedCount = usedComparables.filter((item) => item.sourceBacked).length;
   const fresh90UsedCount = usedComparables.filter((item) => item.freshnessBand === 'fresh_90').length;
   const olderFallbackUsedCount = usedComparables.filter(
@@ -663,13 +681,12 @@ export function buildSection13MarketCalculation(
   ).length;
   const majoritySourceBacked = usedComparables.length > 0 && sourceBackedUsedCount / usedComparables.length >= 0.5;
   const majorityFresh = usedComparables.length > 0 && fresh90UsedCount / usedComparables.length >= 0.5;
-  const olderFallbackUsed = olderFallbackUsedCount > 0 || selection.freshnessWindowUsed === 730;
   const majorityCloseMatch =
     usedComparables.length > 0 && comparableSimilarityCount / usedComparables.length >= 0.5;
   const evidenceStrength: Section13EvidenceStrengthBand =
-    usedComparables.length >= 6 && majoritySourceBacked && majorityFresh && majorityCloseMatch && !olderFallbackUsed
+    usedComparables.length >= 6 && majoritySourceBacked && majorityFresh && majorityCloseMatch
       ? 'strong'
-      : usedComparables.length >= 3 && !olderFallbackUsed
+      : usedComparables.length >= 3
         ? 'moderate'
         : 'weak';
   const adjustmentsApplied = usedComparables.some((item) => item.rentPcmRaw !== item.rentPcmAdjusted);
@@ -677,12 +694,12 @@ export function buildSection13MarketCalculation(
   const proposedRentMonthly =
     state.preview?.proposedRentMonthly ??
     (state.proposal.proposedRentAmount == null ? null : Number(state.proposal.proposedRentAmount));
-  const aboveRange = proposedRentMonthly != null && marketHigh != null && proposedRentMonthly > marketHigh;
-  const aboveMedian = proposedRentMonthly != null && marketMedian != null && proposedRentMonthly > marketMedian;
+  const aboveRange = proposedRentMonthly != null && justifiedMarketHigh != null && proposedRentMonthly > justifiedMarketHigh;
+  const aboveMedian = proposedRentMonthly != null && justifiedMarketMedian != null && proposedRentMonthly > justifiedMarketMedian;
   const dateWarnings = (state.preview?.validationIssues?.length || 0) > 0;
 
   let challengeReasonSummary =
-    'The proposed rent looks broadly aligned with the market calculation currently available.';
+    'The proposed rent looks broadly aligned with the justified market calculation currently available.';
 
   if (dateWarnings) {
     challengeReasonSummary =
@@ -692,23 +709,26 @@ export function buildSection13MarketCalculation(
       'Challenge risk is raised because you already expect the tenant to object, so the file should be prepared more defensively.';
   } else if (evidenceStrength === 'strong' && aboveRange) {
     challengeReasonSummary =
-      'Evidence strength is strong, but the proposed rent is high compared with the market calculation.';
+      'Evidence strength is strong, but the proposed rent is high compared with the justified market calculation.';
   } else if (evidenceStrength === 'weak') {
     challengeReasonSummary =
       'Challenge risk is being driven mainly by limited or mixed comparable evidence rather than pricing alone.';
   } else if (aboveRange) {
     challengeReasonSummary =
-      'The proposed rent sits above the supported market position and is likely to attract challenge.';
+      'The proposed rent sits above the justified supported market position and is likely to attract challenge.';
   } else if (aboveMedian) {
     challengeReasonSummary =
       'The proposed rent sits toward the upper end of the supported market position, so explanation and service discipline matter.';
   }
 
   const saferRangeGuidance =
-    proposedRentMonthly != null && marketMedian != null && marketLow != null && proposedRentMonthly > marketMedian
-      ? proposedRentMonthly > (marketHigh ?? marketMedian)
-        ? `A more supportable rent may be closer to ${formatCurrency(marketLow)}-${formatCurrency(marketMedian)} pcm.`
-        : `The strongest evidence currently supports a figure around ${formatCurrency(marketMedian)} pcm.`
+    proposedRentMonthly != null &&
+    justifiedMarketMedian != null &&
+    justifiedMarketLow != null &&
+    proposedRentMonthly > justifiedMarketMedian
+      ? proposedRentMonthly > (justifiedMarketHigh ?? justifiedMarketMedian ?? marketMedian)
+        ? `A more supportable rent may be closer to ${formatCurrency(justifiedMarketLow)}-${formatCurrency(justifiedMarketMedian)} pcm after the selected justification factors.`
+        : `The strongest evidence currently supports a justified figure around ${formatCurrency(justifiedMarketMedian)} pcm.`
       : null;
 
   const explanationText = buildExplanationText({
@@ -717,15 +737,30 @@ export function buildSection13MarketCalculation(
     fresh90UsedCount,
     freshnessWindowUsed: selection.freshnessWindowUsed,
     adjustmentsApplied,
+    justificationAdjustmentPercent: justificationAdjustment.percent,
+    justificationAdjustmentCapped: justificationAdjustment.capped,
   });
 
   return {
     usedComparables,
     contextComparables,
     excludedComparables,
-    marketLow: marketLow == null ? null : Number(marketLow.toFixed(2)),
-    marketMedian: marketMedian == null ? null : Number(marketMedian.toFixed(2)),
-    marketHigh: marketHigh == null ? null : Number(marketHigh.toFixed(2)),
+    rawMarketLow: marketLow == null ? null : Number(marketLow.toFixed(2)),
+    rawMarketMedian: marketMedian == null ? null : Number(marketMedian.toFixed(2)),
+    rawMarketHigh: marketHigh == null ? null : Number(marketHigh.toFixed(2)),
+    marketLow: justifiedMarketLow == null ? null : Number(justifiedMarketLow.toFixed(2)),
+    marketMedian: justifiedMarketMedian == null ? null : Number(justifiedMarketMedian.toFixed(2)),
+    marketHigh: justifiedMarketHigh == null ? null : Number(justifiedMarketHigh.toFixed(2)),
+    justifiedMarketLow: justifiedMarketLow == null ? null : Number(justifiedMarketLow.toFixed(2)),
+    justifiedMarketMedian: justifiedMarketMedian == null ? null : Number(justifiedMarketMedian.toFixed(2)),
+    justifiedMarketHigh: justifiedMarketHigh == null ? null : Number(justifiedMarketHigh.toFixed(2)),
+    justificationAdjustmentPercent: justificationAdjustment.percent,
+    justificationAdjustmentFactors: justificationAdjustment.adjustmentFactors.map((factor) => factor.label),
+    justificationAdjustmentCapped: justificationAdjustment.capped,
+    olderFallbackSearchUsed:
+      olderFallbackUsedCount > 0 ||
+      selection.freshnessWindowUsed === 730 ||
+      String(state.comparablesMeta.searchFallbackMode || '').includes('older_2_year'),
     totalComparableCount: assessments.length,
     usedComparableCount: usedComparables.length,
     sourceBackedUsedCount,

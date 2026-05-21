@@ -243,7 +243,7 @@ describe('section13 live comparable scraper', () => {
     );
   });
 
-  it('fails honestly when fewer than three live comparables are available', async () => {
+  it('uses the 2-year fallback mode when fewer than three live comparables are available', async () => {
     mockFetchByUrl({
       rightmove: buildRightmoveHtml([
         buildRightmoveProperty(0, {
@@ -259,15 +259,14 @@ describe('section13 live comparable scraper', () => {
 
     const result = await scrapeLiveComparables('LS1 4AP', 2);
 
-    expect(result.success).toBe(false);
-    if (result.success) {
-      throw new Error('Expected insufficient live evidence failure');
+    expect(result.success).toBe(true);
+    if (!result.success) {
+      throw new Error('Expected older fallback live comparable success');
     }
 
-    expect(result.source).toBe('insufficient_live_evidence');
     expect(result.comparables).toHaveLength(2);
-    expect(result.summary).toContain('We could only gather 2 live comparable listings');
-    expect(result.reason).toBe('insufficient_live_comparables');
+    expect(result.searchFallbackMode).toBe('older_2_year');
+    expect(result.summary).toContain('older comparable evidence up to 2 years was included');
   });
 
   it('broadens subtype searches to parent property type when exact evidence is thin', async () => {

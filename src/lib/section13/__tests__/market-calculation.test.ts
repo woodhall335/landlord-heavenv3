@@ -129,11 +129,33 @@ describe('buildSection13MarketCalculation', () => {
 
     expect(calculation.freshnessWindowUsed).toBe(730);
     expect(calculation.usedComparableCount).toBe(3);
-    expect(calculation.evidenceStrength).toBe('weak');
+    expect(calculation.evidenceStrength).toBe('moderate');
     expect(calculation.usedComparables.some((item) => item.freshnessBand === 'older_2_year_fallback')).toBe(true);
     expect(
       calculation.explanationText.some((line) => line.includes('up to 2 years'))
     ).toBe(true);
+  });
+
+  it('applies selected justification factors to the operative market range while preserving raw values', () => {
+    const state = buildState();
+    state.adjustments.justificationFactors = ['excellent_condition', 'recent_refurbishment', 'parking_or_garage'];
+    const comparables = [
+      buildComparable(1200, { addressSnippet: 'Fresh 1', sortOrder: 0 }),
+      buildComparable(1300, { addressSnippet: 'Fresh 2', sortOrder: 1 }),
+      buildComparable(1400, { addressSnippet: 'Fresh 3', sortOrder: 2 }),
+    ];
+
+    const calculation = buildSection13MarketCalculation(
+      state,
+      comparables,
+      new Date('2026-05-03T10:00:00.000Z')
+    );
+
+    expect(calculation.rawMarketMedian).toBe(1300);
+    expect(calculation.justificationAdjustmentPercent).toBe(25);
+    expect(calculation.marketMedian).toBe(1625);
+    expect(calculation.justifiedMarketHigh).toBe(1687.5);
+    expect(calculation.explanationText.some((line) => line.includes('increase the supportable range by 25%'))).toBe(true);
   });
 
   it('treats scraped zero-mile distances as unknown instead of precise evidence', () => {

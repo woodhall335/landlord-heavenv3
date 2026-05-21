@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { AlertTriangle, ArrowRight, Check, Download, ShieldCheck } from 'lucide-react';
 import { clsx } from 'clsx';
 
@@ -11,6 +11,7 @@ import { captureLead } from '@/components/leads/useLeadCapture';
 import { trackEvent } from '@/lib/analytics';
 import type { GrowthCtaPosition } from '@/lib/analytics/growth-events';
 import { PRODUCTS } from '@/lib/pricing/products';
+import type { Section13RentJustificationResult } from '@/lib/section13/rent-justification';
 import type {
   RentCheckerPropertyCondition,
   RentCheckerPropertySubtype,
@@ -203,6 +204,123 @@ function buildEventPayload(result: RentCheckerResult) {
   };
 }
 
+function deriveAdjustedCheckerResult(
+  result: RentCheckerResult,
+  justification: Section13RentJustificationResult | null
+): RentCheckerResult {
+  if (!justification) return result;
+
+  const rawLow = result.rawMarketLow ?? result.marketLow;
+  const rawMedian = result.rawMarketMedian ?? result.marketMedian;
+  const rawHigh = result.rawMarketHigh ?? result.marketHigh;
+  const multiplier = 1 + justification.justificationAdjustmentPercent / 100;
+  const marketLow = rawLow == null ? null : Number((rawLow * multiplier).toFixed(2));
+  const marketMedian = rawMedian == null ? null : Number((rawMedian * multiplier).toFixed(2));
+  const marketHigh = rawHigh == null ? null : Number((rawHigh * multiplier).toFixed(2));
+  const proposedRent = result.proposedRent;
+  const evidenceStrength = result.evidenceStrength;
+  const nextRisk =
+    proposedRent == null || marketMedian == null || marketHigh == null
+      ? result.challengeRisk
+      : proposedRent > marketHigh || evidenceStrength === 'Weak'
+        ? 'high'
+        : proposedRent > marketMedian || evidenceStrength === 'Moderate'
+          ? 'moderate'
+          : 'low';
+  const resultState =
+    nextRisk === 'low'
+      ? 'landlord_low_risk'
+      : nextRisk === 'moderate'
+        ? 'landlord_moderate_risk'
+        : 'landlord_high_risk';
+  const recommendedProduct = nextRisk === 'low' ? 'section13_standard' : 'section13_defensive';
+  const proposedPositionLabel =
+    proposedRent == null || marketLow == null || marketMedian == null || marketHigh == null
+      ? result.proposedPositionLabel
+      : proposedRent > marketHigh
+        ? 'Above justified market'
+        : proposedRent > marketMedian
+          ? 'Above justified median'
+          : proposedRent < marketLow
+            ? 'Below justified market'
+            : 'Within justified range';
+  const challengeExplanation =
+    justification.justificationAdjustmentPercent > 0
+      ? `Selected justification factors adjust the supportable range by ${justification.justificationAdjustmentPercent}%${justification.justificationAdjustmentCapped ? ' after the 30% cap' : ''}. ${
+          proposedRent != null && marketHigh != null && proposedRent > marketHigh
+            ? 'The proposed rent remains above the adjusted supportable range.'
+            : 'The proposed rent is now assessed against that adjusted range.'
+        }`
+      : result.challengeExplanation;
+  const saferRangeGuidance =
+    proposedRent != null && marketMedian != null && marketLow != null && proposedRent > marketMedian
+      ? `A more supportable rent may be closer to ${formatCurrency(marketLow)}-${formatCurrency(marketMedian)} pcm after the selected justification factors.`
+      : result.saferRangeGuidance;
+
+  return {
+    ...result,
+    resultState,
+    recommendedProduct,
+    showBundleUpsell: nextRisk !== 'low',
+    showDefenceSecondary: nextRisk !== 'low',
+    challengeRisk: nextRisk,
+    challengeRiskLabel: toCheckerRiskLabel(nextRisk),
+    marketLow,
+    marketMedian,
+    marketHigh,
+    justificationAdjustmentPercent: justification.justificationAdjustmentPercent,
+    justificationAdjustmentFactors: justification.adjustmentFactors.map((factor) => factor.label),
+    justificationAdjustmentCapped: justification.justificationAdjustmentCapped,
+    proposedPositionLabel,
+    overallPositionLabel: proposedPositionLabel || result.overallPositionLabel,
+    challengeExplanation,
+    saferRangeGuidance,
+    primaryCtaLabel:
+      recommendedProduct === 'section13_standard'
+        ? 'Generate my Section 13 notice'
+        : 'Build a defendable rent increase',
+    primaryCtaHref: PRODUCTS[recommendedProduct].wizardHref,
+    primaryCtaSubtext:
+      recommendedProduct === 'section13_standard'
+        ? 'Create Form 4A, rent summary, justification report, cover letter, and proof of service.'
+        : 'Strengthen the evidence and prepare for challenge before relying on the increase.',
+    preview: {
+      ...result.preview,
+      lowerQuartile: marketLow,
+      median: marketMedian,
+      upperQuartile: marketHigh,
+      justifiedMarketLow: marketLow,
+      justifiedMarketMedian: marketMedian,
+      justifiedMarketHigh: marketHigh,
+      justificationAdjustmentPercent: justification.justificationAdjustmentPercent,
+      justificationAdjustmentFactors: justification.adjustmentFactors.map((factor) => factor.label),
+      justificationAdjustmentCapped: justification.justificationAdjustmentCapped,
+      challengeReasonSummary: challengeExplanation,
+      saferRangeGuidance,
+      marketCalculation: {
+        ...result.preview.marketCalculation,
+        marketLow,
+        marketMedian,
+        marketHigh,
+        justifiedMarketLow: marketLow,
+        justifiedMarketMedian: marketMedian,
+        justifiedMarketHigh: marketHigh,
+        justificationAdjustmentPercent: justification.justificationAdjustmentPercent,
+        justificationAdjustmentFactors: justification.adjustmentFactors.map((factor) => factor.label),
+        justificationAdjustmentCapped: justification.justificationAdjustmentCapped,
+        challengeReasonSummary: challengeExplanation,
+        saferRangeGuidance,
+      },
+    },
+  };
+}
+
+function toCheckerRiskLabel(risk: RentCheckerResult['challengeRisk']): RentCheckerResult['challengeRiskLabel'] {
+  if (risk === 'low') return 'Low';
+  if (risk === 'moderate') return 'Moderate';
+  return 'High';
+}
+
 function CtaLink({
   href,
   label,
@@ -287,11 +405,18 @@ export function MarketPositionCard({ result }: { result: RentCheckerResult }) {
           <dd className="font-semibold text-slate-950">{formatLabel(result.propertyCondition)}</dd>
         </div>
         <div className="flex items-start justify-between gap-4">
-          <dt>Estimated range</dt>
-          <dd className="font-semibold text-slate-950">
+          <dt>Adjusted supportable range</dt>
+          <dd className="text-right">
+            <div className="font-semibold text-slate-950">
             {result.marketLow != null && result.marketHigh != null
               ? `${formatCurrency(result.marketLow)} - ${formatCurrency(result.marketHigh)} pcm`
               : 'Unavailable'}
+            </div>
+            {result.justificationAdjustmentPercent > 0 ? (
+              <div className="mt-1 text-xs leading-5 text-slate-500">
+                Raw range {formatCurrency(result.rawMarketLow)} - {formatCurrency(result.rawMarketHigh)} pcm, adjusted by {result.justificationAdjustmentPercent}%.
+              </div>
+            ) : null}
           </dd>
         </div>
         <div className="flex items-start justify-between gap-4">
@@ -1160,11 +1285,17 @@ export function RentCheckerResultPage({
   trackingContext,
 }: RentCheckerResultPageProps) {
   const [showStickyCta, setShowStickyCta] = useState(false);
+  const [justificationResult, setJustificationResult] =
+    useState<Section13RentJustificationResult | null>(null);
+  const adjustedResult = useMemo(
+    () => deriveAdjustedCheckerResult(result, justificationResult),
+    [justificationResult, result]
+  );
 
   const onStickyCtaClick = () => {
-    trackProductCta(result, result.recommendedProduct, trackingContext);
-    if (result.primaryCtaTracksCheckout) {
-      trackEvent('checkout_started', buildCheckoutPayload(result, trackingContext));
+    trackProductCta(adjustedResult, adjustedResult.recommendedProduct, trackingContext);
+    if (adjustedResult.primaryCtaTracksCheckout) {
+      trackEvent('checkout_started', buildCheckoutPayload(adjustedResult, trackingContext));
     }
   };
 
@@ -1182,37 +1313,38 @@ export function RentCheckerResultPage({
     <div className="space-y-8">
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1.4fr)_360px]">
         <div className="space-y-6">
-          <ResultHeroCard result={result} />
+          <ResultHeroCard result={adjustedResult} />
           <div className="grid gap-6 lg:grid-cols-2">
-            <MarketPositionCard result={result} />
-            <RiskEvidenceCard result={result} />
+            <MarketPositionCard result={adjustedResult} />
+            <RiskEvidenceCard result={adjustedResult} />
           </div>
-          <ConditionScenarioCard result={result} />
+          <ConditionScenarioCard result={adjustedResult} />
           <RentJustificationBuilder
-            currentRent={result.currentRent}
-            proposedRent={result.proposedRent}
-            marketLow={result.marketLow}
-            marketHigh={result.marketHigh}
-            comparableCount={result.comparableCount}
-            evidenceStrength={result.preview.marketCalculation.evidenceStrength}
-            conditionScenario={result.propertyCondition}
+            currentRent={adjustedResult.currentRent}
+            proposedRent={adjustedResult.proposedRent}
+            marketLow={adjustedResult.rawMarketLow}
+            marketHigh={adjustedResult.rawMarketHigh}
+            comparableCount={adjustedResult.comparableCount}
+            evidenceStrength={adjustedResult.preview.marketCalculation.evidenceStrength}
+            conditionScenario={adjustedResult.propertyCondition}
+            onChange={setJustificationResult}
           />
-          <ComparableListingsCard result={result} />
+          <ComparableListingsCard result={adjustedResult} />
         </div>
-        <RecommendedActionCard result={result} trackingContext={trackingContext} />
+        <RecommendedActionCard result={adjustedResult} trackingContext={trackingContext} />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <WhatThisMeansCard result={result} />
-        <NextStepsCard result={result} trackingContext={trackingContext} />
+        <WhatThisMeansCard result={adjustedResult} />
+        <NextStepsCard result={adjustedResult} trackingContext={trackingContext} />
       </div>
 
-      <EmailReportCapture result={result} />
-      <ProductComparisonStrip result={result} />
-      {result.showBundleUpsell ? (
-        <BundleUpsellBlock result={result} trackingContext={trackingContext} />
+      <EmailReportCapture result={adjustedResult} />
+      <ProductComparisonStrip result={adjustedResult} />
+      {adjustedResult.showBundleUpsell ? (
+        <BundleUpsellBlock result={adjustedResult} trackingContext={trackingContext} />
       ) : null}
-      <DisclaimerBlock result={result} />
+      <DisclaimerBlock result={adjustedResult} />
 
       <div className="flex justify-end">
         <button onClick={onRestart} className="text-sm font-medium text-slate-500 hover:text-slate-800">
@@ -1222,9 +1354,9 @@ export function RentCheckerResultPage({
 
       {showStickyCta ? (
         <div className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 px-4 py-3 shadow-[0_-8px_30px_rgba(15,23,42,0.08)] backdrop-blur md:hidden">
-            <Link href={result.primaryCtaHref} onClick={onStickyCtaClick} className="block">
+            <Link href={adjustedResult.primaryCtaHref} onClick={onStickyCtaClick} className="block">
               <Button fullWidth className="bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-300">
-              {result.recommendedProduct === 'section13_standard'
+              {adjustedResult.recommendedProduct === 'section13_standard'
                 ? 'Create my rent increase notice'
                 : 'Prepare for challenge'}
                 <ArrowRight className="h-4 w-4" />

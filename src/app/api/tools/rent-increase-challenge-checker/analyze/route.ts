@@ -128,6 +128,7 @@ export async function POST(request: Request) {
       comparables: scrape.comparables,
       scrapeSource: scrape.source,
       scrapeSummary: scrape.summary,
+      searchFallbackMode: scrape.searchFallbackMode || null,
     });
 
     const resultId = await persistResult(input, result);

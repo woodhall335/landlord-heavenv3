@@ -1734,25 +1734,35 @@ export function Section13WizardFlow({
 
             <div className="grid gap-4 md:grid-cols-2">
               <div className="rounded-2xl border border-gray-200 bg-white p-4">
-                <p className="text-sm font-semibold text-gray-900">Supportable range</p>
+                <p className="text-sm font-semibold text-gray-900">Adjusted supportable range</p>
                 <p className="mt-2 text-2xl font-bold text-gray-950">
-                  {formatMoney(effectiveState.preview?.proposedRentMonthly)}
+                  {effectiveState.preview?.lowerQuartile != null && effectiveState.preview?.upperQuartile != null
+                    ? `${formatMoney(effectiveState.preview.lowerQuartile)} - ${formatMoney(effectiveState.preview.upperQuartile)}`
+                    : 'Unavailable'}
                 </p>
                 <p className="mt-2 text-sm text-gray-700">
                   {effectiveState.preview?.proposedPositionLabel || 'Add the proposed rent above to see where the figure sits.'}
                 </p>
+                {effectiveState.preview?.justificationAdjustmentPercent ? (
+                  <p className="mt-2 text-sm text-gray-700">
+                    Raw comparable median {formatMoney(effectiveState.preview.rawMedian)} adjusted by {effectiveState.preview.justificationAdjustmentPercent}% from selected justification factors.
+                  </p>
+                ) : null}
                 <div className="mt-4 grid grid-cols-3 gap-2 text-sm">
                   <div className="rounded-xl bg-gray-50 p-3">
-                    <div className="text-xs text-gray-600">LQ</div>
-                    <div className="font-semibold text-gray-900">{formatMoney(effectiveState.preview?.lowerQuartile)}</div>
+                    <div className="text-xs text-gray-600">Raw LQ</div>
+                    <div className="font-semibold text-gray-900">{formatMoney(effectiveState.preview?.rawLowerQuartile)}</div>
+                    <div className="mt-1 text-xs text-gray-500">Adjusted {formatMoney(effectiveState.preview?.lowerQuartile)}</div>
                   </div>
                   <div className="rounded-xl bg-gray-50 p-3">
-                    <div className="text-xs text-gray-600">Median</div>
-                    <div className="font-semibold text-gray-900">{formatMoney(effectiveState.preview?.median)}</div>
+                    <div className="text-xs text-gray-600">Raw median</div>
+                    <div className="font-semibold text-gray-900">{formatMoney(effectiveState.preview?.rawMedian)}</div>
+                    <div className="mt-1 text-xs text-gray-500">Adjusted {formatMoney(effectiveState.preview?.median)}</div>
                   </div>
                   <div className="rounded-xl bg-gray-50 p-3">
-                    <div className="text-xs text-gray-600">UQ</div>
-                    <div className="font-semibold text-gray-900">{formatMoney(effectiveState.preview?.upperQuartile)}</div>
+                    <div className="text-xs text-gray-600">Raw UQ</div>
+                    <div className="font-semibold text-gray-900">{formatMoney(effectiveState.preview?.rawUpperQuartile)}</div>
+                    <div className="mt-1 text-xs text-gray-500">Adjusted {formatMoney(effectiveState.preview?.upperQuartile)}</div>
                   </div>
                 </div>
                 {marketCalculation?.medianExplanation ? (
@@ -2183,8 +2193,8 @@ export function Section13WizardFlow({
                     )
               }
               proposedRent={effectiveState.preview?.proposedRentMonthly}
-              marketLow={effectiveState.preview?.lowerQuartile}
-              marketHigh={effectiveState.preview?.upperQuartile}
+              marketLow={effectiveState.preview?.rawLowerQuartile}
+              marketHigh={effectiveState.preview?.rawUpperQuartile}
               comparableCount={marketCalculation?.usedComparableCount || 0}
               evidenceStrength={effectiveState.preview?.evidenceBand}
               conditionScenario={effectiveState.adjustments.conditionScenario || 'average'}
@@ -2578,23 +2588,33 @@ export function Section13WizardFlow({
             </div>
             <div className="grid gap-4 md:grid-cols-2">
               <div className="rounded-2xl border border-gray-200 p-4">
-                <p className="text-sm font-semibold text-gray-900">What we found in the local market</p>
+                <p className="text-sm font-semibold text-gray-900">Adjusted supportable market range</p>
                 <p className="mt-2 text-2xl font-bold text-gray-950">
-                  {formatMoney(effectiveState.preview?.proposedRentMonthly)}
+                  {effectiveState.preview?.lowerQuartile != null && effectiveState.preview?.upperQuartile != null
+                    ? `${formatMoney(effectiveState.preview.lowerQuartile)} - ${formatMoney(effectiveState.preview.upperQuartile)}`
+                    : 'Unavailable'}
                 </p>
                 <p className="mt-2 text-sm text-gray-700">{effectiveState.preview?.proposedPositionLabel}</p>
+                {effectiveState.preview?.justificationAdjustmentPercent ? (
+                  <p className="mt-2 text-sm text-gray-700">
+                    Raw median {formatMoney(effectiveState.preview.rawMedian)} adjusted by {effectiveState.preview.justificationAdjustmentPercent}% from selected justification factors.
+                  </p>
+                ) : null}
                 <div className="mt-4 grid grid-cols-3 gap-2 text-sm">
                   <div className="rounded-xl bg-gray-50 p-3">
-                    <div className="text-xs text-gray-600">LQ</div>
-                    <div className="font-semibold text-gray-900">{formatMoney(effectiveState.preview?.lowerQuartile)}</div>
+                    <div className="text-xs text-gray-600">Raw LQ</div>
+                    <div className="font-semibold text-gray-900">{formatMoney(effectiveState.preview?.rawLowerQuartile)}</div>
+                    <div className="mt-1 text-xs text-gray-500">Adjusted {formatMoney(effectiveState.preview?.lowerQuartile)}</div>
                   </div>
                   <div className="rounded-xl bg-gray-50 p-3">
-                    <div className="text-xs text-gray-600">Median</div>
-                    <div className="font-semibold text-gray-900">{formatMoney(effectiveState.preview?.median)}</div>
+                    <div className="text-xs text-gray-600">Raw median</div>
+                    <div className="font-semibold text-gray-900">{formatMoney(effectiveState.preview?.rawMedian)}</div>
+                    <div className="mt-1 text-xs text-gray-500">Adjusted {formatMoney(effectiveState.preview?.median)}</div>
                   </div>
                   <div className="rounded-xl bg-gray-50 p-3">
-                    <div className="text-xs text-gray-600">UQ</div>
-                    <div className="font-semibold text-gray-900">{formatMoney(effectiveState.preview?.upperQuartile)}</div>
+                    <div className="text-xs text-gray-600">Raw UQ</div>
+                    <div className="font-semibold text-gray-900">{formatMoney(effectiveState.preview?.rawUpperQuartile)}</div>
+                    <div className="mt-1 text-xs text-gray-500">Adjusted {formatMoney(effectiveState.preview?.upperQuartile)}</div>
                   </div>
                 </div>
                 {marketCalculation?.medianExplanation ? (
