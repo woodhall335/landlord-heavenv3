@@ -26,12 +26,13 @@
  */
 
 import { NextResponse } from 'next/server';
-import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from '@/lib/supabase/server';
+import { createAdminClient, tryGetServerUser } from '@/lib/supabase/server';
 import { htmlToPdf, pdfBytesToPreviewThumbnail, compileTemplate, loadTemplate } from '@/lib/documents/generator';
 import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 import { buildMoneyClaimGenerationInput } from '@/lib/documents/money-claim-generation-facts';
 import { getArrearsScheduleData } from '@/lib/documents/arrears-schedule-mapper';
 import { fillN1Form, CaseData } from '@/lib/documents/official-forms-filler';
+import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
 
 // Force Node.js runtime - Puppeteer/@sparticuz/chromium cannot run on Edge
 export const runtime = 'nodejs';
@@ -190,15 +191,10 @@ export async function GET(
 
     // Get user and create client
     const user = await tryGetServerUser();
-    const supabase = user ? await createServerSupabaseClient() : createAdminClient();
+    const supabase = createAdminClient();
 
     // Fetch case
-    let query = supabase.from('cases').select('*').eq('id', caseId);
-    if (user) {
-      query = query.eq('user_id', user.id);
-    }
-
-    const { data, error: fetchError } = await query.single();
+    const { data, error: fetchError } = await supabase.from('cases').select('*').eq('id', caseId).single();
 
     if (fetchError || !data) {
       console.error('[Money-Claim-Thumbnail] Case not found:', fetchError);
@@ -206,6 +202,22 @@ export async function GET(
     }
 
     const caseRow = data as any;
+    const accessDenied = getPreviewCaseAccessDenial(user, caseRow);
+    if (accessDenied) {
+      console.warn('[Money-Claim-Thumbnail] UNAUTHORIZED_CASE_ACCESS:', {
+        code: 'UNAUTHORIZED_CASE_ACCESS',
+        caseId,
+        reason: accessDenied,
+        userId: user?.id || null,
+        caseOwnerId: caseRow.user_id || null,
+      });
+      return errorResponse('CASE_NOT_FOUND', 'Case not found', 404, {
+        reason: 'UNAUTHORIZED_CASE_ACCESS',
+        accessDenied,
+        caseId,
+      });
+    }
+
     const wizardFacts = caseRow.wizard_facts || caseRow.collected_facts || caseRow.facts || {};
 
     // Determine jurisdiction - Money Claim is ENGLAND-ONLY

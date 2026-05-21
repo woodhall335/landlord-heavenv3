@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 
-import { isAdmin } from '@/lib/auth';
 import { buildPdfEmbedHtml } from '@/lib/previews/documentEmbedShell';
 import {
   SECTION13_CORE_DOCUMENT_TYPES,
@@ -11,6 +10,7 @@ import { computeSection13Preview } from '@/lib/section13/rules';
 import { getDefaultSection13StateForCase, getSection13Comparables } from '@/lib/section13/server';
 import type { Section13ProductSku } from '@/lib/section13/types';
 import { createAdminClient, tryGetServerUser } from '@/lib/supabase/server';
+import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -60,12 +60,6 @@ function resolveSection13ProductType(
     : 'section13_standard';
 }
 
-function canReadPreviewCase(user: { id: string } | null, caseRow: { user_id?: string | null }): boolean {
-  if (!caseRow.user_id) return true;
-  if (!user) return false;
-  return caseRow.user_id === user.id || isAdmin(user.id);
-}
-
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ caseId: string }> }
@@ -106,8 +100,20 @@ export async function GET(
     }
 
     const caseRow = data as any;
-    if (!canReadPreviewCase(user, caseRow)) {
-      return errorResponse('CASE_NOT_FOUND', 'Case not found', 404, { caseId });
+    const accessDenied = getPreviewCaseAccessDenial(user, caseRow);
+    if (accessDenied) {
+      console.warn('[Section13-Embed] UNAUTHORIZED_CASE_ACCESS:', {
+        code: 'UNAUTHORIZED_CASE_ACCESS',
+        caseId,
+        reason: accessDenied,
+        userId: user?.id || null,
+        caseOwnerId: caseRow.user_id || null,
+      });
+      return errorResponse('CASE_NOT_FOUND', 'Case not found', 404, {
+        caseId,
+        reason: 'UNAUTHORIZED_CASE_ACCESS',
+        accessDenied,
+      });
     }
     const facts = (caseRow.collected_facts || caseRow.wizard_facts || caseRow.facts || {}) as Record<
       string,

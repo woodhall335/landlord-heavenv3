@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createAdminClient, tryGetServerUser } from '@/lib/supabase/server';
 import { buildMoneyClaimGenerationInput } from '@/lib/documents/money-claim-generation-facts';
 import { generateMoneyClaimPack } from '@/lib/documents/money-claim-pack-generator';
 import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 import { validateForPreview } from '@/lib/validation/previewValidation';
 import { assertPreviewAllowed } from '@/lib/payments/entitlement';
+import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
 
 type CaseRow = any;
 
@@ -15,26 +16,14 @@ export async function GET(
   try {
     const { caseId } = await params;
 
-    const supabase = await createServerSupabaseClient();
+    const user = await tryGetServerUser();
+    const supabase = createAdminClient();
 
-    // Try to get the current user (but allow anonymous access)
-    const { data: { user } } = await supabase.auth.getUser();
-
-    // Build query to allow viewing own cases or anonymous cases
-    let query = supabase
+    const { data, error } = await supabase
       .from('cases')
       .select('*')
-      .eq('id', caseId);
-
-    // If logged in, allow viewing owned cases or anonymous cases
-    if (user) {
-      query = query.or(`user_id.eq.${user.id},user_id.is.null`);
-    } else {
-      // If not logged in, only allow viewing anonymous cases
-      query = query.is('user_id', null);
-    }
-
-    const { data, error } = await query.single();
+      .eq('id', caseId)
+      .single();
 
     if (error || !data) {
       console.error('Money claim preview case not found:', error);
@@ -45,6 +34,20 @@ export async function GET(
     }
 
     const caseRow = data as CaseRow;
+    const accessDenied = getPreviewCaseAccessDenial(user, caseRow);
+    if (accessDenied) {
+      console.warn('[MONEY-CLAIM-PREVIEW] UNAUTHORIZED_CASE_ACCESS:', {
+        code: 'UNAUTHORIZED_CASE_ACCESS',
+        caseId,
+        reason: accessDenied,
+        userId: user?.id || null,
+        caseOwnerId: caseRow.user_id || null,
+      });
+      return NextResponse.json(
+        { error: 'Case not found', code: 'CASE_NOT_FOUND' },
+        { status: 404 },
+      );
+    }
 
     const wizardFacts =
       caseRow.wizard_facts ||

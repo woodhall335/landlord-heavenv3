@@ -14,7 +14,7 @@
  */
 
 import { NextResponse } from 'next/server';
-import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from '@/lib/supabase/server';
+import { createAdminClient, tryGetServerUser } from '@/lib/supabase/server';
 import { wizardFactsToCaseFacts, mapNoticeOnlyFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { generateNoticeOnlyPreview, type NoticeOnlyDocument } from '@/lib/documents/notice-only-preview-merger';
@@ -52,6 +52,7 @@ import {
   applyEnglandSection8CourtPackCalculation,
   buildEnglandSection8CourtPackCalculation,
 } from '@/lib/documents/england-section8-court-pack';
+import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -175,15 +176,9 @@ export async function GET(
     await assertPaidEntitlement({ caseId, product: 'notice_only' });
 
     const user = await tryGetServerUser();
-    const supabase = user ? await createServerSupabaseClient() : createAdminClient();
+    const supabase = createAdminClient();
 
-    let query = supabase.from('cases').select('*').eq('id', caseId);
-
-    if (user) {
-      query = query.eq('user_id', user.id);
-    }
-
-    const { data, error: fetchError } = await query.single();
+    const { data, error: fetchError } = await supabase.from('cases').select('*').eq('id', caseId).single();
 
     if (fetchError || !data) {
       console.error('[NOTICE-PREVIEW-API] Case not found:', fetchError);
@@ -191,6 +186,17 @@ export async function GET(
     }
 
     const caseRow = data as any;
+    const accessDenied = getPreviewCaseAccessDenial(user, caseRow);
+    if (accessDenied) {
+      console.warn('[NOTICE-PREVIEW-API] UNAUTHORIZED_CASE_ACCESS:', {
+        code: 'UNAUTHORIZED_CASE_ACCESS',
+        caseId,
+        reason: accessDenied,
+        userId: user?.id || null,
+        caseOwnerId: caseRow.user_id || null,
+      });
+      return NextResponse.json({ error: 'Case not found', code: 'CASE_NOT_FOUND' }, { status: 404 });
+    }
 
     // Get wizard facts
     const wizardFacts = caseRow.wizard_facts || caseRow.collected_facts || caseRow.facts || {};

@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import {
-  createServerSupabaseClient,
   createAdminClient,
   tryGetServerUser,
 } from '@/lib/supabase/server';
@@ -12,6 +11,7 @@ import { validateForGenerate } from '@/lib/validation/previewValidation';
 import { evaluateRules, type MoneyClaimFacts } from '@/lib/validation/money-claim-rules-engine';
 import JSZip from 'jszip';
 import { assertPaidEntitlement } from '@/lib/payments/entitlement';
+import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
 
 // If you have a proper Case row type somewhere, you can replace this `any`
 type CaseRow = any;
@@ -27,20 +27,30 @@ export async function GET(
   // Step 2: Fetch case data
   let caseRow: CaseRow;
   try {
-    const supabase = user ? await createServerSupabaseClient() : createAdminClient();
-    let query = supabase
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
       .from('cases')
       .select('*')
-      .eq('id', caseId);
-
-    if (user) {
-      query = query.eq('user_id', user.id);
-    }
-
-    const { data, error } = await query.single();
+      .eq('id', caseId)
+      .single();
 
     if (error || !data) {
       console.error('Money claim case not found:', error);
+      return NextResponse.json(
+        { error: 'Case not found. Please ensure you have saved your case.' },
+        { status: 404 }
+      );
+    }
+
+    const accessDenied = getPreviewCaseAccessDenial(user, data as CaseRow);
+    if (accessDenied) {
+      console.warn('[Money-Claim-Pack] UNAUTHORIZED_CASE_ACCESS:', {
+        code: 'UNAUTHORIZED_CASE_ACCESS',
+        caseId,
+        reason: accessDenied,
+        userId: user?.id || null,
+        caseOwnerId: (data as CaseRow).user_id || null,
+      });
       return NextResponse.json(
         { error: 'Case not found. Please ensure you have saved your case.' },
         { status: 404 }

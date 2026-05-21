@@ -7,7 +7,8 @@ import { getArrearsScheduleData } from '@/lib/documents/arrears-schedule-mapper'
 import { buildMoneyClaimGenerationInput } from '@/lib/documents/money-claim-generation-facts';
 import { fillN1Form, type CaseData } from '@/lib/documents/official-forms-filler';
 import { buildPdfEmbedHtml } from '@/lib/previews/documentEmbedShell';
-import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from '@/lib/supabase/server';
+import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
+import { createAdminClient, tryGetServerUser } from '@/lib/supabase/server';
 import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 
 export const runtime = 'nodejs';
@@ -167,19 +168,30 @@ export async function GET(
 
   try {
     const user = await tryGetServerUser();
-    const supabase = user ? await createServerSupabaseClient() : createAdminClient();
+    const supabase = createAdminClient();
 
-    let query = supabase.from('cases').select('*').eq('id', caseId);
-    if (user) {
-      query = query.eq('user_id', user.id);
-    }
-
-    const { data, error: fetchError } = await query.single();
+    const { data, error: fetchError } = await supabase.from('cases').select('*').eq('id', caseId).single();
     if (fetchError || !data) {
       return errorResponse('CASE_NOT_FOUND', 'Case not found', 404, { caseId });
     }
 
     const caseRow = data as any;
+    const accessDenied = getPreviewCaseAccessDenial(user, caseRow);
+    if (accessDenied) {
+      console.warn('[Money-Claim-Embed] UNAUTHORIZED_CASE_ACCESS:', {
+        code: 'UNAUTHORIZED_CASE_ACCESS',
+        caseId,
+        reason: accessDenied,
+        userId: user?.id || null,
+        caseOwnerId: caseRow.user_id || null,
+      });
+      return errorResponse('CASE_NOT_FOUND', 'Case not found', 404, {
+        caseId,
+        reason: 'UNAUTHORIZED_CASE_ACCESS',
+        accessDenied,
+      });
+    }
+
     const wizardFacts = caseRow.wizard_facts || caseRow.collected_facts || caseRow.facts || {};
     const jurisdiction = deriveCanonicalJurisdiction(
       caseRow.jurisdiction,

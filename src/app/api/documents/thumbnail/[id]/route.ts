@@ -15,6 +15,7 @@
 
 import { getServerUser, tryCreateServerSupabaseClient } from '@/lib/supabase/server';
 import { pdfToPreviewThumbnail, getBrowserDiagnostics } from '@/lib/documents/generator';
+import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
@@ -191,16 +192,18 @@ export async function GET(
       ownerId: docRecord.user_id,
     });
 
-    // Access control: owner OR anonymous document
-    const isOwner = user && docRecord.user_id === user.id;
-    const isAnonymousDoc = docRecord.user_id === null;
-
-    if (!isOwner && !isAnonymousDoc) {
+    const accessDenied = getPreviewCaseAccessDenial(user ? { id: user.id } : null, docRecord);
+    if (accessDenied) {
       return errorResponse(
         'ACCESS_DENIED',
         'Document not found',
         404,
-        { reason: 'Not owner and not anonymous', userId: user?.id, docUserId: docRecord.user_id }
+        {
+          reason: 'UNAUTHORIZED_DOCUMENT_THUMBNAIL_ACCESS',
+          accessDenied,
+          userId: user?.id,
+          docUserId: docRecord.user_id,
+        }
       );
     }
 
