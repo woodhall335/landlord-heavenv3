@@ -73,6 +73,8 @@ export interface RentCheckerResult {
   resultId?: string | null;
   userType: RentCheckerUserType;
   bedrooms: number;
+  propertyType: RentCheckerPropertyType;
+  propertyCondition: RentCheckerPropertyCondition;
   resultState: RentCheckerResultState;
   postcodeOutcode: string;
   recommendedProduct: Section13ProductSku;
@@ -221,18 +223,6 @@ function getProposedPositionLabel(
   return 'Within range';
 }
 
-function toEvidenceStrengthLabel(band: Section13EvidenceStrengthBand): RentCheckerEvidenceStrength {
-  switch (band) {
-    case 'strong':
-      return 'Strong';
-    case 'moderate':
-      return 'Moderate';
-    case 'weak':
-    default:
-      return 'Weak';
-  }
-}
-
 function toChallengeRiskLabel(risk: RentCheckerChallengeRisk): 'Low' | 'Moderate' | 'High' {
   switch (risk) {
     case 'low':
@@ -297,10 +287,11 @@ function buildSyntheticState(input: RentCheckerInput, now = new Date()): Section
   const selectedPlan: Section13ProductSku = 'section13_standard';
   const base = createEmptySection13State(selectedPlan);
   const serviceDate = now.toISOString().slice(0, 10);
+  const tenancyStartDate = input.tenancyStartDate || '2000-01-01';
   const desiredStartDateCandidate =
     input.desiredIncreaseStartDate || addCalendarMonths(serviceDate, 2);
   const validationSeed = validateSection13StartDate({
-    tenancyStartDate: input.tenancyStartDate,
+    tenancyStartDate,
     currentRentFrequency: input.rentFrequency,
     proposedStartDate: desiredStartDateCandidate,
     serviceDate,
@@ -321,7 +312,7 @@ function buildSyntheticState(input: RentCheckerInput, now = new Date()): Section
       propertyTownCity: 'England',
       postcodeRaw: input.postcode,
       bedrooms: input.bedrooms,
-      tenancyStartDate: input.tenancyStartDate,
+      tenancyStartDate,
       currentRentAmount: input.currentRent,
       currentRentFrequency: input.rentFrequency,
       lastRentIncreaseDate: input.lastRentIncreaseDate || null,
@@ -615,6 +606,8 @@ export function buildRentCheckerResult({
     sessionId: input.sessionId || buildToolSessionId(),
     userType: input.userType,
     bedrooms: input.bedrooms,
+    propertyType: input.propertyType,
+    propertyCondition: input.propertyCondition,
     postcodeOutcode,
     recommendedProduct: 'section13_standard',
     showBundleUpsell: false,

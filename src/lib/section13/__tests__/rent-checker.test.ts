@@ -72,6 +72,8 @@ describe('buildRentCheckerResult', () => {
     expect(result.resultState).toBe('landlord_low_risk');
     expect(result.recommendedProduct).toBe('section13_standard');
     expect(result.userType).toBe('landlord');
+    expect(result.propertyType).toBe('flat');
+    expect(result.propertyCondition).toBe('good');
     expect(result.evidenceStrength).toBe('Strong');
     expect(result.challengeRisk).toBe('low');
     expect(result.usedComparableListings).toHaveLength(6);

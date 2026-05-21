@@ -92,6 +92,7 @@ export function RentCheckerForm({
             fullWidth
           />
           <Select
+            id="rent-checker-property-type"
             label="Property type"
             value={input.propertyType}
             onChange={(event) => onChange('propertyType', event.target.value as RentCheckerInput['propertyType'])}
@@ -104,6 +105,7 @@ export function RentCheckerForm({
             <option value="other">Other</option>
           </Select>
           <Select
+            id="rent-checker-furnished-status"
             label="Furnished status"
             value={input.furnishedStatus}
             onChange={(event) => onChange('furnishedStatus', event.target.value as RentCheckerInput['furnishedStatus'])}
@@ -123,6 +125,7 @@ export function RentCheckerForm({
             fullWidth
           />
           <Select
+            id="rent-checker-rent-frequency"
             label="Rent frequency"
             value={input.rentFrequency}
             onChange={(event) => onChange('rentFrequency', event.target.value as RentCheckerInput['rentFrequency'])}
@@ -142,28 +145,6 @@ export function RentCheckerForm({
             error={errors.proposedRent}
             fullWidth
           />
-          <Input
-            label="Tenancy start date"
-            type="date"
-            value={input.tenancyStartDate}
-            onChange={(event) => onChange('tenancyStartDate', event.target.value)}
-            error={errors.tenancyStartDate}
-            fullWidth
-          />
-          <Input
-            label="Last rent increase date"
-            type="date"
-            value={input.lastRentIncreaseDate || ''}
-            onChange={(event) => onChange('lastRentIncreaseDate', event.target.value || null)}
-            fullWidth
-          />
-          <Input
-            label="Desired increase start date"
-            type="date"
-            value={input.desiredIncreaseStartDate || ''}
-            onChange={(event) => onChange('desiredIncreaseStartDate', event.target.value || null)}
-            fullWidth
-          />
         </div>
       );
     }
@@ -171,42 +152,27 @@ export function RentCheckerForm({
     if (step === 'condition') {
       return (
         <div className="grid gap-5 md:grid-cols-2">
+          <div className="space-y-2">
+            <Select
+              id="rent-checker-property-condition"
+              label="Property condition"
+              value={input.propertyCondition}
+              onChange={(event) => onChange('propertyCondition', event.target.value as RentCheckerInput['propertyCondition'])}
+            >
+              <option value="below_average">Below average</option>
+              <option value="average">Average</option>
+              <option value="good">Good</option>
+              <option value="excellent">Excellent</option>
+            </Select>
+            <p className="text-sm leading-6 text-slate-600">
+              Property condition affects how strongly the proposed rent can be justified against nearby comparables.
+            </p>
+          </div>
           <Select
-            label="Property condition"
-            value={input.propertyCondition}
-            onChange={(event) => onChange('propertyCondition', event.target.value as RentCheckerInput['propertyCondition'])}
-          >
-            <option value="below_average">Below average</option>
-            <option value="average">Average</option>
-            <option value="good">Good</option>
-            <option value="excellent">Excellent</option>
-          </Select>
-          <Select
+            id="rent-checker-bills-included"
             label="Any bills included in rent?"
             value={input.billsIncluded ? 'yes' : 'no'}
             onChange={(event) => onChange('billsIncluded', event.target.value === 'yes')}
-          >
-            <option value="no">No</option>
-            <option value="yes">Yes</option>
-          </Select>
-          <Select
-            label="Comparable evidence available?"
-            value={input.comparableEvidenceAvailable}
-            onChange={(event) =>
-              onChange(
-                'comparableEvidenceAvailable',
-                event.target.value as RentCheckerInput['comparableEvidenceAvailable']
-              )
-            }
-          >
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-            <option value="not_sure">Not sure</option>
-          </Select>
-          <Select
-            label="Has the tenant already objected?"
-            value={input.tenantAlreadyObjected ? 'yes' : 'no'}
-            onChange={(event) => onChange('tenantAlreadyObjected', event.target.value === 'yes')}
           >
             <option value="no">No</option>
             <option value="yes">Yes</option>
@@ -222,10 +188,11 @@ export function RentCheckerForm({
           <dl className="mt-4">
             <ReviewRow label="Audience" value="Landlord" />
             <ReviewRow label="Postcode" value={input.postcode || '-'} />
+            <ReviewRow label="Property type" value={input.propertyType.replace('_', ' ')} />
             <ReviewRow label="Bedrooms" value={String(input.bedrooms)} />
+            <ReviewRow label="Condition" value={input.propertyCondition.replace('_', ' ')} />
             <ReviewRow label="Current rent" value={input.currentRent ? `£${input.currentRent}` : '-'} />
             <ReviewRow label="Proposed rent" value={input.proposedRent ? `£${input.proposedRent}` : '-'} />
-            <ReviewRow label="Evidence available" value={input.comparableEvidenceAvailable.replace('_', ' ')} />
           </dl>
         </div>
         <div className="rounded-3xl border border-slate-200 bg-white p-5">

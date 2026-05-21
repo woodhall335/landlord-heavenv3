@@ -20,7 +20,7 @@ const payloadSchema = z.object({
   currentRent: z.number().positive(),
   rentFrequency: z.enum(['weekly', 'fortnightly', '4-weekly', 'monthly']),
   proposedRent: z.number().positive().nullable().optional(),
-  tenancyStartDate: z.string().min(10),
+  tenancyStartDate: z.string().optional().default(''),
   lastRentIncreaseDate: z.string().nullable().optional(),
   desiredIncreaseStartDate: z.string().nullable().optional(),
   propertyCondition: z.enum(['below_average', 'average', 'good', 'excellent']),

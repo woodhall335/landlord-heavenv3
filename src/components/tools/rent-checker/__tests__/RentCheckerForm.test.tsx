@@ -45,6 +45,31 @@ describe('RentCheckerForm', () => {
 
     expect(screen.getByText('1. Property basics')).toBeInTheDocument();
     expect(screen.getByLabelText('Proposed rent')).toBeInTheDocument();
+    expect(screen.getByLabelText('Property type')).toBeInTheDocument();
+    expect(screen.queryByLabelText('Tenancy start date')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Last rent increase date')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Desired increase start date')).not.toBeInTheDocument();
     expect(screen.queryByText('I am a tenant')).not.toBeInTheDocument();
+  });
+
+  it('keeps the condition step focused on condition and bills', () => {
+    render(
+      <RentCheckerForm
+        step="condition"
+        input={buildInput()}
+        errors={{}}
+        loading={false}
+        onChange={vi.fn()}
+        onNext={vi.fn()}
+        onBack={vi.fn()}
+        onSubmit={vi.fn()}
+      />
+    );
+
+    expect(screen.getByLabelText('Property condition')).toBeInTheDocument();
+    expect(screen.getByText(/Property condition affects/)).toBeInTheDocument();
+    expect(screen.getByLabelText('Any bills included in rent?')).toBeInTheDocument();
+    expect(screen.queryByLabelText('Comparable evidence available?')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Has the tenant already objected?')).not.toBeInTheDocument();
   });
 });

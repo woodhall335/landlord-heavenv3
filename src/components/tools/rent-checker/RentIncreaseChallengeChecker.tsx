@@ -169,7 +169,6 @@ export function RentIncreaseChallengeChecker({
       if (!input.postcode.trim()) nextErrors.postcode = 'Enter the postcode.';
       if (input.bedrooms < 0) nextErrors.bedrooms = 'Enter a valid bedroom count.';
       if (!input.currentRent || input.currentRent <= 0) nextErrors.currentRent = 'Enter the current rent.';
-      if (!input.tenancyStartDate) nextErrors.tenancyStartDate = 'Enter the tenancy start date.';
       if (!input.proposedRent || input.proposedRent <= 0) {
         nextErrors.proposedRent = 'Enter the proposed rent to assess the increase.';
       }

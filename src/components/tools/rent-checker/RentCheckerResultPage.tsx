@@ -10,7 +10,7 @@ import { captureLead } from '@/components/leads/useLeadCapture';
 import { trackEvent } from '@/lib/analytics';
 import type { GrowthCtaPosition } from '@/lib/analytics/growth-events';
 import { PRODUCTS } from '@/lib/pricing/products';
-import type { RentCheckerResult } from '@/lib/section13';
+import type { RentCheckerPropertyCondition, RentCheckerPropertyType, RentCheckerResult } from '@/lib/section13';
 
 export interface RentCheckerTrackingContext {
   sourcePage: string;
@@ -49,6 +49,53 @@ function formatCurrency(value: number | null | undefined): string {
     currency: 'GBP',
     maximumFractionDigits: 0,
   }).format(Number(value));
+}
+
+const CONDITION_SCENARIOS: Array<{
+  value: RentCheckerPropertyCondition;
+  label: string;
+  factor: number;
+  copy: string;
+}> = [
+  {
+    value: 'below_average',
+    label: 'Below average',
+    factor: 0.95,
+    copy: 'A tired or poorly presented property usually needs a more cautious rent figure.',
+  },
+  {
+    value: 'average',
+    label: 'Average',
+    factor: 1,
+    copy: 'An average condition property is measured close to the local comparable baseline.',
+  },
+  {
+    value: 'good',
+    label: 'Good',
+    factor: 1.03,
+    copy: 'Good condition can support a modest uplift if the comparables are similar.',
+  },
+  {
+    value: 'excellent',
+    label: 'Excellent',
+    factor: 1.06,
+    copy: 'Excellent condition can justify the top end only where the evidence also supports it.',
+  },
+];
+
+function getConditionScenario(condition: RentCheckerPropertyCondition) {
+  return CONDITION_SCENARIOS.find((item) => item.value === condition) || CONDITION_SCENARIOS[1];
+}
+
+function formatLabel(value: string): string {
+  return value
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function propertyTypeLabel(propertyType: RentCheckerPropertyType): string {
+  if (propertyType === 'hmo') return 'HMO';
+  return formatLabel(propertyType);
 }
 
 function getToneClasses(result: RentCheckerResult) {
@@ -214,6 +261,14 @@ export function MarketPositionCard({ result }: { result: RentCheckerResult }) {
       <h3 className="text-xl font-semibold text-slate-950">Your position vs local market</h3>
       <dl className="mt-5 space-y-4 text-sm text-slate-600">
         <div className="flex items-start justify-between gap-4">
+          <dt>Property type</dt>
+          <dd className="font-semibold text-slate-950">{propertyTypeLabel(result.propertyType)}</dd>
+        </div>
+        <div className="flex items-start justify-between gap-4">
+          <dt>Condition entered</dt>
+          <dd className="font-semibold text-slate-950">{formatLabel(result.propertyCondition)}</dd>
+        </div>
+        <div className="flex items-start justify-between gap-4">
           <dt>Estimated range</dt>
           <dd className="font-semibold text-slate-950">
             {result.marketLow != null && result.marketHigh != null
@@ -301,6 +356,103 @@ export function RiskEvidenceCard({ result }: { result: RentCheckerResult }) {
   );
 }
 
+function deriveConditionScenarioRisk(
+  result: RentCheckerResult,
+  adjustedMedian: number | null,
+  adjustedHigh: number | null,
+  condition: RentCheckerPropertyCondition
+): 'Low' | 'Moderate' | 'High' {
+  if (result.evidenceStrength === 'Weak') return 'High';
+  if (result.proposedRent == null || adjustedMedian == null || adjustedHigh == null) {
+    return result.challengeRiskLabel;
+  }
+  if (result.proposedRent > adjustedHigh || condition === 'below_average') return 'High';
+  if (result.proposedRent > adjustedMedian * 0.98 || result.evidenceStrength === 'Moderate') return 'Moderate';
+  return 'Low';
+}
+
+export function ConditionScenarioCard({ result }: { result: RentCheckerResult }) {
+  const initialIndex = Math.max(
+    0,
+    CONDITION_SCENARIOS.findIndex((item) => item.value === result.propertyCondition)
+  );
+  const [conditionIndex, setConditionIndex] = useState(initialIndex);
+  const scenario = CONDITION_SCENARIOS[conditionIndex] || getConditionScenario(result.propertyCondition);
+  const adjustedLow = result.marketLow == null ? null : Math.round(result.marketLow * scenario.factor);
+  const adjustedMedian = result.marketMedian == null ? null : Math.round(result.marketMedian * scenario.factor);
+  const adjustedHigh = result.marketHigh == null ? null : Math.round(result.marketHigh * scenario.factor);
+  const scenarioRisk = deriveConditionScenarioRisk(result, adjustedMedian, adjustedHigh, scenario.value);
+  const medianChange =
+    result.marketMedian == null || adjustedMedian == null ? null : adjustedMedian - Math.round(result.marketMedian);
+
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+        <div>
+          <h3 className="text-xl font-semibold text-slate-950">Condition scenario</h3>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
+            Move the slider to see how property condition changes the supportable market position and likely challenge risk.
+          </p>
+        </div>
+        <span className="inline-flex w-fit rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-indigo-700">
+          Interactive
+        </span>
+      </div>
+
+      <div className="mt-5">
+        <div className="flex items-center justify-between gap-4 text-sm font-semibold text-slate-700">
+          <span>Below average</span>
+          <span>Excellent</span>
+        </div>
+        <input
+          type="range"
+          min={0}
+          max={CONDITION_SCENARIOS.length - 1}
+          step={1}
+          value={conditionIndex}
+          onChange={(event) => setConditionIndex(Number(event.target.value))}
+          className="mt-3 w-full accent-indigo-600"
+          aria-label="Property condition scenario"
+        />
+      </div>
+
+      <div className="mt-6 grid gap-4 md:grid-cols-4">
+        <div className="rounded-2xl bg-slate-50 p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Condition</p>
+          <p className="mt-2 text-lg font-semibold text-slate-950">{scenario.label}</p>
+        </div>
+        <div className="rounded-2xl bg-slate-50 p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Adjusted median</p>
+          <p className="mt-2 text-lg font-semibold text-slate-950">
+            {adjustedMedian == null ? 'Unavailable' : `${formatCurrency(adjustedMedian)} pcm`}
+          </p>
+        </div>
+        <div className="rounded-2xl bg-slate-50 p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Supportable range</p>
+          <p className="mt-2 text-lg font-semibold text-slate-950">
+            {adjustedLow != null && adjustedHigh != null
+              ? `${formatCurrency(adjustedLow)} - ${formatCurrency(adjustedHigh)}`
+              : 'Unavailable'}
+          </p>
+        </div>
+        <div className="rounded-2xl bg-slate-50 p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Scenario risk</p>
+          <p className="mt-2 text-lg font-semibold text-slate-950">{scenarioRisk}</p>
+        </div>
+      </div>
+
+      <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+        <p className="text-sm leading-6 text-slate-700">
+          {scenario.copy}{' '}
+          {medianChange == null
+            ? 'The live comparable range is unavailable for this scenario.'
+            : `This condition setting moves the indicative median by ${formatCurrency(medianChange)} against the comparable baseline.`}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export function ComparableListingsCard({ result }: { result: RentCheckerResult }) {
   const groups = [
     {
@@ -350,6 +502,7 @@ export function ComparableListingsCard({ result }: { result: RentCheckerResult }
                 <article key={item.id} className="overflow-hidden rounded-3xl border border-slate-200 bg-slate-50/60">
                   <div className="aspect-[4/3] bg-slate-100">
                     {item.imageUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element -- external evidence images can come from arbitrary listing domains.
                       <img
                         src={item.imageUrl}
                         alt={item.address}
@@ -1016,6 +1169,7 @@ export function RentCheckerResultPage({
             <MarketPositionCard result={result} />
             <RiskEvidenceCard result={result} />
           </div>
+          <ConditionScenarioCard result={result} />
           <ComparableListingsCard result={result} />
         </div>
         <RecommendedActionCard result={result} trackingContext={trackingContext} />
