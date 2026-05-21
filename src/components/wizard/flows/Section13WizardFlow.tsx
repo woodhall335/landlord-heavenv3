@@ -325,6 +325,11 @@ function getMarketVerdict(
     };
   }
 
+  const aboveJustifiedRange =
+    preview.proposedRentMonthly != null &&
+    preview.justifiedMarketHigh != null &&
+    preview.proposedRentMonthly > preview.justifiedMarketHigh;
+
   if (preview.evidenceBand === 'strong' && preview.challengeBand !== 'higher_likelihood') {
     return {
       title: 'This is looking well supported',
@@ -336,6 +341,16 @@ function getMarketVerdict(
   }
 
   if (preview.challengeBand === 'higher_likelihood' || preview.evidenceBand === 'weak') {
+    if (!aboveJustifiedRange && preview.challengeBand !== 'higher_likelihood') {
+      return {
+        title: 'This increase may be supportable, but keep the evidence file tight before serving notice.',
+        body: preview.defensibilitySummarySentence || preview.previewSummary,
+        badge: preview.challengeBandLabel,
+        panelClassName: 'border-amber-200 bg-amber-50 text-amber-950',
+        badgeClassName: 'border-amber-200 bg-white text-amber-900',
+      };
+    }
+
     return {
       title: 'This needs stronger evidence before service',
       body:
@@ -2121,7 +2136,7 @@ export function Section13WizardFlow({
                       <div>
                         <p className="text-xl font-semibold text-gray-950">Condition scenario</p>
                         <p className="mt-2 max-w-3xl text-sm leading-6 text-gray-700">
-                          Move the slider to see how condition affects the supportable market position. This does not overwrite the official market-risk result.
+                          Move the slider to see a condition-only illustration from the raw comparable range. This does not include selected justification factors or overwrite the official market-risk result.
                         </p>
                       </div>
                       <span className="inline-flex w-fit rounded-full bg-violet-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-violet-700">
@@ -2159,11 +2174,11 @@ export function Section13WizardFlow({
                         <p className="mt-2 text-lg font-semibold text-gray-950">{conditionScenario.label}</p>
                       </div>
                       <div className="rounded-2xl bg-gray-50 p-4">
-                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">Adjusted median</p>
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">Condition-only median</p>
                         <p className="mt-2 text-lg font-semibold text-gray-950">{formatMoney(adjustedMedian)}</p>
                       </div>
                       <div className="rounded-2xl bg-gray-50 p-4">
-                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">Supportable range</p>
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">Condition-only range</p>
                         <p className="mt-2 text-lg font-semibold text-gray-950">
                           {adjustedLow != null && adjustedHigh != null
                             ? `${formatMoney(adjustedLow)} - ${formatMoney(adjustedHigh)}`
@@ -2171,12 +2186,12 @@ export function Section13WizardFlow({
                         </p>
                       </div>
                       <div className="rounded-2xl bg-gray-50 p-4">
-                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">Scenario risk</p>
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">Illustrative risk</p>
                         <p className="mt-2 text-lg font-semibold text-gray-950">{scenarioRisk}</p>
                       </div>
                     </div>
                     <p className="mt-4 rounded-2xl border border-gray-200 bg-gray-50 p-4 text-sm leading-6 text-gray-700">
-                      {conditionScenario.copy}
+                      {conditionScenario.copy} Selected justification factors are assessed separately in the official adjusted range above.
                     </p>
                   </div>
                 );
