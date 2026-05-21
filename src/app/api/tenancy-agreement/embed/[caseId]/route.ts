@@ -8,7 +8,7 @@
  */
 
 import { NextResponse } from 'next/server';
-import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from '@/lib/supabase/server';
+import { createAdminClient, tryGetServerUser } from '@/lib/supabase/server';
 import { htmlToPdf } from '@/lib/documents/generator';
 import { buildPdfEmbedHtml } from '@/lib/previews/documentEmbedShell';
 import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
@@ -18,6 +18,7 @@ import {
   type ResidentialLettingProductSku,
 } from '@/lib/residential-letting/products';
 import { resolveTenancyPreviewDocumentHtml } from '@/lib/previews/tenancyPreviewDocuments';
+import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -78,14 +79,9 @@ export async function GET(
     const requestedDocumentType = url.searchParams.get('document_type');
 
     const user = await tryGetServerUser();
-    const supabase = user ? await createServerSupabaseClient() : createAdminClient();
+    const supabase = createAdminClient();
 
-    let query = supabase.from('cases').select('*').eq('id', caseId);
-    if (user) {
-      query = query.eq('user_id', user.id);
-    }
-
-    const { data, error: fetchError } = await query.single();
+    const { data, error: fetchError } = await supabase.from('cases').select('*').eq('id', caseId).single();
 
     if (fetchError || !data) {
       return errorResponse('CASE_NOT_FOUND', 'Case not found', 404, {
@@ -95,6 +91,22 @@ export async function GET(
     }
 
     const caseRow = data as any;
+    const accessDenied = getPreviewCaseAccessDenial(user, caseRow);
+    if (accessDenied) {
+      console.warn('[Tenancy-Agreement-Embed] UNAUTHORIZED_CASE_ACCESS:', {
+        code: 'UNAUTHORIZED_CASE_ACCESS',
+        caseId,
+        reason: accessDenied,
+        userId: user?.id || null,
+        caseOwnerId: caseRow.user_id || null,
+      });
+      return errorResponse('CASE_NOT_FOUND', 'Case not found', 404, {
+        caseId,
+        reason: 'UNAUTHORIZED_CASE_ACCESS',
+        accessDenied,
+      });
+    }
+
     const facts = caseRow.collected_facts || caseRow.wizard_facts || caseRow.facts || {};
     const modernEnglandProduct = [
       requestedProduct,

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from '@/lib/supabase/server';
+import { createAdminClient, tryGetServerUser } from '@/lib/supabase/server';
 import { mapNoticeOnlyFacts, wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
@@ -26,6 +26,7 @@ import {
   applyEnglandSection8CourtPackCalculation,
   buildEnglandSection8CourtPackCalculation,
 } from '@/lib/documents/england-section8-court-pack';
+import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -301,19 +302,30 @@ export async function GET(
 
   try {
     const user = await tryGetServerUser();
-    const supabase = user ? await createServerSupabaseClient() : createAdminClient();
+    const supabase = createAdminClient();
 
-    let query = supabase.from('cases').select('*').eq('id', caseId);
-    if (user) {
-      query = query.eq('user_id', user.id);
-    }
-
-    const { data, error } = await query.single();
+    const { data, error } = await supabase.from('cases').select('*').eq('id', caseId).single();
     if (error || !data) {
       return errorResponse('CASE_NOT_FOUND', 'Case not found', 404, { caseId });
     }
 
     const caseRow = data as any;
+    const accessDenied = getPreviewCaseAccessDenial(user, caseRow);
+    if (accessDenied) {
+      console.warn('[Notice-Only-Embed] UNAUTHORIZED_CASE_ACCESS:', {
+        code: 'UNAUTHORIZED_CASE_ACCESS',
+        caseId,
+        reason: accessDenied,
+        userId: user?.id || null,
+        caseOwnerId: caseRow.user_id || null,
+      });
+      return errorResponse('CASE_NOT_FOUND', 'Case not found', 404, {
+        caseId,
+        reason: 'UNAUTHORIZED_CASE_ACCESS',
+        accessDenied,
+      });
+    }
+
     const wizardFacts = caseRow.wizard_facts || caseRow.collected_facts || caseRow.facts || {};
     normalizeSection8Facts(wizardFacts);
 

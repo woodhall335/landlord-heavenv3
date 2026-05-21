@@ -69,6 +69,10 @@ import {
   getPreviewDocumentTypes,
   resolveDocumentPreview,
 } from '@/lib/previews/documentPreviewResolver';
+import {
+  hasPreviewProductMismatch,
+  resolveWizardPreviewProduct,
+} from '@/lib/previews/preview-product';
 
 interface CaseData {
   id: string;
@@ -512,71 +516,34 @@ export default function WizardPreviewPage() {
           (fetchedCase.collected_facts as any)?.__meta?.product ||
           (fetchedCase.collected_facts as any)?.__meta?.original_product ||
           'unknown';
-        trackWizardPreviewViewed({
-          product: productFromFacts,
-          route: fetchedCase.recommended_route || 'unknown',
-          jurisdiction: fetchedCase.jurisdiction || 'unknown',
-          caseId,
-        });
-        fetch(`/api/cases/${caseId}/preview-reached`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', ...sessionHeaders },
-          body: JSON.stringify({
-            product: searchParams.get('product') || productFromFacts,
-            source: 'wizard_preview_page',
-          }),
-        }).catch((previewMarkerError) => {
-          console.warn('Failed to mark case preview reached:', previewMarkerError);
-        });
-
         // Try to generate/load preview
         const factsMeta = (fetchedCase.collected_facts as any)?.meta || {};
         const originalMeta = (fetchedCase.collected_facts as any)?.__meta || {};
         const wizardFacts = (fetchedCase.collected_facts as any) || {};
 
-        // ROBUST PRODUCT INFERENCE ORDER:
-        // 1. URL query param (most explicit)
-        // 2. collected_facts.meta.product
-        // 3. collected_facts.__meta.product
-        // 4. collected_facts.__meta.original_product
-        // 5. Infer from notice-only specific facts (selected_notice_route present indicates notice_only)
         const urlProduct = searchParams.get('product');
         const section13Facts = wizardFacts.section13 || {};
         const section13SelectedPlan =
           section13Facts.selectedPlan ||
           section13Facts.selected_plan ||
           section13Facts.product;
-        let inferredProduct =
-          lockedProduct ||
-          urlProduct ||
-          section13SelectedPlan ||
-          originalMeta.canonical_product ||
-          factsMeta.product ||
-          originalMeta.product ||
-          originalMeta.legacy_requested_product ||
-          originalMeta.original_product;
+        // Paid order product is authoritative. URL product is only a fallback for unpaid checkout previews.
+        const inferredProduct = resolveWizardPreviewProduct({
+          lockedProduct,
+          urlProduct,
+          section13SelectedPlan,
+          originalMeta,
+          factsMeta,
+          wizardFacts,
+          caseType: fetchedCase.case_type,
+        });
 
-        // If product still not determined, infer from case characteristics
-        // Notice-only cases have selected_notice_route set (from the wizard flow)
-        if (!inferredProduct) {
-          const hasNoticeOnlyMarkers =
-            wizardFacts.selected_notice_route ||
-            wizardFacts.eviction_route ||
-            (originalMeta.flow === 'notice_only');
-
-          // If we have notice-only markers and it's an eviction case, infer notice_only
-          if (hasNoticeOnlyMarkers && fetchedCase.case_type === 'eviction') {
-            console.log('[Preview] Inferred product=notice_only from case markers:', {
-              selected_notice_route: wizardFacts.selected_notice_route,
-              eviction_route: wizardFacts.eviction_route,
-              flow: originalMeta.flow,
-            });
-            inferredProduct = 'notice_only';
-          }
-        }
-
-        if (!inferredProduct && fetchedCase.case_type === 'rent_increase') {
-          inferredProduct = 'section13_standard';
+        if (hasPreviewProductMismatch(lockedProduct, urlProduct)) {
+          console.warn('[Preview] URL product differs from paid order product; using paid order product', {
+            caseId,
+            urlProduct,
+            lockedProduct,
+          });
         }
 
         if (inferredProduct === 'notice_only') {
@@ -585,6 +552,24 @@ export default function WizardPreviewPage() {
           setSelectedProduct(inferredProduct);
         }
 
+        const resolvedPreviewProduct = inferredProduct || productFromFacts || 'unknown';
+        trackWizardPreviewViewed({
+          product: resolvedPreviewProduct,
+          route: fetchedCase.recommended_route || 'unknown',
+          jurisdiction: fetchedCase.jurisdiction || 'unknown',
+          caseId,
+        });
+        fetch(`/api/cases/${caseId}/preview-reached`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', ...sessionHeaders },
+          body: JSON.stringify({
+            product: resolvedPreviewProduct,
+            source: 'wizard_preview_page',
+          }),
+        }).catch((previewMarkerError) => {
+          console.warn('Failed to mark case preview reached:', previewMarkerError);
+        });
+
         if (!hasTrackedPreviewPageView.current) {
           hasTrackedPreviewPageView.current = true;
           const previewPagePath =
@@ -592,7 +577,7 @@ export default function WizardPreviewPage() {
               ? `${window.location.pathname}${window.location.search}`
               : `/wizard/preview/${caseId}`;
           const paymentStatus = searchParams.get('payment') || undefined;
-          const previewProduct = inferredProduct || productFromFacts || 'unknown';
+          const previewProduct = resolvedPreviewProduct;
           const previewJurisdiction = fetchedCase.jurisdiction || 'unknown';
           const previewRoute = fetchedCase.recommended_route || 'unknown';
 
