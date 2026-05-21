@@ -293,11 +293,7 @@ export function calculateSection13RentJustification(
   const proposedIncrease =
     currentRent == null || proposedRent == null ? null : roundMoney(proposedRent - currentRent);
   const evidenceCappedJustifiedIncrease =
-    marketHeadroom == null || marketHeadroom <= 0
-      ? marketHeadroom == null
-        ? null
-        : 0
-      : roundMoney(marketHeadroom * (score / 100));
+    marketHeadroom == null || marketHeadroom <= 0 ? (marketHeadroom == null ? null : 0) : marketHeadroom;
   const unexplainedIncrease =
     proposedIncrease == null || evidenceCappedJustifiedIncrease == null
       ? null

@@ -19,10 +19,10 @@ describe('calculateSection13RentJustification', () => {
     expect(result.justificationAdjustmentPercent).toBe(19);
     expect(result.adjustedMarketHigh).toBe(1428);
     expect(result.marketHeadroom).toBe(428);
-    expect(result.evidenceCappedJustifiedIncrease).toBe(205.44);
-    expect(result.unexplainedIncrease).toBe(-85.44);
+    expect(result.evidenceCappedJustifiedIncrease).toBe(428);
+    expect(result.unexplainedIncrease).toBe(-308);
     expect(result.unsupportedIncrease).toBe(0);
-    expect(result.headroomRemaining).toBe(85.44);
+    expect(result.headroomRemaining).toBe(308);
     expect(result.summary).toContain('adjust the supportable market range by 19%');
     expect(result.summary).toContain('Selected factors support the full £120 uplift');
   });
@@ -75,6 +75,38 @@ describe('calculateSection13RentJustification', () => {
     expect(result.justificationAdjustmentPercent).toBe(25);
     expect(result.adjustedMarketHigh).toBe(1500);
     expect(result.summary).not.toContain('market evidence still shows pricing risk');
+  });
+
+  it('uses displayed adjusted headroom rather than score-weighted headroom', () => {
+    const result = calculateSection13RentJustification({
+      selectedFactors: [
+        'good_condition',
+        'recent_refurbishment',
+        'new_kitchen_or_bathroom',
+        'desirable_schools_or_amenities',
+        'parking_or_garage',
+        'strong_transport_links',
+        'garden_or_outdoor_space',
+        'good_furnishing',
+      ],
+      currentRent: 900,
+      proposedRent: 1400,
+      marketLow: 1100,
+      marketHigh: 1300,
+      comparableCount: 5,
+      evidenceStrength: 'moderate',
+      conditionScenario: 'good',
+    });
+
+    expect(result.score).toBe(71);
+    expect(result.justificationAdjustmentPercent).toBe(30);
+    expect(result.adjustedMarketHigh).toBe(1690);
+    expect(result.marketHeadroom).toBe(790);
+    expect(result.proposedIncrease).toBe(500);
+    expect(result.evidenceCappedJustifiedIncrease).toBe(790);
+    expect(result.unsupportedIncrease).toBe(0);
+    expect(result.headroomRemaining).toBe(290);
+    expect(result.summary).toMatch(/Selected factors support the full £500 uplift, with £290 headroom remaining\./);
   });
 
   it('keeps condition factors mutually exclusive', () => {

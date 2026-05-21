@@ -262,17 +262,23 @@ function deriveAdjustedCheckerResult(
     marketHigh != null &&
     proposedRent >= marketLow &&
     proposedRent <= marketHigh;
+  const atOrBelowJustifiedHigh =
+    proposedRent != null &&
+    marketHigh != null &&
+    proposedRent <= marketHigh;
   const headline =
-    nextRisk === 'moderate' && withinJustifiedRange
+    nextRisk === 'moderate' && atOrBelowJustifiedHigh
       ? 'This increase may be supportable, but keep the evidence file tight before serving notice'
-      : nextRisk === 'low'
+    : nextRisk === 'low'
         ? 'You can likely increase this rent safely'
         : proposedRent != null && marketHigh != null && proposedRent > marketHigh
           ? 'This increase is above the justified supportable range'
           : result.headline;
   const subheadline =
-    nextRisk === 'moderate' && withinJustifiedRange
-      ? 'The selected justification factors bring the proposed figure within the adjusted range, but the file still needs clear comparable evidence and service discipline.'
+    nextRisk === 'moderate' && atOrBelowJustifiedHigh
+      ? withinJustifiedRange
+        ? 'The selected justification factors bring the proposed figure within the adjusted range, but the file still needs clear comparable evidence and service discipline.'
+        : 'The selected justification factors put the proposed figure at or below the adjusted supportable range, but the file still needs clear comparable evidence and service discipline.'
       : nextRisk === 'low'
         ? 'Your proposed rent sits within the supportable local market range and is backed by usable comparable evidence.'
         : proposedRent != null && marketHigh != null && proposedRent > marketHigh
@@ -444,11 +450,16 @@ export function MarketPositionCard({ result }: { result: RentCheckerResult }) {
           </dd>
         </div>
         <div className="flex items-start justify-between gap-4">
-          <dt>Market median</dt>
+          <dt>{result.justificationAdjustmentPercent > 0 ? 'Adjusted market median' : 'Market median'}</dt>
           <dd className="max-w-[14rem] text-right">
             <div className="font-semibold text-slate-950">
               {result.marketMedian != null ? `${formatCurrency(result.marketMedian)} pcm` : 'Unavailable'}
             </div>
+            {result.justificationAdjustmentPercent > 0 && result.rawMarketMedian != null ? (
+              <div className="mt-1 text-xs leading-5 text-slate-500">
+                Raw median {formatCurrency(result.rawMarketMedian)} pcm before selected factors.
+              </div>
+            ) : null}
             <div className="mt-1 text-xs leading-5 text-slate-500">{result.medianExplanation}</div>
           </dd>
         </div>
@@ -564,7 +575,7 @@ export function ConditionScenarioCard({ result }: { result: RentCheckerResult })
         <div>
           <h3 className="text-xl font-semibold text-slate-950">Condition scenario</h3>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
-            Move the slider to see how property condition changes the supportable market position and likely challenge risk.
+            Move the slider to see a condition-only illustration from the raw comparable range. This does not include the selected justification factors or overwrite the official result above.
           </p>
         </div>
         <span className="inline-flex w-fit rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-indigo-700">
@@ -595,13 +606,13 @@ export function ConditionScenarioCard({ result }: { result: RentCheckerResult })
           <p className="mt-2 text-lg font-semibold text-slate-950">{scenario.label}</p>
         </div>
         <div className="rounded-2xl bg-slate-50 p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Adjusted median</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Condition-only median</p>
           <p className="mt-2 text-lg font-semibold text-slate-950">
             {adjustedMedian == null ? 'Unavailable' : `${formatCurrency(adjustedMedian)} pcm`}
           </p>
         </div>
         <div className="rounded-2xl bg-slate-50 p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Supportable range</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Condition-only range</p>
           <p className="mt-2 text-lg font-semibold text-slate-950">
             {adjustedLow != null && adjustedHigh != null
               ? `${formatCurrency(adjustedLow)} - ${formatCurrency(adjustedHigh)}`
@@ -609,7 +620,7 @@ export function ConditionScenarioCard({ result }: { result: RentCheckerResult })
           </p>
         </div>
         <div className="rounded-2xl bg-slate-50 p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Scenario risk</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Illustrative risk</p>
           <p className="mt-2 text-lg font-semibold text-slate-950">{scenarioRisk}</p>
         </div>
       </div>
@@ -619,7 +630,7 @@ export function ConditionScenarioCard({ result }: { result: RentCheckerResult })
           {scenario.copy}{' '}
           {medianChange == null
             ? 'The live comparable range is unavailable for this scenario.'
-            : `This condition setting moves the indicative median by ${formatCurrency(medianChange)} against the comparable baseline.`}
+            : `This condition-only setting moves the raw comparable median by ${formatCurrency(medianChange)}. Selected justification factors are assessed separately in the official range above.`}
         </p>
       </div>
     </div>
