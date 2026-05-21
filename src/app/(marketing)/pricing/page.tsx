@@ -41,7 +41,7 @@ const accentByProduct = {
   money_claim: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.cardAccent,
   section13_standard: PUBLIC_PRODUCT_DESCRIPTORS.section13_standard.cardAccent,
   section13_defensive: PUBLIC_PRODUCT_DESCRIPTORS.section13_defensive.cardAccent,
-  ast: PUBLIC_PRODUCT_DESCRIPTORS.ast.cardAccent,
+  tenancy: PUBLIC_PRODUCT_DESCRIPTORS.england_standard_tenancy_agreement.cardAccent,
 };
 
 const packageImages: Record<
@@ -76,12 +76,37 @@ const packageImages: Record<
   ast_standard: {
     src: '/images/standard-tenancy.webp',
     alt: 'Standard tenancy agreement preview',
-    accent: 'ast',
+    accent: 'tenancy',
   },
   ast_premium: {
     src: '/images/premium-tenancy.webp',
     alt: 'Premium tenancy agreement preview',
-    accent: 'ast',
+    accent: 'tenancy',
+  },
+  england_standard_tenancy_agreement: {
+    src: '/images/standard-tenancy.webp',
+    alt: 'Standard tenancy agreement preview',
+    accent: 'tenancy',
+  },
+  england_premium_tenancy_agreement: {
+    src: '/images/premium-tenancy.webp',
+    alt: 'Premium tenancy agreement preview',
+    accent: 'tenancy',
+  },
+  england_student_tenancy_agreement: {
+    src: '/images/wizard-student-tenancy-agreement.webp',
+    alt: 'Student tenancy agreement preview',
+    accent: 'tenancy',
+  },
+  england_hmo_shared_house_tenancy_agreement: {
+    src: '/images/wizard-hmo-agreement.webp',
+    alt: 'HMO shared house tenancy agreement preview',
+    accent: 'tenancy',
+  },
+  england_lodger_agreement: {
+    src: '/images/wizard-lodger-agreement.webp',
+    alt: 'Lodger agreement preview',
+    accent: 'tenancy',
   },
 };
 
@@ -160,7 +185,7 @@ export default function PricingPage() {
 
           <div className="grid gap-6 xl:grid-cols-2">
             {PRICING_PACKAGE_CARDS.map((card) => {
-              const image = packageImages[card.productSku];
+              const image = packageImages[card.productSku] ?? packageImages.england_standard_tenancy_agreement;
               const accent = getPublicCardAccentClasses(accentByProduct[image.accent]);
 
               return (
