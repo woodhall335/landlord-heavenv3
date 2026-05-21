@@ -29,9 +29,19 @@ export async function createCaseRecoveryLink(params: {
   orderRow?: RecoveryOrderRow;
   stage: CaseRecoveryStage;
   source: string;
+  kind?: 'case_preview_recovery' | 'case_wizard_recovery';
   expiresInDays?: number;
 }): Promise<{ resumeUrl: string; productType: string | null; productName: string }> {
-  const { supabase, caseRow, email, orderRow = null, stage, source, expiresInDays = 14 } = params;
+  const {
+    supabase,
+    caseRow,
+    email,
+    orderRow = null,
+    stage,
+    source,
+    kind = 'case_preview_recovery',
+    expiresInDays = 14,
+  } = params;
   const { token, tokenHash } = createCaseRecoveryToken();
   const productType = deriveCaseProductType(caseRow, orderRow);
   const expiresAt = new Date(Date.now() + expiresInDays * 24 * 60 * 60 * 1000).toISOString();
@@ -42,7 +52,7 @@ export async function createCaseRecoveryLink(params: {
     token_hash: tokenHash,
     expires_at: expiresAt,
     metadata: {
-      kind: 'case_preview_recovery',
+      kind,
       stage,
       source,
       product_type: productType,

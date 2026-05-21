@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { DocumentProofShowcase } from '@/components/preview';
 import {
   RiCheckboxCircleLine,
   RiErrorWarningLine,
@@ -32,7 +31,6 @@ import {
   trackOutcomeConfidenceShown,
   trackCourtFeeEstimatorViewed,
   trackEvidenceGalleryViewed,
-  trackEvidenceWarningResolved,
 } from '@/lib/analytics';
 
 interface SectionProps {
@@ -86,7 +84,7 @@ function formatCurrency(amount: number): string {
 /**
  * Map field path to wizard section for navigation
  */
-function getWizardSectionForField(field: string | null | undefined, section: string): string | null {
+function getWizardSectionForField(field: string | null | undefined): string | null {
   if (!field) return null;
 
   // Map field paths to wizard section identifiers
@@ -156,7 +154,7 @@ function ValidationItem({
   }[severity];
 
   const Icon = config.icon;
-  const targetSection = getWizardSectionForField(issue.field, issue.section);
+  const targetSection = getWizardSectionForField(issue.field);
 
   return (
     <div className={`flex items-start gap-2 p-2 rounded-md ${config.bg} ${config.border} border`}>
@@ -524,33 +522,6 @@ export const ReviewSection: React.FC<SectionProps> = ({
     () => getRelevantEvidenceCategories(claimTypeIds),
     [claimTypeIds]
   );
-  const proofEntries = useMemo(
-    () => [
-      {
-        id: 'letter-before-claim',
-        title: 'Letter Before Claim',
-        description: 'Live first-page draft of the PAP-DEBT letter prepared from this case.',
-        thumbnailUrl: `/api/money-claim/thumbnail/${caseId}?document_type=letter_before_claim`,
-        badge: 'Actual draft',
-      },
-      {
-        id: 'particulars-of-claim',
-        title: 'Particulars of Claim',
-        description: 'Live first-page draft of the particulars prepared from your answers.',
-        thumbnailUrl: `/api/money-claim/thumbnail/${caseId}?document_type=particulars_of_claim`,
-        badge: 'Actual draft',
-      },
-      {
-        id: 'form-n1',
-        title: 'Form N1 claim form',
-        description: 'Live first-page draft of the official N1 form filled from this case.',
-        thumbnailUrl: `/api/money-claim/thumbnail/${caseId}?document_type=form_n1`,
-        badge: 'Official form',
-      },
-    ],
-    [caseId]
-  );
-
   // Check if there are evidence-related warnings
   const hasEvidenceWarnings = useMemo(() => {
     const evidenceRuleIds = [
@@ -663,13 +634,6 @@ export const ReviewSection: React.FC<SectionProps> = ({
           </p>
         </div>
       </div>
-
-      <DocumentProofShowcase
-        compact
-        title="Actual draft checkpoints from this case"
-        description="These live first-page previews let you sense-check the core money claim paperwork before you generate the final pack."
-        entries={proofEntries}
-      />
 
       {/* Smart Validation Summary */}
       <SmartValidationSummary

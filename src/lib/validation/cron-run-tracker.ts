@@ -29,6 +29,7 @@ export type CronJobName =
   | 'compliance:check'
   | 'checkout:recover-abandoned'
   | 'case-preview:recover-abandoned'
+  | 'wizard:recover-incomplete'
   | 'cases:cleanup-stale-unclaimed'
   | 'validation:audit';
 
@@ -734,6 +735,7 @@ function calculateNextScheduledTime(jobName: CronJobName, lastRun?: CronRun): st
     'compliance:check': 24, // Daily
     'checkout:recover-abandoned': 1, // Hourly
     'case-preview:recover-abandoned': 24, // Daily
+    'wizard:recover-incomplete': 24, // Daily
     'cases:cleanup-stale-unclaimed': 24, // Daily
     'validation:audit': 168, // Weekly
   };

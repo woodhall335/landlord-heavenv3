@@ -74,7 +74,9 @@ export interface ProductSalesEarlyProofBand {
   preview?: ReactNode;
   imageSrc?: string;
   imageAlt?: string;
+  imageHref?: string;
   fullWidthPreview?: boolean;
+  mobileImageFirstFullBleed?: boolean;
 }
 
 export interface ProductSalesStep {
@@ -144,6 +146,8 @@ export interface ProductSalesPageContent {
     steps: ProductSalesStep[];
     imageSrc?: string;
     imageAlt?: string;
+    imageHref?: string;
+    mobileImageFirstFullBleed?: boolean;
   };
   cta: ProductSalesCta;
   faq: {

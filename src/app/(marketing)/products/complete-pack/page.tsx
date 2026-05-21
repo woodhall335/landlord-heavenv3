@@ -144,6 +144,8 @@ export default function CompleteEvictionPackPage() {
         'Prepare the full possession file, not just the court forms. You can check the claim forms and supporting file before you pay.',
       imageSrc: '/images/complete-pack.webp',
       imageAlt: 'Preview of the complete Section 8 eviction pack',
+      imageHref: descriptor.wizardHref,
+      mobileImageFirstFullBleed: true,
       includedBullets: [
         'Everything in Stage 1: Form 3A, N215, service instructions, arrears schedule, checks, and case summary',
         'N5, N119, witness statement, court readiness status, and evidence collection checklist',
@@ -396,6 +398,8 @@ export default function CompleteEvictionPackPage() {
         'This asks for the facts needed to prepare the notice and court papers together.',
       imageSrc: '/images/how-it-works-complete-pack.webp',
       imageAlt: 'How the complete Section 8 pack works from notice to court',
+      imageHref: descriptor.wizardHref,
+      mobileImageFirstFullBleed: true,
       steps: [
         {
           step: 'Step 01',

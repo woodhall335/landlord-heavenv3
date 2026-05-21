@@ -646,6 +646,78 @@ The Landlord Heaven Team
 }
 
 /**
+ * Send a wizard recovery email for users who started but did not finish a flow.
+ */
+export async function sendWizardAbandonmentRecoveryEmail(params: {
+  to: string;
+  customerName: string;
+  productName: string;
+  resumeUrl: string;
+  stage: 'day_1' | 'day_3';
+}): Promise<{ success: boolean; error?: string }> {
+  const { to, customerName, productName, resumeUrl, stage } = params;
+  const stageLine =
+    stage === 'day_3'
+      ? 'Your saved answers are still waiting if you want to finish the pack.'
+      : 'Your answers were saved, so you can pick up where you left off.';
+
+  const cardContent = `
+    <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.white}; line-height: 1.6;">Hi ${customerName},</p>
+    <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.lightGray}; line-height: 1.6;">${stageLine}</p>
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 20px 0;">
+      <tr>
+        <td bgcolor="${COLORS.cardBgAlt}" style="background-color: ${COLORS.cardBgAlt}; padding: 20px; border-radius: 6px; border: 1px solid ${COLORS.border};">
+          <p style="margin: 0 0 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; color: ${COLORS.white};">Saved wizard</p>
+          <p style="margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bold; color: ${COLORS.primary};">${productName}</p>
+        </td>
+      </tr>
+    </table>
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0;">
+      <tr>
+        <td align="center">
+          ${getBulletproofButton('Continue My Pack', resumeUrl)}
+        </td>
+      </tr>
+    </table>
+
+    ${getInfoBox('This secure link opens your saved wizard answers. If you no longer need the document pack, you can ignore this email.')}
+
+    <p style="margin: 25px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: ${COLORS.mutedGray}; word-break: break-all; line-height: 1.5;">If the button does not work, copy and paste this link into your browser:<br><a href="${resumeUrl}" style="color: ${COLORS.primaryLight}; text-decoration: none;">${resumeUrl}</a></p>
+  `;
+
+  const emailContent = `
+    ${getLogoRow()}
+    ${getHeaderBanner('Continue Your Landlord Heaven Pack')}
+    ${getContentCard(cardContent)}
+    ${getEmailFooter(false)}
+  `;
+
+  const html = getEmailWrapper(emailContent);
+  const text = `
+Hi ${customerName},
+
+${stageLine}
+
+Saved wizard: ${productName}
+
+Continue your pack: ${resumeUrl}
+
+If you no longer need the document pack, you can ignore this email.
+
+The Landlord Heaven Team
+  `;
+
+  return sendEmail({
+    to,
+    subject: `Continue your ${productName}`,
+    html,
+    text,
+  });
+}
+
+/**
  * Send welcome email (for new users)
  */
 export async function sendWelcomeEmail(params: {

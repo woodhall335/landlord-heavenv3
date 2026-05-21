@@ -37,6 +37,26 @@ function inferProductFromHref(href: string) {
   return undefined;
 }
 
+function ImageLinkWrapper({
+  href,
+  className,
+  children,
+}: {
+  href?: string;
+  className: string;
+  children: ReactNode;
+}) {
+  if (href) {
+    return (
+      <Link href={href} className={className}>
+        {children}
+      </Link>
+    );
+  }
+
+  return <div className={className}>{children}</div>;
+}
+
 function BreakdownCard({ item }: { item: ProductSalesBreakdownItem }) {
   return (
     <article className="rounded-[2rem] border border-[#E8E1F8] bg-white p-6 shadow-[0_14px_34px_rgba(24,11,49,0.06)]">
@@ -444,6 +464,7 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
   const hasPreview = Boolean(content.preview);
   const hasImage = Boolean(content.imageSrc);
   const hasStandaloneImage = hasImage && !hasPreview;
+  const showMobileFullBleedImage = Boolean(content.mobileImageFirstFullBleed && content.imageSrc);
   const hasSummaryContent = Boolean(
     content.priceLabel ||
     content.valueSummary ||
@@ -462,7 +483,10 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
           <div className={`mx-auto min-w-0 ${content.fullWidthPreview ? '' : 'max-w-6xl'}`}>
             {hasPreview ? content.preview : null}
             {content.imageSrc ? (
-              <div className="relative overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)]">
+              <ImageLinkWrapper
+                href={content.imageHref}
+                className="relative block overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)]"
+              >
                 <div className="relative aspect-[16/9] w-full">
                   <Image
                     src={content.imageSrc}
@@ -472,11 +496,27 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
                     className="object-cover object-top"
                   />
                 </div>
-              </div>
+              </ImageLinkWrapper>
             ) : null}
           </div>
         ) : (
           <div className="mx-auto max-w-6xl rounded-[2.25rem] border border-[#E8E1F8] bg-[#FCFAFF] p-6 shadow-[0_18px_46px_rgba(24,11,49,0.06)] md:p-8">
+            {showMobileFullBleedImage ? (
+              <ImageLinkWrapper
+                href={content.imageHref}
+                className="relative left-1/2 -mt-6 mb-6 block w-screen -translate-x-1/2 overflow-hidden bg-white lg:hidden"
+              >
+                <div className="relative aspect-[16/11] w-full">
+                  <Image
+                    src={content.imageSrc as string}
+                    alt={content.imageAlt ?? 'Product pack preview'}
+                    fill
+                    sizes="100vw"
+                    className="object-cover object-top"
+                  />
+                </div>
+              </ImageLinkWrapper>
+            ) : null}
             <div
               className={`grid gap-8 lg:grid-cols-[0.58fr_0.42fr] ${
                 hasStandaloneImage ? 'lg:items-stretch' : 'lg:items-start'
@@ -543,11 +583,22 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
               </div>
 
               {hasPreview || hasImage ? (
-                <div className={`min-w-0 ${hasStandaloneImage ? 'lg:flex lg:h-full' : ''}`}>
+                <div
+                  className={`min-w-0 ${
+                    showMobileFullBleedImage
+                      ? hasStandaloneImage
+                        ? 'hidden lg:flex lg:h-full'
+                        : 'hidden lg:block'
+                      : hasStandaloneImage
+                        ? 'lg:flex lg:h-full'
+                        : ''
+                  }`}
+                >
                   {hasPreview ? content.preview : null}
                   {content.imageSrc ? (
-                    <div
-                      className={`relative overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)] ${
+                    <ImageLinkWrapper
+                      href={content.imageHref}
+                      className={`relative block overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)] ${
                         hasStandaloneImage ? 'h-72 w-full lg:h-full' : ''
                       }`}
                     >
@@ -564,7 +615,7 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
                           className="object-cover object-top"
                         />
                       </div>
-                    </div>
+                    </ImageLinkWrapper>
                   ) : null}
                 </div>
               ) : null}
@@ -744,10 +795,29 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
               </div>
             </div>
 
+            {howItWorks.mobileImageFirstFullBleed && howItWorks.imageSrc ? (
+              <ImageLinkWrapper
+                href={howItWorks.imageHref}
+                className="relative left-1/2 mt-8 block w-screen -translate-x-1/2 overflow-hidden bg-white lg:hidden"
+              >
+                <div className="relative aspect-[16/11] w-full">
+                  <Image
+                    src={howItWorks.imageSrc}
+                    alt={howItWorks.imageAlt ?? 'How it works illustration'}
+                    fill
+                    sizes="100vw"
+                    className="object-cover object-top"
+                  />
+                </div>
+              </ImageLinkWrapper>
+            ) : null}
+
             <div
               className={
                 hasHowItWorksImage
-                  ? 'mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:items-stretch'
+                  ? `grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:items-stretch ${
+                      howItWorks.mobileImageFirstFullBleed ? 'mt-6 lg:mt-8' : 'mt-8'
+                    }`
                   : 'mt-8 grid gap-5 md:grid-cols-3'
               }
             >
@@ -769,7 +839,12 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
               </div>
 
               {howItWorks.imageSrc ? (
-                <div className="relative min-h-[360px] overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)] md:min-h-[440px] lg:min-h-full">
+                <ImageLinkWrapper
+                  href={howItWorks.imageHref}
+                  className={`relative block min-h-[360px] overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)] md:min-h-[440px] lg:min-h-full ${
+                    howItWorks.mobileImageFirstFullBleed ? 'hidden lg:block' : ''
+                  }`}
+                >
                   <Image
                     src={howItWorks.imageSrc}
                     alt={howItWorks.imageAlt ?? 'How it works illustration'}
@@ -777,7 +852,7 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
                     sizes="(min-width: 1024px) 66vw, 100vw"
                     className="object-cover object-top"
                   />
-                </div>
+                </ImageLinkWrapper>
               ) : null}
             </div>
           </div>

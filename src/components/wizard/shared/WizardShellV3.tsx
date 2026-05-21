@@ -242,10 +242,6 @@ export function WizardShellV3({
           </div>
         </aside>
       </div>
-
-      <div className="mx-auto max-w-[1240px] px-4 pb-8 text-center text-sm text-[#6f6788]">
-        This service provides document preparation assistance. It does not provide legal advice.
-      </div>
     </div>
   );
 }

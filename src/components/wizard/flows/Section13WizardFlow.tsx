@@ -2838,10 +2838,6 @@ export function Section13WizardFlow({
           </div>
         ) : null}
       </div>
-
-      <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-        This tool provides assistance only. It does not constitute legal advice. Rent increases must be lawful and reasonable, and you remain responsible for compliance.
-      </div>
     </div>
   );
 

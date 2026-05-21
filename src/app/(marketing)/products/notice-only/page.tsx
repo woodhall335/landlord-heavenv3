@@ -144,6 +144,8 @@ export default function NoticeOnlyPage() {
         'Prepare the notice file properly before anything goes to the tenant. You can check the actual Section 8 notice and service file before you pay.',
       imageSrc: '/images/notice-only-pack.webp',
       imageAlt: 'Preview of the Stage 1 Section 8 notice-only pack',
+      imageHref: descriptor.wizardHref,
+      mobileImageFirstFullBleed: true,
       includedBullets: [
         'Form 3A Section 8 notice, N215 certificate of service, and service instructions',
         'Rent arrears schedule, validity checklist, and compliance declaration',
@@ -396,6 +398,8 @@ export default function NoticeOnlyPage() {
         'We ask for the facts needed to prepare a current England Section 8 notice.',
       imageSrc: '/images/how-it-works-notice-only.webp',
       imageAlt: 'How the Section 8 notice-only pack works',
+      imageHref: descriptor.wizardHref,
+      mobileImageFirstFullBleed: true,
       steps: [
         {
           step: 'Step 01',

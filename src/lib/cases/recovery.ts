@@ -2,19 +2,29 @@ import crypto from 'crypto';
 
 import { isValidProductSku, type ProductSku } from '../pricing/products';
 
-export type CaseRecoveryStage = 'manual' | 'day_1' | 'day_7';
+export type CaseRecoveryStage = 'manual' | 'day_1' | 'day_3' | 'day_7';
 
 export const CASE_PREVIEW_RECOVERY_SENT_EVENT_TYPES = {
   manual: 'case_preview_recovery_manual_sent',
   day_1: 'case_preview_recovery_day_1_sent',
   day_7: 'case_preview_recovery_day_7_sent',
-} as const satisfies Record<CaseRecoveryStage, string>;
+} as const satisfies Record<Extract<CaseRecoveryStage, 'manual' | 'day_1' | 'day_7'>, string>;
 
 export const CASE_PREVIEW_RECOVERY_FAILED_EVENT_TYPES = {
   manual: 'case_preview_recovery_manual_failed',
   day_1: 'case_preview_recovery_day_1_failed',
   day_7: 'case_preview_recovery_day_7_failed',
-} as const satisfies Record<CaseRecoveryStage, string>;
+} as const satisfies Record<Extract<CaseRecoveryStage, 'manual' | 'day_1' | 'day_7'>, string>;
+
+export const CASE_WIZARD_RECOVERY_SENT_EVENT_TYPES = {
+  day_1: 'case_wizard_recovery_day_1_sent',
+  day_3: 'case_wizard_recovery_day_3_sent',
+} as const satisfies Record<Extract<CaseRecoveryStage, 'day_1' | 'day_3'>, string>;
+
+export const CASE_WIZARD_RECOVERY_FAILED_EVENT_TYPES = {
+  day_1: 'case_wizard_recovery_day_1_failed',
+  day_3: 'case_wizard_recovery_day_3_failed',
+} as const satisfies Record<Extract<CaseRecoveryStage, 'day_1' | 'day_3'>, string>;
 
 type CaseLike = {
   id: string;
@@ -306,6 +316,34 @@ export function isPreviewAbandonedCase(params: {
   if (params.hasFinalDocuments) return false;
   if (params.order?.payment_status === 'paid') return false;
   return Boolean(params.hasPreviewDocuments || isCasePreviewReached(params.caseItem));
+}
+
+function hasMeaningfulStartedFacts(facts: Record<string, any>): boolean {
+  const ignoredKeys = new Set(['__meta', 'jurisdiction', 'property_country', 'selected_notice_route', 'eviction_route']);
+  return Object.entries(facts).some(([key, value]) => {
+    if (ignoredKeys.has(key)) return false;
+    if (Array.isArray(value)) return value.length > 0;
+    if (typeof value === 'string') return value.trim().length > 0;
+    if (typeof value === 'number') return Number.isFinite(value);
+    if (typeof value === 'boolean') return true;
+    if (value && typeof value === 'object') return Object.keys(value).length > 0;
+    return false;
+  });
+}
+
+export function isStartedButIncompleteCase(params: {
+  caseItem: CaseLike;
+  order?: OrderLike;
+  hasFinalDocuments: boolean;
+  hasPreviewDocuments?: boolean;
+}): boolean {
+  if (params.hasFinalDocuments) return false;
+  if (params.hasPreviewDocuments) return false;
+  if (params.order?.payment_status === 'paid') return false;
+  if (isCasePreviewReached(params.caseItem)) return false;
+  if (params.caseItem.status === 'completed' || params.caseItem.wizard_completed_at) return false;
+  if ((params.caseItem.wizard_progress || 0) >= 100) return false;
+  return hasMeaningfulStartedFacts(params.caseItem.collected_facts || {});
 }
 
 export function createCaseRecoveryToken(): {

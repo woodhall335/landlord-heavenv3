@@ -1,0 +1,39 @@
+0 info it worked if it ends with ok
+1 verbose cli [
+1 verbose cli   'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   'node@20',
+1 verbose cli   '--global',
+1 verbose cli   '--prefix',
+1 verbose cli   'C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\.npm-cache-codex2\\_npx\\2112',
+1 verbose cli   '--loglevel',
+1 verbose cli   'error',
+1 verbose cli   '--json'
+1 verbose cli ]
+2 info using npm@6.14.15
+3 info using node@v14.17.6
+4 verbose npm-session bfcec7e35a157209
+5 silly install loadCurrentTree
+6 silly install readGlobalPackageData
+7 silly fetchPackageMetaData error for node@20 request to https://registry.npmjs.org/node failed, reason: unable to verify the first certificate
+8 timing stage:rollbackFailedOptional Completed in 1ms
+9 timing stage:runTopLevelLifecycles Completed in 368ms
+10 verbose type system
+11 verbose stack FetchError: request to https://registry.npmjs.org/node failed, reason: unable to verify the first certificate
+11 verbose stack     at ClientRequest.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\node-fetch-npm\src\index.js:68:14)
+11 verbose stack     at ClientRequest.emit (events.js:400:28)
+11 verbose stack     at TLSSocket.socketErrorListener (_http_client.js:475:9)
+11 verbose stack     at TLSSocket.emit (events.js:400:28)
+11 verbose stack     at emitErrorNT (internal/streams/destroy.js:106:8)
+11 verbose stack     at emitErrorCloseNT (internal/streams/destroy.js:74:3)
+11 verbose stack     at processTicksAndRejections (internal/process/task_queues.js:82:21)
+12 verbose cwd C:\Users\t_moh\Documents\GitHub\landlord-heavenv3
+13 verbose Windows_NT 10.0.19045
+14 verbose argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "node@20" "--global" "--prefix" "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\.npm-cache-codex2\\_npx\\2112" "--loglevel" "error" "--json"
+15 verbose node v14.17.6
+16 verbose npm  v6.14.15
+17 error code UNABLE_TO_VERIFY_LEAF_SIGNATURE
+18 error errno UNABLE_TO_VERIFY_LEAF_SIGNATURE
+19 error request to https://registry.npmjs.org/node failed, reason: unable to verify the first certificate
+20 verbose exit [ 1, true ]
