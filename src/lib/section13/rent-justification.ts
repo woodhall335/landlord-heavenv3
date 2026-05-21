@@ -19,6 +19,7 @@ export type Section13JustificationFactorId =
   | 'five_strong_comparables'
   | 'proposed_within_market_range'
   | 'proposed_above_market_high'
+  | 'proposed_above_justified_market_high'
   | 'below_average_condition'
   | 'weak_comparable_evidence';
 
@@ -67,6 +68,8 @@ export interface Section13RentJustificationResult {
   proposedIncrease: number | null;
   evidenceCappedJustifiedIncrease: number | null;
   unexplainedIncrease: number | null;
+  unsupportedIncrease: number | null;
+  headroomRemaining: number | null;
   summary: string;
 }
 
@@ -131,6 +134,7 @@ export const SECTION13_JUSTIFICATION_FACTOR_ADJUSTMENTS: Record<
   five_strong_comparables: 0,
   proposed_within_market_range: 0,
   proposed_above_market_high: 0,
+  proposed_above_justified_market_high: 0,
   below_average_condition: 0,
   weak_comparable_evidence: 0,
 };
@@ -138,7 +142,8 @@ export const SECTION13_JUSTIFICATION_FACTOR_ADJUSTMENTS: Record<
 export const SECTION13_MARKET_CHECK_FACTORS: Section13JustificationFactor[] = [
   { id: 'five_strong_comparables', label: 'At least 5 strong comparables', weight: 15, kind: 'market_check' },
   { id: 'proposed_within_market_range', label: 'Proposed rent within market range', weight: 15, kind: 'market_check' },
-  { id: 'proposed_above_market_high', label: 'Proposed rent above market high', weight: -20, kind: 'market_check' },
+  { id: 'proposed_above_market_high', label: 'Proposed rent above raw market high', weight: 0, kind: 'market_check' },
+  { id: 'proposed_above_justified_market_high', label: 'Proposed rent above justified market high', weight: -20, kind: 'market_check' },
   { id: 'below_average_condition', label: 'Below average condition', weight: -15, kind: 'market_check' },
   { id: 'weak_comparable_evidence', label: 'Weak comparable evidence', weight: -20, kind: 'market_check' },
 ];
@@ -222,12 +227,17 @@ export function calculateSection13JustificationAdjustment(
   };
 }
 
-function getMarketCheckFactors(input: Section13RentJustificationInput): Section13JustificationFactorId[] {
+function getMarketCheckFactors(
+  input: Section13RentJustificationInput,
+  selectedFactors: Section13JustificationFactorId[]
+): Section13JustificationFactorId[] {
   const factors: Section13JustificationFactorId[] = [];
   const evidenceStrength = normalizeEvidenceStrength(input.evidenceStrength);
   const proposedRent = input.proposedRent == null ? null : Number(input.proposedRent);
   const marketLow = input.marketLow == null ? null : Number(input.marketLow);
   const marketHigh = input.marketHigh == null ? null : Number(input.marketHigh);
+  const adjustment = calculateSection13JustificationAdjustment(selectedFactors);
+  const adjustedMarketHigh = marketHigh == null ? null : marketHigh * (1 + adjustment.percent / 100);
 
   if (input.comparableCount >= 5 && evidenceStrength === 'strong') {
     factors.push('five_strong_comparables');
@@ -247,6 +257,10 @@ function getMarketCheckFactors(input: Section13RentJustificationInput): Section1
     factors.push('proposed_above_market_high');
   }
 
+  if (proposedRent != null && adjustedMarketHigh != null && proposedRent > adjustedMarketHigh) {
+    factors.push('proposed_above_justified_market_high');
+  }
+
   if (input.conditionScenario === 'below_average') {
     factors.push('below_average_condition');
   }
@@ -263,7 +277,7 @@ export function calculateSection13RentJustification(
 ): Section13RentJustificationResult {
   const selectedFactors = normalizeSection13JustificationFactors(input.selectedFactors);
   const justificationAdjustment = calculateSection13JustificationAdjustment(selectedFactors);
-  const appliedFactorIds = [...new Set([...selectedFactors, ...getMarketCheckFactors(input)])];
+  const appliedFactorIds = [...new Set([...selectedFactors, ...getMarketCheckFactors(input, selectedFactors)])];
   const rawScore = appliedFactorIds.reduce((sum, id) => sum + getFactor(id).weight, 0);
   const score = Math.min(100, Math.max(0, rawScore));
   const band = getJustificationBand(score);
@@ -288,6 +302,8 @@ export function calculateSection13RentJustification(
     proposedIncrease == null || evidenceCappedJustifiedIncrease == null
       ? null
       : roundMoney(proposedIncrease - evidenceCappedJustifiedIncrease);
+  const unsupportedIncrease = unexplainedIncrease == null ? null : Math.max(0, unexplainedIncrease);
+  const headroomRemaining = unexplainedIncrease == null ? null : Math.max(0, roundMoney(-unexplainedIncrease) || 0);
   const proposedAboveMarketHigh =
     proposedRent != null && adjustedMarketHigh != null && proposedRent > adjustedMarketHigh;
 
@@ -310,11 +326,17 @@ export function calculateSection13RentJustification(
   }
 
   if (proposedAboveMarketHigh) {
-    summary += ' The justification score strengthens the explanation, but the market evidence still shows pricing risk.';
+    summary += ' The justification score strengthens the explanation, but the proposed rent still sits above the justified market high.';
   }
 
   if (evidenceCappedJustifiedIncrease != null && proposedIncrease != null && proposedIncrease > 0) {
-    summary += ` Evidence-capped justified uplift: ${formatMoney(evidenceCappedJustifiedIncrease)} of ${formatMoney(proposedIncrease)}.`;
+    if (evidenceCappedJustifiedIncrease >= proposedIncrease) {
+      summary += ` Selected factors support the full ${formatMoney(proposedIncrease)} uplift${
+        headroomRemaining && headroomRemaining > 0 ? `, with ${formatMoney(headroomRemaining)} headroom remaining` : ''
+      }.`;
+    } else {
+      summary += ` Selected factors support ${formatMoney(evidenceCappedJustifiedIncrease)} of the ${formatMoney(proposedIncrease)} uplift; ${formatMoney(unsupportedIncrease || 0)} remains unsupported.`;
+    }
   }
 
   return {
@@ -331,6 +353,8 @@ export function calculateSection13RentJustification(
     proposedIncrease,
     evidenceCappedJustifiedIncrease,
     unexplainedIncrease,
+    unsupportedIncrease,
+    headroomRemaining,
     summary,
   };
 }

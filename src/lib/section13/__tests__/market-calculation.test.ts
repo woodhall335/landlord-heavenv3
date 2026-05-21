@@ -158,6 +158,49 @@ describe('buildSection13MarketCalculation', () => {
     expect(calculation.explanationText.some((line) => line.includes('increase the supportable range by 25%'))).toBe(true);
   });
 
+  it('does not show older fallback copy when the used comparables are fresh partial matches', () => {
+    const state = buildState();
+    state.comparablesMeta.propertySubtype = 'semi_detached';
+    const comparables = [
+      buildComparable(1100, { addressSnippet: 'Fresh terrace 1', propertyType: 'Terraced House', sortOrder: 0 }),
+      buildComparable(1150, { addressSnippet: 'Fresh terrace 2', propertyType: 'Terraced House', sortOrder: 1 }),
+      buildComparable(1200, { addressSnippet: 'Fresh terrace 3', propertyType: 'Terraced House', sortOrder: 2 }),
+    ];
+
+    const calculation = buildSection13MarketCalculation(
+      state,
+      comparables,
+      new Date('2026-05-03T10:00:00.000Z')
+    );
+
+    expect(calculation.freshnessWindowUsed).toBe(730);
+    expect(calculation.usedComparables.every((item) => item.freshnessBand === 'fresh_90')).toBe(true);
+    expect(calculation.explanationText.some((line) => line.includes('Older fallback comparables'))).toBe(false);
+  });
+
+  it('uses a parsed source date for freshness even when the source date kind is unknown', () => {
+    const state = buildState();
+    const calculation = buildSection13MarketCalculation(
+      state,
+      [
+        buildComparable(1200, {
+          sourceDateKind: 'unknown',
+          sourceDateValue: '2026-05-05',
+        }),
+      ],
+      new Date('2026-05-21T10:00:00.000Z')
+    );
+
+    const comparable = [
+      ...calculation.usedComparables,
+      ...calculation.contextComparables,
+      ...calculation.excludedComparables,
+    ][0];
+
+    expect(comparable.listedDateLabel).toBe('2026-05-05');
+    expect(comparable.freshnessLabel).toBe('16 days old');
+  });
+
   it('treats scraped zero-mile distances as unknown instead of precise evidence', () => {
     const state = buildState();
     const comparables = [

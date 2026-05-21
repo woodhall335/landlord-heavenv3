@@ -2091,17 +2091,17 @@ export function Section13WizardFlow({
                   SECTION13_CONDITION_SCENARIOS.findIndex((item) => item.value === conditionScenario.value)
                 );
                 const adjustedLow =
-                  effectiveState.preview?.lowerQuartile == null
+                  effectiveState.preview?.rawLowerQuartile == null
                     ? null
-                    : Math.round(effectiveState.preview.lowerQuartile * conditionScenario.factor);
+                    : Math.round(effectiveState.preview.rawLowerQuartile * conditionScenario.factor);
                 const adjustedMedian =
-                  effectiveState.preview?.median == null
+                  effectiveState.preview?.rawMedian == null
                     ? null
-                    : Math.round(effectiveState.preview.median * conditionScenario.factor);
+                    : Math.round(effectiveState.preview.rawMedian * conditionScenario.factor);
                 const adjustedHigh =
-                  effectiveState.preview?.upperQuartile == null
+                  effectiveState.preview?.rawUpperQuartile == null
                     ? null
-                    : Math.round(effectiveState.preview.upperQuartile * conditionScenario.factor);
+                    : Math.round(effectiveState.preview.rawUpperQuartile * conditionScenario.factor);
                 const scenarioRisk =
                   effectiveState.preview?.evidenceBand === 'weak' ||
                   conditionScenario.value === 'below_average' ||

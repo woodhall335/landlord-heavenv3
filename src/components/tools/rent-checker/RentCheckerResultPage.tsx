@@ -255,11 +255,35 @@ function deriveAdjustedCheckerResult(
   const saferRangeGuidance =
     proposedRent != null && marketMedian != null && marketLow != null && proposedRent > marketMedian
       ? `A more supportable rent may be closer to ${formatCurrency(marketLow)}-${formatCurrency(marketMedian)} pcm after the selected justification factors.`
-      : result.saferRangeGuidance;
+      : null;
+  const withinJustifiedRange =
+    proposedRent != null &&
+    marketLow != null &&
+    marketHigh != null &&
+    proposedRent >= marketLow &&
+    proposedRent <= marketHigh;
+  const headline =
+    nextRisk === 'moderate' && withinJustifiedRange
+      ? 'This increase may be supportable, but keep the evidence file tight before serving notice'
+      : nextRisk === 'low'
+        ? 'You can likely increase this rent safely'
+        : proposedRent != null && marketHigh != null && proposedRent > marketHigh
+          ? 'This increase is above the justified supportable range'
+          : result.headline;
+  const subheadline =
+    nextRisk === 'moderate' && withinJustifiedRange
+      ? 'The selected justification factors bring the proposed figure within the adjusted range, but the file still needs clear comparable evidence and service discipline.'
+      : nextRisk === 'low'
+        ? 'Your proposed rent sits within the supportable local market range and is backed by usable comparable evidence.'
+        : proposedRent != null && marketHigh != null && proposedRent > marketHigh
+          ? 'Even after selected justification factors, the proposed figure remains above the supportable market range.'
+          : result.subheadline;
 
   return {
     ...result,
     resultState,
+    headline,
+    subheadline,
     recommendedProduct,
     showBundleUpsell: nextRisk !== 'low',
     showDefenceSecondary: nextRisk !== 'low',
@@ -520,13 +544,19 @@ export function ConditionScenarioCard({ result }: { result: RentCheckerResult })
     CONDITION_SCENARIOS.findIndex((item) => item.value === result.propertyCondition)
   );
   const [conditionIndex, setConditionIndex] = useState(initialIndex);
+  useEffect(() => {
+    setConditionIndex(initialIndex);
+  }, [initialIndex]);
   const scenario = CONDITION_SCENARIOS[conditionIndex] || getConditionScenario(result.propertyCondition);
-  const adjustedLow = result.marketLow == null ? null : Math.round(result.marketLow * scenario.factor);
-  const adjustedMedian = result.marketMedian == null ? null : Math.round(result.marketMedian * scenario.factor);
-  const adjustedHigh = result.marketHigh == null ? null : Math.round(result.marketHigh * scenario.factor);
+  const scenarioLowBase = result.rawMarketLow ?? result.marketLow;
+  const scenarioMedianBase = result.rawMarketMedian ?? result.marketMedian;
+  const scenarioHighBase = result.rawMarketHigh ?? result.marketHigh;
+  const adjustedLow = scenarioLowBase == null ? null : Math.round(scenarioLowBase * scenario.factor);
+  const adjustedMedian = scenarioMedianBase == null ? null : Math.round(scenarioMedianBase * scenario.factor);
+  const adjustedHigh = scenarioHighBase == null ? null : Math.round(scenarioHighBase * scenario.factor);
   const scenarioRisk = deriveConditionScenarioRisk(result, adjustedMedian, adjustedHigh, scenario.value);
   const medianChange =
-    result.marketMedian == null || adjustedMedian == null ? null : adjustedMedian - Math.round(result.marketMedian);
+    scenarioMedianBase == null || adjustedMedian == null ? null : adjustedMedian - Math.round(scenarioMedianBase);
 
   return (
     <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">

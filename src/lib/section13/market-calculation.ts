@@ -107,10 +107,6 @@ function readComparableFurnishedStatus(comparable: Section13Comparable): string 
 }
 
 function getFreshnessDays(comparable: Section13Comparable, now: Date): number | null {
-  if (comparable.sourceDateKind !== 'published' && comparable.sourceDateKind !== 'first_listed') {
-    return null;
-  }
-
   const sourceDate = toUtcDate(comparable.sourceDateValue || null);
   if (!sourceDate) return null;
   return Math.max(0, Math.round((now.getTime() - sourceDate.getTime()) / DAY_MS));
@@ -523,6 +519,7 @@ function buildExplanationText(calculation: {
   adjustmentsApplied: boolean;
   justificationAdjustmentPercent: number;
   justificationAdjustmentCapped: boolean;
+  olderFallbackUsed: boolean;
 }): string[] {
   const lines = [
     `Median calculated from ${calculation.usedComparableCount} comparable listing${
@@ -547,7 +544,7 @@ function buildExplanationText(calculation: {
     lines.push('The calculation extends to 180-day comparables because fewer recent matches were available within 90 days.');
   }
 
-  if (calculation.freshnessWindowUsed === 730) {
+  if (calculation.olderFallbackUsed) {
     lines.push('Older fallback comparables up to 2 years are included only because current like-for-like evidence was thin.');
   }
 
@@ -739,6 +736,7 @@ export function buildSection13MarketCalculation(
     adjustmentsApplied,
     justificationAdjustmentPercent: justificationAdjustment.percent,
     justificationAdjustmentCapped: justificationAdjustment.capped,
+    olderFallbackUsed: olderFallbackUsedCount > 0,
   });
 
   return {

@@ -146,8 +146,14 @@ export function RentJustificationBuilder({
           <p className="mt-2 text-lg font-semibold text-slate-950">{formatMoney(result.marketHeadroom)}</p>
         </div>
         <div className="rounded-2xl bg-slate-50 p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Still unsupported</p>
-          <p className="mt-2 text-lg font-semibold text-slate-950">{formatMoney(result.unexplainedIncrease)}</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+            {result.headroomRemaining && result.headroomRemaining > 0 ? 'Headroom remaining' : 'Still unsupported'}
+          </p>
+          <p className="mt-2 text-lg font-semibold text-slate-950">
+            {result.headroomRemaining && result.headroomRemaining > 0
+              ? formatMoney(result.headroomRemaining)
+              : formatMoney(result.unsupportedIncrease)}
+          </p>
         </div>
       </div>
 

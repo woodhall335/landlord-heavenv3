@@ -21,7 +21,10 @@ describe('calculateSection13RentJustification', () => {
     expect(result.marketHeadroom).toBe(428);
     expect(result.evidenceCappedJustifiedIncrease).toBe(205.44);
     expect(result.unexplainedIncrease).toBe(-85.44);
+    expect(result.unsupportedIncrease).toBe(0);
+    expect(result.headroomRemaining).toBe(85.44);
     expect(result.summary).toContain('adjust the supportable market range by 19%');
+    expect(result.summary).toContain('Selected factors support the full £120 uplift');
   });
 
   it('caps market-positive score at 100 and selected adjustment at 30%', () => {
@@ -68,7 +71,7 @@ describe('calculateSection13RentJustification', () => {
       conditionScenario: 'excellent',
     });
 
-    expect(result.score).toBe(33);
+    expect(result.score).toBe(53);
     expect(result.justificationAdjustmentPercent).toBe(25);
     expect(result.adjustedMarketHigh).toBe(1500);
     expect(result.summary).not.toContain('market evidence still shows pricing risk');

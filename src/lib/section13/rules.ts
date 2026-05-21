@@ -187,10 +187,6 @@ export function getSourceBackedComparableCount(comparables: Section13Comparable[
 }
 
 export function isFreshComparable(comparable: Section13Comparable, now = new Date()): boolean {
-  if (comparable.sourceDateKind !== 'published' && comparable.sourceDateKind !== 'first_listed') {
-    return false;
-  }
-
   const sourceDate = toUtcDate(comparable.sourceDateValue || null);
   if (!sourceDate) return false;
   const ninetyDaysAgo = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 90));
