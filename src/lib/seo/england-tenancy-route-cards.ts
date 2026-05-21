@@ -1,3 +1,5 @@
+import { PRODUCTS } from '@/lib/pricing/products';
+
 export const englandTenancyRouteComparisonCards = [
   {
     title: 'Standard Periodic Tenancy Agreement',
@@ -6,7 +8,7 @@ export const englandTenancyRouteComparisonCards = [
     ctaLabel: 'Build my validated Standard pack',
     imageSrc: '/images/wizard-standard-tenancy-agreement.webp',
     imageAlt: 'Standard tenancy agreement preview',
-    price: '£14.99',
+    price: PRODUCTS.england_standard_tenancy_agreement.displayPrice,
     details: [
       {
         label: 'Best when',
@@ -37,7 +39,7 @@ export const englandTenancyRouteComparisonCards = [
     ctaLabel: 'Build my validated Premium pack',
     imageSrc: '/images/wizard-premium-tenancy-agreement.webp',
     imageAlt: 'Premium tenancy agreement preview',
-    price: '£24.99',
+    price: PRODUCTS.england_premium_tenancy_agreement.displayPrice,
     details: [
       {
         label: 'Best when',
@@ -68,7 +70,7 @@ export const englandTenancyRouteComparisonCards = [
     ctaLabel: 'Build my validated Student pack',
     imageSrc: '/images/wizard-student-tenancy-agreement.webp',
     imageAlt: 'Student tenancy agreement preview',
-    price: '£24.99',
+    price: PRODUCTS.england_student_tenancy_agreement.displayPrice,
     details: [
       {
         label: 'Best when',
@@ -98,7 +100,7 @@ export const englandTenancyRouteComparisonCards = [
     ctaLabel: 'Build my validated HMO pack',
     imageSrc: '/images/wizard-hmo-agreement.webp',
     imageAlt: 'HMO shared house tenancy agreement preview',
-    price: '£34.99',
+    price: PRODUCTS.england_hmo_shared_house_tenancy_agreement.displayPrice,
     details: [
       {
         label: 'Best when',
@@ -128,7 +130,7 @@ export const englandTenancyRouteComparisonCards = [
     ctaLabel: 'Build my validated Lodger pack',
     imageSrc: '/images/wizard-lodger-agreement.webp',
     imageAlt: 'Lodger agreement preview',
-    price: '£14.99',
+    price: PRODUCTS.england_lodger_agreement.displayPrice,
     details: [
       {
         label: 'Best when',

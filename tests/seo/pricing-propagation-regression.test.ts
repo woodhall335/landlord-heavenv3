@@ -14,8 +14,13 @@ describe('Pricing propagation regressions', () => {
     expect(pricingModuleContent).toContain('PRODUCTS.notice_only.displayPrice');
     expect(pricingModuleContent).toContain('PRODUCTS.complete_pack.displayPrice');
     expect(pricingModuleContent).toContain('PRODUCTS.money_claim.displayPrice');
-    expect(pricingModuleContent).toContain('PRODUCTS.ast_standard.displayPrice');
-    expect(pricingModuleContent).toContain('PRODUCTS.ast_premium.displayPrice');
+    expect(pricingModuleContent).toContain('PRODUCTS.section13_standard.displayPrice');
+    expect(pricingModuleContent).toContain('PRODUCTS.section13_defensive.displayPrice');
+    expect(pricingModuleContent).toContain('PRODUCTS.england_standard_tenancy_agreement.displayPrice');
+    expect(pricingModuleContent).toContain('PRODUCTS.england_premium_tenancy_agreement.displayPrice');
+    expect(pricingModuleContent).toContain('PRODUCTS.england_student_tenancy_agreement.displayPrice');
+    expect(pricingModuleContent).toContain('PRODUCTS.england_hmo_shared_house_tenancy_agreement.displayPrice');
+    expect(pricingModuleContent).toContain('PRODUCTS.england_lodger_agreement.displayPrice');
   });
 
   it('rejects stale hardcoded core-product prices in app/lib surfaces', () => {

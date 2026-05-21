@@ -360,7 +360,7 @@ export default function PricingPage() {
           {
             question: 'Do you list Section 13 pricing here too?',
             answer:
-              'Yes. This page includes both the Supported Rent Increase Pack and the Tribunal-Ready Rent Increase Pack, using the same central prices as the rest of the site.',
+              'Yes. This page includes both the Standard Section 13 Rent Increase Notice and the Challenge Ready Section 13 Defence Pack, using the same central prices as the rest of the site.',
           },
         ]}
         showContactCTA={false}

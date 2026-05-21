@@ -2,6 +2,21 @@ import { PRICING_PACKAGE_CARDS, PRICING_SCHEMA_ITEMS } from '@/lib/marketing/pri
 import { PRODUCTS } from '@/lib/pricing/products';
 
 describe('pricing page product mapping', () => {
+  it('shows the full current 10-product catalogue', () => {
+    expect(PRICING_PACKAGE_CARDS.map((card) => card.productSku)).toEqual([
+      'notice_only',
+      'complete_pack',
+      'money_claim',
+      'section13_standard',
+      'section13_defensive',
+      'england_standard_tenancy_agreement',
+      'england_premium_tenancy_agreement',
+      'england_student_tenancy_agreement',
+      'england_hmo_shared_house_tenancy_agreement',
+      'england_lodger_agreement',
+    ]);
+  });
+
   it('shows both Section 13 products in the visible pricing cards', () => {
     const standardCard = PRICING_PACKAGE_CARDS.find((card) => card.productSku === 'section13_standard');
     const defenceCard = PRICING_PACKAGE_CARDS.find((card) => card.productSku === 'section13_defensive');
@@ -11,6 +26,8 @@ describe('pricing page product mapping', () => {
 
     expect(standardCard?.price).toBe(PRODUCTS.section13_standard.displayPrice);
     expect(defenceCard?.price).toBe(PRODUCTS.section13_defensive.displayPrice);
+    expect(standardCard?.name).toBe('Standard Section 13 Rent Increase Notice');
+    expect(defenceCard?.name).toBe('Challenge Ready Section 13 Defence Pack');
     expect(standardCard?.href).toBe('/products/section-13-standard');
     expect(defenceCard?.href).toBe('/products/section-13-defence');
   });
@@ -32,6 +49,14 @@ describe('pricing page product mapping', () => {
         expect.objectContaining({
           productSku: 'section13_standard',
           bestFor: expect.stringContaining('Form 4A, current local comparables'),
+        }),
+        expect.objectContaining({
+          productSku: 'england_hmo_shared_house_tenancy_agreement',
+          price: PRODUCTS.england_hmo_shared_house_tenancy_agreement.displayPrice,
+        }),
+        expect.objectContaining({
+          productSku: 'england_lodger_agreement',
+          price: PRODUCTS.england_lodger_agreement.displayPrice,
         }),
       ])
     );
