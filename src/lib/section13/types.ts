@@ -25,7 +25,13 @@ export type Section13SourceDateKind =
   | 'unknown';
 export type Section13AdjustmentCategory = 'location' | 'condition' | 'amenities' | 'custom';
 export type Section13EvidenceStrengthBand = 'strong' | 'moderate' | 'weak';
-export type Section13ComparableFreshnessBand = 'fresh_90' | 'extended_180' | 'stale';
+export type Section13ComparableFreshnessBand =
+  | 'fresh_90'
+  | 'extended_180'
+  | 'older_2_year_fallback'
+  | 'stale';
+export type Section13ConditionScenario = 'below_average' | 'average' | 'good' | 'excellent';
+export type Section13JustificationBand = 'Weak' | 'Moderate' | 'Good' | 'Strong';
 export type Section13ComparableRelevanceBand =
   | 'strong_match'
   | 'partial_match'
@@ -150,7 +156,7 @@ export interface Section13MarketCalculation {
   usedComparableCount: number;
   sourceBackedUsedCount: number;
   fresh90UsedCount: number;
-  freshnessWindowUsed: 90 | 180;
+  freshnessWindowUsed: 90 | 180 | 730;
   calculationMethod: string;
   explanationText: string[];
   medianExplanation: string;
@@ -337,12 +343,21 @@ export interface Section13State {
     searchPostcodeNormalized?: string;
     bedrooms?: number | null;
     propertyType?: string | null;
+    propertySubtype?: string | null;
+    searchFallbackMode?: 'exact' | 'parent_type' | 'older_2_year' | 'parent_type_and_older_2_year' | null;
+    freshnessWindowUsed?: 90 | 180 | 730 | null;
     lastScrapeAt?: string | null;
     lastScrapeSource?: string | null;
     lastScrapeSummary?: string | null;
   };
   adjustments: {
     manualJustification?: string;
+    conditionScenario?: Section13ConditionScenario;
+    justificationFactors?: string[];
+    justificationScore?: number;
+    justificationBand?: Section13JustificationBand;
+    evidenceCappedJustifiedIncrease?: number | null;
+    unexplainedIncrease?: number | null;
     challengeBandExplainer: string;
     evidenceBandExplainer: string;
     expectTenantChallenge?: boolean;

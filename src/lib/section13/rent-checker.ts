@@ -20,6 +20,21 @@ import { getReliableComparableDistanceMiles } from './comparable-distance';
 
 export type RentCheckerUserType = 'landlord';
 export type RentCheckerPropertyType = 'flat' | 'house' | 'room' | 'hmo' | 'other';
+export type RentCheckerPropertySubtype =
+  | 'terraced'
+  | 'end_terrace'
+  | 'semi_detached'
+  | 'detached'
+  | 'bungalow'
+  | 'purpose_built_flat'
+  | 'converted_flat'
+  | 'maisonette'
+  | 'studio'
+  | 'room_in_shared_house'
+  | 'other_house'
+  | 'other_flat'
+  | 'other'
+  | null;
 export type RentCheckerFurnishedStatus = 'unfurnished' | 'part_furnished' | 'furnished';
 export type RentCheckerPropertyCondition = 'below_average' | 'average' | 'good' | 'excellent';
 export type RentCheckerComparableEvidenceAvailability = 'yes' | 'no' | 'not_sure';
@@ -55,6 +70,7 @@ export interface RentCheckerInput {
   postcode: string;
   bedrooms: number;
   propertyType: RentCheckerPropertyType;
+  propertySubtype?: RentCheckerPropertySubtype;
   furnishedStatus: RentCheckerFurnishedStatus;
   currentRent: number;
   rentFrequency: Section13RentFrequency;
@@ -74,6 +90,7 @@ export interface RentCheckerResult {
   userType: RentCheckerUserType;
   bedrooms: number;
   propertyType: RentCheckerPropertyType;
+  propertySubtype?: RentCheckerPropertySubtype;
   propertyCondition: RentCheckerPropertyCondition;
   resultState: RentCheckerResultState;
   postcodeOutcode: string;
@@ -335,6 +352,8 @@ function buildSyntheticState(input: RentCheckerInput, now = new Date()): Section
       ...base.comparablesMeta,
       searchPostcodeRaw: input.postcode,
       bedrooms: input.bedrooms,
+      propertyType: input.propertyType,
+      propertySubtype: input.propertySubtype || null,
       lastScrapeAt: now.toISOString(),
       lastScrapeSource: 'rent_checker',
       lastScrapeSummary: 'Rent checker comparable search',
@@ -607,6 +626,7 @@ export function buildRentCheckerResult({
     userType: input.userType,
     bedrooms: input.bedrooms,
     propertyType: input.propertyType,
+    propertySubtype: input.propertySubtype || null,
     propertyCondition: input.propertyCondition,
     postcodeOutcode,
     recommendedProduct: 'section13_standard',

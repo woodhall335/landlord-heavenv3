@@ -13,6 +13,7 @@ function buildInput(overrides: Partial<RentCheckerInput> = {}): RentCheckerInput
     postcode: 'SW1A 1AA',
     bedrooms: 2,
     propertyType: 'flat',
+    propertySubtype: 'purpose_built_flat',
     furnishedStatus: 'furnished',
     currentRent: 1000,
     rentFrequency: 'monthly',
@@ -46,6 +47,7 @@ describe('RentCheckerForm', () => {
     expect(screen.getByText('1. Property basics')).toBeInTheDocument();
     expect(screen.getByLabelText('Proposed rent')).toBeInTheDocument();
     expect(screen.getByLabelText('Property type')).toBeInTheDocument();
+    expect(screen.getByLabelText('Property subtype')).toBeInTheDocument();
     expect(screen.queryByLabelText('Tenancy start date')).not.toBeInTheDocument();
     expect(screen.queryByLabelText('Last rent increase date')).not.toBeInTheDocument();
     expect(screen.queryByLabelText('Desired increase start date')).not.toBeInTheDocument();

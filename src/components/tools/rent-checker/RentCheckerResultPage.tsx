@@ -6,11 +6,17 @@ import { AlertTriangle, ArrowRight, Check, Download, ShieldCheck } from 'lucide-
 import { clsx } from 'clsx';
 
 import { Button } from '@/components/ui/Button';
+import { RentJustificationBuilder } from '@/components/section13/RentJustificationBuilder';
 import { captureLead } from '@/components/leads/useLeadCapture';
 import { trackEvent } from '@/lib/analytics';
 import type { GrowthCtaPosition } from '@/lib/analytics/growth-events';
 import { PRODUCTS } from '@/lib/pricing/products';
-import type { RentCheckerPropertyCondition, RentCheckerPropertyType, RentCheckerResult } from '@/lib/section13';
+import type {
+  RentCheckerPropertyCondition,
+  RentCheckerPropertySubtype,
+  RentCheckerPropertyType,
+  RentCheckerResult,
+} from '@/lib/section13';
 
 export interface RentCheckerTrackingContext {
   sourcePage: string;
@@ -96,6 +102,12 @@ function formatLabel(value: string): string {
 function propertyTypeLabel(propertyType: RentCheckerPropertyType): string {
   if (propertyType === 'hmo') return 'HMO';
   return formatLabel(propertyType);
+}
+
+function propertySubtypeLabel(propertySubtype: RentCheckerPropertySubtype | undefined): string | null {
+  if (!propertySubtype) return null;
+  if (propertySubtype === 'room_in_shared_house') return 'Room in shared house';
+  return formatLabel(propertySubtype);
 }
 
 function getToneClasses(result: RentCheckerResult) {
@@ -264,6 +276,12 @@ export function MarketPositionCard({ result }: { result: RentCheckerResult }) {
           <dt>Property type</dt>
           <dd className="font-semibold text-slate-950">{propertyTypeLabel(result.propertyType)}</dd>
         </div>
+        {propertySubtypeLabel(result.propertySubtype) ? (
+          <div className="flex items-start justify-between gap-4">
+            <dt>Property subtype</dt>
+            <dd className="font-semibold text-slate-950">{propertySubtypeLabel(result.propertySubtype)}</dd>
+          </div>
+        ) : null}
         <div className="flex items-start justify-between gap-4">
           <dt>Condition entered</dt>
           <dd className="font-semibold text-slate-950">{formatLabel(result.propertyCondition)}</dd>
@@ -1170,6 +1188,15 @@ export function RentCheckerResultPage({
             <RiskEvidenceCard result={result} />
           </div>
           <ConditionScenarioCard result={result} />
+          <RentJustificationBuilder
+            currentRent={result.currentRent}
+            proposedRent={result.proposedRent}
+            marketLow={result.marketLow}
+            marketHigh={result.marketHigh}
+            comparableCount={result.comparableCount}
+            evidenceStrength={result.preview.marketCalculation.evidenceStrength}
+            conditionScenario={result.propertyCondition}
+          />
           <ComparableListingsCard result={result} />
         </div>
         <RecommendedActionCard result={result} trackingContext={trackingContext} />

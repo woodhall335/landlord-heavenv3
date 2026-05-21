@@ -20,6 +20,7 @@ const payloadSchema = z.object({
   postcode: z.string().min(3),
   bedrooms: z.number().int().min(0).max(20),
   propertyType: z.string().trim().max(80).optional().nullable(),
+  propertySubtype: z.string().trim().max(80).optional().nullable(),
 });
 
 export async function POST(request: Request) {
@@ -37,7 +38,7 @@ export async function POST(request: Request) {
     }
 
     const supabase = createSupabaseAdminClient();
-    const { caseId, postcode, bedrooms, propertyType } = parsed.data;
+    const { caseId, postcode, bedrooms, propertyType, propertySubtype } = parsed.data;
     const { caseRow, facts, state } = await getSection13CaseData(supabase, caseId);
 
     const accessError = assertCaseWriteAccess({
@@ -47,7 +48,8 @@ export async function POST(request: Request) {
     });
     if (accessError) return accessError;
 
-    const scrape = await scrapeLiveComparables(postcode, bedrooms, propertyType);
+    const effectivePropertyType = propertySubtype || propertyType || null;
+    const scrape = await scrapeLiveComparables(postcode, bedrooms, effectivePropertyType);
     if (!scrape.success) {
       return NextResponse.json(
         {
@@ -67,6 +69,8 @@ export async function POST(request: Request) {
         searchPostcodeRaw: postcode,
         bedrooms,
         propertyType: propertyType || null,
+        propertySubtype: propertySubtype || null,
+        searchFallbackMode: scrape.searchFallbackMode || null,
         lastScrapeAt: new Date().toISOString(),
         lastScrapeSource: scrape.source,
         lastScrapeSummary: scrape.summary,
@@ -91,6 +95,7 @@ export async function POST(request: Request) {
       preview,
       scrapeSource: scrape.source,
       scrapeSummary: scrape.summary,
+      searchFallbackMode: scrape.searchFallbackMode || null,
     });
   } catch (error: any) {
     console.error('[section13/scrape] error', error);

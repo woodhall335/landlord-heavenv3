@@ -16,6 +16,24 @@ const payloadSchema = z.object({
   postcode: z.string().min(3),
   bedrooms: z.number().int().min(0).max(20),
   propertyType: z.enum(['flat', 'house', 'room', 'hmo', 'other']),
+  propertySubtype: z
+    .enum([
+      'terraced',
+      'end_terrace',
+      'semi_detached',
+      'detached',
+      'bungalow',
+      'purpose_built_flat',
+      'converted_flat',
+      'maisonette',
+      'studio',
+      'room_in_shared_house',
+      'other_house',
+      'other_flat',
+      'other',
+    ])
+    .nullable()
+    .optional(),
   furnishedStatus: z.enum(['unfurnished', 'part_furnished', 'furnished']),
   currentRent: z.number().positive(),
   rentFrequency: z.enum(['weekly', 'fortnightly', '4-weekly', 'monthly']),
@@ -89,7 +107,11 @@ export async function POST(request: Request) {
       );
     }
 
-    const scrape = await scrapeLiveComparables(input.postcode, input.bedrooms);
+    const scrape = await scrapeLiveComparables(
+      input.postcode,
+      input.bedrooms,
+      input.propertySubtype || input.propertyType
+    );
     if (!scrape.success) {
       return NextResponse.json(
         {

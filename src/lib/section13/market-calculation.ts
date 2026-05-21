@@ -12,6 +12,7 @@ import { getReliableComparableDistanceMiles } from './comparable-distance';
 const DAY_MS = 24 * 60 * 60 * 1000;
 const PRIMARY_FRESHNESS_DAYS = 90;
 const EXTENDED_FRESHNESS_DAYS = 180;
+const OLDER_FALLBACK_DAYS = 730;
 
 function percentile(sortedValues: number[], quantile: number): number | null {
   if (sortedValues.length === 0) return null;
@@ -35,7 +36,7 @@ function capitalize(value: string): string {
 }
 
 function normalizePropertyType(value: string | null | undefined): 'flat' | 'house' | 'room' | 'hmo' | 'other' | 'unknown' {
-  const normalized = String(value || '').trim().toLowerCase();
+  const normalized = String(value || '').trim().toLowerCase().replace(/_/g, '-');
   if (!normalized) return 'unknown';
   if (normalized.includes('hmo')) return 'hmo';
   if (normalized.includes('room') || normalized.includes('lodger')) return 'room';
@@ -59,6 +60,24 @@ function normalizePropertyType(value: string | null | undefined): 'flat' | 'hous
   }
 
   return 'other';
+}
+
+function normalizePropertySubtype(value: string | null | undefined): string | null {
+  const normalized = String(value || '').trim().toLowerCase().replace(/_/g, '-');
+  if (!normalized || normalized === 'other') return null;
+  if (normalized.includes('semi')) return 'semi_detached';
+  if (normalized.includes('end-terrace') || normalized.includes('end terrace')) return 'end_terrace';
+  if (normalized.includes('terrace')) return 'terraced';
+  if (normalized.includes('detached')) return 'detached';
+  if (normalized.includes('bungalow')) return 'bungalow';
+  if (normalized.includes('maisonette')) return 'maisonette';
+  if (normalized.includes('studio')) return 'studio';
+  if (normalized.includes('purpose-built') || normalized.includes('purpose built')) return 'purpose_built_flat';
+  if (normalized.includes('converted')) return 'converted_flat';
+  if (normalized.includes('room') || normalized.includes('hmo') || normalized.includes('shared')) {
+    return 'room_in_shared_house';
+  }
+  return null;
 }
 
 function readComparableFurnishedStatus(comparable: Section13Comparable): string | null {
@@ -100,6 +119,7 @@ function getFreshnessBand(days: number | null): Section13ComparableFreshnessBand
   if (days == null) return 'stale';
   if (days <= PRIMARY_FRESHNESS_DAYS) return 'fresh_90';
   if (days <= EXTENDED_FRESHNESS_DAYS) return 'extended_180';
+  if (days <= OLDER_FALLBACK_DAYS) return 'older_2_year_fallback';
   return 'stale';
 }
 
@@ -108,6 +128,9 @@ function getFreshnessLabel(days: number | null, band: Section13ComparableFreshne
   if (band === 'fresh_90') return `${days} day${days === 1 ? '' : 's'} old`;
   if (band === 'extended_180') {
     return `${days} days old (included only if recent matches are limited)`;
+  }
+  if (band === 'older_2_year_fallback') {
+    return `${days} days old (older fallback evidence within 2 years)`;
   }
   return `${days} days old (stale)`;
 }
@@ -162,6 +185,7 @@ interface ProvisionalAssessment {
   freshnessBand: Section13ComparableFreshnessBand;
   bedroomDifference: number | null;
   propertyTypeMismatch: boolean;
+  propertySubtypeMismatch: boolean;
   severePropertyTypeMismatch: boolean;
   furnishedMismatch: boolean;
   billsIncludedMismatch: boolean;
@@ -177,12 +201,21 @@ function buildProvisionalAssessment(
 ): ProvisionalAssessment {
   const subjectBedrooms = state.tenancy.bedrooms ?? null;
   const subjectType = normalizePropertyType(
-    state.comparablesMeta.propertyType ||
+    state.comparablesMeta.propertySubtype ||
+      state.comparablesMeta.propertyType ||
       (typeof comparable.metadata?.subjectPropertyType === 'string'
         ? comparable.metadata.subjectPropertyType
         : null)
   );
   const comparableType = normalizePropertyType(comparable.propertyType);
+  const subjectSubtype = normalizePropertySubtype(
+    state.comparablesMeta.propertySubtype ||
+      state.comparablesMeta.propertyType ||
+      (typeof comparable.metadata?.subjectPropertyType === 'string'
+        ? comparable.metadata.subjectPropertyType
+        : null)
+  );
+  const comparableSubtype = normalizePropertySubtype(comparable.propertyType);
   const freshnessDays = getFreshnessDays(comparable, now);
   const freshnessBand = getFreshnessBand(freshnessDays);
   const sourceBacked = isSourceBacked(comparable);
@@ -202,6 +235,9 @@ function buildProvisionalAssessment(
     subjectType !== 'unknown' &&
     comparableType !== 'unknown' &&
     subjectType !== comparableType;
+  const propertySubtypeMismatch =
+    !propertyTypeMismatch &&
+    Boolean(subjectSubtype && comparableSubtype && subjectSubtype !== comparableSubtype);
   const comparableFurnished = readComparableFurnishedStatus(comparable);
   const subjectFurnished =
     typeof comparable.metadata?.subjectFurnishedStatus === 'string'
@@ -221,8 +257,10 @@ function buildProvisionalAssessment(
 
   if (freshnessBand === 'extended_180') {
     reasonParts.push('Older comparable inside the 180-day fallback window.');
+  } else if (freshnessBand === 'older_2_year_fallback') {
+    reasonParts.push('Older fallback comparable inside the 2-year fallback window.');
   } else if (freshnessBand === 'stale') {
-    reasonParts.push('Older than 180 days or missing a reliable source date.');
+    reasonParts.push('Older than 2 years or missing a reliable source date.');
   }
 
   if (bedroomDifference === 1) {
@@ -235,6 +273,8 @@ function buildProvisionalAssessment(
     reasonParts.push('Property type differs materially from the subject property.');
   } else if (propertyTypeMismatch) {
     reasonParts.push('Property type is close but not identical to the subject property.');
+  } else if (propertySubtypeMismatch) {
+    reasonParts.push('Property subtype differs from the subject property.');
   }
 
   if (distanceMiles != null && distanceMiles > 3 && distanceMiles <= 5) {
@@ -264,6 +304,7 @@ function buildProvisionalAssessment(
     freshnessBand === 'fresh_90' &&
     (bedroomDifference == null || bedroomDifference === 0) &&
     !propertyTypeMismatch &&
+    !propertySubtypeMismatch &&
     distanceMiles != null &&
     distanceMiles <= 1.5 &&
     !furnishedMismatch &&
@@ -285,6 +326,7 @@ function buildProvisionalAssessment(
     freshnessBand,
     bedroomDifference,
     propertyTypeMismatch,
+    propertySubtypeMismatch,
     severePropertyTypeMismatch,
     furnishedMismatch,
     billsIncludedMismatch,
@@ -301,7 +343,7 @@ function buildMedian(values: number[]): number | null {
 
 function selectUsedComparableIds(
   provisional: ProvisionalAssessment[]
-): { usedIds: Set<string>; freshnessWindowUsed: 90 | 180 } {
+): { usedIds: Set<string>; freshnessWindowUsed: 90 | 180 | 730 } {
   const getId = (item: ProvisionalAssessment) =>
     item.comparable.id || `${item.comparable.addressSnippet}|${item.comparable.sortOrder}`;
   const selected = new Set<string>();
@@ -315,13 +357,24 @@ function selectUsedComparableIds(
   );
   pushAll(strongFresh);
 
-  let freshnessWindowUsed: 90 | 180 = 90;
+  let freshnessWindowUsed: 90 | 180 | 730 = 90;
 
   if (selected.size < 3) {
     freshnessWindowUsed = 180;
     pushAll(
       provisional.filter(
         (item) => item.initialRelevanceBand === 'strong_match' && item.freshnessBand === 'extended_180'
+      )
+    );
+  }
+
+  if (selected.size < 3) {
+    freshnessWindowUsed = 730;
+    pushAll(
+      provisional.filter(
+        (item) =>
+          item.initialRelevanceBand === 'strong_match' &&
+          item.freshnessBand === 'older_2_year_fallback'
       )
     );
   }
@@ -339,6 +392,17 @@ function selectUsedComparableIds(
     pushAll(
       provisional.filter(
         (item) => item.initialRelevanceBand === 'partial_match' && item.freshnessBand === 'extended_180'
+      )
+    );
+  }
+
+  if (selected.size < 3) {
+    freshnessWindowUsed = 730;
+    pushAll(
+      provisional.filter(
+        (item) =>
+          item.initialRelevanceBand === 'partial_match' &&
+          item.freshnessBand === 'older_2_year_fallback'
       )
     );
   }
@@ -374,7 +438,9 @@ function buildReasonDetail(
   }
 
   if (usageGroup === 'used') {
-    if (provisional.freshnessBand === 'extended_180') {
+    if (provisional.freshnessBand === 'older_2_year_fallback') {
+      reasons.unshift('Included as older fallback evidence because fewer current like-for-like matches were available.');
+    } else if (provisional.freshnessBand === 'extended_180') {
       reasons.unshift('Included because fewer recent like-for-like matches were available.');
     } else if (provisional.initialRelevanceBand === 'partial_match') {
       reasons.unshift('Included as a partial match because the nearby like-for-like pool was limited.');
@@ -452,7 +518,7 @@ function buildExplanationText(calculation: {
   usedComparableCount: number;
   sourceBackedUsedCount: number;
   fresh90UsedCount: number;
-  freshnessWindowUsed: 90 | 180;
+  freshnessWindowUsed: 90 | 180 | 730;
   adjustmentsApplied: boolean;
 }): string[] {
   const lines = [
@@ -468,6 +534,10 @@ function buildExplanationText(calculation: {
 
   if (calculation.freshnessWindowUsed === 180) {
     lines.push('The calculation extends to 180-day comparables because fewer recent matches were available within 90 days.');
+  }
+
+  if (calculation.freshnessWindowUsed === 730) {
+    lines.push('Older fallback comparables up to 2 years are included only because current like-for-like evidence was thin.');
   }
 
   if (calculation.sourceBackedUsedCount < calculation.usedComparableCount) {
@@ -497,6 +567,7 @@ export function buildSection13MarketCalculation(
       (item.bedroomDifference == null || item.bedroomDifference <= 1) &&
       !item.severePropertyTypeMismatch &&
       !item.propertyTypeMismatch &&
+      !item.propertySubtypeMismatch &&
       (item.distanceMiles == null || item.distanceMiles <= 3)
   );
 
@@ -584,17 +655,21 @@ export function buildSection13MarketCalculation(
   const marketHigh = percentile(usedAdjusted, 0.75);
   const sourceBackedUsedCount = usedComparables.filter((item) => item.sourceBacked).length;
   const fresh90UsedCount = usedComparables.filter((item) => item.freshnessBand === 'fresh_90').length;
+  const olderFallbackUsedCount = usedComparables.filter(
+    (item) => item.freshnessBand === 'older_2_year_fallback'
+  ).length;
   const comparableSimilarityCount = usedComparables.filter(
     (item) => item.relevanceBand === 'strong_match'
   ).length;
   const majoritySourceBacked = usedComparables.length > 0 && sourceBackedUsedCount / usedComparables.length >= 0.5;
   const majorityFresh = usedComparables.length > 0 && fresh90UsedCount / usedComparables.length >= 0.5;
+  const olderFallbackUsed = olderFallbackUsedCount > 0 || selection.freshnessWindowUsed === 730;
   const majorityCloseMatch =
     usedComparables.length > 0 && comparableSimilarityCount / usedComparables.length >= 0.5;
   const evidenceStrength: Section13EvidenceStrengthBand =
-    usedComparables.length >= 6 && majoritySourceBacked && majorityFresh && majorityCloseMatch
+    usedComparables.length >= 6 && majoritySourceBacked && majorityFresh && majorityCloseMatch && !olderFallbackUsed
       ? 'strong'
-      : usedComparables.length >= 3
+      : usedComparables.length >= 3 && !olderFallbackUsed
         ? 'moderate'
         : 'weak';
   const adjustmentsApplied = usedComparables.some((item) => item.rentPcmRaw !== item.rentPcmAdjusted);

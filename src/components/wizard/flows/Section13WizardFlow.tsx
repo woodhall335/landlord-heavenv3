@@ -14,6 +14,7 @@ import {
 } from 'react-icons/ri';
 
 import { Button } from '@/components/ui/Button';
+import { RentJustificationBuilder } from '@/components/section13/RentJustificationBuilder';
 import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
 import { getCaseFacts } from '@/lib/wizard/facts-client';
 import { getSessionTokenHeaders } from '@/lib/session-token';
@@ -28,6 +29,11 @@ import {
   getMonthlyEquivalent,
   getWeeklyEquivalent,
 } from '@/lib/section13/rules';
+import {
+  getConditionScenario,
+  SECTION13_CONDITION_SCENARIOS,
+  type Section13RentJustificationResult,
+} from '@/lib/section13/rent-justification';
 import type {
   Section13BundleAsset,
   Section13Comparable,
@@ -71,6 +77,28 @@ const PROPERTY_TYPE_OPTIONS = [
   { value: 'room', label: 'Room / shared house' },
   { value: 'other', label: 'Other / not sure' },
 ];
+
+const PROPERTY_SUBTYPE_OPTIONS: Record<string, Array<{ value: string; label: string }>> = {
+  house: [
+    { value: 'terraced', label: 'Terraced house' },
+    { value: 'end_terrace', label: 'End-terrace house' },
+    { value: 'semi_detached', label: 'Semi-detached house' },
+    { value: 'detached', label: 'Detached house' },
+    { value: 'bungalow', label: 'Bungalow' },
+    { value: 'other_house', label: 'Other house' },
+  ],
+  flat: [
+    { value: 'purpose_built_flat', label: 'Purpose-built flat' },
+    { value: 'converted_flat', label: 'Converted flat' },
+    { value: 'maisonette', label: 'Maisonette' },
+    { value: 'studio', label: 'Studio' },
+    { value: 'other_flat', label: 'Other flat' },
+  ],
+  bungalow: [{ value: 'bungalow', label: 'Bungalow' }],
+  studio: [{ value: 'studio', label: 'Studio' }],
+  room: [{ value: 'room_in_shared_house', label: 'Room in shared house / HMO' }],
+  other: [{ value: 'other', label: 'Other / not sure' }],
+};
 
 const ADJUSTMENT_COPY: Record<
   Section13ComparableAdjustment['category'],
@@ -196,6 +224,17 @@ function formatStatusLabel(value: string | null | undefined): string {
     .split('_')
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(' ');
+}
+
+function getPropertySubtypeOptions(propertyType: string | null | undefined) {
+  return PROPERTY_SUBTYPE_OPTIONS[propertyType || ''] || [];
+}
+
+function getPropertySubtypeLabel(propertyType: string | null | undefined, propertySubtype: string | null | undefined) {
+  if (!propertySubtype) return null;
+  const option = getPropertySubtypeOptions(propertyType).find((item) => item.value === propertySubtype);
+  if (option) return option.label;
+  return propertySubtype.replace(/_/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
 function getComparableAssessmentId(comparable: Section13Comparable): string {
@@ -331,6 +370,7 @@ function getStepCompleteState(
           Boolean(state.tenancy.propertyTownCity) &&
           Boolean(state.tenancy.postcodeRaw) &&
           Boolean(state.comparablesMeta.propertyType) &&
+          Boolean(state.comparablesMeta.propertySubtype || state.comparablesMeta.propertyType === 'other') &&
           state.tenancy.bedrooms != null &&
           state.tenancy.currentRentAmount != null &&
           state.proposal.proposedRentAmount != null,
@@ -538,6 +578,31 @@ export function Section13WizardFlow({
     effectiveState.selectedPlan === 'section13_defensive'
       ? 'Continue to document preview with the Tribunal-Ready pack'
       : 'Continue to document preview with the Standard Pack';
+
+  const handleJustificationChange = useCallback((result: Section13RentJustificationResult) => {
+    setState((prev) => {
+      const same =
+        prev.adjustments.justificationScore === result.score &&
+        prev.adjustments.justificationBand === result.band &&
+        prev.adjustments.evidenceCappedJustifiedIncrease === result.evidenceCappedJustifiedIncrease &&
+        prev.adjustments.unexplainedIncrease === result.unexplainedIncrease &&
+        JSON.stringify(prev.adjustments.justificationFactors || []) === JSON.stringify(result.selectedFactors);
+
+      if (same) return prev;
+
+      return normalizeSection13State({
+        ...prev,
+        adjustments: {
+          ...prev.adjustments,
+          justificationFactors: result.selectedFactors,
+          justificationScore: result.score,
+          justificationBand: result.band,
+          evidenceCappedJustifiedIncrease: result.evidenceCappedJustifiedIncrease,
+          unexplainedIncrease: result.unexplainedIncrease,
+        },
+      });
+    });
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -899,7 +964,10 @@ export function Section13WizardFlow({
         sortOrder: prev.length,
         adjustments: [],
         metadata: {
-          subjectPropertyType: effectiveState.comparablesMeta.propertyType || null,
+          subjectPropertyType:
+            effectiveState.comparablesMeta.propertySubtype ||
+            effectiveState.comparablesMeta.propertyType ||
+            null,
         },
       },
     ]);
@@ -961,6 +1029,7 @@ export function Section13WizardFlow({
     const postcode = effectiveState.comparablesMeta.searchPostcodeRaw || effectiveState.tenancy.postcodeRaw;
     const bedrooms = effectiveState.comparablesMeta.bedrooms ?? effectiveState.tenancy.bedrooms;
     const propertyType = effectiveState.comparablesMeta.propertyType || null;
+    const propertySubtype = effectiveState.comparablesMeta.propertySubtype || null;
     if (!postcode || !bedrooms) {
       setSaveError('Enter the property postcode and bedroom count before checking local listings.');
       return;
@@ -982,6 +1051,7 @@ export function Section13WizardFlow({
           postcode,
           bedrooms,
           propertyType,
+          propertySubtype,
         }),
       });
 
@@ -998,6 +1068,8 @@ export function Section13WizardFlow({
           searchPostcodeRaw: postcode,
           bedrooms,
           propertyType,
+          propertySubtype,
+          searchFallbackMode: data.searchFallbackMode || null,
           lastScrapeAt: new Date().toISOString(),
           lastScrapeSource: data.scrapeSource || null,
           lastScrapeSummary: data.scrapeSummary || null,
@@ -1082,7 +1154,7 @@ export function Section13WizardFlow({
     checkoutLoading;
   const continueDisabledReason =
     currentStep.id === 'tenancy'
-      ? 'Complete the property address, town/city, postcode, property type, bedrooms, current rent, and target rent before continuing.'
+      ? 'Complete the property address, town/city, postcode, property type, subtype, bedrooms, current rent, and target rent before continuing.'
       : currentStep.id === 'proposal'
         ? 'Complete the tenant, tenancy date, service date, proposed start date, and service method before continuing.'
         : currentStep.id === 'landlord'
@@ -1154,9 +1226,10 @@ export function Section13WizardFlow({
     const postcode = effectiveState.comparablesMeta.searchPostcodeRaw || effectiveState.tenancy.postcodeRaw;
     const bedrooms = effectiveState.comparablesMeta.bedrooms ?? effectiveState.tenancy.bedrooms;
     const propertyType = effectiveState.comparablesMeta.propertyType || '';
+    const propertySubtype = effectiveState.comparablesMeta.propertySubtype || '';
     if (!postcode || !bedrooms) return;
 
-    const scrapeKey = `${postcode.trim().toUpperCase()}|${bedrooms}|${propertyType}`;
+    const scrapeKey = `${postcode.trim().toUpperCase()}|${bedrooms}|${propertyType}|${propertySubtype}`;
     if (autoScrapeKeyRef.current === scrapeKey) return;
     autoScrapeKeyRef.current = scrapeKey;
     setScrapeMessage('Checking local listings automatically from the property details...');
@@ -1167,6 +1240,7 @@ export function Section13WizardFlow({
     currentStep.id,
     effectiveState.comparablesMeta.bedrooms,
     effectiveState.comparablesMeta.propertyType,
+    effectiveState.comparablesMeta.propertySubtype,
     effectiveState.comparablesMeta.searchPostcodeRaw,
     effectiveState.tenancy.bedrooms,
     effectiveState.tenancy.postcodeRaw,
@@ -1269,15 +1343,18 @@ export function Section13WizardFlow({
                 <select
                   required
                   value={effectiveState.comparablesMeta.propertyType || ''}
-                  onChange={(event) =>
+                  onChange={(event) => {
+                    const nextPropertyType = event.target.value || null;
+                    const firstSubtype = getPropertySubtypeOptions(nextPropertyType)[0]?.value || null;
                     updateState((prev) => ({
                       ...prev,
                       comparablesMeta: {
                         ...prev.comparablesMeta,
-                        propertyType: event.target.value || null,
+                        propertyType: nextPropertyType,
+                        propertySubtype: firstSubtype,
                       },
-                    }))
-                  }
+                    }));
+                  }}
                   className="w-full rounded-2xl border border-[#e1d5ff] bg-[#fcfbff] px-4 py-3 text-sm shadow-sm transition focus:border-violet-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-violet-200"
                 >
                   {PROPERTY_TYPE_OPTIONS.map((option) => (
@@ -1286,6 +1363,33 @@ export function Section13WizardFlow({
                     </option>
                   ))}
                 </select>
+              </label>
+              <label className="block space-y-2">
+                <span className="text-sm font-semibold text-[#27134a]">Property subtype</span>
+                <select
+                  required={effectiveState.comparablesMeta.propertyType !== 'other'}
+                  value={effectiveState.comparablesMeta.propertySubtype || ''}
+                  onChange={(event) =>
+                    updateState((prev) => ({
+                      ...prev,
+                      comparablesMeta: {
+                        ...prev.comparablesMeta,
+                        propertySubtype: event.target.value || null,
+                      },
+                    }))
+                  }
+                  className="w-full rounded-2xl border border-[#e1d5ff] bg-[#fcfbff] px-4 py-3 text-sm shadow-sm transition focus:border-violet-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-violet-200"
+                >
+                  <option value="">Select closest subtype</option>
+                  {getPropertySubtypeOptions(effectiveState.comparablesMeta.propertyType).map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                <span className="block text-xs leading-5 text-gray-500">
+                  We search this exact subtype first, then broaden only if fewer than 3 usable comparables are found.
+                </span>
               </label>
               {renderTextInput('Bedrooms', effectiveState.tenancy.bedrooms, (value) =>
                 updateState((prev) => ({
@@ -1826,6 +1930,7 @@ export function Section13WizardFlow({
         const marketSearchBedrooms =
           effectiveState.comparablesMeta.bedrooms ?? effectiveState.tenancy.bedrooms;
         const marketSearchPropertyType = effectiveState.comparablesMeta.propertyType || '';
+        const marketSearchPropertySubtype = effectiveState.comparablesMeta.propertySubtype || '';
         const marketVerdict = getMarketVerdict(effectiveState.preview, comparables.length);
 
         return (
@@ -1865,6 +1970,10 @@ export function Section13WizardFlow({
                         ? PROPERTY_TYPE_OPTIONS.find((option) => option.value === marketSearchPropertyType)?.label ||
                           marketSearchPropertyType
                         : 'Property type missing'}
+                    </span>
+                    <span className="rounded-full border border-violet-200 bg-violet-50 px-3 py-1.5 text-xs font-semibold text-violet-900">
+                      {getPropertySubtypeLabel(marketSearchPropertyType, marketSearchPropertySubtype) ||
+                        'Property subtype missing'}
                     </span>
                     <span className="rounded-full border border-violet-200 bg-violet-50 px-3 py-1.5 text-xs font-semibold text-violet-900">
                       {marketSearchBedrooms != null ? `${marketSearchBedrooms} bedrooms` : 'Bedroom count missing'}
@@ -1961,6 +2070,128 @@ export function Section13WizardFlow({
                 </div>
               ) : null}
             </div>
+
+            <div className="rounded-2xl border border-gray-200 bg-white p-4">
+              {(() => {
+                const conditionScenario = getConditionScenario(
+                  effectiveState.adjustments.conditionScenario || 'average'
+                );
+                const conditionIndex = Math.max(
+                  0,
+                  SECTION13_CONDITION_SCENARIOS.findIndex((item) => item.value === conditionScenario.value)
+                );
+                const adjustedLow =
+                  effectiveState.preview?.lowerQuartile == null
+                    ? null
+                    : Math.round(effectiveState.preview.lowerQuartile * conditionScenario.factor);
+                const adjustedMedian =
+                  effectiveState.preview?.median == null
+                    ? null
+                    : Math.round(effectiveState.preview.median * conditionScenario.factor);
+                const adjustedHigh =
+                  effectiveState.preview?.upperQuartile == null
+                    ? null
+                    : Math.round(effectiveState.preview.upperQuartile * conditionScenario.factor);
+                const scenarioRisk =
+                  effectiveState.preview?.evidenceBand === 'weak' ||
+                  conditionScenario.value === 'below_average' ||
+                  (effectiveState.preview?.proposedRentMonthly != null &&
+                    adjustedHigh != null &&
+                    effectiveState.preview.proposedRentMonthly > adjustedHigh)
+                    ? 'High'
+                    : effectiveState.preview?.proposedRentMonthly != null &&
+                        adjustedMedian != null &&
+                        effectiveState.preview.proposedRentMonthly > adjustedMedian * 0.98
+                      ? 'Moderate'
+                      : 'Low';
+
+                return (
+                  <div>
+                    <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                      <div>
+                        <p className="text-xl font-semibold text-gray-950">Condition scenario</p>
+                        <p className="mt-2 max-w-3xl text-sm leading-6 text-gray-700">
+                          Move the slider to see how condition affects the supportable market position. This does not overwrite the official market-risk result.
+                        </p>
+                      </div>
+                      <span className="inline-flex w-fit rounded-full bg-violet-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-violet-700">
+                        Interactive
+                      </span>
+                    </div>
+                    <div className="mt-5">
+                      <div className="flex items-center justify-between gap-4 text-sm font-semibold text-gray-700">
+                        <span>Below average</span>
+                        <span>Excellent</span>
+                      </div>
+                      <input
+                        type="range"
+                        min={0}
+                        max={SECTION13_CONDITION_SCENARIOS.length - 1}
+                        step={1}
+                        value={conditionIndex}
+                        onChange={(event) => {
+                          const nextScenario = SECTION13_CONDITION_SCENARIOS[Number(event.target.value)];
+                          updateState((prev) => ({
+                            ...prev,
+                            adjustments: {
+                              ...prev.adjustments,
+                              conditionScenario: nextScenario?.value || 'average',
+                            },
+                          }));
+                        }}
+                        className="mt-3 w-full accent-violet-700"
+                        aria-label="Property condition scenario"
+                      />
+                    </div>
+                    <div className="mt-5 grid gap-3 md:grid-cols-4">
+                      <div className="rounded-2xl bg-gray-50 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">Condition</p>
+                        <p className="mt-2 text-lg font-semibold text-gray-950">{conditionScenario.label}</p>
+                      </div>
+                      <div className="rounded-2xl bg-gray-50 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">Adjusted median</p>
+                        <p className="mt-2 text-lg font-semibold text-gray-950">{formatMoney(adjustedMedian)}</p>
+                      </div>
+                      <div className="rounded-2xl bg-gray-50 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">Supportable range</p>
+                        <p className="mt-2 text-lg font-semibold text-gray-950">
+                          {adjustedLow != null && adjustedHigh != null
+                            ? `${formatMoney(adjustedLow)} - ${formatMoney(adjustedHigh)}`
+                            : 'Unavailable'}
+                        </p>
+                      </div>
+                      <div className="rounded-2xl bg-gray-50 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">Scenario risk</p>
+                        <p className="mt-2 text-lg font-semibold text-gray-950">{scenarioRisk}</p>
+                      </div>
+                    </div>
+                    <p className="mt-4 rounded-2xl border border-gray-200 bg-gray-50 p-4 text-sm leading-6 text-gray-700">
+                      {conditionScenario.copy}
+                    </p>
+                  </div>
+                );
+              })()}
+            </div>
+
+            <RentJustificationBuilder
+              currentRent={
+                effectiveState.tenancy.currentRentAmount == null
+                  ? null
+                  : getMonthlyEquivalent(
+                      effectiveState.tenancy.currentRentAmount,
+                      effectiveState.tenancy.currentRentFrequency
+                    )
+              }
+              proposedRent={effectiveState.preview?.proposedRentMonthly}
+              marketLow={effectiveState.preview?.lowerQuartile}
+              marketHigh={effectiveState.preview?.upperQuartile}
+              comparableCount={marketCalculation?.usedComparableCount || 0}
+              evidenceStrength={effectiveState.preview?.evidenceBand}
+              conditionScenario={effectiveState.adjustments.conditionScenario || 'average'}
+              initialSelectedFactors={effectiveState.adjustments.justificationFactors || []}
+              onChange={handleJustificationChange}
+              tone="wizard"
+            />
 
             <div className="space-y-4">
               {comparables.length === 0 ? (

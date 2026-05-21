@@ -39,6 +39,7 @@ function defaultInput(): RentCheckerInput {
     postcode: '',
     bedrooms: 2,
     propertyType: 'house',
+    propertySubtype: null,
     furnishedStatus: 'unfurnished',
     currentRent: 0,
     rentFrequency: 'monthly',
@@ -169,6 +170,9 @@ export function RentIncreaseChallengeChecker({
       if (!input.postcode.trim()) nextErrors.postcode = 'Enter the postcode.';
       if (input.bedrooms < 0) nextErrors.bedrooms = 'Enter a valid bedroom count.';
       if (!input.currentRent || input.currentRent <= 0) nextErrors.currentRent = 'Enter the current rent.';
+      if (input.propertyType !== 'other' && !input.propertySubtype) {
+        nextErrors.propertySubtype = 'Select the closest property subtype.';
+      }
       if (!input.proposedRent || input.proposedRent <= 0) {
         nextErrors.proposedRent = 'Enter the proposed rent to assess the increase.';
       }

@@ -357,7 +357,9 @@ export function buildSection13DefensibilitySummarySentence(
 }
 
 export function buildSection13JustificationSummaryText(
-  state: Pick<Section13State, 'proposal' | 'tenancy'>,
+  state: Pick<Section13State, 'proposal' | 'tenancy'> & {
+    adjustments?: Partial<Section13State['adjustments']>;
+  },
   preview: Pick<
     Section13PreviewMetrics,
     | 'proposedRentMonthly'
@@ -385,10 +387,19 @@ export function buildSection13JustificationSummaryText(
     preview.upperQuartile != null &&
     preview.proposedRentMonthly > preview.upperQuartile
   ) {
-    return `The proposed rent of ${formatCurrencyValue(state.proposal.proposedRentAmount)} ${describeRentFrequency(state.tenancy.currentRentFrequency)} is ${position} the adjusted median market rent of ${formatCurrencyValue(preview.median)} per month. The evidence base is strong, but the proposed figure still sits above the supported market position and is likely to attract challenge. ${preview.challengeReasonSummary || ''}`.trim();
+    const scoreText =
+      state.adjustments?.justificationScore != null
+        ? ` The selected justification factors score ${state.adjustments.justificationScore}/100 (${state.adjustments.justificationBand || 'Unbanded'}), but this does not override the market pricing risk.`
+        : '';
+    return `The proposed rent of ${formatCurrencyValue(state.proposal.proposedRentAmount)} ${describeRentFrequency(state.tenancy.currentRentFrequency)} is ${position} the adjusted median market rent of ${formatCurrencyValue(preview.median)} per month. The evidence base is strong, but the proposed figure still sits above the supported market position and is likely to attract challenge.${scoreText} ${preview.challengeReasonSummary || ''}`.trim();
   }
 
-  return `The proposed rent of ${formatCurrencyValue(state.proposal.proposedRentAmount)} ${describeRentFrequency(state.tenancy.currentRentFrequency)} is ${position} the adjusted median market rent of ${formatCurrencyValue(preview.median)} per month. Based on the comparables analysed under section 13(4) of the Housing Act 1988 (as amended), the proposed increase is presented as reasonable with a ${preview.challengeBandLabel.toLowerCase()} and ${preview.evidenceBandLabel.toLowerCase()}.`;
+  const scoreText =
+    state.adjustments?.justificationScore != null
+      ? ` The selected justification factors score ${state.adjustments.justificationScore}/100 (${state.adjustments.justificationBand || 'Unbanded'}), with an evidence-capped explained uplift of ${formatCurrencyValue(state.adjustments.evidenceCappedJustifiedIncrease || 0)}.`
+      : '';
+
+  return `The proposed rent of ${formatCurrencyValue(state.proposal.proposedRentAmount)} ${describeRentFrequency(state.tenancy.currentRentFrequency)} is ${position} the adjusted median market rent of ${formatCurrencyValue(preview.median)} per month. Based on the comparables analysed under section 13(4) of the Housing Act 1988 (as amended), the proposed increase is presented as reasonable with a ${preview.challengeBandLabel.toLowerCase()} and ${preview.evidenceBandLabel.toLowerCase()}.${scoreText}`;
 }
 
 export function validateSection13StartDate(input: {

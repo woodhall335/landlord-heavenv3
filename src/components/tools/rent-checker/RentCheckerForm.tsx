@@ -26,6 +26,39 @@ const stepOrder: Array<{ id: StepId; label: string }> = [
   { id: 'review', label: 'Review & calculate' },
 ];
 
+const propertySubtypeOptions: Partial<
+  Record<
+    RentCheckerInput['propertyType'],
+    Array<{ value: NonNullable<RentCheckerInput['propertySubtype']>; label: string }>
+  >
+> = {
+  house: [
+    { value: 'terraced', label: 'Terraced house' },
+    { value: 'end_terrace', label: 'End-terrace house' },
+    { value: 'semi_detached', label: 'Semi-detached house' },
+    { value: 'detached', label: 'Detached house' },
+    { value: 'bungalow', label: 'Bungalow' },
+    { value: 'other_house', label: 'Other house' },
+  ],
+  flat: [
+    { value: 'purpose_built_flat', label: 'Purpose-built flat' },
+    { value: 'converted_flat', label: 'Converted flat' },
+    { value: 'maisonette', label: 'Maisonette' },
+    { value: 'studio', label: 'Studio' },
+    { value: 'other_flat', label: 'Other flat' },
+  ],
+  room: [{ value: 'room_in_shared_house', label: 'Room in shared house' }],
+  hmo: [{ value: 'room_in_shared_house', label: 'Room in HMO / shared house' }],
+};
+
+function formatReviewLabel(value: string | null | undefined): string {
+  if (!value) return '-';
+  if (value === 'hmo') return 'HMO';
+  return value
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
 function StepHeader({ step }: { step: StepId }) {
   const currentIndex = stepOrder.findIndex((item) => item.id === step);
 
@@ -71,6 +104,13 @@ export function RentCheckerForm({
   onBack,
   onSubmit,
 }: RentCheckerFormProps) {
+  const subtypeOptions = propertySubtypeOptions[input.propertyType] || [];
+  const handlePropertyTypeChange = (value: RentCheckerInput['propertyType']) => {
+    onChange('propertyType', value);
+    const firstSubtype = propertySubtypeOptions[value]?.[0]?.value || null;
+    onChange('propertySubtype', firstSubtype);
+  };
+
   const renderStep = () => {
     if (step === 'property') {
       return (
@@ -95,7 +135,7 @@ export function RentCheckerForm({
             id="rent-checker-property-type"
             label="Property type"
             value={input.propertyType}
-            onChange={(event) => onChange('propertyType', event.target.value as RentCheckerInput['propertyType'])}
+            onChange={(event) => handlePropertyTypeChange(event.target.value as RentCheckerInput['propertyType'])}
             error={errors.propertyType}
           >
             <option value="flat">Flat</option>
@@ -104,6 +144,24 @@ export function RentCheckerForm({
             <option value="hmo">HMO</option>
             <option value="other">Other</option>
           </Select>
+          {subtypeOptions.length > 0 ? (
+            <Select
+              id="rent-checker-property-subtype"
+              label="Property subtype"
+              value={input.propertySubtype || ''}
+              onChange={(event) =>
+                onChange('propertySubtype', event.target.value as NonNullable<RentCheckerInput['propertySubtype']>)
+              }
+              error={errors.propertySubtype}
+            >
+              <option value="">Select closest match</option>
+              {subtypeOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </Select>
+          ) : null}
           <Select
             id="rent-checker-furnished-status"
             label="Furnished status"
@@ -188,9 +246,10 @@ export function RentCheckerForm({
           <dl className="mt-4">
             <ReviewRow label="Audience" value="Landlord" />
             <ReviewRow label="Postcode" value={input.postcode || '-'} />
-            <ReviewRow label="Property type" value={input.propertyType.replace('_', ' ')} />
+            <ReviewRow label="Property type" value={formatReviewLabel(input.propertyType)} />
+            <ReviewRow label="Property subtype" value={formatReviewLabel(input.propertySubtype)} />
             <ReviewRow label="Bedrooms" value={String(input.bedrooms)} />
-            <ReviewRow label="Condition" value={input.propertyCondition.replace('_', ' ')} />
+            <ReviewRow label="Condition" value={formatReviewLabel(input.propertyCondition)} />
             <ReviewRow label="Current rent" value={input.currentRent ? `£${input.currentRent}` : '-'} />
             <ReviewRow label="Proposed rent" value={input.proposedRent ? `£${input.proposedRent}` : '-'} />
           </dl>

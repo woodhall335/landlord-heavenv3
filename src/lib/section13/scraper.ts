@@ -1,4 +1,4 @@
-import { maybeNormalizeUkPostcode, getDomainFromUrl } from './postcode';
+import { maybeNormalizeUkPostcode } from './postcode';
 import { buildComparableFromPartial } from './server';
 import { getReliableComparableDistanceMiles } from './comparable-distance';
 import type { Section13Comparable, Section13SourceDateKind } from './types';
@@ -41,6 +41,7 @@ export interface LiveComparableScrapeSuccess {
   source: Exclude<ComparableSearchOutcome, 'insufficient_live_evidence'>;
   summary: string;
   sourceStatuses: ComparableSourceStatus[];
+  searchFallbackMode?: 'exact' | 'parent_type' | null;
 }
 
 export interface LiveComparableScrapeFailure {
@@ -51,6 +52,7 @@ export interface LiveComparableScrapeFailure {
   sourceStatuses: ComparableSourceStatus[];
   reason: 'insufficient_live_comparables';
   retryable: true;
+  searchFallbackMode?: 'exact' | 'parent_type' | null;
 }
 
 export type LiveComparableScrapeResult =
@@ -93,8 +95,10 @@ function getOutcode(postcode: string): string {
 }
 
 function normalizeSearchPropertyType(value: string | null | undefined): string | null {
-  const normalized = String(value || '').trim().toLowerCase();
+  const normalized = String(value || '').trim().toLowerCase().replace(/_/g, '-');
   if (!normalized || normalized === 'other') return null;
+  if (normalized.includes('studio')) return 'studio';
+  if (normalized.includes('maisonette')) return 'maisonette';
   if (normalized.includes('room') || normalized.includes('lodger')) return 'room';
   if (normalized.includes('hmo') || normalized.includes('shared')) return 'hmo';
   if (
@@ -120,9 +124,21 @@ function normalizeSearchPropertyType(value: string | null | undefined): string |
 }
 
 function getRightmovePropertyTypeQuery(propertyType: string | null | undefined): string | null {
+  const raw = String(propertyType || '').trim().toLowerCase().replace(/_/g, '-');
+  if (raw.includes('semi')) return 'semi-detached';
+  if (raw.includes('end-terrace') || raw.includes('end terrace')) return 'terraced';
+  if (raw.includes('terrace')) return 'terraced';
+  if (raw.includes('detached') && !raw.includes('semi')) return 'detached';
+  if (raw.includes('maisonette')) return 'maisonette';
+  if (raw.includes('studio')) return 'studio';
+
   switch (normalizeSearchPropertyType(propertyType)) {
     case 'flat':
       return 'flat';
+    case 'maisonette':
+      return 'maisonette';
+    case 'studio':
+      return 'studio';
     case 'bungalow':
       return 'bungalow';
     case 'house':
@@ -133,9 +149,46 @@ function getRightmovePropertyTypeQuery(propertyType: string | null | undefined):
 }
 
 function formatSearchScope(postcode: string, propertyType?: string | null): string {
+  const rawType = String(propertyType || '').trim().replace(/_/g, ' ');
   const normalizedType = normalizeSearchPropertyType(propertyType);
-  const typeLabel = normalizedType && normalizedType !== 'other' ? `, ${normalizedType}` : '';
-  return `${getOutcode(postcode)} outcode search${typeLabel}`;
+  const typeLabel = rawType || (normalizedType && normalizedType !== 'other' ? normalizedType : '');
+  return `${getOutcode(postcode)} outcode search${typeLabel ? `, ${typeLabel}` : ''}`;
+}
+
+function getParentSearchPropertyType(propertyType: string | null | undefined): string | null {
+  const normalized = normalizeSearchPropertyType(propertyType);
+  const raw = String(propertyType || '').trim().toLowerCase().replace(/_/g, '-');
+
+  if (!normalized || normalized === 'other') return null;
+  if (
+    raw.includes('terrace') ||
+    raw.includes('semi') ||
+    raw.includes('detached') ||
+    raw.includes('bungalow') ||
+    normalized === 'bungalow'
+  ) {
+    return 'house';
+  }
+
+  if (raw.includes('purpose-built') || raw.includes('converted') || normalized === 'maisonette' || normalized === 'studio') {
+    return 'flat';
+  }
+
+  if (normalized === 'hmo') return 'room';
+  return null;
+}
+
+function applySearchMetadata(
+  comparables: Section13Comparable[],
+  metadata: Record<string, unknown>
+): Section13Comparable[] {
+  return comparables.map((comparable) => ({
+    ...comparable,
+    metadata: {
+      ...(comparable.metadata || {}),
+      ...metadata,
+    },
+  }));
 }
 
 function buildRightmoveOutcodeUrl(postcode: string, propertyType?: string | null): string {
@@ -1000,7 +1053,8 @@ function mergeLiveComparables(
   bedrooms: number,
   propertyType: string | null | undefined,
   sourceStatuses: ComparableSourceStatus[],
-  sourceResults: Array<SourceScrapeSuccess | null>
+  sourceResults: Array<SourceScrapeSuccess | null>,
+  options?: { searchFallbackMode?: 'exact' | 'parent_type' | null; summarySuffix?: string }
 ): LiveComparableScrapeResult {
   const merged = dedupeComparables(
     sourceResults.flatMap((item) => item?.comparables || []),
@@ -1020,6 +1074,7 @@ function mergeLiveComparables(
       sourceStatuses,
       reason: 'insufficient_live_comparables',
       retryable: true,
+      searchFallbackMode: options?.searchFallbackMode || 'exact',
     };
   }
 
@@ -1037,9 +1092,46 @@ function mergeLiveComparables(
     source,
     summary: `Imported ${merged.length} live comparable listing${
       merged.length === 1 ? '' : 's'
-    } from ${formatSourceNames(sourceStatuses)} (${formatSearchScope(postcode, propertyType)}).`,
+    } from ${formatSourceNames(sourceStatuses)} (${formatSearchScope(postcode, propertyType)})${
+      options?.summarySuffix ? ` ${options.summarySuffix}` : ''
+    }.`,
     sourceStatuses,
+    searchFallbackMode: options?.searchFallbackMode || 'exact',
   };
+}
+
+async function scrapeLiveComparablesOnce(
+  postcode: string,
+  bedrooms: number,
+  propertyType?: string | null,
+  options?: { searchFallbackMode?: 'exact' | 'parent_type' | null; subjectPropertyType?: string | null }
+): Promise<LiveComparableScrapeResult> {
+  const [rightmove, openrent] = await Promise.all([
+    scrapeRightmoveSource(postcode, bedrooms, propertyType),
+    scrapeOpenRentSource(postcode, bedrooms, propertyType),
+  ]);
+
+  const sourceResults = [rightmove.result, openrent.result].map((result) =>
+    result
+      ? {
+          ...result,
+          comparables: applySearchMetadata(result.comparables, {
+            searchFallbackMode: options?.searchFallbackMode || 'exact',
+            subjectPropertyType: options?.subjectPropertyType || propertyType || null,
+            searchPropertyType: propertyType || null,
+          }),
+        }
+      : null
+  );
+
+  return mergeLiveComparables(
+    postcode,
+    bedrooms,
+    propertyType,
+    [rightmove.status, openrent.status],
+    sourceResults,
+    { searchFallbackMode: options?.searchFallbackMode || 'exact' }
+  );
 }
 
 export async function scrapeLiveComparables(
@@ -1048,18 +1140,75 @@ export async function scrapeLiveComparables(
   propertyType?: string | null
 ): Promise<LiveComparableScrapeResult> {
   const normalizedPostcode = maybeNormalizeUkPostcode(postcode) || postcode.toUpperCase();
-  const [rightmove, openrent] = await Promise.all([
-    scrapeRightmoveSource(normalizedPostcode, bedrooms, propertyType),
-    scrapeOpenRentSource(normalizedPostcode, bedrooms, propertyType),
-  ]);
-
-  return mergeLiveComparables(
+  const exactResult = await scrapeLiveComparablesOnce(
     normalizedPostcode,
     bedrooms,
     propertyType,
-    [rightmove.status, openrent.status],
-    [rightmove.result, openrent.result]
+    { searchFallbackMode: 'exact', subjectPropertyType: propertyType || null }
   );
+  if (exactResult.success || exactResult.comparables.length >= MIN_LIVE_COMPARABLES) {
+    return exactResult;
+  }
+
+  const parentPropertyType = getParentSearchPropertyType(propertyType);
+  const rawSearchType = String(propertyType || '').trim().toLowerCase().replace(/_/g, '-');
+  if (!parentPropertyType || parentPropertyType === rawSearchType) {
+    return exactResult;
+  }
+
+  const parentResult = await scrapeLiveComparablesOnce(
+    normalizedPostcode,
+    bedrooms,
+    parentPropertyType,
+    { searchFallbackMode: 'parent_type', subjectPropertyType: propertyType || null }
+  );
+  const combinedComparables = dedupeComparables(
+    [...exactResult.comparables, ...parentResult.comparables],
+    bedrooms
+  );
+  const combinedStatuses = [...exactResult.sourceStatuses, ...parentResult.sourceStatuses];
+
+  if (combinedComparables.length < MIN_LIVE_COMPARABLES) {
+    return {
+      success: false,
+      comparables: combinedComparables,
+      source: 'insufficient_live_evidence',
+      summary: `We could only gather ${combinedComparables.length} live comparable listing${
+        combinedComparables.length === 1 ? '' : 's'
+      } after first searching ${formatSearchScope(
+        normalizedPostcode,
+        propertyType
+      )} and then broadening to ${formatSearchScope(
+        normalizedPostcode,
+        parentPropertyType
+      )}. Broader or older fallback evidence is labelled and should be treated more cautiously.`,
+      sourceStatuses: combinedStatuses,
+      reason: 'insufficient_live_comparables',
+      retryable: true,
+      searchFallbackMode: 'parent_type',
+    };
+  }
+
+  const successfulSources = combinedStatuses.filter((item) => item.ok && item.count > 0);
+  const source: LiveComparableScrapeSuccess['source'] =
+    successfulSources.some((item) => item.source === 'rightmove') &&
+    successfulSources.some((item) => item.source === 'openrent')
+      ? 'blended_live'
+      : successfulSources[0]?.source === 'openrent'
+        ? 'openrent_live'
+        : 'rightmove_live';
+
+  return {
+    success: true,
+    comparables: combinedComparables,
+    source,
+    summary: `Imported ${combinedComparables.length} live comparable listings after an exact subtype search returned only ${exactResult.comparables.length}; broadened to ${formatSearchScope(
+      normalizedPostcode,
+      parentPropertyType
+    )}. Broader fallback comparables are labelled and evidence strength is softened where needed.`,
+    sourceStatuses: combinedStatuses,
+    searchFallbackMode: 'parent_type',
+  };
 }
 
 export async function scrapeRightmoveComparables(

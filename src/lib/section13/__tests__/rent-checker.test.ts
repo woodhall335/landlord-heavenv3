@@ -9,6 +9,7 @@ function makeInput(overrides: Partial<RentCheckerInput> = {}): RentCheckerInput 
     postcode: 'SW1A 1AA',
     bedrooms: 2,
     propertyType: 'flat',
+    propertySubtype: 'purpose_built_flat',
     furnishedStatus: 'furnished',
     currentRent: 1000,
     rentFrequency: 'monthly',
@@ -73,6 +74,7 @@ describe('buildRentCheckerResult', () => {
     expect(result.recommendedProduct).toBe('section13_standard');
     expect(result.userType).toBe('landlord');
     expect(result.propertyType).toBe('flat');
+    expect(result.propertySubtype).toBe('purpose_built_flat');
     expect(result.propertyCondition).toBe('good');
     expect(result.evidenceStrength).toBe('Strong');
     expect(result.challengeRisk).toBe('low');

@@ -5,6 +5,7 @@ export * from './market-calculation';
 export * from './postcode';
 export * from './rent-checker';
 export * from './rent-checker-email';
+export * from './rent-justification';
 export * from './rules';
 export * from './scraper';
 export * from './server';

@@ -131,6 +131,16 @@ function mockFetchByUrl(handlers: Record<string, string>) {
   });
 }
 
+function mockFetchByUrlMatch(handler: (url: string) => string) {
+  vi.spyOn(globalThis, 'fetch').mockImplementation(async (input: any) => {
+    const url = String(input);
+    return {
+      ok: true,
+      text: async () => handler(url),
+    } as any;
+  });
+}
+
 afterEach(() => {
   vi.restoreAllMocks();
 });
@@ -258,5 +268,43 @@ describe('section13 live comparable scraper', () => {
     expect(result.comparables).toHaveLength(2);
     expect(result.summary).toContain('We could only gather 2 live comparable listings');
     expect(result.reason).toBe('insufficient_live_comparables');
+  });
+
+  it('broadens subtype searches to parent property type when exact evidence is thin', async () => {
+    mockFetchByUrlMatch((url) => {
+      if (url.includes('openrent')) return '<html><body>No cards</body></html>';
+      if (url.includes('propertyTypes=detached%2Csemi-detached%2Cterraced')) {
+        return buildRightmoveHtml(
+          Array.from({ length: 3 }, (_, index) =>
+            buildRightmoveProperty(index + 10, {
+              bedrooms: 2,
+              displayAddress: `Broader house comparable ${index + 1}, Leeds`,
+              propertySubType: 'Terraced',
+            })
+          )
+        );
+      }
+      return buildRightmoveHtml([
+        buildRightmoveProperty(0, {
+          bedrooms: 2,
+          displayAddress: 'Exact detached comparable, Leeds',
+          propertySubType: 'Detached',
+        }),
+      ]);
+    });
+
+    const result = await scrapeLiveComparables('LS1 4AP', 2, 'detached');
+
+    expect(result.success).toBe(true);
+    if (!result.success) {
+      throw new Error('Expected fallback live comparable success');
+    }
+
+    expect(result.searchFallbackMode).toBe('parent_type');
+    expect(result.comparables).toHaveLength(4);
+    expect(result.summary).toContain('broadened');
+    expect(
+      result.comparables.some((item) => item.metadata?.searchFallbackMode === 'parent_type')
+    ).toBe(true);
   });
 });

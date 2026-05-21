@@ -1835,7 +1835,13 @@ function buildEvidenceStrengthSentence(
   const sourceBackedCount = marketCalculation?.sourceBackedUsedCount ?? preview.sourceBackedCount;
   const freshComparableCount = marketCalculation?.fresh90UsedCount ?? preview.freshComparableCount;
   const freshnessWindowUsed = marketCalculation?.freshnessWindowUsed ?? 90;
-  const base = `${preview.evidenceBandLabel} is based on ${usedComparableCount} comparable home${usedComparableCount === 1 ? '' : 's'} used in the market calculation, ${sourceBackedCount} source-backed entr${sourceBackedCount === 1 ? 'y' : 'ies'}, and ${freshComparableCount} comparables dated within the 90-day freshness window${freshnessWindowUsed === 180 ? ' with 180-day fallback used where needed' : ''}.`;
+  const fallbackText =
+    freshnessWindowUsed === 730
+      ? ' with older fallback evidence up to 2 years used where current like-for-like evidence was thin'
+      : freshnessWindowUsed === 180
+        ? ' with 180-day fallback used where needed'
+        : '';
+  const base = `${preview.evidenceBandLabel} is based on ${usedComparableCount} comparable home${usedComparableCount === 1 ? '' : 's'} used in the market calculation, ${sourceBackedCount} source-backed entr${sourceBackedCount === 1 ? 'y' : 'ies'}, and ${freshComparableCount} comparables dated within the 90-day freshness window${fallbackText}.`;
 
   if (preview.evidenceBand === 'strong') {
     return `${base} The file reads as a well-supported market review rather than a bare assertion.`;

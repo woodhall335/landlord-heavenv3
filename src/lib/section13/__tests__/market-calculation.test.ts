@@ -113,6 +113,29 @@ describe('buildSection13MarketCalculation', () => {
     ).toBe(true);
   });
 
+  it('uses older fallback evidence up to 2 years only when current evidence is thin', () => {
+    const state = buildState();
+    const comparables = [
+      buildComparable(1200, { addressSnippet: 'Fresh 1', sortOrder: 0, sourceDateValue: '2026-04-25' }),
+      buildComparable(1250, { addressSnippet: 'Fresh 2', sortOrder: 1, sourceDateValue: '2026-04-18' }),
+      buildComparable(1300, { addressSnippet: 'Older fallback', sortOrder: 2, sourceDateValue: '2025-01-20' }),
+    ];
+
+    const calculation = buildSection13MarketCalculation(
+      state,
+      comparables,
+      new Date('2026-05-03T10:00:00.000Z')
+    );
+
+    expect(calculation.freshnessWindowUsed).toBe(730);
+    expect(calculation.usedComparableCount).toBe(3);
+    expect(calculation.evidenceStrength).toBe('weak');
+    expect(calculation.usedComparables.some((item) => item.freshnessBand === 'older_2_year_fallback')).toBe(true);
+    expect(
+      calculation.explanationText.some((line) => line.includes('up to 2 years'))
+    ).toBe(true);
+  });
+
   it('treats scraped zero-mile distances as unknown instead of precise evidence', () => {
     const state = buildState();
     const comparables = [
