@@ -201,14 +201,63 @@ describe('case preview recovery cron', () => {
         stage: 'day_1',
       })
     );
-    expect(insertedEmailEvents[0]).toEqual(
-      expect.objectContaining({
-        email: 'alex@example.com',
-        event_type: 'case_preview_recovery_day_1_sent',
-        event_data: expect.objectContaining({ case_id: 'case-1' }),
-      })
+    expect(insertedEmailEvents).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          email: 'alex@example.com',
+          event_type: 'case_preview_recovery_day_1_attempted',
+          event_data: expect.objectContaining({ case_id: 'case-1', status: 'attempted' }),
+        }),
+        expect.objectContaining({
+          email: 'alex@example.com',
+          event_type: 'case_preview_recovery_day_1_sent',
+          event_data: expect.objectContaining({ case_id: 'case-1', status: 'sent' }),
+        }),
+      ])
     );
     expect(cronCompleted[0].status).toBe('success');
+  });
+
+  it('skips a case when the matching stage email was already attempted', async () => {
+    mockCases = [
+      {
+        id: 'case-1',
+        user_id: null,
+        case_type: 'rent_increase',
+        jurisdiction: 'england',
+        status: 'in_progress',
+        workflow_status: 'preview_ready',
+        wizard_progress: 90,
+        wizard_completed_at: null,
+        collected_facts: {
+          section13: {
+            selectedPlan: 'section13_standard',
+            landlord: { landlordEmail: 'alex@example.com', landlordName: 'Alex Landlord' },
+          },
+        },
+        created_at: new Date(Date.now() - 26 * 60 * 60 * 1000).toISOString(),
+        updated_at: new Date(Date.now() - 25 * 60 * 60 * 1000).toISOString(),
+      },
+    ];
+    mockEvents = [
+      {
+        event_type: 'case_preview_recovery_day_1_attempted',
+        event_data: { case_id: 'case-1' },
+      },
+    ];
+
+    const { GET } = await import('@/app/api/cron/case-preview-recovery/route');
+    const response = await GET(
+      request('http://localhost/api/cron/case-preview-recovery', {
+        authorization: `Bearer ${MOCK_CRON_SECRET}`,
+      })
+    );
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data.emails_sent).toBe(0);
+    expect(sentEmails).toEqual([]);
+    expect(insertedEmailEvents).toEqual([]);
   });
 
   it('skips a case when the matching stage email was already sent', async () => {
@@ -284,11 +333,17 @@ describe('case preview recovery cron', () => {
 
     expect(response.status).toBe(200);
     expect(createdRecoveryLinks[0]).toEqual(expect.objectContaining({ stage: 'day_1' }));
-    expect(insertedEmailEvents[0]).toEqual(
-      expect.objectContaining({
-        event_type: 'case_preview_recovery_day_1_sent',
-        event_data: expect.objectContaining({ case_id: 'case-older-no-day1' }),
-      })
+    expect(insertedEmailEvents).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          event_type: 'case_preview_recovery_day_1_attempted',
+          event_data: expect.objectContaining({ case_id: 'case-older-no-day1' }),
+        }),
+        expect.objectContaining({
+          event_type: 'case_preview_recovery_day_1_sent',
+          event_data: expect.objectContaining({ case_id: 'case-older-no-day1' }),
+        }),
+      ])
     );
   });
 
@@ -329,11 +384,17 @@ describe('case preview recovery cron', () => {
 
     expect(response.status).toBe(200);
     expect(createdRecoveryLinks[0]).toEqual(expect.objectContaining({ stage: 'day_7' }));
-    expect(insertedEmailEvents[0]).toEqual(
-      expect.objectContaining({
-        event_type: 'case_preview_recovery_day_7_sent',
-        event_data: expect.objectContaining({ case_id: 'case-older-day7' }),
-      })
+    expect(insertedEmailEvents).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          event_type: 'case_preview_recovery_day_7_attempted',
+          event_data: expect.objectContaining({ case_id: 'case-older-day7' }),
+        }),
+        expect.objectContaining({
+          event_type: 'case_preview_recovery_day_7_sent',
+          event_data: expect.objectContaining({ case_id: 'case-older-day7' }),
+        }),
+      ])
     );
   });
 });

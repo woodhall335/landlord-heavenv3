@@ -57,10 +57,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Recovery link is invalid or has expired.' }, { status: 400 });
     }
 
-    if ((tokenRow as any).used_at) {
-      return NextResponse.json({ error: 'This recovery link has already been used.' }, { status: 400 });
-    }
-
     if (new Date((tokenRow as any).expires_at).getTime() < Date.now()) {
       return NextResponse.json({ error: 'This recovery link has expired.' }, { status: 400 });
     }
@@ -73,16 +69,19 @@ export async function POST(request: Request) {
       } as any)
       .eq('id', caseId);
 
-    await supabase
-      .from('case_recovery_tokens')
-      .update({
-        used_at: new Date().toISOString(),
-      } as any)
-      .eq('id', (tokenRow as any).id);
+    if (!(tokenRow as any).used_at) {
+      await supabase
+        .from('case_recovery_tokens')
+        .update({
+          used_at: new Date().toISOString(),
+        } as any)
+        .eq('id', (tokenRow as any).id);
+    }
 
     return NextResponse.json({
       success: true,
       recovered: true,
+      alreadyUsed: Boolean((tokenRow as any).used_at),
     });
   } catch (error: any) {
     console.error('[cases/recover] error', error);

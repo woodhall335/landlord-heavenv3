@@ -46,7 +46,7 @@ export async function createCaseRecoveryLink(params: {
   const productType = deriveCaseProductType(caseRow, orderRow);
   const expiresAt = new Date(Date.now() + expiresInDays * 24 * 60 * 60 * 1000).toISOString();
 
-  await supabase.from('case_recovery_tokens').insert({
+  const tokenPayload = {
     case_id: caseRow.id,
     email,
     token_hash: tokenHash,
@@ -59,7 +59,28 @@ export async function createCaseRecoveryLink(params: {
       case_type: caseRow.case_type,
       jurisdiction: caseRow.jurisdiction,
     },
-  } as any);
+  };
+
+  const insertResult = await supabase.from('case_recovery_tokens').insert(tokenPayload as any);
+
+  if (insertResult.error) {
+    const metadataColumnMissing =
+      insertResult.error.code === 'PGRST204' ||
+      /metadata/i.test(insertResult.error.message || '');
+
+    if (!metadataColumnMissing) {
+      throw new Error(`Failed to store recovery token: ${insertResult.error.message}`);
+    }
+
+    const legacyPayload = { ...tokenPayload } as Record<string, unknown>;
+    delete legacyPayload.metadata;
+
+    const retryResult = await supabase.from('case_recovery_tokens').insert(legacyPayload as any);
+
+    if (retryResult.error) {
+      throw new Error(`Failed to store recovery token: ${retryResult.error.message}`);
+    }
+  }
 
   return {
     resumeUrl: buildCaseRecoveryUrl({

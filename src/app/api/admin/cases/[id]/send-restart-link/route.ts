@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { isAdmin } from '@/lib/auth';
 import {
+  CASE_PREVIEW_RECOVERY_ATTEMPT_EVENT_TYPES,
   CASE_PREVIEW_RECOVERY_FAILED_EVENT_TYPES,
   CASE_PREVIEW_RECOVERY_SENT_EVENT_TYPES,
   deriveCaseRecoveryContact,
@@ -104,6 +105,27 @@ export async function POST(_request: NextRequest, context: RouteContext) {
       source: 'admin:cases',
     });
 
+    const attemptEvent = await supabase.from('email_events').insert({
+      email: contact.email,
+      event_type: CASE_PREVIEW_RECOVERY_ATTEMPT_EVENT_TYPES.manual,
+      event_data: {
+        case_id: caseId,
+        product_type: recovery.productType,
+        resume_url: recovery.resumeUrl,
+        sent_at: null,
+        source: 'admin:cases',
+        stage: 'manual',
+        status: 'attempted',
+      },
+    });
+
+    if (attemptEvent.error) {
+      return NextResponse.json(
+        { error: 'Failed to record restart email attempt' },
+        { status: 500 }
+      );
+    }
+
     const emailResult = await sendCasePreviewRecoveryEmail({
       to: contact.email,
       customerName: contact.name || contact.email.split('@')[0] || 'there',
@@ -112,7 +134,7 @@ export async function POST(_request: NextRequest, context: RouteContext) {
       stage: 'manual',
     });
 
-    await supabase.from('email_events').insert({
+    const finalEvent = await supabase.from('email_events').insert({
       email: contact.email,
       event_type: emailResult.success
         ? CASE_PREVIEW_RECOVERY_SENT_EVENT_TYPES.manual
@@ -124,8 +146,17 @@ export async function POST(_request: NextRequest, context: RouteContext) {
         error: emailResult.success ? null : emailResult.error || 'Unknown email error',
         sent_at: new Date().toISOString(),
         source: 'admin:cases',
+        stage: 'manual',
+        status: emailResult.success ? 'sent' : 'failed',
       },
     });
+
+    if (finalEvent.error) {
+      return NextResponse.json(
+        { error: 'Failed to record restart email result' },
+        { status: 500 }
+      );
+    }
 
     if (!emailResult.success) {
       return NextResponse.json(

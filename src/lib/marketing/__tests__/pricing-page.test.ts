@@ -1,5 +1,7 @@
 import { PRICING_PACKAGE_CARDS, PRICING_SCHEMA_ITEMS } from '@/lib/marketing/pricing-page';
 import { PRODUCTS } from '@/lib/pricing/products';
+import fs from 'node:fs';
+import path from 'node:path';
 
 describe('pricing page product mapping', () => {
   it('shows the full current 10-product catalogue', () => {
@@ -15,6 +17,17 @@ describe('pricing page product mapping', () => {
       'england_hmo_shared_house_tenancy_agreement',
       'england_lodger_agreement',
     ]);
+  });
+
+  it('keeps a pricing-page image mapping for every visible pricing card', () => {
+    const pricingPageSource = fs.readFileSync(
+      path.join(process.cwd(), 'src/app/(marketing)/pricing/page.tsx'),
+      'utf-8'
+    );
+
+    for (const card of PRICING_PACKAGE_CARDS) {
+      expect(pricingPageSource).toContain(`${card.productSku}: {`);
+    }
   });
 
   it('shows both Section 13 products in the visible pricing cards', () => {

@@ -10,6 +10,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { getAdminProductLabel } from '@/lib/admin/products';
 import {
+  CASE_WIZARD_RECOVERY_ATTEMPT_EVENT_TYPES,
   CASE_WIZARD_RECOVERY_FAILED_EVENT_TYPES,
   CASE_WIZARD_RECOVERY_SENT_EVENT_TYPES,
   deriveCaseProductType,
@@ -129,19 +130,22 @@ function eventHasCaseId(event: EmailEventRow, caseId: string): boolean {
   return event.event_data?.case_id === caseId;
 }
 
-function hasSentStage(events: EmailEventRow[], caseId: string, stage: 'day_1' | 'day_3'): boolean {
-  const eventType = CASE_WIZARD_RECOVERY_SENT_EVENT_TYPES[stage];
-  return events.some((event) => event.event_type === eventType && eventHasCaseId(event, caseId));
+function hasStageEmailActivity(events: EmailEventRow[], caseId: string, stage: 'day_1' | 'day_3'): boolean {
+  const eventTypes = new Set<string>([
+    CASE_WIZARD_RECOVERY_ATTEMPT_EVENT_TYPES[stage],
+    CASE_WIZARD_RECOVERY_SENT_EVENT_TYPES[stage],
+  ]);
+  return events.some((event) => eventTypes.has(event.event_type) && eventHasCaseId(event, caseId));
 }
 
 function getDueStage(caseRow: CaseRow, sentEvents: EmailEventRow[]): 'day_1' | 'day_3' | null {
   const ageHours = getCaseAgeHours(caseRow);
 
-  if (ageHours >= DAY_1_AGE_HOURS && !hasSentStage(sentEvents, caseRow.id, 'day_1')) {
+  if (ageHours >= DAY_1_AGE_HOURS && !hasStageEmailActivity(sentEvents, caseRow.id, 'day_1')) {
     return 'day_1';
   }
 
-  if (ageHours >= DAY_3_AGE_HOURS && !hasSentStage(sentEvents, caseRow.id, 'day_3')) {
+  if (ageHours >= DAY_3_AGE_HOURS && !hasStageEmailActivity(sentEvents, caseRow.id, 'day_3')) {
     return 'day_3';
   }
 
@@ -202,6 +206,8 @@ async function executeWizardAbandonmentRecovery(request: NextRequest) {
         .in('event_type', [
           CASE_WIZARD_RECOVERY_SENT_EVENT_TYPES.day_1,
           CASE_WIZARD_RECOVERY_SENT_EVENT_TYPES.day_3,
+          CASE_WIZARD_RECOVERY_ATTEMPT_EVENT_TYPES.day_1,
+          CASE_WIZARD_RECOVERY_ATTEMPT_EVENT_TYPES.day_3,
         ])
         .gte('created_at', hoursAgoIso(24 * 45)),
     ]);
@@ -283,6 +289,24 @@ async function executeWizardAbandonmentRecovery(request: NextRequest) {
         kind: 'case_wizard_recovery',
       });
       const productType = recovery.productType || deriveCaseProductType(caseRow, relatedOrder);
+      const attemptEvent = await supabase.from('email_events').insert({
+        email: contact.email,
+        event_type: CASE_WIZARD_RECOVERY_ATTEMPT_EVENT_TYPES[dueStage],
+        event_data: {
+          case_id: caseRow.id,
+          product_type: productType,
+          resume_url: recovery.resumeUrl,
+          sent_at: null,
+          source: JOB_NAME,
+          stage: dueStage,
+          status: 'attempted',
+        },
+      });
+
+      if (attemptEvent.error) {
+        throw new Error(`Failed to record recovery email attempt: ${attemptEvent.error.message}`);
+      }
+
       const emailResult = await sendWizardAbandonmentRecoveryEmail({
         to: contact.email,
         customerName: contact.name || contact.email.split('@')[0] || 'there',
@@ -291,7 +315,7 @@ async function executeWizardAbandonmentRecovery(request: NextRequest) {
         stage: dueStage,
       });
 
-      await supabase.from('email_events').insert({
+      const finalEvent = await supabase.from('email_events').insert({
         email: contact.email,
         event_type: emailResult.success
           ? CASE_WIZARD_RECOVERY_SENT_EVENT_TYPES[dueStage]
@@ -304,8 +328,13 @@ async function executeWizardAbandonmentRecovery(request: NextRequest) {
           sent_at: new Date().toISOString(),
           source: JOB_NAME,
           stage: dueStage,
+          status: emailResult.success ? 'sent' : 'failed',
         },
       });
+
+      if (finalEvent.error) {
+        throw new Error(`Failed to record recovery email result: ${finalEvent.error.message}`);
+      }
 
       if (emailResult.success) {
         emailsSent += 1;
