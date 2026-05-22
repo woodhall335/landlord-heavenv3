@@ -61,6 +61,7 @@ type UserRow = {
 };
 
 type EmailEventRow = {
+  email?: string | null;
   event_type: string;
   event_data: Record<string, any> | null;
 };
@@ -126,30 +127,63 @@ function getCaseAgeHours(caseRow: CaseRow): number {
   return (Date.now() - updatedAt) / (60 * 60 * 1000);
 }
 
-function hasStageEmailActivity(events: EmailEventRow[], caseId: string, stage: Extract<CaseRecoveryStage, 'day_1' | 'day_7'>): boolean {
+function normalizeEmail(value: string | null | undefined): string | null {
+  return typeof value === 'string' && value.trim() ? value.trim().toLowerCase() : null;
+}
+
+function getEventCaseId(event: EmailEventRow): string | null {
+  const data = event.event_data || {};
+  return (
+    data.case_id ||
+    data.caseId ||
+    data.case?.id ||
+    data.case?.case_id ||
+    null
+  );
+}
+
+function eventMatchesRecoveryTarget(event: EmailEventRow, caseId: string, email: string | null): boolean {
+  const eventCaseId = getEventCaseId(event);
+  if (eventCaseId) {
+    return eventCaseId === caseId;
+  }
+
+  const eventEmail = normalizeEmail(event.email);
+  const targetEmail = normalizeEmail(email);
+  return Boolean(eventEmail && targetEmail && eventEmail === targetEmail);
+}
+
+function hasStageEmailActivity(
+  events: EmailEventRow[],
+  caseId: string,
+  email: string | null,
+  stage: Extract<CaseRecoveryStage, 'day_1' | 'day_7'>
+): boolean {
   const eventTypes = new Set<string>([
     CASE_PREVIEW_RECOVERY_ATTEMPT_EVENT_TYPES[stage],
     CASE_PREVIEW_RECOVERY_SENT_EVENT_TYPES[stage],
   ]);
-  return events.some((event) => eventTypes.has(event.event_type) && eventHasCaseId(event, caseId));
+  return events.some(
+    (event) => eventTypes.has(event.event_type) && eventMatchesRecoveryTarget(event, caseId, email)
+  );
 }
 
-function getDueStage(caseRow: CaseRow, sentEvents: EmailEventRow[]): Extract<CaseRecoveryStage, 'day_1' | 'day_7'> | null {
+function getDueStage(
+  caseRow: CaseRow,
+  sentEvents: EmailEventRow[],
+  email: string | null
+): Extract<CaseRecoveryStage, 'day_1' | 'day_7'> | null {
   const ageHours = getCaseAgeHours(caseRow);
 
-  if (ageHours >= DAY_1_AGE_HOURS && !hasStageEmailActivity(sentEvents, caseRow.id, 'day_1')) {
+  if (ageHours >= DAY_1_AGE_HOURS && !hasStageEmailActivity(sentEvents, caseRow.id, email, 'day_1')) {
     return 'day_1';
   }
 
-  if (ageHours >= DAY_7_AGE_HOURS && !hasStageEmailActivity(sentEvents, caseRow.id, 'day_7')) {
+  if (ageHours >= DAY_7_AGE_HOURS && !hasStageEmailActivity(sentEvents, caseRow.id, email, 'day_7')) {
     return 'day_7';
   }
 
   return null;
-}
-
-function eventHasCaseId(event: EmailEventRow, caseId: string): boolean {
-  return event.event_data?.case_id === caseId;
 }
 
 async function executeCasePreviewRecovery(request: NextRequest) {
@@ -202,7 +236,7 @@ async function executeCasePreviewRecovery(request: NextRequest) {
         : Promise.resolve({ data: [], error: null }),
       supabase
         .from('email_events')
-        .select('event_type, event_data')
+        .select('email, event_type, event_data')
         .in('event_type', [
           CASE_PREVIEW_RECOVERY_SENT_EVENT_TYPES.day_1,
           CASE_PREVIEW_RECOVERY_SENT_EVENT_TYPES.day_7,
@@ -243,13 +277,11 @@ async function executeCasePreviewRecovery(request: NextRequest) {
     const failedCaseIds: string[] = [];
 
     for (const caseRow of cases) {
-      const dueStage = getDueStage(caseRow, sentEvents);
       const relatedOrder = orderByCase.get(caseRow.id) || null;
       const hasFinalDocuments = finalDocumentCaseIds.has(caseRow.id);
       const hasPreviewDocuments = previewDocumentCaseIds.has(caseRow.id);
 
       if (
-        !dueStage ||
         !isPreviewAbandonedCase({
           caseItem: caseRow,
           order: relatedOrder,
@@ -262,8 +294,6 @@ async function executeCasePreviewRecovery(request: NextRequest) {
         continue;
       }
 
-      checked += 1;
-
       const user = caseRow.user_id ? userById.get(caseRow.user_id) : null;
       const contact = deriveCaseRecoveryContact(caseRow, user || null);
       if (!contact.email) {
@@ -271,6 +301,15 @@ async function executeCasePreviewRecovery(request: NextRequest) {
         skippedCaseIds.push(caseRow.id);
         continue;
       }
+
+      const dueStage = getDueStage(caseRow, sentEvents, contact.email);
+      if (!dueStage) {
+        skipped += 1;
+        skippedCaseIds.push(caseRow.id);
+        continue;
+      }
+
+      checked += 1;
 
       if (dryRun) {
         skipped += 1;

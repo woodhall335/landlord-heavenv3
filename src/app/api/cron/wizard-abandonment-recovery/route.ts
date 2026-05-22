@@ -61,6 +61,7 @@ type UserRow = {
 };
 
 type EmailEventRow = {
+  email?: string | null;
   event_type: string;
   event_data: Record<string, any> | null;
 };
@@ -126,26 +127,55 @@ function getCaseAgeHours(caseRow: CaseRow): number {
   return (Date.now() - updatedAt) / (60 * 60 * 1000);
 }
 
-function eventHasCaseId(event: EmailEventRow, caseId: string): boolean {
-  return event.event_data?.case_id === caseId;
+function normalizeEmail(value: string | null | undefined): string | null {
+  return typeof value === 'string' && value.trim() ? value.trim().toLowerCase() : null;
 }
 
-function hasStageEmailActivity(events: EmailEventRow[], caseId: string, stage: 'day_1' | 'day_3'): boolean {
+function getEventCaseId(event: EmailEventRow): string | null {
+  const data = event.event_data || {};
+  return (
+    data.case_id ||
+    data.caseId ||
+    data.case?.id ||
+    data.case?.case_id ||
+    null
+  );
+}
+
+function eventMatchesRecoveryTarget(event: EmailEventRow, caseId: string, email: string | null): boolean {
+  const eventCaseId = getEventCaseId(event);
+  if (eventCaseId) {
+    return eventCaseId === caseId;
+  }
+
+  const eventEmail = normalizeEmail(event.email);
+  const targetEmail = normalizeEmail(email);
+  return Boolean(eventEmail && targetEmail && eventEmail === targetEmail);
+}
+
+function hasStageEmailActivity(
+  events: EmailEventRow[],
+  caseId: string,
+  email: string | null,
+  stage: 'day_1' | 'day_3'
+): boolean {
   const eventTypes = new Set<string>([
     CASE_WIZARD_RECOVERY_ATTEMPT_EVENT_TYPES[stage],
     CASE_WIZARD_RECOVERY_SENT_EVENT_TYPES[stage],
   ]);
-  return events.some((event) => eventTypes.has(event.event_type) && eventHasCaseId(event, caseId));
+  return events.some(
+    (event) => eventTypes.has(event.event_type) && eventMatchesRecoveryTarget(event, caseId, email)
+  );
 }
 
-function getDueStage(caseRow: CaseRow, sentEvents: EmailEventRow[]): 'day_1' | 'day_3' | null {
+function getDueStage(caseRow: CaseRow, sentEvents: EmailEventRow[], email: string | null): 'day_1' | 'day_3' | null {
   const ageHours = getCaseAgeHours(caseRow);
 
-  if (ageHours >= DAY_1_AGE_HOURS && !hasStageEmailActivity(sentEvents, caseRow.id, 'day_1')) {
+  if (ageHours >= DAY_1_AGE_HOURS && !hasStageEmailActivity(sentEvents, caseRow.id, email, 'day_1')) {
     return 'day_1';
   }
 
-  if (ageHours >= DAY_3_AGE_HOURS && !hasStageEmailActivity(sentEvents, caseRow.id, 'day_3')) {
+  if (ageHours >= DAY_3_AGE_HOURS && !hasStageEmailActivity(sentEvents, caseRow.id, email, 'day_3')) {
     return 'day_3';
   }
 
@@ -202,7 +232,7 @@ async function executeWizardAbandonmentRecovery(request: NextRequest) {
         : Promise.resolve({ data: [], error: null }),
       supabase
         .from('email_events')
-        .select('event_type, event_data')
+        .select('email, event_type, event_data')
         .in('event_type', [
           CASE_WIZARD_RECOVERY_SENT_EVENT_TYPES.day_1,
           CASE_WIZARD_RECOVERY_SENT_EVENT_TYPES.day_3,
@@ -244,13 +274,11 @@ async function executeWizardAbandonmentRecovery(request: NextRequest) {
     const failedCaseIds: string[] = [];
 
     for (const caseRow of cases) {
-      const dueStage = getDueStage(caseRow, sentEvents);
       const relatedOrder = orderByCase.get(caseRow.id) || null;
       const hasFinalDocuments = finalDocumentCaseIds.has(caseRow.id);
       const hasPreviewDocuments = previewDocumentCaseIds.has(caseRow.id);
 
       if (
-        !dueStage ||
         !isStartedButIncompleteCase({
           caseItem: caseRow,
           order: relatedOrder,
@@ -263,8 +291,6 @@ async function executeWizardAbandonmentRecovery(request: NextRequest) {
         continue;
       }
 
-      checked += 1;
-
       const user = caseRow.user_id ? userById.get(caseRow.user_id) : null;
       const contact = deriveCaseRecoveryContact(caseRow, user || null);
       if (!contact.email) {
@@ -272,6 +298,15 @@ async function executeWizardAbandonmentRecovery(request: NextRequest) {
         skippedCaseIds.push(caseRow.id);
         continue;
       }
+
+      const dueStage = getDueStage(caseRow, sentEvents, contact.email);
+      if (!dueStage) {
+        skipped += 1;
+        skippedCaseIds.push(caseRow.id);
+        continue;
+      }
+
+      checked += 1;
 
       if (dryRun) {
         skipped += 1;

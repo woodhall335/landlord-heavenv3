@@ -59,6 +59,16 @@ body {
   overflow-x: clip;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 
 html.blog-article-sticky-safe,
 body.blog-article-sticky-safe {

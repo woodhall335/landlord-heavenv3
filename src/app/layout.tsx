@@ -13,6 +13,7 @@ import { TrackingPixels } from "@/components/analytics/TrackingPixels";
 import { Analytics } from "@vercel/analytics/next";
 import { HeaderModeProvider } from "@/components/layout/HeaderModeContext";
 import { JourneyProvider } from "@/components/journey/JourneyProvider";
+import { SmoothAnchorScroll } from "@/components/browser/SmoothAnchorScroll";
 
 
 export const metadata: Metadata = {
@@ -79,6 +80,7 @@ export default async function RootLayout({
           </PopupProvider>
         </HeaderModeProvider>
         <TrackingPixels />
+        <SmoothAnchorScroll />
         <JourneyProvider />
         <Analytics />
       </body>
