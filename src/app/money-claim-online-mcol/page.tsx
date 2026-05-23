@@ -31,9 +31,9 @@ import {
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'MCOL Rent Arrears Claim: Money Claim Pack for Landlords',
+  title: 'Money Claim Online (MCOL) for Landlords: Rent Arrears Guide',
   description:
-    'Plain-English MCOL rent arrears guide for landlords. Prepare a Money Claim Pack with clear figures, particulars, evidence, and next steps.',
+    'Money Claim Online (MCOL) guide for landlords recovering rent arrears. Prepare figures, particulars, evidence, and next steps before issuing a claim.',
   keywords: [
     'money claim online',
     'MCOL',
@@ -47,9 +47,9 @@ export const metadata: Metadata = {
     'MCOL process',
   ],
   openGraph: {
-    title: 'MCOL Rent Arrears Claim: Money Claim Pack for Landlords',
+    title: 'Money Claim Online (MCOL) for Landlords: Rent Arrears Guide',
     description:
-      'Landlord guide to using Money Claim Online for tenant debt recovery and preparing the file behind the claim.',
+      'Landlord guide to using Money Claim Online for rent arrears and preparing the file behind the claim.',
     type: 'article',
     url: getCanonicalUrl('/money-claim-online-mcol'),
   },
@@ -135,10 +135,10 @@ export default function MoneyClaimOnlineMCOLPage() {
   const hero = {
     ...moneyClaimSupportHeroConfig,
     trustText: 'MCOL guidance | England & Wales county court',
-    title: 'Money Claim Online (MCOL)',
-    highlightTitle: 'with a clear file',
+    title: 'Money Claim Online (MCOL) for landlords',
+    highlightTitle: 'recovering rent arrears',
     subtitle:
-      'Understand where Money Claim Online fits the broader landlord money claim route before you move into filing and pack generation.',
+      'Understand how landlords use Money Claim Online for rent arrears, what evidence sits behind the claim, and when a Money Claim Pack is the cleaner route.',
     primaryCta: ownerGuideCta,
     secondaryCta: {
       label: 'Compare MCOL with N1',

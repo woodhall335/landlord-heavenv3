@@ -4,19 +4,19 @@ import { sections, type RentIncreaseGuidePage } from './types';
 export const form4aGuidePage: RentIncreaseGuidePage = {
   slug: 'form-4a-guide',
   path: `${RENT_INCREASE_HUB_PATH}/form-4a-guide`,
-  title: 'Form 4A Guide',
-  heroTitle: 'Form 4A Guide for Section 13 Rent Increase Notices',
+  title: 'Form 4A Rent Increase Guide',
+  heroTitle: 'Form 4A Rent Increase Notice 2026 for England Landlords',
   heroSubtitle:
-    'Form-specific help for landlords: what each part of Form 4A is doing, what quality looks like, and how to avoid drafting errors.',
+    'Form-specific help for landlords preparing a Section 13 Form 4A rent increase notice: what each part is doing, what quality looks like, and how to avoid drafting errors.',
   heroBullets: [
-    'Form-completion intent: field quality, consistency, and service readiness.',
+    'Form 4A completion intent: field quality, consistency, and service readiness.',
     'Explains how Form 4A fits into a full evidence-backed pack.',
     'Designed for landlords checking quality before service.',
   ],
-  metaTitle: 'Form 4A Rent Increase 2026: Check If Your Rent Is Supportable',
+  metaTitle: 'Form 4A Rent Increase Notice 2026: Section 13 Guide',
   metaDescription:
-    'England landlord guide to Form 4A rent increases. Check whether the proposed rent is supportable before you prepare and serve the Section 13 notice.',
-  primaryKeyword: 'form 4a rent increase',
+    'England landlord guide to Form 4A rent increase notices. Check Section 13 dates, market support, service, and evidence before you serve.',
+  primaryKeyword: 'form 4a',
   intentLabel: 'form completion / form-specific help',
   introAngle:
     'Zoom in on the form itself so landlords can improve field-level quality before service.',
@@ -24,7 +24,7 @@ export const form4aGuidePage: RentIncreaseGuidePage = {
   heroAlt: 'Form 4A completion guide icon',
   secondaryCta: RENT_INCREASE_LINKS.section13,
   quickAnswer: [
-    'Form 4A is the prescribed notice form used for Section 13 rent proposals in England from 1 May 2026. Landlords should complete it as part of a coherent pack, not as an isolated document. Field-level accuracy matters because small inconsistencies in rent frequency, dates, or party details can create downstream friction in correspondence or dispute handling.',
+    'Form 4A is the prescribed notice form used for Section 13 rent proposals in England from 1 May 2026. Landlords should complete the Section 13 Form 4A as part of a coherent pack, not as an isolated document. Field-level accuracy matters because small inconsistencies in rent frequency, dates, or party details can create downstream friction in correspondence or dispute handling.',
     'Form quality is mostly about consistency. The same rent terms, dates, and identifiers should appear consistently across the form, cover letter, and justification report. If a tenant compares documents and sees mismatch, confidence drops and challenge likelihood rises. A premium process keeps field-level details synchronized and traceable to saved facts.',
     'This page is intentionally form-specific. It does not replace broader process guidance. Use it when you are validating completion quality, then return to market-rent and challenge pages for deeper evidence and dispute strategy support.',
     'Treat Form 4A quality checks like a pre-flight checklist. Short checks done at the right time are better than long rewrites after service. If every amount, date, and frequency pair has already been validated against your source data, final review becomes quick and reliable rather than stressful and error-prone.',

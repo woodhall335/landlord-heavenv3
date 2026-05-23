@@ -14,9 +14,9 @@ import { howToRentGuideFAQs } from '@/data/faqs';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'How to Rent Guide 2026: Landlord Checklist & Download',
+  title: 'How to Rent Guide 2026: Latest PDF & Landlord Checklist',
   description:
-    'England landlord checklist for the How to Rent guide. Know when to provide it, how to evidence service, and what to do next.',
+    'How to Rent guide 2026 for England landlords: when to give the latest PDF, how to evidence service, and what to do before notice or a new tenancy.',
   keywords: [
     'how to rent guide',
     'how to rent checklist',
@@ -26,9 +26,9 @@ export const metadata: Metadata = {
     'prescribed information tenants',
   ],
   openGraph: {
-    title: 'How to Rent Guide 2026: Landlord Checklist & Download',
+    title: 'How to Rent Guide 2026: Latest PDF & Landlord Checklist',
     description:
-      'Landlord guide to the How to Rent checklist, evidence of service, and practical next steps.',
+      'Landlord guide to the latest How to Rent PDF, evidence of service, and practical next steps.',
     type: 'article',
     url: getCanonicalUrl('/how-to-rent-guide'),
   },
@@ -91,8 +91,8 @@ export default function HowToRentGuidePage() {
         {/* Hero Section */}
         <UniversalHero
           badge="Landlord Guide"
-          title="How to Rent Guide for Landlords"
-          subtitle="Landlord-focused guide to serving and evidencing How to Rent compliance."
+          title="How to Rent Guide 2026 for Landlords"
+          subtitle="Landlord-focused guide to the latest How to Rent PDF, when to serve it, and how to evidence compliance."
           primaryCta={{ label: 'Start Notice Only', href: noticeOnlyHref }}
           secondaryCta={{ label: 'Create tenancy agreement', href: tenancyProductHref }}
           align="center"
@@ -137,7 +137,7 @@ export default function HowToRentGuidePage() {
                 </ul>
 
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 my-6">
-                  <p className="text-blue-800 font-semibold mb-2">Download Latest Version</p>
+                  <p className="text-blue-800 font-semibold mb-2">Latest How to Rent guide PDF</p>
                   <p className="text-blue-700 text-sm">
                     Always check gov.uk for the current version of the How to Rent guide. The
                     government updates it periodically.

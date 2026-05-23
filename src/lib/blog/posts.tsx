@@ -9776,9 +9776,9 @@ const allBlogPosts: BlogPost[] = [
   // Article 19: Money Claim Online (MCOL) Guide
   {
     slug: 'england-money-claim-online',
-    title: 'Money Claim Online (MCOL) - England & Wales Guide 2026',
-    description: 'Complete guide to using Money Claim Online to recover rent arrears. Learn the MCOL process, fees, timescales, and how to enforce your judgment against tenants.',
-    metaDescription: 'Use Money Claim Online to recover rent arrears from tenants. Complete MCOL guide for landlords covering claims, fees, and enforcement in 2026.',
+    title: 'Money Claim Online (MCOL) for Landlords: Rent Arrears Guide 2026',
+    description: 'Complete landlord guide to using Money Claim Online (MCOL) for rent arrears. Learn the MCOL claim process, fees, timescales, and enforcement options.',
+    metaDescription: 'Money Claim Online (MCOL) guide for landlords recovering rent arrears from tenants. Covers claims, fees, evidence, and enforcement in 2026.',
     date: '2026-01-03',
     readTime: '14 min read',
     wordCount: 1720,
@@ -9795,8 +9795,8 @@ const allBlogPosts: BlogPost[] = [
     heroImage: '/images/blog/mcol.svg',
     heroImageAlt: 'Money Claim Online Guide for Landlords',
     showUrgencyBanner: false,
-    targetKeyword: 'money claim online landlord',
-    secondaryKeywords: ['MCOL rent arrears', 'recover rent from tenant', 'county court money claim', 'debt recovery landlord'],
+    targetKeyword: 'money claim online',
+    secondaryKeywords: ['mcol', 'MCOL rent arrears', 'money claim online landlord', 'recover rent from tenant', 'county court money claim'],
     tableOfContents: [
       { id: 'what-is-mcol', title: 'What Is Money Claim Online?', level: 2 },
       { id: 'when-to-use', title: 'When to Use MCOL', level: 2 },
@@ -9829,10 +9829,11 @@ const allBlogPosts: BlogPost[] = [
     content: (
       <>
         <p className="lead">
-          When a tenant owes you money and won&apos;t pay voluntarily, Money Claim Online (MCOL)
-          provides a straightforward way to pursue them through the courts. This guide explains
-          how to use MCOL effectively to recover rent arrears, deposit shortfalls, or damages
-          left by tenants in England and Wales.
+          When a tenant owes rent arrears and will not pay voluntarily, Money Claim Online
+          (MCOL) gives landlords a direct county court route for recovering the debt. This
+          guide explains how to use MCOL effectively, what evidence to prepare, and how the
+          online claim fits deposit shortfalls, damages, and other tenant debts in England
+          and Wales.
         </p>
 
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">

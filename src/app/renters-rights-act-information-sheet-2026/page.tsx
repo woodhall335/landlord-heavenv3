@@ -51,9 +51,9 @@ const faqs: FAQItem[] = [
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: "Renters' Rights Act Information Sheet 2026 | Free PDF Download",
+  title: "Renters' Rights Act Information Sheet 2026 PDF Download",
   description:
-    "Download the free Renters' Rights Act Information Sheet 2026 PDF and understand why older tenancy agreements may expose England landlords to risk.",
+    "Download the Renters' Rights Act Information Sheet 2026 PDF for England tenants and see what landlords must do before relying on older tenancy paperwork.",
   keywords: [
     'renters rights act information sheet 2026',
     'renters rights information sheet pdf',
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: "Renters' Rights Act Information Sheet 2026 | Free PDF Download",
+    title: "Renters' Rights Act Information Sheet 2026 PDF Download",
     description:
       "Download the England Renters' Rights Act Information Sheet 2026 PDF and see why older tenancy agreements may need review.",
     url: canonicalUrl,
@@ -101,7 +101,7 @@ export default function RentersRightsInformationSheet2026Page() {
       <main className="min-h-screen bg-[#FCFBF8]">
         <UniversalHero
           badge="Free England PDF Download"
-          title="Download the Information Sheet. Do not assume your old tenancy agreement is still safe."
+          title="Renters' Rights Act Information Sheet 2026 PDF Download"
           subtitle="Get the official Renters' Rights Act Information Sheet 2026 PDF, then understand the real danger: many existing tenancy agreements were written for a different framework and may no longer protect landlords in the way they expect."
           primaryCta={{ label: 'Download free PDF', href: downloadHref }}
           secondaryCta={{ label: 'Replace outdated tenancy paperwork', href: '/products/ast' }}

@@ -47,8 +47,8 @@ describe('revenue-focused SEO funnels', () => {
     expect(landing).not.toContain('href="#rent-increase-checker"');
     expect(landing).not.toContain('Check rent increase risk');
     expect(landing).not.toContain('Use the free rent checker first');
-    expect(landing).toContain('Start the standard pack');
-    expect(landing).toContain('Prepare a challenge-ready pack');
+    expect(landing).toContain('Check my rent increase');
+    expect(landing).toContain('Compare the packs');
     expect(landing).not.toContain('Why this converts better than a guide-first page');
     expect(landing).not.toContain('Broad intent still needs a concrete next step');
     expect(landing).not.toContain('Form 4A alone is not the real buying decision');
@@ -62,7 +62,7 @@ describe('revenue-focused SEO funnels', () => {
     expect(guide).toContain("href:");
     expect(guide).toContain("'#rent-increase-checker'");
     expect(standaloneTool).toContain('<RentIncreaseChallengeChecker />');
-    expect(form4a).toContain('Form 4A Rent Increase 2026: Check If Your Rent Is Supportable');
+    expect(form4a).toContain('Form 4A Rent Increase Notice 2026: Section 13 Guide');
     expect(section13).toContain('Section 13 Notice 2026: Increase Rent Properly in England');
   });
 
@@ -113,7 +113,7 @@ describe('revenue-focused SEO funnels', () => {
     const alias = readRepoFile('src', 'app', '(marketing)', 'products', 'money-claim-pack', 'page.tsx');
 
     expect(mcol).toContain('MoneyClaimBridge');
-    expect(mcol).toContain('MCOL Rent Arrears Claim: Money Claim Pack for Landlords');
+    expect(mcol).toContain('Money Claim Online (MCOL) for Landlords: Rent Arrears Guide');
     expect(blog).toContain("slug === 'england-money-claim-online'");
     expect(blog).toContain('MoneyClaimBridge');
     expect(alias).toContain("permanentRedirect('/products/money-claim')");
