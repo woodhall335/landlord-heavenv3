@@ -62,9 +62,9 @@ export default function HmoSharedHouseTenancyAgreementPage() {
 
       <EnglandTenancyPage
         pagePath="/hmo-shared-house-tenancy-agreement"
-        title="HMO / Shared House Tenancy Agreement for England Landlords"
-        subtitle="Use this HMO tenancy agreement template when the property is being shared and you want house rules, communal-area wording, and day-to-day paperwork to match how the house is actually run."
-        primaryCtaLabel="Build my validated HMO pack"
+        title="Create an HMO or shared-house tenancy agreement pack"
+        subtitle="Use this England HMO tenancy agreement pack when the property is being shared and you want house rules, communal-area wording, and day-to-day paperwork to match how the house is actually run."
+        primaryCtaLabel="Create my HMO agreement"
         primaryCtaHref={hmoWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}

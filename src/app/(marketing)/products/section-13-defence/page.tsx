@@ -47,27 +47,33 @@ export default function Section13DefenceProductPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'Form 4A plus current market evidence, response materials, legal briefing, and tribunal bundle support',
+      trustText: 'Section 13 challenge support | Form 4A, market evidence, response wording, tribunal bundle',
       title: config.heroTitle,
       subtitle: config.heroSubtitle,
       primaryCta: { label: config.ctaLabel, href: product.wizardHref },
       secondaryCta: { label: 'Compare the supported option', href: '/products/section-13-standard' },
       feature:
-        'Built for landlords who want the notice, current comparables, response notes, legal briefing, and tribunal materials prepared together through a step-by-step route.',
+        'Choose this when the tenant may challenge the rent or you want response materials ready before serving. For a straightforward increase, the Supported pack is usually enough.',
       mediaSrc: '/images/wizard-icons/41-rent.png',
       mediaAlt: 'Section 13 defence documents',
       showReviewPill: true,
       showTrustPositioningBar: true,
       trustPositioningPreset: 'section13',
       children: (
-        <ul className="mt-6 space-y-2 text-sm text-white/90 md:text-base">
-          {config.heroBullets.map((bullet) => (
-            <li key={bullet}>{bullet}</li>
-          ))}
-        </ul>
+        <div className="mt-6 rounded-2xl border border-white/20 bg-white/10 p-4 text-sm leading-6 text-white/90 backdrop-blur">
+          <p className="font-semibold text-white">Choose this if pushback is likely.</p>
+          <ul className="mt-2 space-y-2">
+            {config.heroBullets.map((bullet) => (
+              <li key={bullet}>{bullet}</li>
+            ))}
+          </ul>
+        </div>
       ),
     },
     earlyProofBand: {
+      priceLabel: product.displayPrice,
+      valueSummary:
+        'Preview the tribunal-ready rent increase file before you pay, including market evidence, response wording, legal briefing, and bundle support. This is procedural document preparation, not representation.',
       preview: (
         <GoldenPackProof
           data={sampleProof}
@@ -141,6 +147,11 @@ export default function Section13DefenceProductPage() {
           question: 'Is this only for a tribunal hearing?',
           answer:
             'No. It also helps before a hearing by keeping your evidence, explanation, and replies consistent while objections are being raised.',
+        },
+        {
+          question: 'Is this legal advice or tribunal representation?',
+          answer:
+            'No. This is procedural document preparation for a higher-risk Section 13 rent increase. It helps organise the notice, evidence, response wording, briefing, and bundle support, but it is not representation.',
         },
       ],
     },

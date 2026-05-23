@@ -52,9 +52,9 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
     'section 13 notice rent increase',
     'form 4a rent increase',
   ],
-  heroTitle: 'Serve a market-supported rent increase, not just a bare Form 4A.',
+  heroTitle: 'Create a Form 4A rent increase pack with market evidence.',
   heroSubtitle:
-    'Use this when you want to propose a rent increase in England with the notice, figures, current local market listings, cover letter, and service record built around the same facts before you serve.',
+    'Use this when you want to propose a supportable rent increase in England with Form 4A, the proposed figure, current local market listings, cover letter, and service record built around the same facts before you serve.',
   productSku: 'section13_standard',
   ctaLabel: `Build my supported rent increase - ${PRODUCTS.section13_standard.displayPrice}`,
   heroBullets: [
@@ -251,9 +251,9 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
     "Renters' Rights Act tribunal pack",
     'section 13 tribunal defence',
   ],
-  heroTitle: 'Prepare the rent increase file as if it may be challenged.',
+  heroTitle: 'Prepare for a Section 13 rent challenge before it lands.',
   heroSubtitle:
-    'Use this when the tenant is likely to question the rent increase. It includes everything in the Supported Rent Increase Pack plus an indexed tribunal bundle, argument summary, response template, legal briefing, and condition comparison support.',
+    'Use this when the tenant is likely to question or challenge the rent increase. It includes everything in the Supported Rent Increase Pack plus an indexed tribunal bundle, argument summary, response template, legal briefing, and condition comparison support.',
   productSku: 'section13_defensive',
   ctaLabel: `Build my tribunal-ready file - ${PRODUCTS.section13_defensive.displayPrice}`,
   heroBullets: [

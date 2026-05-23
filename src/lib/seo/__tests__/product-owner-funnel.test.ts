@@ -128,25 +128,25 @@ const earlyInternalLinks = [
 
 const expectedProductMetaDescriptions = {
   noticeOnly:
-    'Prepare a solicitor-approved Section 8 notice and service file with Form 3A, N215, arrears schedule, service instructions, and checks.',
+    'Create an England Section 8 eviction notice file with Form 3A, N215, arrears schedule, service instructions, and pre-service checks.',
   completePack:
-    'Prepare a solicitor-approved Section 8 court and possession file with Form 3A, N5, N119, witness statement, evidence, and hearing support.',
+    'Prepare an England Section 8 possession claim pack with Form 3A, N5, N119, witness statement, evidence, and hearing support included.',
   moneyClaim:
-    'Prepare a landlord money claim for unpaid rent, damage, bills, or tenancy debt, with a demand letter and claim papers you can check.',
+    'Recover unpaid rent or tenant debt with a landlord money claim pack: letter before claim, particulars, debt schedule, MCOL/N1 guidance.',
   section13Standard:
-    'Create a Section 13 Form 4A rent increase notice with market evidence, service record, and a tenant-facing explanation before you serve.',
+    'Create an England Section 13 Form 4A rent increase pack with market evidence, service record, cover letter, and supportable-rent summary.',
   section13Defence:
-    'Prepare for a challenged rent increase with Form 4A, market evidence, response wording, and tribunal bundle support kept together.',
+    'Prepare for a Section 13 rent challenge with Form 4A, market evidence, response wording, legal briefing, and tribunal bundle support.',
   standardTenancy:
-    'Create a Standard Periodic Tenancy Agreement for a straightforward England let, with current wording and setup documents in one pack.',
+    'Create an England standard periodic tenancy agreement pack with current wording, setup records, validation checks, and preview before payment.',
   premiumTenancy:
-    'Create a Premium Periodic Tenancy Agreement with stronger management wording for access, repairs, keys, handover, and day-to-day control.',
+    'Create a premium England periodic tenancy agreement pack with stronger wording for access, repairs, keys, handover, and management control.',
   studentTenancy:
-    'Create a Student Tenancy Agreement for England with guarantor, sharer, replacement occupier, and end-of-term wording in one pack.',
+    'Create an England student tenancy agreement pack with guarantor wording, sharer rules, replacement controls, and end-of-term handover records.',
   hmoTenancy:
-    'Create an HMO or shared-house tenancy agreement with house rules, communal-area wording, and shared occupation records kept together.',
+    'Create an England HMO or shared-house tenancy agreement pack with house rules, communal-area wording, and shared occupation records.',
   lodgerAgreement:
-    'Create a Lodger Agreement for resident landlords with room-let terms, shared-home rules, notice wording, and house records in one pack.',
+    'Create a lodger agreement for resident landlords with room-let terms, shared-home rules, notice wording, and move-in records.',
 } satisfies Record<keyof typeof PRODUCT_OWNER_METADATA, string>;
 
 const pageCommercialPhraseExpectations = [

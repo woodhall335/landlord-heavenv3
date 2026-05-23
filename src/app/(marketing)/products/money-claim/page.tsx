@@ -94,10 +94,10 @@ export default function MoneyClaimPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'Claim unpaid rent, damage, bills, or tenancy debt',
-      title: 'Prepare a landlord money claim',
+      trustText: 'Unpaid rent, tenant debt, MCOL/N1 guidance, and preview before paying',
+      title: 'Recover unpaid rent with a landlord money claim pack',
       subtitle:
-        'Use this when a tenant owes rent, damage, bills, or other tenancy debt. Answer the questions, check the letter and claim papers before you pay, then download the money claim file.',
+        'Use this when a tenant owes rent arrears, damage, bills, or other tenancy debt. Build the letter before claim, Particulars of Claim, debt schedule, interest calculation, and MCOL/N1 filing guidance in one file you can check before paying.',
       primaryCta: {
         label: descriptor.primaryCtaLabel,
         href: descriptor.wizardHref,
@@ -107,7 +107,16 @@ export default function MoneyClaimPage() {
         href: '/products/complete-pack',
       },
       feature:
-        'Built for landlords who want the debt claim to stay clear from the first demand letter through to enforcement.',
+        'Choose this when recovering money is the job. If the urgent problem is getting possession of the property, use the Section 8 possession route instead. Procedural document pack, not legal advice.',
+      children: (
+        <div className="mt-6 rounded-2xl border border-white/20 bg-white/10 p-4 text-sm leading-6 text-white/90 backdrop-blur">
+          <p className="font-semibold text-white">Choose this if the tenant owes money.</p>
+          <p className="mt-1">
+            It is the debt-recovery route for rent arrears, damage, bills, and tenancy debt.
+            It does not replace a Section 8 notice or possession claim pack.
+          </p>
+        </div>
+      ),
       mediaSrc: '/images/money_claims.webp',
       mediaAlt: 'Preview of the landlord money claim pack',
       showTrustPositioningBar: true,
@@ -115,7 +124,7 @@ export default function MoneyClaimPage() {
     },
     afterPostHeroContent: (
       <section className="scroll-mt-24 bg-white py-10 md:py-12" aria-label="Money claim route">
-        <Link href="/wizard" className="block w-full">
+        <Link href={descriptor.wizardHref} className="block w-full">
           <picture>
             <source media="(max-width: 767px)" srcSet="/images/money-claim-mobile.webp" />
             <Image
@@ -133,7 +142,8 @@ export default function MoneyClaimPage() {
     earlyProofBand: {
       priceLabel: product.displayPrice,
       valueSummary:
-        'Preview the debt-recovery file before you pay. It includes the demand letter, schedules, claim wording, and follow-through guidance.',
+        'Preview the debt-recovery file before you pay. It includes the letter before claim, debt schedule, Particulars of Claim, MCOL/N1 guidance, and follow-through support.',
+      imageHref: descriptor.wizardHref,
       imageSrc: '/images/money-claim-wizard.webp',
       imageAlt: 'Money claim wizard preview',
       includedBullets: [
@@ -143,14 +153,14 @@ export default function MoneyClaimPage() {
         'Filing guidance and enforcement support',
       ],
       bestFor:
-        'Best when the tenant owes money and you want a clear debt-recovery file instead of improvising the paperwork.',
+        'Best when the tenant owes rent arrears, damage, bills, or other tenancy debt and you want a clear debt-recovery file instead of improvising the paperwork.',
       notFor:
         'Not the right fit if your next step is possession, serving a Section 8 notice, or preparing N5 and N119.',
     },
     whatYouGet: {
       title: 'See what the money claim file looks like',
       intro:
-        'Read the sample debt-recovery documents on the page, including the letter before claim template, particulars of claim template, and documents used to explain and issue the claim.',
+        'Read the sample debt-recovery documents on the page, including the letter before claim template, Particulars of Claim template, debt schedule, and documents used to explain and issue the claim.',
       sampleProof: sampleProof ? (
         <GoldenPackProof data={sampleProof} samplePageHref={samplePage?.samplePath} />
       ) : undefined,
@@ -158,14 +168,14 @@ export default function MoneyClaimPage() {
     comparisonBlock: {
       title: 'Compare the debt route with the possession route',
       intro:
-        'Some landlords need to recover money. Some need the tenant to leave. Some need both, but not always through the same product.',
+        'Some landlords need to recover unpaid rent or tenant debt. Some need the tenant to leave. Some need both, but not always through the same product.',
       routeGridClassName: 'mt-8 grid gap-5 lg:grid-cols-2',
       routeCards: [
         {
           name: descriptor.displayName,
           priceLabel: product.displayPrice,
           whatItIs:
-            'The route for unpaid rent, damage, bills, guarantor debt, and other tenancy-related claims.',
+            'The route for unpaid rent, damage, bills, guarantor debt, and other tenancy-related money claims.',
           problemItSolves:
             'Gives you the letter before claim, figures, and court paperwork needed to pursue the debt.',
           riskIfWrong:
@@ -214,6 +224,11 @@ export default function MoneyClaimPage() {
           question: 'What if I also need possession?',
           answer:
             'If the immediate problem is getting the tenant out, the Section 8 possession route is usually the better first step. Use this pack when recovering the debt is the job you need to do now.',
+        },
+        {
+          question: 'Is this legal advice?',
+          answer:
+            'No. This is a procedural document pack that prepares the debt claim paperwork from the information you provide. For disputed, high-value, or unusual claims, take legal advice before filing.',
         },
       ],
     },

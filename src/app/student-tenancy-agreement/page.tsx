@@ -62,9 +62,9 @@ export default function StudentTenancyAgreementPage() {
 
       <EnglandTenancyPage
         pagePath="/student-tenancy-agreement"
-        title="Student Tenancy Agreement for England Landlords"
-        subtitle="Use this student tenancy agreement when the occupiers are students and you want guarantor wording, clearer wording on joint tenants, replacement requests, and end-of-term move-out under the post-May 2026 England rules."
-        primaryCtaLabel="Build my validated Student pack"
+        title="Create a student tenancy agreement pack"
+        subtitle="Use this England student tenancy agreement pack when the occupiers are students and you want guarantor wording, clearer wording on joint tenants, replacement requests, and end-of-term move-out under the post-May 2026 England rules."
+        primaryCtaLabel="Create my Student agreement"
         primaryCtaHref={studentWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}

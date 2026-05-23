@@ -3,63 +3,63 @@ import { SEO_PRICES } from '@/lib/pricing/products';
 export const PRODUCT_OWNER_METADATA = {
   noticeOnly: {
     path: '/products/notice-only',
-    title: `Landlord Section 8 Notice & Service File | ${SEO_PRICES.evictionNotice.display}`,
+    title: `Section 8 Eviction Notice & Service File | ${SEO_PRICES.evictionNotice.display}`,
     description:
-      'Prepare a solicitor-approved Section 8 notice and service file with Form 3A, N215, arrears schedule, service instructions, and checks.',
+      'Create an England Section 8 eviction notice file with Form 3A, N215, arrears schedule, service instructions, and pre-service checks.',
   },
   completePack: {
     path: '/products/complete-pack',
-    title: `Evict a Tenant Through Court | ${SEO_PRICES.evictionBundle.display}`,
+    title: `Section 8 Possession Claim Pack | N5 & N119 | ${SEO_PRICES.evictionBundle.display}`,
     description:
-      'Prepare a solicitor-approved Section 8 court and possession file with Form 3A, N5, N119, witness statement, evidence, and hearing support.',
+      'Prepare an England Section 8 possession claim pack with Form 3A, N5, N119, witness statement, evidence, and hearing support included.',
   },
   moneyClaim: {
     path: '/products/money-claim',
-    title: `Landlord Money Claim Pack | ${SEO_PRICES.moneyClaim.display}`,
+    title: `Rent Arrears Money Claim Pack | MCOL & N1 | ${SEO_PRICES.moneyClaim.display}`,
     description:
-      'Prepare a landlord money claim for unpaid rent, damage, bills, or tenancy debt, with a demand letter and claim papers you can check.',
+      'Recover unpaid rent or tenant debt with a landlord money claim pack: letter before claim, particulars, debt schedule, MCOL/N1 guidance.',
   },
   section13Standard: {
     path: '/products/section-13-standard',
-    title: `Supported Rent Increase Pack | Section 13 Form 4A | ${SEO_PRICES.section13Standard.display}`,
+    title: `Form 4A Rent Increase Pack | Market Evidence | ${SEO_PRICES.section13Standard.display}`,
     description:
-      'Create a Section 13 Form 4A rent increase notice with market evidence, service record, and a tenant-facing explanation before you serve.',
+      'Create an England Section 13 Form 4A rent increase pack with market evidence, service record, cover letter, and supportable-rent summary.',
   },
   section13Defence: {
     path: '/products/section-13-defence',
-    title: `Tribunal-Ready Rent Increase Pack | Section 13 | ${SEO_PRICES.section13Defensive.display}`,
+    title: `Section 13 Rent Challenge Pack | Tribunal-Ready | ${SEO_PRICES.section13Defensive.display}`,
     description:
-      'Prepare for a challenged rent increase with Form 4A, market evidence, response wording, and tribunal bundle support kept together.',
+      'Prepare for a Section 13 rent challenge with Form 4A, market evidence, response wording, legal briefing, and tribunal bundle support.',
   },
   standardTenancy: {
     path: '/standard-tenancy-agreement',
-    title: 'Buy Standard Tenancy Agreement | England AST | £14.99',
+    title: 'England Tenancy Agreement Pack | Standard Periodic | £14.99',
     description:
-      'Create a Standard Periodic Tenancy Agreement for a straightforward England let, with current wording and setup documents in one pack.',
+      'Create an England standard periodic tenancy agreement pack with current wording, setup records, validation checks, and preview before payment.',
   },
   premiumTenancy: {
     path: '/premium-tenancy-agreement',
-    title: 'Premium Tenancy Agreement | Stronger Wording | £24.99',
+    title: 'Premium Tenancy Agreement Pack | Stronger Wording | £24.99',
     description:
-      'Create a Premium Periodic Tenancy Agreement with stronger management wording for access, repairs, keys, handover, and day-to-day control.',
+      'Create a premium England periodic tenancy agreement pack with stronger wording for access, repairs, keys, handover, and management control.',
   },
   studentTenancy: {
     path: '/student-tenancy-agreement',
-    title: 'Student Tenancy Agreement | Guarantor Forms | £24.99',
+    title: 'Student Tenancy Agreement Pack | Guarantor Forms | £24.99',
     description:
-      'Create a Student Tenancy Agreement for England with guarantor, sharer, replacement occupier, and end-of-term wording in one pack.',
+      'Create an England student tenancy agreement pack with guarantor wording, sharer rules, replacement controls, and end-of-term handover records.',
   },
   hmoTenancy: {
     path: '/hmo-shared-house-tenancy-agreement',
-    title: 'HMO Tenancy Agreement | Shared House Rules | £34.99',
+    title: 'HMO Tenancy Agreement Pack | Shared House Rules | £34.99',
     description:
-      'Create an HMO or shared-house tenancy agreement with house rules, communal-area wording, and shared occupation records kept together.',
+      'Create an England HMO or shared-house tenancy agreement pack with house rules, communal-area wording, and shared occupation records.',
   },
   lodgerAgreement: {
     path: '/lodger-agreement',
-    title: 'Lodger Agreement | Resident Landlord | £14.99',
+    title: 'Lodger Agreement Pack | Resident Landlord | £14.99',
     description:
-      'Create a Lodger Agreement for resident landlords with room-let terms, shared-home rules, notice wording, and house records in one pack.',
+      'Create a lodger agreement for resident landlords with room-let terms, shared-home rules, notice wording, and move-in records.',
   },
 } as const;
 

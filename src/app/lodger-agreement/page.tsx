@@ -61,9 +61,9 @@ export default function LodgerAgreementEnglandPage() {
 
       <EnglandTenancyPage
         pagePath="/lodger-agreement"
-        title="Lodger Agreement for Resident Landlords"
-        subtitle="Use this lodger agreement when you live in the property and are taking in a lodger, so the room let contract, notice wording, house rules, and shared-home expectations are set out clearly from the start."
-        primaryCtaLabel="Build my validated Lodger pack"
+        title="Create a lodger agreement pack for a resident landlord"
+        subtitle="Use this lodger agreement pack when you live in the property and are taking in a lodger, so the room let contract, notice wording, house rules, and shared-home expectations are set out clearly from the start."
+        primaryCtaLabel="Create my Lodger agreement"
         primaryCtaHref={lodgerWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}

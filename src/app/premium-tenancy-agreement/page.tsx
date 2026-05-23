@@ -60,9 +60,9 @@ export default function PremiumTenancyAgreementPage() {
       />
       <EnglandTenancyPage
         pagePath="/premium-tenancy-agreement"
-        title="Premium Periodic Tenancy Agreement for England Landlords"
-        subtitle="Use this premium periodic tenancy agreement when the let is still an ordinary residential tenancy, but you want stronger management wording around access, repairs, handover, keys, and day-to-day control than the Standard route provides."
-        primaryCtaLabel="Build my validated Premium pack"
+        title="Create a premium England tenancy agreement pack"
+        subtitle="Use this premium periodic tenancy agreement pack when the let is still an ordinary residential tenancy, but you want stronger management wording around access, repairs, handover, keys, and day-to-day control than the Standard route provides."
+        primaryCtaLabel="Create my Premium agreement"
         primaryCtaHref={premiumWizardHref}
         secondaryCtaLabel="Read assured periodic guide"
         secondaryCtaHref="/assured-periodic-tenancy-agreement"

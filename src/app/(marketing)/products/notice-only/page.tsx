@@ -95,10 +95,10 @@ export default function NoticeOnlyPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'Solicitor-approved notice file | Form 3A, N215, arrears, and service checks',
-      title: 'Solicitor-approved Section 8 notice and service file',
+      trustText: 'England-only Form 3A eviction notice | N215, arrears, service checks, preview before paying',
+      title: 'Create a Section 8 eviction notice and service file',
       subtitle:
-        'Prepare the notice file properly before anything goes to the tenant. Build Form 3A, N215, the arrears schedule, service instructions, validity checklist, compliance declaration, case summary, and next-step guide in one file you can check before paying.',
+        'Prepare the England Form 3A notice file properly before anything goes to the tenant. Build the Section 8 eviction notice, N215, arrears schedule, service instructions, validity checklist, compliance declaration, case summary, and next-step guide in one file you can preview before paying.',
       primaryCta: {
         label: descriptor.primaryCtaLabel,
         href: descriptor.wizardHref,
@@ -108,7 +108,16 @@ export default function NoticeOnlyPage() {
         href: '/products/complete-pack',
       },
       feature:
-        'Stage 1 = serve correctly. Most problems start with the notice, the dates, or how it was served, so this keeps the notice and service record together before anything goes to the tenant.',
+        'Stage 1 = serve correctly. Use this when you need the eviction notice first. Choose Complete Pack if you already expect court. Procedural document pack, not legal advice.',
+      children: (
+        <div className="mt-6 rounded-2xl border border-white/20 bg-white/10 p-4 text-sm leading-6 text-white/90 backdrop-blur">
+          <p className="font-semibold text-white">Choose this if your next step is serving notice.</p>
+          <p className="mt-1">
+            It is the England-only Form 3A notice and service route. If you want N5 and N119
+            possession claim papers as well, use the Complete Pack instead.
+          </p>
+        </div>
+      ),
       mediaSrc: '/images/notice_bundles.webp',
       mediaAlt: 'Preview of the England Section 8 notice pack',
       showTrustPositioningBar: true,
@@ -123,7 +132,7 @@ export default function NoticeOnlyPage() {
     ),
     afterPostHeroContent: (
       <section className="scroll-mt-24 bg-white py-10 md:py-12" aria-label="Notice stage route">
-        <a href="/wizard" className="block w-full">
+        <a href={descriptor.wizardHref} className="block w-full">
           <picture>
             <source media="(max-width: 767px)" srcSet="/images/notice-stage-mobile.webp" />
             <Image
@@ -141,7 +150,7 @@ export default function NoticeOnlyPage() {
     earlyProofBand: {
       priceLabel: product.displayPrice,
       valueSummary:
-        'Prepare the notice file properly before anything goes to the tenant. You can check the actual Section 8 notice and service file before you pay.',
+        'Prepare the notice file properly before anything goes to the tenant. You can check the actual Section 8 eviction notice and service file before you pay. This is procedural document preparation, not legal advice.',
       imageSrc: '/images/notice-only-pack.webp',
       imageAlt: 'Preview of the Stage 1 Section 8 notice-only pack',
       imageHref: descriptor.wizardHref,
@@ -159,7 +168,7 @@ export default function NoticeOnlyPage() {
     whatYouGet: {
       title: 'What you get in Stage 1',
       intro:
-        'This is more than a blank form. You get an 8-document notice and service file, and you can inspect it before buying.',
+        'This is more than a blank form. You get an 8-document England eviction notice and service file, and you can inspect it before buying.',
       items: [
         {
           name: 'Form 3A (Section 8 Notice)',
@@ -265,7 +274,7 @@ export default function NoticeOnlyPage() {
     comparisonBlock: {
       title: 'Stage 1 and Stage 2 do different jobs',
       intro:
-        'The choice is simple: do you need to serve the notice now, or do you want the full possession claim file built as well?',
+        'The choice is simple: do you need to serve the Section 8 eviction notice now, or do you want the full possession claim file built as well?',
       routeCards: [
         {
           name: 'Stage 1: Serve the Section 8 notice first',
@@ -319,6 +328,11 @@ export default function NoticeOnlyPage() {
           question: 'Does this include the official Form 3A?',
           answer:
             'Yes. The pack generates the current England Form 3A notice with N215, service instructions, arrears schedule, validity checklist, compliance declaration, case summary, and what-happens-next guide.',
+        },
+        {
+          question: 'Is this legal advice?',
+          answer:
+            'No. This is a procedural document pack that prepares the notice and service file from the information you provide. For complex disputes, unusual tenancy facts, or expected defences, take legal advice before serving.',
         },
       ],
     },

@@ -71,9 +71,9 @@ export default function StandardTenancyAgreementPage() {
       />
       <EnglandTenancyPage
         pagePath="/standard-tenancy-agreement"
-        title="Standard Tenancy Agreement for England Landlords"
-        subtitle="Use this standard periodic tenancy agreement if you are letting a whole property in England and want current wording, setup records, and post-May 2026 terms without student, HMO, lodger, or Premium-level management wording."
-        primaryCtaLabel="Build my validated Standard pack"
+        title="Create a standard England tenancy agreement pack"
+        subtitle="Use this standard periodic tenancy agreement pack if you are letting a whole property in England and want current wording, setup records, validation checks, and preview before payment without student, HMO, lodger, or Premium-level management wording."
+        primaryCtaLabel="Create my Standard agreement"
         primaryCtaHref={standardWizardHref}
         secondaryCtaLabel="Read periodic tenancy guide"
         secondaryCtaHref="/periodic-tenancy-agreement"

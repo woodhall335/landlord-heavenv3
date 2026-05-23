@@ -47,27 +47,33 @@ export default function Section13StandardProductPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'Form 4A, current market comparables, summary, cover letter, and service record',
+      trustText: 'Form 4A, market evidence, supportable range, service record, preview before paying',
       title: config.heroTitle,
       subtitle: config.heroSubtitle,
       primaryCta: { label: config.ctaLabel, href: product.wizardHref },
       secondaryCta: { label: 'Compare the tribunal-ready pack', href: '/products/section-13-defence' },
       feature:
-        'Built for landlords who want the proposed rent, Form 4A, current comparable evidence, and service record to match from the start.',
+        'Choose this for a normal rent increase where you want the figure explained by market evidence. If a challenge already feels likely, use the Tribunal-Ready pack instead.',
       mediaSrc: '/images/wizard-icons/41-rent.png',
       mediaAlt: 'Section 13 rent increase documents',
       showReviewPill: true,
       showTrustPositioningBar: true,
       trustPositioningPreset: 'section13',
       children: (
-        <ul className="mt-6 space-y-2 text-sm text-white/90 md:text-base">
-          {config.heroBullets.map((bullet) => (
-            <li key={bullet}>{bullet}</li>
-          ))}
-        </ul>
+        <div className="mt-6 rounded-2xl border border-white/20 bg-white/10 p-4 text-sm leading-6 text-white/90 backdrop-blur">
+          <p className="font-semibold text-white">Choose this if the increase needs to be supportable.</p>
+          <ul className="mt-2 space-y-2">
+            {config.heroBullets.map((bullet) => (
+              <li key={bullet}>{bullet}</li>
+            ))}
+          </ul>
+        </div>
       ),
     },
     earlyProofBand: {
+      priceLabel: product.displayPrice,
+      valueSummary:
+        'Preview the Form 4A rent increase file before you pay, including market evidence, the rent summary, cover letter, and service record. This is procedural document preparation, not legal advice.',
       preview: (
         <GoldenPackProof
           data={sampleProof}
@@ -137,6 +143,11 @@ export default function Section13StandardProductPage() {
           question: 'What if the tenant is likely to challenge the increase formally?',
           answer:
             'If challenge risk is already active, the tribunal-ready pack is usually better because it adds response materials, a tribunal bundle, a legal briefing, and preparation support.',
+        },
+        {
+          question: 'Is this legal advice?',
+          answer:
+            'No. This is procedural document preparation for a Section 13 rent increase. It helps prepare the notice, market evidence, explanation, and service record from the information you provide.',
         },
       ],
     },

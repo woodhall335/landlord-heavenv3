@@ -349,6 +349,38 @@ export function EnglandTenancyPage({
               </>
             )}
 
+            {workflowImageLink && (idealFor.length || notFor.length) ? (
+              <section className="mb-12 grid gap-8 lg:grid-cols-2">
+                <div className="rounded-[2rem] border border-[#D9EAD7] bg-[#F5FBF2] p-6 shadow-[0_14px_32px_rgba(29,92,54,0.06)]">
+                  <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
+                    Choose this agreement if
+                  </h2>
+                  <ul className="mt-5 space-y-3 text-[#465066]">
+                    {idealFor.map((item) => (
+                      <li key={item} className="flex items-start gap-3 leading-7">
+                        <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#2F855A]" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="rounded-[2rem] border border-[#F0DCC7] bg-[#FFF8F1] p-6 shadow-[0_14px_32px_rgba(124,72,18,0.06)]">
+                  <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
+                    Choose a different agreement if
+                  </h2>
+                  <ul className="mt-5 space-y-3 text-[#465066]">
+                    {notFor.map((item) => (
+                      <li key={item} className="flex items-start gap-3 leading-7">
+                        <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#C26A1B]" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </section>
+            ) : null}
+
             <section className="mb-12 grid gap-8 lg:grid-cols-2">
               <div className="rounded-[2rem] border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]">
                 <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
