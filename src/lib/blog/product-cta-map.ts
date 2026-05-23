@@ -46,7 +46,22 @@ const DEFAULT_CONFIG: ProductCtaConfig = {
   usedDefault: true,
 };
 
-const MONEY_CLAIM_MATCHERS = [/money claim/i, /rent arrears/i, /arrears/i, /letter before action/i, /mcol/i];
+const MONEY_CLAIM_MATCHERS = [
+  /money claim/i,
+  /rent arrears/i,
+  /arrears/i,
+  /letter before action/i,
+  /mcol/i,
+  /tenant damage/i,
+  /property damage/i,
+  /fair wear and tear/i,
+  /cleaning cost/i,
+  /unpaid utilit/i,
+  /guarantor/i,
+  /deposit shortfall/i,
+  /small claims/i,
+  /county court judgment/i,
+];
 const AST_MATCHERS = [/tenancy agreement/i, /ast/i, /prt/i, /occupation contract/i, /landlord agreement/i];
 const COMPLETE_PACK_MATCHERS = [/eviction process/i, /possession claim/i, /n5b/i, /court hearing/i, /bailiff/i];
 

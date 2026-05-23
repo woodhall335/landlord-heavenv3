@@ -12,6 +12,7 @@ import {
   getRetainedSeoPageTaxonomyEntries,
   type SeoPageTaxonomyEntry,
 } from '@/lib/seo/page-taxonomy';
+import { resolveCommercialSweepRoute } from '@/lib/seo/commercial-routing';
 import { discoverStaticPageRoutes } from '@/lib/seo/static-route-inventory.shared.mjs';
 
 export type SeoOpportunityPageType = 'owner' | 'high-intent' | 'blog';
@@ -498,7 +499,7 @@ const commercialAuditTextForLinks = (
 
   if (cluster === 'section-8-court') {
     return [
-      'Prepare a court-ready possession pack with official court forms.',
+      'Prepare a court-ready possession pack and possession claim pack with official court forms.',
       'Use N5 possession claim form and N119 particulars of claim checks, validated before filing.',
       'Prepare a court-ready possession pack at /products/complete-pack.',
     ].join(' ');
@@ -530,14 +531,22 @@ const commercialAuditTextForLinks = (
 
   if (primary === '/products/money-claim') {
     return [
-      'Use a solicitor-approved MCOL pack for landlords.',
-      'Build a money claim online pack for a rent arrears money claim with a letter before claim template and particulars of claim template.',
-      'Download the solicitor-approved MCOL pack for landlords from /products/money-claim after validation checks.',
+      'Use a validated, solicitor-approved MCOL pack for landlords.',
+      'Build a court-ready money claim online pack with a claim-file builder, claim generator, letter before claim template, and particulars of claim template.',
+      'Download the solicitor-approved MCOL pack for landlords from /products/money-claim after post-May 2026 validation checks.',
+    ].join(' ');
+  }
+
+  if (primary === '/products/complete-pack') {
+    return [
+      'Use a validated possession claim pack builder before you file.',
+      'Create a court-ready possession pack and possession claim generator pack with solicitor-approved Form 3A, N5, N119, witness statement, and evidence chronology checks.',
+      'Prepare the post-May 2026 court-ready possession pack at /products/complete-pack.',
     ].join(' ');
   }
 
   return [
-    'Use a validated Section 8 notice builder before you serve.',
+    'Use a validated, court-ready Section 8 notice builder before you serve.',
     "Create a section 8 notice generator pack with a solicitor-approved Form 3A, validated section 8 notice, section 8 notice service pack, post-May 2026 checks, and Renters' Rights Act Section 8 form wording.",
     'Use our validated Section 8 notice builder at /products/notice-only.',
   ].join(' ');
@@ -631,6 +640,16 @@ export async function buildSeoOpportunityAudit(): Promise<SeoOpportunityAuditRes
           ...(entry.secondaryProduct ? [entry.secondaryProduct] : []),
         ]
       : [];
+    const commercialResolution = resolveCommercialSweepRoute(entry.pathname);
+    const resolvedCommercialDestination =
+      commercialResolution?.kind === 'jurisdiction_safe'
+        ? `Jurisdiction-safe: ${commercialResolution.primaryHref}`
+        : commercialResolution?.kind === 'product'
+          ? [
+              commercialResolution.primaryHref,
+              ...(commercialResolution.secondaryHref ? [commercialResolution.secondaryHref] : []),
+            ].join(', ')
+          : undefined;
 
     items.push(
       buildItem({
@@ -643,6 +662,7 @@ export async function buildSeoOpportunityAudit(): Promise<SeoOpportunityAuditRes
         metadataText,
         hasMetadataExport: /export\s+const\s+metadata/.test(source.sourceText),
         configuredProductLinks,
+        primaryCommercialDestination: resolvedCommercialDestination,
         includeClusterProductSuggestions: canRouteToEnglandProduct,
         includeCommercialKeywordChecks: canRouteToEnglandProduct,
         visibleCommercialCopy: canRouteToEnglandProduct

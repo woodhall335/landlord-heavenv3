@@ -11,10 +11,13 @@ import { metadata as rentIncreaseMetadata } from '@/app/rent-increase/page';
 import { metadata as standardMetadata } from '@/app/standard-tenancy-agreement/page';
 import { metadata as studentMetadata } from '@/app/student-tenancy-agreement/page';
 import { OWNER_PAGE_CONTRACTS } from '@/lib/seo/owner-page-contracts';
+import { resolveCommercialSweepRoute } from '@/lib/seo/commercial-routing';
 import {
+  getCommercialSweepResolutions,
   discoverSweepableStaticSeoRoutes,
   getSweepableBlogSeoEntries,
   getUnclassifiedSweepableStaticSeoRoutes,
+  getUnresolvedCommercialSweepRoutes,
   SUPPLEMENTAL_SWEEP_CLASSIFIED_ROUTES,
 } from '@/lib/seo/sitewide-sweep';
 
@@ -76,6 +79,79 @@ describe('sitewide SEO sweep coverage', () => {
 
     expect(routes).toEqual(expect.arrayContaining([...SUPPLEMENTAL_SWEEP_CLASSIFIED_ROUTES]));
     expect(outsideSweep).toEqual([]);
+  });
+
+  it('resolves every sweepable route to a commercial destination or a jurisdiction-safe exemption', async () => {
+    const unresolvedRoutes = await getUnresolvedCommercialSweepRoutes();
+    const resolutions = await getCommercialSweepResolutions();
+
+    expect(unresolvedRoutes).toEqual([]);
+    expect(resolutions.length).toBeGreaterThan(0);
+
+    for (const resolution of resolutions) {
+      expect(resolution.primaryHref.startsWith('/')).toBe(true);
+
+      if (resolution.kind === 'product') {
+        expect(
+          resolution.primaryHref.startsWith('/products/') ||
+            [
+              '/standard-tenancy-agreement',
+              '/premium-tenancy-agreement',
+              '/student-tenancy-agreement',
+              '/hmo-shared-house-tenancy-agreement',
+              '/lodger-agreement',
+            ].includes(resolution.primaryHref)
+        ).toBe(true);
+      } else {
+        expect(resolution.primaryHref.startsWith('/products/')).toBe(false);
+        expect(resolution.message).toContain('England-only');
+      }
+    }
+  });
+
+  it('does not surface duplicate primary and secondary commercial routes', async () => {
+    const resolutions = await getCommercialSweepResolutions();
+
+    for (const resolution of resolutions) {
+      if (resolution.kind !== 'product' || !resolution.secondaryHref) continue;
+
+      expect(
+        resolution.secondaryHref,
+        `${resolution.pathname} should not repeat ${resolution.primaryHref} as its secondary route`
+      ).not.toBe(resolution.primaryHref);
+    }
+  });
+
+  it('keeps non-England eviction pages on eviction-specific guide routes', () => {
+    expect(resolveCommercialSweepRoute('/eviction-process-wales')).toMatchObject({
+      kind: 'jurisdiction_safe',
+      primaryHref: '/eviction-process-wales',
+    });
+    expect(resolveCommercialSweepRoute('/wales-eviction-notices')).toMatchObject({
+      kind: 'jurisdiction_safe',
+      primaryHref: '/wales-eviction-notices',
+    });
+    expect(resolveCommercialSweepRoute('/scotland-eviction-notices')).toMatchObject({
+      kind: 'jurisdiction_safe',
+      primaryHref: '/scotland-eviction-notices',
+    });
+    expect(resolveCommercialSweepRoute('/notice-to-quit-northern-ireland-guide')).toMatchObject({
+      kind: 'jurisdiction_safe',
+      primaryHref: '/notice-to-quit-northern-ireland-guide',
+    });
+  });
+
+  it('routes obvious tenancy agreement intent to exact owner pages', () => {
+    expect(resolveCommercialSweepRoute('/joint-tenancy-agreement-template')).toMatchObject({
+      kind: 'product',
+      primaryHref: '/premium-tenancy-agreement',
+      secondaryHref: '/standard-tenancy-agreement',
+    });
+    expect(resolveCommercialSweepRoute('/assured-periodic-tenancy-agreement')).toMatchObject({
+      kind: 'product',
+      primaryHref: '/standard-tenancy-agreement',
+      secondaryHref: '/premium-tenancy-agreement',
+    });
   });
 
   it('keeps the owner-page contract metadata aligned to the intended ranking promise', async () => {

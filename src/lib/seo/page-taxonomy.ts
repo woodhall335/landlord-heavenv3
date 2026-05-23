@@ -1584,6 +1584,7 @@ const LONGTAIL_REDIRECT_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     }),
     pageType: 'court',
     primaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
     consolidationStatus: 'supporting_live',
   }),
   '/complete-eviction-pack-england': productAdjacentRedirectEntry(
@@ -2262,6 +2263,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     }),
     pageType: 'court',
     primaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
   }),
   '/rent-arrears-eviction-guide': rentArrearsEntry('/rent-arrears-eviction-guide', '/money-claim-unpaid-rent', {
     canonicalTarget: '/rent-arrears-eviction-guide',
@@ -2631,6 +2633,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     }),
     pageType: 'problem',
     primaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
     anchorVariants: {
       pillar: [...anchorSets.section8Pillar],
       supporting: [
@@ -2732,6 +2735,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     }),
     pageType: 'court',
     primaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
   }),
   '/what-happens-after-section-21': section21Entry('/what-happens-after-section-21', SEO_PILLAR_ROUTES.section21Notice, {
     canonicalTarget: '/what-happens-after-section-21',
@@ -2742,6 +2746,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     }),
     pageType: 'court',
     primaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
   }),
   '/how-long-does-eviction-take': makeEntry('/how-long-does-eviction-take', {
     ...processEntry('/how-long-does-eviction-take', '/possession-order-timeline', {
@@ -3097,6 +3102,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     }),
     pageType: 'problem',
     primaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
     anchorVariants: {
       pillar: [...anchorSets.section8Pillar],
       supporting: [
@@ -3114,6 +3120,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     jurisdiction: 'uk',
     pageType: 'problem',
     primaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    secondaryProduct: SEO_PRODUCT_ROUTES.completePack,
     anchorVariants: {
       pillar: [...anchorSets.howToEvictPillar],
       supporting: [

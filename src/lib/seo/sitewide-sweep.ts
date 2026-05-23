@@ -6,6 +6,10 @@ import {
   getSeoPageTaxonomy,
 } from '@/lib/seo/page-taxonomy';
 import { OWNER_PAGE_CONTRACTS } from '@/lib/seo/owner-page-contracts';
+import {
+  resolveCommercialSweepRoute,
+  type CommercialSweepResolution,
+} from '@/lib/seo/commercial-routing';
 import { discoverStaticPageRoutes } from '@/lib/seo/static-route-inventory.shared.mjs';
 
 export const SITEWIDE_SWEEP_STATIC_PREFIX_EXCLUSIONS = [
@@ -77,6 +81,18 @@ export async function getUnclassifiedSweepableStaticSeoRoutes(): Promise<string[
     .filter((pathname) => !SUPPLEMENTAL_SWEEP_ROUTE_SET.has(pathname))
     .filter((pathname) => !getSeoPageTaxonomy(pathname))
     .sort();
+}
+
+export async function getUnresolvedCommercialSweepRoutes(): Promise<string[]> {
+  const routes = await discoverSweepableStaticSeoRoutes();
+  return routes.filter((pathname) => !resolveCommercialSweepRoute(pathname)).sort();
+}
+
+export async function getCommercialSweepResolutions(): Promise<CommercialSweepResolution[]> {
+  const routes = await discoverSweepableStaticSeoRoutes();
+  return routes
+    .map((pathname) => resolveCommercialSweepRoute(pathname))
+    .filter((resolution): resolution is CommercialSweepResolution => Boolean(resolution));
 }
 
 export interface SweepableBlogSeoEntry {

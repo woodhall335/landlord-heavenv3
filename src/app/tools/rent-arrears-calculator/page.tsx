@@ -19,6 +19,7 @@ import { trackToolComplete } from '@/lib/journey/events';
 import { setJourneyState, type StageEstimate } from '@/lib/journey/state';
 import { bucketArrears, bucketMonthsInArrears } from '@/lib/journey/stage';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { getRentArrearsResultCtas } from '@/lib/tools/result-ctas';
 
 const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 
@@ -137,6 +138,10 @@ export default function RentArrearsCalculator() {
     const months = rentAmount > 0 ? totals.totalOutstanding / rentAmount : 0;
     return months >= 2 ? 'notice_ready' : 'early_arrears';
   }, [rentAmount, totals.totalOutstanding]);
+  const resultCtas = useMemo(
+    () => getRentArrearsResultCtas(totals.totalOutstanding, rentAmount),
+    [rentAmount, totals.totalOutstanding],
+  );
 
   useEffect(() => {
     if (totals.totalOutstanding <= 0) {
@@ -643,7 +648,14 @@ export default function RentArrearsCalculator() {
             </div>
 
             {totals.totalOutstanding > 0 && (
-              <NextStepWidget stageHint={stageHint} location="tool_result" />
+              <NextStepWidget
+                stageHint={stageHint}
+                location="tool_result"
+                primaryAction={resultCtas?.primaryAction}
+                secondaryAction={resultCtas?.secondaryAction}
+                heading={resultCtas?.heading}
+                description={resultCtas?.description}
+              />
             )}
 
             <div className="mt-8">

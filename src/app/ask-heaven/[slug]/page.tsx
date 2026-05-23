@@ -37,6 +37,7 @@ import AskHeavenPageClient from '@/app/ask-heaven/AskHeavenPageClient';
 import { detectAskHeavenCtaIntent } from '@/lib/ask-heaven/cta-copy';
 import { getRecommendedProduct, type Topic } from '@/lib/ask-heaven/topic-detection';
 import type { AskHeavenPrimaryTopic } from '@/lib/ask-heaven/questions/types';
+import { getAskHeavenNextStepActions } from '@/lib/ask-heaven/next-step-actions';
 import type { Jurisdiction } from '@/lib/jurisdiction/types';
 import { NextStepWidget } from '@/components/journey/NextStepWidget';
 import { JourneyStageUpdater } from '@/components/journey/JourneyStageUpdater';
@@ -137,6 +138,11 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
   const recommendedProduct = chatTopic
     ? getRecommendedProduct(chatTopic, resolvedJurisdiction, intent ?? undefined)
     : null;
+  const nextStepActions = getAskHeavenNextStepActions({
+    topic: chatTopic,
+    jurisdiction: primaryJurisdiction,
+    intent,
+  });
   const canonicalUrl = getCanonicalUrl(`/ask-heaven/${slug}`);
 
   // Build breadcrumb items
@@ -197,7 +203,13 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
       <div className="bg-white pb-12">
         <div className="container mx-auto px-4 pt-8">
           <div className="max-w-4xl mx-auto">
-            <NextStepWidget location="ask_heaven_slug" />
+            <NextStepWidget
+              location="ask_heaven_slug"
+              primaryAction={nextStepActions.primaryAction}
+              secondaryAction={nextStepActions.secondaryAction}
+              heading={nextStepActions.heading}
+              description={nextStepActions.description}
+            />
           </div>
         </div>
         <div className="container mx-auto px-4">

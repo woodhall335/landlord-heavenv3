@@ -28,8 +28,8 @@ describe('Ask Heaven next-step cards', () => {
   it('shows the full England commercial set for England', () => {
     render(<AskHeavenNextStepsCards jurisdiction="england" />);
 
-    expect(screen.getByText('Eviction Notice Generator')).toBeInTheDocument();
-    expect(screen.getByText('Complete Eviction Pack')).toBeInTheDocument();
+    expect(screen.getByText('Stage 1 Notice & Service File')).toBeInTheDocument();
+    expect(screen.getByText('Stage 2 Court & Possession File')).toBeInTheDocument();
     expect(screen.getByText('Money Claim Pack')).toBeInTheDocument();
     expect(screen.getByText('England Tenancy Agreements')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Create my Section 8 notice' })).toBeInTheDocument();
@@ -42,16 +42,16 @@ describe('Ask Heaven next-step cards', () => {
     const { container, rerender } = render(<AskHeavenNextStepsCards jurisdiction="wales" />);
 
     expect(container.querySelector('[data-jurisdiction="wales"]')).toBeInTheDocument();
-    expect(screen.getByText('Eviction Notice Generator')).toBeInTheDocument();
-    expect(screen.getByText('Complete Eviction Pack')).toBeInTheDocument();
+    expect(screen.getByText('Stage 1 Notice & Service File')).toBeInTheDocument();
+    expect(screen.getByText('Stage 2 Court & Possession File')).toBeInTheDocument();
     expect(screen.getByText('Money Claim Pack')).toBeInTheDocument();
     expect(screen.getByText('England Tenancy Agreements')).toBeInTheDocument();
 
     rerender(<AskHeavenNextStepsCards jurisdiction="scotland" />);
 
     expect(container.querySelector('[data-jurisdiction="scotland"]')).toBeInTheDocument();
-    expect(screen.getByText('Eviction Notice Generator')).toBeInTheDocument();
-    expect(screen.getByText('Complete Eviction Pack')).toBeInTheDocument();
+    expect(screen.getByText('Stage 1 Notice & Service File')).toBeInTheDocument();
+    expect(screen.getByText('Stage 2 Court & Possession File')).toBeInTheDocument();
     expect(screen.getByText('Money Claim Pack')).toBeInTheDocument();
     expect(screen.getByText('England Tenancy Agreements')).toBeInTheDocument();
   });
@@ -59,8 +59,8 @@ describe('Ask Heaven next-step cards', () => {
   it('keeps Northern Ireland cases on the same public England recommendation surface', () => {
     render(<AskHeavenNextStepsCards jurisdiction="northern-ireland" />);
 
-    expect(screen.getByText('Eviction Notice Generator')).toBeInTheDocument();
-    expect(screen.getByText('Complete Eviction Pack')).toBeInTheDocument();
+    expect(screen.getByText('Stage 1 Notice & Service File')).toBeInTheDocument();
+    expect(screen.getByText('Stage 2 Court & Possession File')).toBeInTheDocument();
     expect(screen.getByText('Money Claim Pack')).toBeInTheDocument();
     expect(screen.getByText('England Tenancy Agreements')).toBeInTheDocument();
   });

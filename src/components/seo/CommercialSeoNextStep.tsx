@@ -30,9 +30,9 @@ export function getCommercialSeoCopy(
   if (primary === '/products/money-claim') {
     return {
       eyebrow: 'Debt recovery',
-      title: 'Tenant still owes money? Prepare the claim file',
+      title: 'Tenant still owes money? Prepare the validated claim file',
       body:
-        'For rent arrears, a money claim works best when the arrears schedule, letter before claim, and claim particulars all tell the same story. The Money Claim Pack keeps those documents together before you file.',
+        'For rent arrears, a money claim works best when the arrears schedule, letter before claim, and claim particulars all tell the same story. The Money Claim Pack acts as a builder for the claim file, keeping the court-ready documents together before you file.',
       primary: {
         href: '/products/money-claim',
         label: 'Prepare my money claim',
@@ -50,9 +50,9 @@ export function getCommercialSeoCopy(
   if (primary === '/products/complete-pack') {
     return {
       eyebrow: 'Court-stage paperwork',
-      title: 'Tenant still staying? Prepare the possession file',
+      title: 'Tenant still staying? Prepare the court-ready possession claim pack',
       body:
-        'When notice has expired or court is likely, the possession file needs the official court forms, N5 possession claim form, N119 particulars, witness statement, and evidence chronology to stay consistent. If you have not served notice yet, create the Section 8 notice first before moving to court.',
+        'When notice has expired or court is likely, the court-ready possession pack needs the official court forms, N5 possession claim form, N119 particulars, witness statement, and evidence chronology to stay consistent. The complete pack also works as a possession claim pack when the case is ready to file. If you have not served notice yet, create the Section 8 notice first before moving to court.',
       primary: {
         href: '/products/complete-pack',
         label: 'Prepare my court pack',
@@ -94,7 +94,22 @@ export function getCommercialSeoCopy(
     };
   }
 
-  if (primary === '/products/ast' || primary === '/standard-tenancy-agreement') {
+  if (
+    primary === '/products/ast' ||
+    primary === '/standard-tenancy-agreement' ||
+    primary === '/premium-tenancy-agreement' ||
+    primary === '/student-tenancy-agreement' ||
+    primary === '/hmo-shared-house-tenancy-agreement' ||
+    primary === '/lodger-agreement'
+  ) {
+    const exactAgreementLabels: Record<string, string> = {
+      '/standard-tenancy-agreement': 'Build my Standard tenancy pack',
+      '/premium-tenancy-agreement': 'Build my Premium tenancy pack',
+      '/student-tenancy-agreement': 'Build my Student tenancy pack',
+      '/hmo-shared-house-tenancy-agreement': 'Build my HMO / Shared House pack',
+      '/lodger-agreement': 'Build my Lodger agreement',
+    };
+
     return {
       eyebrow: 'England tenancy paperwork',
       title: "Create a Renters' Rights Act compliant tenancy agreement",
@@ -102,7 +117,9 @@ export function getCommercialSeoCopy(
         'For England lets, use a current tenancy agreement rather than recycling old AST wording. The standard periodic agreement route supports post-May 2026 rules and a clean landlord setup file.',
       primary: {
         href: primary === '/products/ast' ? '/standard-tenancy-agreement' : primary,
-        label: "create a Renters' Rights Act compliant tenancy agreement",
+        label:
+          exactAgreementLabels[primary ?? ''] ??
+          "create a Renters' Rights Act compliant tenancy agreement",
       },
       secondary: {
         href: '/premium-tenancy-agreement',

@@ -18,6 +18,8 @@ interface NextStepWidgetProps {
   secondaryAction?: Action;
   stageHint?: StageEstimate;
   location?: string;
+  heading?: string;
+  description?: string;
 }
 
 const RECOMMENDATIONS: Record<StageEstimate, { primary: Action; secondary: Action }> = {
@@ -48,6 +50,8 @@ export function NextStepWidget({
   secondaryAction,
   stageHint,
   location = 'inline',
+  heading = 'Move forward with the right landlord action',
+  description = 'Based on your current journey stage, we recommend one primary next step and one backup option.',
 }: NextStepWidgetProps): React.ReactElement {
   const router = useRouter();
   const resolvedStage: StageEstimate = useMemo(() => {
@@ -76,10 +80,8 @@ export function NextStepWidget({
   return (
     <section className="rounded-2xl border border-purple-200 bg-purple-50 p-6 mt-8" aria-label="Recommended next steps">
       <p className="text-xs font-semibold uppercase tracking-wide text-primary">Recommended next step</p>
-      <h3 className="mt-2 text-xl font-semibold text-gray-900">Move forward with the right landlord action</h3>
-      <p className="mt-2 text-sm text-gray-700">
-        Based on your current journey stage, we recommend one primary next step and one backup option.
-      </p>
+      <h3 className="mt-2 text-xl font-semibold text-gray-900">{heading}</h3>
+      <p className="mt-2 text-sm text-gray-700">{description}</p>
 
       <div className="mt-5 flex flex-col sm:flex-row sm:items-center gap-4">
         <Button

@@ -12,6 +12,7 @@ import { trackEvent } from '@/lib/analytics';
 import type { GrowthCtaPosition } from '@/lib/analytics/growth-events';
 import { PRODUCTS } from '@/lib/pricing/products';
 import type { Section13RentJustificationResult } from '@/lib/section13/rent-justification';
+import { getSection13ResultProductHref } from '@/lib/tools/result-ctas';
 import type {
   RentCheckerPropertyCondition,
   RentCheckerPropertySubtype,
@@ -166,10 +167,7 @@ function trackProductCta(
   trackingContext?: RentCheckerTrackingContext
 ) {
   const context = resolveTrackingContext(trackingContext);
-  const destination =
-    clickedProduct === 'section13_standard'
-      ? '/products/section-13-standard'
-      : '/products/section-13-defence';
+  const destination = getSection13ResultProductHref(clickedProduct);
 
   trackEvent('product_cta_clicked', {
     sourcePage: context.sourcePage,
