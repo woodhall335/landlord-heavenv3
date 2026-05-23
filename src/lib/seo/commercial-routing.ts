@@ -21,6 +21,8 @@ export type CommercialSweepResolution =
       jurisdiction: Exclude<SeoPageTaxonomyEntry['jurisdiction'], 'england' | 'uk'> | 'uk';
     };
 
+type JurisdictionSafeScope = Exclude<SeoPageTaxonomyEntry['jurisdiction'], 'england'>;
+
 const OWNER_ROUTE_DESTINATIONS: Record<string, { primaryHref: string; secondaryHref?: string }> = {
   '/products/ast': { primaryHref: '/products/ast' },
   '/products/notice-only': {
@@ -148,7 +150,7 @@ const TAXONOMY_ROUTE_DESTINATION_OVERRIDES: Record<string, { primaryHref: string
   },
 };
 
-const NON_ENGLAND_GUIDES: Record<Exclude<SeoPageTaxonomyEntry['jurisdiction'], 'england' | 'uk'> | 'uk', string> = {
+const NON_ENGLAND_GUIDES: Record<JurisdictionSafeScope, string> = {
   wales: '/wales-tenancy-agreement-template',
   scotland: '/private-residential-tenancy-agreement-template',
   'northern-ireland': '/northern-ireland-tenancy-agreement-template',
@@ -191,7 +193,8 @@ function jurisdictionSafeResolution(
   pathname: string,
   entry: SeoPageTaxonomyEntry
 ): CommercialSweepResolution {
-  const jurisdiction = entry.jurisdiction === 'uk' ? 'uk' : entry.jurisdiction;
+  const jurisdiction: JurisdictionSafeScope =
+    entry.jurisdiction === 'england' ? 'uk' : entry.jurisdiction;
   const primaryHref =
     NON_ENGLAND_ROUTE_GUIDE_OVERRIDES[pathname] ??
     NON_ENGLAND_GUIDES[jurisdiction] ??

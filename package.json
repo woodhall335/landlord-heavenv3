@@ -31,6 +31,7 @@
     "audit:seo": "npx -p node@20 -p tsx tsx scripts/seo-audit.ts",
     "audit:seo-opportunities": "npx -p node@20 -p tsx tsx scripts/seo-opportunity-audit.ts",
     "audit:commercial-sweep": "npx -p node@20 -p tsx tsx scripts/commercial-sweep-tracker.ts",
+    "audit:commercial-sweep:remaining": "npx -p node@20 -p tsx tsx scripts/commercial-sweep-remaining-fixes.ts",
     "audit:sitemap": "npx -p node@20 -p tsx tsx scripts/sitemap-audit.ts",
     "prove:notice-only:e2e": "npx -p node@20 -p tsx tsx scripts/prove-notice-only-e2e.ts",
     "prove:notice-only:editable": "npx -p node@20 -p tsx tsx scripts/prove-notice-only-editable-html.ts",
