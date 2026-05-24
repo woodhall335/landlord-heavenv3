@@ -45,6 +45,7 @@ export function RentCheckerSeoPage(props: RentCheckerSeoPageProps) {
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <Link
                     href={primaryCta.href}
+                    data-testid="hero-primary-cta"
                     className="inline-flex items-center justify-center rounded-2xl bg-violet-600 px-6 py-4 text-base font-semibold text-white transition hover:bg-violet-700"
                   >
                     {primaryCta.label}
@@ -98,6 +99,7 @@ export function RentCheckerSeoPage(props: RentCheckerSeoPageProps) {
                 </p>
                 <Link
                   href={primaryCta.href}
+                  data-testid="tool-upsell-cta"
                   className="mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-violet-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-700"
                 >
                   {primaryCta.label}

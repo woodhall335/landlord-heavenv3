@@ -93,6 +93,47 @@ describe('revenue-focused SEO funnels', () => {
     expect(resultPage).toContain("trackEvent('checkout_started', buildCheckoutPayload(result, trackingContext))");
   });
 
+  it('shared SEO CTAs expose stable selectors and conversion tracking events', () => {
+    const nextStep = readRepoFile('src', 'components', 'seo', 'CommercialSeoTrackedCta.tsx');
+    const commercialBlock = readRepoFile('src', 'components', 'seo', 'CommercialSeoNextStep.tsx');
+    const rentCheckerSeo = readRepoFile('src', 'components', 'tools', 'rent-checker', 'RentCheckerSeoPage.tsx');
+    const rentCheckerResult = readRepoFile('src', 'components', 'tools', 'rent-checker', 'RentCheckerResultPage.tsx');
+    const pillarShell = readRepoFile('src', 'components', 'seo', 'PillarPageShell.tsx');
+    const moneyClaim = readRepoFile('src', 'app', 'money-claim', 'page.tsx');
+
+    expect(commercialBlock).toContain('CommercialSeoTrackedCta');
+    expect(nextStep).toContain("trackEvent('journey_cta_impression'");
+    expect(nextStep).toContain("trackEvent('journey_cta_click'");
+    expect(nextStep).toContain("trackEvent('product_cta_clicked'");
+    expect(nextStep).toContain("data-testid={variant === 'primary' ? 'guide-primary-cta' : undefined}");
+    expect(rentCheckerSeo).toContain('data-testid="hero-primary-cta"');
+    expect(rentCheckerSeo).toContain('data-testid="tool-upsell-cta"');
+    expect(rentCheckerResult).toContain('data-testid="tool-upsell-cta"');
+    expect(pillarShell).toContain('data-testid="guide-primary-cta"');
+    expect(moneyClaim).toContain('data-testid="guide-primary-cta"');
+  });
+
+  it('conversion funnel audit covers buyer paths and records QA flags', () => {
+    const audit = readRepoFile('scripts', 'funnel-audit.mjs');
+
+    for (const journey of [
+      'buyer_tenant_not_paying_rent_to_money_claim',
+      'buyer_need_section_8_notice_to_notice_only',
+      'buyer_notice_ignored_to_complete_pack',
+      'buyer_unpaid_rent_after_leaving_to_money_claim',
+      'buyer_need_tenancy_agreement_to_owner_page',
+      'buyer_rent_increase_challenge_to_defence',
+    ]) {
+      expect(audit).toContain(journey);
+    }
+
+    expect(audit).toContain('conversion_flags');
+    expect(audit).toContain('weak_cta_copy');
+    expect(audit).toContain('FUNNEL_AUDIT_MODE');
+    expect(audit).toContain('buyer-paths');
+    expect(audit).toContain('Conversion QA Funnel Audit Summary');
+  });
+
   it('routes Section 8 and court-claim pages into the correct product choices', () => {
     const form3 = readRepoFile('src', 'components', 'seo', 'CurrentFrameworkGuidePage.tsx');
     const section8Template = readRepoFile('src', 'app', 'section-8-notice-template', 'page.tsx');

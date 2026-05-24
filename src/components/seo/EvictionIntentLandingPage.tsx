@@ -352,7 +352,14 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
       </section>
 
       {jurisdiction === 'england' || jurisdiction === 'uk' ? (
-        <CommercialSeoNextStep primaryHref={primaryHref} secondaryHref={secondaryActionHref} />
+        <CommercialSeoNextStep
+          primaryHref={primaryHref}
+          secondaryHref={secondaryActionHref}
+          sourcePage={`/${config.slug}`}
+          pageType={pageType}
+          intent={config.slug}
+          ctaPosition="mid"
+        />
       ) : null}
 
       <section id="eviction-process-overview" className="py-14 bg-white">

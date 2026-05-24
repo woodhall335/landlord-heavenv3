@@ -5,8 +5,10 @@ import puppeteerCore from 'puppeteer-core';
 import chromium from '@sparticuz/chromium';
 
 const BASE_URL = process.env.BASE_URL ?? 'https://landlordheaven.co.uk';
-const IS_LOCALHOST = /^https?:\/\/localhost(?::\d+)?$/i.test(BASE_URL);
+const IS_LOCALHOST = /^https?:\/\/(?:localhost|127\.0\.0\.1)(?::\d+)?$/i.test(BASE_URL);
 const E2E_MODE_ENABLED = process.env.E2E_MODE === 'true';
+const AUDIT_MODE = process.env.FUNNEL_AUDIT_MODE ?? 'full';
+const BUYER_PATH_ONLY = AUDIT_MODE === 'buyer-paths';
 const STEP_TIMEOUT_MS = Number(process.env.FUNNEL_STEP_TIMEOUT_MS ?? (IS_LOCALHOST ? 25000 : 60000));
 
 const outputRoot = path.join(process.cwd(), 'audit-output/funnel/latest');
@@ -16,6 +18,52 @@ const results = [];
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const sanitizeName = (name) => name.replace(/\s+/g, '-').toLowerCase();
 const summarizeError = (error) => (error instanceof Error ? `${error.name}: ${error.message}` : String(error)).slice(0, 280);
+const productHrefSelector = (href) => `a[href="${href}"], a[href^="${href}?"]`;
+
+const BUYER_PATH_JOURNEYS = [
+  {
+    journey: 'buyer_tenant_not_paying_rent_to_money_claim',
+    startPath: '/tenant-not-paying-rent',
+    stepName: 'tenant not paying rent product cta',
+    selectors: ['[data-testid="guide-primary-cta"]', productHrefSelector('/products/money-claim')],
+    expectedUrlIncludes: '/products/money-claim',
+  },
+  {
+    journey: 'buyer_need_section_8_notice_to_notice_only',
+    startPath: '/section-8-notice',
+    stepName: 'section 8 notice product cta',
+    selectors: ['[data-testid="guide-primary-cta"]', productHrefSelector('/products/notice-only')],
+    expectedUrlIncludes: '/products/notice-only',
+  },
+  {
+    journey: 'buyer_notice_ignored_to_complete_pack',
+    startPath: '/eviction-process-uk',
+    stepName: 'notice ignored complete pack cta',
+    selectors: ['[data-testid="guide-primary-cta"]', productHrefSelector('/products/complete-pack')],
+    expectedUrlIncludes: '/products/complete-pack',
+  },
+  {
+    journey: 'buyer_unpaid_rent_after_leaving_to_money_claim',
+    startPath: '/tenant-left-without-paying-rent',
+    stepName: 'former tenant money claim cta',
+    selectors: ['[data-testid="guide-primary-cta"]', productHrefSelector('/products/money-claim')],
+    expectedUrlIncludes: '/products/money-claim',
+  },
+  {
+    journey: 'buyer_need_tenancy_agreement_to_owner_page',
+    startPath: '/tenancy-agreement-template',
+    stepName: 'tenancy agreement owner cta',
+    selectors: [productHrefSelector('/premium-tenancy-agreement'), productHrefSelector('/standard-tenancy-agreement'), productHrefSelector('/products/ast')],
+    expectedUrlIncludes: '/premium-tenancy-agreement',
+  },
+  {
+    journey: 'buyer_rent_increase_challenge_to_defence',
+    startPath: '/tools/rent-increase-challenge-checker/tenant-challenge',
+    stepName: 'rent increase challenge defence cta',
+    selectors: ['a[href="/products/section-13-defence"]', '[data-testid="guide-primary-cta"]'],
+    expectedUrlIncludes: '/products/section-13-defence',
+  },
+];
 
 async function ensureDirs() {
   await fs.mkdir(screensDir, { recursive: true });
@@ -150,9 +198,17 @@ async function clickAndRecord({ page, journey, stepName, selectors, expectedUrlI
   await page.waitForSelector(selectorUsed, { timeout: STEP_TIMEOUT_MS, visible: true });
   let clicked_text = '';
   let clicked_href = '';
+  let cta_top = null;
+  let cta_in_initial_viewport = null;
   try {
     clicked_text = ((await page.$eval(selectorUsed, (el) => el.textContent || '')) || '').trim();
     clicked_href = (await page.$eval(selectorUsed, (el) => el.getAttribute('href') || '')) || '';
+    const layout = await page.$eval(selectorUsed, (el) => {
+      const rect = el.getBoundingClientRect();
+      return { top: rect.top + window.scrollY, viewportHeight: window.innerHeight };
+    });
+    cta_top = Math.round(layout.top);
+    cta_in_initial_viewport = layout.top <= layout.viewportHeight;
   } catch {
     // If DOM mutates while navigating, diagnostics still capture outcome.
   }
@@ -177,7 +233,29 @@ async function clickAndRecord({ page, journey, stepName, selectors, expectedUrlI
 
   await safeScreenshot(page, `${journey}_${sanitizeName(stepName)}.png`, { diagnostics, stepDiagnostics, stepName });
 
-  return { step_name: stepName, clicked_text, clicked_href, url_before, url_after, timestamp: new Date().toISOString(), diagnostics: stepDiagnostics };
+  const normalizedText = clicked_text.toLowerCase().replace(/\s+/g, ' ').trim();
+  const conversion_flags = [];
+  if (!clicked_href) conversion_flags.push('missing_href');
+  if (/^(learn more|read more|start here|click here|view route|next steps)$/i.test(normalizedText)) {
+    conversion_flags.push('weak_cta_copy');
+  }
+  if (cta_in_initial_viewport === false && stepName.includes('hero')) {
+    conversion_flags.push('buried_hero_cta');
+  }
+
+  return {
+    step_name: stepName,
+    selector_used: selectorUsed,
+    clicked_text,
+    clicked_href,
+    cta_top,
+    cta_in_initial_viewport,
+    url_before,
+    url_after,
+    conversion_flags,
+    timestamp: new Date().toISOString(),
+    diagnostics: stepDiagnostics,
+  };
 }
 
 async function createMoneyClaimCase() {
@@ -256,6 +334,13 @@ async function runJourney(browser, journey, fn) {
 
 function collectTopErrors() {
   const counts = new Map();
+  const isIgnorableLocalDiagnostic = ({ url, reason }) => {
+    if (!IS_LOCALHOST) return false;
+    if (url?.includes('/_vercel/insights/script.js')) return true;
+    if (reason === 'net::ERR_ABORTED' && /\.(png|jpe?g|webp|gif|svg)(\?|$)/i.test(url || '')) return true;
+    if (reason === 'net::ERR_ABORTED' && url?.includes('/_next/image?')) return true;
+    return false;
+  };
 
   for (const row of results) {
     const d = row.diagnostics;
@@ -267,11 +352,13 @@ function collectTopErrors() {
     }
 
     for (const resp of d.failedResponses || []) {
+      if (isIgnorableLocalDiagnostic(resp)) continue;
       const key = `http${resp.status}: ${resp.url}`;
       counts.set(key, (counts.get(key) ?? 0) + 1);
     }
 
     for (const req of d.requestFailures || []) {
+      if (isIgnorableLocalDiagnostic(req)) continue;
       const key = `requestfailed: ${req.reason} ${req.url}`;
       counts.set(key, (counts.get(key) ?? 0) + 1);
     }
@@ -285,10 +372,11 @@ async function writeOutputs() {
   await fs.writeFile(path.join(outputRoot, 'funnel_runs.json'), `${JSON.stringify(results, null, 2)}\n`);
 
   const lines = [
-    '# Funnel Audit Summary',
+    '# Conversion QA Funnel Audit Summary',
     '',
     `Generated: ${new Date().toISOString()}`,
     `E2E_MODE: ${E2E_MODE_ENABLED ? 'enabled' : 'disabled'}`,
+    `FUNNEL_AUDIT_MODE: ${AUDIT_MODE}`,
     '',
     '| Journey | Status | Failed step | Details |',
     '|---|---|---|---|',
@@ -308,6 +396,28 @@ async function writeOutputs() {
     }
     lines.push('');
   }
+
+  const conversionFlags = results.flatMap((row) =>
+    (row.steps || []).flatMap((step) =>
+      (step.conversion_flags || []).map((flag) => ({
+        journey: row.journey,
+        step: step.step_name,
+        flag,
+        clicked_text: step.clicked_text,
+        clicked_href: step.clicked_href,
+      }))
+    )
+  );
+
+  lines.push('## Conversion QA flags', '');
+  if (!conversionFlags.length) {
+    lines.push('- No weak CTA copy, missing hrefs, or buried hero CTAs were detected in completed steps.');
+  } else {
+    for (const item of conversionFlags) {
+      lines.push(`- **${item.journey}** / ${item.step}: ${item.flag} (${item.clicked_text || 'no text'} -> ${item.clicked_href || 'no href'})`);
+    }
+  }
+  lines.push('');
 
   const screenshotSkips = results.flatMap((row) => row.diagnostics?.screenshotIssues ?? []);
   lines.push('## Screenshot skips', '');
@@ -338,6 +448,28 @@ async function main() {
   const browser = await launchBrowser();
 
   try {
+    for (const config of BUYER_PATH_JOURNEYS) {
+      // eslint-disable-next-line no-await-in-loop
+      await runJourney(browser, config.journey, async (page, { setStep, steps, diagnostics }) => {
+        setStep('open buyer path page');
+        await page.goto(`${BASE_URL}${config.startPath}`, { waitUntil: 'domcontentloaded', timeout: STEP_TIMEOUT_MS });
+        await page.waitForSelector('h1', { timeout: 15000 });
+        await safeScreenshot(page, `${config.journey}_start.png`, { diagnostics, stepName: 'open buyer path page' });
+
+        setStep(config.stepName);
+        steps.push(await clickAndRecord({
+          page,
+          journey: config.journey,
+          stepName: config.stepName,
+          selectors: config.selectors,
+          expectedUrlIncludes: config.expectedUrlIncludes,
+          diagnostics,
+        }));
+      });
+    }
+
+    if (BUYER_PATH_ONLY) return;
+
     await runJourney(browser, 'journey_a_guide_to_paid', async (page, { setStep, steps, diagnostics }) => {
       setStep('open guide page');
       const guideUrl = `${BASE_URL}/pre-action-protocol-debt`;

@@ -336,6 +336,7 @@ export default async function MoneyClaimPage() {
                   <p className="mt-3 text-sm text-gray-600">One-time price: {moneyClaimPrice}</p>
                   <Link
                     href="/products/money-claim"
+                    data-testid="guide-primary-cta"
                     className="mt-5 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 font-semibold text-white hover:opacity-95"
                   >
                     Start with the money claim pack

@@ -191,7 +191,11 @@ export function PillarPageShell(content: PillarPageContent) {
                   {link.label}
                 </Link>
               ))}
-              <Link href={content.productLink.href} className="rounded-lg border border-[#CAB6FF] bg-[#F8F4FF] px-4 py-3 text-primary font-semibold hover:bg-[#F2EAFF]">
+              <Link
+                href={content.productLink.href}
+                data-testid="guide-primary-cta"
+                className="rounded-lg border border-[#CAB6FF] bg-[#F8F4FF] px-4 py-3 text-primary font-semibold hover:bg-[#F2EAFF]"
+              >
                 {content.productLink.label}
               </Link>
             </div>

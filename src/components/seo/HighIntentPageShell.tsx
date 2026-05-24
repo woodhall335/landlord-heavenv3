@@ -145,6 +145,10 @@ export function HighIntentPageShell(props: HighIntentPageShellProps) {
       <CommercialSeoNextStep
         primaryHref={props.primaryCta.href}
         secondaryHref={props.secondaryCta?.href}
+        sourcePage={`/${props.slug}`}
+        pageType="guide"
+        intent={props.slug}
+        ctaPosition="mid"
       />
 
       {props.diagrams && props.diagrams.length > 0 ? (

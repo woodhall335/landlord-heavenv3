@@ -1,9 +1,13 @@
-import Link from 'next/link';
+import { CommercialSeoTrackedCta } from '@/components/seo/CommercialSeoTrackedCta';
 
 interface CommercialSeoNextStepProps {
   primaryHref: string;
   secondaryHref?: string | null;
   className?: string;
+  sourcePage?: string;
+  pageType?: string;
+  intent?: string;
+  ctaPosition?: string;
 }
 
 interface CommercialSeoCopy {
@@ -152,8 +156,13 @@ export function CommercialSeoNextStep({
   primaryHref,
   secondaryHref,
   className = '',
+  sourcePage,
+  pageType = 'guide',
+  intent,
+  ctaPosition = 'mid',
 }: CommercialSeoNextStepProps) {
   const copy = getCommercialSeoCopy(primaryHref, secondaryHref);
+  const recommendedProduct = normalizeProductHref(primaryHref) ?? copy.primary.href;
 
   return (
     <section className={`border-y border-[#E6DBFF] bg-white py-10 ${className}`}>
@@ -162,20 +171,34 @@ export function CommercialSeoNextStep({
         <h2 className="mt-2 text-2xl font-semibold text-[#2a2161]">{copy.title}</h2>
         <p className="mt-3 leading-7 text-gray-700">{copy.body}</p>
         <div className="mt-5 grid gap-3 text-sm md:grid-cols-2">
-          <Link
+          <CommercialSeoTrackedCta
             href={copy.primary.href}
+            label={copy.primary.label}
+            variant="primary"
+            sourcePage={sourcePage}
+            pageType={pageType}
+            intent={intent}
+            ctaPosition={ctaPosition}
+            recommendedProduct={recommendedProduct}
             className="rounded-lg border border-[#CAB6FF] bg-white px-4 py-3 font-semibold text-primary hover:bg-[#F8F4FF]"
           >
             {copy.primary.label}
-          </Link>
+          </CommercialSeoTrackedCta>
           {copy.secondary ? (
-            <Link
+            <CommercialSeoTrackedCta
               href={copy.secondary.href}
+              label={copy.secondary.label}
+              variant="secondary"
+              sourcePage={sourcePage}
+              pageType={pageType}
+              intent={intent}
+              ctaPosition={ctaPosition}
+              recommendedProduct={recommendedProduct}
               className="rounded-lg border border-[#E6DBFF] bg-white px-4 py-3 text-primary hover:bg-[#F8F4FF]"
             >
               <span className="font-semibold">{copy.secondary.label}</span>
               <span className="mt-1 block text-gray-600">{copy.secondary.text}</span>
-            </Link>
+            </CommercialSeoTrackedCta>
           ) : null}
         </div>
       </div>

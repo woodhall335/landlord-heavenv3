@@ -126,6 +126,10 @@ export function TenancyFunnelLandingPage({
         <CommercialSeoNextStep
           primaryHref={primaryCtaHref}
           secondaryHref="/premium-tenancy-agreement"
+          sourcePage={pagePath}
+          pageType="guide"
+          intent={pagePath.replace(/^\//, '')}
+          ctaPosition="mid"
           className="mt-10 border-y-0 bg-transparent py-0"
         />
 

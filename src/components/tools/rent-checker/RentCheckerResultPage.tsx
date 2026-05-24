@@ -366,6 +366,7 @@ function CtaLink({
     <div className="space-y-2">
       <Link href={href} onClick={onClick} className="block">
         <Button
+          data-testid={variant === 'primary' ? 'tool-upsell-cta' : undefined}
           variant={variant === 'primary' ? 'primary' : 'outline'}
           size="large"
           fullWidth
@@ -885,7 +886,7 @@ export function NextStepsCard({
       </ul>
 
       <div className="mt-6">
-        <Link href={result.primaryCtaHref} onClick={onRepeatCtaClick}>
+        <Link href={result.primaryCtaHref} onClick={onRepeatCtaClick} data-testid="tool-upsell-cta">
           <Button size="large" className="bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-300">
             {result.primaryCtaLabel}
           </Button>
@@ -1393,7 +1394,12 @@ export function RentCheckerResultPage({
 
       {showStickyCta ? (
         <div className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 px-4 py-3 shadow-[0_-8px_30px_rgba(15,23,42,0.08)] backdrop-blur md:hidden">
-            <Link href={adjustedResult.primaryCtaHref} onClick={onStickyCtaClick} className="block">
+            <Link
+              href={adjustedResult.primaryCtaHref}
+              onClick={onStickyCtaClick}
+              className="block"
+              data-testid="tool-upsell-cta"
+            >
               <Button fullWidth className="bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-300">
               {adjustedResult.recommendedProduct === 'section13_standard'
                 ? 'Create my rent increase notice'
