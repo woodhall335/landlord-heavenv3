@@ -34,6 +34,15 @@ describe('case-access', () => {
     expect(result).toBeNull();
   });
 
+  it('allows an emailed recovery session to access an owned case on another device', () => {
+    const result = assertCaseReadAccess({
+      request: req('recovered-phone-token'),
+      user: null,
+      caseRow: { user_id: 'desktop-user', session_token: 'recovered-phone-token' },
+    });
+    expect(result).toBeNull();
+  });
+
   it('blocks owned case for non-owner', () => {
     const result = assertCaseWriteAccess({
       request: req(),

@@ -36,6 +36,9 @@
     "src/app/api/cron/wizard-abandonment-recovery/route.ts": {
       "maxDuration": 60
     },
+    "src/app/api/cron/recovery-orchestrator/route.ts": {
+      "maxDuration": 60
+    },
     "src/app/api/seo/cron/daily/route.ts": {
       "maxDuration": 300
     }
@@ -54,16 +57,8 @@
       "schedule": "0 4 * * *"
     },
     {
-      "path": "/api/cron/checkout-recovery?key=$CRON_SECRET",
+      "path": "/api/cron/recovery-orchestrator?key=$CRON_SECRET",
       "schedule": "17 9 * * *"
-    },
-    {
-      "path": "/api/cron/case-preview-recovery?key=$CRON_SECRET",
-      "schedule": "47 9 * * *"
-    },
-    {
-      "path": "/api/cron/wizard-abandonment-recovery?key=$CRON_SECRET",
-      "schedule": "7 10 * * *"
     },
     {
       "path": "/api/cron/compliance-check?key=$CRON_SECRET",

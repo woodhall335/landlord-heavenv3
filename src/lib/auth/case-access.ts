@@ -26,6 +26,11 @@ export function assertCaseReadAccess(params: {
     return null;
   }
 
+  const requestToken = getSessionTokenFromRequest(request);
+  if (requestToken && caseRow.session_token && requestToken === caseRow.session_token) {
+    return null;
+  }
+
   if (caseRow.user_id) {
     if (!user || caseRow.user_id !== user.id) {
       return deniedResponse();
@@ -33,7 +38,6 @@ export function assertCaseReadAccess(params: {
     return null;
   }
 
-  const requestToken = getSessionTokenFromRequest(request);
   if (!requestToken || !caseRow.session_token || requestToken !== caseRow.session_token) {
     return deniedResponse();
   }

@@ -226,4 +226,31 @@ describe('wizard abandonment recovery cron', () => {
     expect(sentEmails).toEqual([]);
     expect(insertedEmailEvents).toEqual([]);
   });
+
+  it('skips incomplete wizard recovery when a fresh pending checkout can handle the sales nudge', async () => {
+    mockCases = [incompleteCase({ updated_at: new Date(Date.now() - 26 * 60 * 60 * 1000).toISOString() })];
+    mockOrders = [
+      {
+        id: 'order-1',
+        case_id: 'case-1',
+        user_id: 'user-1',
+        product_type: 'notice_only',
+        payment_status: 'pending',
+        created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+      },
+    ];
+
+    const { GET } = await import('@/app/api/cron/wizard-abandonment-recovery/route');
+    const response = await GET(
+      request('http://localhost/api/cron/wizard-abandonment-recovery', {
+        authorization: `Bearer ${MOCK_CRON_SECRET}`,
+      })
+    );
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data.emails_sent).toBe(0);
+    expect(sentEmails).toEqual([]);
+    expect(insertedEmailEvents).toEqual([]);
+  });
 });

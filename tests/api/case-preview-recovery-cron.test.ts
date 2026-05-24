@@ -260,6 +260,52 @@ describe('case preview recovery cron', () => {
     expect(insertedEmailEvents).toEqual([]);
   });
 
+  it('skips preview recovery when a fresh pending checkout can send the checkout recovery email', async () => {
+    mockCases = [
+      {
+        id: 'case-1',
+        user_id: null,
+        case_type: 'rent_increase',
+        jurisdiction: 'england',
+        status: 'in_progress',
+        workflow_status: 'preview_ready',
+        wizard_progress: 90,
+        wizard_completed_at: null,
+        collected_facts: {
+          section13: {
+            selectedPlan: 'section13_standard',
+            landlord: { landlordEmail: 'alex@example.com', landlordName: 'Alex Landlord' },
+          },
+        },
+        created_at: new Date(Date.now() - 26 * 60 * 60 * 1000).toISOString(),
+        updated_at: new Date(Date.now() - 25 * 60 * 60 * 1000).toISOString(),
+      },
+    ];
+    mockOrders = [
+      {
+        id: 'order-1',
+        case_id: 'case-1',
+        user_id: 'user-1',
+        product_type: 'section13_standard',
+        payment_status: 'pending',
+        created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+      },
+    ];
+
+    const { GET } = await import('@/app/api/cron/case-preview-recovery/route');
+    const response = await GET(
+      request('http://localhost/api/cron/case-preview-recovery', {
+        authorization: `Bearer ${MOCK_CRON_SECRET}`,
+      })
+    );
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data.emails_sent).toBe(0);
+    expect(sentEmails).toEqual([]);
+    expect(insertedEmailEvents).toEqual([]);
+  });
+
   it('skips a case when the matching stage email was already sent', async () => {
     mockCases = [
       {

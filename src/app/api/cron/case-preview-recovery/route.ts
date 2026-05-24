@@ -30,6 +30,7 @@ const JOB_NAME = 'case-preview:recover-abandoned' as const;
 const DEFAULT_BATCH_LIMIT = 50;
 const DAY_1_AGE_HOURS = 24;
 const DAY_7_AGE_HOURS = 24 * 7;
+const PENDING_CHECKOUT_SUPPRESSION_HOURS = 24;
 
 type CaseRow = {
   id: string;
@@ -125,6 +126,18 @@ function pickBestOrder(current: OrderRow | undefined, candidate: OrderRow): Orde
 function getCaseAgeHours(caseRow: CaseRow): number {
   const updatedAt = new Date(caseRow.updated_at).getTime();
   return (Date.now() - updatedAt) / (60 * 60 * 1000);
+}
+
+function getOrderAgeHours(order: OrderRow): number {
+  const createdAt = new Date(order.created_at).getTime();
+  return (Date.now() - createdAt) / (60 * 60 * 1000);
+}
+
+function hasFreshPendingCheckout(order: OrderRow | null): boolean {
+  return Boolean(
+    order?.payment_status === 'pending' &&
+      getOrderAgeHours(order) <= PENDING_CHECKOUT_SUPPRESSION_HOURS
+  );
 }
 
 function normalizeEmail(value: string | null | undefined): string | null {
@@ -280,6 +293,12 @@ async function executeCasePreviewRecovery(request: NextRequest) {
       const relatedOrder = orderByCase.get(caseRow.id) || null;
       const hasFinalDocuments = finalDocumentCaseIds.has(caseRow.id);
       const hasPreviewDocuments = previewDocumentCaseIds.has(caseRow.id);
+
+      if (hasFreshPendingCheckout(relatedOrder)) {
+        skipped += 1;
+        skippedCaseIds.push(caseRow.id);
+        continue;
+      }
 
       if (
         !isPreviewAbandonedCase({

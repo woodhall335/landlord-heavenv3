@@ -27,6 +27,7 @@ export type CronJobName =
   | 'legal-change:check'
   | 'legal-change:ingest'
   | 'compliance:check'
+  | 'recovery:orchestrate'
   | 'checkout:recover-abandoned'
   | 'case-preview:recover-abandoned'
   | 'wizard:recover-incomplete'
@@ -733,6 +734,7 @@ function calculateNextScheduledTime(jobName: CronJobName, lastRun?: CronRun): st
     'legal-change:check': 24, // Daily
     'legal-change:ingest': 6, // Every 6 hours
     'compliance:check': 24, // Daily
+    'recovery:orchestrate': 24, // Daily
     'checkout:recover-abandoned': 1, // Hourly
     'case-preview:recover-abandoned': 24, // Daily
     'wizard:recover-incomplete': 24, // Daily
@@ -765,8 +767,7 @@ export async function getAllJobStatuses(
     'legal-change:check',
     'legal-change:ingest',
     'compliance:check',
-    'checkout:recover-abandoned',
-    'case-preview:recover-abandoned',
+    'recovery:orchestrate',
     'cases:cleanup-stale-unclaimed',
     'validation:audit',
   ];
