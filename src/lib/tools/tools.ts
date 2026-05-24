@@ -39,6 +39,7 @@ export const freeTools: ToolLink[] = [
     label: 'Rent Demand Letter Generator',
     description: 'Create a rent demand letter before you move into a fuller claim pack.',
     category: 'generator',
+    featured: true,
   },
 ];
 

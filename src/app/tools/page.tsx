@@ -24,7 +24,6 @@ export const metadata = generateMetadata({
 });
 
 const featuredTools = freeTools.filter((tool) => tool.featured);
-const otherTools = freeTools.filter((tool) => !tool.featured);
 
 const commercialLinkingResult = analyzeContent({
   pathname: '/tools',
@@ -44,13 +43,13 @@ export default function ToolsHubPage() {
         badge="Free Tools"
         title="Free Tools for UK Landlords"
         subtitle="Use our free calculators, letter builders, and checks to understand your position quickly, then move into a full landlord pack if you need the paperwork for the next step."
-        primaryCTA={{ label: 'Explore free tools', href: '#tools' }}
+        primaryCTA={{ label: 'Explore free tools', href: '#featured-tools' }}
         secondaryCTA={{ label: 'Ask Heaven', href: '/ask-heaven' }}
         variant="pastel"
       />
 
       {featuredTools.length > 0 && (
-        <section className="py-12 bg-white">
+        <section id="featured-tools" className="py-12 bg-white">
           <Container>
             <div className="text-center mb-10">
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Featured Tools</h2>
@@ -100,40 +99,6 @@ export default function ToolsHubPage() {
         <Container>
           <div className="mx-auto max-w-6xl">
             <Section21ComplianceTimingPanel />
-          </div>
-        </Container>
-      </section>
-
-      <section id="tools" className="py-20 md:py-24">
-        <Container>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">All Free Tools</h2>
-            <p className="text-gray-600 mt-3">
-              Pick the tool that matches your situation and get instant results.
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {otherTools.map((tool) => (
-              <div
-                key={tool.href}
-                className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm flex flex-col h-full"
-              >
-                <div className="flex-1">
-                  <span className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-600 mb-3">
-                    {tool.category.replace('-', ' ').toUpperCase()}
-                  </span>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{tool.label}</h3>
-                  <p className="text-gray-600 mb-6">{tool.description}</p>
-                </div>
-                <Link
-                  href={tool.href}
-                  className="hero-btn-secondary text-center"
-                  aria-label={`Try ${tool.label}`}
-                >
-                  Use free tool
-                </Link>
-              </div>
-            ))}
           </div>
         </Container>
       </section>

@@ -9,7 +9,7 @@ export function Section21ComplianceTimingPanel() {
       <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-2">
         <div className="rounded-2xl border border-[#7c3aed]/15 bg-gradient-to-br from-[#f7f2ff] via-white to-[#f3e8ff] p-6 shadow-[0_16px_45px_-26px_rgba(76,29,149,0.45)] md:p-8">
           <Image
-            src="/images/section21_compliance.webp"
+            src="/images/the-court-looks-at-the-notice-first.webp"
             alt="England eviction notice route"
             width={900}
             height={900}
