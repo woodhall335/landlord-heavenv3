@@ -808,7 +808,7 @@ const LONGTAIL_LIVE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     },
   }),
   '/tenant-left-without-paying-rent': makeEntry('/tenant-left-without-paying-rent', {
-    ...rentArrearsEntry('/tenant-left-without-paying-rent', '/recover-rent-arrears-after-eviction', {
+    ...rentArrearsEntry('/tenant-left-without-paying-rent', '/tenant-left-without-paying-rent', {
       canonicalTarget: '/tenant-left-without-paying-rent',
     }),
     pageType: 'problem',
@@ -825,7 +825,7 @@ const LONGTAIL_LIVE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     },
   }),
   '/recover-rent-arrears-after-eviction': makeEntry('/recover-rent-arrears-after-eviction', {
-    ...rentArrearsEntry('/recover-rent-arrears-after-eviction', '/money-claim-unpaid-rent', {
+    ...rentArrearsEntry('/recover-rent-arrears-after-eviction', '/recover-rent-arrears-after-eviction', {
       canonicalTarget: '/recover-rent-arrears-after-eviction',
     }),
     primaryProduct: SEO_PRODUCT_ROUTES.moneyClaim,
@@ -964,7 +964,7 @@ const LONGTAIL_LIVE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     consolidationStatus: 'bridge_live',
   }),
   '/renting-homes-wales-written-statement': makeEntry('/renting-homes-wales-written-statement', {
-    ...regionalTenancyEntry('/renting-homes-wales-written-statement', 'wales', 'tenancy-wales', SEO_PILLAR_ROUTES.tenancyAgreementsWales, '/update-occupation-contract-wales', {
+    ...regionalTenancyEntry('/renting-homes-wales-written-statement', 'wales', 'tenancy-wales', SEO_PILLAR_ROUTES.tenancyAgreementsWales, '/renting-homes-wales-written-statement', {
       canonicalTarget: '/renting-homes-wales-written-statement',
     }),
     pageType: 'guide',
@@ -1001,7 +1001,7 @@ const LONGTAIL_LIVE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     },
   }),
   '/joint-occupation-contract-wales': makeEntry('/joint-occupation-contract-wales', {
-    ...regionalTenancyEntry('/joint-occupation-contract-wales', 'wales', 'tenancy-wales', SEO_PILLAR_ROUTES.tenancyAgreementsWales, '/update-occupation-contract-wales', {
+    ...regionalTenancyEntry('/joint-occupation-contract-wales', 'wales', 'tenancy-wales', SEO_PILLAR_ROUTES.tenancyAgreementsWales, '/joint-occupation-contract-wales', {
       canonicalTarget: '/joint-occupation-contract-wales',
     }),
     freshnessRequired: true,
@@ -1019,7 +1019,7 @@ const LONGTAIL_LIVE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     },
   }),
   '/fixed-term-periodic-occupation-contract-wales': makeEntry('/fixed-term-periodic-occupation-contract-wales', {
-    ...regionalTenancyEntry('/fixed-term-periodic-occupation-contract-wales', 'wales', 'tenancy-wales', SEO_PILLAR_ROUTES.tenancyAgreementsWales, '/update-occupation-contract-wales', {
+    ...regionalTenancyEntry('/fixed-term-periodic-occupation-contract-wales', 'wales', 'tenancy-wales', SEO_PILLAR_ROUTES.tenancyAgreementsWales, '/fixed-term-periodic-occupation-contract-wales', {
       canonicalTarget: '/fixed-term-periodic-occupation-contract-wales',
     }),
     freshnessRequired: true,
@@ -1056,7 +1056,7 @@ const LONGTAIL_LIVE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     },
   }),
   '/update-prt-tenancy-agreement-scotland': makeEntry('/update-prt-tenancy-agreement-scotland', {
-    ...regionalTenancyEntry('/update-prt-tenancy-agreement-scotland', 'scotland', 'tenancy-scotland', SEO_PILLAR_ROUTES.tenancyAgreementsScotland, '/scotland-prt-model-agreement-guide', {
+    ...regionalTenancyEntry('/update-prt-tenancy-agreement-scotland', 'scotland', 'tenancy-scotland', SEO_PILLAR_ROUTES.tenancyAgreementsScotland, '/update-prt-tenancy-agreement-scotland', {
       canonicalTarget: '/update-prt-tenancy-agreement-scotland',
     }),
     freshnessRequired: true,
@@ -1092,7 +1092,7 @@ const LONGTAIL_LIVE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     },
   }),
   '/common-prt-tenancy-mistakes-scotland': makeEntry('/common-prt-tenancy-mistakes-scotland', {
-    ...regionalTenancyEntry('/common-prt-tenancy-mistakes-scotland', 'scotland', 'tenancy-scotland', SEO_PILLAR_ROUTES.tenancyAgreementsScotland, '/scotland-prt-model-agreement-guide', {
+    ...regionalTenancyEntry('/common-prt-tenancy-mistakes-scotland', 'scotland', 'tenancy-scotland', SEO_PILLAR_ROUTES.tenancyAgreementsScotland, '/common-prt-tenancy-mistakes-scotland', {
       canonicalTarget: '/common-prt-tenancy-mistakes-scotland',
     }),
     pageType: 'guide',
@@ -1129,7 +1129,7 @@ const LONGTAIL_LIVE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     },
   }),
   '/joint-tenancy-agreement-northern-ireland': makeEntry('/joint-tenancy-agreement-northern-ireland', {
-    ...regionalTenancyEntry('/joint-tenancy-agreement-northern-ireland', 'northern-ireland', 'tenancy-northern-ireland', SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland, '/update-tenancy-agreement-northern-ireland', {
+    ...regionalTenancyEntry('/joint-tenancy-agreement-northern-ireland', 'northern-ireland', 'tenancy-northern-ireland', SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland, '/joint-tenancy-agreement-northern-ireland', {
       canonicalTarget: '/joint-tenancy-agreement-northern-ireland',
     }),
     freshnessRequired: true,
@@ -1147,7 +1147,7 @@ const LONGTAIL_LIVE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     },
   }),
   '/fixed-term-tenancy-agreement-northern-ireland': makeEntry('/fixed-term-tenancy-agreement-northern-ireland', {
-    ...regionalTenancyEntry('/fixed-term-tenancy-agreement-northern-ireland', 'northern-ireland', 'tenancy-northern-ireland', SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland, '/update-tenancy-agreement-northern-ireland', {
+    ...regionalTenancyEntry('/fixed-term-tenancy-agreement-northern-ireland', 'northern-ireland', 'tenancy-northern-ireland', SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland, '/fixed-term-tenancy-agreement-northern-ireland', {
       canonicalTarget: '/fixed-term-tenancy-agreement-northern-ireland',
     }),
     freshnessRequired: true,
@@ -1215,7 +1215,7 @@ const LONGTAIL_LIVE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
   }),
   '/eviction-notice-england': makeEntry('/eviction-notice-england', {
     ...genericNoticeEntry('/eviction-notice-england', '/form-3-section-8', {
-      canonicalTarget: SEO_PILLAR_ROUTES.evictionNoticeTemplate,
+      canonicalTarget: '/eviction-notice-england',
     }),
     pageRole: 'bridge',
     jurisdiction: 'england',
@@ -1827,7 +1827,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     consolidationStatus: 'canonical',
   }),
   '/tenancy-agreements/england': makeEntry('/tenancy-agreements/england', {
-    ...tenancyEntry('/tenancy-agreements/england', '/assured-periodic-tenancy-agreement', {
+    ...tenancyEntry('/tenancy-agreements/england', '/tenancy-agreements/england', {
       canonicalTarget: '/tenancy-agreements/england',
     }),
     pageRole: 'supporting',
@@ -2265,7 +2265,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     primaryProduct: SEO_PRODUCT_ROUTES.completePack,
     secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
   }),
-  '/rent-arrears-eviction-guide': rentArrearsEntry('/rent-arrears-eviction-guide', '/money-claim-unpaid-rent', {
+  '/rent-arrears-eviction-guide': rentArrearsEntry('/rent-arrears-eviction-guide', '/rent-arrears-eviction-guide', {
     canonicalTarget: '/rent-arrears-eviction-guide',
   }),
   '/rent-arrears-letter-template': makeEntry('/rent-arrears-letter-template', {
@@ -2274,7 +2274,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     jurisdiction: 'uk',
     cluster: 'rent-arrears',
     primaryPillar: SEO_PILLAR_ROUTES.tenantNotPayingRent,
-    supportingPage: '/money-claim-unpaid-rent',
+    supportingPage: '/rent-arrears-letter-template',
     primaryProduct: SEO_PRODUCT_ROUTES.moneyClaim,
     secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
     primaryProductByScenario: {
@@ -2297,7 +2297,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     consolidationStatus: 'bridge_live',
   }),
   '/tenant-stopped-paying-rent': makeEntry('/tenant-stopped-paying-rent', {
-    ...rentArrearsEntry('/tenant-stopped-paying-rent', SEO_PILLAR_ROUTES.section8Notice, {
+    ...rentArrearsEntry('/tenant-stopped-paying-rent', '/tenant-stopped-paying-rent', {
       canonicalTarget: '/tenant-stopped-paying-rent',
     }),
     pageType: 'problem',
@@ -2330,10 +2330,10 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     }),
     consolidationStatus: 'candidate_redirect',
   }),
-  '/how-to-sue-tenant-for-unpaid-rent': moneyClaimEntry('/how-to-sue-tenant-for-unpaid-rent', SEO_PILLAR_ROUTES.tenantNotPayingRent, {
+  '/how-to-sue-tenant-for-unpaid-rent': moneyClaimEntry('/how-to-sue-tenant-for-unpaid-rent', '/how-to-sue-tenant-for-unpaid-rent', {
     canonicalTarget: '/how-to-sue-tenant-for-unpaid-rent',
   }),
-  '/money-claim-online-mcol': moneyClaimEntry('/money-claim-online-mcol', '/money-claim-letter-before-action', {
+  '/money-claim-online-mcol': moneyClaimEntry('/money-claim-online-mcol', '/money-claim-online-mcol', {
     canonicalTarget: '/money-claim-online-mcol',
     anchorVariants: {
       pillar: [...anchorSets.moneyClaimPillar],
@@ -2351,7 +2351,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     }),
     consolidationStatus: 'candidate_redirect',
   }),
-  '/money-claim-letter-before-action': moneyClaimEntry('/money-claim-letter-before-action', '/money-claim-schedule-of-debt', {
+  '/money-claim-letter-before-action': moneyClaimEntry('/money-claim-letter-before-action', '/money-claim-letter-before-action', {
     canonicalTarget: '/money-claim-letter-before-action',
     anchorVariants: {
       pillar: [...anchorSets.moneyClaimPillar],
@@ -2363,13 +2363,13 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
       product: [...anchorSets.moneyClaimProduct],
     },
   }),
-  '/money-claim-n1-claim-form': moneyClaimEntry('/money-claim-n1-claim-form', '/money-claim-online-mcol', {
+  '/money-claim-n1-claim-form': moneyClaimEntry('/money-claim-n1-claim-form', '/money-claim-n1-claim-form', {
     canonicalTarget: '/money-claim-n1-claim-form',
   }),
-  '/money-claim-schedule-of-debt': moneyClaimEntry('/money-claim-schedule-of-debt', '/money-claim-letter-before-action', {
+  '/money-claim-schedule-of-debt': moneyClaimEntry('/money-claim-schedule-of-debt', '/money-claim-schedule-of-debt', {
     canonicalTarget: '/money-claim-schedule-of-debt',
   }),
-  '/money-claim-pap-financial-statement': moneyClaimEntry('/money-claim-pap-financial-statement', '/money-claim-letter-before-action', {
+  '/money-claim-pap-financial-statement': moneyClaimEntry('/money-claim-pap-financial-statement', '/money-claim-pap-financial-statement', {
     canonicalTarget: '/money-claim-pap-financial-statement',
   }),
   '/money-claim-property-damage': moneyClaimEntry('/money-claim-property-damage', '/can-you-evict-a-tenant-for-property-damage', {
@@ -2384,55 +2384,55 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
       product: [...anchorSets.moneyClaimProduct],
     },
   }),
-  '/money-claim-cleaning-costs': moneyClaimEntry('/money-claim-cleaning-costs', '/money-claim-property-damage', {
+  '/money-claim-cleaning-costs': moneyClaimEntry('/money-claim-cleaning-costs', '/money-claim-cleaning-costs', {
     canonicalTarget: '/money-claim-cleaning-costs',
   }),
-  '/money-claim-unpaid-utilities': moneyClaimEntry('/money-claim-unpaid-utilities', SEO_PILLAR_ROUTES.tenantNotPayingRent, {
+  '/money-claim-unpaid-utilities': moneyClaimEntry('/money-claim-unpaid-utilities', '/money-claim-unpaid-utilities', {
     canonicalTarget: '/money-claim-unpaid-utilities',
   }),
-  '/money-claim-unpaid-bills': moneyClaimEntry('/money-claim-unpaid-bills', '/money-claim-unpaid-utilities', {
+  '/money-claim-unpaid-bills': moneyClaimEntry('/money-claim-unpaid-bills', '/money-claim-unpaid-bills', {
     canonicalTarget: '/money-claim-unpaid-bills',
   }),
-  '/money-claim-council-tax': moneyClaimEntry('/money-claim-council-tax', '/money-claim-unpaid-utilities', {
+  '/money-claim-council-tax': moneyClaimEntry('/money-claim-council-tax', '/money-claim-council-tax', {
     canonicalTarget: '/money-claim-council-tax',
   }),
-  '/money-claim-guarantor': moneyClaimEntry('/money-claim-guarantor', SEO_PILLAR_ROUTES.tenantNotPayingRent, {
+  '/money-claim-guarantor': moneyClaimEntry('/money-claim-guarantor', '/money-claim-guarantor', {
     canonicalTarget: '/money-claim-guarantor',
   }),
-  '/money-claim-former-tenant': moneyClaimEntry('/money-claim-former-tenant', SEO_PILLAR_ROUTES.tenantNotPayingRent, {
+  '/money-claim-former-tenant': moneyClaimEntry('/money-claim-former-tenant', '/money-claim-former-tenant', {
     canonicalTarget: '/money-claim-former-tenant',
   }),
-  '/money-claim-deposit-shortfall': moneyClaimEntry('/money-claim-deposit-shortfall', '/money-claim-property-damage', {
+  '/money-claim-deposit-shortfall': moneyClaimEntry('/money-claim-deposit-shortfall', '/money-claim-deposit-shortfall', {
     canonicalTarget: '/money-claim-deposit-shortfall',
   }),
-  '/money-claim-early-termination': moneyClaimEntry('/money-claim-early-termination', SEO_PILLAR_ROUTES.tenantNotPayingRent, {
+  '/money-claim-early-termination': moneyClaimEntry('/money-claim-early-termination', '/money-claim-early-termination', {
     canonicalTarget: '/money-claim-early-termination',
   }),
-  '/money-claim-abandoned-goods': moneyClaimEntry('/money-claim-abandoned-goods', '/money-claim-cleaning-costs', {
+  '/money-claim-abandoned-goods': moneyClaimEntry('/money-claim-abandoned-goods', '/money-claim-abandoned-goods', {
     canonicalTarget: '/money-claim-abandoned-goods',
   }),
-  '/money-claim-carpet-damage': moneyClaimEntry('/money-claim-carpet-damage', '/money-claim-property-damage', {
+  '/money-claim-carpet-damage': moneyClaimEntry('/money-claim-carpet-damage', '/money-claim-carpet-damage', {
     canonicalTarget: '/money-claim-carpet-damage',
   }),
-  '/money-claim-appliance-damage': moneyClaimEntry('/money-claim-appliance-damage', '/money-claim-property-damage', {
+  '/money-claim-appliance-damage': moneyClaimEntry('/money-claim-appliance-damage', '/money-claim-appliance-damage', {
     canonicalTarget: '/money-claim-appliance-damage',
   }),
-  '/money-claim-wall-damage': moneyClaimEntry('/money-claim-wall-damage', '/money-claim-property-damage', {
+  '/money-claim-wall-damage': moneyClaimEntry('/money-claim-wall-damage', '/money-claim-wall-damage', {
     canonicalTarget: '/money-claim-wall-damage',
   }),
-  '/money-claim-bathroom-damage': moneyClaimEntry('/money-claim-bathroom-damage', '/money-claim-property-damage', {
+  '/money-claim-bathroom-damage': moneyClaimEntry('/money-claim-bathroom-damage', '/money-claim-bathroom-damage', {
     canonicalTarget: '/money-claim-bathroom-damage',
   }),
-  '/money-claim-garden-damage': moneyClaimEntry('/money-claim-garden-damage', '/money-claim-property-damage', {
+  '/money-claim-garden-damage': moneyClaimEntry('/money-claim-garden-damage', '/money-claim-garden-damage', {
     canonicalTarget: '/money-claim-garden-damage',
   }),
-  '/money-claim-ccj-enforcement': moneyClaimEntry('/money-claim-ccj-enforcement', '/money-claim-online-mcol', {
+  '/money-claim-ccj-enforcement': moneyClaimEntry('/money-claim-ccj-enforcement', '/money-claim-ccj-enforcement', {
     canonicalTarget: '/money-claim-ccj-enforcement',
   }),
-  '/money-claim-small-claims-landlord': moneyClaimEntry('/money-claim-small-claims-landlord', '/money-claim-online-mcol', {
+  '/money-claim-small-claims-landlord': moneyClaimEntry('/money-claim-small-claims-landlord', '/money-claim-small-claims-landlord', {
     canonicalTarget: '/money-claim-small-claims-landlord',
   }),
-  '/money-claim-tenant-defends': moneyClaimEntry('/money-claim-tenant-defends', '/money-claim-online-mcol', {
+  '/money-claim-tenant-defends': moneyClaimEntry('/money-claim-tenant-defends', '/money-claim-tenant-defends', {
     canonicalTarget: '/money-claim-tenant-defends',
   }),
   '/section-21-validity-checklist': makeEntry('/section-21-validity-checklist', {
@@ -2909,7 +2909,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     consolidationStatus: 'bridge_live',
   }),
   '/eviction-timeline-england': makeEntry('/eviction-timeline-england', {
-    ...processEntry('/eviction-timeline-england', SEO_PILLAR_ROUTES.howToEvictTenant, {
+    ...processEntry('/eviction-timeline-england', '/eviction-timeline-england', {
       canonicalTarget: '/eviction-timeline-england',
     }),
     pageType: 'guide',
@@ -2917,7 +2917,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     cluster: 'court-process',
     primaryProduct: SEO_PRODUCT_ROUTES.completePack,
     secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
-    supportingPage: SEO_PILLAR_ROUTES.howToEvictTenant,
+    supportingPage: '/eviction-timeline-england',
     primaryProductByScenario: {
       court: SEO_PRODUCT_ROUTES.completePack,
       notice: SEO_PRODUCT_ROUTES.noticeOnly,
@@ -2979,11 +2979,11 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     pageType: 'court',
   }),
   '/warrant-of-possession-guide': makeEntry('/warrant-of-possession-guide', {
-    ...processEntry('/warrant-of-possession-guide', '/bailiff-eviction-process', {
+    ...processEntry('/warrant-of-possession-guide', '/warrant-of-possession-guide', {
       canonicalTarget: '/warrant-of-possession-guide',
     }),
     cluster: 'court-process',
-    supportingPage: '/bailiff-eviction-process',
+    supportingPage: '/warrant-of-possession-guide',
     anchorVariants: {
       pillar: [...anchorSets.evictionProcessPillar],
       supporting: [
@@ -2995,11 +2995,11 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     },
   }),
   '/bailiff-eviction-process': makeEntry('/bailiff-eviction-process', {
-    ...processEntry('/bailiff-eviction-process', '/warrant-of-possession-guide', {
+    ...processEntry('/bailiff-eviction-process', '/bailiff-eviction-process', {
       canonicalTarget: '/bailiff-eviction-process',
     }),
     cluster: 'court-process',
-    supportingPage: '/warrant-of-possession-guide',
+    supportingPage: '/bailiff-eviction-process',
     anchorVariants: {
       pillar: [...anchorSets.evictionProcessPillar],
       supporting: [
@@ -3011,12 +3011,12 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     },
   }),
   '/how-long-does-bailiff-eviction-take': makeEntry('/how-long-does-bailiff-eviction-take', {
-    ...processEntry('/how-long-does-bailiff-eviction-take', '/bailiff-eviction-process', {
+    ...processEntry('/how-long-does-bailiff-eviction-take', '/how-long-does-bailiff-eviction-take', {
       canonicalTarget: '/how-long-does-bailiff-eviction-take',
     }),
     cluster: 'court-process',
     jurisdiction: 'uk',
-    supportingPage: '/bailiff-eviction-process',
+    supportingPage: '/how-long-does-bailiff-eviction-take',
     anchorVariants: {
       pillar: [...anchorSets.evictionProcessPillar],
       supporting: [
@@ -3028,12 +3028,12 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     },
   }),
   '/how-long-after-court-order-do-bailiffs-evict': makeEntry('/how-long-after-court-order-do-bailiffs-evict', {
-    ...processEntry('/how-long-after-court-order-do-bailiffs-evict', '/warrant-of-possession-guide', {
+    ...processEntry('/how-long-after-court-order-do-bailiffs-evict', '/how-long-after-court-order-do-bailiffs-evict', {
       canonicalTarget: '/how-long-after-court-order-do-bailiffs-evict',
     }),
     cluster: 'court-process',
     jurisdiction: 'uk',
-    supportingPage: '/warrant-of-possession-guide',
+    supportingPage: '/how-long-after-court-order-do-bailiffs-evict',
     anchorVariants: {
       pillar: [...anchorSets.evictionProcessPillar],
       supporting: [
@@ -3165,8 +3165,8 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     consolidationStatus: 'bridge_live',
   }),
   '/assured-periodic-tenancy-agreement': makeEntry('/assured-periodic-tenancy-agreement', {
-    ...tenancyEntry('/assured-periodic-tenancy-agreement', '/tenancy-agreement-template', {
-      canonicalTarget: '/tenancy-agreement-template',
+    ...tenancyEntry('/assured-periodic-tenancy-agreement', '/assured-periodic-tenancy-agreement', {
+      canonicalTarget: '/assured-periodic-tenancy-agreement',
     }),
     pageRole: 'hub',
     freshnessRequired: true,
@@ -3193,7 +3193,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     consolidationStatus: 'candidate_redirect',
   }),
   '/assured-shorthold-tenancy-agreement-template': makeEntry('/assured-shorthold-tenancy-agreement-template', {
-    ...tenancyEntry('/assured-shorthold-tenancy-agreement-template', '/tenancy-agreement-template', {
+    ...tenancyEntry('/assured-shorthold-tenancy-agreement-template', '/assured-shorthold-tenancy-agreement-template', {
       canonicalTarget: '/assured-shorthold-tenancy-agreement-template',
     }),
     anchorVariants: {
@@ -3202,25 +3202,25 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
       product: [...anchorSets.tenancyProduct],
     },
   }),
-  '/6-month-tenancy-agreement-template': tenancyEntry('/6-month-tenancy-agreement-template', '/tenancy-agreement-template', {
+  '/6-month-tenancy-agreement-template': tenancyEntry('/6-month-tenancy-agreement-template', '/6-month-tenancy-agreement-template', {
     canonicalTarget: '/6-month-tenancy-agreement-template',
   }),
-  '/fixed-term-tenancy-agreement-template': tenancyEntry('/fixed-term-tenancy-agreement-template', '/tenancy-agreement-template', {
+  '/fixed-term-tenancy-agreement-template': tenancyEntry('/fixed-term-tenancy-agreement-template', '/fixed-term-tenancy-agreement-template', {
     canonicalTarget: '/fixed-term-tenancy-agreement-template',
   }),
-  '/fixed-term-periodic-tenancy-england': tenancyEntry('/fixed-term-periodic-tenancy-england', '/periodic-tenancy-agreement', {
+  '/fixed-term-periodic-tenancy-england': tenancyEntry('/fixed-term-periodic-tenancy-england', '/fixed-term-periodic-tenancy-england', {
     canonicalTarget: '/fixed-term-periodic-tenancy-england',
   }),
-  '/joint-tenancy-agreement-england': tenancyEntry('/joint-tenancy-agreement-england', '/premium-tenancy-agreement', {
+  '/joint-tenancy-agreement-england': tenancyEntry('/joint-tenancy-agreement-england', '/joint-tenancy-agreement-england', {
     canonicalTarget: '/joint-tenancy-agreement-england',
   }),
-  '/joint-tenancy-agreement-template': tenancyEntry('/joint-tenancy-agreement-template', '/premium-tenancy-agreement', {
+  '/joint-tenancy-agreement-template': tenancyEntry('/joint-tenancy-agreement-template', '/joint-tenancy-agreement-template', {
     canonicalTarget: '/joint-tenancy-agreement-template',
   }),
-  '/renew-tenancy-agreement-england': tenancyEntry('/renew-tenancy-agreement-england', '/tenancy-agreement-template', {
+  '/renew-tenancy-agreement-england': tenancyEntry('/renew-tenancy-agreement-england', '/renew-tenancy-agreement-england', {
     canonicalTarget: '/renew-tenancy-agreement-england',
   }),
-  '/rolling-tenancy-agreement': tenancyEntry('/rolling-tenancy-agreement', '/periodic-tenancy-agreement', {
+  '/rolling-tenancy-agreement': tenancyEntry('/rolling-tenancy-agreement', '/rolling-tenancy-agreement', {
     canonicalTarget: '/rolling-tenancy-agreement',
   }),
   '/renters-rights-bill-tenancy-agreement': makeEntry('/renters-rights-bill-tenancy-agreement', {

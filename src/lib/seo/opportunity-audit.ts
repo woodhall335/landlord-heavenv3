@@ -222,6 +222,14 @@ const stripFaqSection = (source: string) => {
 };
 
 const extractMetadataDescriptionFromSource = (source: string): string | undefined => {
+  const metadataBlockMatch = source.match(/export\s+const\s+metadata[\s\S]*?\{([\s\S]*?)\n\};/);
+  const metadataDescriptionMatch = metadataBlockMatch?.[1].match(
+    /description\s*:\s*(['"`])([\s\S]{40,260}?)\1/
+  );
+  if (metadataDescriptionMatch?.[2]) {
+    return metadataDescriptionMatch[2].replace(/\s+/g, ' ').trim();
+  }
+
   const descriptionMatch = source.match(/description\s*:\s*(['"`])([\s\S]{40,260}?)\1/);
   const metaMatch = source.match(/metaDescription\s*:\s*(['"`])([\s\S]{40,260}?)\1/);
   return (descriptionMatch?.[2] ?? metaMatch?.[2])?.replace(/\s+/g, ' ').trim();
@@ -509,7 +517,7 @@ const commercialAuditTextForLinks = (
     return [
       "Create a Renters' Rights Act compliant tenancy agreement.",
       'Use a periodic tenancy agreement template, assured periodic tenancy agreement wording, and a validated tenancy agreement builder for post-May 2026.',
-      'Create a Renters Rights Act compliant tenancy agreement at /standard-tenancy-agreement.',
+      'Create a Renters Rights Act compliant tenancy agreement at /standard-tenancy-agreement, or upgrade to the premium tenancy agreement builder at /premium-tenancy-agreement.',
     ].join(' ');
   }
 
@@ -631,7 +639,7 @@ export async function buildSeoOpportunityAudit(): Promise<SeoOpportunityAuditRes
     if (!source) continue;
 
     const cluster = clusterForTaxonomyEntry(entry);
-    const targetKeyword = `${entry.primaryPillar} / ${entry.supportingPage}`;
+    const targetKeyword = `${entry.primaryPillar} / ${entry.canonicalTarget ?? entry.supportingPage}`;
     const metadataText = extractMetadataDescriptionFromSource(source.sourceText);
     const canRouteToEnglandProduct = entry.jurisdiction === 'england' || entry.jurisdiction === 'uk';
     const configuredProductLinks = canRouteToEnglandProduct
