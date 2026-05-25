@@ -19,6 +19,11 @@ import {
 } from '@/lib/cases/recovery';
 import { createCaseRecoveryLink } from '@/lib/cases/recovery-server';
 import { sendWizardAbandonmentRecoveryEmail } from '@/lib/email/resend';
+import {
+  RECOVERY_UNSUBSCRIBED_EVENT,
+  buildRecoveryUnsubscribeUrl,
+  isRecoveryUnsubscribedFromEvents,
+} from '@/lib/recovery/unsubscribe';
 import { createAdminClient } from '@/lib/supabase/server';
 import { completeCronRun, startCronRun } from '@/lib/validation/cron-run-tracker';
 
@@ -251,8 +256,9 @@ async function executeWizardAbandonmentRecovery(request: NextRequest) {
           CASE_WIZARD_RECOVERY_SENT_EVENT_TYPES.day_3,
           CASE_WIZARD_RECOVERY_ATTEMPT_EVENT_TYPES.day_1,
           CASE_WIZARD_RECOVERY_ATTEMPT_EVENT_TYPES.day_3,
+          RECOVERY_UNSUBSCRIBED_EVENT,
         ])
-        .gte('created_at', hoursAgoIso(24 * 45)),
+        .limit(10000),
     ]);
 
     if (ordersResult.error) throw new Error(`Failed to fetch case orders: ${ordersResult.error.message}`);
@@ -318,6 +324,12 @@ async function executeWizardAbandonmentRecovery(request: NextRequest) {
         continue;
       }
 
+      if (isRecoveryUnsubscribedFromEvents(sentEvents, contact.email)) {
+        skipped += 1;
+        skippedCaseIds.push(caseRow.id);
+        continue;
+      }
+
       const dueStage = getDueStage(caseRow, sentEvents, contact.email);
       if (!dueStage) {
         skipped += 1;
@@ -367,6 +379,7 @@ async function executeWizardAbandonmentRecovery(request: NextRequest) {
         productName: recovery.productName || getAdminProductLabel(productType),
         resumeUrl: recovery.resumeUrl,
         stage: dueStage,
+        unsubscribeUrl: buildRecoveryUnsubscribeUrl(contact.email, 'wizard'),
       });
 
       const finalEvent = await supabase.from('email_events').insert({

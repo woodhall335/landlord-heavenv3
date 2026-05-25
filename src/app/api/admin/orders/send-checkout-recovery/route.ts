@@ -11,6 +11,7 @@ import { isAdmin } from '@/lib/auth';
 import { sendAbandonedCheckoutRecoveryEmail } from '@/lib/email/resend';
 import { logger } from '@/lib/logger';
 import { PRODUCTS, isValidProductSku, type ProductSku } from '@/lib/pricing/products';
+import { RECOVERY_UNSUBSCRIBED_EVENT, buildRecoveryUnsubscribeUrl } from '@/lib/recovery/unsubscribe';
 import { createAdminClient, requireServerAuth } from '@/lib/supabase/server';
 
 const payloadSchema = z.object({
@@ -132,6 +133,29 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'User has no email address' }, { status: 400 });
     }
 
+    const { data: unsubscribeEvents, error: unsubscribeError } = await adminClient
+      .from('email_events')
+      .select('id')
+      .eq('email', orderUser.email)
+      .eq('event_type', RECOVERY_UNSUBSCRIBED_EVENT)
+      .limit(1);
+
+    if (unsubscribeError) {
+      logger.warn('Failed to check checkout recovery unsubscribe status', {
+        orderId,
+        error: unsubscribeError.message,
+      });
+    }
+
+    if ((unsubscribeEvents || []).length > 0) {
+      return NextResponse.json({
+        success: true,
+        status: 'suppressed',
+        message: 'This email address has unsubscribed from recovery emails.',
+        email: orderUser.email,
+      });
+    }
+
     const dedupeCutoff = new Date(Date.now() - DEDUPE_WINDOW_HOURS * 60 * 60 * 1000).toISOString();
     const { data: recentEvents, error: recentEventsError } = await adminClient
       .from('email_events')
@@ -166,6 +190,7 @@ export async function POST(request: NextRequest) {
       productName: getProductName(order),
       amount: normalizeGbpAmount(order.total_amount),
       checkoutUrl: order.stripe_checkout_url,
+      unsubscribeUrl: buildRecoveryUnsubscribeUrl(orderUser.email, 'manual'),
     });
 
     const eventType = emailResult.success ? RECOVERY_EVENT_TYPE : RECOVERY_FAILED_EVENT_TYPE;

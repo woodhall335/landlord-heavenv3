@@ -19,6 +19,11 @@ import {
   sendWizardAbandonmentRecoveryEmail,
 } from '@/lib/email/resend';
 import { PRODUCTS, isValidProductSku, type ProductSku } from '@/lib/pricing/products';
+import {
+  RECOVERY_UNSUBSCRIBED_EVENT,
+  buildRecoveryUnsubscribeUrl,
+  isRecoveryUnsubscribedFromEvents,
+} from '@/lib/recovery/unsubscribe';
 import { createAdminClient } from '@/lib/supabase/server';
 import { completeCronRun, startCronRun } from '@/lib/validation/cron-run-tracker';
 
@@ -291,10 +296,10 @@ export async function runRecoveryOrchestrator(options: RecoveryOptions = {}): Pr
     const { data: checkoutEvents, error: checkoutEventsError } = checkoutEmails.length
       ? await supabase
           .from('email_events')
-          .select('email, event_data')
-          .eq('event_type', CHECKOUT_RECOVERY_SENT_EVENT)
+          .select('email, event_type, event_data')
+          .in('event_type', [CHECKOUT_RECOVERY_SENT_EVENT, RECOVERY_UNSUBSCRIBED_EVENT])
           .in('email', checkoutEmails)
-          .gte('created_at', hoursAgoIso(24 * 45))
+          .limit(10000)
       : { data: [], error: null };
 
     if (checkoutEventsError) throw new Error(`Failed to fetch checkout recovery events: ${checkoutEventsError.message}`);
@@ -310,7 +315,10 @@ export async function runRecoveryOrchestrator(options: RecoveryOptions = {}): Pr
         !email ||
         !order.stripe_checkout_url ||
         emailedRecipients.has(email) ||
-        priorCheckoutEvents.some((event) => eventHasOrderId(event, order.id))
+        isRecoveryUnsubscribedFromEvents(priorCheckoutEvents, email) ||
+        priorCheckoutEvents.some(
+          (event) => event.event_type === CHECKOUT_RECOVERY_SENT_EVENT && eventHasOrderId(event, order.id)
+        )
       ) {
         result.skipped += 1;
         result.skipped_ids.push(order.id);
@@ -330,6 +338,7 @@ export async function runRecoveryOrchestrator(options: RecoveryOptions = {}): Pr
         productName: getCheckoutProductName(order),
         amount: normalizeGbpAmount(order.total_amount),
         checkoutUrl: order.stripe_checkout_url,
+        unsubscribeUrl: buildRecoveryUnsubscribeUrl(email, 'checkout'),
       });
 
       await insertEmailEvent(supabase, {
@@ -402,8 +411,9 @@ export async function runRecoveryOrchestrator(options: RecoveryOptions = {}): Pr
             CASE_WIZARD_RECOVERY_SENT_EVENT_TYPES.day_3,
             CASE_WIZARD_RECOVERY_ATTEMPT_EVENT_TYPES.day_1,
             CASE_WIZARD_RECOVERY_ATTEMPT_EVENT_TYPES.day_3,
+            RECOVERY_UNSUBSCRIBED_EVENT,
           ])
-          .gte('created_at', hoursAgoIso(24 * 45)),
+          .limit(10000),
       ]);
 
       if (ordersResult.error) throw new Error(`Failed to fetch case orders: ${ordersResult.error.message}`);
@@ -441,6 +451,7 @@ export async function runRecoveryOrchestrator(options: RecoveryOptions = {}): Pr
         if (
           !email ||
           emailedRecipients.has(email) ||
+          isRecoveryUnsubscribedFromEvents(caseEvents, email) ||
           checkoutSuppressedCaseIds.has(caseRow.id) ||
           isFreshPendingCheckout(relatedOrder)
         ) {
@@ -534,6 +545,7 @@ export async function runRecoveryOrchestrator(options: RecoveryOptions = {}): Pr
                 productName: recovery.productName || getAdminProductLabel(productType),
                 resumeUrl: recovery.resumeUrl,
                 stage: dueStage as 'day_1' | 'day_7',
+                unsubscribeUrl: buildRecoveryUnsubscribeUrl(email, 'preview'),
               })
             : await sendWizardAbandonmentRecoveryEmail({
                 to: email,
@@ -541,6 +553,7 @@ export async function runRecoveryOrchestrator(options: RecoveryOptions = {}): Pr
                 productName: recovery.productName || getAdminProductLabel(productType),
                 resumeUrl: recovery.resumeUrl,
                 stage: dueStage as 'day_1' | 'day_3',
+                unsubscribeUrl: buildRecoveryUnsubscribeUrl(email, 'wizard'),
               });
 
         await insertEmailEvent(supabase, {

@@ -51,6 +51,7 @@ function emailEventsBuilder() {
     select: vi.fn(() => builder),
     in: vi.fn(() => builder),
     gte: vi.fn(() => Promise.resolve({ data: mockEvents, error: null })),
+    limit: vi.fn(() => Promise.resolve({ data: mockEvents, error: null })),
     insert: vi.fn((payload: any) => {
       insertedEmailEvents.push(payload);
       return Promise.resolve({ data: null, error: null });
@@ -165,7 +166,13 @@ describe('wizard abandonment recovery cron', () => {
 
     expect(response.status).toBe(200);
     expect(data.emails_sent).toBe(1);
-    expect(sentEmails[0]).toEqual(expect.objectContaining({ to: 'alex@example.com', stage: 'day_1' }));
+    expect(sentEmails[0]).toEqual(
+      expect.objectContaining({
+        to: 'alex@example.com',
+        stage: 'day_1',
+        unsubscribeUrl: expect.stringContaining('/api/recovery/unsubscribe?token='),
+      })
+    );
     expect(insertedEmailEvents).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ event_type: 'case_wizard_recovery_day_1_attempted' }),

@@ -71,6 +71,7 @@ function emailEventsBuilder() {
     eq: vi.fn(() => builder),
     in: vi.fn(() => builder),
     gte: vi.fn(() => Promise.resolve({ data: selectData, error: null })),
+    limit: vi.fn(() => Promise.resolve({ data: selectData, error: null })),
     insert: vi.fn((payload: any) => {
       insertedEmailEvents.push(payload);
       return Promise.resolve({ data: null, error: null });
@@ -223,6 +224,7 @@ describe('recovery orchestrator cron', () => {
     expect(data.emails_sent).toBe(1);
     expect(data.checkout_sent_order_ids).toEqual(['order-1']);
     expect(checkoutEmails).toHaveLength(1);
+    expect(checkoutEmails[0].unsubscribeUrl).toContain('/api/recovery/unsubscribe?token=');
     expect(previewEmails).toHaveLength(0);
     expect(wizardEmails).toHaveLength(0);
     expect(insertedEmailEvents).toEqual(
@@ -233,5 +235,46 @@ describe('recovery orchestrator cron', () => {
         }),
       ])
     );
+  });
+
+  it('does not send recovery emails to an unsubscribed address', async () => {
+    mockCheckoutOrders = [
+      {
+        id: 'order-1',
+        user_id: 'user-1',
+        case_id: 'case-1',
+        product_type: 'notice_only',
+        product_name: 'Notice Pack',
+        total_amount: 49,
+        payment_status: 'pending',
+        stripe_checkout_url: 'https://checkout.example/session',
+        stripe_session_id: 'cs_123',
+        created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+      },
+    ];
+    mockUsers = [{ id: 'user-1', email: 'alex@example.com', full_name: 'Alex Landlord' }];
+    mockCheckoutEvents = [
+      {
+        email: 'alex@example.com',
+        event_type: 'recovery_unsubscribed',
+        event_data: { source: 'recovery_unsubscribe_link' },
+      },
+    ];
+
+    const { GET } = await import('@/app/api/cron/recovery-orchestrator/route');
+    const response = await GET(
+      request('http://localhost/api/cron/recovery-orchestrator', {
+        authorization: `Bearer ${MOCK_CRON_SECRET}`,
+      })
+    );
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data.emails_sent).toBe(0);
+    expect(data.skipped).toBe(1);
+    expect(checkoutEmails).toEqual([]);
+    expect(previewEmails).toEqual([]);
+    expect(wizardEmails).toEqual([]);
+    expect(insertedEmailEvents).toEqual([]);
   });
 });

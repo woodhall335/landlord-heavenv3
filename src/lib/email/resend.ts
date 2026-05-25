@@ -345,6 +345,22 @@ const getEmailFooter = (showUnsubscribe: boolean = true): string => `
   </tr>
 `;
 
+const getRecoveryUnsubscribeHtml = (unsubscribeUrl?: string): string =>
+  unsubscribeUrl
+    ? `
+    <p style="margin: 20px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: ${COLORS.mutedGray}; line-height: 1.5;">
+      Do not want saved checkout, draft, or wizard reminders? <a href="${unsubscribeUrl}" style="color: ${COLORS.primaryLight}; text-decoration: underline;">Unsubscribe from recovery emails</a>.
+    </p>
+  `
+    : '';
+
+const getRecoveryUnsubscribeText = (unsubscribeUrl?: string): string =>
+  unsubscribeUrl
+    ? `
+Stop saved checkout, draft, and wizard reminders: ${unsubscribeUrl}
+`
+    : '';
+
 /**
  * Send a transactional email
  */
@@ -497,8 +513,9 @@ export async function sendAbandonedCheckoutRecoveryEmail(params: {
   productName: string;
   amount: number;
   checkoutUrl: string;
+  unsubscribeUrl?: string;
 }): Promise<{ success: boolean; error?: string }> {
-  const { to, customerName, productName, amount, checkoutUrl } = params;
+  const { to, customerName, productName, amount, checkoutUrl, unsubscribeUrl } = params;
   const displayAmount = formatPriceLabel(amount);
 
   const checkoutSummaryContent = `
@@ -538,6 +555,7 @@ export async function sendAbandonedCheckoutRecoveryEmail(params: {
     ${getInfoBox('If you already completed payment, you can ignore this email. If the checkout link has expired, start checkout again from your dashboard and we will resume the saved case.')}
 
     <p style="margin: 30px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.mutedGray};">Questions? Reply to this email and we will help.<br><strong style="color: ${COLORS.lightGray};">The Landlord Heaven Team</strong></p>
+    ${getRecoveryUnsubscribeHtml(unsubscribeUrl)}
   `;
 
   const emailContent = `
@@ -561,6 +579,7 @@ Continue checkout: ${checkoutUrl}
 If you already completed payment, you can ignore this email. If the checkout link has expired, start checkout again from your dashboard and we will resume the saved case.
 
 Questions? Reply to this email and we will help.
+${getRecoveryUnsubscribeText(unsubscribeUrl)}
 
 The Landlord Heaven Team
   `;
@@ -582,8 +601,9 @@ export async function sendCasePreviewRecoveryEmail(params: {
   productName: string;
   resumeUrl: string;
   stage: 'manual' | 'day_1' | 'day_7';
+  unsubscribeUrl?: string;
 }): Promise<{ success: boolean; error?: string }> {
-  const { to, customerName, productName, resumeUrl, stage } = params;
+  const { to, customerName, productName, resumeUrl, stage, unsubscribeUrl } = params;
   const stageLine =
     stage === 'day_7'
       ? 'Your saved draft is still available if you want to come back to it.'
@@ -611,6 +631,7 @@ export async function sendCasePreviewRecoveryEmail(params: {
     </table>
 
     ${getInfoBox('This secure link is intended for your use only. If you no longer need the document pack, you can ignore this email.')}
+    ${getRecoveryUnsubscribeHtml(unsubscribeUrl)}
 
     <p style="margin: 25px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: ${COLORS.mutedGray}; word-break: break-all; line-height: 1.5;">If the button does not work, copy and paste this link into your browser:<br><a href="${resumeUrl}" style="color: ${COLORS.primaryLight}; text-decoration: none;">${resumeUrl}</a></p>
   `;
@@ -633,6 +654,7 @@ Saved document pack: ${productName}
 Resume your draft: ${resumeUrl}
 
 If you no longer need the document pack, you can ignore this email.
+${getRecoveryUnsubscribeText(unsubscribeUrl)}
 
 The Landlord Heaven Team
   `;
@@ -654,8 +676,9 @@ export async function sendWizardAbandonmentRecoveryEmail(params: {
   productName: string;
   resumeUrl: string;
   stage: 'day_1' | 'day_3';
+  unsubscribeUrl?: string;
 }): Promise<{ success: boolean; error?: string }> {
-  const { to, customerName, productName, resumeUrl, stage } = params;
+  const { to, customerName, productName, resumeUrl, stage, unsubscribeUrl } = params;
   const stageLine =
     stage === 'day_3'
       ? 'Your saved answers are still waiting if you want to finish the pack.'
@@ -683,6 +706,7 @@ export async function sendWizardAbandonmentRecoveryEmail(params: {
     </table>
 
     ${getInfoBox('This secure link opens your saved wizard answers. If you no longer need the document pack, you can ignore this email.')}
+    ${getRecoveryUnsubscribeHtml(unsubscribeUrl)}
 
     <p style="margin: 25px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: ${COLORS.mutedGray}; word-break: break-all; line-height: 1.5;">If the button does not work, copy and paste this link into your browser:<br><a href="${resumeUrl}" style="color: ${COLORS.primaryLight}; text-decoration: none;">${resumeUrl}</a></p>
   `;
@@ -705,6 +729,7 @@ Saved wizard: ${productName}
 Continue your pack: ${resumeUrl}
 
 If you no longer need the document pack, you can ignore this email.
+${getRecoveryUnsubscribeText(unsubscribeUrl)}
 
 The Landlord Heaven Team
   `;

@@ -10,6 +10,7 @@ import {
 } from '@/lib/cases/recovery';
 import { createCaseRecoveryLink } from '@/lib/cases/recovery-server';
 import { sendCasePreviewRecoveryEmail } from '@/lib/email/resend';
+import { RECOVERY_UNSUBSCRIBED_EVENT, buildRecoveryUnsubscribeUrl } from '@/lib/recovery/unsubscribe';
 import { createAdminClient, requireServerAuth } from '@/lib/supabase/server';
 
 export const runtime = 'nodejs';
@@ -96,6 +97,29 @@ export async function POST(_request: NextRequest, context: RouteContext) {
       return NextResponse.json({ error: 'This case does not have a usable email address' }, { status: 400 });
     }
 
+    const { data: unsubscribeEvents, error: unsubscribeError } = await supabase
+      .from('email_events')
+      .select('id')
+      .eq('email', contact.email)
+      .eq('event_type', RECOVERY_UNSUBSCRIBED_EVENT)
+      .limit(1);
+
+    if (unsubscribeError) {
+      return NextResponse.json(
+        { error: 'Failed to check recovery email unsubscribe status' },
+        { status: 500 }
+      );
+    }
+
+    if ((unsubscribeEvents || []).length > 0) {
+      return NextResponse.json({
+        success: true,
+        emailSent: false,
+        status: 'suppressed',
+        message: 'This email address has unsubscribed from recovery emails.',
+      });
+    }
+
     const recovery = await createCaseRecoveryLink({
       supabase: supabase as any,
       caseRow: caseRow as any,
@@ -132,6 +156,7 @@ export async function POST(_request: NextRequest, context: RouteContext) {
       productName: recovery.productName,
       resumeUrl: recovery.resumeUrl,
       stage: 'manual',
+      unsubscribeUrl: buildRecoveryUnsubscribeUrl(contact.email, 'manual'),
     });
 
     const finalEvent = await supabase.from('email_events').insert({

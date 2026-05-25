@@ -9,6 +9,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sendAbandonedCheckoutRecoveryEmail } from '@/lib/email/resend';
 import { PRODUCTS, isValidProductSku, type ProductSku } from '@/lib/pricing/products';
+import {
+  RECOVERY_UNSUBSCRIBED_EVENT,
+  buildRecoveryUnsubscribeUrl,
+  isRecoveryUnsubscribedFromEvents,
+} from '@/lib/recovery/unsubscribe';
 import { createAdminClient } from '@/lib/supabase/server';
 import {
   completeCronRun,
@@ -47,6 +52,7 @@ interface UserContact {
 
 interface EmailEventRow {
   email: string;
+  event_type?: string | null;
   event_data: Record<string, unknown> | null;
 }
 
@@ -215,10 +221,10 @@ async function executeCheckoutRecovery(request: NextRequest) {
     const { data: recoveryEventRows, error: recoveryEventsError } = emails.length
       ? await supabase
           .from('email_events')
-          .select('email, event_data')
-          .eq('event_type', RECOVERY_EVENT_TYPE)
+          .select('email, event_type, event_data')
+          .in('event_type', [RECOVERY_EVENT_TYPE, RECOVERY_UNSUBSCRIBED_EVENT])
           .in('email', emails)
-          .gte('created_at', hoursAgoIso(24 * 45))
+          .limit(10000)
       : { data: [], error: null };
 
     if (recoveryEventsError) {
@@ -228,7 +234,11 @@ async function executeCheckoutRecovery(request: NextRequest) {
     const recoveryEvents = (recoveryEventRows || []) as EmailEventRow[];
     const alreadyRecoveredOrderIds = new Set(
       orders
-        .filter((order) => recoveryEvents.some((event) => eventHasOrderId(event, order.id)))
+        .filter((order) =>
+          recoveryEvents.some(
+            (event) => event.event_type === RECOVERY_EVENT_TYPE && eventHasOrderId(event, order.id)
+          )
+        )
         .map((order) => order.id)
     );
 
@@ -243,7 +253,13 @@ async function executeCheckoutRecovery(request: NextRequest) {
       const user = order.user_id ? userMap.get(order.user_id) : null;
       const email = user?.email;
 
-      if (!user || !email || alreadyRecoveredOrderIds.has(order.id) || !order.stripe_checkout_url) {
+      if (
+        !user ||
+        !email ||
+        isRecoveryUnsubscribedFromEvents(recoveryEvents, email) ||
+        alreadyRecoveredOrderIds.has(order.id) ||
+        !order.stripe_checkout_url
+      ) {
         skipped += 1;
         skippedOrderIds.push(order.id);
         continue;
@@ -261,6 +277,7 @@ async function executeCheckoutRecovery(request: NextRequest) {
         productName: getProductName(order),
         amount: normalizeGbpAmount(order.total_amount),
         checkoutUrl: order.stripe_checkout_url,
+        unsubscribeUrl: buildRecoveryUnsubscribeUrl(email, 'checkout'),
       });
 
       const eventType = emailResult.success ? RECOVERY_EVENT_TYPE : RECOVERY_FAILED_EVENT_TYPE;

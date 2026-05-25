@@ -19,6 +19,11 @@ import {
 } from '@/lib/cases/recovery';
 import { createCaseRecoveryLink } from '@/lib/cases/recovery-server';
 import { sendCasePreviewRecoveryEmail } from '@/lib/email/resend';
+import {
+  RECOVERY_UNSUBSCRIBED_EVENT,
+  buildRecoveryUnsubscribeUrl,
+  isRecoveryUnsubscribedFromEvents,
+} from '@/lib/recovery/unsubscribe';
 import { createAdminClient } from '@/lib/supabase/server';
 import { completeCronRun, startCronRun } from '@/lib/validation/cron-run-tracker';
 
@@ -255,8 +260,9 @@ async function executeCasePreviewRecovery(request: NextRequest) {
           CASE_PREVIEW_RECOVERY_SENT_EVENT_TYPES.day_7,
           CASE_PREVIEW_RECOVERY_ATTEMPT_EVENT_TYPES.day_1,
           CASE_PREVIEW_RECOVERY_ATTEMPT_EVENT_TYPES.day_7,
+          RECOVERY_UNSUBSCRIBED_EVENT,
         ])
-        .gte('created_at', hoursAgoIso(24 * 45)),
+        .limit(10000),
     ]);
 
     if (ordersResult.error) throw new Error(`Failed to fetch case orders: ${ordersResult.error.message}`);
@@ -321,6 +327,12 @@ async function executeCasePreviewRecovery(request: NextRequest) {
         continue;
       }
 
+      if (isRecoveryUnsubscribedFromEvents(sentEvents, contact.email)) {
+        skipped += 1;
+        skippedCaseIds.push(caseRow.id);
+        continue;
+      }
+
       const dueStage = getDueStage(caseRow, sentEvents, contact.email);
       if (!dueStage) {
         skipped += 1;
@@ -369,6 +381,7 @@ async function executeCasePreviewRecovery(request: NextRequest) {
         productName: recovery.productName || getAdminProductLabel(productType),
         resumeUrl: recovery.resumeUrl,
         stage: dueStage,
+        unsubscribeUrl: buildRecoveryUnsubscribeUrl(contact.email, 'preview'),
       });
 
       const finalEvent = await supabase.from('email_events').insert({

@@ -55,6 +55,7 @@ function emailEventsBuilder() {
     select: vi.fn(() => builder),
     in: vi.fn(() => builder),
     gte: vi.fn(() => Promise.resolve({ data: mockEvents, error: null })),
+    limit: vi.fn(() => Promise.resolve({ data: mockEvents, error: null })),
     insert: vi.fn((payload: any) => {
       insertedEmailEvents.push(payload);
       return Promise.resolve({ data: null, error: null });
@@ -199,6 +200,7 @@ describe('case preview recovery cron', () => {
         customerName: 'Alex Landlord',
         productName: 'Supported Rent Increase Pack',
         stage: 'day_1',
+        unsubscribeUrl: expect.stringContaining('/api/recovery/unsubscribe?token='),
       })
     );
     expect(insertedEmailEvents).toEqual(

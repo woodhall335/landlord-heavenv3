@@ -38,6 +38,7 @@ function createEmailEventsBuilder() {
     eq: vi.fn(() => builder),
     in: vi.fn(() => builder),
     gte: vi.fn(() => Promise.resolve({ data: mockRecoveryEvents, error: null })),
+    limit: vi.fn(() => Promise.resolve({ data: mockRecoveryEvents, error: null })),
     insert: vi.fn((payload: any) => {
       insertedEmailEvents.push(payload);
       return Promise.resolve({ data: null, error: null });
@@ -156,6 +157,7 @@ describe('checkout recovery cron', () => {
         productName: 'Stage 1: Section 8 Notice & Service Pack',
         amount: 39.99,
         checkoutUrl: 'https://checkout.stripe.com/c/session',
+        unsubscribeUrl: expect.stringContaining('/api/recovery/unsubscribe?token='),
       }),
     ]);
     expect(insertedEmailEvents).toEqual([
@@ -190,7 +192,47 @@ describe('checkout recovery cron', () => {
     mockRecoveryEvents = [
       {
         email: 'landlord@example.com',
+        event_type: 'checkout_recovery_sent',
         event_data: { order_id: 'order-1' },
+      },
+    ];
+
+    const { GET } = await import('@/app/api/cron/checkout-recovery/route');
+    const response = await GET(
+      request('http://localhost/api/cron/checkout-recovery', {
+        authorization: `Bearer ${MOCK_CRON_SECRET}`,
+      })
+    );
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data.emails_sent).toBe(0);
+    expect(data.skipped).toBe(1);
+    expect(sentEmails).toEqual([]);
+    expect(insertedEmailEvents).toEqual([]);
+  });
+
+  it('skips checkout recovery when the email has unsubscribed from recovery reminders', async () => {
+    mockOrders = [
+      {
+        id: 'order-1',
+        user_id: 'user-1',
+        case_id: 'case-1',
+        product_type: 'notice_only',
+        product_name: 'Stage 1 Notice',
+        total_amount: '39.99',
+        payment_status: 'pending',
+        stripe_checkout_url: 'https://checkout.stripe.com/c/session',
+        stripe_session_id: 'cs_test_123',
+        created_at: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
+      },
+    ];
+    mockUsers = [{ id: 'user-1', email: 'landlord@example.com', full_name: 'Alex Landlord' }];
+    mockRecoveryEvents = [
+      {
+        email: 'landlord@example.com',
+        event_type: 'recovery_unsubscribed',
+        event_data: { source: 'recovery_unsubscribe_link' },
       },
     ];
 
