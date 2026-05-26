@@ -81,6 +81,7 @@ export default function Section13StandardProductPage() {
       fullWidthPreview: true,
     },
     whatYouGet: {
+      hideSection: true,
       title: 'What you get',
       intro: config.packIntro,
       items: config.packBreakdown,
@@ -98,7 +99,7 @@ export default function Section13StandardProductPage() {
             'A bare form with weak dates or no evidence can invite questions, delays, or a challenge that is harder to answer.',
           landlordOutcome:
             'Best when the increase is straightforward and you want a clear, service-ready pack.',
-          href: '/products/section-13-standard',
+          href: product.wizardHref,
           ctaLabel: 'Build my supported rent increase',
           priceLabel: product.displayPrice,
           imageSrc: '/images/rent-increase-standard.webp',
@@ -114,7 +115,7 @@ export default function Section13StandardProductPage() {
             'If challenge risk is obvious and you start with a light file, you may have to rebuild the evidence after the tenant objects.',
           landlordOutcome:
             'Best when you want to be ready for questions, negotiation, or tribunal scrutiny.',
-          href: '/products/section-13-defence',
+          href: PRODUCTS.section13_defensive.wizardHref,
           ctaLabel: 'Prepare for a rent challenge',
           priceLabel: PRODUCTS.section13_defensive.displayPrice,
           imageSrc: '/images/rent-increase-defence.webp',

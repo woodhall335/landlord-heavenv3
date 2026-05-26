@@ -1,0 +1,12 @@
+[analytics/events] Analytics event ignored Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at POST (src\app\api\analytics\events\route.ts:33:42)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {

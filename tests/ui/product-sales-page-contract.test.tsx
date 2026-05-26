@@ -215,7 +215,6 @@ const pageContracts: PageContract[] = [
     load: () => import('@/app/(marketing)/products/section-13-standard/page'),
     h1: /Serve a market-supported rent increase, not just a bare Form 4A/i,
     sectionTitles: [
-      'What you get',
       'Why you need this',
       'How this helps you',
       'How it works',
@@ -228,7 +227,6 @@ const pageContracts: PageContract[] = [
       'Proof of service record',
       'Rent increase cover letter',
     ],
-    expectsWhatYouGet: true,
   },
   {
     name: 'section 13 defence',

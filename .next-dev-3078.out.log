@@ -1,0 +1,16 @@
+▲ Next.js 16.1.1 (webpack)
+- Local:         http://127.0.0.1:3078
+- Network:       http://127.0.0.1:3078
+- Experiments (use with caution):
+  · serverActions
+
+✓ Starting...
+✓ Ready in 7.9s
+○ Compiling /products/section-13-standard ...
+ GET /products/section-13-standard 200 in 3.5s (compile: 856ms, proxy.ts: 2.1s, render: 531ms)
+ GET /products/section-13-standard 200 in 45s (compile: 30.9s, proxy.ts: 428ms, render: 13.5s)
+○ Compiling /api/golden-pack-samples/[packKey]/[documentType]/embed ...
+ GET /api/golden-pack-samples/section13_standard/section13_rent_increase_summary/embed?v=1779219440489 200 in 18.4s (proxy.ts: 1079ms)
+[supabase-admin-env] { hasUrl: false, hasServiceRoleKey: false }
+ POST /api/analytics/events 202 in 5.5s (compile: 1724ms, proxy.ts: 3.4s, render: 449ms)
+ GET /products/section-13-standard 200 in 1338ms (compile: 127ms, proxy.ts: 10ms, render: 1201ms)
