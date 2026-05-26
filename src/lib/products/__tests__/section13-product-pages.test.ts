@@ -33,6 +33,9 @@ describe('Section 13 product pages', () => {
     expect(source).toContain('const samplePreviewEntries = config.packBreakdown.map');
     expect(source).toContain('fallbackEntries={samplePreviewEntries}');
     expect(source).toContain('samplePageHref={samplePage?.samplePath}');
+    expect(source).toContain('hideSection: true');
+    expect(source).toContain('href: PRODUCTS.section13_standard.wizardHref');
+    expect(source).toContain('href: product.wizardHref');
     expect(source).toContain('Questions landlords ask before choosing the defence route');
     expect(source).toContain('Prepare for a rent challenge');
     expect(source).toContain('I only need the supported option');

@@ -143,7 +143,7 @@ const pageContracts: PageContract[] = [
   {
     name: 'notice only',
     load: () => import('@/app/(marketing)/products/notice-only/page'),
-    h1: /Solicitor-approved Section 8 notice and service file/i,
+    h1: /Create a Section 8 eviction notice and service file/i,
     sectionTitles: [
       'Why a blank notice is risky',
       'How this puts you in a stronger position',
@@ -165,7 +165,7 @@ const pageContracts: PageContract[] = [
   {
     name: 'complete pack',
     load: () => import('@/app/(marketing)/products/complete-pack/page'),
-    h1: /Solicitor-approved Section 8 court and possession file/i,
+    h1: /Section 8 possession claim pack with N5 and N119/i,
     sectionTitles: [
       'Why separate forms cause problems',
       'How the full pack improves the landlord outcome',
@@ -190,7 +190,7 @@ const pageContracts: PageContract[] = [
   {
     name: 'money claim',
     load: () => import('@/app/(marketing)/products/money-claim/page'),
-    h1: /Prepare a landlord money claim/i,
+    h1: /Recover unpaid rent with a landlord money claim pack/i,
     sectionTitles: [
       'Why a landlord money claim needs more than one form',
       'How this improves the landlord outcome',
@@ -213,7 +213,7 @@ const pageContracts: PageContract[] = [
   {
     name: 'section 13 standard',
     load: () => import('@/app/(marketing)/products/section-13-standard/page'),
-    h1: /Serve a market-supported rent increase, not just a bare Form 4A/i,
+    h1: /Create a Form 4A rent increase pack with market evidence/i,
     sectionTitles: [
       'Why you need this',
       'How this helps you',
@@ -231,9 +231,8 @@ const pageContracts: PageContract[] = [
   {
     name: 'section 13 defence',
     load: () => import('@/app/(marketing)/products/section-13-defence/page'),
-    h1: /Prepare the rent increase file as if it may be challenged/i,
+    h1: /Prepare for a Section 13 rent challenge before it lands/i,
     sectionTitles: [
-      'What you get',
       'Why this route helps',
       'What it helps you do',
       'How it works',
@@ -253,7 +252,6 @@ const pageContracts: PageContract[] = [
       'negotiation',
       'Merged tribunal bundle PDF',
     ],
-    expectsWhatYouGet: true,
   },
 ];
 

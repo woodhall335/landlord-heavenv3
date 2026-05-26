@@ -68,13 +68,16 @@ export function RentCheckerLanding({ onStart }: RentCheckerLandingProps) {
               Check rent now
               <ArrowRight className="h-4 w-4" />
             </Button>
-            <a href="/products/section-13-standard?src=rent_checker_landing" className="inline-flex">
+            <a
+              href="/wizard/flow?type=rent_increase&product=section13_standard&src=product_page&topic=general"
+              className="inline-flex"
+            >
               <Button
                 variant="outline"
                 size="large"
                 className="border-slate-200 text-slate-700 hover:border-indigo-300 hover:text-indigo-700"
               >
-                Already increasing rent? Create my Section 13 notice
+                Generate Section 13 Notice Pack Now
               </Button>
             </a>
           </div>
