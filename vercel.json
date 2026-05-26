@@ -39,6 +39,9 @@
     "src/app/api/cron/recovery-orchestrator/route.ts": {
       "maxDuration": 60
     },
+    "src/app/api/cron/rent-checker-followups/route.ts": {
+      "maxDuration": 60
+    },
     "src/app/api/seo/cron/daily/route.ts": {
       "maxDuration": 300
     }
@@ -59,6 +62,10 @@
     {
       "path": "/api/cron/recovery-orchestrator?key=$CRON_SECRET",
       "schedule": "17 9 * * *"
+    },
+    {
+      "path": "/api/cron/rent-checker-followups?key=$CRON_SECRET",
+      "schedule": "37 9 * * *"
     },
     {
       "path": "/api/cron/compliance-check?key=$CRON_SECRET",

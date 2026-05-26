@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { RentIncreaseChallengeChecker } from '@/components/tools/rent-checker';
+import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
+import { getProductSamplePageByPackKey } from '@/lib/marketing/product-sample-pages';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, softwareApplicationSchema } from '@/lib/seo/structured-data';
 
@@ -22,11 +25,21 @@ export const metadata: Metadata = {
 };
 
 export default function RentIncreaseChallengeCheckerPage() {
+  const sampleProof = getGoldenPackProofData('section13_standard');
+  const samplePage = getProductSamplePageByPackKey('section13_standard');
+
   return (
     <>
       <HeaderConfig mode="solid" />
       <StructuredData data={softwareApplicationSchema()} />
       <RentIncreaseChallengeChecker />
+      {sampleProof ? (
+        <section className="bg-white py-12 md:py-16">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <GoldenPackProof data={sampleProof} samplePageHref={samplePage?.samplePath} />
+          </div>
+        </section>
+      ) : null}
     </>
   );
 }

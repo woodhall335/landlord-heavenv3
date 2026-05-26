@@ -1,8 +1,17 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
+import { sendEmail } from '@/lib/email/resend';
 import { createAdminClient } from '@/lib/supabase/server';
 import { buildRentCheckerEmailSequence } from '@/lib/section13';
+import {
+  buildSection13WizardDraftFromRentCheckerResult,
+} from '@/lib/section13/rent-checker-handoff';
+import {
+  RENT_CHECKER_EMAIL_HANDOFF_EVENT,
+  createRentCheckerEmailHandoffToken,
+  getRentCheckerEmailHandoffExpiry,
+} from '@/lib/section13/rent-checker-email-handoff';
 
 export const runtime = 'nodejs';
 
@@ -95,7 +104,22 @@ export async function POST(request: Request) {
       postcodeOutcode: result.postcodeOutcode,
     });
 
-    const messages = buildRentCheckerEmailSequence(result as any);
+    const handoff = createRentCheckerEmailHandoffToken();
+    const expiresAt = getRentCheckerEmailHandoffExpiry();
+    await logEvent(supabase, email, RENT_CHECKER_EMAIL_HANDOFF_EVENT, {
+      source,
+      jurisdiction,
+      resultId: result.resultId ?? null,
+      tokenHash: handoff.tokenHash,
+      expiresAt,
+      recommendedProduct: result.recommendedProduct,
+      resultState: result.resultState,
+      draft: buildSection13WizardDraftFromRentCheckerResult(result as any),
+    });
+
+    const messages = buildRentCheckerEmailSequence(result as any, {
+      handoffToken: handoff.token,
+    });
     const providerKey =
       process.env.EMAIL_PROVIDER ||
       process.env.RESEND_API_KEY ||
@@ -113,12 +137,21 @@ export async function POST(request: Request) {
         subject: immediate.subject,
       });
     } else {
-      await logEvent(supabase, email, 'rent_checker_report_sent', {
+      const sendResult = await sendEmail({
+        to: email,
+        subject: immediate.subject,
+        html: immediate.html,
+        text: immediate.text,
+      });
+
+      await logEvent(supabase, email, sendResult.success ? 'rent_checker_report_sent' : 'rent_checker_report_failed', {
         source,
         jurisdiction,
         resultId: result.resultId ?? null,
         sequence: immediate.sequence,
         subject: immediate.subject,
+        providerMessageId: sendResult.id ?? null,
+        error: sendResult.error ?? null,
       });
     }
 
@@ -132,6 +165,8 @@ export async function POST(request: Request) {
         recommendedProduct: result.recommendedProduct,
         sequence: message.sequence,
         subject: message.subject,
+        text: message.text,
+        html: message.html,
         sendAfterHours: message.sendAfterHours,
         scheduledFor,
       });

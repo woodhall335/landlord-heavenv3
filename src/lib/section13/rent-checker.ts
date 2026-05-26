@@ -458,7 +458,7 @@ function buildLowRiskResult(
       'Record how and when the notice is served.',
       'Use the same figures across every document.',
     ],
-    primaryCtaLabel: 'Generate my Section 13 notice',
+    primaryCtaLabel: `Build my supported rent increase pack - ${PRODUCTS.section13_standard.displayPrice}`,
     primaryCtaHref: buildPrimaryWizardHref('section13_standard', 'landlord_low_risk'),
     primaryCtaSubtext:
       'Create Form 4A, rent summary, justification report, cover letter, and proof of service.',
@@ -501,7 +501,7 @@ function buildModerateRiskResult(
       'Use recent comparable evidence.',
       'Prepare a response file in case the tenant refers it to tribunal.',
     ],
-    primaryCtaLabel: 'Prepare for a tenant challenge',
+    primaryCtaLabel: `Prepare my tribunal-ready file - ${PRODUCTS.section13_defensive.displayPrice}`,
     primaryCtaHref: buildPrimaryWizardHref('section13_defensive', 'landlord_moderate_risk'),
     primaryCtaSubtext:
       'Build the notice, evidence, and tribunal-ready defence file before the tenant challenges.',
@@ -557,7 +557,7 @@ function buildHighRiskResult(
       'Consider lowering the proposed figure.',
       'Prepare a tribunal defence file before sending Form 4A.',
     ],
-    primaryCtaLabel: 'Build a defendable rent increase',
+    primaryCtaLabel: `Prepare my tribunal-ready file - ${PRODUCTS.section13_defensive.displayPrice}`,
     primaryCtaHref: buildPrimaryWizardHref('section13_defensive', 'landlord_high_risk'),
     primaryCtaSubtext:
       'Strengthen the evidence and prepare for challenge before relying on the increase.',

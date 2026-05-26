@@ -71,9 +71,6 @@ export default function Section13DefenceProductPage() {
       ),
     },
     earlyProofBand: {
-      priceLabel: product.displayPrice,
-      valueSummary:
-        'Preview the tribunal-ready rent increase file before you pay, including market evidence, response wording, legal briefing, and bundle support. This is procedural document preparation, not representation.',
       preview: (
         <GoldenPackProof
           data={sampleProof}

@@ -13,6 +13,10 @@ import type { GrowthCtaPosition } from '@/lib/analytics/growth-events';
 import { PRODUCTS } from '@/lib/pricing/products';
 import type { Section13RentJustificationResult } from '@/lib/section13/rent-justification';
 import { getSection13ResultProductHref } from '@/lib/tools/result-ctas';
+import {
+  RENT_CHECKER_HANDOFF_STORAGE_KEY,
+  buildSection13WizardDraftFromRentCheckerResult,
+} from '@/lib/section13/rent-checker-handoff';
 import type {
   RentCheckerPropertyCondition,
   RentCheckerPropertySubtype,
@@ -187,6 +191,46 @@ function trackProductCta(
   });
 }
 
+function storeRentCheckerWizardHandoff(
+  result: RentCheckerResult,
+  selectedProduct: 'section13_standard' | 'section13_defensive'
+) {
+  if (typeof window === 'undefined') return;
+
+  const handoffResult = {
+    ...result,
+    recommendedProduct: selectedProduct,
+  };
+
+  window.sessionStorage.setItem(
+    RENT_CHECKER_HANDOFF_STORAGE_KEY,
+    JSON.stringify({
+      createdAt: new Date().toISOString(),
+      product: selectedProduct,
+      resultId: result.resultId,
+      resultState: result.resultState,
+      draft: buildSection13WizardDraftFromRentCheckerResult(handoffResult),
+    })
+  );
+}
+
+function storeRentCheckerWizardHandoffForHref(
+  result: RentCheckerResult,
+  selectedProduct: 'section13_standard' | 'section13_defensive',
+  href?: string | null
+) {
+  if (!href?.includes('/wizard/flow')) return;
+  storeRentCheckerWizardHandoff(result, selectedProduct);
+}
+
+function purchasePanelCopy(result: RentCheckerResult) {
+  if (result.challengeRisk === 'low') {
+    return 'Your result: low challenge risk. The next paid pack prepares Form 4A, market evidence, the rent summary, cover letter, and proof of service.';
+  }
+
+  return `Your result: ${result.challengeRisk} challenge risk. The next paid pack prepares Form 4A, evidence, proof of service, response materials, and tribunal-ready support.`;
+}
+
 function buildEventPayload(result: RentCheckerResult) {
   return {
     userType: result.userType,
@@ -305,8 +349,8 @@ function deriveAdjustedCheckerResult(
     saferRangeGuidance,
     primaryCtaLabel:
       recommendedProduct === 'section13_standard'
-        ? 'Generate my Section 13 notice'
-        : 'Build a defendable rent increase',
+        ? `Build my supported rent increase pack - ${PRODUCTS.section13_standard.displayPrice}`
+        : `Prepare my tribunal-ready file - ${PRODUCTS.section13_defensive.displayPrice}`,
     primaryCtaHref: PRODUCTS[recommendedProduct].wizardHref,
     primaryCtaSubtext:
       recommendedProduct === 'section13_standard'
@@ -761,29 +805,6 @@ export function ComparableListingsCard({ result }: { result: RentCheckerResult }
   );
 }
 
-function buildCheckoutPayload(
-  result: RentCheckerResult,
-  trackingContext?: RentCheckerTrackingContext
-) {
-  const context = resolveTrackingContext(trackingContext);
-  return {
-    sourcePage: context.sourcePage,
-    pagePath: context.pagePath,
-    intent: 'rent_increase',
-    ctaPosition: context.ctaPosition,
-    product: result.recommendedProduct,
-    productClicked: result.recommendedProduct,
-    recommendedProduct: result.recommendedProduct,
-    source: 'rent_checker',
-    userType: 'landlord',
-    resultState: result.resultState,
-    challengeRisk: result.challengeRisk,
-    evidenceStrength: result.evidenceStrength,
-    toolName: 'rent_increase_challenge_checker',
-    mode: context.mode,
-  };
-}
-
 export function RecommendedActionCard({
   result,
   trackingContext,
@@ -793,10 +814,8 @@ export function RecommendedActionCard({
 }) {
   const product = PRODUCTS[result.recommendedProduct];
   const onPrimaryClick = () => {
+    storeRentCheckerWizardHandoffForHref(result, result.recommendedProduct, result.primaryCtaHref);
     trackProductCta(result, result.recommendedProduct, trackingContext);
-    if (result.primaryCtaTracksCheckout) {
-      trackEvent('checkout_started', buildCheckoutPayload(result, trackingContext));
-    }
   };
 
   const onSecondaryClick = () => {
@@ -805,6 +824,7 @@ export function RecommendedActionCard({
       result.secondaryCtaHref?.includes('section-13-standard')
         ? 'section13_standard'
         : 'section13_defensive';
+    storeRentCheckerWizardHandoffForHref(result, clickedProduct, result.secondaryCtaHref);
     trackProductCta(result, clickedProduct, trackingContext);
   };
 
@@ -825,6 +845,13 @@ export function RecommendedActionCard({
           <p className="text-sm text-slate-600">Paid route</p>
           <p className="mt-1 text-lg font-semibold text-slate-950">{product.label}</p>
           <p className="mt-1 text-sm text-slate-500">{product.displayPrice} one-time</p>
+        </div>
+
+        <div className="rounded-2xl border border-indigo-100 bg-indigo-50 p-4">
+          <p className="text-sm font-semibold leading-6 text-indigo-950">{purchasePanelCopy(result)}</p>
+          <p className="mt-2 text-sm leading-6 text-indigo-800">
+            Your checker answers and comparable evidence will be carried into the Section 13 wizard.
+          </p>
         </div>
 
         <CtaLink
@@ -865,10 +892,8 @@ export function NextStepsCard({
   trackingContext?: RentCheckerTrackingContext;
 }) {
   const onRepeatCtaClick = () => {
+    storeRentCheckerWizardHandoffForHref(result, result.recommendedProduct, result.primaryCtaHref);
     trackProductCta(result, result.recommendedProduct, trackingContext);
-    if (result.primaryCtaTracksCheckout) {
-      trackEvent('checkout_started', buildCheckoutPayload(result, trackingContext));
-    }
   };
 
   return (
@@ -1333,10 +1358,12 @@ export function RentCheckerResultPage({
   );
 
   const onStickyCtaClick = () => {
+    storeRentCheckerWizardHandoffForHref(
+      adjustedResult,
+      adjustedResult.recommendedProduct,
+      adjustedResult.primaryCtaHref
+    );
     trackProductCta(adjustedResult, adjustedResult.recommendedProduct, trackingContext);
-    if (adjustedResult.primaryCtaTracksCheckout) {
-      trackEvent('checkout_started', buildCheckoutPayload(adjustedResult, trackingContext));
-    }
   };
 
   useEffect(() => {
@@ -1402,8 +1429,8 @@ export function RentCheckerResultPage({
             >
               <Button fullWidth className="bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-300">
               {adjustedResult.recommendedProduct === 'section13_standard'
-                ? 'Create my rent increase notice'
-                : 'Prepare for challenge'}
+                ? `Build my pack - ${PRODUCTS.section13_standard.displayPrice}`
+                : `Prepare tribunal file - ${PRODUCTS.section13_defensive.displayPrice}`}
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>

@@ -71,9 +71,6 @@ export default function Section13StandardProductPage() {
       ),
     },
     earlyProofBand: {
-      priceLabel: product.displayPrice,
-      valueSummary:
-        'Preview the Form 4A rent increase file before you pay, including market evidence, the rent summary, cover letter, and service record. This is procedural document preparation, not legal advice.',
       preview: (
         <GoldenPackProof
           data={sampleProof}
@@ -81,6 +78,7 @@ export default function Section13StandardProductPage() {
           samplePageHref={samplePage?.samplePath}
         />
       ),
+      fullWidthPreview: true,
     },
     whatYouGet: {
       title: 'What you get',

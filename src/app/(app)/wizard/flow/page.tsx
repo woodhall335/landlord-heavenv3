@@ -48,6 +48,10 @@ import {
   getPublicProductOwnerHref,
   isPubliclyStartableProduct,
 } from '@/lib/public-products';
+import {
+  RENT_CHECKER_HANDOFF_STORAGE_KEY,
+  getSection13WizardDraftStorageKey,
+} from '@/lib/section13/rent-checker-handoff';
 
 // Feature flags: Use new section-based flows
 // Set to true to enable the redesigned wizards, false to use legacy StructuredWizard
@@ -73,6 +77,75 @@ const TENANCY_FIELD_TO_SECTION: Record<string, string> = {
   tenants: 'tenants',
 };
 
+async function applyRentCheckerHandoffToSection13Draft(params: {
+  caseId: string;
+  product: string;
+  recoveryToken?: string | null;
+}) {
+  const { caseId, product, recoveryToken } = params;
+  if (
+    typeof window === 'undefined' ||
+    (product !== 'section13_standard' && product !== 'section13_defensive')
+  ) {
+    return;
+  }
+
+  const raw = window.sessionStorage.getItem(RENT_CHECKER_HANDOFF_STORAGE_KEY);
+  if (raw) {
+    try {
+      const handoff = JSON.parse(raw) as {
+        product?: string;
+        draft?: unknown;
+      };
+
+      if (
+        handoff.product === product &&
+        handoff.draft &&
+        typeof handoff.draft === 'object'
+      ) {
+        window.localStorage.setItem(
+          getSection13WizardDraftStorageKey(caseId),
+          JSON.stringify(handoff.draft)
+        );
+        window.sessionStorage.removeItem(RENT_CHECKER_HANDOFF_STORAGE_KEY);
+        return;
+      }
+    } catch (error) {
+      console.warn('[WizardFlow] Failed to apply rent checker handoff', error);
+    }
+  }
+
+  if (!recoveryToken) return;
+
+  try {
+    const response = await fetch('/api/tools/rent-increase-challenge-checker/recover-handoff', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getSessionTokenHeaders(),
+      },
+      body: JSON.stringify({
+        caseId,
+        product,
+        token: recoveryToken,
+      }),
+    });
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || !data?.draft) {
+      console.warn('[WizardFlow] Rent checker email handoff unavailable', data?.error || response.status);
+      return;
+    }
+
+    window.localStorage.setItem(
+      getSection13WizardDraftStorageKey(caseId),
+      JSON.stringify(data.draft)
+    );
+  } catch (error) {
+    console.warn('[WizardFlow] Failed to recover rent checker email handoff', error);
+  }
+}
+
 function WizardFlowContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -88,6 +161,7 @@ function WizardFlowContent() {
   const productVariant = searchParams.get('product_variant'); // e.g. money_claim_england_wales
   const editCaseId = searchParams.get('case_id'); // Case ID to edit
   const recoveryToken = searchParams.get('recovery_token');
+  const rentCheckerToken = searchParams.get('rent_checker_token');
   const mode = searchParams.get('mode');
   const jumpTo = searchParams.get('jump_to'); // Question ID to jump to (from End Validator "Fix this" button)
   const fixMode = searchParams.get('fix_mode') === 'true'; // Single-question fix mode (returns to validation after save)
@@ -437,6 +511,14 @@ function WizardFlowContent() {
         throw new Error('Missing case_id from start response');
       }
 
+      if (type === 'rent_increase') {
+        await applyRentCheckerHandoffToSection13Draft({
+          caseId: newCaseId,
+          product: startProduct,
+          recoveryToken: rentCheckerToken,
+        });
+      }
+
       setCaseId(newCaseId);
       setInitialQuestion(data.next_question ?? null);
     } catch (err) {
@@ -444,7 +526,7 @@ function WizardFlowContent() {
     } finally {
       setLoading(false);
     }
-  }, [editCaseId, jurisdiction, product, productVariant, publicJurisdictionBlocked, recoveryToken, router, searchParams, type]);
+  }, [editCaseId, jurisdiction, product, productVariant, publicJurisdictionBlocked, recoveryToken, rentCheckerToken, router, searchParams, type]);
 
   useEffect(() => {
     if (!hasRequiredParams) {

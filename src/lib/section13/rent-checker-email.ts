@@ -1,5 +1,8 @@
 import { SITE_ORIGIN } from '@/lib/seo/urls';
 import type { RentCheckerResult } from './rent-checker';
+import {
+  buildSection13WizardHrefWithRentCheckerToken,
+} from './rent-checker-email-links';
 
 export interface RentCheckerEmailMessage {
   sequence: 1 | 2 | 3 | 4;
@@ -24,9 +27,34 @@ function buildSummaryLines(result: RentCheckerResult) {
   ];
 }
 
-export function buildRentCheckerEmailSequence(result: RentCheckerResult): RentCheckerEmailMessage[] {
-  const primaryUrl = makeAbsoluteUrl(result.primaryCtaHref);
-  const bundleUrl = makeAbsoluteUrl(result.bundleCtaHref);
+export function buildRentCheckerEmailSequence(
+  result: RentCheckerResult,
+  options?: { handoffToken?: string }
+): RentCheckerEmailMessage[] {
+  const standardWizardUrl = options?.handoffToken
+    ? buildSection13WizardHrefWithRentCheckerToken(
+        'section13_standard',
+        options.handoffToken,
+        'rent_checker_email_standard'
+      )
+    : makeAbsoluteUrl('/products/section-13-standard?src=rent_checker_email');
+  const defensiveWizardUrl = options?.handoffToken
+    ? buildSection13WizardHrefWithRentCheckerToken(
+        'section13_defensive',
+        options.handoffToken,
+        'rent_checker_email_defence'
+      )
+    : makeAbsoluteUrl('/products/section-13-defence?src=rent_checker_email');
+  const primaryUrl = options?.handoffToken
+    ? buildSection13WizardHrefWithRentCheckerToken(
+        result.recommendedProduct,
+        options.handoffToken,
+        'rent_checker_email_result'
+      )
+    : makeAbsoluteUrl(result.primaryCtaHref);
+  const bundleUrl = result.recommendedProduct === 'section13_defensive'
+    ? defensiveWizardUrl
+    : makeAbsoluteUrl(result.bundleCtaHref);
   const summaryLines = buildSummaryLines(result);
   const summaryHtml = summaryLines.map((line) => `<li>${line}</li>`).join('');
 
@@ -52,13 +80,13 @@ export function buildRentCheckerEmailSequence(result: RentCheckerResult): RentCh
         'Form 4A still needs the dates, notice period, and service record to line up properly.',
         'Check the two-month notice window, keep the market evidence together, and record how the notice is served.',
         '',
-        `Use the Supported pack: ${makeAbsoluteUrl('/products/section-13-standard?src=rent_checker_email')}`,
+        `Use the Supported pack: ${standardWizardUrl}`,
       ].join('\n'),
       html: `
         <h2>Before you serve a Section 13 notice</h2>
         <p>Form 4A still needs the dates, notice period, and service record to line up properly.</p>
         <p>Check the two-month notice window, keep the market evidence together, and record how the notice is served.</p>
-        <p><a href="${makeAbsoluteUrl('/products/section-13-standard?src=rent_checker_email')}">View the Supported Rent Increase Pack</a></p>
+        <p><a href="${standardWizardUrl}">Build the Supported Rent Increase Pack</a></p>
       `,
     },
     {
@@ -71,13 +99,13 @@ export function buildRentCheckerEmailSequence(result: RentCheckerResult): RentCh
         'If the tenant pushes back, the market comparables, notice dates, and service record matter fast.',
         'A challenge-ready file helps you explain the rent and respond if the matter reaches tribunal.',
         '',
-        `Prepare for challenge: ${makeAbsoluteUrl('/products/section-13-defence?src=rent_checker_email')}`,
+        `Prepare for challenge: ${defensiveWizardUrl}`,
       ].join('\n'),
       html: `
         <h2>What if the tenant challenges the rent?</h2>
         <p>If the tenant pushes back, the market comparables, notice dates, and service record matter fast.</p>
         <p>A challenge-ready file helps you explain the rent and respond if the matter reaches tribunal.</p>
-        <p><a href="${makeAbsoluteUrl('/products/section-13-defence?src=rent_checker_email')}">View the Tribunal-Ready Rent Increase Pack</a></p>
+        <p><a href="${defensiveWizardUrl}">Prepare the Tribunal-Ready Rent Increase Pack</a></p>
       `,
     },
     {

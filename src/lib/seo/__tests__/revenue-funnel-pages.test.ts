@@ -90,7 +90,8 @@ describe('revenue-focused SEO funnels', () => {
     expect(resultPage).toContain('sourcePage: context.sourcePage');
     expect(resultPage).toContain('pagePath: context.pagePath');
     expect(resultPage).toContain('trackProductCta(result, result.recommendedProduct, trackingContext)');
-    expect(resultPage).toContain("trackEvent('checkout_started', buildCheckoutPayload(result, trackingContext))");
+    expect(resultPage).toContain('storeRentCheckerWizardHandoffForHref(result, result.recommendedProduct, result.primaryCtaHref)');
+    expect(resultPage).not.toContain("trackEvent('checkout_started'");
   });
 
   it('shared SEO CTAs expose stable selectors and conversion tracking events', () => {
