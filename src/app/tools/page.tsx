@@ -4,6 +4,7 @@ import { freeTools } from '@/lib/tools/tools';
 import { generateMetadata } from '@/lib/seo';
 import { StructuredData, websiteSchema } from '@/lib/seo/structured-data';
 import { StandardHero } from '@/components/marketing/StandardHero';
+import { StaggerReveal, TrustPillRow } from '@/components/marketing/PremiumMotion';
 import { CommercialWizardLinks } from '@/components/seo/CommercialWizardLinks';
 import { analyzeContent } from '@/lib/seo/commercial-linking';
 import { Section21ComplianceTimingPanel } from '@/components/products/Section21ComplianceTimingPanel';
@@ -37,7 +38,7 @@ const commercialLinkingResult = analyzeContent({
 
 export default function ToolsHubPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen public-page-shell">
       <StructuredData data={websiteSchema()} />
       <StandardHero
         badge="Free Tools"
@@ -49,19 +50,23 @@ export default function ToolsHubPage() {
       />
 
       {featuredTools.length > 0 && (
-        <section id="featured-tools" className="py-12 bg-white">
+        <section id="featured-tools" className="premium-surface premium-surface-white py-12">
           <Container>
             <div className="text-center mb-10">
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Featured Tools</h2>
               <p className="text-gray-600 mt-2">
                 Start with the most popular landlord tools and guided helpers.
               </p>
+              <TrustPillRow
+                className="mt-5 justify-center"
+                items={['Free tools', 'Instant next step', 'No subscription']}
+              />
             </div>
-            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            <StaggerReveal className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
               {featuredTools.map((tool) => (
                 <div
                   key={tool.href}
-                  className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-md transition-all"
+                  className="standalone-premium-hover-lift public-surface-card rounded-2xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-md transition-all"
                 >
                   <span className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary mb-3">
                     Featured
@@ -77,7 +82,7 @@ export default function ToolsHubPage() {
                   </Link>
                 </div>
               ))}
-            </div>
+            </StaggerReveal>
           </Container>
         </section>
       )}

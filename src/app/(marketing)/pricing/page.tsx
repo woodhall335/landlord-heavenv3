@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Container } from '@/components/ui';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { StaggerReveal, TrustPillRow } from '@/components/marketing/PremiumMotion';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { generateMetadata } from '@/lib/seo';
 import { StructuredData, pricingItemListSchema } from '@/lib/seo/structured-data';
@@ -165,6 +166,10 @@ export default function PricingPage() {
         <p className="mt-2 max-w-3xl text-sm leading-7 text-white/76">
           Prices below are for landlords in England who need the right paperwork before they serve, file, or issue anything.
         </p>
+        <TrustPillRow
+          className="mt-5"
+          items={['Fixed price', 'Preview before payment', 'England landlord documents']}
+        />
       </UniversalHero>
 
       <Container size="large" className="py-14">
@@ -183,7 +188,7 @@ export default function PricingPage() {
             </p>
           </div>
 
-          <div className="grid gap-6 xl:grid-cols-2">
+          <StaggerReveal className="grid gap-6 xl:grid-cols-2">
             {PRICING_PACKAGE_CARDS.map((card) => {
               const image = packageImages[card.productSku] ?? packageImages.england_standard_tenancy_agreement;
               const accent = getPublicCardAccentClasses(accentByProduct[image.accent]);
@@ -259,7 +264,7 @@ export default function PricingPage() {
                 </section>
               );
             })}
-          </div>
+          </StaggerReveal>
         </div>
       </Container>
 

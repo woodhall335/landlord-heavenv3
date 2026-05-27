@@ -6,6 +6,7 @@ import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { Container } from '@/components/ui/Container';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { Reveal, StaggerReveal } from './PremiumMotion';
 import type {
   ProductSalesBreakdownItem,
   ProductSalesCard,
@@ -59,7 +60,7 @@ function ImageLinkWrapper({
 
 function BreakdownCard({ item }: { item: ProductSalesBreakdownItem }) {
   return (
-    <article className="rounded-[2rem] border border-[#E8E1F8] bg-white p-6 shadow-[0_14px_34px_rgba(24,11,49,0.06)]">
+    <article className="standalone-premium-hover-lift rounded-[2rem] border border-[#E8E1F8] bg-white p-6 shadow-[0_14px_34px_rgba(24,11,49,0.06)]">
       <div className="flex items-start justify-between gap-4">
         <h3 className="text-2xl font-semibold tracking-tight text-[#17142B]">{item.name}</h3>
         {!item.includedByDefault && item.conditionalLabel ? (
@@ -103,7 +104,7 @@ function RouteCard({
   routeIntent?: string;
 }) {
   return (
-    <article className="flex h-full flex-col overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_14px_34px_rgba(24,11,49,0.06)]">
+    <article className="standalone-premium-hover-lift flex h-full flex-col overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_14px_34px_rgba(24,11,49,0.06)]">
       {item.imageSrc ? (
         <div className="relative h-56 w-full overflow-hidden border-b border-[#E8E1F8]">
           <Image
@@ -188,11 +189,11 @@ function InfoCards({
             <div className="mt-4 text-base leading-8 text-[#4B5565] md:text-lg">{intro}</div>
           </div>
 
-          <div className={gridClassName}>
+          <StaggerReveal className={gridClassName}>
             {cards.map((card) => (
               <article
                 key={card.title}
-                className="overflow-hidden rounded-[1.8rem] border border-[#E8E1F8] bg-[#FCFAFF] shadow-[0_14px_34px_rgba(24,11,49,0.05)]"
+                className="standalone-premium-hover-lift overflow-hidden rounded-[1.8rem] border border-[#E8E1F8] bg-[#FCFAFF] shadow-[0_14px_34px_rgba(24,11,49,0.05)]"
               >
                 {card.imageSrc ? (
                   <div className="relative h-56 w-full">
@@ -211,7 +212,7 @@ function InfoCards({
                 </div>
               </article>
             ))}
-          </div>
+          </StaggerReveal>
         </div>
       </Container>
     </section>
@@ -247,13 +248,13 @@ function DecisionBlock({
             <div className="mt-4 text-base leading-8 text-[#4B5565] md:text-lg">{content.intro}</div>
           </div>
 
-          <div className="mt-8 grid gap-5 md:grid-cols-2">
+          <StaggerReveal className="mt-8 grid gap-5 md:grid-cols-2">
             {content.cards.map((card) => {
               const tone = card.tone ?? 'neutral';
               return (
                 <article
                   key={card.title}
-                  className={`rounded-[1.8rem] border p-6 shadow-[0_14px_34px_rgba(24,11,49,0.04)] ${toneClasses[tone]}`}
+                  className={`standalone-premium-hover-lift rounded-[1.8rem] border p-6 shadow-[0_14px_34px_rgba(24,11,49,0.04)] ${toneClasses[tone]}`}
                 >
                   {card.eyebrow ? (
                     <p className={`text-xs font-semibold uppercase tracking-[0.12em] ${eyebrowClasses[tone]}`}>
@@ -267,7 +268,7 @@ function DecisionBlock({
                 </article>
               );
             })}
-          </div>
+          </StaggerReveal>
 
           {content.primary || content.secondary ? (
             <div className="mt-8 flex flex-wrap gap-3">
@@ -335,7 +336,7 @@ function ComparisonBlock({
             </div>
           ) : null}
 
-          <div className={content.routeGridClassName ?? 'mt-8 grid gap-5 lg:grid-cols-2'}>
+          <StaggerReveal className={content.routeGridClassName ?? 'mt-8 grid gap-5 lg:grid-cols-2'}>
             {content.routeCards.map((item) => (
               <RouteCard
                 key={item.name}
@@ -345,7 +346,7 @@ function ComparisonBlock({
                 routeIntent={analytics?.routeIntent}
               />
             ))}
-          </div>
+          </StaggerReveal>
         </div>
       </Container>
     </section>
@@ -366,17 +367,17 @@ function ObjectionBlock({ content }: { content: ProductSalesObjectionBlock }) {
             ) : null}
           </div>
 
-          <div className="mt-8 grid gap-5 lg:grid-cols-3">
+          <StaggerReveal className="mt-8 grid gap-5 lg:grid-cols-3">
             {content.items.map((item) => (
               <article
                 key={item.question}
-                className="rounded-[1.8rem] border border-[#E8E1F8] bg-white p-6 shadow-[0_14px_34px_rgba(24,11,49,0.04)]"
+                className="standalone-premium-hover-lift rounded-[1.8rem] border border-[#E8E1F8] bg-white p-6 shadow-[0_14px_34px_rgba(24,11,49,0.04)]"
               >
                 <h3 className="text-xl font-semibold tracking-tight text-[#17142B]">{item.question}</h3>
                 <div className="mt-3 text-sm leading-7 text-[#4B5565] md:text-base">{item.answer}</div>
               </article>
             ))}
-          </div>
+          </StaggerReveal>
         </div>
       </Container>
     </section>
@@ -485,7 +486,7 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
             {content.imageSrc ? (
               <ImageLinkWrapper
                 href={content.imageHref}
-                className="relative block overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)]"
+                className="premium-image-frame relative block overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)]"
               >
                 <div className="relative aspect-[16/9] w-full">
                   <Image
@@ -598,7 +599,7 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
                   {content.imageSrc ? (
                     <ImageLinkWrapper
                       href={content.imageHref}
-                      className={`relative block overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)] ${
+                      className={`premium-image-frame relative block overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)] ${
                         hasStandaloneImage ? 'h-72 w-full lg:h-full' : ''
                       }`}
                     >
@@ -673,7 +674,7 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
         />
       ) : null}
       <UniversalHero {...hero} preTitleLabel={heroPreTitleLabel}>{hero.children}</UniversalHero>
-      {postHeroContent ? <section className="scroll-mt-24 bg-white py-10 md:py-12"><Container><div className="mx-auto max-w-6xl">{postHeroContent}</div></Container></section> : null}
+      {postHeroContent ? <section className="scroll-mt-24 bg-white py-10 md:py-12"><Container><Reveal className="mx-auto max-w-6xl">{postHeroContent}</Reveal></Container></section> : null}
       {afterPostHeroContent ? <>{afterPostHeroContent}</> : null}
       {decisionBlock ? <DecisionBlock content={decisionBlock} analytics={analytics} /> : null}
       {earlyProofBand ? <EarlyProofBand content={earlyProofBand} /> : null}
@@ -693,7 +694,7 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
                     </div>
                   </div>
 
-                  <div
+                  <StaggerReveal
                     className={
                       whatYouGet.routeGridClassName ??
                       'mt-8 grid gap-5 lg:grid-cols-2 xl:grid-cols-3'
@@ -708,7 +709,7 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
                         routeIntent={analytics?.routeIntent}
                       />
                     ))}
-                  </div>
+                  </StaggerReveal>
                 </>
               ) : null}
 
@@ -724,11 +725,11 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
                   </div>
 
                   {whatYouGet.items?.length ? (
-                    <div className="mt-8 grid gap-5 lg:grid-cols-2">
+                    <StaggerReveal className="mt-8 grid gap-5 lg:grid-cols-2">
                       {whatYouGet.items.map((item) => (
                         <BreakdownCard key={item.name} item={item} />
                       ))}
-                    </div>
+                    </StaggerReveal>
                   ) : null}
                 </>
               ) : null}
@@ -745,11 +746,11 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
                       </div>
                     ) : null}
                   </div>
-                  <div className="mt-6 grid gap-5 lg:grid-cols-2">
+                  <StaggerReveal className="mt-6 grid gap-5 lg:grid-cols-2">
                     {whatYouGet.conditionalItems.map((item) => (
                       <BreakdownCard key={item.name} item={item} />
                     ))}
-                  </div>
+                  </StaggerReveal>
                 </div>
               ) : null}
 
@@ -821,11 +822,11 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
                   : 'mt-8 grid gap-5 md:grid-cols-3'
               }
             >
-              <div className={hasHowItWorksImage ? 'space-y-5' : 'contents'}>
+              <StaggerReveal className={hasHowItWorksImage ? 'space-y-5' : 'contents'}>
                 {howItWorks.steps.map((step) => (
                   <article
                     key={step.step}
-                    className="rounded-[1.8rem] border border-[#E8E1F8] bg-[#FCFAFF] p-6"
+                    className="standalone-premium-hover-lift rounded-[1.8rem] border border-[#E8E1F8] bg-[#FCFAFF] p-6"
                   >
                     <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6D28D9]">
                       {step.step}
@@ -836,14 +837,14 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
                     <p className="mt-3 text-sm leading-7 text-[#4B5565] md:text-base">{step.body}</p>
                   </article>
                 ))}
-              </div>
+              </StaggerReveal>
 
               {howItWorks.imageSrc ? (
                 <ImageLinkWrapper
-                  href={howItWorks.imageHref}
-                  className={`relative block min-h-[360px] overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)] md:min-h-[440px] lg:min-h-full ${
-                    howItWorks.mobileImageFirstFullBleed ? 'hidden lg:block' : ''
-                  }`}
+                href={howItWorks.imageHref}
+                className={`premium-image-frame relative block min-h-[360px] overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)] md:min-h-[440px] lg:min-h-full ${
+                  howItWorks.mobileImageFirstFullBleed ? 'hidden lg:block' : ''
+                }`}
                 >
                   <Image
                     src={howItWorks.imageSrc}

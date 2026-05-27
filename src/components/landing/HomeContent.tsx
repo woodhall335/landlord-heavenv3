@@ -9,6 +9,8 @@
 import Image from 'next/image';
 import { useEffect } from 'react';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
+import { PremiumImageFrame, Reveal, StaggerReveal, TrustPillRow } from '@/components/marketing/PremiumMotion';
+import { Section8WorkflowStory } from '@/components/marketing/Section8WorkflowStory';
 import { Container } from '@/components/ui';
 import { Hero, TrustBar } from '@/components/landing';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
@@ -386,7 +388,7 @@ export default function HomeContent() {
       <section id="homepage-route-selector" className="py-14 md:py-18">
         <Container>
           <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'public-subtle-grid px-6 py-8 md:px-10 md:py-10')}>
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <StaggerReveal className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div className="max-w-3xl">
                 <span className="public-eyebrow">Choose the right route</span>
                 <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
@@ -414,40 +416,51 @@ export default function HomeContent() {
                     {formattedReviewCount} live reviews across the product.
                   </p>
                 </div>
-            </div>
+            </StaggerReveal>
 
-            <div className="mt-8 grid gap-6 xl:grid-cols-3 md:grid-cols-2">
+            <TrustPillRow
+              className="mt-6"
+              items={['For landlords in England', 'Updated for May 2026', 'Preview before payment', 'Fixed price']}
+            />
+
+            <StaggerReveal className="mt-8 grid gap-6 xl:grid-cols-3 md:grid-cols-2">
               {routeSelectionCards.map((card) => (
                 <RouteSelectionCard key={card.title} {...card} />
               ))}
-            </div>
+            </StaggerReveal>
           </div>
         </Container>
       </section>
 
+      <Section8WorkflowStory />
+
       <section className="pb-16 pt-4 md:pb-20">
-        <TrackedLink
-          href="/wizard"
-          pagePath="/"
-          pageType="homepage"
-          ctaLabel="Clarity section"
-          ctaPosition="section"
-          eventName="homepage_primary_cta_click"
-          routeIntent="wizard"
-          className="block w-full"
-        >
-          <picture>
-            <source media="(max-width: 767px)" srcSet="/images/clarity-mobile.webp" />
-            <Image
-              src="/images/clarity-desktop.webp"
-              alt="Clarity first. Legal detail second."
-              width={1672}
-              height={941}
-              className="h-auto w-full"
-              sizes="100vw"
-            />
-          </picture>
-        </TrackedLink>
+        <Reveal>
+          <PremiumImageFrame className="mx-auto max-w-[1672px] rounded-none border-x-0 md:rounded-[2rem] md:border-x">
+            <TrackedLink
+              href="/wizard"
+              pagePath="/"
+              pageType="homepage"
+              ctaLabel="Clarity section"
+              ctaPosition="section"
+              eventName="homepage_primary_cta_click"
+              routeIntent="wizard"
+              className="block w-full"
+            >
+              <picture>
+                <source media="(max-width: 767px)" srcSet="/images/clarity-mobile.webp" />
+                <Image
+                  src="/images/clarity-desktop.webp"
+                  alt="Clarity first. Legal detail second."
+                  width={1672}
+                  height={941}
+                  className="h-auto w-full"
+                  sizes="100vw"
+                />
+              </picture>
+            </TrackedLink>
+          </PremiumImageFrame>
+        </Reveal>
       </section>
 
       <section className="pb-16 pt-4 md:pb-20">
@@ -477,7 +490,7 @@ export default function HomeContent() {
                 </div>
               </div>
 
-              <div className="grid gap-5 md:grid-cols-3">
+              <StaggerReveal className="grid gap-5 md:grid-cols-3">
                 {previewCards.map((card) => (
                   <TrackedLink
                     key={card.title}
@@ -523,7 +536,7 @@ export default function HomeContent() {
                     </div>
                   </TrackedLink>
                 ))}
-              </div>
+              </StaggerReveal>
             </div>
           </div>
         </Container>
@@ -537,11 +550,11 @@ export default function HomeContent() {
               <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
                 Choose the job and get the paperwork moving
               </h2>
-              <div className="mt-8 space-y-5">
+              <StaggerReveal className="mt-8 space-y-5">
                 {processSteps.map((step) => (
                   <div
                     key={step.step}
-                    className="grid gap-4 rounded-[1.8rem] border border-[#efe5ff] bg-white/85 p-4 md:grid-cols-[0.28fr_0.72fr]"
+                    className="standalone-premium-hover-lift grid gap-4 rounded-[1.8rem] border border-[#efe5ff] bg-white/85 p-4 md:grid-cols-[0.28fr_0.72fr]"
                   >
                     <div className="relative aspect-[4/3] overflow-hidden rounded-[1.3rem] public-image-frame">
                       <Image
@@ -563,7 +576,7 @@ export default function HomeContent() {
                     </div>
                   </div>
                 ))}
-              </div>
+              </StaggerReveal>
             </div>
 
             <div className={clsx(PUBLIC_LAYOUT_CLASSES.darkPanel, 'px-6 py-8 md:px-8')}>
@@ -636,8 +649,8 @@ export default function HomeContent() {
               </p>
             </div>
 
-              <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'overflow-hidden px-6 py-8 md:px-8')}>
-                <div className="overflow-hidden rounded-[2rem]">
+              <Reveal className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'overflow-hidden px-6 py-8 md:px-8')}>
+                <PremiumImageFrame className="rounded-[2rem]">
                   <Image
                     src="/images/See-the-product-before-you-commit2.webp"
                     alt="See the product before you commit"
@@ -646,8 +659,8 @@ export default function HomeContent() {
                     sizes="(max-width: 768px) 100vw, 80vw"
                     className="h-auto w-full"
                   />
-                </div>
-              </div>
+                </PremiumImageFrame>
+              </Reveal>
           </div>
         </Container>
       </section>
