@@ -60,13 +60,13 @@ export const homeHeroConfig: HeroConfig = {
   highlightTitle: 'Without the solicitor bill.',
   subtitle: (
     <>
-      Section 8 notices, eviction packs, rent increases, money claims, and
-      tenancy agreements — checked against current England rules and ready to
-      serve. From £14.99, no subscription.
+      Section 8 notices, court papers, rent increases, money claims, and tenancy
+      agreements for landlords in England. Start from the problem you need to
+      solve today.
     </>
   ),
   primaryCta: {
-    label: 'Choose the right route',
+    label: 'Choose the right next step',
     href: '#homepage-route-selector',
   },
   feature: 'Built for landlords in England who need the next step clear fast when the tenancy is already under pressure.',
@@ -112,7 +112,7 @@ export const noticeOnlyHeroConfig: HeroConfig = {
   title: 'Eviction Notice Generator',
   highlightTitle: '(Section 8, May 2026)',
   subtitle:
-    'Create the current England Section 8 notice with checks on grounds, dates, service, and compliance before you serve anything.',
+    'Create the current England Section 8 notice with checks on grounds, dates, and service before you serve anything.',
   primaryCta: {
     label: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.primaryCtaLabel,
     href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.wizardHref,
@@ -147,7 +147,7 @@ export const completePackHeroConfig: HeroConfig = {
     label: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.secondaryCtaLabel!,
     href: '/eviction-process-england',
   },
-  feature: 'Prepare Form 3A, N5, N119, and the supporting paperwork in one pack.',
+  feature: 'Prepare Form 3A, N5, N119, and the supporting paperwork together.',
 };
 
 /* ============================================================
@@ -213,7 +213,7 @@ export const wizardHeroConfig: HeroConfig = {
     </>
   ),
   primaryCta: {
-    label: 'Choose eviction route',
+    label: 'Choose eviction next step',
     href: '#wizard-eviction',
   },
 };

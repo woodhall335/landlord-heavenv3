@@ -89,16 +89,16 @@ const routeSelectionCards: RouteCard[] = [
     title: 'Tenant not paying rent',
     eyebrow: 'Usually the first step',
     description:
-      'If the tenant is in arrears and you have not served notice yet, start here. This route helps you prepare the solicitor-approved Section 8 notice and service file before you move into court paperwork.',
+      'If rent is unpaid and you have not served notice yet, start here. Prepare the Section 8 notice, proof of service, and arrears record before anything goes to the tenant.',
     whyRoute:
-      'Stage 1 = serve correctly: choose the right grounds, calculate the dates properly, and keep the notice, N215, service instructions, and arrears record aligned from the start.',
+      'This is for the notice step: choose the right grounds, calculate the dates, and keep the notice, N215, service instructions, and arrears record together from the start.',
     includes: [
       'Form 3A Section 8 notice and N215 certificate of service',
-      'Rent arrears schedule, service instructions, validity checklist, and compliance declaration',
-      'Case summary and what-happens-next guide for a cleaner Stage 2 handoff',
+      'Rent arrears schedule, service instructions, and checks before you serve',
+      'Case summary and plain-English next steps if the tenant does not respond',
     ],
     complianceNote:
-      'Built around the updated England possession route from 1 May 2026, so the notice wording, timing, and supporting checks follow the post-Renters\' Rights framework.',
+      'Updated for the England possession rules from 1 May 2026, including notice wording, timing, and service checks.',
     ctaLabel: 'Create my Section 8 notice',
     href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.landingHref,
     imageSrc: '/images/section-8-notice.webp',
@@ -111,16 +111,16 @@ const routeSelectionCards: RouteCard[] = [
     title: 'Tenant will not leave',
     eyebrow: 'When notice is not the whole job',
     description:
-      'Use the Complete Pack when the case is already moving toward possession paperwork and court steps, or when you want the solicitor-approved Section 8 court and possession file joined up in one place.',
+      'Use this if the case is likely to need court papers, or if notice has already been served and the tenant still has not left.',
     whyRoute:
-      'Stage 2 = serve, issue, evidence, and prepare for hearing: the claim forms, witness evidence, service record, and filing path work together.',
+      'This is for the court step: prepare the claim forms, witness evidence, service record, and filing guidance as one joined-up file.',
     includes: [
-      'Everything in Stage 1 plus N5, N119, and witness statement',
-      'Court readiness status, court bundle index, evidence collection checklist, and filing guide',
-      'Hearing checklist, eviction case summary, and arrears engagement letter',
+      'Section 8 notice file plus N5, N119, and witness statement',
+      'Evidence checklist, court bundle index, and filing guide',
+      'Hearing checklist, case summary, and arrears engagement letter',
     ],
     complianceNote:
-      'Built to keep the notice, service details, and court forms consistent with the updated England process from 1 May 2026, reducing avoidable mismatch problems later.',
+      'Keeps the notice, service details, and court forms consistent with the England process from 1 May 2026.',
     ctaLabel: 'Prepare my court pack',
     href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.landingHref,
     imageSrc: '/images/section-8-court-paperwork.webp',
@@ -131,18 +131,18 @@ const routeSelectionCards: RouteCard[] = [
   },
   {
     title: 'Need to recover unpaid rent, bills, or damage',
-    eyebrow: 'Debt recovery route',
+    eyebrow: 'Money claim',
     description:
-      'Use the Money Claim Pack when the main goal is recovering what is owed, whether the tenant is still there or has already left.',
+      'Use this when your main goal is getting money back, whether the tenant is still in the property or has already left.',
     whyRoute:
-      'This route fits when the debt needs dealing with as a claim, instead of being mixed up with the possession route.',
+      'This is for a debt claim, not possession. Keep the money owed separate from the question of whether the tenant must leave.',
     includes: [
       'Letter before claim, particulars, and money claim paperwork',
       'Arrears schedule and debt breakdown support',
-      'A route focused on recovery rather than possession',
+      'A clearer file for recovering money rather than repossessing the property',
     ],
     complianceNote:
-      'Structured around the debt-claim paperwork flow so the money side is handled separately and more clearly.',
+      'Helps keep rent, damage, bills, and other tenant debt clear before you make a claim.',
     ctaLabel: 'Prepare my money claim',
     href: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.landingHref,
     imageSrc: '/images/money-claim-selector.webp',
@@ -153,18 +153,18 @@ const routeSelectionCards: RouteCard[] = [
   },
   {
     title: 'Need to increase the rent',
-    eyebrow: 'Section 13 route',
+    eyebrow: 'Rent increase',
     description:
-      'Use the rent increase route to choose the right Section 13 pack before you generate anything.',
+      'Use this when you want to increase the rent for an England assured tenancy and need the notice, dates, and supporting paperwork handled carefully.',
     whyRoute:
-      'This is the right route when you need the notice, timing, and supporting paperwork handled properly for an England rent increase.',
+      'This is for serving a rent increase notice, with the timing and service record checked before you send it.',
     includes: [
       'Official Form 4A notice for England',
       'Timing, service, and supporting rent increase documents',
-      'A standard route and a more defensive route if challenge risk is higher',
+      'A normal option and a tribunal-ready option if a challenge is likely',
     ],
     complianceNote:
-      'Updated for the England assured tenancy rent increase route in force from 1 May 2026.',
+      'Updated for the England assured tenancy rent increase process in force from 1 May 2026.',
     ctaLabel: 'Create my rent increase notice',
     href: '/rent-increase',
     imageSrc: '/images/section-13-selector.webp',
@@ -175,11 +175,11 @@ const routeSelectionCards: RouteCard[] = [
   },
   {
     title: 'Need a tenancy agreement',
-    eyebrow: 'Agreement route',
+    eyebrow: 'Tenancy agreement',
     description:
-      'Start with the tenancy agreements hub when you need the right England agreement for the property, occupiers, and let type, including the updated Standard and Premium assured periodic routes.',
+      'Start here if you are setting up a new tenancy or replacing old paperwork and need the agreement to match the property, occupiers, and let type.',
     whyRoute:
-      'This route fits when you are setting up a tenancy or replacing older paperwork and want the current England route, with Standard and Premium updated for the post-Renters’ Rights Act framework from 1 May 2026.',
+      'This fits when you need the right agreement before the tenancy starts, rather than a generic template that may not match the let.',
     ctaLabel: 'Choose my tenancy agreement',
     href: PUBLIC_PRODUCT_DESCRIPTORS.ast.landingHref,
     imageSrc: '/images/tenancy-agreement-selector.webp',
@@ -193,14 +193,14 @@ const routeSelectionCards: RouteCard[] = [
 const routeCardOverridesByProduct: Record<string, Partial<RouteCard>> = {
   ast: {
     whyRoute:
-      'This route fits when you are setting up a tenancy or replacing older paperwork and want the current England route for the tenancy you are creating.',
+      'This fits when you are setting up a tenancy or replacing older paperwork and want the agreement to match the tenancy you are creating.',
     includes: [
-      'Standard, premium, student, HMO, and lodger routes',
+      'Standard, premium, student, HMO, and lodger options',
       'Supporting checklists, handover records, and addenda',
-      'A cleaner starting point for new or replacement tenancy paperwork',
+      'A clearer starting point for new or replacement tenancy paperwork',
     ],
     complianceNote:
-      'Positioned around the updated England framework from 1 May 2026, including the post-Renters\' Rights assured periodic routes.',
+      'Updated for the England tenancy rules from 1 May 2026, including assured periodic tenancy options.',
   },
 };
 
@@ -208,13 +208,13 @@ const previewCards: PreviewCard[] = [
   {
     title: 'Section 8 notice file ready to review',
     body:
-      'If you need to serve notice, you can prepare the solicitor-approved Section 8 notice and service file without jumping between guides, forms, and checklists.',
+      'If notice is the next step, prepare the Section 8 notice, service record, and arrears support without piecing them together yourself.',
     imageSrc: '/images/Section-8-notie-file-ready-to-review.webp',
     imageAlt: 'Section 8 notice file ready to review',
     bullets: [
       'Form 3A and N215 service record',
-      'Arrears schedule, validity checklist, and compliance declaration',
-      'Case summary and what-happens-next guide',
+      'Arrears schedule and checks before service',
+      'Case summary and next-step guide',
     ],
     href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.landingHref,
     ctaLabel: 'Create my Section 8 notice',
@@ -224,13 +224,13 @@ const previewCards: PreviewCard[] = [
   {
     title: 'Court possession paperwork in one file',
     body:
-      'When the case has moved beyond notice, you can prepare the full possession file, not just the court forms.',
+      'When the tenant still has not left, prepare the court forms and supporting evidence as one file.',
     imageSrc: '/images/Court-possession-paperwork-in-one-file.webp',
     imageAlt: 'Court possession paperwork in one file',
     bullets: [
-      'Stage 1 plus N5 and N119 together',
+      'Section 8 notice file plus N5 and N119 together',
       'Witness statement, evidence checklist, and court bundle index',
-      'Filing guide and hearing checklist for the England court route',
+      'Filing guide and hearing checklist for court',
     ],
     href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.landingHref,
     ctaLabel: 'Prepare my court pack',
@@ -240,7 +240,7 @@ const previewCards: PreviewCard[] = [
   {
     title: 'Debt, rent, and tenancy paperwork from the same account',
     body:
-      'You can also prepare money claim documents, rent increase paperwork, and tenancy agreements without switching to a different tool.',
+      'You can also prepare money claims, rent increase notices, and tenancy agreements from the same account.',
     imageSrc: '/images/Debt-rent-and-tenancy-paperwork-from-the-same-account.webp',
     imageAlt: 'Debt, rent, and tenancy paperwork from the same account',
     bullets: [
@@ -260,7 +260,7 @@ const processSteps: ProcessStep[] = [
     step: '01',
     title: 'Pick the landlord job you need done',
     body:
-      'Start with a Section 8 notice, a court pack, a money claim, a rent increase, or a tenancy agreement.',
+      'Start with the thing you need to do now: serve notice, go to court, recover money, raise rent, or set up a tenancy.',
     imageSrc: '/images/recover-unpaid-rent.webp',
     imageAlt: 'Recover unpaid rent process step',
   },
@@ -395,7 +395,7 @@ export default function HomeContent() {
           <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'public-subtle-grid px-6 py-8 md:px-10 md:py-10')}>
             <StaggerReveal className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div className="max-w-3xl">
-                <span className="public-eyebrow">Choose the right route</span>
+                <span className="public-eyebrow">Choose the right next step</span>
                 <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
                   What situation are you dealing with?
                 </h2>
@@ -403,8 +403,8 @@ export default function HomeContent() {
                   Tell us what's happening and we'll show you the next step.
                 </p>
                 <p className="mt-3 text-sm font-medium leading-7 text-[#6a6280]">
-                  Pick the situation that matches your problem. We'll route you to
-                  the right product — no legal jargon needed.
+                  Pick the situation that matches your problem. We will take you
+                  to the right next step without making you decode legal jargon first.
                 </p>
               </div>
                 <div className="public-stat-card px-5 py-4">
@@ -476,8 +476,8 @@ export default function HomeContent() {
                   See what you will actually get
                 </h2>
                 <p className="mt-4 text-lg leading-8 text-[#5d5672]">
-                  Each product page should make it clear what it helps with, what
-                  the pack includes, and what to do next.
+                  Each page should make it clear what problem it solves, what you
+                  get, and what to do next.
                 </p>
                 <div className="mt-6 space-y-4">
                   {[
@@ -591,12 +591,12 @@ export default function HomeContent() {
               </h2>
               <p className="mt-4 text-base leading-8 text-white/78">
                 When something needs dealing with, you should be able to find the
-                right product quickly, understand what it covers, and move forward
+                right next step quickly, understand what it covers, and move forward
                 without digging through legal jargon.
               </p>
               <div className="mt-8 grid gap-4">
                 {[
-                  'Section 8 notices, court packs, money claims, rent increases, and tenancy agreements in one place',
+                  'Section 8 notices, court papers, money claims, rent increases, and tenancy agreements in one place',
                   'Guidance that explains the next step in plain English',
                   'Documents that are easy to review, download, and print',
                 ].map((item) => (
@@ -675,11 +675,11 @@ export default function HomeContent() {
               Start now
             </span>
             <h2 className="mt-5 text-3xl font-bold tracking-tight text-white md:text-5xl">
-              Choose the route and keep the paperwork moving
+              Choose the next step and keep the paperwork moving
             </h2>
             <p className="mx-auto mt-4 max-w-3xl text-lg leading-8 text-white/78">
-              The job should be obvious before the jargon starts. Use the route
-              selector to move into the right product page for your case.
+              The job should be obvious before the jargon starts. Start with the
+              situation you are dealing with, then move into the right paperwork.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <TrackedLink
@@ -696,11 +696,11 @@ export default function HomeContent() {
                   }
                 }}
               >
-                Choose the right route
+                Choose the right next step
               </TrackedLink>
             </div>
             <p className="mt-5 text-sm text-white/66">
-              For landlords with property in England. Clear routes, strong checks,
+              For landlords with property in England. Clear next steps, strong checks,
               and documents ready to review and print.
             </p>
           </div>

@@ -19,7 +19,7 @@ const tenancyOptions = [
     label: 'Standard',
     href: '/standard-tenancy-agreement',
     sku: 'england_standard_tenancy_agreement' as const,
-    fit: 'Ordinary whole-property residential lets in England that need a validated setup pack rather than a static wording-only form.',
+    fit: 'Ordinary whole-property residential lets in England where you need the usual agreement and setup documents.',
   },
   {
     label: 'Premium',
@@ -68,7 +68,7 @@ const faqs = [
 export const metadata: Metadata = {
   title: 'Which Tenancy Agreement Do I Need? England Options Compared',
   description:
-    'Compare Standard, Premium, Student, HMO / Shared House, and Lodger workflows for England landlords. Choose the right solicitor-approved, fact-built setup pack.',
+    'Compare Standard, Premium, Student, HMO / Shared House, and Lodger agreements for England landlords. Choose the paperwork that matches the let.',
   keywords: [
     'which tenancy agreement do i need',
     'tenancy agreement options england',
@@ -110,22 +110,22 @@ export default function TenancyAgreementOptionsComparisonPage() {
       <UniversalHero
         badge="Compare"
         title="Which Tenancy Agreement Do I Need?"
-        subtitle="Compare the five England agreement workflows, then choose the validated setup pack that matches the property, occupier setup, rent, deposit, and management risk."
-        primaryCta={{ label: 'Build my validated tenancy pack', href: '/products/ast' }}
+        subtitle="Choose based on how the property is actually being let: ordinary tenancy, fuller management wording, students, shared house, or lodger."
+        primaryCta={{ label: 'Choose my tenancy agreement', href: '/products/ast' }}
         secondaryCta={{ label: 'View Free Samples', href: '/samples' }}
         mediaSrc="/images/wizard-icons/10-signing.png"
         mediaAlt="Tenancy agreement comparison documents"
         showReviewPill
         showTrustPositioningBar
         trustPositioningPreset="ast"
-        trustPositioningHeadline="Choose the correct England agreement workflow before you start, then build from your facts and preview before payment."
+        trustPositioningHeadline="Choose the right England agreement before you start, then preview the documents before payment."
       />
 
       <Container className="py-12 md:py-16">
         <section className="rounded-lg border border-[#E8E1D7] bg-white p-6">
           <h2 className="text-3xl font-bold text-[#141B2D]">Start with the occupier setup</h2>
           <p className="mt-3 max-w-3xl text-base leading-7 text-[#546075]">
-            Landlord Heaven is for routine solicitor-approved document preparation, not legal advice or representation. A solicitor is better for bespoke disputes; a low-cost wording-only download is cheaper but will not validate the tenancy route or build the procedural setup pack from your answers.
+            Start with how the property will be occupied. A solicitor is better for bespoke disputes; a cheap template may be enough for very simple cases, but it will not check whether the agreement matches the tenancy you are setting up.
           </p>
           <div className="mt-6 grid gap-4 md:grid-cols-5">
             {tenancyOptions.map((option) => (

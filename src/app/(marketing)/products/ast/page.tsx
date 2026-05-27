@@ -173,25 +173,25 @@ export default function EnglandTenancyHubPage() {
     hero: {
       ...astHeroConfig,
       trustText:
-        'Validated England tenancy setup packs | Standard, Premium, Student, HMO, and Lodger',
+        'England tenancy agreements | Standard, Premium, Student, HMO, and Lodger',
       title: 'Choose the right England',
       highlightTitle: 'tenancy agreement for the let',
       subtitle:
-        'Choose the England agreement workflow that matches the property, occupiers, rent, deposit, and management facts. Each route builds a validated setup pack, not a wording-only download.',
+        'Choose the agreement that matches how the property will actually be occupied: ordinary let, fuller management terms, student house, HMO / shared house, or lodger.',
       showTrustPositioningBar: true,
       primaryCta: {
-        label: 'Build my validated Standard pack',
+        label: 'Choose Standard agreement',
         href: '/standard-tenancy-agreement',
       },
       secondaryCta: {
-        label: 'Build my validated Premium pack',
+        label: 'Choose Premium agreement',
         href: '/premium-tenancy-agreement',
       },
     },
     decisionBlock: {
       title: 'Choose the agreement before you start',
       intro:
-        'Use this page to choose the jurisdiction-specific agreement workflow that matches the property, occupiers, and way the let will be managed before you preview and pay.',
+        'Start with the facts of the let. The right agreement depends on who will live there, whether the property is shared, and how much management detail you want in the paperwork.',
       cards: [
         {
           eyebrow: 'Most common choice',
@@ -209,18 +209,18 @@ export default function EnglandTenancyHubPage() {
         },
       ],
       primary: {
-        label: 'Build my validated Standard pack',
+        label: 'Choose Standard agreement',
         href: '/standard-tenancy-agreement',
       },
       secondary: {
-        label: 'Build my validated Premium pack',
+        label: 'Choose Premium agreement',
         href: '/premium-tenancy-agreement',
       },
     },
     whatYouGet: {
       title: 'Choose the agreement that fits the let',
       intro:
-        'Compare the five England agreement workflows. Standard is the usual ordinary-let route, Premium adds fuller management wording, and the specialist options cover student, shared-house, and lodger setups with the right procedural support.',
+        'Compare the five England agreement options. Standard is the usual ordinary-let choice, Premium adds fuller management wording, and the specialist options cover student, shared-house, and lodger setups.',
       routeCards,
     },
     objectionBlock: {
@@ -241,20 +241,20 @@ export default function EnglandTenancyHubPage() {
         {
           question: 'What if I buy the wrong agreement type?',
           answer:
-            'This comparison page is meant to prevent that. It helps the paperwork match the way the property is actually being let, before the guided workflow validates the key setup details.',
+            'This comparison page is meant to prevent that. It helps the paperwork match the way the property is actually being let before you start answering detailed questions.',
         },
       ],
     },
     midPageCta: {
       title: 'Ready to choose the agreement?',
       body:
-        'Open Standard for the usual whole-property option, choose Premium for fuller management wording, or use a specialist product when the facts point there. Each route builds the pack from your answers instead of leaving you with a static form to adapt alone.',
+        'Open Standard for the usual whole-property option, choose Premium for fuller management wording, or use a specialist product when the facts point there.',
       primary: {
-        label: 'Build my validated Standard pack',
+        label: 'Choose Standard agreement',
         href: '/standard-tenancy-agreement',
       },
       secondary: {
-        label: 'Build my validated Premium pack',
+        label: 'Choose Premium agreement',
         href: '/premium-tenancy-agreement',
       },
     },
@@ -283,7 +283,7 @@ export default function EnglandTenancyHubPage() {
     howThisHelps: {
       title: 'How this helps',
       intro:
-        'The goal is to get you to the right agreement workflow quickly, with less guesswork and stronger setup validation.',
+        'The goal is to get you to the right agreement quickly, with less guesswork before you start.',
       cards: [
         {
           title: 'It narrows the choice fast',
@@ -293,12 +293,12 @@ export default function EnglandTenancyHubPage() {
         {
           title: 'It keeps the choice honest',
           body:
-            'This page compares the options, then each exact page explains the full product, sample preview, and procedural workflow.',
+            'This page compares the options, then each agreement page explains what you receive and shows a sample preview.',
         },
         {
           title: 'It reduces confusion before checkout',
           body:
-            'Landlords can compare Standard, Premium, Student, HMO, and Lodger before generating anything.',
+            'Landlords can compare Standard, Premium, Student, HMO, and Lodger before preparing anything.',
         },
       ],
     },
@@ -307,7 +307,7 @@ export default function EnglandTenancyHubPage() {
       intro:
         'Compare the options first, then open the product page that matches the tenancy.',
       imageSrc: '/tenancy-how-it-works.webp',
-      imageAlt: 'Landlord tenancy agreement workflow preview',
+      imageAlt: 'Landlord tenancy agreement preview',
       steps: [
         {
           step: 'Step 01',
@@ -323,22 +323,22 @@ export default function EnglandTenancyHubPage() {
         },
         {
           step: 'Step 03',
-          title: 'Start the correct agreement workflow',
+          title: 'Start the correct agreement',
           body:
-            'Generate the product that matches the property and occupiers instead of adapting the wrong paperwork later.',
+            'Prepare the agreement that matches the property and occupiers instead of adapting the wrong paperwork later.',
         },
       ],
     },
     cta: {
       title: 'Start with the agreement that fits the let',
       body:
-        'If the tenancy is a straightforward whole-property let, open Standard first. Choose Premium for fuller management wording. Use the specialist options only when the occupiers or setup point there, then build the validated pack from your facts.',
+        'If the tenancy is a straightforward whole-property let, open Standard first. Choose Premium for fuller management wording. Use the specialist options only when the occupiers or setup point there.',
       primary: {
-        label: 'Build my validated Standard pack',
+        label: 'Choose Standard agreement',
         href: '/standard-tenancy-agreement',
       },
       secondary: {
-        label: 'Build my validated Premium pack',
+        label: 'Choose Premium agreement',
         href: '/premium-tenancy-agreement',
       },
       guideLinks: [

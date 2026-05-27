@@ -166,13 +166,13 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
     switch (type) {
       case 'eviction':
-        return `👋 Hi! I'm here to help you create the right eviction documents for ${jurName}.\n\nI'll check your case against 20+ legal requirements before generating anything — if there's a compliance issue that could invalidate your notice, I'll catch it now, not when you're in court.\n\nLet's get started...`;
+        return `Hi. I will help you prepare the right eviction paperwork for ${jurName}.\n\nI will ask for the facts the court or notice process is likely to care about, then flag anything that could weaken the notice before you serve or file it.\n\nLet's get started.`;
       case 'money_claim':
-        return `👋 Hi! I'm here to help you recover money owed by creating a money claim pack for ${jurName}.\n\nI'll verify your claim against Pre-Action Protocol requirements and calculate arrears precisely — the same checks a solicitor would perform.\n\nLet's begin...`;
+        return `Hi. I will help you prepare a money claim for ${jurName}.\n\nWe will set out who owes what, why it is owed, what you have already done to chase it, and what evidence supports the claim.\n\nLet's begin.`;
       case 'tenancy_agreement':
-        return `👋 Hi! I'm here to help you create a professional tenancy agreement for ${jurName}.\n\nI'll ensure your agreement complies with ${jurName === 'Wales' ? 'Renting Homes (Wales) Act 2016' : jurName === 'Scotland' ? 'Private Housing (Tenancies) (Scotland) Act 2016' : 'Housing Act 1988'} requirements, including deposit caps and required clauses.\n\nShall we start?`;
+        return `Hi. I will help you prepare a tenancy agreement for ${jurName}.\n\nWe will check the property, occupiers, rent, deposit, and any special setup details so the paperwork matches the tenancy you are creating.\n\nShall we start?`;
       default:
-        return "👋 Hi! Let's get started...";
+        return "Hi. Let's get started.";
     }
   }, []);
 
@@ -968,8 +968,8 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                       Why we ask:
                     </div>
                     <div className="text-sm text-gray-600">
-                      We need exact details for court-ready documents. Don't worry - you can edit
-                      these later.
+                      We need exact details because small errors can change the paperwork. You can
+                      edit these later.
                     </div>
                   </div>
                 </div>

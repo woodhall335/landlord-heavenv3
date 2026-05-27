@@ -18,17 +18,17 @@ const faqs = [
   {
     question: 'When is the Supported Rent Increase Pack enough?',
     answer:
-      'Use the Supported pack when you need to serve the official Form 4A with current market evidence, a service record, and clear landlord guidance.',
+      'Use the Supported pack when you expect the increase to be straightforward and need Form 4A, market evidence, and a service record.',
   },
   {
     question: 'When should I use the Tribunal-Ready Rent Increase Pack?',
     answer:
-      'Use the Tribunal-Ready pack when the tenant has challenged or is likely to challenge the rent increase at tribunal.',
+      'Use the Tribunal-Ready pack when the tenant has challenged the increase, or you already think a challenge is likely.',
   },
   {
     question: 'Can I start with Supported and move to Tribunal-Ready?',
     answer:
-      'Yes. If a tenant later disputes the increase, move into the Tribunal-Ready pack for tribunal response material and bundle preparation.',
+      'Yes. If the tenant later disputes the increase, move into the Tribunal-Ready pack for response material and tribunal bundle preparation.',
   },
 ];
 
@@ -82,9 +82,9 @@ export default function Section13ComparisonPage() {
       <UniversalHero
         badge="Compare"
         title="Supported vs Tribunal-Ready"
-        subtitle="Most unchallenged rent increases need the Supported pack. If the tenant disputes the proposed rent or tribunal risk is high, use the Tribunal-Ready pack."
-        primaryCta={{ label: 'Buy Supported Pack', href: '/products/section-13-standard' }}
-        secondaryCta={{ label: 'Buy Tribunal-Ready Pack', href: '/products/section-13-defence' }}
+        subtitle="If you expect the increase to be straightforward, use the Supported pack. If the tenant is likely to challenge it, choose the Tribunal-Ready pack from the start."
+        primaryCta={{ label: 'Prepare the rent increase notice', href: '/products/section-13-standard' }}
+        secondaryCta={{ label: 'Prepare for a tenant challenge', href: '/products/section-13-defence' }}
         mediaSrc="/images/wizard-icons/18-forms-bundle.png"
         mediaAlt="Section 13 rent increase pack documents"
         showReviewPill
@@ -93,7 +93,7 @@ export default function Section13ComparisonPage() {
 
       <Container className="py-12 md:py-16">
         <section className="rounded-lg border border-[#E8E1D7] bg-white p-6">
-          <h2 className="text-3xl font-bold text-[#141B2D]">Which pack fits?</h2>
+          <h2 className="text-3xl font-bold text-[#141B2D]">Which situation fits?</h2>
           <div className="mt-6 overflow-hidden rounded-lg border border-[#E8E1D7]">
             <table className="w-full text-left text-sm">
               <thead className="bg-[#F7F2FF] text-[#2A2161]">
@@ -129,10 +129,10 @@ export default function Section13ComparisonPage() {
           </div>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <Link href="/products/section-13-standard" className="hero-btn-primary text-center">
-              Buy Supported Pack
+              Prepare the rent increase notice
             </Link>
             <Link href="/products/section-13-defence" className="hero-btn-secondary text-center">
-              Buy Tribunal-Ready Pack
+              Prepare for a tenant challenge
             </Link>
           </div>
         </section>

@@ -98,7 +98,7 @@ export default function CompleteEvictionPackPage() {
       trustText: 'England possession claim pack | Form 3A, N5, N119, evidence, preview before paying',
       title: 'Section 8 possession claim pack with N5 and N119',
       subtitle:
-        'Prepare the full England possession claim file, not just separate court forms. Build the Stage 1 notice/service file plus N5, N119, witness statement, court readiness status, evidence checklist, court bundle index, filing guide, hearing checklist, eviction case summary, and arrears engagement letter.',
+        'Use this when the case is heading to court, or you want the notice and court papers prepared together. Prepare the Section 8 notice file plus N5, N119, witness statement, evidence checklist, filing guide, hearing checklist, case summary, and arrears engagement letter.',
       primaryCta: {
         label: descriptor.primaryCtaLabel,
         href: descriptor.wizardHref,
@@ -108,12 +108,12 @@ export default function CompleteEvictionPackPage() {
         href: '/products/notice-only',
       },
       feature:
-        'Stage 2 = serve, issue, evidence, and prepare for hearing. Includes the Notice Only file, so if you already expect court action, start here instead of buying Stage 1 separately. Procedural document pack, not legal advice.',
+        'Choose this if court is likely. It includes the notice file, so you do not need to buy Notice Only separately first. Procedural document preparation, not legal advice.',
       children: (
         <div className="mt-6 rounded-2xl border border-white/20 bg-white/10 p-4 text-sm leading-6 text-white/90 backdrop-blur">
           <p className="font-semibold text-white">Choose this if court is likely.</p>
           <p className="mt-1">
-            It includes the Stage 1 Form 3A notice and service file, then adds the N5,
+            It includes the Form 3A notice and service file, then adds the N5,
             N119, evidence, filing, and hearing support for the possession claim.
           </p>
         </div>
@@ -156,8 +156,8 @@ export default function CompleteEvictionPackPage() {
       imageHref: descriptor.wizardHref,
       mobileImageFirstFullBleed: true,
       includedBullets: [
-        'Everything in Stage 1: Form 3A, N215, service instructions, arrears schedule, checks, and case summary',
-        'N5, N119, witness statement, court readiness status, and evidence collection checklist',
+        'Form 3A, N215, service instructions, arrears schedule, checks, and case summary',
+        'N5, N119, witness statement, and evidence collection checklist',
         'Court bundle index, court filing guide, hearing checklist, what-happens-next guide, and arrears engagement letter',
       ],
       bestFor:
@@ -168,7 +168,7 @@ export default function CompleteEvictionPackPage() {
     whatYouGet: {
       title: 'What you get in the combined pack',
       intro:
-        'You get the Stage 1 notice and service file plus the Stage 2 possession claim bundle in one file. You can inspect the Form 3A notice, N215, N5 claim form, N119 particulars, arrears record, evidence support, and hearing preparation before buying.',
+        'You get the notice and service file plus the possession claim papers in one file. You can inspect the Form 3A notice, N215, N5 claim form, N119 particulars, arrears record, evidence support, and hearing preparation before buying.',
       items: [
         {
           name: 'Form 3A (Section 8 Notice)',

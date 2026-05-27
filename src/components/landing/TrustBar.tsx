@@ -44,7 +44,7 @@ const trustBadges = [
   },
   {
     icon: <RiLockLine className="h-5 w-5" />,
-    label: 'Section 8 route updated for May 2026',
+    label: 'Section 8 notices updated for May 2026',
     sublabel: 'Written for the current England rules',
   },
   {
@@ -53,7 +53,7 @@ const trustBadges = [
   },
   {
     icon: <RiMapPinLine className="h-5 w-5" />,
-    label: 'Notice, court, debt, rent, and tenancy routes',
+    label: 'Notice, court, debt, rent, and tenancy paperwork',
   },
 ];
 

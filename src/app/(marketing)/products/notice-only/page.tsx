@@ -98,7 +98,7 @@ export default function NoticeOnlyPage() {
       trustText: 'England-only Form 3A eviction notice | N215, arrears, service checks, preview before paying',
       title: 'Create a Section 8 eviction notice and service file',
       subtitle:
-        'Prepare the England Form 3A notice file properly before anything goes to the tenant. Build the Section 8 eviction notice, N215, arrears schedule, service instructions, validity checklist, compliance declaration, case summary, and next-step guide in one file you can preview before paying.',
+        'Use this when the next job is serving notice. Prepare the England Form 3A notice, N215 service record, arrears schedule, service instructions, checks before service, case summary, and next-step guide in one file you can preview before paying.',
       primaryCta: {
         label: descriptor.primaryCtaLabel,
         href: descriptor.wizardHref,
@@ -108,12 +108,12 @@ export default function NoticeOnlyPage() {
         href: '/products/complete-pack',
       },
       feature:
-        'Stage 1 = serve correctly. Use this when you need the eviction notice first. Choose Complete Pack if you already expect court. Procedural document pack, not legal advice.',
+        'Choose this if you have not served the Section 8 notice yet. If you already expect court papers, use the Complete Pack instead. Procedural document preparation, not legal advice.',
       children: (
         <div className="mt-6 rounded-2xl border border-white/20 bg-white/10 p-4 text-sm leading-6 text-white/90 backdrop-blur">
           <p className="font-semibold text-white">Choose this if your next step is serving notice.</p>
           <p className="mt-1">
-            It is the England-only Form 3A notice and service route. If you want N5 and N119
+            It is the England-only Form 3A notice and service file. If you want N5 and N119
             possession claim papers as well, use the Complete Pack instead.
           </p>
         </div>
@@ -150,15 +150,15 @@ export default function NoticeOnlyPage() {
     earlyProofBand: {
       priceLabel: product.displayPrice,
       valueSummary:
-        'Prepare the notice file properly before anything goes to the tenant. You can check the actual Section 8 eviction notice and service file before you pay. This is procedural document preparation, not legal advice.',
+        'Prepare the notice file properly before anything goes to the tenant. You can check the actual Section 8 notice and service file before you pay. This is procedural document preparation, not legal advice.',
       imageSrc: '/images/notice-only-pack.webp',
       imageAlt: 'Preview of the Stage 1 Section 8 notice-only pack',
       imageHref: descriptor.wizardHref,
       mobileImageFirstFullBleed: true,
       includedBullets: [
         'Form 3A Section 8 notice, N215 certificate of service, and service instructions',
-        'Rent arrears schedule, validity checklist, and compliance declaration',
-        'Case summary and what-happens-next guide for the next step',
+        'Rent arrears schedule and checks before service',
+        'Case summary and next-step guide',
       ],
       bestFor:
         'You need to serve correctly first and want the service record ready before deciding about court.',
@@ -168,7 +168,7 @@ export default function NoticeOnlyPage() {
     whatYouGet: {
       title: 'What you get in Stage 1',
       intro:
-        'This is more than a blank form. You get an 8-document England eviction notice and service file, and you can inspect it before buying.',
+        'This is more than a blank form. You get an England eviction notice and service file, and you can inspect it before buying.',
       items: [
         {
           name: 'Form 3A (Section 8 Notice)',
@@ -251,7 +251,7 @@ export default function NoticeOnlyPage() {
           riskIfMissing:
             'If the case later moves to court, scattered facts make the file harder to rebuild.',
           landlordOutcome:
-            'Creates a cleaner handoff into Stage 2 if you need it.',
+            'Makes it easier to move into court papers later if you need them.',
           includedByDefault: true,
         },
         {
