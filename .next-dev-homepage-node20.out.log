@@ -1,0 +1,14 @@
+▲ Next.js 16.1.1 (webpack)
+- Local:         http://localhost:5000
+- Network:       http://0.0.0.0:5000
+- Experiments (use with caution):
+  · serverActions
+
+✓ Starting...
+✓ Ready in 7.9s
+○ Compiling / ...
+ GET / 200 in 3.6s (compile: 17ms, proxy.ts: 2.1s, render: 1449ms)
+ GET / 200 in 633ms (compile: 16ms, proxy.ts: 42ms, render: 574ms)
+ GET / 200 in 7.5s (compile: 222ms, proxy.ts: 713ms, render: 6.6s)
+○ Compiling /_error ...
+ GET / 200 in 5.3s (compile: 873ms, proxy.ts: 106ms, render: 4.3s)

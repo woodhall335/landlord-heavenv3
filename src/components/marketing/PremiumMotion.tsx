@@ -38,6 +38,25 @@ function usePrefersReducedMotion() {
   return prefersReducedMotion;
 }
 
+function useIsMobileRevealFallback() {
+  const [isMobileRevealFallback, setIsMobileRevealFallback] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) {
+      return;
+    }
+
+    const query = window.matchMedia('(max-width: 767px)');
+    const update = () => setIsMobileRevealFallback(query.matches);
+
+    update();
+    query.addEventListener?.('change', update);
+    return () => query.removeEventListener?.('change', update);
+  }, []);
+
+  return isMobileRevealFallback;
+}
+
 export function Reveal({
   children,
   className,
@@ -52,15 +71,23 @@ export function Reveal({
   const Component = as;
   const ref = useRef<HTMLElement | null>(null);
   const reducedMotion = usePrefersReducedMotion();
+  const isMobileRevealFallback = useIsMobileRevealFallback();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const node = ref.current;
     if (!node) return;
 
-    if (reducedMotion || typeof IntersectionObserver === 'undefined') {
-      setIsVisible(true);
-      return;
+    if (reducedMotion || isMobileRevealFallback || typeof IntersectionObserver === 'undefined') {
+      const markVisible = () => setIsVisible(true);
+
+      if (typeof window !== 'undefined' && window.requestAnimationFrame) {
+        const frame = window.requestAnimationFrame(markVisible);
+        return () => window.cancelAnimationFrame(frame);
+      }
+
+      const timeout = window.setTimeout(markVisible, 0);
+      return () => window.clearTimeout(timeout);
     }
 
     const observer = new IntersectionObserver(
@@ -70,12 +97,12 @@ export function Reveal({
           observer.disconnect();
         }
       },
-      { rootMargin: '0px 0px -12% 0px', threshold: 0.12 }
+      { rootMargin: '0px 0px -8% 0px', threshold: 0.01 }
     );
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, [reducedMotion]);
+  }, [isMobileRevealFallback, reducedMotion]);
 
   return (
     <Component

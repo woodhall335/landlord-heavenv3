@@ -771,13 +771,13 @@ div.ask-heaven-panel,
 @media (max-width: 767px) {
   .premium-reveal,
   .premium-stagger-child {
-    opacity: 1;
-    filter: none;
-    transform: none;
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
   }
 
   .premium-stagger-child {
-    transition-delay: 0ms;
+    transition-delay: 0ms !important;
   }
 }
 

@@ -1,0 +1,34 @@
+internal/modules/cjs/loader.js:892
+  throw err;
+  ^
+
+Error: Cannot find module 'node:events'
+Require stack:
+- C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\node_modules\.pnpm\next@16.1.1_@babel+core@7.28.5_babel-plugin-react-compiler@1.0.0_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\compiled\commander\index.js
+- C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\node_modules\.pnpm\next@16.1.1_@babel+core@7.28.5_babel-plugin-react-compiler@1.0.0_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\bin\next
+    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:889:15)
+    at C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\node_modules\.pnpm\next@16.1.1_@babel+core@7.28.5_babel-plugin-react-compiler@1.0.0_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\require-hook.js:57:36
+    at Function.Module._load (internal/modules/cjs/loader.js:745:27)
+    at Module.require (internal/modules/cjs/loader.js:961:19)
+    at Module.mod.require (C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\node_modules\.pnpm\next@16.1.1_@babel+core@7.28.5_babel-plugin-react-compiler@1.0.0_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\require-hook.js:68:28)
+    at require (internal/modules/cjs/helpers.js:92:18)
+    at Object.673 (C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\node_modules\.pnpm\next@16.1.1_@babel+core@7.28.5_babel-plugin-react-compiler@1.0.0_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\compiled\commander\index.js:1:107)
+    at __nccwpck_require__ (C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\node_modules\.pnpm\next@16.1.1_@babel+core@7.28.5_babel-plugin-react-compiler@1.0.0_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\compiled\commander\index.js:1:37016)
+    at Object.119 (C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\node_modules\.pnpm\next@16.1.1_@babel+core@7.28.5_babel-plugin-react-compiler@1.0.0_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\compiled\commander\index.js:1:1576)
+    at __nccwpck_require__ (C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\node_modules\.pnpm\next@16.1.1_@babel+core@7.28.5_babel-plugin-react-compiler@1.0.0_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\compiled\commander\index.js:1:37016) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\node_modules\\.pnpm\\next@16.1.1_@babel+core@7.28.5_babel-plugin-react-compiler@1.0.0_react-dom@19.2.0_react@19.2.0__react@19.2.0\\node_modules\\next\\dist\\compiled\\commander\\index.js',
+    'C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\node_modules\\.pnpm\\next@16.1.1_@babel+core@7.28.5_babel-plugin-react-compiler@1.0.0_react-dom@19.2.0_react@19.2.0__react@19.2.0\\node_modules\\next\\dist\\bin\\next'
+  ]
+}
+npm ERR! code ELIFECYCLE
+npm ERR! errno 1
+npm ERR! landlord-heavenv3@0.1.0 dev: `next dev --webpack -H 0.0.0.0 -p 5000`
+npm ERR! Exit status 1
+npm ERR! 
+npm ERR! Failed at the landlord-heavenv3@0.1.0 dev script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\t_moh\AppData\Roaming\npm-cache\_logs\2026-05-27T12_20_38_251Z-debug.log

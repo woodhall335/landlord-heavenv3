@@ -28,11 +28,11 @@ vi.mock('@/components/ui/Container', () => ({
   Container: ({ children }: { children: ReactNode }) => <div>{children}</div>,
 }));
 
-function mockMatchMedia(matches: boolean) {
+function mockMatchMedia(matches: boolean | ((query: string) => boolean)) {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: vi.fn().mockImplementation((query: string) => ({
-      matches,
+      matches: typeof matches === 'function' ? matches(query) : matches,
       media: query,
       onchange: null,
       addListener: vi.fn(),
@@ -59,6 +59,27 @@ describe('premium motion primitives', () => {
     const { container } = render(<Reveal>Premium content</Reveal>);
 
     expect(screen.getByText('Premium content')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(container.querySelector('.premium-reveal')).toHaveAttribute(
+        'data-motion-state',
+        'visible',
+      );
+    });
+  });
+
+  it('Reveal marks content visible on mobile even when IntersectionObserver never fires', async () => {
+    mockMatchMedia((query) => query === '(max-width: 767px)');
+    vi.stubGlobal(
+      'IntersectionObserver',
+      vi.fn().mockImplementation(() => ({
+        observe: vi.fn(),
+        disconnect: vi.fn(),
+      })),
+    );
+
+    const { container } = render(<Reveal>Mobile content</Reveal>);
+
+    expect(screen.getByText('Mobile content')).toBeInTheDocument();
     await waitFor(() => {
       expect(container.querySelector('.premium-reveal')).toHaveAttribute(
         'data-motion-state',
