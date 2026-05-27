@@ -10,7 +10,6 @@ import Image from 'next/image';
 import { useEffect } from 'react';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { PremiumImageFrame, Reveal, StaggerReveal, TrustPillRow } from '@/components/marketing/PremiumMotion';
-import { Section8WorkflowStory } from '@/components/marketing/Section8WorkflowStory';
 import { Container } from '@/components/ui';
 import { Hero, TrustBar } from '@/components/landing';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
@@ -437,8 +436,6 @@ export default function HomeContent() {
           </div>
         </Container>
       </section>
-
-      <Section8WorkflowStory />
 
       <section className="pb-16 pt-4 md:pb-20">
         <Reveal>
