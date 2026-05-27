@@ -769,15 +769,20 @@ div.ask-heaven-panel,
 }
 
 @media (max-width: 767px) {
-  .premium-reveal,
-  .premium-stagger-child {
-    opacity: 1 !important;
-    filter: none !important;
-    transform: none !important;
+  .premium-reveal {
+    transform: translate3d(0, var(--premium-reveal-sm), 0);
+    transition-duration: 520ms;
+  }
+
+  .premium-stagger[data-motion-state="hidden"] .premium-stagger-child {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translate3d(0, 14px, 0);
   }
 
   .premium-stagger-child {
-    transition-delay: 0ms !important;
+    transition-duration: 520ms;
+    transition-delay: calc(var(--premium-stagger-index, 0) * 45ms);
   }
 }
 

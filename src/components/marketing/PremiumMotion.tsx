@@ -78,7 +78,7 @@ export function Reveal({
     const node = ref.current;
     if (!node) return;
 
-    if (reducedMotion || isMobileRevealFallback || typeof IntersectionObserver === 'undefined') {
+    if (reducedMotion || typeof IntersectionObserver === 'undefined') {
       const markVisible = () => setIsVisible(true);
 
       if (typeof window !== 'undefined' && window.requestAnimationFrame) {
@@ -90,18 +90,69 @@ export function Reveal({
       return () => window.clearTimeout(timeout);
     }
 
-    const observer = new IntersectionObserver(
+    let observer: IntersectionObserver | null = null;
+    let mobileFrame: number | null = null;
+    const mobileTimeouts: number[] = [];
+
+    const markVisible = () => {
+      setIsVisible(true);
+      observer?.disconnect();
+    };
+
+    const cancelMobileFrame = () => {
+      if (mobileFrame !== null) {
+        window.cancelAnimationFrame(mobileFrame);
+        mobileFrame = null;
+      }
+    };
+
+    const checkMobilePosition = () => {
+      mobileFrame = null;
+      const rect = node.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      const revealMargin = 140;
+
+      if (rect.top <= viewportHeight + revealMargin && rect.bottom >= -revealMargin) {
+        markVisible();
+      }
+    };
+
+    const scheduleMobileCheck = () => {
+      if (mobileFrame === null) {
+        mobileFrame = window.requestAnimationFrame(checkMobilePosition);
+      }
+    };
+
+    if (isMobileRevealFallback) {
+      window.addEventListener('scroll', scheduleMobileCheck, { passive: true });
+      window.addEventListener('resize', scheduleMobileCheck);
+      scheduleMobileCheck();
+      mobileTimeouts.push(
+        window.setTimeout(scheduleMobileCheck, 250),
+        window.setTimeout(scheduleMobileCheck, 900),
+        window.setTimeout(scheduleMobileCheck, 1600)
+      );
+    }
+
+    observer = new IntersectionObserver(
       ([entry]) => {
         if (entry?.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
+          markVisible();
         }
       },
       { rootMargin: '0px 0px -8% 0px', threshold: 0.01 }
     );
 
     observer.observe(node);
-    return () => observer.disconnect();
+    return () => {
+      observer?.disconnect();
+      if (isMobileRevealFallback) {
+        window.removeEventListener('scroll', scheduleMobileCheck);
+        window.removeEventListener('resize', scheduleMobileCheck);
+      }
+      mobileTimeouts.forEach((timeout) => window.clearTimeout(timeout));
+      cancelMobileFrame();
+    };
   }, [isMobileRevealFallback, reducedMotion]);
 
   return (

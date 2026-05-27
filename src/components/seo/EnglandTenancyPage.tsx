@@ -106,12 +106,12 @@ const tenancyPositioningCards = [
   {
     title: 'Compared with using a solicitor',
     body:
-      'A solicitor is the safer choice for complex dispute work. For routine tenancy setup, this fixed-price workflow gives landlords solicitor-approved document preparation without solicitor rates or delays.',
+      'A solicitor is the safer choice for complex dispute work. For routine tenancy setup, this fixed-price option gives landlords prepared documents without solicitor rates or delays.',
   },
   {
-    title: 'Validated before preview',
+    title: 'Checked before preview',
     body:
-      'The workflow checks the agreement route, core tenancy facts, deposit and guarantor inputs where relevant, product fit, and procedural readiness before the pack moves to preview.',
+      'The builder checks the agreement type, core tenancy facts, deposit and guarantor inputs where relevant, product fit, and setup details before the pack moves to preview.',
   },
 ] as const;
 
@@ -232,8 +232,8 @@ export function EnglandTenancyPage({
     <main className="min-h-screen bg-[#FCFBF8]">
       <UniversalHero
         badge="England tenancy agreements"
-        preTitleLabel="Solicitor-approved document preparation"
-        trustText="Validated England tenancy setup packs for landlords, updated for the post-May 2026 rules."
+        preTitleLabel="Landlord document preparation"
+        trustText="Current England tenancy setup packs for landlords, updated for the post-May 2026 rules."
         title={title}
         subtitle={subtitle}
         primaryCta={{ label: primaryCtaLabel, href: primaryCtaHref }}
@@ -242,12 +242,12 @@ export function EnglandTenancyPage({
             ? { label: secondaryCtaLabel, href: secondaryCtaHref }
             : undefined
         }
-        feature="Create a validated England tenancy setup pack around your property, occupiers, rent, deposit, and management facts."
+        feature="Create an England tenancy setup pack around your property, occupiers, rent, deposit, and management facts."
         mediaSrc="/images/tenancy_agreements.webp"
         mediaAlt="Tenancy agreement documents and landlord paperwork"
         showTrustPositioningBar
         trustPositioningPreset="ast"
-        trustPositioningHeadline="Build the agreement from your facts, validate the setup, preview before payment, and keep the procedural pack together."
+        trustPositioningHeadline="Build the agreement from your facts, check the setup, preview before payment, and keep the pack together."
       />
 
       <Container className="py-12 md:py-16">
@@ -271,7 +271,7 @@ export function EnglandTenancyPage({
                     <p key={`sales-intro-${index}`}>{paragraph}</p>
                   ))}
                   <p>
-                    Landlord Heaven is not selling a static wording-only form. It is a solicitor-approved document preparation workflow that builds a validated England tenancy setup pack around your property, occupiers, rent, deposit, guarantor, and management facts.
+                    Landlord Heaven is not selling a static wording-only form. It asks for the property, occupiers, rent, deposit, guarantor, and management facts, then builds a current England tenancy setup pack around those answers.
                   </p>
                 </div>
               </div>
@@ -298,13 +298,13 @@ export function EnglandTenancyPage({
                 <section className="mb-12 rounded-[2rem] border border-[#D8C8FF] bg-[#F7F2FF] p-6 shadow-[0_14px_32px_rgba(91,86,232,0.08)] md:p-8">
                   <div className="max-w-3xl">
                     <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
-                      Why landlords choose the workflow
+                      Why landlords choose this
                     </p>
                     <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
                       Create the agreement from your facts, not from a static form
                     </h2>
                     <p className="mt-4 text-base leading-8 text-[#546075] md:text-lg">
-                      This is fixed-price, solicitor-approved document preparation for routine landlord setup. It helps you follow the procedure, validate the key tenancy facts, and preview the agreement before payment.
+                      This is fixed-price document preparation for routine landlord setup. It helps you follow the steps, check the key tenancy facts, and preview the agreement before payment.
                     </p>
                   </div>
                   <div className="mt-8 grid gap-5 md:grid-cols-3">

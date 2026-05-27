@@ -87,7 +87,7 @@ const faqs: FAQItem[] = [
   {
     question: 'Should I use Notice Only or the Complete Eviction Pack?',
     answer:
-      'Notice Only is often suitable where you already know Section 8 is the correct route and mainly need a compliant notice workflow. The Complete Eviction Pack is usually a better fit where you want wider support around route choice, evidence quality, and the next court stages.',
+      'Notice Only is often suitable where you already know Section 8 is the correct next step and mainly need the notice papers. The Complete Eviction Pack is usually a better fit where you want wider support around evidence quality and the next court stages.',
   },
 ];
 
@@ -187,7 +187,7 @@ export default function Page() {
       >
         <p className="mt-6 text-sm text-white/90 md:text-base">
           Learn when to use a Section 8 notice, which grounds landlords rely on, what
-          evidence matters most, and when to choose a Notice Only workflow versus the
+          evidence matters most, and when to choose Notice Only versus the
           Complete Eviction Pack.
         </p>
       </UniversalHero>
@@ -313,11 +313,11 @@ export default function Page() {
 
             <CtaBand
               title="Need a Section 8 notice generated properly?"
-              body="Use Notice Only if you already know Section 8 is the right route and mainly need a compliant notice workflow. Use the Complete Eviction Pack if you want broader support with route choice, evidence, and next legal steps."
+              body="Use Notice Only if you already know Section 8 is the right next step and mainly need the notice papers. Use the Complete Eviction Pack if you want broader support with evidence and the next court steps."
               primaryHref="/products/notice-only"
               primaryLabel="Create my Section 8 notice"
               secondaryHref="/products/complete-pack"
-              secondaryLabel="Prepare my court pack"
+              secondaryLabel="Prepare my court papers"
             />
 
             <Card id="section-8-rent-arrears" title="Section 8 for Rent Arrears">
@@ -453,7 +453,7 @@ export default function Page() {
                 </table>
               </div>
               <p className="mt-4 leading-7 text-gray-700">
-                For landlords, the key point is that Section 8 is a managed workflow, not
+                For landlords, the key point is that Section 8 is a managed process, not
                 a single notice event. Good evidence and accurate notice preparation
                 usually save more time than trying to rush a weak file into court.
               </p>
@@ -545,7 +545,7 @@ export default function Page() {
                 </table>
               </div>
               <p className="mt-4 leading-7 text-gray-700">
-                The right route depends on the facts, not preference alone. If the real
+                The right next step depends on the facts, not preference alone. If the real
                 problem is breach and the evidence is there, Section 8 is often the better
                 fit. If the landlord simply wants possession and the compliance file is
                 strong, Section 21 may be more suitable.
@@ -555,37 +555,37 @@ export default function Page() {
             <Card id="notice-only-vs-complete-pack" title="Notice Only vs Complete Pack">
               <p className="mt-4 leading-7 text-gray-700">
                 Choosing the right product matters because many landlords are not just
-                looking for information. They need a workflow that matches the certainty of
+                looking for information. They need paperwork that matches the certainty of
                 their case.
               </p>
               <h3 className="mt-5 text-lg font-semibold text-[#2a2161]">Notice Only</h3>
               <p className="mt-2 leading-7 text-gray-700">
                 Notice Only is usually the better fit where you already know Section 8 is
-                the correct route and mainly need a compliant notice produced from the
+                the correct next step and mainly need a notice produced from the
                 right inputs. It is often suitable for landlords, agents, or repeat users
-                who understand the grounds and want the notice workflow handled cleanly.
+                who understand the grounds and want the notice papers handled cleanly.
               </p>
               <h3 className="mt-5 text-lg font-semibold text-[#2a2161]">Complete Eviction Pack</h3>
               <p className="mt-2 leading-7 text-gray-700">
                 The Complete Eviction Pack is usually the stronger choice where route
-                confidence, evidence readiness, next-step planning, or possession workflow
+                confidence, evidence readiness, next-step planning, or possession paperwork
                 support still matter. It is often the better fit where the case may proceed
                 from notice to court and enforcement.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
-                In simple terms, use Notice Only where the route is already settled. Use
+                In simple terms, use Notice Only where the notice step is already settled. Use
                 the Complete Eviction Pack where the wider possession case still needs
-                validation and preparation.
+                checks and preparation.
               </p>
             </Card>
 
             <CtaBand
-              title="Choose the right Section 8 workflow before you serve"
-              body="If you mainly need the notice, start with Notice Only. If you want broader preparation, stronger evidence handling, and a fuller possession workflow, choose the Complete Eviction Pack."
+              title="Choose the right Section 8 next step before you serve"
+              body="If you mainly need the notice, start with Notice Only. If you want broader preparation, stronger evidence handling, and fuller possession papers, choose the Complete Eviction Pack."
               primaryHref="/products/notice-only"
               primaryLabel="Create my Section 8 notice"
               secondaryHref="/products/complete-pack"
-              secondaryLabel="Prepare my court pack"
+              secondaryLabel="Prepare my court papers"
             />
           </div>
         </Container>
@@ -601,7 +601,7 @@ export default function Page() {
             <Card title="Related Guides" id="related-guides">
               <p className="mt-4 leading-7 text-gray-700">
                 Landlords researching Section 8 often also need guidance on wider eviction
-                process, route choice, notice-only workflows, and possession planning.
+                process, notice choice, notice-only papers, and possession planning.
                 These pages help build the full picture.
               </p>
               <div className="mt-4 grid gap-3 md:grid-cols-2">
@@ -621,13 +621,13 @@ export default function Page() {
                   href="/products/notice-only"
                   className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]"
                 >
-                  Notice Only: generate compliant notice documents
+                  Notice Only: prepare Section 8 notice documents
                 </Link>
                 <Link
                   href="/products/complete-pack"
                   className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]"
                 >
-                  Complete Eviction Pack: broader possession workflow support
+                  Complete Eviction Pack: broader possession paperwork support
                 </Link>
               </div>
             </Card>
@@ -640,9 +640,9 @@ export default function Page() {
                 process feels controlled or chaotic later.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
-                If you already know Section 8 is the right route and mainly need the
+                If you already know Section 8 is the right next step and mainly need the
                 notice, start with Notice Only. If your case needs wider preparation,
-                stronger evidence handling, and fuller possession workflow support, start
+                stronger evidence handling, and fuller possession paperwork support, start
                 with the Complete Eviction Pack.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
@@ -656,7 +656,7 @@ export default function Page() {
                   href="/products/complete-pack"
                   className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#F8F4FF]"
                 >
-                  Prepare my court pack
+                  Prepare my court papers
                 </Link>
               </div>
             </Card>

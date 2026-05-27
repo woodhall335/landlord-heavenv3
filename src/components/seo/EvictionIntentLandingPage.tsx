@@ -29,7 +29,7 @@ const AREA_SERVED_BY_JURISDICTION = {
 } as const;
 const PRODUCT_CTA_LABELS = {
   '/products/notice-only': 'Start your notice',
-  '/products/complete-pack': 'Start your full eviction pack',
+  '/products/complete-pack': 'Prepare court papers',
   '/products/money-claim': 'Start your money claim',
   '/products/ast': 'Start your tenancy agreement',
 } as const;
@@ -56,19 +56,19 @@ function labelMatchesProduct(label: string, route: string) {
 }
 
 const LANDLORD_SCENARIO_IMAGE_MAP: Record<string, { src: string; alt: string }> = {
-  'Your fixed term has ended, the tenant will not leave, and you want a clean no-fault route without a paperwork restart.': {
+  'Your fixed term has ended, the tenant will not leave, and you want the right next step without restarting the paperwork.': {
     src: '/images/1 Tenant Wont Leave.webp',
     alt: 'Tenant refusing to leave after fixed term ended',
   },
-  'You are unsure whether your compliance record is complete enough to serve safely right now.': {
+  'You are unsure whether your tenancy records are complete enough to serve safely right now.': {
     src: '/images/2️ Unsure Compliance.webp',
     alt: 'Landlord reviewing Section 21 compliance paperwork',
   },
-  'You need to act this week and want a guided workflow instead of editing generic templates manually.': {
+  'You need to act this week and want guided questions instead of editing generic templates manually.': {
     src: '/images/3️ Need to Act.webp',
     alt: 'Landlord preparing urgent eviction notice this week',
   },
-  'You inherited tenancy admin from an agent and need to verify whether deposit and prescribed information records are actually court-ready.': {
+  'You inherited tenancy admin from an agent and need to check whether deposit and prescribed information records are usable later.': {
     src: '/images/4️ Inherited Tenancy Admin.webp',
     alt: 'Inherited tenancy admin records being checked for court readiness',
   },
@@ -76,7 +76,7 @@ const LANDLORD_SCENARIO_IMAGE_MAP: Record<string, { src: string; alt: string }> 
     src: '/images/5️ Accelerated Possession.webp',
     alt: 'Accelerated possession paperwork timeline prepared for court use',
   },
-  'You are balancing arrears pressure with route safety and need confidence that a Section 21 route is still available before committing to service.': {
+  'You are balancing arrears pressure with notice risk and need to know what is still available before committing to service.': {
     src: '/images/6️ Balancing Arrears Pressure.webp',
     alt: 'Landlord balancing arrears pressure and Section 21 route safety',
   },
@@ -196,13 +196,13 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
     '@type': 'Service',
     name:
       primaryProductRoute === '/products/notice-only'
-        ? 'Notice Only Eviction Workflow'
+        ? 'Section 8 Notice Pack'
         : primaryProductRoute === '/products/money-claim'
-          ? 'Money Claim Workflow'
-          : 'Complete Eviction Pack Workflow',
+          ? 'Money Claim Pack'
+          : 'Court Possession Pack',
     provider: { '@type': 'Organization', name: 'Landlord Heaven' },
     areaServed: AREA_SERVED_BY_JURISDICTION[jurisdiction],
-    serviceType: 'Landlord document generation and guided workflow',
+    serviceType: 'Landlord document preparation and guided questions',
     url: canonical,
   };
 
@@ -216,7 +216,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
   const tocItems = [
     { href: '#eviction-process-overview', label: 'Eviction process overview' },
     { href: '#section-21-vs-section-8-explainer', label: 'Section 21 vs Section 8' },
-    { href: '#compliance-requirements', label: 'Compliance requirements' },
+    { href: '#compliance-requirements', label: 'Records to check' },
     { href: '#court-forms-explained', label: 'Court forms explained' },
     { href: '#eviction-timeline', label: 'Eviction timeline' },
     { href: '#start-eviction-now', label: 'Start eviction notice' },
@@ -226,8 +226,8 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
     'Serving the wrong notice for the case facts',
     'Using outdated forms from generic template websites',
     'Serving through the wrong method or without proof',
-    'Missing key compliance documents such as gas safety evidence',
-    'Choosing the wrong possession route and losing weeks',
+    'Missing key records such as gas safety evidence',
+    'Choosing the wrong next step and losing weeks',
     'Submitting incomplete court paperwork after notice expiry',
   ];
 
@@ -244,7 +244,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
     },
     {
       title: 'Scenario: Tenant remains after notice',
-      route: 'Next step is usually the possession claim, with the court forms and dates lined up properly.',
+      route: 'The next step is usually the possession claim, with the court forms and dates lined up properly.',
       link: '/eviction-court-forms-england',
     },
   ];
@@ -406,7 +406,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
               A cheap template can become the expensive option if it sends you down the wrong process. If
               you are still trying to translate older Section 21 wording, use the{' '}
               <Link href="/section-21-vs-section-8" className="text-primary hover:underline">historical comparison guide</Link>{' '}
-              before you serve anything. If you already know the current process, move straight into the workflow that matches your case.
+              before you serve anything. If you already know the current process, move straight into the paperwork that matches your case.
             </p>
             <div className="mt-6 grid gap-4 md:grid-cols-2">
               <Link href="/section-21-notice" className="rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-5 text-gray-700 hover:shadow-sm">
@@ -427,7 +427,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
           <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1.2fr_0.8fr]">
             <div className="rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-8">
               <h2 className="text-3xl font-bold text-charcoal">Why landlords get notices wrong</h2>
-              <p className="mt-4 text-gray-700">Most notices fail for simple reasons: the wrong notice, the wrong dates, missing compliance documents, or service that cannot be proved later. Generic template sites rarely stop you before those mistakes happen.</p>
+              <p className="mt-4 text-gray-700">Most notices fail for simple reasons: the wrong notice, the wrong dates, missing records, or service that cannot be proved later. Generic template sites rarely stop you before those mistakes happen.</p>
               <ul className="mt-4 space-y-2 text-gray-700">
                 {config.templateRisks.map((risk) => <li key={risk}>• {risk}</li>)}
               </ul>
@@ -485,7 +485,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
         <Container>
           <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-10">
             <h2 className="text-3xl font-bold text-charcoal">Where landlords usually lose time</h2>
-            <p className="mt-4 text-gray-700">For timing expectations, use the <Link href="/eviction-timeline-england" className="text-primary hover:underline">eviction timeline England guide</Link>. Court backlogs are outside your control, but notice validity, service quality, and evidence consistency are not.</p>
+            <p className="mt-4 text-gray-700">For timing expectations, use the <Link href="/eviction-timeline-england" className="text-primary hover:underline">eviction timeline England guide</Link>. Court backlogs are outside your control, but notice dates, service quality, and evidence consistency are not.</p>
             <div className="mt-6 overflow-hidden rounded-2xl border border-[#E6DBFF] bg-white">
               <div className="relative w-full">
                 <Image
@@ -515,7 +515,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
                 <ul className="mt-3 space-y-2 text-sm text-gray-700">
                   <li>• Signed tenancy agreement plus any renewal/variation records.</li>
                   <li>• Deposit protection evidence and prescribed information delivery records.</li>
-                  <li>• Compliance records (for example EPC, gas safety, and How to Rent where relevant).</li>
+                  <li>• Required tenancy records (for example EPC, gas safety, and How to Rent where relevant).</li>
                   <li>• Notice copy showing exact date, method, and recipient details.</li>
                   <li>• Proof of service (certificate, posting evidence, hand-delivery witness notes, or tracked records).</li>
                   <li>• Rent ledger or arrears schedule with clear running totals.</li>
@@ -528,7 +528,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
                   <li>• Missing proof that mandatory documents were served to the tenant.</li>
                   <li>• Recalculating arrears late and submitting inconsistent debt totals.</li>
                   <li>• Using screenshots without context, timestamp, or explanation in chronology.</li>
-                  <li>• Mixing template wording from different sources and creating route ambiguity.</li>
+                  <li>• Mixing template wording from different sources and creating confusion about the next step.</li>
                   <li>• Waiting until expiry day to assemble court paperwork.</li>
                 </ul>
               </article>
@@ -553,14 +553,14 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
             <div className="mt-6 grid gap-4 md:grid-cols-3">
               <div className="rounded-2xl border border-[#E6DBFF] bg-white p-5">
                 <h3 className="font-semibold text-charcoal">Before serving</h3>
-                <p className="mt-2 text-sm text-gray-700">Check that you can use this notice, confirm the compliance history, and choose a service method you can prove later.</p>
+                <p className="mt-2 text-sm text-gray-700">Check that you can use this notice, confirm the tenancy records, and choose a service method you can prove later.</p>
               </div>
               <div className="rounded-2xl border border-[#E6DBFF] bg-white p-5">
                 <h3 className="font-semibold text-charcoal">During notice period</h3>
                 <p className="mt-2 text-sm text-gray-700">Maintain communication logs, keep arrears schedules current, and prepare court documents before expiry.</p>
               </div>
               <div className="rounded-2xl border border-[#E6DBFF] bg-white p-5">
-                <h3 className="font-semibold text-charcoal">At court handoff</h3>
+                <h3 className="font-semibold text-charcoal">When moving to court</h3>
                 <p className="mt-2 text-sm text-gray-700">Submit one consistent narrative: tenancy facts, notice, service, chronology, and supporting evidence should all match.</p>
               </div>
             </div>
@@ -616,7 +616,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
           <div className="mx-auto max-w-5xl rounded-3xl border border-[#E6DBFF] bg-gradient-to-br from-[#692ED4] via-[#7A3BE5] to-[#5a21be] p-8 text-white shadow-[0_22px_60px_rgba(105,46,212,0.32)] md:p-10">
             <p className="text-sm font-semibold uppercase tracking-wide text-white/80">Next step</p>
             <h2 className="mt-2 text-2xl font-bold md:text-3xl">Do not let avoidable paperwork errors cost you more rent</h2>
-            <p className="mt-3 text-white/90">A generic template can feel cheaper at the start, but if the notice, dates, or service are wrong you can lose months and end up restarting. Use the guided workflow now and keep the paperwork in the right order from the start.</p>
+            <p className="mt-3 text-white/90">A generic template can feel cheaper at the start, but if the notice, dates, or service are wrong you can lose months and end up restarting. Use guided questions now and keep the paperwork in the right order from the start.</p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <Link href={primaryHref} className="hero-btn-primary">{primaryCtaLabel}</Link>
               {heroSecondaryHref && heroSecondaryLabel ? (
@@ -709,7 +709,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
         <Container>
           <div className="mx-auto max-w-4xl rounded-3xl border border-[#E6DBFF] bg-gradient-to-br from-[#692ED4] via-[#7A3BE5] to-[#5a21be] p-8 text-center text-white shadow-[0_22px_60px_rgba(105,46,212,0.35)] md:p-12">
             <h2 className="text-3xl font-bold">{config.finalCta}</h2>
-            <p className="mt-4 text-white/90">For many straightforward cases, landlords do not need to pay a solicitor hundreds or thousands just to get the starting paperwork in place. Use the guided workflow, keep your documents consistent, and move the case forward with more confidence.</p>
+            <p className="mt-4 text-white/90">For many straightforward cases, landlords do not need to pay a solicitor hundreds or thousands just to get the starting paperwork in place. Use guided questions, keep your documents consistent, and move the case forward with more confidence.</p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link href={primaryHref} className="hero-btn-primary">{config.heroCta}</Link>
               {secondaryActionHref && secondaryActionLabel ? (

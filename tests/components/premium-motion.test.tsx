@@ -133,7 +133,7 @@ describe('Section 8 workflow story', () => {
       'href',
       '/products/notice-only',
     );
-    expect(screen.getByRole('link', { name: 'Prepare my court pack' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Prepare my court papers' })).toHaveAttribute(
       'href',
       '/products/complete-pack',
     );

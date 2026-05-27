@@ -6,18 +6,18 @@
  * - Unique title, description, and H1
  * - Jurisdiction-specific coverage details
  * - Notice/form type listings
- * - Validation claim explanations
+ * - Document-check explanations
  * - FAQ content with JSON-LD schema support
  * - Internal link suggestions
  * - Value proposition sections explaining procedural benefits
  *
  * LEGAL SAFETY: Claims are accurate to what the product actually does:
- * - "Legally validated" means: jurisdiction selection, correct form mapping,
+ * - "Checked" means: jurisdiction selection, correct form mapping,
  *   required fields present, date/notice period logic checks, formatting completeness
  * - NOT "lawyer approved" unless evidence exists
  */
 
-import { PRODUCTS, SEO_PRICES } from '@/lib/pricing/products';
+import { SEO_PRICES } from '@/lib/pricing/products';
 
 export interface FAQItem {
   question: string;
@@ -48,10 +48,10 @@ export interface JurisdictionCoverage {
 }
 
 /**
- * Explains what "legally validated" means and provides disclaimer
+ * Explains what the document checks mean and provides disclaimer
  */
 export interface LegalValidationExplainer {
-  /** What validation actually does */
+  /** What the checks actually do */
   whatItMeans: string[];
   /** Clear disclaimer that this is not legal advice */
   disclaimer: string;
@@ -157,38 +157,38 @@ export const noticeOnlyContent: WizardLandingContent = {
   ],
 
   whatYouGet: [
-    'Eviction notice in the correct legal format for your jurisdiction',
+    'Eviction notice in the correct format for your jurisdiction',
     'Official government forms: Form 3A (England possession notice), RHW forms (Wales), Notice to Leave (Scotland)',
     'Correct statutory wording required by each jurisdiction\'s legislation',
-    'Service Instructions explaining how to legally serve the notice',
-    'Service & Validity Checklist to verify compliance before serving',
-    'Unlimited regenerations - edit and regenerate instantly',
+    'Service instructions explaining how to serve the notice',
+    'Service checklist to review before serving',
+    'Edit your answers if details change',
     'Portal storage for 12+ months',
   ],
 
   // NEW: Why landlords use this instead of templates
   whyUseThis: {
-    heading: 'Why Landlords Use This Instead of a Template',
+    heading: 'Why landlords use this instead of a template',
     intro:
-      'Incorrect eviction notices are a leading cause of failed or delayed possession claims. A single error in notice type, wording, grounds, or notice period can result in your case being struck out. Our generator reduces this risk by ensuring your notice is procedurally correct from the start.',
+      'Incorrect eviction notices are a common cause of failed or delayed possession claims. A single error in notice type, wording, grounds, or notice period can mean starting again. This helps reduce that risk by checking the notice details before you serve.',
     benefits: [
       'The right notice for your jurisdiction: Form 3A in England, Section 173 or 181 in Wales, or Notice to Leave in Scotland',
       'Current statutory wording rather than old template wording copied from elsewhere',
       'Notice periods worked out from your answers, including tenancy dates and grounds where relevant',
       'Ground-specific wording where the law requires it',
-      'Checks for common blockers before you serve, such as deposit protection, gas safety, EPC, and How to Rent in England',
+      'Checks for common issues before you serve, such as deposit protection, gas safety, EPC, and How to Rent in England',
       'A notice prepared in the right format for service, which reduces the risk of avoidable rejection later',
     ],
   },
 
   // NEW: Concrete procedural benefits
   proceduralBenefits: [
-    'Ensures the correct notice type is selected for your property location and tenancy type',
+    'Selects the correct notice type for your property location and tenancy type',
     'Applies the correct notice period based on tenancy length and chosen grounds',
     'Uses statutory wording required by Housing Act 1988, Renting Homes (Wales) Act 2016, or Private Housing (Tenancies) (Scotland) Act 2016',
-    'Generates official prescribed forms: Form 3A, RHW forms, or Notice to Leave',
-    'Flags compliance issues (deposit, gas, EPC, How to Rent) that could invalidate your notice',
-    'Creates documents in the correct format for filing or service',
+    'Prepares official prescribed forms: Form 3A, RHW forms, or Notice to Leave',
+    'Flags missing records or issues that could affect your notice',
+    'Creates documents in the correct format for service or filing',
   ],
 
   // NEW: Legal validation explainer with disclaimer
@@ -198,26 +198,26 @@ export const noticeOnlyContent: WizardLandingContent = {
       'Ensures all required fields are completed',
       'Calculates notice periods based on tenancy length and grounds',
       'Applies statutory wording required by current legislation',
-      'Checks compliance pre-requisites (deposit, gas safety, EPC, How to Rent)',
-      'Generates documents in the correct format for service or filing',
+      'Checks pre-service records (deposit, gas safety, EPC, How to Rent)',
+      'Creates documents in the correct format for service or filing',
     ],
     disclaimer:
-      'This is systematic procedural validation, not legal advice. Our system checks that your notice is procedurally correct based on the information you provide. For complex situations — such as disputes about tenancy type, unusual lease terms, or potential defences — consult a qualified solicitor before serving.',
+      'These are document checks, not legal advice. We check the notice based on the information you provide. For complex situations, such as disputes about tenancy type, unusual lease terms, or potential defences, consult a qualified solicitor before serving.',
   },
 
   howValidationWorks: [
     'Jurisdiction selection: System identifies correct notice type based on property location',
-    'Compliance pre-checks: Flags common blockers (deposit protection, gas safety, EPC, How to Rent for England)',
+    'Pre-service checks: flags common issues (deposit protection, gas safety, EPC, How to Rent for England)',
     'Date logic: Calculates correct notice periods and earliest valid dates',
     'Required fields: Ensures all mandatory information is captured',
-    'Form mapping: Generates the correct official form for your jurisdiction and grounds',
+    'Form mapping: prepares the correct official form for your jurisdiction and grounds',
     'Formatting completeness: Verifies all sections are properly completed',
   ],
 
   whoThisIsFor: [
-    'Landlords who need a procedurally correct eviction notice quickly',
+    'Landlords who need an eviction notice quickly and want the key checks first',
     'Property managers handling tenant departures across multiple jurisdictions',
-    'Landlords who want compliance checks before serving to reduce rejection risk',
+    'Landlords who want checks before serving to reduce avoidable mistakes',
     'Anyone who needs to understand their eviction options by jurisdiction',
   ],
 
@@ -230,7 +230,7 @@ export const noticeOnlyContent: WizardLandingContent = {
     {
       question: 'What does "procedurally correct" mean?',
       answer:
-        'It means your notice uses the correct notice type, statutory wording, notice period, and prescribed form for your jurisdiction. We check: (1) Jurisdiction — correct notice type for your property location, (2) Grounds — required wording for each ground cited, (3) Notice period — calculated based on tenancy length, (4) Compliance — flags blockers like missing deposit protection. This is procedural validation, not legal advice.',
+        'It means your notice uses the correct notice type, wording, notice period, and prescribed form for your jurisdiction. We check the property location, grounds, notice period, and missing records such as deposit protection. These are document checks, not legal advice.',
     },
     {
       question: 'Are these official government forms?',
@@ -240,27 +240,27 @@ export const noticeOnlyContent: WizardLandingContent = {
     {
       question: 'What compliance checks are performed?',
       answer:
-        'For England: deposit protection status, gas safety certificate, Energy Performance Certificate, How to Rent guide provision. For Wales: Rent Smart Wales registration. For Scotland: landlord registration, First-tier Tribunal jurisdiction. Issues are flagged before generation so you can address them first.',
+        'For England: deposit protection status, gas safety certificate, Energy Performance Certificate, and How to Rent guide provision. For Wales: Rent Smart Wales registration. For Scotland: landlord registration and First-tier Tribunal route. Issues are flagged before you prepare the final documents so you can address them first.',
     },
     {
       question: 'Why do incorrect notices fail?',
       answer:
-        'Common reasons: wrong notice type for the tenancy, incorrect notice period, outdated form version, missing statutory wording, grounds not properly cited, or serving before compliance requirements are met. Our system prevents these errors by validating each element before generation.',
+        'Common reasons include the wrong notice type, incorrect notice period, outdated form version, missing required wording, grounds not properly cited, or serving before required records are in place. Our checks help catch these before the final documents are prepared.',
     },
     {
       question: 'Can I preview before paying?',
       answer:
-        'Yes. You can preview all documents with a watermark before paying. Edit your answers and regenerate until satisfied.',
+        'Yes. You can preview all documents with a watermark before paying. Edit your answers until the details look right.',
     },
     {
       question: 'What if my notice is rejected by the court?',
       answer:
-        'If your notice is rejected due to an error in our document generation, we will regenerate it free. Court acceptance ultimately depends on your specific circumstances and evidence.',
+        'If your notice is rejected because of an error in our document preparation, we will correct it free. Court outcomes still depend on your specific circumstances and evidence.',
     },
     {
       question: 'Do you provide legal advice?',
       answer:
-        'No. We provide document generation and procedural validation, not legal advice. Our AI assistant helps you understand the process but is not a solicitor. Consult a qualified solicitor for complex cases or if you anticipate a defence.',
+        'No. We provide document preparation and guidance, not legal advice. Our AI assistant helps you understand the process but is not a solicitor. Consult a qualified solicitor for complex cases or if you anticipate a defence.',
     },
   ],
 
@@ -274,10 +274,10 @@ export const noticeOnlyContent: WizardLandingContent = {
  */
 export const completePackContent: WizardLandingContent = {
   slug: 'products/complete-pack',
-  title: `Complete Eviction Bundle 2026 – England | Form 3A, N5 & N119 Possession Pack | ${SEO_PRICES.evictionBundle.display}`,
+  title: `Court Possession Pack 2026 - England | Form 3A, N5 & N119 | ${SEO_PRICES.evictionBundle.display}`,
   description:
-    'End-to-end England eviction paperwork: Form 3A notice, N5 claim form, N119 particulars of claim, and filing guidance. This is the full possession pack, not just the notice.',
-  h1: 'Taking Your Tenant to Court? Complete England Form 3A Eviction Pack',
+    'England possession paperwork: Form 3A notice, N5 claim form, N119 particulars of claim, witness statement, and filing guidance. Use this when the case is moving toward court.',
+  h1: 'Taking Your Tenant to Court? Prepare the England Possession Papers',
   subheading:
     'Form 3A notice, N5, N119, a witness statement, and a filing guide prepared together so your possession paperwork is consistent from the start.',
 
@@ -333,18 +333,18 @@ export const completePackContent: WizardLandingContent = {
       'For rent arrears, the pack lays out the amounts, dates, and running totals clearly',
       'For breach cases, it sets out the relevant ground and the supporting facts in a structured way',
       'The notice, claim form, and particulars are checked against each other so they do not contradict one another',
-      'Validation catches missing fields, date issues, and common compliance problems before the documents are generated',
+      'Checks catch missing fields, date issues, and common record problems before the documents are prepared',
     ],
   },
 
   // NEW: Procedural benefits with Particulars of Claim emphasis
   proceduralBenefits: [
-    'Generates the Particulars of Claim (N119), which is where the grounds, arrears history, and supporting facts are set out in detail',
+    'Prepares the Particulars of Claim (N119), where the grounds, arrears history, and supporting facts are set out in detail',
     'Builds the current England possession file: Form 3A, N5, and N119',
     'Checks that the notice, claim form, and particulars all line up properly',
-    'Pre-fills official HMCTS forms with your case details — court-ready format',
+    'Pre-fills official HMCTS forms with your case details',
     'Calculates notice periods, court deadlines, and earliest filing dates',
-    'Flags compliance blockers (deposit, gas, EPC, How to Rent) before you file',
+    'Flags missing records or issues before you file',
     'Creates documents in the correct format for court filing',
   ],
 
@@ -352,30 +352,30 @@ export const completePackContent: WizardLandingContent = {
   legalValidationExplainer: {
     whatItMeans: [
       'Maps your answers to the current England possession process',
-      'Generates the right court forms for that process: Form 3A, N5, and N119',
+      'Prepares the right court forms for that process: Form 3A, N5, and N119',
       'Pre-fills all mandatory court form fields',
       'Creates Particulars of Claim with grounds, arrears history, and case details',
-      'Validates internal consistency between notice, claim form, and particulars',
-      'Checks compliance requirements before generation',
+      'Checks internal consistency between notice, claim form, and particulars',
+      'Checks required records before the documents are prepared',
     ],
     disclaimer:
-      'This is systematic procedural validation, not legal advice. We ensure your forms are complete, consistent, and in the correct format. For complex cases — such as disputes over tenancy type, potential defences, or enforcement — consult a qualified solicitor.',
+      'These are document checks, not legal advice. We help make the forms complete, consistent, and in the correct format. For complex cases, such as disputes over tenancy type, potential defences, or enforcement, consult a qualified solicitor.',
   },
 
   howValidationWorks: [
     'Maps the case to the current England possession process: Form 3A, N5, and N119',
-    'Form generation: Official HMCTS forms pre-filled with your case details',
-    'Particulars of Claim: Grounds, arrears history, dates, and amounts drafted in legal format',
-    'Compliance validation: Checks deposit, gas safety, EPC, How to Rent before generating',
+    'Form preparation: official HMCTS forms pre-filled with your case details',
+    'Particulars of Claim: grounds, arrears history, dates, and amounts drafted clearly',
+    'Record checks: deposit, gas safety, EPC, and How to Rent before documents are prepared',
     'Date calculations: Notice periods, court deadlines, and timeline guidance',
     'Internal consistency: All documents cross-reference correctly — grounds match, dates align, amounts reconcile',
   ],
 
   whoThisIsFor: [
-    'England landlords who need the complete eviction journey from notice to possession order',
+    'England landlords who need the possession paperwork from notice to court claim',
     'Landlords with rent arrears who want the current England possession paperwork and properly drafted particulars',
-    'Landlords who want Form 3A, N5, and N119 prepared as one consistent court pack',
-    'Property managers handling court filings who need consistent, court-ready documents',
+    'Landlords who want Form 3A, N5, and N119 prepared as one consistent set of court papers',
+    'Property managers handling court filings who need consistent documents',
   ],
 
   faqs: [
@@ -387,12 +387,12 @@ export const completePackContent: WizardLandingContent = {
     {
       question: 'What is the N119 Particulars of Claim?',
       answer:
-        'N119 is the statement of your case filed with the N5 claim form. It details: your grounds for possession, rent arrears history with dates and amounts, tenancy details, and breach specifics. This is where your case is actually made — a weak or missing N119 can sink an otherwise valid claim. We draft this for you.',
+        'N119 is the statement of your case filed with the N5 claim form. It details your grounds for possession, rent arrears history with dates and amounts, tenancy details, and breach specifics. This is where your case is set out. A weak or missing N119 can undermine an otherwise strong claim. We prepare this for you.',
     },
     {
       question: 'Why do you emphasise the Particulars of Claim?',
       answer:
-        'Many landlords serve a valid notice but then file an incomplete or poorly drafted court claim. The N119 Particulars of Claim is where you set out the facts that support your grounds. Courts expect itemised arrears, specific breach dates, and correct legal references. We create this document with your case details.',
+        'Many landlords serve a notice but then file an incomplete or hard-to-follow court claim. The N119 Particulars of Claim is where you set out the facts that support your grounds. Courts expect itemised arrears, specific breach dates, and correct references. We prepare this document with your case details.',
     },
     {
       question: 'What court forms are included?',
@@ -407,17 +407,17 @@ export const completePackContent: WizardLandingContent = {
     {
       question: 'How does this reduce rejected claims?',
       answer:
-        'Rejected claims usually fail due to: incomplete forms, inconsistent information between documents, incorrect dates, or missing particulars. Our system validates all fields, ensures consistency between notice and claim, and generates Particulars of Claim in the correct legal format.',
+        'Rejected claims often fail because of incomplete forms, inconsistent information between documents, incorrect dates, or missing particulars. Our checks review the fields, compare the notice and claim, and prepare the Particulars of Claim in the right format.',
     },
     {
       question: 'Can I preview before paying?',
       answer:
-        'Yes. Preview all documents with watermark before paying. Edit and regenerate unlimited times until you are satisfied.',
+        'Yes. Preview all documents with a watermark before paying. Edit your answers until the details look right.',
     },
     {
       question: 'Do you provide legal advice?',
       answer:
-        'No. We provide document generation and procedural validation. For contested cases, potential defences, or enforcement strategy, consult a solicitor.',
+        'No. We provide document preparation and guidance. For contested cases, potential defences, or enforcement strategy, consult a solicitor.',
     },
   ],
 
@@ -533,7 +533,7 @@ export const moneyClaimContent: WizardLandingContent = {
     'Amount validation: Ensures totals match itemised amounts across all documents',
     'Interest calculation: Automatic 8% statutory interest from correct start dates, with daily rate calculation',
     'Date validation: Confirms dates are consistent and within 6-year limitation period',
-    'Required fields: All mandatory N1 fields validated',
+    'Required fields: all mandatory N1 fields checked',
     'PAP compliance: Letter Before Claim follows Pre-Action Protocol for Debt Claims',
   ],
 

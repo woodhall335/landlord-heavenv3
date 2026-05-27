@@ -26,8 +26,8 @@ export function LegacySection21Banner({
       </h2>
       <p className="mt-3 text-sm leading-7 md:text-base">
         {SECTION21_PRE_CHANGE_SUMMARY} We are aligned with the Renters&apos; Rights Act, so live
-        England case planning should already be based on the current possession and eviction
-        workflow rather than older Section 21 assumptions.
+        England case planning should already be based on the current possession process rather
+        than older Section 21 assumptions.
       </p>
       <p className={`text-sm leading-7 md:text-base ${compact ? 'mt-2' : 'mt-3'}`}>
         {SECTION21_PRE_CHANGE_BRIDGE} Treat any Section 21 wording on this page as transition
@@ -51,7 +51,7 @@ export function LegacySection21Banner({
           href="/n5-n119-possession-claim"
           className="hero-btn-secondary"
         >
-          View the current claim route
+          View the current claim papers
         </Link>
       </div>
     </div>

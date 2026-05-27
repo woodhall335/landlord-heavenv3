@@ -3,23 +3,23 @@ import Image from "next/image";
 const steps = [
   {
     iconSrc: "/images/howitworks1.webp",
-    title: "Answer Questions",
+    title: "Answer a few questions",
     description:
-      "Tell us what has happened in plain English. We ask the questions that matter so you do not have to work out the legal route yourself.",
+      "Tell us what has happened in plain English. We ask the questions that matter so you do not have to decode the process yourself.",
     time: "5-10 minutes",
   },
   {
     iconSrc: "/images/howitworks2.webp",
-    title: "Check the Route",
+    title: "Check the next step",
     description:
-      "We flag the problems that could trip you up before you generate anything, so you do not serve the wrong notice or miss a key detail.",
+      "We flag the problems that could trip you up before the documents are prepared, so you do not serve the wrong notice or miss a key detail.",
     time: "2-3 minutes",
   },
   {
     iconSrc: "/images/howitworks3.webp",
-    title: "Generate and Act",
+    title: "Prepare and act",
     description:
-      "Generate the documents, service guidance, and next-step checklist you need to move the case forward.",
+      "Prepare the documents, service guidance, and next-step checklist you need to move the case forward.",
     time: "Instant",
   },
 ];
@@ -36,7 +36,7 @@ export function HowItWorksThreeStep() {
         </h2>
         <p className="mx-auto max-w-2xl text-xl text-gray-600">
           Work out the right next step, avoid the mistakes that cause delay, and
-          generate the documents you need without wading through legal jargon.
+          prepare the documents you need without wading through legal jargon.
         </p>
       </div>
 

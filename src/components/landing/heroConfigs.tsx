@@ -160,7 +160,7 @@ export const moneyClaimHeroConfig: HeroConfig = {
   preset: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.heroPreset,
   badge: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.heroBadge,
   mediaSrc: '/images/money_claims.webp',
-  trustText: 'Recover unpaid rent and tenant debt | England county court pack',
+  trustText: 'Recover unpaid rent and tenant debt | England county court papers',
   title: 'Recover Unpaid Rent',
   highlightTitle: 'and Prepare Your Money Claim Pack',
   subtitle:

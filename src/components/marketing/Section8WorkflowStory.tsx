@@ -5,7 +5,7 @@ import { Container } from '@/components/ui/Container';
 import { PUBLIC_PRODUCT_DESCRIPTORS } from '@/lib/public-products';
 import { Reveal, StaggerReveal, TrustPillRow } from './PremiumMotion';
 
-const workflowSteps = [
+const section8Steps = [
   {
     step: '01',
     title: 'Identify the problem',
@@ -14,9 +14,9 @@ const workflowSteps = [
   },
   {
     step: '02',
-    title: 'Validate the route',
+    title: 'Check the next step',
     body:
-      'Check that the Section 8 route fits the England possession process before the paperwork is prepared.',
+      'Check that a Section 8 notice fits the England possession process before the paperwork is prepared.',
   },
   {
     step: '03',
@@ -28,7 +28,7 @@ const workflowSteps = [
     step: '04',
     title: 'Progress if notice is ignored',
     body:
-      'If the case moves beyond notice, step into the court and possession pack with the notice details already aligned.',
+      'If the case moves beyond notice, step into the court possession papers with the notice details already aligned.',
   },
 ];
 
@@ -38,16 +38,16 @@ export function Section8WorkflowStory() {
       <Container>
         <div className="grid gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
           <Reveal className="lg:sticky lg:top-28">
-            <span className="public-eyebrow">Section 8 workflow</span>
+            <span className="public-eyebrow">Section 8 next steps</span>
             <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
               From rent arrears to the right next step
             </h2>
             <p className="mt-5 text-lg leading-8 text-[#5d5672]">
-              The route is designed to keep the notice stage and court stage clear, so landlords do not mix up the paperwork before the case is ready.
+              The steps keep the notice stage and court stage clear, so landlords do not mix up the paperwork before the case is ready.
             </p>
             <TrustPillRow
               className="mt-6"
-              items={['For landlords in England', 'Stage 1 notice file', 'Stage 2 court pack']}
+              items={['For landlords in England', 'Notice file', 'Court possession papers']}
             />
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <TrackedLink
@@ -67,20 +67,20 @@ export function Section8WorkflowStory() {
                 href={PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.landingHref}
                 pagePath="/"
                 pageType="homepage"
-                ctaLabel="Prepare my court pack"
+                ctaLabel="Prepare my court papers"
                 ctaPosition="section"
                 eventName="product_route_chosen"
                 routeIntent="section_8_court_story"
                 product="complete_pack"
                 className="hero-btn-secondary text-center"
               >
-                Prepare my court pack
+                Prepare my court papers
               </TrackedLink>
             </div>
           </Reveal>
 
           <StaggerReveal className="grid gap-4">
-            {workflowSteps.map((item) => (
+            {section8Steps.map((item) => (
               <article
                 key={item.step}
                 className="standalone-premium-hover-lift rounded-[2rem] border border-[#E8E1F8] bg-white/90 p-6 shadow-[0_18px_46px_rgba(24,11,49,0.07)] backdrop-blur"

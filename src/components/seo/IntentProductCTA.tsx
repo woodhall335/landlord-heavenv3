@@ -54,22 +54,22 @@ export function RelatedProductsModule({ products }: RelatedProductsModuleProps) 
   const productMeta: Record<IntentProduct, { title: string; description: string; href: string }> = {
     notice_only: {
       title: 'Notice Only',
-      description: 'Generate court-ready eviction notices with procedural checks.',
+      description: 'Prepare a Section 8 notice and service record before you serve.',
       href: PRODUCT_FALLBACK_HREF.notice_only,
     },
     money_claim: {
       title: 'Money Claim',
-      description: 'Recover rent arrears and tenant debt with guided court forms.',
+      description: 'Set out unpaid rent or tenant debt with clearer claim paperwork.',
       href: PRODUCT_FALLBACK_HREF.money_claim,
     },
     complete_pack: {
-      title: 'Complete Pack',
-      description: 'End-to-end eviction bundle with notice and possession claim documents.',
+      title: 'Court Possession Pack',
+      description: 'Prepare the notice file, claim forms, witness evidence, and filing steps together.',
       href: PRODUCT_FALLBACK_HREF.complete_pack,
     },
     ast: {
-      title: 'AST Tenancy Agreement',
-      description: 'Build compliant tenancy agreements for England, Wales, Scotland, and Northern Ireland.',
+      title: 'Tenancy Agreement',
+      description: 'Choose an agreement that fits the property, occupiers, and let type.',
       href: PRODUCT_FALLBACK_HREF.ast,
     },
   };
@@ -79,7 +79,7 @@ export function RelatedProductsModule({ products }: RelatedProductsModuleProps) 
       <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">Related products</h2>
-          <p className="text-gray-600 mb-8">Compare related landlord document workflows.</p>
+          <p className="text-gray-600 mb-8">Compare the landlord paperwork that fits your situation.</p>
           <StaggerReveal className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => (
               <Link
@@ -89,7 +89,7 @@ export function RelatedProductsModule({ products }: RelatedProductsModuleProps) 
               >
                 <h3 className="font-semibold text-gray-900 mb-2">{productMeta[product].title}</h3>
                 <p className="text-sm text-gray-600 mb-3">{productMeta[product].description}</p>
-                <span className="text-primary font-medium text-sm">View product -&gt;</span>
+                <span className="text-primary font-medium text-sm">See this option -&gt;</span>
               </Link>
             ))}
           </StaggerReveal>

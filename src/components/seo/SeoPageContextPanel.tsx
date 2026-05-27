@@ -86,7 +86,7 @@ export function SeoPageContextPanel({
           .
         </p>
         <p>
-          Ready to act? The quickest route from here is{' '}
+          Ready to act? The quickest next step from here is{' '}
           <Link href={productHref} className="font-medium text-primary hover:underline">
             {productAnchor}
           </Link>

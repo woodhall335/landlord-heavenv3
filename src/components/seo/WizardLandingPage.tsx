@@ -42,15 +42,15 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
   const showHeroPrice = !isCompletePackEnglandPage && !isMoneyClaimPage;
 
   const heroCtaLabel = isCompletePackEnglandPage
-    ? `Start & Preview Complete Pack — ${PRODUCTS.complete_pack.displayPrice}`
+    ? `Prepare Court Papers — ${PRODUCTS.complete_pack.displayPrice}`
     : isNoticeOnlyPage
-      ? `Generate My Notice — ${PRODUCTS.notice_only.displayPrice}`
+      ? `Create My Notice — ${PRODUCTS.notice_only.displayPrice}`
       : isMoneyClaimPage
-        ? `Start My Case Bundle — ${PRODUCTS.money_claim.displayPrice}`
-        : 'Start My Case Bundle';
+        ? `Prepare My Money Claim — ${PRODUCTS.money_claim.displayPrice}`
+        : 'Start My Case';
 
   const heroHelperCopy = isCompletePackEnglandPage
-    ? 'Avoid wasted court fees by getting the route and paperwork lined up before you file.'
+    ? 'Avoid wasted court fees by checking the notice, dates, evidence, and court papers before you file.'
     : isNoticeOnlyPage
       ? 'Serve the right notice, avoid easy mistakes, and move the case forward with more confidence.'
       : null;
@@ -110,7 +110,7 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
             <Eye className="w-4 h-4" /> Preview before you buy
           </span>
           <span className="flex items-center gap-1">
-            <RefreshCw className="w-4 h-4" /> Edit &amp; regenerate (unlimited)
+            <RefreshCw className="w-4 h-4" /> Edit your answers if something changes
           </span>
           <span className="flex items-center gap-1">
             <Cloud className="w-4 h-4" /> Portal storage (12+ months)
@@ -200,7 +200,7 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
               How the checks work
             </h2>
             <p className="text-center text-gray-600 mb-8">
-              We check the details that usually trip landlords up, so the generated documents are easier to trust before you serve or file them.
+              We check the details that usually trip landlords up, so the documents are easier to review before you serve or file them.
             </p>
             <div className="grid md:grid-cols-2 gap-4">
               {content.howValidationWorks.map((item, index) => (
@@ -255,7 +255,7 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
                 source="seo"
                 product={content.product}
                 title="Still unsure what to do?"
-                description="Ask Heaven can help you work through the route, the paperwork, and the next step in plain English."
+                description="Ask Heaven can help you work through the paperwork and the next step in plain English."
               />
             </div>
           </Container>
@@ -270,12 +270,12 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to get started?</h2>
             <p className="text-xl mb-8 text-gray-600">
-              Clear landlord guidance, stronger procedural checks, and documents that are easier to rely on when the tenancy problem needs action.
+              Plain-English landlord guidance, practical checks, and documents that are easier to review when the tenancy problem needs action.
             </p>
             <div className="mx-auto w-full max-w-md">
               <IntentProductCTA
                 intent={{ product: toIntentProduct(content.product), src: "seo_landing" }}
-                label={`Start My Case Bundle - ${content.price}`}
+                label={`Start My Case - ${content.price}`}
                 className="hero-btn-primary w-full"
               />
             </div>
@@ -327,7 +327,7 @@ function WhyAccuracyMattersSection() {
               </li>
             </ul>
             <p className="mt-6 text-lg text-gray-800 font-medium leading-relaxed">
-              This bundle prepares the full possession route — not just the notice.
+              This pack prepares the court possession papers, not just the notice.
             </p>
           </div>
           <div className="flex items-center justify-center">
@@ -354,10 +354,10 @@ function NoticeTypesSection({ noticeTypes }: { noticeTypes: NoticeType[] }) {
       <Container>
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
-            Notice Types We Generate
+            Notice types we prepare
           </h2>
           <p className="text-center text-gray-600 mb-8">
-            Legally validated and procedurally correct notices for each jurisdiction
+            Notices prepared around the forms, dates, and service steps for each jurisdiction
           </p>
 
           <div className="overflow-x-auto">
@@ -404,7 +404,7 @@ function CourtFormsSection({ courtForms }: { courtForms: CourtForm[] }) {
             Court Forms Included
           </h2>
           <p className="text-center text-gray-600 mb-8">
-            Official HMCTS forms generated and validated with your case details
+            Official HMCTS forms prepared with the case details you provide
           </p>
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -420,7 +420,7 @@ function CourtFormsSection({ courtForms }: { courtForms: CourtForm[] }) {
                     <p className="text-gray-600 text-sm mt-2">{form.description}</p>
                     {form.route && (
                       <span className="inline-block mt-2 text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                        {form.route === 'section21' ? 'Section 21 Route' : 'Section 8 Route'}
+                        {form.route === 'section21' ? 'Section 21 notice' : 'Section 8 notice'}
                       </span>
                     )}
                   </div>
@@ -450,7 +450,7 @@ function JurisdictionCoverageSection({
             Coverage by Jurisdiction
           </h2>
           <p className="text-center text-gray-600 mb-8">
-            Jurisdiction-specific agreements with correct terminology and legal requirements
+            Agreements with wording and requirements matched to the property location
           </p>
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -524,7 +524,7 @@ function WhyUseThisSectionComponent({
           <div className="flex justify-center mb-6">
             <Image
               src="/images/why_this_bundle.webp"
-              alt="Documents folder illustration for full possession route bundle"
+              alt="Documents folder illustration for court possession paperwork"
               width={340}
               height={220}
               className="h-auto w-full max-w-[300px] md:max-w-[340px] object-contain"
@@ -563,15 +563,15 @@ function LegalValidationExplainerSection({ explainer }: { explainer: LegalValida
           <div className="flex items-center justify-center gap-2 mb-4">
             <Scale className="w-6 h-6 text-primary" />
             <h2 className="text-2xl md:text-3xl font-bold text-charcoal">
-              What &quot;Validation&quot; Means
+              What the checks mean
             </h2>
           </div>
           <p className="text-center text-gray-600 mb-8">
-            Our system performs procedural checks — not legal advice
+            Our system checks paperwork details. It does not replace legal advice.
           </p>
 
           <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-            <h3 className="font-semibold text-charcoal mb-4">What our validation checks:</h3>
+            <h3 className="font-semibold text-charcoal mb-4">What we check:</h3>
             <ul className="space-y-2">
               {explainer.whatItMeans.map((item, index) => (
                 <li key={index} className="flex items-start gap-2 text-gray-700">

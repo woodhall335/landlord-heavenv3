@@ -141,7 +141,7 @@ export function EnglandMoneyClaimPreview({ previews }: EnglandMoneyClaimPreviewP
               England landlord money claim example
             </h2>
             <p className="mt-4 text-lg text-gray-700">
-              Review the broad claim workflow before you decide which support page or transactional
+              Review the broad claim paperwork before you decide which support page or transactional
               route you need next. The aim is to make the page feel like a real landlord debt-recovery
               file, not a product page with a decorative preview attached.
             </p>

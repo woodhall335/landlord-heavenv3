@@ -173,7 +173,7 @@ export function EnglandNoticePreview({ previews }: EnglandNoticePreviewProps) {
             </h2>
             <p className="mt-4 text-lg text-gray-700">
               Review the notice-stage documents and guidance before you choose a route. The aim is
-              to make the page feel like a real England notice workflow, not a product pitch with a
+              to make the page feel like real England notice paperwork, not a product pitch with a
               decorative preview attached.
             </p>
           </div>

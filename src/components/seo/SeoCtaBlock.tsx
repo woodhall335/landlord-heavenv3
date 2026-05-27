@@ -77,12 +77,12 @@ const ROUTE_TO_PRODUCT_KEY: Record<SeoProductRoute, SeoProductKey> = {
 };
 
 const PRODUCT_LABEL_BY_KEY: Record<SeoProductKey, string> = {
-  notice_only: 'Get Court-Ready Notice',
-  complete_pack: 'Get Complete Eviction Pack',
-  money_claim: 'Start Money Claim',
-  section13_standard: 'Generate Section 13 Notice',
+  notice_only: 'Create My Section 8 Notice',
+  complete_pack: 'Prepare My Court Papers',
+  money_claim: 'Prepare My Money Claim',
+  section13_standard: 'Create My Rent Increase Notice',
   section13_defensive: 'Prepare for Tenant Challenge',
-  ast: 'Create Your Agreement',
+  ast: 'Choose My Tenancy Agreement',
 };
 
 const PRODUCT_SHORT_LABEL_BY_KEY: Record<SeoProductKey, string> = {
@@ -116,16 +116,16 @@ type CtaConfigEntry = {
 // Pre-configured CTA content by page type
 const ctaConfig: Record<SeoPageType, CtaConfigEntry> = {
   problem: {
-    primary: { label: 'Get Court-Ready Notice', product: 'notice_only' },
-    secondary: { label: 'View Complete Pack', href: '/products/complete-pack' },
+    primary: { label: 'Create My Section 8 Notice', product: 'notice_only' },
+    secondary: { label: 'See Court Papers', href: '/products/complete-pack' },
     sectionTitle: 'Ready to move from reading to action?',
-    sectionDescription: 'If the tenancy problem has reached the point where you need to serve notice, this pack helps you start with the right route and clearer checks.',
+    sectionDescription: 'If the tenancy problem has reached the point where you need to serve notice, this helps you start with the right paperwork and clearer checks.',
     faqTitle: 'Need to start the eviction process?',
-    faqDescription: 'The Notice Only Pack helps you work out the route, generate the notice, and keep the service steps clearer from the start.',
+    faqDescription: 'The Notice Only Pack helps you choose the right notice, prepare it, and keep the service steps clearer from the start.',
     icon: FileText,
   },
   court: {
-    primary: { label: 'Get Complete Eviction Pack', product: 'complete_pack' },
+    primary: { label: 'Prepare My Court Papers', product: 'complete_pack' },
     secondary: { label: 'Just Need the Notice?', href: '/products/notice-only' },
     sectionTitle: 'Ready for the court stage?',
     sectionDescription: 'Use the Complete Pack when you want the notice, claim forms, and filing guidance to read like one joined-up landlord file.',
@@ -134,8 +134,8 @@ const ctaConfig: Record<SeoPageType, CtaConfigEntry> = {
     icon: Gavel,
   },
   money: {
-    primary: { label: 'Start Money Claim', product: 'money_claim' },
-    secondary: { label: 'Also Need Eviction?', href: '/products/complete-pack' },
+    primary: { label: 'Prepare My Money Claim', product: 'money_claim' },
+    secondary: { label: 'Also Need Possession Papers?', href: '/products/complete-pack' },
     sectionTitle: 'Ready to recover what you are owed?',
     sectionDescription: 'Use the Money Claim Pack when the tenant owes rent or other tenancy debt and you want the paperwork structured properly before you file.',
     faqTitle: 'Want to recover unpaid rent?',
@@ -143,38 +143,38 @@ const ctaConfig: Record<SeoPageType, CtaConfigEntry> = {
     icon: PoundSterling,
   },
   general: {
-    primary: { label: 'Get Court-Ready Notice', product: 'notice_only' },
+    primary: { label: 'Create My Section 8 Notice', product: 'notice_only' },
     secondary: { label: 'Learn More', href: '/eviction-notice-template' },
     sectionTitle: 'Ready to take the next step?',
-    sectionDescription: 'If you already know the problem, we can help you move into the right landlord document route without piecing it together alone.',
+    sectionDescription: 'If you already know the problem, we can help you move into the right landlord paperwork without piecing it together alone.',
     faqTitle: 'Need help with your eviction?',
-    faqDescription: 'Our document routes are designed to help landlords understand the next step, generate the paperwork, and keep the file clearer.',
+    faqDescription: 'Our document packs help landlords understand the next step, prepare the paperwork, and keep the file clearer.',
     icon: Shield,
   },
   tenancy: {
-    primary: { label: 'Create Your Agreement', product: 'ast' },
-    secondary: { label: 'View AST Products', href: '/products/ast' },
+    primary: { label: 'Choose My Tenancy Agreement', product: 'ast' },
+    secondary: { label: 'See Tenancy Agreements', href: '/products/ast' },
     sectionTitle: 'Ready to create the right tenancy agreement?',
-    sectionDescription: 'Use the tenancy routes when you want the agreement to match the property, the jurisdiction, and the current legal position from the start.',
+    sectionDescription: 'Use the tenancy agreement options when you want the agreement to match the property, the occupiers, and the current legal position from the start.',
     faqTitle: 'Need a tenancy agreement that fits the property properly?',
-    faqDescription: 'Our tenancy agreement routes help landlords choose the right document for the let instead of relying on an outdated template.',
+    faqDescription: 'Our tenancy agreement options help landlords choose the right document for the let instead of relying on an outdated template.',
     icon: FileText,
   },
   guide: {
-    primary: { label: 'Get Court-Ready Notice', product: 'notice_only' },
+    primary: { label: 'Create My Section 8 Notice', product: 'notice_only' },
     secondary: { label: 'Explore More Guides', href: '/blog' },
     sectionTitle: 'Ready to take the next step?',
-    sectionDescription: 'Once the guide has helped you work out the route, move into the product that matches the problem you need to solve.',
+    sectionDescription: 'Once the guide has helped you work out the next step, move into the product that matches the problem you need to solve.',
     faqTitle: 'Need help turning this guide into action?',
-    faqDescription: 'Our landlord document routes are there when you want to move from reading the issue to dealing with it properly.',
+    faqDescription: 'Our landlord document packs are there when you want to move from reading about the issue to dealing with it properly.',
     icon: Shield,
   },
   notice: {
-    primary: { label: 'Get Court-Ready Notice', product: 'notice_only' },
-    secondary: { label: 'View Complete Pack', href: '/products/complete-pack' },
+    primary: { label: 'Create My Section 8 Notice', product: 'notice_only' },
+    secondary: { label: 'See Court Papers', href: '/products/complete-pack' },
     sectionTitle: 'Ready to serve the notice?',
     sectionDescription: 'Use the Notice Only Pack when you want the notice, the service steps, and the key checks lined up before anything is served.',
-    faqTitle: 'Need a clearer notice route?',
+    faqTitle: 'Need a clearer notice step?',
     faqDescription: 'The Notice Only Pack helps you choose the notice and prepare it for service with fewer avoidable mistakes.',
     icon: FileText,
   },
@@ -266,6 +266,7 @@ export function getHeroCtaProps(
   secondaryCTA: { label: string; href: string };
 } {
   const primaryProduct = getMappedPrimaryProductKey(pageType, pagePath);
+  void _jurisdiction;
 
   return {
     primaryCTA: {
@@ -427,10 +428,10 @@ export function SeoCtaBlock({
     return (
       <Reveal className={`rounded-3xl bg-gradient-to-br from-primary via-[#6d28d9] to-primary/90 p-8 text-center text-white shadow-[0_28px_80px_rgba(76,29,149,0.24)] lg:p-12 ${className}`}>
         <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-          {title || `Get Your ${pageType === 'money' ? 'Money Claim' : 'Eviction'} Documents Now`}
+          {title || `Prepare Your ${pageType === 'money' ? 'Money Claim' : 'Landlord'} Documents`}
         </h2>
         <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-          {description || 'Court-ready format. AI compliance check. Trusted by over 10,000 UK landlords.'}
+          {description || 'Plain-English questions, document checks, and a clearer file before you serve or file.'}
         </p>
         {showTrustPositioningBar ? (
           <TrustPositioningBar variant="compact" className="mx-auto mt-6 max-w-5xl" />
@@ -460,7 +461,7 @@ export function SeoCtaBlock({
           ) : pageType === 'court' ? (
             <>All court forms included &bull; Witness statements &bull; Step-by-step guide</>
           ) : (
-            <>Section 21 and Section 8 included &bull; AI compliance check &bull; Designed for court acceptance</>
+            <>Notice checks &bull; Service guidance &bull; Clear next steps for landlords</>
           )}
         </p>
       </Reveal>

@@ -48,8 +48,8 @@ const STATUS_CONFIG: Record<BannerStatus, {
   iconBg: string;
 }> = {
   valid: {
-    label: 'Valid',
-    summary: 'Your notice appears to meet legal requirements.',
+    label: 'No blockers found',
+    summary: 'Your notice appears to meet the main checks we can run from this document.',
     icon: <RiCheckboxCircleFill className="h-8 w-8" />,
     bgGradient: 'bg-gradient-to-r from-green-50 to-green-100',
     textColor: 'text-green-800',
@@ -57,8 +57,8 @@ const STATUS_CONFIG: Record<BannerStatus, {
     iconBg: 'bg-green-200 text-green-700',
   },
   warning: {
-    label: 'Valid with Warnings',
-    summary: 'Your notice appears valid but has potential risks to review.',
+    label: 'Review these warnings',
+    summary: 'Your notice may still work, but there are risks to review before you rely on it.',
     icon: <RiAlertFill className="h-8 w-8" />,
     bgGradient: 'bg-gradient-to-r from-amber-50 to-amber-100',
     textColor: 'text-amber-800',
@@ -67,7 +67,7 @@ const STATUS_CONFIG: Record<BannerStatus, {
   },
   high_risk: {
     label: 'High Risk',
-    summary: 'Multiple issues found that may affect your case.',
+    summary: 'Multiple issues could affect the case if you serve or file without fixing them.',
     icon: <RiErrorWarningFill className="h-8 w-8" />,
     bgGradient: 'bg-gradient-to-r from-orange-50 to-orange-100',
     textColor: 'text-orange-800',
@@ -75,8 +75,8 @@ const STATUS_CONFIG: Record<BannerStatus, {
     iconBg: 'bg-orange-200 text-orange-700',
   },
   invalid: {
-    label: 'Invalid',
-    summary: 'Critical issues found that will likely invalidate your notice.',
+    label: 'Likely problem',
+    summary: 'Critical issues found that could make the notice unsafe to rely on.',
     icon: <RiCloseCircleFill className="h-8 w-8" />,
     bgGradient: 'bg-gradient-to-r from-red-50 to-red-100',
     textColor: 'text-red-800',
@@ -93,8 +93,8 @@ const STATUS_CONFIG: Record<BannerStatus, {
     iconBg: 'bg-red-200 text-red-700',
   },
   needs_info: {
-    label: 'More Info Needed',
-    summary: 'Answer some questions to complete the validation.',
+    label: 'More information needed',
+    summary: 'Answer a few questions so we can finish the check.',
     icon: <RiQuestionFill className="h-8 w-8" />,
     bgGradient: 'bg-gradient-to-r from-blue-50 to-blue-100',
     textColor: 'text-blue-800',
@@ -102,8 +102,8 @@ const STATUS_CONFIG: Record<BannerStatus, {
     iconBg: 'bg-blue-200 text-blue-700',
   },
   unknown: {
-    label: 'Analyzing',
-    summary: 'Validation in progress.',
+    label: 'Checking',
+    summary: 'Document check in progress.',
     icon: <RiShieldCheckLine className="h-8 w-8" />,
     bgGradient: 'bg-gradient-to-r from-gray-50 to-gray-100',
     textColor: 'text-gray-700',
@@ -176,9 +176,9 @@ export function getActionSummary(
   // Has blockers - needs attention
   if (blockersCount > 0) {
     if (questionsCount > 0) {
-      return `Address ${blockersCount} critical issue${blockersCount > 1 ? 's' : ''} below, then answer ${questionsCount} question${questionsCount > 1 ? 's' : ''} for full validation.`;
+      return `Fix ${blockersCount} critical issue${blockersCount > 1 ? 's' : ''} below, then answer ${questionsCount} question${questionsCount > 1 ? 's' : ''} so we can finish the check.`;
     }
-    return `Address ${blockersCount} critical issue${blockersCount > 1 ? 's' : ''} below to proceed.`;
+    return `Fix ${blockersCount} critical issue${blockersCount > 1 ? 's' : ''} below before you rely on this document.`;
   }
 
   // Has questions to answer
@@ -186,7 +186,7 @@ export function getActionSummary(
     if (warningsCount > 0) {
       return `Answer ${questionsCount} question${questionsCount > 1 ? 's' : ''} below and review ${warningsCount} warning${warningsCount > 1 ? 's' : ''}.`;
     }
-    return `Answer ${questionsCount} question${questionsCount > 1 ? 's' : ''} below for complete validation.`;
+    return `Answer ${questionsCount} question${questionsCount > 1 ? 's' : ''} below so we can finish the check.`;
   }
 
   // Warnings only
@@ -196,12 +196,12 @@ export function getActionSummary(
 
   // All good
   if (normalizedStatus === 'valid') {
-    return 'Your document is ready. Proceed to generate court forms.';
+    return 'You can move on to preparing the next paperwork.';
   }
 
   // Needs more info
   if (normalizedStatus === 'needs_info') {
-    return 'Additional information is required to complete validation.';
+    return 'Additional information is needed to finish the check.';
   }
 
   return '';

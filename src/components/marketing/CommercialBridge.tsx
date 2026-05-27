@@ -240,10 +240,10 @@ export function RentIncreaseBridge({
       riskMessage="A weak rent figure can be challenged"
       proofPoints={[
         'Check the proposed rent against market support',
-        'Decide whether Standard or Defence is the better route',
+        'Decide whether the standard notice or challenge-ready option fits best',
         'Keep Form 4A and Section 13 wording aligned with the facts',
       ]}
-      body="Use the checker first if you are unsure whether the proposed rent is likely to stand up. Then choose the notice pack that matches the risk."
+      body="Use the checker first if you are unsure whether the proposed rent is likely to stand up. Then choose the notice option that matches the risk."
       className={className}
     />
   );
@@ -267,18 +267,18 @@ export function Section8Bridge({
       headline={headline}
       primaryProduct="complete_pack"
       primaryHref="/products/complete-pack"
-      primaryLabel="Prepare my court pack"
+      primaryLabel="Prepare my court papers"
       secondaryProduct="notice_only"
       secondaryHref="/products/notice-only"
       secondaryLabel="Create my Section 8 notice"
       ctaPosition={ctaPosition}
-      riskMessage="The wrong route can delay possession"
+      riskMessage="The wrong next step can delay possession"
       proofPoints={[
-        'Notice Only prepares the solicitor-approved Form 3A notice and service file',
-        'Complete Pack prepares the solicitor-approved court and possession file',
-        'N5, N119, witness statement, court readiness, evidence checklist, bundle index, and hearing support are covered in Stage 2',
+        'Notice Only prepares Form 3A and the service file before you serve',
+        'Complete Pack prepares the possession claim forms and supporting court file',
+        'N5, N119, witness statement, evidence checklist, bundle index, and hearing support are included when the case needs court papers',
       ]}
-      body="If you only need to serve correctly, start with Notice Only. If you expect to issue, evidence, and prepare for hearing, use the Complete Pack."
+      body="If you only need to serve notice, start with Notice Only. If the tenant is likely to stay put and you need court papers, use the Complete Pack."
       className={className}
     />
   );
@@ -306,7 +306,7 @@ export function MoneyClaimBridge({
       ctaPosition={ctaPosition}
       riskMessage="Rent arrears claims need clear figures and evidence"
       proofPoints={[
-        'Turn arrears into a structured claim pack',
+        'Turn arrears into clear claim paperwork',
         'Prepare particulars, interest, and evidence prompts',
         'Keep the claim focused on unpaid rent and recoverable sums',
       ]}
@@ -338,7 +338,7 @@ export function TenancyAgreementBridge({
       ctaPosition={ctaPosition}
       riskMessage="The agreement should match the property and occupier setup"
       proofPoints={[
-        'Choose the right England tenancy route',
+        'Choose the right England tenancy agreement',
         'Include landlord-ready clauses and prescribed information prompts',
         'Avoid using the wrong template for the property type',
       ]}

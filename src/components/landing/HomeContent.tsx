@@ -121,7 +121,7 @@ const routeSelectionCards: RouteCard[] = [
     ],
     complianceNote:
       'Keeps the notice, service details, and court forms consistent with the England process from 1 May 2026.',
-    ctaLabel: 'Prepare my court pack',
+    ctaLabel: 'Prepare my court papers',
     href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.landingHref,
     imageSrc: '/images/section-8-court-paperwork.webp',
     imageAlt: 'Tenant will not leave situation card',
@@ -233,7 +233,7 @@ const previewCards: PreviewCard[] = [
       'Filing guide and hearing checklist for court',
     ],
     href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.landingHref,
-    ctaLabel: 'Prepare my court pack',
+    ctaLabel: 'Prepare my court papers',
     routeIntent: 'court_possession',
     product: 'complete_pack',
   },
@@ -686,7 +686,7 @@ export default function HomeContent() {
                 href="#homepage-route-selector"
                 pagePath="/"
                 pageType="homepage"
-                ctaLabel="Choose the right route"
+                ctaLabel="Choose the right next step"
                 ctaPosition="final"
                 eventName="homepage_primary_cta_click"
                 className="hero-btn-primary"

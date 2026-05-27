@@ -1,7 +1,7 @@
 /**
  * Validation Report Component
  *
- * Displays a court-ready validation report with:
+ * Displays a landlord document check report with:
  * - Overall status with clear visual indicator
  * - Rule results categorized by severity
  * - Provenance metadata showing source of each fact
@@ -86,32 +86,32 @@ const STATUS_CONFIG: Record<StatusType, {
   borderColor: string;
 }> = {
   pass: {
-    label: 'Valid',
-    description: 'No blocking issues found. Your notice appears compliant.',
+    label: 'No blockers found',
+    description: 'No blocking issues found from the information provided.',
     icon: <RiCheckboxCircleFill className="h-6 w-6 text-green-600" />,
     bgColor: 'bg-green-50',
     textColor: 'text-green-900',
     borderColor: 'border-green-200',
   },
   warning: {
-    label: 'Valid with Warnings',
-    description: 'Your notice appears valid but has potential risks.',
+    label: 'Review these warnings',
+    description: 'Your notice may still work, but there are risks to review first.',
     icon: <RiAlertFill className="h-6 w-6 text-amber-600" />,
     bgColor: 'bg-amber-50',
     textColor: 'text-amber-900',
     borderColor: 'border-amber-200',
   },
   invalid: {
-    label: 'Invalid',
-    description: 'Critical issues found that will likely invalidate your notice.',
+    label: 'Likely problem',
+    description: 'Critical issues found that could make the notice unsafe to rely on.',
     icon: <RiCloseCircleFill className="h-6 w-6 text-red-600" />,
     bgColor: 'bg-red-50',
     textColor: 'text-red-900',
     borderColor: 'border-red-200',
   },
   needs_info: {
-    label: 'More Info Needed',
-    description: 'Answer some questions to complete the validation.',
+    label: 'More information needed',
+    description: 'Answer a few questions so we can finish the check.',
     icon: <RiQuestionFill className="h-6 w-6 text-blue-600" />,
     bgColor: 'bg-blue-50',
     textColor: 'text-blue-900',
@@ -119,7 +119,7 @@ const STATUS_CONFIG: Record<StatusType, {
   },
   unknown: {
     label: 'Unknown',
-    description: 'Unable to determine validity.',
+    description: 'Unable to complete the check from the information provided.',
     icon: <RiInformationLine className="h-6 w-6 text-gray-600" />,
     bgColor: 'bg-gray-50',
     textColor: 'text-gray-900',
@@ -244,9 +244,9 @@ export function ValidationReport({
             <div className="flex items-start gap-3">
               <RiQuestionFill className="h-5 w-5 text-blue-600 mt-0.5" />
               <div className="flex-1">
-                <h4 className="font-semibold text-blue-900">Additional Information Required</h4>
+                <h4 className="font-semibold text-blue-900">Additional information needed</h4>
                 <p className="text-sm text-blue-800 mt-1">
-                  We need you to confirm {missingFacts.length} item{missingFacts.length !== 1 ? 's' : ''} to complete the validation.
+                  We need you to confirm {missingFacts.length} item{missingFacts.length !== 1 ? 's' : ''} to finish the check.
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {missingFacts.slice(0, 5).map((fact) => (
@@ -280,7 +280,7 @@ export function ValidationReport({
           <div>
             <h4 className="flex items-center gap-2 font-semibold text-red-900 mb-3">
               <RiCloseCircleFill className="h-5 w-5" />
-              Critical Issues (Blockers)
+              Critical issues to fix
             </h4>
             <ul className="space-y-2">
               {blockers.map((issue, idx) => (
@@ -306,7 +306,7 @@ export function ValidationReport({
           <div>
             <h4 className="flex items-center gap-2 font-semibold text-amber-900 mb-3">
               <RiAlertFill className="h-5 w-5" />
-              Potential Risks (Warnings)
+              Risks to review
             </h4>
             <ul className="space-y-2">
               {warnings.map((issue, idx) => (
@@ -332,7 +332,7 @@ export function ValidationReport({
           <div>
             <h4 className="flex items-center gap-2 font-semibold text-gray-700 mb-3">
               <RiInformationLine className="h-5 w-5" />
-              Additional Notes
+              Additional notes
             </h4>
             <ul className="space-y-2">
               {info.map((issue, idx) => (
@@ -353,10 +353,10 @@ export function ValidationReport({
           <div className="flex items-start gap-3 rounded-lg border border-green-200 bg-green-50 p-4">
             <RiShieldCheckLine className="h-6 w-6 text-green-600 flex-shrink-0" />
             <div>
-              <h4 className="font-semibold text-green-900">All Checks Passed</h4>
+              <h4 className="font-semibold text-green-900">No blocking issues found</h4>
               <p className="text-sm text-green-800 mt-1">
-                Your notice appears to meet all legal requirements based on the information provided.
-                Consider our eviction packs for additional support and court-ready documents.
+                Your notice appears to meet the main checks we can run from the information provided.
+                If you need the next documents, our eviction packs can help you keep the file in order.
               </p>
             </div>
           </div>
@@ -368,7 +368,7 @@ export function ValidationReport({
             <div className="flex items-center justify-between mb-3">
               <h4 className="flex items-center gap-2 font-semibold text-gray-700">
                 <RiFileTextLine className="h-5 w-5" />
-                Extracted Information
+                Information found in the document
               </h4>
               <button
                 type="button"
@@ -448,7 +448,7 @@ export function ValidationReport({
         {/* Provenance Details */}
         {showProvenance && provenanceMetadata.length > 0 && (
           <div className="rounded-lg border border-gray-200 p-4">
-            <h4 className="font-semibold text-gray-700 mb-3">Fact Provenance (Audit Trail)</h4>
+            <h4 className="font-semibold text-gray-700 mb-3">Where these facts came from</h4>
             <div className="space-y-2 max-h-60 overflow-y-auto">
               {provenanceMetadata.map((item, idx) => {
                 const prov = PROVENANCE_LABELS[item.provenance] || PROVENANCE_LABELS.missing;
@@ -486,14 +486,14 @@ export function ValidationReport({
                   Claiming for rent arrears?
                 </p>
                 <p className="text-xs text-blue-700 mt-1">
-                  Eviction gives you possession. A money claim recovers what you&apos;re owed.
+                  Eviction is about possession. A money claim is about recovering what you&apos;re owed.
                   Many landlords pursue both.
                 </p>
                 <a
                   href="/wizard?product=money_claim&src=validator_arrears"
                   className="inline-flex items-center gap-1 text-xs font-medium text-blue-700 hover:text-blue-900 mt-2"
                 >
-                  Get Money Claim Pack — {PRODUCTS.money_claim.displayPrice} <RiArrowRightLine className="h-3 w-3" />
+                  Prepare Money Claim Pack — {PRODUCTS.money_claim.displayPrice} <RiArrowRightLine className="h-3 w-3" />
                 </a>
               </div>
             </div>
@@ -506,10 +506,10 @@ export function ValidationReport({
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-gray-600">
             {normalizedStatus === 'invalid'
-              ? 'Our Complete Eviction Pack includes expert review and guidance.'
+              ? 'Our Complete Eviction Pack helps you prepare the court papers and supporting file.'
               : normalizedStatus === 'warning'
-                ? 'Consider our eviction packs for additional compliance checks.'
-                : 'Get court-ready documents with our eviction packs.'}
+                ? 'Consider our eviction packs if you want clearer checks before you serve or file.'
+                : 'Prepare the next landlord documents with our eviction packs.'}
           </p>
           {ctas ? (
             <div className="flex gap-3">
@@ -536,7 +536,7 @@ export function ValidationReport({
           ) : (
             /* Fallback: No CTA when caseId is missing - show informational message */
             <p className="text-xs text-gray-400 italic">
-              Upload a document to get personalized recommendations
+              Upload a document to get recommendations for your situation
             </p>
           )}
         </div>

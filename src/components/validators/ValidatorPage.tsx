@@ -180,7 +180,7 @@ export function ValidatorPage({
           <Container>
             <div className="max-w-3xl mx-auto text-center">
               <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-                <span className="text-sm font-semibold text-primary">Free Validator</span>
+                <span className="text-sm font-semibold text-primary">Free document check</span>
               </div>
               <p className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
                 {title}
@@ -190,10 +190,10 @@ export function ValidatorPage({
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                 <a href="#validator" className="hero-btn-primary">
-                  Start Validation →
+                  Check my document
                 </a>
                 <Link href="/pricing" className="hero-btn-secondary">
-                  View All Products →
+                  View landlord products
                 </Link>
               </div>
             </div>
@@ -208,11 +208,11 @@ export function ValidatorPage({
             <RiAlertLine className="mt-1 h-6 w-6 shrink-0 text-warning-700" />
             <div>
               <p className="text-sm font-semibold text-warning-900">
-                Free Validation Preview
+                Free document check
               </p>
               <p className="text-sm text-warning-800">
                 This validator provides helpful guidance but is not a substitute for legal advice.
-                For court-ready documents with full validation, upgrade to our paid packs.
+                For prepared documents with clearer checks before you serve or file, use one of our paid packs.
               </p>
             </div>
           </div>
@@ -235,7 +235,7 @@ export function ValidatorPage({
                     Where is the property located?
                   </label>
                   <p className="text-xs text-gray-500 mb-3">
-                    Different rules apply in each jurisdiction. Select the correct location for accurate validation.
+                    Different rules apply in each jurisdiction. Select the correct location so the checks match the property.
                   </p>
                   <div className="grid grid-cols-2 gap-3">
                     {availableJurisdictions.map((option) => (
@@ -255,7 +255,7 @@ export function ValidatorPage({
               {isLoading && selectedJurisdiction && (
                 <div className="text-center py-8">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto mb-4" />
-                  <p className="text-sm text-gray-600">Starting validation session...</p>
+                  <p className="text-sm text-gray-600">Starting your document check...</p>
                 </div>
               )}
 
@@ -292,7 +292,7 @@ export function ValidatorPage({
                   )}
 
                   <p className="text-sm text-gray-600 mb-6">
-                    Upload your document (PDF or image) and our AI will analyze it for compliance issues.
+                    Upload your document (PDF or image) and we will check it for issues that could cause problems later.
                   </p>
 
                   <UploadField
@@ -310,7 +310,7 @@ export function ValidatorPage({
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-semibold text-gray-700">Get your report by email</p>
-                        <p className="text-xs text-gray-500">Get a copy of your validation results</p>
+                        <p className="text-xs text-gray-500">Get a copy of your document check</p>
                       </div>
                       <button
                         type="button"
@@ -331,7 +331,7 @@ export function ValidatorPage({
               {features.length > 0 && (
                 <div className="mt-8 rounded-xl bg-primary-50 p-6">
                   <h3 className="mb-4 text-lg font-semibold text-gray-900">
-                    What We Check
+                    What we check
                   </h3>
                   <ul className="grid md:grid-cols-2 gap-3">
                     {features.map((feature) => (
@@ -372,7 +372,7 @@ export function ValidatorPage({
                 variant="card"
                 source="validator"
                 topic={VALIDATOR_TO_ASK_HEAVEN_TOPIC[validatorKey] ?? 'general'}
-                title="Have questions about your validation results?"
+                title="Have questions about your document check?"
                 description="Ask Heaven can help you understand any issues found and what to do next."
               />
             </div>
@@ -399,7 +399,7 @@ export function ValidatorPage({
         caseId={caseId ?? undefined}
         tags={['validator', validatorKey]}
         title="Email my report"
-        description="We'll send you a copy of your validation report and helpful resources."
+        description="We'll send you a copy of your document check and helpful resources."
         primaryLabel="Send report"
         includeEmailReport={true}
         reportCaseId={caseId ?? undefined}

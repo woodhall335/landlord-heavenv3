@@ -278,14 +278,14 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
               <Section8Bridge
                 sourcePage={pagePath}
                 ctaPosition="faq"
-                headline="Before the FAQs, choose the route that matches your next step"
+                headline="Before the FAQs, choose the next step that fits your case"
               />
             ) : null}
           </div>
           <div className="mx-auto mt-8 max-w-5xl rounded-3xl border border-[#e6dbff] bg-white p-6 md:p-8">
             <h2 className="text-3xl font-bold text-[#2a2161]">Choose the next step for your case</h2>
             <p className="mt-4 max-w-3xl leading-8 text-gray-700">
-              Move from guidance into the current England workflow that fits your case. If you already know the route, start the notice. If the case is likely to continue into court, use the fuller possession support and claim-stage guidance instead of piecing it together later.
+              Move from guidance into the current England paperwork that fits your case. If you already know the next step, start the notice. If the case is likely to continue into court, use the fuller possession support and claim-stage guidance instead of piecing it together later.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <TrackedLink

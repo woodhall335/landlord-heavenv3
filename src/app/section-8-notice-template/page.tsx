@@ -78,7 +78,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Section 8 Notice Template 2026: Form 3A Guide for England',
     description:
-      'Learn how Section 8 Form 3 works, what a valid notice should include, and when to use a guided Notice Only workflow.',
+      'Learn how Section 8 Form 3 works, what a notice should include, and when to use guided Notice Only paperwork.',
     type: 'article',
     url: canonicalUrl,
     siteName: 'Landlord Heaven',
@@ -88,7 +88,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Section 8 Notice Template 2026: Form 3A Guide for England',
     description:
-      'Form 3 guidance, common grounds, notice content, service rules, and a guided Section 8 workflow for landlords.',
+      'Form 3 guidance, common grounds, notice content, service rules, and guided Section 8 paperwork for landlords.',
   },
   robots: {
     index: true,
@@ -119,9 +119,9 @@ export default function Section8NoticeTemplatePage() {
         'Yes. Keep every version sent, all enclosures, and proof of service. Documentary quality matters in Section 8 cases because the route is grounds-based and evidence-heavy.',
     },
     {
-      question: 'When should I move from template stage to a paid workflow?',
+      question: 'When should I move from template stage to guided paperwork?',
       answer:
-        'Usually as soon as the matter may escalate to court, involve disputed arrears, or depend on multiple grounds. A guided workflow reduces the risk of incorrect dates, weak ground selection, and duplicated costs later.',
+        'Usually as soon as the matter may escalate to court, involve disputed arrears, or depend on multiple grounds. Guided paperwork reduces the risk of incorrect dates, weak ground selection, and duplicated costs later.',
     },
     {
       question: 'What should a Section 8 notice include?',
@@ -167,7 +167,7 @@ export default function Section8NoticeTemplatePage() {
       <main className="min-h-screen bg-[#fcfaff]">
         <UniversalHero
           title="Section 8 Notice Template"
-          subtitle="Learn how Section 8 Form 3 works, what a valid grounds-based notice should include, and when to use a guided Notice Only workflow instead of relying on a blank form."
+          subtitle="Learn how Section 8 Form 3 works, what a grounds-based notice should include, and when to use guided Notice Only paperwork instead of relying on a blank form."
           primaryCta={{ label: `Create my Section 8 notice - ${noticeOnlyPrice}`, href: noticeOnlyProductHref }}
           secondaryCta={{ label: `Start full eviction support - ${completePackPrice}`, href: completePackProductHref }}
           showTrustPositioningBar
@@ -569,7 +569,7 @@ export default function Section8NoticeTemplatePage() {
                     Notice Only
                   </Link>
                   . The value is not just the completed Form 3. It is the cleaner notice-and-service
-                  workflow around it.
+                  file around it.
                 </p>
               </div>
             </div>
@@ -732,7 +732,7 @@ export default function Section8NoticeTemplatePage() {
                     </li>
                     <li className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700 font-medium">Stronger fit for service-stage workflow</span>
+                      <span className="text-gray-700 font-medium">Stronger fit for the service-stage file</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
@@ -793,7 +793,7 @@ export default function Section8NoticeTemplatePage() {
                 How to get your Section 8 notice
               </h2>
               <p className="text-gray-600 text-center mb-12">
-                Generate your notice in a cleaner sequence rather than editing Form 3 manually.
+                Prepare your notice in a cleaner sequence rather than editing Form 3 manually.
               </p>
 
               <div className="grid md:grid-cols-4 gap-6">
@@ -833,7 +833,7 @@ export default function Section8NoticeTemplatePage() {
                   </div>
                   <h3 className="font-semibold text-gray-900 mb-2">Download and serve</h3>
                   <p className="text-gray-600 text-sm">
-                    Use the notice with cleaner service-stage workflow.
+                    Use the notice with a cleaner service-stage file.
                   </p>
                 </div>
               </div>
@@ -922,7 +922,7 @@ export default function Section8NoticeTemplatePage() {
               <p>
                 Section 8 is grounds-based and depends on proving specific statutory grounds. For new
                 England private-rented cases after 1 May 2026, Section 21 is no longer the live route,
-                so landlords need a guided notice workflow that keeps the grounds, evidence, and service
+                so landlords need guided notice paperwork that keeps the grounds, evidence, and service
                 record consistent.
               </p>
 
@@ -970,14 +970,14 @@ export default function Section8NoticeTemplatePage() {
             <div className="max-w-5xl mx-auto prose prose-slate max-w-none">
               <h2>Legal framework explained for landlords</h2>
               <p>
-                Landlords get better outcomes when they treat Section 8 document generation as one
-                part of a full legal workflow. Courts do not just look at whether the correct form
+                Landlords get better outcomes when they treat Section 8 document preparation as one
+                part of the wider possession process. Courts do not just look at whether the correct form
                 title was used. They also look at whether the correct grounds were chosen, whether
                 the facts support those grounds, whether the notice period was right, and whether
                 service can be proved.
               </p>
               <p>
-                That is why a guided workflow is often commercially stronger than a template-only
+                That is why guided paperwork is often commercially stronger than a template-only
                 approach. The landlord usually needs more than a form. They need a cleaner link
                 between facts, grounds, dates, evidence, and later court position.
               </p>
@@ -1041,11 +1041,11 @@ export default function Section8NoticeTemplatePage() {
                 <li>Chronology document mapping each event to supporting evidence.</li>
               </ul>
               <p className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
-                Need a faster route from guidance to action? Use our{' '}
+                Need a faster step from guidance to action? Use our{' '}
                 <Link href="/products/notice-only" className="text-primary underline">
-                  Notice Only workflow
+                  Notice Only pack
                 </Link>{' '}
-                to generate a compliance-checked Section 8 notice and keep the service-stage file aligned.
+                to prepare a checked Section 8 notice and keep the service-stage file aligned.
               </p>
             </div>
           </div>
@@ -1090,10 +1090,10 @@ export default function Section8NoticeTemplatePage() {
                       <td className="border border-gray-200 p-3">Proof of ground + service</td>
                     </tr>
                     <tr className="bg-gray-50">
-                      <td className="border border-gray-200 p-3">Notice Only workflow</td>
+                      <td className="border border-gray-200 p-3">Notice Only pack</td>
                       <td className="border border-gray-200 p-3">Most live Section 8 notice cases</td>
                       <td className="border border-gray-200 p-3">Incomplete source facts</td>
-                      <td className="border border-gray-200 p-3">Validation + service-stage file</td>
+                      <td className="border border-gray-200 p-3">Checks + service-stage file</td>
                     </tr>
                     <tr>
                       <td className="border border-gray-200 p-3">Complete Pack</td>
@@ -1152,7 +1152,7 @@ export default function Section8NoticeTemplatePage() {
               </ul>
               <p>
                 If several items on this list are incomplete, that is usually a sign the case now
-                belongs on a guided workflow rather than a template-only path.
+                belongs on guided paperwork rather than a template-only path.
               </p>
             </div>
           </div>
@@ -1164,7 +1164,7 @@ export default function Section8NoticeTemplatePage() {
               <Section8Bridge
                 sourcePage="/section-8-notice-template"
                 ctaPosition="faq"
-                headline="Before you check the FAQs, choose the route that fits the case"
+                headline="Before you check the FAQs, choose the next step that fits the case"
               />
             </div>
           </div>
@@ -1185,7 +1185,7 @@ export default function Section8NoticeTemplatePage() {
               </h2>
               <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
                 If your case is live, the strongest next step is usually not a bare template.
-                It is a cleaner Notice Only workflow built around grounds, dates, and service.
+                It is a cleaner Notice Only file built around grounds, dates, and service.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
@@ -1204,7 +1204,7 @@ export default function Section8NoticeTemplatePage() {
                 </Link>
               </div>
               <p className="mt-8 text-white/70 text-sm">
-                Grounds-based route • Cleaner service workflow • Better fit than a blank form for live cases
+                Grounds-based notice • Cleaner service file • Better fit than a blank form for live cases
               </p>
             </div>
           </div>

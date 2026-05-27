@@ -34,9 +34,9 @@ export function getCommercialSeoCopy(
   if (primary === '/products/money-claim') {
     return {
       eyebrow: 'Debt recovery',
-      title: 'Tenant still owes money? Prepare the validated claim file',
+      title: 'Tenant still owes money? Prepare a clear claim file',
       body:
-        'For rent arrears, a money claim works best when the arrears schedule, letter before claim, and claim particulars all tell the same story. The Money Claim Pack acts as a builder for the claim file, keeping the court-ready documents together before you file.',
+        'For rent arrears, a money claim works best when the arrears schedule, letter before claim, and claim particulars all tell the same story. The Money Claim Pack helps you build the claim file before you file.',
       primary: {
         href: '/products/money-claim',
         label: 'Prepare my money claim',
@@ -44,8 +44,8 @@ export function getCommercialSeoCopy(
       secondary: secondary
         ? {
             href: secondary,
-            label: 'compare the possession route',
-            text: 'If possession is still part of the plan, keep the debt claim aligned with the eviction route.',
+            label: 'compare possession papers',
+            text: 'If possession is still part of the plan, keep the debt claim aligned with the eviction paperwork.',
           }
         : undefined,
     };
@@ -54,12 +54,12 @@ export function getCommercialSeoCopy(
   if (primary === '/products/complete-pack') {
     return {
       eyebrow: 'Court-stage paperwork',
-      title: 'Tenant still staying? Prepare the court-ready possession claim pack',
+      title: 'Tenant still staying? Prepare the possession claim papers',
       body:
-        'When notice has expired or court is likely, the court-ready possession pack needs the official court forms, N5 possession claim form, N119 particulars, witness statement, and evidence chronology to stay consistent. The complete pack also works as a possession claim pack when the case is ready to file. If you have not served notice yet, create the Section 8 notice first before moving to court.',
+        'When notice has expired or court is likely, the possession file needs the N5 claim form, N119 particulars, witness statement, and evidence chronology to stay consistent. If you have not served notice yet, create the Section 8 notice first before moving to court.',
       primary: {
         href: '/products/complete-pack',
-        label: 'Prepare my court pack',
+        label: 'Prepare my court papers',
       },
       secondary: {
         href: secondary ?? '/products/notice-only',
@@ -75,7 +75,7 @@ export function getCommercialSeoCopy(
       eyebrow: 'Rent increase paperwork',
       title: 'Need to increase rent? Keep the notice and evidence aligned',
       body:
-        'For England rent increases, the Section 13 notice, market evidence, service record, and challenge evidence need to line up. Use the standard pack for the notice route, then move to the defence pack if the tenant challenges the increase.',
+        'For England rent increases, the Section 13 notice, market evidence, service record, and challenge evidence need to line up. Use the standard pack for the notice, then move to the defence pack if the tenant challenges the increase.',
       primary: {
         href: primary,
         label:
@@ -93,7 +93,7 @@ export function getCommercialSeoCopy(
             ? 'Create my rent increase notice'
             : 'Prepare for a rent challenge',
         text:
-          'Keep the notice and tribunal evidence routes connected so the paperwork stays consistent.',
+          'Keep the notice and tribunal evidence connected so the paperwork stays consistent.',
       },
     };
   }
@@ -116,14 +116,14 @@ export function getCommercialSeoCopy(
 
     return {
       eyebrow: 'England tenancy paperwork',
-      title: "Create a Renters' Rights Act compliant tenancy agreement",
+      title: 'Create a current England tenancy agreement',
       body:
-        'For England lets, use a current tenancy agreement rather than recycling old AST wording. The standard periodic agreement route supports post-May 2026 rules and a clean landlord setup file.',
+        'For England lets, use a current tenancy agreement rather than recycling old AST wording. The standard periodic agreement supports post-May 2026 rules and a clean landlord setup file.',
       primary: {
         href: primary === '/products/ast' ? '/standard-tenancy-agreement' : primary,
         label:
           exactAgreementLabels[primary ?? ''] ??
-          "create a Renters' Rights Act compliant tenancy agreement",
+          'choose my tenancy agreement',
       },
       secondary: {
         href: '/premium-tenancy-agreement',
@@ -138,16 +138,16 @@ export function getCommercialSeoCopy(
     eyebrow: 'Notice stage',
     title: 'Need to serve notice? Create the Section 8 file first',
     body:
-      "For live England possession cases, the Section 8 notice should connect the grounds, dates, service record, and Form 3A wording before you serve. The Notice Only pack creates the notice-stage file for post-May 2026 and the Renters' Rights Act Section 8 form rules.",
+      "For live England possession cases, the Section 8 notice should connect the grounds, dates, service record, and Form 3A wording before you serve. The Notice Only pack creates the notice-stage file for the current England Section 8 rules.",
     primary: {
       href: '/products/notice-only',
       label: 'Create my Section 8 notice',
     },
     secondary: {
       href: secondary ?? '/products/complete-pack',
-      label: 'Prepare my court pack',
+      label: 'Prepare my court papers',
       text:
-        'If the tenant stays after notice, move into the court pack with official court forms.',
+        'If the tenant stays after notice, move into the court papers with official court forms.',
     },
   };
 }

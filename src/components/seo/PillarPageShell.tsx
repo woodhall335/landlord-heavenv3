@@ -105,7 +105,7 @@ export function PillarPageShell(content: PillarPageContent) {
             </article>
 
             <article className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8">
-              <h2 className="text-2xl font-semibold text-[#2a2161]">Comparison table: choosing the right route</h2>
+              <h2 className="text-2xl font-semibold text-[#2a2161]">Comparison table: choosing the right next step</h2>
               <div className="mt-4 overflow-x-auto">
                 <table className="w-full min-w-[760px] border-collapse text-left text-sm">
                   <thead>
