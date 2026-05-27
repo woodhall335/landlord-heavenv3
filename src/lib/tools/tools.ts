@@ -22,6 +22,13 @@ export const freeTools: ToolLink[] = [
     featured: true,
   },
   {
+    href: '/tools/section-8-notice-date-calculator',
+    label: 'Section 8 Notice Date Calculator',
+    description: 'Calculate the Form 3A notice period, deemed service date, and earliest court-paper date.',
+    category: 'calculator',
+    featured: true,
+  },
+  {
     href: '/tools/rent-increase-challenge-checker',
     label: 'Rent Increase & Challenge Checker',
     description: 'Check the proposed rent against market evidence before you serve Form 4A.',

@@ -100,7 +100,7 @@ export default function TenantNotPayingRentPage() {
             </span>
             <span className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-green-500" />
-              Two-week notice route for arrears
+              Four-week notice route for serious arrears
             </span>
           </div>
         </UniversalHero>
@@ -223,6 +223,13 @@ export default function TenantNotPayingRentPage() {
                   >
                     {`Create my Section 8 notice - ${noticeOnlyPrice}`}
                     <ArrowRight className="w-4 h-4" />
+                  </Link>
+                  <Link
+                    href="/tools/section-8-notice-date-calculator"
+                    className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
+                  >
+                    Calculate the Section 8 notice date first
+                    <Calculator className="w-4 h-4" />
                   </Link>
                 </div>
 

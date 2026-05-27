@@ -618,6 +618,12 @@ export default function Page() {
                   Section 21 notice guide: rules, validity checks, and timing
                 </Link>
                 <Link
+                  href="/tools/section-8-notice-date-calculator"
+                  className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]"
+                >
+                  Section 8 notice date calculator for Form 3A timing
+                </Link>
+                <Link
                   href="/products/notice-only"
                   className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]"
                 >

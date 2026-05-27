@@ -96,6 +96,13 @@ export const toolLinks = {
     icon: 'calculator' as const,
     type: 'tool' as const,
   },
+  section8NoticeDateCalculator: {
+    href: '/tools/section-8-notice-date-calculator',
+    title: 'Section 8 Notice Date Calculator',
+    description: 'Calculate notice periods, deemed service dates, and earliest court-paper dates',
+    icon: 'calculator' as const,
+    type: 'tool' as const,
+  },
   hmoChecker: {
     href: '/tools/hmo-license-checker',
     title: 'HMO License Checker',
@@ -642,6 +649,7 @@ export const section21RelatedLinks = dedupeLinksByHref([
 export const section8RelatedLinks = dedupeLinksByHref([
   productLinks.noticeOnly,
   ...currentEnglandFrameworkLinks,
+  toolLinks.section8NoticeDateCalculator,
   landingPageLinks.evictionTemplate,
   guideLinks.section21Notice,
   productLinks.completePack,
@@ -654,6 +662,7 @@ export const rentArrearsRelatedLinks = dedupeLinksByHref([
   guideLinks.moneyClaimGuide,
   moneyClaimGuides.unpaidRent,
   productLinks.moneyClaim,
+  toolLinks.section8NoticeDateCalculator,
   toolLinks.rentDemandLetter,
   toolLinks.rentArrearsCalculator,
   landingPageLinks.rentArrearsTemplate,
@@ -753,6 +762,7 @@ export const tenantNotPayingRentRelatedLinks = dedupeLinksByHref([
   productLinks.moneyClaim,
   productLinks.completePack,
   landingPageLinks.section8Template,
+  toolLinks.section8NoticeDateCalculator,
   toolLinks.section8Generator,
   toolLinks.rentDemandLetter,
   toolLinks.rentArrearsCalculator,
