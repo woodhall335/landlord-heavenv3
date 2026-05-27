@@ -135,12 +135,13 @@ export function PremiumParallax({
   className,
   intensity = 14,
   disabled = false,
+  ...props
 }: {
   children: ReactNode;
   className?: string;
   intensity?: number;
   disabled?: boolean;
-}) {
+} & HTMLAttributes<HTMLDivElement>) {
   const ref = useRef<HTMLDivElement | null>(null);
   const reducedMotion = usePrefersReducedMotion();
   const isDisabled = disabled || reducedMotion;
@@ -175,6 +176,7 @@ export function PremiumParallax({
 
   return (
     <div
+      {...props}
       ref={ref}
       data-parallax={isDisabled ? 'disabled' : 'enabled'}
       className={clsx('premium-parallax', className)}

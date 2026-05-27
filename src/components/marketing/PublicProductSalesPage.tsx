@@ -819,10 +819,10 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
                   ? `grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:items-stretch ${
                       howItWorks.mobileImageFirstFullBleed ? 'mt-6 lg:mt-8' : 'mt-8'
                     }`
-                  : 'mt-8 grid gap-5 md:grid-cols-3'
+                  : 'mt-8'
               }
             >
-              <StaggerReveal className={hasHowItWorksImage ? 'space-y-5' : 'contents'}>
+              <StaggerReveal className={hasHowItWorksImage ? 'space-y-5' : 'grid gap-5 md:grid-cols-3'}>
                 {howItWorks.steps.map((step) => (
                   <article
                     key={step.step}

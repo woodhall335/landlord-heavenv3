@@ -49,6 +49,10 @@ type RouteCard = {
   product: string;
 };
 
+type RouteSelectionCardProps = RouteCard & {
+  className?: string;
+};
+
 type PreviewCard = {
   title: string;
   body: string;
@@ -293,7 +297,8 @@ function RouteSelectionCard({
   product,
   includes,
   complianceNote,
-}: RouteCard) {
+  className,
+}: RouteSelectionCardProps) {
   const accentStyles = getPublicCardAccentClasses(accent);
   const Icon = accentIconByType[accent];
   const overrides = routeCardOverridesByProduct[product] ?? {};
@@ -313,6 +318,7 @@ function RouteSelectionCard({
       product={product}
       className={clsx(
         'group overflow-hidden rounded-[2rem] border transition duration-200',
+        className,
         accentStyles.card,
         accentStyles.borderGlow,
         PUBLIC_LAYOUT_CLASSES.card

@@ -4,7 +4,7 @@ import { useEffect, type ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { RiCheckLine, RiShieldCheckFill } from 'react-icons/ri';
-import { PremiumImageFrame, PremiumParallax, StaggerReveal } from '@/components/marketing/PremiumMotion';
+import { PremiumParallax, StaggerReveal } from '@/components/marketing/PremiumMotion';
 import { TrustPositioningBar } from '@/components/marketing/TrustPositioningBar';
 import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
 import type { PositioningPreset } from '@/lib/marketing/positioning';
@@ -405,22 +405,21 @@ export function UniversalHero({
               className="relative z-10 hidden h-full items-center justify-end lg:flex"
               aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
             >
-              <PremiumParallax intensity={12} className="w-full max-w-[680px]">
-                <PremiumImageFrame
-                  className="rounded-[1.5rem]"
+              <PremiumParallax
+                intensity={12}
+                className="w-full max-w-[680px]"
+                aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
+              >
+                <Image
+                  src={resolvedMediaSrc}
+                  alt={mascotDecorativeOnDesktop ? '' : resolvedMediaAlt}
                   aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
-                >
-                  <Image
-                    src={resolvedMediaSrc}
-                    alt={mascotDecorativeOnDesktop ? '' : resolvedMediaAlt}
-                    aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
-                    width={980}
-                    height={650}
-                    priority={mediaPriority}
-                    sizes="(max-width: 1024px) 92vw, 46vw"
-                    className="h-auto w-full"
-                  />
-                </PremiumImageFrame>
+                  width={980}
+                  height={650}
+                  priority={mediaPriority}
+                  sizes="(max-width: 1024px) 92vw, 46vw"
+                  className="h-auto w-full rounded-[1.5rem]"
+                />
               </PremiumParallax>
             </div>
           )}

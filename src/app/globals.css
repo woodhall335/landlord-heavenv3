@@ -768,6 +768,19 @@ div.ask-heaven-panel,
   background: linear-gradient(90deg, rgba(235, 223, 255, 0), rgba(124, 58, 237, 0.3), rgba(235, 223, 255, 0));
 }
 
+@media (max-width: 767px) {
+  .premium-reveal,
+  .premium-stagger-child {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+
+  .premium-stagger-child {
+    transition-delay: 0ms;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-btn-primary,
   .hero-btn-primary:hover,
