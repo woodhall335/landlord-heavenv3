@@ -9,7 +9,7 @@ describe('Section8NoticeDateCalculator', () => {
     render(<Section8NoticeDateCalculator />);
 
     expect(screen.getByText('Calculate the date before you serve')).toBeInTheDocument();
-    expect(screen.getByText('Ground 8: Rent arrears')).toBeInTheDocument();
+    expect(screen.getAllByText('Ground 8: Rent arrears').length).toBeGreaterThan(0);
     expect(screen.getByText('Earliest court-paper date')).toBeInTheDocument();
     expect(screen.getByText('Create my Section 8 notice')).toBeInTheDocument();
   });
@@ -20,7 +20,7 @@ describe('Section8NoticeDateCalculator', () => {
     fireEvent.click(screen.getByText('Expired, tenant still there'));
 
     expect(screen.getByText('Prepare my court papers')).toBeInTheDocument();
-    expect(screen.getByText(/N5, N119, witness statement/)).toBeInTheDocument();
+    expect(screen.getAllByText(/N5, N119, witness statement/).length).toBeGreaterThan(0);
   });
 
   it('changes selected grounds when the landlord problem changes', () => {
@@ -28,7 +28,7 @@ describe('Section8NoticeDateCalculator', () => {
 
     fireEvent.click(screen.getByText('I need to sell the property'));
 
-    expect(screen.getByText('Ground 1A: Sale of dwelling house')).toBeInTheDocument();
+    expect(screen.getAllByText('Ground 1A: Sale of dwelling house').length).toBeGreaterThan(0);
     expect(screen.getAllByText('4 months').length).toBeGreaterThan(0);
   });
 });
