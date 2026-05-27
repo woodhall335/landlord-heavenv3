@@ -13,6 +13,7 @@ import type { RelatedToolsConfig } from '@/lib/ask-heaven/questions/linking';
 import { buildProductUrl } from '@/lib/ask-heaven/questions/linking';
 import { trackAskHeavenPageCtaClick } from '@/lib/analytics';
 import type { AskHeavenJurisdiction } from '@/lib/ask-heaven/questions/types';
+import { Reveal, StaggerReveal } from '@/components/marketing/PremiumMotion';
 
 interface RelatedToolsProps {
   config: RelatedToolsConfig;
@@ -37,15 +38,15 @@ export function RelatedTools({ config, slug, jurisdiction }: RelatedToolsProps) 
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-      <div className="bg-gray-50 border-b border-gray-200 px-4 py-3">
+    <Reveal className="overflow-hidden rounded-[1.5rem] border border-[#e8ddfb] bg-white shadow-[0_18px_50px_rgba(91,33,182,0.10)]">
+      <div className="border-b border-[#e8ddfb] bg-[#faf7ff] px-4 py-3">
         <h3 className="font-semibold text-gray-900">Related Tools</h3>
       </div>
 
       <div className="p-4 space-y-4">
         {/* Product CTAs */}
         {showProductCTAs && products.length > 0 && (
-          <div className="space-y-3">
+          <StaggerReveal className="space-y-3">
             {products.map((product, index) => (
               <ProductCard
                 key={product.product}
@@ -55,7 +56,7 @@ export function RelatedTools({ config, slug, jurisdiction }: RelatedToolsProps) 
                 jurisdiction={jurisdiction}
               />
             ))}
-          </div>
+          </StaggerReveal>
         )}
 
         {/* Jurisdiction restriction message */}
@@ -109,7 +110,7 @@ export function RelatedTools({ config, slug, jurisdiction }: RelatedToolsProps) 
           </div>
         )}
       </div>
-    </div>
+    </Reveal>
   );
 }
 
@@ -134,7 +135,7 @@ function ProductCard({
 
   return (
     <div
-      className={`rounded-lg border p-3 ${
+      className={`rounded-xl border p-3 shadow-sm standalone-premium-hover-lift ${
         isPrimary
           ? 'border-primary bg-primary/5'
           : 'border-gray-200 bg-white'

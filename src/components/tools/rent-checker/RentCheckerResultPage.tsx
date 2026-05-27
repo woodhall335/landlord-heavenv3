@@ -13,6 +13,7 @@ import type { GrowthCtaPosition } from '@/lib/analytics/growth-events';
 import { PRODUCTS } from '@/lib/pricing/products';
 import type { Section13RentJustificationResult } from '@/lib/section13/rent-justification';
 import { getSection13ResultProductHref } from '@/lib/tools/result-ctas';
+import { StaggerReveal } from '@/components/marketing/PremiumMotion';
 import {
   RENT_CHECKER_HANDOFF_STORAGE_KEY,
   buildSection13WizardDraftFromRentCheckerResult,
@@ -439,7 +440,7 @@ export function ResultHeroCard({ result }: { result: RentCheckerResult }) {
         : 'Higher risk';
 
   return (
-    <div className={clsx('overflow-hidden rounded-3xl border bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)]', tone.border)}>
+    <div className={clsx('overflow-hidden rounded-3xl border bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)] standalone-premium-hover-lift', tone.border)}>
       <div className={clsx('h-2 w-full bg-gradient-to-r', tone.accent)} />
       <div className="space-y-5 p-7 sm:p-8">
         <span className={clsx('inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em]', tone.badge)}>
@@ -460,7 +461,7 @@ export function ResultHeroCard({ result }: { result: RentCheckerResult }) {
 
 export function MarketPositionCard({ result }: { result: RentCheckerResult }) {
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm standalone-premium-hover-lift">
       <h3 className="text-xl font-semibold text-slate-950">Your position vs local market</h3>
       <dl className="mt-5 space-y-4 text-sm text-slate-600">
         <div className="flex items-start justify-between gap-4">
@@ -541,7 +542,7 @@ export function MarketPositionCard({ result }: { result: RentCheckerResult }) {
 
 export function RiskEvidenceCard({ result }: { result: RentCheckerResult }) {
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm standalone-premium-hover-lift">
       <h3 className="text-xl font-semibold text-slate-950">Risk and evidence</h3>
       <dl className="mt-5 grid gap-4 sm:grid-cols-2">
         <div className="rounded-2xl bg-slate-50 p-4">
@@ -613,7 +614,7 @@ export function ConditionScenarioCard({ result }: { result: RentCheckerResult })
     scenarioMedianBase == null || adjustedMedian == null ? null : adjustedMedian - Math.round(scenarioMedianBase);
 
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm standalone-premium-hover-lift">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <h3 className="text-xl font-semibold text-slate-950">Condition scenario</h3>
@@ -704,7 +705,7 @@ export function ComparableListingsCard({ result }: { result: RentCheckerResult }
   }
 
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm standalone-premium-hover-lift">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h3 className="text-xl font-semibold text-slate-950">Comparable evidence</h3>
@@ -726,7 +727,7 @@ export function ComparableListingsCard({ result }: { result: RentCheckerResult }
             </div>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {group.items.map((item) => (
-                <article key={item.id} className="overflow-hidden rounded-3xl border border-slate-200 bg-slate-50/60">
+                <article key={item.id} className="overflow-hidden rounded-3xl border border-slate-200 bg-slate-50/60 standalone-premium-hover-lift">
                   <div className="aspect-[4/3] bg-slate-100">
                     {item.imageUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element -- external evidence images can come from arbitrary listing domains.
@@ -829,7 +830,7 @@ export function RecommendedActionCard({
   };
 
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_20px_45px_rgba(15,23,42,0.08)] sm:p-7">
+    <div className="rounded-3xl border border-indigo-100 bg-[linear-gradient(135deg,#ffffff,rgba(238,242,255,0.92))] p-6 shadow-[0_20px_45px_rgba(79,70,229,0.12)] sm:p-7 standalone-premium-hover-lift">
       <div className="space-y-5">
         <div className="flex items-center gap-3">
           <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600">
@@ -877,7 +878,7 @@ export function RecommendedActionCard({
 
 export function WhatThisMeansCard({ result }: { result: RentCheckerResult }) {
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm standalone-premium-hover-lift">
       <h3 className="text-xl font-semibold text-slate-950">What this means</h3>
       <p className="mt-4 text-base leading-7 text-slate-600">{result.whatThisMeans}</p>
     </div>
@@ -897,7 +898,7 @@ export function NextStepsCard({
   };
 
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm standalone-premium-hover-lift">
       <h3 className="text-xl font-semibold text-slate-950">What should I do next?</h3>
       <ul className="mt-4 space-y-3">
         {result.nextSteps.map((step) => (
@@ -990,7 +991,7 @@ export function EmailReportCapture({ result }: { result: RentCheckerResult }) {
   };
 
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7">
+    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7 standalone-premium-hover-lift">
       <div className="flex items-start gap-4">
         <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600">
           <Download className="h-5 w-5" />
@@ -1061,7 +1062,7 @@ const comparisonRows = [
 
 export function ProductComparisonStrip({ result }: { result: RentCheckerResult }) {
   return (
-    <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+    <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm standalone-premium-hover-lift">
       <div className="border-b border-slate-200 px-6 py-5">
         <h3 className="text-xl font-semibold text-slate-950">Route comparison</h3>
       </div>
@@ -1131,7 +1132,7 @@ export function BundleUpsellBlock({
   };
 
   return (
-    <div className="rounded-3xl border border-indigo-100 bg-gradient-to-br from-indigo-50 via-white to-violet-50 p-6 shadow-sm sm:p-7">
+    <div className="rounded-3xl border border-indigo-100 bg-gradient-to-br from-indigo-50 via-white to-violet-50 p-6 shadow-[0_22px_60px_rgba(79,70,229,0.12)] sm:p-7 standalone-premium-hover-lift">
       <div className="max-w-2xl">
         <h3 className="text-2xl font-semibold text-slate-950">Want full protection?</h3>
         <p className="mt-3 text-base leading-7 text-slate-600">
@@ -1153,7 +1154,7 @@ export function BundleUpsellBlock({
             copy: 'Build the tribunal bundle, argument summary, and response pack.',
           },
         ].map((card) => (
-          <div key={card.title} className="rounded-2xl border border-white/70 bg-white/80 p-5 shadow-sm">
+          <div key={card.title} className="rounded-2xl border border-white/70 bg-white/80 p-5 shadow-sm standalone-premium-hover-lift">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-indigo-600">{card.title}</p>
             <p className="mt-3 text-sm leading-6 text-slate-600">{card.copy}</p>
           </div>
@@ -1198,7 +1199,7 @@ export function RentCheckerInsufficientEvidencePage({
   onEditDetails: () => void;
 }) {
   return (
-    <div className="space-y-8">
+    <StaggerReveal className="space-y-8">
       <div className="overflow-hidden rounded-3xl border border-amber-200 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
         <div className="h-2 w-full bg-gradient-to-r from-amber-500 to-orange-500" />
         <div className="space-y-5 p-7 sm:p-8">
@@ -1340,7 +1341,7 @@ export function RentCheckerInsufficientEvidencePage({
           </div>
         </div>
       </div>
-    </div>
+    </StaggerReveal>
   );
 }
 
@@ -1377,7 +1378,7 @@ export function RentCheckerResultPage({
   }, []);
 
   return (
-    <div className="space-y-8">
+    <StaggerReveal className="space-y-8">
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1.4fr)_360px]">
         <div className="space-y-6">
           <ResultHeroCard result={adjustedResult} />
@@ -1436,7 +1437,7 @@ export function RentCheckerResultPage({
             </Link>
         </div>
       ) : null}
-    </div>
+    </StaggerReveal>
   );
 }
 

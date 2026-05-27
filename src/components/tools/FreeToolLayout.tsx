@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Hero } from '@/components/ui/Hero';
+import { Reveal, StaggerReveal } from '@/components/marketing/PremiumMotion';
 
 interface PaidVersionInfo {
   price: string;
@@ -46,7 +47,7 @@ export function FreeToolLayout({
   paidVersion,
 }: FreeToolLayoutProps) {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[linear-gradient(180deg,#ffffff_0%,#faf7ff_42%,#f8f4ff_100%)]">
       {/* Hero - Lighter variant for tools */}
       <Hero
         variant="secondary"
@@ -56,7 +57,7 @@ export function FreeToolLayout({
       />
 
       {/* Legal Disclaimer Banner */}
-      <div className="border-b-2 border-warning-500 bg-warning-50 py-4">
+      <div className="border-b border-warning-200 bg-warning-50 py-4">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="flex items-start gap-3">
             <svg
@@ -90,14 +91,14 @@ export function FreeToolLayout({
         <div className="grid gap-8 lg:grid-cols-3">
           {/* Tool Interface */}
           <div className="lg:col-span-2">
-            <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+            <Reveal className="rounded-[1.75rem] border border-[#e8ddfb] bg-white p-8 shadow-[0_22px_60px_rgba(91,33,182,0.10)]">
               {children}
-            </div>
+            </Reveal>
           </div>
 
           {/* Upgrade Sidebar */}
           <div className="lg:col-span-1">
-            <div className="sticky top-8 rounded-2xl border-2 border-primary-200 bg-gradient-to-br from-primary-50 to-white p-6 shadow-lg">
+            <Reveal className="sticky top-8 rounded-[1.75rem] border border-primary-200 bg-gradient-to-br from-primary-50 via-white to-white p-6 shadow-[0_22px_60px_rgba(105,46,212,0.14)]">
               <div className="mb-4 flex items-center gap-2">
                 <svg
                   className="h-6 w-6 text-primary-600"
@@ -116,7 +117,7 @@ export function FreeToolLayout({
                 {paidVersion.price}
               </p>
 
-              <ul className="mb-6 space-y-3">
+              <StaggerReveal className="mb-6 space-y-3">
                 {paidVersion.features.map((feature, idx) => (
                   <li
                     key={idx}
@@ -137,7 +138,7 @@ export function FreeToolLayout({
                     {feature}
                   </li>
                 ))}
-              </ul>
+              </StaggerReveal>
 
               <Link
                 href={paidVersion.href}
@@ -149,7 +150,7 @@ export function FreeToolLayout({
               <p className="mt-4 text-center text-xs text-gray-600">
                 Instant download - checked document format
               </p>
-            </div>
+            </Reveal>
           </div>
         </div>
       </div>

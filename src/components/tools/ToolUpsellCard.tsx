@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { trackUpsellClicked } from '@/lib/analytics';
+import { Reveal, StaggerReveal } from '@/components/marketing/PremiumMotion';
 
 export type ToolType = 'validator' | 'generator' | 'calculator' | 'checker';
 
@@ -43,9 +44,10 @@ export function ToolUpsellCard({
   };
 
   return (
-    <section
+    <Reveal
+      as="section"
       data-testid="tool-upsell"
-      className={`rounded-2xl border border-purple-200 bg-gradient-to-br from-purple-50 via-white to-white p-6 shadow-sm ${className ?? ''}`}
+      className={`rounded-[1.75rem] border border-purple-200 bg-gradient-to-br from-purple-50 via-white to-white p-6 shadow-[0_22px_60px_rgba(91,33,182,0.12)] ${className ?? ''}`}
     >
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
@@ -72,8 +74,8 @@ export function ToolUpsellCard({
         </Link>
       </div>
 
-      <div className="mt-5 grid gap-4 md:grid-cols-2">
-        <div className="rounded-xl border border-gray-200 bg-white p-4">
+      <StaggerReveal className="mt-5 grid gap-4 md:grid-cols-2">
+        <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Free tool includes</p>
           <ul className="mt-3 space-y-2 text-sm text-gray-700">
             {freeIncludes.map((item) => (
@@ -81,7 +83,7 @@ export function ToolUpsellCard({
             ))}
           </ul>
         </div>
-        <div className="rounded-xl border border-purple-200 bg-purple-50 p-4">
+        <div className="rounded-xl border border-purple-200 bg-purple-50 p-4 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-wide text-purple-700">
             Paid pack includes
           </p>
@@ -91,7 +93,7 @@ export function ToolUpsellCard({
             ))}
           </ul>
         </div>
-      </div>
-    </section>
+      </StaggerReveal>
+    </Reveal>
   );
 }

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import { StaggerReveal } from '@/components/marketing/PremiumMotion';
 
 export type IntentProduct = 'notice_only' | 'money_claim' | 'complete_pack' | 'ast';
 export type IntentSource = string;
@@ -79,19 +80,19 @@ export function RelatedProductsModule({ products }: RelatedProductsModuleProps) 
         <div className="max-w-5xl mx-auto">
           <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">Related products</h2>
           <p className="text-gray-600 mb-8">Compare related landlord document workflows.</p>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <StaggerReveal className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => (
               <Link
                 key={product}
                 href={productMeta[product].href}
-                className="rounded-xl border border-gray-200 p-5 hover:border-primary/50 hover:shadow-sm transition"
+                className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:border-primary/50 public-surface-card standalone-premium-hover-lift"
               >
                 <h3 className="font-semibold text-gray-900 mb-2">{productMeta[product].title}</h3>
                 <p className="text-sm text-gray-600 mb-3">{productMeta[product].description}</p>
                 <span className="text-primary font-medium text-sm">View product -&gt;</span>
               </Link>
             ))}
-          </div>
+          </StaggerReveal>
         </div>
       </div>
     </section>

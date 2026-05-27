@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { trackEvent } from '@/lib/analytics';
 import type { ProductCtaConfig } from '@/lib/blog/product-cta-map';
+import { Reveal, StaggerReveal } from '@/components/marketing/PremiumMotion';
 
 interface BlogInlineProductCardProps {
   cta: ProductCtaConfig;
@@ -26,7 +27,7 @@ export function BlogInlineProductCard({
   const iconSrc = CTA_ICONS[cta.iconKey ?? 'notice'];
 
   return (
-    <section className="my-10 rounded-3xl border border-[#e8ddfb] bg-[#f8f1ff] p-6 shadow-[0_10px_30px_rgba(105,46,212,0.08)]">
+    <Reveal as="section" className="my-10 rounded-3xl border border-[#e8ddfb] bg-[linear-gradient(135deg,#f8f1ff,#ffffff)] p-6 shadow-[0_18px_50px_rgba(105,46,212,0.12)]">
       <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">
         {cta.eyebrow}
       </p>
@@ -41,14 +42,14 @@ export function BlogInlineProductCard({
         <h3 className="text-xl font-bold text-slate-900">{cta.heading}</h3>
       </div>
       <p className="mt-3 text-sm text-slate-700">{cta.intro}</p>
-      <ul className="mt-4 space-y-2 text-sm text-slate-700">
+      <StaggerReveal as="ul" className="mt-4 space-y-2 text-sm text-slate-700">
         {cta.bullets.map((bullet) => (
           <li key={bullet} className="flex items-start gap-2">
             <span className="mt-1 h-2 w-2 flex-none rounded-full bg-[#692ed4]" aria-hidden />
             <span>{bullet}</span>
           </li>
         ))}
-      </ul>
+      </StaggerReveal>
       <Link
         href={cta.primaryProductHref}
         onClick={() =>
@@ -59,10 +60,10 @@ export function BlogInlineProductCard({
             placement: 'inline',
           })
         }
-        className="mt-5 inline-flex rounded-xl bg-[#692ed4] px-5 py-3 font-semibold text-white transition hover:bg-[#5b24be] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2"
+        className="mt-5 inline-flex rounded-xl bg-[#692ed4] px-5 py-3 font-semibold text-white shadow-[0_14px_34px_rgba(105,46,212,0.22)] transition hover:-translate-y-0.5 hover:bg-[#5b24be] hover:shadow-[0_20px_42px_rgba(105,46,212,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2"
       >
         {cta.ctaLabel}
       </Link>
-    </section>
+    </Reveal>
   );
 }

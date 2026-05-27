@@ -14,6 +14,7 @@ import {
   getAuthorityLinks,
 } from '@/lib/seo/eviction-authority';
 import { CommercialSeoNextStep } from '@/components/seo/CommercialSeoNextStep';
+import { Reveal, StaggerReveal } from '@/components/marketing/PremiumMotion';
 
 export interface IntentSection {
   title: string;
@@ -109,9 +110,9 @@ export function HighIntentPageShell(props: HighIntentPageShellProps) {
         </ul>
       </UniversalHero>
 
-      <section className="border-b border-[#E6DBFF] bg-white py-10">
+      <section className="border-b border-[#E6DBFF] bg-[linear-gradient(180deg,#ffffff_0%,#fbf7ff_100%)] py-10">
         <Container>
-          <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
+          <Reveal className="mx-auto max-w-5xl rounded-[1.75rem] border border-[#E6DBFF] bg-[#F8F4FF] p-6 shadow-[0_22px_60px_rgba(91,33,182,0.10)] md:p-8">
             <h2 className="text-2xl font-semibold text-[#2a2161]">Start here</h2>
             <p className="mt-3 text-sm font-semibold uppercase tracking-wide text-primary">
               Question
@@ -138,7 +139,7 @@ export function HighIntentPageShell(props: HighIntentPageShellProps) {
               <li>Only file the court paperwork when the dates and supporting documents all match.</li>
               <li>Move to enforcement if needed without having to rebuild the whole file.</li>
             </ol>
-          </div>
+          </Reveal>
         </Container>
       </section>
 
@@ -154,15 +155,15 @@ export function HighIntentPageShell(props: HighIntentPageShellProps) {
       {props.diagrams && props.diagrams.length > 0 ? (
         <section className="border-b border-[#E6DBFF] bg-white py-8">
           <Container>
-            <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6">
+            <Reveal className="mx-auto max-w-5xl rounded-[1.75rem] border border-[#E6DBFF] bg-[#F8F4FF] p-6 shadow-[0_18px_50px_rgba(91,33,182,0.08)]">
               <h2 className="text-2xl font-semibold text-[#2a2161]">
                 Eviction diagrams and process maps
               </h2>
-              <div className="mt-5 grid gap-4 md:grid-cols-3">
+              <StaggerReveal className="mt-5 grid gap-4 md:grid-cols-3">
                 {props.diagrams.map((diagram) => (
                   <article
                     key={diagram.title}
-                    className="rounded-xl border border-[#E6DBFF] bg-white p-4"
+                    className="rounded-xl border border-[#E6DBFF] bg-white p-4 shadow-sm standalone-premium-hover-lift"
                   >
                     <Image
                       src={diagram.imageSrc}
@@ -176,15 +177,15 @@ export function HighIntentPageShell(props: HighIntentPageShellProps) {
                     <p className="mt-2 text-sm leading-6 text-gray-700">{diagram.description}</p>
                   </article>
                 ))}
-              </div>
-            </div>
+              </StaggerReveal>
+            </Reveal>
           </Container>
         </section>
       ) : null}
 
-      <section className="bg-white py-12">
+      <section className="bg-[linear-gradient(180deg,#ffffff_0%,#faf7ff_100%)] py-12">
         <Container>
-          <div className="mx-auto max-w-5xl space-y-10">
+          <StaggerReveal className="mx-auto max-w-5xl space-y-10">
             <SeoPageContextPanel
               pathname={`/${props.slug}`}
               className="border border-[#CAB6FF] bg-[#FBF8FF]"
@@ -192,7 +193,7 @@ export function HighIntentPageShell(props: HighIntentPageShellProps) {
             {props.sections.map((section) => (
               <article
                 key={section.title}
-                className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8"
+                className="rounded-[1.5rem] border border-[#E6DBFF] bg-[#FCFAFF] p-6 shadow-[0_14px_40px_rgba(91,33,182,0.06)] md:p-8 standalone-premium-hover-lift"
               >
                 <h2 className="text-2xl font-semibold text-[#2a2161]">{section.title}</h2>
                 <div className="mt-4 space-y-4 leading-7 text-gray-700">
@@ -209,23 +210,23 @@ export function HighIntentPageShell(props: HighIntentPageShellProps) {
                 ) : null}
               </article>
             ))}
-          </div>
+          </StaggerReveal>
         </Container>
       </section>
 
       {authorityLinks ? (
         <section className="border-y border-[#E6DBFF] bg-white py-10">
           <Container>
-            <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6">
+            <Reveal className="mx-auto max-w-5xl rounded-[1.75rem] border border-[#E6DBFF] bg-[#F8F4FF] p-6 shadow-[0_18px_50px_rgba(91,33,182,0.08)]">
               <h2 className="text-2xl font-semibold text-[#2a2161]">Useful next steps</h2>
               <p className="mt-3 text-gray-700">
                 Use these links when you want to move from reading into the next practical step
                 without losing track of the case.
               </p>
-              <div className="mt-4 grid gap-3 text-sm md:grid-cols-2">
+              <StaggerReveal className="mt-4 grid gap-3 text-sm md:grid-cols-2">
                 <Link
                   href={authorityLinks.parent}
-                  className="rounded-lg border border-[#E6DBFF] bg-white px-4 py-3 text-primary hover:bg-[#F8F4FF]"
+                  className="rounded-lg border border-[#E6DBFF] bg-white px-4 py-3 text-primary transition hover:bg-[#F8F4FF] standalone-premium-hover-lift"
                 >
                   Main guide: {formatAuthorityLinkLabel(authorityLinks.parent)}
                 </Link>
@@ -233,56 +234,56 @@ export function HighIntentPageShell(props: HighIntentPageShellProps) {
                   <Link
                     key={href}
                     href={href}
-                    className="rounded-lg border border-[#E6DBFF] bg-white px-4 py-3 text-primary hover:bg-[#F8F4FF]"
+                    className="rounded-lg border border-[#E6DBFF] bg-white px-4 py-3 text-primary transition hover:bg-[#F8F4FF] standalone-premium-hover-lift"
                   >
                     Related guide: {formatAuthorityLinkLabel(href)}
                   </Link>
                 ))}
                 <Link
                   href={authorityLinks.tool}
-                  className="rounded-lg border border-[#E6DBFF] bg-white px-4 py-3 text-primary hover:bg-[#F8F4FF]"
+                  className="rounded-lg border border-[#E6DBFF] bg-white px-4 py-3 text-primary transition hover:bg-[#F8F4FF] standalone-premium-hover-lift"
                 >
                   Free tool: {formatAuthorityLinkLabel(authorityLinks.tool)}
                 </Link>
                 <Link
                   href={authorityLinks.product}
-                  className="rounded-lg border border-[#E6DBFF] bg-white px-4 py-3 text-primary hover:bg-[#F8F4FF]"
+                  className="rounded-lg border border-[#E6DBFF] bg-white px-4 py-3 text-primary transition hover:bg-[#F8F4FF] standalone-premium-hover-lift"
                 >
                   Document pack: {formatAuthorityLinkLabel(authorityLinks.product)}
                 </Link>
-              </div>
+              </StaggerReveal>
               <h3 className="mt-6 text-lg font-semibold text-[#2a2161]">Key topics covered here</h3>
-              <div className="mt-3 grid gap-2 text-sm text-gray-700 md:grid-cols-3">
+              <StaggerReveal className="mt-3 grid gap-2 text-sm text-gray-700 md:grid-cols-3">
                 {EVICTION_ENTITIES.map((entity) => (
                   <p
                     key={entity}
-                    className="rounded-lg border border-[#E6DBFF] bg-white px-3 py-2"
+                    className="rounded-lg border border-[#E6DBFF] bg-white px-3 py-2 shadow-sm"
                   >
                     {entity}
                   </p>
                 ))}
-              </div>
-            </div>
+              </StaggerReveal>
+            </Reveal>
           </Container>
         </section>
       ) : null}
 
       <section className="py-12">
         <Container>
-          <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-white p-6 md:p-8">
+          <Reveal className="mx-auto max-w-5xl rounded-[1.75rem] border border-[#E6DBFF] bg-white p-6 shadow-[0_18px_50px_rgba(91,33,182,0.08)] md:p-8">
             <h2 className="text-2xl font-semibold text-[#2a2161]">Related guides and next steps</h2>
-            <div className="mt-4 grid gap-3 md:grid-cols-2">
+            <StaggerReveal className="mt-4 grid gap-3 md:grid-cols-2">
               {props.relatedLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]"
+                  className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary transition hover:bg-[#F8F4FF] standalone-premium-hover-lift"
                 >
                   {link.label}
                 </Link>
               ))}
-            </div>
-          </div>
+            </StaggerReveal>
+          </Reveal>
         </Container>
       </section>
 

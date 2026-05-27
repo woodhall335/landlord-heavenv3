@@ -9,6 +9,7 @@ import { Sources } from '@/components/blog/Sources';
 import { BlogCard } from '@/components/blog/BlogCard';
 import { CategoryPage } from '@/components/blog/CategoryPage';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { Reveal, StaggerReveal } from '@/components/marketing/PremiumMotion';
 import { blogPosts, getBlogPost } from '@/lib/blog/posts';
 import { BlogPost } from '@/lib/blog/types';
 import {
@@ -494,31 +495,31 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
     return (
       <main className="bg-white pb-16"> 
-        <section className="border-b border-[#ede2ff] bg-[#f8f1ff]/70 py-10 lg:py-14"> 
+        <section className="border-b border-[#ede2ff] bg-[linear-gradient(180deg,#ffffff_0%,#f8f1ff_100%)] py-10 lg:py-14"> 
           <div className="container mx-auto px-4"> 
             <Link href="/blog" className="text-sm font-medium text-primary hover:underline"> 
               ← Back to blog
             </Link>
             <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-900 lg:text-4xl">{topicHub.name}</h1>
             <p className="mt-4 max-w-3xl text-slate-600">{topicHub.intro}</p>
-            <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3"> 
+            <StaggerReveal className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3"> 
               {topicHub.pillarLinks.map((link) => (
-                <Link key={link.href} href={link.href} className="rounded-xl border border-[#e3d3ff] bg-white px-4 py-3 text-sm font-semibold text-[#692ed4] hover:border-[#c6a2ff]"> 
+                <Link key={link.href} href={link.href} className="rounded-xl border border-[#e3d3ff] bg-white px-4 py-3 text-sm font-semibold text-[#692ed4] shadow-sm transition hover:border-[#c6a2ff] standalone-premium-hover-lift"> 
                   {link.label}
                 </Link>
               ))}
-            </div>
+            </StaggerReveal>
           </div>
         </section>
 
           <section className="container mx-auto px-4 py-10 lg:py-14"> 
             <h2 className="text-2xl font-bold text-gray-900">Related posts in this topic</h2>
             <p className="mb-8 mt-2 text-gray-600">{topicHub.description}</p>
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3"> 
+          <StaggerReveal className="grid gap-6 md:grid-cols-2 xl:grid-cols-3"> 
             {postsForDisplay.map((post) => (
               <BlogCard key={post.slug} {...post} />
             ))}
-          </div>
+          </StaggerReveal>
         </section>
       </main>
     );
@@ -790,7 +791,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
         {/* Content */}
         <div className="container mx-auto min-w-0 px-4 py-7 lg:py-9">
           <BlogReadingProgress />
-          <div className="blog-full-bleed-hero-wrapper relative mb-8 aspect-[16/9] w-full overflow-hidden rounded-3xl border border-[#e8ddfb] bg-[#f8f1ff] shadow-[0_10px_30px_rgba(105,46,212,0.08)] lg:mb-10">
+          <Reveal className="blog-full-bleed-hero-wrapper relative mb-8 aspect-[16/9] w-full overflow-hidden rounded-3xl border border-[#e8ddfb] bg-[#f8f1ff] shadow-[0_18px_50px_rgba(105,46,212,0.12)] lg:mb-10">
             <Image
               src={heroSrc}
               alt={post.heroImageAlt}
@@ -798,7 +799,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               sizes="(min-width: 1280px) 1120px, 100vw"
               className="object-cover object-center"
             />
-          </div>
+          </Reveal>
           <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,760px)_300px] lg:gap-12 lg:justify-center">
             {/* Main Content */}
             <div className="min-w-0 max-w-[760px] overflow-x-clip pb-20 lg:pb-0">
@@ -809,7 +810,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               />
 
               {quickAnswer && (
-                <section className="mt-8 rounded-2xl border border-[#e9dcff] bg-white p-5 shadow-sm md:p-6" aria-label="Quick answer">
+                <Reveal as="section" className="mt-8 rounded-2xl border border-[#e9dcff] bg-white p-5 shadow-[0_14px_34px_rgba(105,46,212,0.08)] md:p-6" aria-label="Quick answer">
                   <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">Short answer</p>
                   <h2 className="mt-2 text-xl font-bold text-gray-900">{quickAnswer.question}</h2>
                   <p className="mt-3 text-sm text-gray-700">{quickAnswer.answer}</p>
@@ -818,11 +819,11 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                       <li key={step}>{step}</li>
                     ))}
                   </ol>
-                </section>
+                </Reveal>
               )}
 
               {isTop30UpgradedPost(post.slug) && (
-                <section className="mt-8 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-5 shadow-sm md:p-6" aria-label="Recommended next routes">
+                <Reveal as="section" className="mt-8 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-5 shadow-[0_14px_34px_rgba(105,46,212,0.08)] md:p-6" aria-label="Recommended next routes">
                   <h2 className="text-xl font-bold text-gray-900">Pick the next step that fits your case</h2>
                   <p className="mt-2 text-sm text-gray-700">Use the option below that matches where you are now, so you do not waste time on the wrong paperwork.</p>
                   <ul className="mt-4 space-y-2 text-sm">
@@ -832,7 +833,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                       </li>
                     ))}
                   </ul>
-                </section>
+                </Reveal>
               )}
 
               <BlogCtaProvider value={{ cta: productCta, postSlug: slug, category: post.category }}>
@@ -855,7 +856,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
               <NextSteps slug={post.slug} category={post.category} tags={post.tags} />
 
-              <section className="mt-10 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-5 shadow-sm md:p-6" aria-label="Core eviction guides">
+              <Reveal as="section" className="mt-10 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-5 shadow-[0_14px_34px_rgba(105,46,212,0.08)] md:p-6" aria-label="Core eviction guides">
                 <h2 className="text-xl font-bold text-gray-900">Core eviction guides landlords usually need next</h2>
                 <p className="mt-2 text-sm text-gray-700">
                   These are the core possession guides landlords usually need after notice or arrears problems start.
@@ -869,7 +870,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                     </li>
                   ))}
                 </ul>
-              </section>
+              </Reveal>
 
               {imagePlaceholders.length > 0 && (
                 <section className="mt-12 rounded-2xl border border-dashed border-[#bba0ee] bg-white p-5 md:p-6" aria-label="Image and diagram placeholders">
@@ -886,10 +887,10 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               )}
 
               {sanitizedFaqs.length > 0 && (
-                <section className="mt-12 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-5 shadow-sm md:p-6" aria-label="FAQs for landlords">
+                <Reveal as="section" className="mt-12 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-5 shadow-[0_14px_34px_rgba(105,46,212,0.08)] md:p-6" aria-label="FAQs for landlords">
                   <h2 className="text-2xl font-bold text-gray-900 mb-6">FAQs for landlords</h2>
                   <FAQInline faqs={sanitizedFaqs} className="rounded-2xl border border-[#e7d9ff] bg-white p-5 md:p-6" />
-                </section>
+                </Reveal>
               )}
 
               {post.sources && post.sources.length > 0 && (

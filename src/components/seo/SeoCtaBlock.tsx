@@ -21,6 +21,7 @@ import {
 } from '@/lib/seo/page-taxonomy';
 import { trackLandingCtaClick } from '@/components/analytics/LandingPageTracker';
 import { TrustPositioningBar } from '@/components/marketing/TrustPositioningBar';
+import { Reveal } from '@/components/marketing/PremiumMotion';
 
 export type SeoPageType = 'problem' | 'court' | 'money' | 'general' | 'tenancy' | 'guide' | 'notice';
 export type SeoCtaVariant = 'hero' | 'section' | 'faq' | 'inline' | 'final';
@@ -325,9 +326,9 @@ export function SeoCtaBlock({
   if (variant === 'section') {
     const ctaText = formatProductCta(primaryText || getPrimaryLabel(pageType, pagePath), primaryProductKey);
     return (
-      <div className={`bg-primary/5 rounded-xl p-6 lg:p-8 border border-primary/20 ${className}`}>
+      <Reveal className={`rounded-[1.5rem] border border-primary/20 bg-[linear-gradient(135deg,rgba(250,245,255,0.98),rgba(255,255,255,0.96))] p-6 shadow-[0_18px_50px_rgba(105,46,212,0.10)] lg:p-8 ${className}`}>
         <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-          <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+          <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-[0_12px_28px_rgba(105,46,212,0.12)]">
             <Icon className="w-7 h-7 text-primary" />
           </div>
           <div className="flex-1">
@@ -351,7 +352,7 @@ export function SeoCtaBlock({
             </Link>
           </div>
         </div>
-      </div>
+      </Reveal>
     );
   }
 
@@ -369,9 +370,9 @@ export function SeoCtaBlock({
         : config.secondary.label);
 
     return (
-      <div className={`bg-gray-50 rounded-xl p-6 lg:p-8 mt-8 ${className}`}>
+      <Reveal className={`mt-8 rounded-[1.5rem] border border-[#eadcff] bg-[linear-gradient(135deg,#ffffff,rgba(250,245,255,0.92))] p-6 shadow-[0_16px_42px_rgba(91,33,182,0.08)] lg:p-8 ${className}`}>
         <div className="flex items-start gap-4">
-          <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+          <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0 shadow-[0_10px_24px_rgba(105,46,212,0.12)]">
             <Icon className="w-6 h-6 text-primary" />
           </div>
           <div className="flex-1">
@@ -406,7 +407,7 @@ export function SeoCtaBlock({
             </div>
           </div>
         </div>
-      </div>
+      </Reveal>
     );
   }
 
@@ -424,7 +425,7 @@ export function SeoCtaBlock({
       secondaryText || formatProductCta(PRODUCT_SHORT_LABEL_BY_KEY[secondaryProductKey], secondaryProductKey);
 
     return (
-      <div className={`bg-gradient-to-br from-primary to-primary/90 rounded-3xl p-8 lg:p-12 text-white text-center ${className}`}>
+      <Reveal className={`rounded-3xl bg-gradient-to-br from-primary via-[#6d28d9] to-primary/90 p-8 text-center text-white shadow-[0_28px_80px_rgba(76,29,149,0.24)] lg:p-12 ${className}`}>
         <h2 className="text-3xl lg:text-4xl font-bold mb-4">
           {title || `Get Your ${pageType === 'money' ? 'Money Claim' : 'Eviction'} Documents Now`}
         </h2>
@@ -462,7 +463,7 @@ export function SeoCtaBlock({
             <>Section 21 and Section 8 included &bull; AI compliance check &bull; Designed for court acceptance</>
           )}
         </p>
-      </div>
+      </Reveal>
     );
   }
 
