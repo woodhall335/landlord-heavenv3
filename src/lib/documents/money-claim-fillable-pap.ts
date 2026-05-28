@@ -160,15 +160,14 @@ function drawDocumentHeader(
   if (logo) {
     const scaled = logo.scaleToFit(130, 28);
     page.drawImage(logo, {
-      x: page.getWidth() - MARGIN_X - scaled.width,
+      x: MARGIN_X,
       y: y(page, 34) - scaled.height,
       width: scaled.width,
       height: scaled.height,
     });
   } else {
     const fallback = 'Landlord Heaven';
-    const width = fonts.bold.widthOfTextAtSize(fallback, 11);
-    drawText(page, fallback, page.getWidth() - MARGIN_X - width, 48, fonts.bold, 11);
+    drawText(page, fallback, MARGIN_X, 48, fonts.bold, 11);
   }
 
   drawTitle(page, title, subtitle, fonts);
@@ -368,11 +367,18 @@ function responseDeadline(templateData: Record<string, any>): string {
 function drawReturnDetails(page: PDFPage, templateData: Record<string, any>, fonts: Fonts, top: number) {
   drawHeading(page, 'Where to send this form', top, fonts);
   let cursor = top + 28;
+  const returnName = firstText(templateData.solicitor_firm, templateData.landlord_full_name);
+  const postalAddress = [
+    firstText(templateData.solicitor_address, templateData.landlord_address),
+    firstText(templateData.solicitor_postcode, templateData.landlord_postcode),
+  ].filter(Boolean).join('\n');
+  const contactEmail = firstText(templateData.solicitor_email, templateData.landlord_email);
+
   cursor = drawInfoRow(
     {} as PDFDocument,
     page,
     'Return to',
-    firstText(templateData.landlord_full_name, templateData.solicitor_firm),
+    returnName,
     undefined,
     cursor,
     fonts
@@ -380,22 +386,24 @@ function drawReturnDetails(page: PDFPage, templateData: Record<string, any>, fon
   cursor = drawInfoRow(
     {} as PDFDocument,
     page,
-    'Address',
-    firstText(templateData.solicitor_address, templateData.landlord_address),
+    'Postal address',
+    postalAddress,
     undefined,
     cursor,
     fonts,
-    { height: 48, multiline: true }
+    { height: 58, multiline: true }
   );
-  cursor = drawInfoRow(
-    {} as PDFDocument,
-    page,
-    'Postcode / email',
-    [templateData.landlord_postcode, templateData.landlord_email].filter(Boolean).join(' / '),
-    undefined,
-    cursor,
-    fonts
-  );
+  if (contactEmail) {
+    cursor = drawInfoRow(
+      {} as PDFDocument,
+      page,
+      'Email',
+      contactEmail,
+      undefined,
+      cursor,
+      fonts
+    );
+  }
   drawWrapped(
     page,
     'Return the completed form within 30 days of the Letter Before Claim, unless a different date is shown above.',
@@ -485,7 +493,7 @@ export async function makeReplyFormFillable(
   addCheckbox(pdf, page1, 'response.financial_statement_enclosed', 80, top + 206, 'I have enclosed a Financial Statement Form.', fonts, 10);
 
   const page2 = pdf.addPage(A4);
-  drawDocumentHeader(page2, 'Reply Form', 'Dispute, documents and support needs', fonts, logo);
+  drawDocumentHeader(page2, 'Reply Form', 'Dispute and evidence', fonts, logo);
   drawHeading(page2, 'If you dispute the debt', 108, fonts);
   addCheckbox(pdf, page2, 'response.i_dispute_the_debt', 52, 138, 'Option 3: I dispute the debt or the amount claimed.', fonts, 11);
   const reasons = [
@@ -525,40 +533,41 @@ export async function makeReplyFormFillable(
   drawText(page2, 'Other:', 62, top + 2, fonts.regular, 9.5);
   addTextField(pdf, page2, 'response.evidence_other', 106, top - 12, 260, 18, { line: true });
 
-  drawHeading(page2, 'More information or support', top + 36, fonts);
-  top += 66;
-  addCheckbox(pdf, page2, 'response.i_need_more_documents', 52, top, 'Option 4: I need more information or documents before I can respond.', fonts, 11);
-  addTextField(pdf, page2, 'response.requested_documents', MARGIN_X, top + 30, CONTENT_WIDTH, 56, {
-    multiline: true,
-  });
-  addCheckbox(pdf, page2, 'response.i_am_vulnerable', 52, top + 112, 'Option 5: I need extra time or support because of my circumstances.', fonts, 11);
-  addTextField(pdf, page2, 'response.vulnerability_or_support_needs', MARGIN_X, top + 142, CONTENT_WIDTH, 56, {
-    multiline: true,
-  });
-  drawText(page2, 'I am seeking advice from:', MARGIN_X, top + 230, fonts.regular, 9.5);
-  addTextField(pdf, page2, 'response.debt_advice_provider', 190, top + 216, 300, 18, { line: true });
-
   const page3 = pdf.addPage(A4);
   drawDocumentHeader(page3, 'Reply Form', 'Declaration and return details', fonts, logo);
-  drawHeading(page3, 'Declaration', 108, fonts);
+
+  drawHeading(page3, 'More information or support', 108, fonts);
+  top = 138;
+  addCheckbox(pdf, page3, 'response.i_need_more_documents', 52, top, 'Option 4: I need more information or documents before I can respond.', fonts, 11);
+  addTextField(pdf, page3, 'response.requested_documents', MARGIN_X, top + 30, CONTENT_WIDTH, 56, {
+    multiline: true,
+  });
+  addCheckbox(pdf, page3, 'response.i_am_vulnerable', 52, top + 112, 'Option 5: I need extra time or support because of my circumstances.', fonts, 11);
+  addTextField(pdf, page3, 'response.vulnerability_or_support_needs', MARGIN_X, top + 142, CONTENT_WIDTH, 56, {
+    multiline: true,
+  });
+  drawText(page3, 'I am seeking advice from:', MARGIN_X, top + 224, fonts.regular, 9.5);
+  addTextField(pdf, page3, 'response.debt_advice_provider', 190, top + 210, 300, 18, { line: true });
+
+  drawHeading(page3, 'Declaration', 398, fonts);
   drawWrapped(
     page3,
     'I confirm that the information I have given on this form is true and complete to the best of my knowledge.',
     MARGIN_X,
-    140,
+    430,
     CONTENT_WIDTH,
     fonts.regular,
     10
   );
-  drawText(page3, 'Signature:', MARGIN_X, 196, fonts.bold, 10);
-  addTextField(pdf, page3, 'signature.debtor_signature', 150, 181, 300, 20, { line: true });
-  drawText(page3, 'Name:', MARGIN_X, 230, fonts.bold, 10);
-  drawKnownOrField(pdf, page3, tenantName(templateData), 150, 216, 300, 20, fonts, {
+  drawText(page3, 'Signature:', MARGIN_X, 486, fonts.bold, 10);
+  addTextField(pdf, page3, 'signature.debtor_signature', 150, 471, 300, 20, { line: true });
+  drawText(page3, 'Name:', MARGIN_X, 520, fonts.bold, 10);
+  drawKnownOrField(pdf, page3, tenantName(templateData), 150, 506, 300, 20, fonts, {
     fieldName: 'signature.debtor_name',
   });
-  drawText(page3, 'Date:', MARGIN_X, 264, fonts.bold, 10);
-  addTextField(pdf, page3, 'signature.date', 150, 249, 145, 20, { line: true });
-  drawReturnDetails(page3, templateData, fonts, 320);
+  drawText(page3, 'Date:', MARGIN_X, 554, fonts.bold, 10);
+  addTextField(pdf, page3, 'signature.date', 150, 539, 145, 20, { line: true });
+  drawReturnDetails(page3, templateData, fonts, 604);
 
   return finalize(pdf, fonts.regular);
 }
