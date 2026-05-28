@@ -59,6 +59,7 @@ import {
 } from '@/components/ui/ComplianceTimingBlocker';
 import { isComplianceTimingBlock } from '@/lib/documents/compliance-timing-types';
 import { JurisdictionExplainer, ChecksSummaryBox } from '@/components/wizard/ReviewValueComponents';
+import { MoneyClaimAnimatedReview } from '@/components/wizard/money-claim/MoneyClaimAnimatedReview';
 
 // Tenancy product tier utilities - single source of truth for pricing and product resolution
 import {
@@ -481,19 +482,16 @@ function ReviewPageInner() {
 
   // Render Money Claim specific content
   if (isMoneyClaimFlow) {
-    return <MoneyClaimReviewContent
+    return <MoneyClaimAnimatedReview
       caseId={caseId}
       analysis={analysis}
       jurisdiction={jurisdiction}
-      readinessBadge={readinessBadge}
       caseStrengthBand={caseStrengthBand}
       readinessSummary={readinessSummary}
       redFlags={redFlags}
       complianceIssues={complianceIssues}
       evidence={evidence}
       hasBlockingIssues={hasBlockingIssues}
-      hasAcknowledgedBlockers={hasAcknowledgedBlockers}
-      onAcknowledgeBlockers={setHasAcknowledgedBlockers}
       onFixIssues={handleFixIssues}
       onEdit={handleEdit}
       onProceed={handleProceed}
