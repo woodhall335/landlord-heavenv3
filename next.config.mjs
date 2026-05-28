@@ -313,11 +313,6 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/section-8-notice-generator',
-        destination: '/eviction-notice-england',
-        permanent: true,
-      },
-      {
         source: '/court-bailiff-eviction-guide',
         destination: '/bailiff-eviction-process',
         permanent: true,

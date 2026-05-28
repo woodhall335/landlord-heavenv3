@@ -167,7 +167,9 @@ const anchorSets = {
     'step-by-step eviction process',
   ],
   section8Pillar: [
+    'Section 8 notice',
     'Section 8 notice guide',
+    'Section 8 notice generator',
     'Section 8 notice for rent arrears',
     'grounds-based possession notice',
   ],
@@ -1608,13 +1610,6 @@ const LONGTAIL_REDIRECT_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     pageRole: 'product-adjacent',
     consolidationStatus: 'candidate_redirect',
   }),
-  '/section-8-notice-generator': makeEntry('/section-8-notice-generator', {
-    ...section8TemplateEntry('/section-8-notice-generator', '/section-8-eviction-process', {
-      canonicalTarget: '/section-8-notice-template',
-    }),
-    pageRole: 'product-adjacent',
-    consolidationStatus: 'candidate_redirect',
-  }),
   '/no-fault-eviction': makeEntry('/no-fault-eviction', {
     ...section21TemplateEntry('/no-fault-eviction', '/section-21-notice-template', {
       canonicalTarget: '/no-fault-eviction',
@@ -2055,6 +2050,27 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     }),
     pageRole: 'supporting',
     consolidationStatus: 'candidate_redirect',
+  }),
+  '/section-8-notice-generator': makeEntry('/section-8-notice-generator', {
+    ...section8Entry('/section-8-notice-generator', SEO_PILLAR_ROUTES.section8Notice, {
+      canonicalTarget: '/section-8-notice-generator',
+      primaryProductByScenario: {
+        notice: SEO_PRODUCT_ROUTES.noticeOnly,
+        court: SEO_PRODUCT_ROUTES.completePack,
+      },
+    }),
+    pageRole: 'supporting',
+    supportingPage: SEO_PILLAR_ROUTES.section8Notice,
+    consolidationStatus: 'supporting_live',
+    anchorVariants: {
+      pillar: [...anchorSets.section8Pillar],
+      supporting: [
+        'Section 8 notice generator',
+        'Form 3A generator for England landlords',
+        'generate a Section 8 notice',
+      ],
+      product: [...anchorSets.section8NoticeProduct],
+    },
   }),
   '/section-21-notice-guide': makeEntry('/section-21-notice-guide', {
     ...section21Entry('/section-21-notice-guide', SEO_PILLAR_ROUTES.section8Notice, {

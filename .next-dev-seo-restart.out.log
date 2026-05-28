@@ -1,0 +1,30 @@
+▲ Next.js 16.1.1 (webpack)
+- Local:         http://127.0.0.1:5000
+- Network:       http://127.0.0.1:5000
+- Experiments (use with caution):
+  · serverActions
+
+✓ Starting...
+✓ Ready in 6s
+○ Compiling proxy ...
+○ Compiling /section-8-notice-generator ...
+ GET /section-8-notice-generator 200 in 54s (compile: 49s, proxy.ts: 554ms, render: 3.6s)
+ GET /section-8-notice-generator 200 in 892ms (compile: 85ms, proxy.ts: 405ms, render: 402ms)
+▲ Next.js 16.1.1 (webpack)
+- Local:         http://127.0.0.1:5000
+- Network:       http://127.0.0.1:5000
+- Experiments (use with caution):
+  · serverActions
+
+✓ Starting...
+✓ Ready in 3.4s
+▲ Next.js 16.1.1 (webpack)
+- Local:         http://127.0.0.1:5000
+- Network:       http://127.0.0.1:5000
+- Experiments (use with caution):
+  · serverActions
+
+✓ Starting...
+✓ Ready in 5s
+○ Compiling proxy ...
+○ Compiling /section-8-notice-generator ...

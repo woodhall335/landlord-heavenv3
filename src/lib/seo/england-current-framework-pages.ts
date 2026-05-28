@@ -243,48 +243,63 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
   },
   'section-8-notice': {
     slug: 'section-8-notice',
-    title: 'Section 8 Notice England | Grounds, Evidence & Rules',
+    title: 'Section 8 Notice | England Landlord Guide, Grounds & Dates',
     description:
-      'Learn how the current England Section 8 notice works after 1 May 2026, including grounds, evidence, service, timing, and N5/N119 court preparation.',
+      'Section 8 notice guide for England landlords. Check Form 3A, grounds, notice periods, service, evidence, court dates, and what to do if the tenant does not leave.',
     keywords: [
+      'section 8 notice',
       'section 8 notice england',
-      'section 8 notice',
+      'section 8 notice generator',
+      'form 3a section 8 notice',
       'section 8 grounds',
+      'section 8 notice period',
+      'section 8 notice for rent arrears',
       'renters rights act possession',
       'england eviction notice grounds',
     ],
-    ownerQueryTheme: 'section 8 notice england',
+    ownerQueryTheme: 'section 8 notice',
     supportingQueryThemes: [
-      'section 8 notice',
+      'section 8 notice england',
+      'section 8 notice generator',
+      'form 3a section 8 notice',
       'section 8 grounds',
+      'section 8 notice period',
       'renters rights act possession',
       'england eviction notice grounds',
     ],
-    heroTitle: 'Section 8 Notice for England',
+    heroTitle: 'Section 8 notice for England landlords',
     heroSubtitle:
-      'Use this page when you need to start the notice correctly in England, then keep the court route clear if the tenant still does not leave.',
+      'Use this as the main landlord guide to Section 8 notices in England: what the notice does, which grounds may apply, how dates and service work, and what happens if the tenant does not leave.',
     heroBullets: [
-      'Explains the live England notice route without retired comparison language.',
-      'Focuses on grounds, evidence, service, and possession continuity.',
-      'Links only to current notice, court, and support destinations.',
+      'Explains Form 3A, Section 8 grounds, notice periods, service, and court next steps.',
+      'Includes the practical checks landlords need before serving a notice.',
+      'Links into the date calculator, notice generator, and court pack when you are ready to act.',
     ],
     pageType: 'guide',
     currentFrameworkNote: buildCurrentFrameworkNote(
       'Current England possession work starts with the facts, the right grounds, and a notice path that still makes sense if the matter reaches court.'
     ),
     introduction: [
-      'A Section 8 notice is one of the main live possession routes landlords need to understand in England. The real question is not whether you can download a form quickly. It is whether the facts support the grounds you want to rely on and whether the notice stage is being prepared in a way that still stands up if you later need a court order.',
-      'This page is here to help you make that route choice calmly. Start with notice when serving correctly is still the next practical job. Move to the fuller court route when the case already needs N5, N119, and claim-stage continuity rather than more reading.',
+      'A Section 8 notice is the landlord notice used in England when you want possession because you are relying on one or more statutory grounds. In plain English, it tells the tenant why you are seeking possession, which ground or grounds you rely on, when the notice period ends, and what facts support your route.',
+      'For current England private-rented cases, landlords normally work from Form 3A. The notice is not just a template. It is the first court-facing part of the file. If the grounds, dates, service method, or evidence are weak, the later possession claim can become slower, more expensive, or easier for the tenant to challenge.',
+      'Use this page as the main Section 8 notice hub. If you need to act, use the date calculator to check timing, the generator to prepare the notice and service file, or the Complete Pack if the case is already likely to move into N5 and N119 court papers.',
     ],
     decisionBlock: {
-      title: 'Choose the route that matches the next job',
+      title: 'Choose the Section 8 route that matches the next job',
       intro:
-        'Do not make every landlord read the whole guide before acting. If you know what the next practical step is, use the matching route below and come back to the deeper guidance second.',
+        'If you already know where your case stands, go straight to the right tool. If you are still checking the rules, continue through the guide and use the links as you go.',
       cards: [
+        {
+          title: 'Need to check the notice date first',
+          body:
+            'Use the free Section 8 notice date calculator when you want to check the likely notice period, deemed service date, and earliest court-paper date before you generate anything.',
+          ctaLabel: 'Calculate my Section 8 date',
+          href: '/tools/section-8-notice-date-calculator',
+        },
         {
           title: 'Need to serve notice correctly first',
           body:
-            'Start with the Eviction Notice Generator when the main job is getting the Section 8 notice, grounds, dates, and service steps right before anything goes to court.',
+            'Start with the Section 8 notice generator when the main job is getting Form 3A, the grounds, dates, evidence prompts, and service record right before anything goes to court.',
           ctaLabel: 'Create my Section 8 notice',
           href: '/products/notice-only',
         },
@@ -299,6 +314,20 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
     },
     deferFrameworkLinks: true,
     sections: [
+      {
+        id: 'quick-answer',
+        title: 'Quick answer: what is a Section 8 notice?',
+        paragraphs: [
+          'A Section 8 notice is the formal notice a landlord serves when seeking possession of an assured tenancy in England using one or more legal grounds. Common reasons include rent arrears, serious breach, anti-social behaviour, damage, sale, landlord occupation, or another ground that fits the facts.',
+          'The notice should identify the property, the tenant, the ground or grounds, the factual explanation for using those grounds, the notice period, and the date after which court proceedings may usually begin. For England private-rented cases under the current route, landlords should think in terms of Form 3A, proper service, and a file that can become court papers if the tenant stays.',
+          'The practical landlord test is simple: can you explain the ground, prove the facts, calculate the date, and show how the notice was served? If the answer is yes, the notice stage is much stronger. If not, fix the file before serving.',
+        ],
+        bullets: [
+          'Use Section 8 when you have grounds for possession, not simply because you want the tenancy to end.',
+          'Check the notice period for the actual grounds selected.',
+          'Keep the notice, service proof, evidence, and later N5/N119 papers consistent.',
+        ],
+      },
       {
         id: 'how-section-8-fits',
         title: 'How Section 8 fits into the current England possession route',
@@ -315,7 +344,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
       },
       {
         id: 'common-grounds',
-        title: 'Common grounds landlords need to think through carefully',
+        title: 'Section 8 grounds landlords need to think through carefully',
         paragraphs: [
           'Arrears grounds are often the most common reason landlords research this route, and Ground 8 is one of the best-known examples, but even apparently simple arrears cases need discipline. You should know the exact tenancy rent, the due dates, the payments received, the balance at the date of service, and whether any credits or adjustments affect the ledger. Small inaccuracies can cause disproportionate difficulty later because the court may lose confidence in the wider file if the basic numbers are not dependable.',
           'Conduct grounds require a different kind of preparation. You may need incident logs, written complaints, police references, correspondence, inspection notes, or witness material. The key is to move away from general dissatisfaction and towards specific events that can be explained and supported. A notice that says the tenant has behaved badly is far less useful than one that states what happened, when it happened, and why that conduct supports the ground relied upon.',
@@ -325,6 +354,20 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
           'Arrears cases depend on accurate numbers and payment history.',
           'Conduct cases need specific incidents and support, not general frustration.',
           'Breach cases should be linked directly to the tenancy terms and chronology.',
+        ],
+      },
+      {
+        id: 'section-8-notice-periods',
+        title: 'Section 8 notice periods and court dates',
+        paragraphs: [
+          'The notice period depends on the ground or combination of grounds you rely on. Some cases require a longer period before court papers can usually start. Others can move more quickly, especially where the ground is serious and the facts support urgency. The important point is that the date must be calculated for the actual selected grounds and the actual service method.',
+          'Landlords also need to distinguish between the date on the notice, the deemed service date, the expiry date, and the earliest practical date to move toward court papers. Those dates can be different. If they are not handled carefully, the case may be delayed before it has even reached a judge.',
+          'For a live case, use the Section 8 notice date calculator before serving. It helps you test the likely notice period and court-paper date, then you can move into the generator with a clearer idea of the timing.',
+        ],
+        bullets: [
+          'Ground selection drives the notice period.',
+          'Service method can affect when the notice is treated as delivered.',
+          'Do not issue court papers before the notice route is ready.',
         ],
       },
       {
@@ -338,11 +381,20 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
       },
       {
         id: 'evidence-file',
-        title: 'What a stronger evidence file usually contains',
+        title: 'Section 8 evidence checklist for landlords',
         paragraphs: [
           'A stronger Section 8 file is usually boring in the best possible way. The rent ledger adds up. The tenancy agreement is easy to find. Messages are ordered by date. Incident notes are specific. Service records are preserved. There is no mystery about what the landlord says happened, or when the case moved from one stage to the next. That kind of order can make a real difference if the tenant disputes the claim or if the court asks focused questions at a hearing.',
           'For arrears cases, you should expect to need the agreement, rent schedule, payment history, and supporting communications. For breach or conduct cases, the core file may be different, but the principle is the same: gather what supports the facts you rely on and organise it so someone else can follow it. A judge should not have to guess what document proves which point. The route works best when every key allegation has a home in the evidence bundle.',
           'You do not need a perfect case to start preparing properly. But you do need honesty about where the file is strong and where it is not. If the evidence is thinner than you hoped, that may affect which grounds you use, whether you serve now, or whether you need wider support before moving ahead. A realistic assessment at this stage is far more helpful than a confident-looking notice that the documents cannot actually support later.',
+        ],
+      },
+      {
+        id: 'what-can-go-wrong',
+        title: 'What can go wrong with a Section 8 notice',
+        paragraphs: [
+          'The notice can be challenged if the wrong ground is used, the factual explanation is too thin, the notice period is miscalculated, or service cannot be proved. Even where the landlord has a real problem with the tenant, procedural mistakes can create delay and extra cost.',
+          'The most common practical failure is treating the notice like a download rather than a possession file. A landlord may have a strong reason to seek possession, but the notice, rent schedule, evidence, and service record still need to line up. If they do not, the tenant has more room to dispute the route and the court has less confidence in the paperwork.',
+          'A better approach is to prepare the notice as if it may later be read alongside the N5, N119, witness statement, and evidence bundle. That does not make the process complicated. It simply keeps the story consistent from the first step.',
         ],
       },
       {
@@ -367,27 +419,51 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
     faqTitle: 'Section 8 Notice FAQs',
     faqs: [
       {
-        question: 'What is the main purpose of a Section 8 notice in England now?',
+        question: 'What is a Section 8 notice?',
         answer:
-          'Its purpose is to start a current grounds-based possession case by explaining the grounds relied on, the notice timing, and the facts that support the route.',
+          'A Section 8 notice is the notice a landlord uses in England when seeking possession using one or more legal grounds, such as rent arrears, breach, anti-social behaviour, sale, or landlord occupation.',
       },
       {
-        question: 'Is evidence important before the notice is served?',
+        question: 'What form do England landlords use for a Section 8 notice?',
         answer:
-          'Yes. The current route works best when the notice matches a file you can already explain and support, rather than hoping the evidence can be rebuilt later.',
+          'England landlords normally work from the current Form 3A route for private-rented Section 8 possession notices. The form needs the correct grounds, factual explanation, dates, and service planning.',
       },
       {
-        question: 'What happens if the tenant stays after the notice period?',
+        question: 'How long is a Section 8 notice period?',
         answer:
-          'You may need to bring a possession claim and prepare N5 and N119 paperwork, using the same notice-stage facts, service record, and supporting documents.',
+          'The notice period depends on the grounds relied on and the service method. Landlords should calculate the date for the actual grounds selected rather than copying timing from another case.',
+      },
+      {
+        question: 'Can I use a Section 8 notice for rent arrears?',
+        answer:
+          'Yes. Rent arrears are one of the most common reasons landlords use Section 8, but the arrears figures, rent schedule, payments, and evidence need to be accurate and consistent.',
+      },
+      {
+        question: 'When can court papers start after a Section 8 notice?',
+        answer:
+          'Court papers should not usually start until the relevant notice period has expired and the service position is clear. If the tenant stays, the landlord may need N5 and N119 possession claim papers supported by the same notice-stage facts.',
       },
       {
         question: 'Where should I go if I want to start now?',
         answer:
-          'Start with Notice Only if the route is settled. If you already expect the matter to move into court, compare the Complete Pack and the possession claim guidance as well.',
+          'Use the date calculator if you need to check timing first. Use Notice Only if you need the Section 8 notice and service file. Use Complete Pack if the case is already likely to move into court papers.',
       },
     ],
     relatedLinks: [
+      {
+        href: '/tools/section-8-notice-date-calculator',
+        title: 'Section 8 Notice Date Calculator',
+        description: 'Calculate the likely notice period, deemed service date, and earliest court-paper date before serving.',
+        icon: 'calculator',
+        type: 'tool',
+      },
+      {
+        href: '/section-8-notice-generator',
+        title: 'Section 8 Notice Generator',
+        description: 'Use the dedicated generator page when you are ready to turn the Section 8 route into a notice file.',
+        icon: 'document',
+        type: 'page',
+      },
       {
         href: '/form-3-section-8',
         title: 'Form 3A',
@@ -721,20 +797,27 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
   },
   'how-to-evict-a-tenant-england': {
     slug: 'how-to-evict-a-tenant-england',
-    title: 'How to Evict a Tenant in England | Landlord Guide 2026',
+    title: 'Evict Tenant in England | Landlord Section 8 Guide',
     description:
-      'Follow how to evict a tenant in England after 1 May 2026, from route selection and notice service to N5 and N119 claims, hearings, and enforcement planning.',
+      'How to evict a tenant in England as a landlord: check the problem, choose the Section 8 route, serve Form 3A, prepare evidence, and move to court if needed.',
     keywords: [
+      'evict tenant',
+      'how to evict tenant',
       'how to evict a tenant england 2026',
       'evict tenant after 1 may 2026 england',
       'how to evict a tenant england',
+      'evict tenant england',
+      'section 8 notice to evict tenant',
       'current eviction process england',
       'renters rights act eviction landlord guide',
     ],
     ownerQueryTheme: 'how to evict a tenant in england',
     supportingQueryThemes: [
+      'evict tenant',
       'evict tenant england',
+      'how to evict tenant',
       'how to evict a tenant england',
+      'section 8 notice to evict tenant',
       'evict tenant after 1 may 2026 england',
       'renters rights act eviction landlord guide',
     ],
@@ -843,6 +926,13 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         type: 'guide',
       },
       {
+        href: '/section-8-notice-generator',
+        title: 'Section 8 Notice Generator',
+        description: 'Turn the route into a Form 3A notice-stage file when you are ready to act.',
+        icon: 'document',
+        type: 'page',
+      },
+      {
         href: '/eviction-process-england',
         title: 'Eviction Process in England',
         description: 'See the same current framework as a notice-to-court sequence with hearings and enforcement planning.',
@@ -864,8 +954,8 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         type: 'product',
       },
     ],
-    primaryCta: { label: 'Read Section 8 Notice', href: '/section-8-notice' },
-    secondaryCta: { label: 'Read Eviction Process in England', href: '/eviction-process-england' },
+    primaryCta: { label: 'Create my Section 8 notice', href: '/products/notice-only' },
+    secondaryCta: { label: 'Read Section 8 notice guide', href: '/section-8-notice' },
   },
   'eviction-process-england': {
     slug: 'eviction-process-england',

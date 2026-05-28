@@ -1,0 +1,9 @@
+▲ Next.js 16.1.1 (webpack)
+- Local:         http://127.0.0.1:5001
+- Network:       http://127.0.0.1:5001
+- Experiments (use with caution):
+  · serverActions
+
+✓ Starting...
+  Suggestion: If you intended to restart next dev, terminate the other process, and then try again.
+[?25h

@@ -62,9 +62,9 @@ export const toolLinks = {
     type: 'tool' as const,
   },
   section8Generator: {
-    href: '/eviction-notice-england',
-    title: 'England Form 3A Notice Workflow',
-    description: 'Start the current England Form 3A notice route.',
+    href: '/section-8-notice-generator',
+    title: 'Section 8 Notice Generator',
+    description: 'Start the current England Form 3A Section 8 notice route.',
     icon: 'document' as const,
     type: 'tool' as const,
   },

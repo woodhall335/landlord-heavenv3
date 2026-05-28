@@ -15,3 +15,964 @@
 ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
 ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
 ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+⨯ SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>) {
+  page: '/tools/section-8-notice-date-calculator'
+}
+⨯ SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>) {
+  page: '/tools/section-8-notice-date-calculator'
+}
+⚠ Blocked cross-origin request from 127.0.0.1 to /_next/* resource. To allow this, configure "allowedDevOrigins" in next.config
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\cases\[id]\route.ts:44:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+⚠ Found a change in next.config.mjs. Restarting the server to apply the changes...
