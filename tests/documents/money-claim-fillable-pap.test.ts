@@ -33,6 +33,33 @@ describe('money claim PAP fillable PDFs', () => {
     expect(fields).toContain('signature.date');
   });
 
+  it('does not ask again for tenant details already collected in the wizard', async () => {
+    const templateData = {
+      landlord_full_name: 'Alice Landlord',
+      claimant_reference: 'MC-001',
+      tenant_full_name: 'Sam Tenant',
+      property_address: '1 Rental Street',
+      property_postcode: 'LS1 1AA',
+      total_claim_amount: 3005,
+    };
+
+    const replyForm = await makeReplyFormFillable(await createRenderedPapPdf(), templateData);
+    const financialStatement = await makeFinancialStatementFillable(
+      await createRenderedPapPdf(),
+      templateData
+    );
+
+    const replyFields = (await PDFDocument.load(replyForm)).getForm().getFields().map((field) => field.getName());
+    const statementFields = (await PDFDocument.load(financialStatement)).getForm().getFields().map((field) => field.getName());
+
+    expect(replyFields).not.toContain('debtor.full_name');
+    expect(replyFields).not.toContain('debtor.address');
+    expect(replyFields).not.toContain('debtor.postcode');
+    expect(statementFields).not.toContain('debtor.full_name');
+    expect(statementFields).not.toContain('debtor.address');
+    expect(statementFields).not.toContain('debtor.postcode');
+  });
+
   it('adds editable fields to the Financial Statement PDF', async () => {
     const fillable = await makeFinancialStatementFillable(await createRenderedPapPdf(), {
       landlord_full_name: 'Alice Landlord',
@@ -45,6 +72,11 @@ describe('money claim PAP fillable PDFs', () => {
 
     expect(fields).toContain('income.wages');
     expect(fields).toContain('outgoings.rent_or_mortgage');
+    expect(fields).not.toContain('outgoings.mortgage');
+    expect(fields).not.toContain('assets.property_owned_outright');
+    expect(fields).not.toContain('assets.property_mortgaged');
+    expect(fields).not.toContain('assets.property_mortgage_outstanding');
+    expect(fields).not.toContain('assets.property_value');
     expect(fields).toContain('priority_debts.details');
     expect(fields).toContain('payment_offer.amount');
   });
