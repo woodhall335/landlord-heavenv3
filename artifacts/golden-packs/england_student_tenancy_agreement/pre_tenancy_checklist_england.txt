@@ -3,7 +3,7 @@ golden-student-tenancy-001
 JURISDICTION
 england
 GENERATED
-16 May 2026
+28 May 2026
 Pre-Tenancy Compliance Checklist
 England
 12 Example Street, London, SW1A 1AA

@@ -8,13 +8,13 @@ The proposal should be judged by reference to nearby open-market comparables, no
 increase from the previous rent alone.
 The landlord relies on the comparable evidence in this file and says the proposed rent of £1285.00 per month
 should be judged against that market evidence, not against the size of the increase alone.
-The proposed rent looks broadly aligned with the market calculation currently available.
+The proposed rent looks broadly aligned with the justified market calculation currently available.
 No safer-range guidance is currently needed from the market calculation.
-The proposed rent of £1285.00 per month is below the adjusted median market rent of £1297.50 per month.
+The proposed rent of £1285.00 per month is below the justified median market rent of £1297.50 per month.
 Based on the comparables analysed under section 13(4) of the Housing Act 1988 (as amended), the
 proposed increase is presented as reasonable with a moderate likelihood of challenge and strong evidence.
-The proposed rent reflects recent local listings, condition, and current market positioning for similar
-two-bedroom homes.
+The selected justification factors score 0/100 (Weak). The proposed rent reflects recent local listings,
+condition, and current market positioning for similar two-bedroom homes.
 Strength of the evidence
 Strong evidence is based on 8 comparable homes used in the market calculation, 8 source-backed entries,
 and 8 comparables dated within the 90-day freshness window. The file reads as a well-supported market

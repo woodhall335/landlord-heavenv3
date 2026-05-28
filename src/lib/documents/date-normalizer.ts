@@ -359,7 +359,7 @@ export function sanitizeISODatesInHTML(
   if (replacements.length > 0 && (process.env.NODE_ENV === 'development' || process.env.DATE_SANITIZE_DEBUG === '1')) {
     console.warn(
       `[DATE_SANITIZER] Replaced ${replacements.length} ISO date(s) in HTML:`,
-      replacements.map(r => `${r.iso} → ${r.uk}`)
+      replacements.map(r => `${r.iso} → ${r.uk} (${r.context})`)
     );
   }
 

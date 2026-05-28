@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-19T19:37:20.489Z",
+  "generatedAt": "2026-05-28T19:35:13.903Z",
   "outputRoot": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\golden-packs",
   "packs": [
     {
@@ -316,7 +316,7 @@
             "html": "money_claim/07-financial-statement-form.html"
           },
           "extraction": {
-            "pageCount": 7,
+            "pageCount": 5,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"

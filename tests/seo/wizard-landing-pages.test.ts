@@ -584,7 +584,7 @@ describe('Wizard Landing Pages - Pricing Accuracy', () => {
 
   it('should use correct price for Eviction Bundle', () => {
     expect(completePackContent.price).toBe(SEO_PRICES.evictionBundle.display);
-    expect(completePackContent.price).toBe('£89.99');
+    expect(completePackContent.price).toBe('£69.99');
   });
 
   it('should use correct price for Money Claim', () => {

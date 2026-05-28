@@ -39,8 +39,8 @@ describe('Pricing Consistency', () => {
       expect(PRODUCTS.notice_only.price).toBe(39.99);
     });
 
-    it('Complete Eviction Pack should be £89.99 (England only)', () => {
-      expect(PRODUCTS.complete_pack.price).toBe(89.99);
+    it('Complete Eviction Pack should be £69.99 (England only)', () => {
+      expect(PRODUCTS.complete_pack.price).toBe(69.99);
     });
 
     it('Money Claim Pack should be £28.99 (England only)', () => {
@@ -53,6 +53,14 @@ describe('Pricing Consistency', () => {
 
     it('Premium AST should be £24.99', () => {
       expect(PRODUCTS.ast_premium.price).toBe(24.99);
+    });
+
+    it('Standard Section 13 should be £24.99', () => {
+      expect(PRODUCTS.section13_standard.price).toBe(24.99);
+    });
+
+    it('Tribunal-ready Section 13 should be £34.99', () => {
+      expect(PRODUCTS.section13_defensive.price).toBe(34.99);
     });
   });
 
@@ -159,7 +167,7 @@ describe('Pricing Consistency', () => {
     });
 
     it('complete_pack should only have England pricing', () => {
-      expect(getRegionalPrice('complete_pack', 'england')).toBe(89.99);
+      expect(getRegionalPrice('complete_pack', 'england')).toBe(69.99);
       expect(getRegionalPrice('complete_pack', 'wales')).toBeNull();
       expect(getRegionalPrice('complete_pack', 'scotland')).toBeNull();
       expect(getRegionalPrice('complete_pack', 'northern_ireland')).toBeNull();

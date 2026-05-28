@@ -17,10 +17,10 @@ const CORE_PRICE_EXPECTATIONS: Record<
   { amount: number; display: string; pence: number }
 > = {
   notice_only: { amount: 39.99, display: '£39.99', pence: 3999 },
-  complete_pack: { amount: 89.99, display: '£89.99', pence: 8999 },
+  complete_pack: { amount: 69.99, display: '£69.99', pence: 6999 },
   money_claim: { amount: 28.99, display: '£28.99', pence: 2899 },
-  section13_standard: { amount: 39.99, display: '£39.99', pence: 3999 },
-  section13_defensive: { amount: 69.99, display: '£69.99', pence: 6999 },
+  section13_standard: { amount: 24.99, display: '£24.99', pence: 2499 },
+  section13_defensive: { amount: 34.99, display: '£34.99', pence: 3499 },
   ast_standard: { amount: 14.99, display: '£14.99', pence: 1499 },
   ast_premium: { amount: 24.99, display: '£24.99', pence: 2499 },
 };
@@ -100,8 +100,8 @@ describe('Pricing regression checks', () => {
   it('charges only the current price difference for notice_only to complete_pack upgrades', () => {
     const upgradeAmount = getProductUpgradeAmount('notice_only', 'complete_pack');
 
-    expect(upgradeAmount).toBe(50);
-    expect(Math.round((upgradeAmount ?? 0) * 100)).toBe(5000);
+    expect(upgradeAmount).toBe(30);
+    expect(Math.round((upgradeAmount ?? 0) * 100)).toBe(3000);
   });
 
   it('has no stale pricing copy on user-facing paths', () => {
@@ -117,7 +117,6 @@ describe('Pricing regression checks', () => {
       { label: 'Section 13 Standard £29.99', pattern: /Standard Section 13(?: Pack)?[^\n£]{0,120}£29\.99/i },
       { label: 'Section 13 Defence £49.99', pattern: /Section 13 Defence(?: Pack)?[^\n£]{0,120}£49\.99/i },
       { label: 'Section 13 Standard £19.99', pattern: /Standard Section 13(?: Pack)?[^\n£]{0,120}£19\.99/i },
-      { label: 'Section 13 Defence £34.99', pattern: /Section 13 Defence(?: Pack)?[^\n£]{0,120}£34\.99/i },
       { label: 'Section 13 Standard £17.99', pattern: /(?:Standard\s+)?Section 13[^\n£]{0,120}£17\.99/i },
       { label: 'Section 13 Defence £27.99', pattern: /(?:Defence|Defense|Challenge-Ready|Tribunal-Ready|Section 13)[^\n£]{0,120}£27\.99/i },
       { label: 'Money Claim £59.99', pattern: /Money Claim(?:s)?[^\n£]{0,120}£59\.99/i },

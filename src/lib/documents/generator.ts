@@ -11,7 +11,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import puppeteerCore from 'puppeteer-core';
 import { SITE_CONFIG } from '@/lib/site-config';
-import { normalizeDatesForRender, sanitizeISODatesInHTML, validateHtmlForPdfTextLayer } from './date-normalizer';
+import { formatDateUK, normalizeDatesForRender, sanitizeISODatesInHTML, validateHtmlForPdfTextLayer } from './date-normalizer';
 import { applyPreviewLockToPdfBytes } from '@/lib/previews/preview-lock-rendering';
 
 const DEBUG_GOLDEN_PACKS =
@@ -714,15 +714,21 @@ function getSupportDocumentLogoDataUri(): string | null {
   }
 }
 
+function formatSupportDocumentDateLabel(value: unknown): string {
+  if (typeof value === 'string' && value.trim()) {
+    return formatDateUK(value.trim(), 'long');
+  }
+
+  return new Date().toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+}
+
 function buildSupportDocumentChrome(data: Record<string, any>): string {
   const generatedLabel = sanitizeTextForPdfRendering(
-    typeof data.generation_date === 'string' && data.generation_date.trim()
-      ? data.generation_date
-      : new Date().toLocaleDateString('en-GB', {
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric',
-        })
+    formatSupportDocumentDateLabel(data.generation_date)
   );
 
   const jurisdiction = sanitizeTextForPdfRendering(
@@ -1187,14 +1193,14 @@ export function compileTemplate(templateContent: string, data: Record<string, an
     // - Footer stamps use: {{generation_date}}
     // Both must be set and formatted as UK dates to prevent blank fields in PDF text layer.
     const ukFormattedNow = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-    const isoNow = new Date().toISOString().split('T')[0];
     const enrichedData = {
       ...normalizedData,
       // 'current_date' - used by compliance checklist, audit reports, etc.
       // If already provided and normalized, keep it; otherwise use UK-formatted now
       current_date: normalizedData.current_date || ukFormattedNow,
-      // 'generation_date' - used by footer stamps, metadata (ISO fallback preferred)
-      generation_date: normalizedData.generation_date || isoNow,
+      // 'generation_date' is rendered directly in many templates, so the fallback must be display-safe.
+      // Machine-readable timestamps should use generation_timestamp instead.
+      generation_date: normalizedData.generation_date || ukFormattedNow,
       generation_timestamp: new Date().toISOString(),
       document_id: generateDocumentId(),
       // Site configuration (for footer, domain, etc.)

@@ -2,7 +2,7 @@ Tribunal Bundle Cover Sheet
 Pack: Tribunal-Ready Rent Increase Pack
 Property: 10 Sample Road, Leeds, LS1 1AA
 Tenant(s): Alex Tenant, Jordan Tenant
-Prepared on: 19 May 2026
+Prepared on: 28 May 2026
 Rules version: england_assured_section13_2026-05-01
 Bundle purpose
 Prepared for any tenant challenge to the proposed rent under section 13 of the Housing Act 1988.
@@ -421,12 +421,12 @@ Adjusted market range: lower quartile £1272.50 pcm | median £1297.50 pcm | upp
 Proposed rent: £1285.00 per month (£1285.00 pcm equivalent)
 The proposed rent of £1285.00 per month sits between the lower quartile and the median of the adjusted
 comparable range, against an adjusted range of £1272.50 to £1318.75 pcm and a median of £1297.50 pcm.
-Your proposed rent (£1285.00) sits below the median comparable rent (£1297.50 pcm), with strong evidence
-based on 8 recent source-backed comparables.
+Your proposed rent (£1285.00) sits below the justified median comparable rent (£1297.50 pcm), with strong
+evidence based on 8 recent source-backed comparables.
 Strong evidence is based on 8 comparable homes used in the market calculation, 8 source-backed entries,
 and 8 comparables dated within the 90-day freshness window. The file reads as a well-supported market
 review rather than a bare assertion.
-The proposed rent looks broadly aligned with the market calculation currently available.
+The proposed rent looks broadly aligned with the justified market calculation currently available.
 No safer-range guidance is currently needed from the market calculation.
 Challenge band: Moderate likelihood of challenge - Based on where your proposed rent sits within the
 adjusted comparable rent range.
@@ -437,20 +437,41 @@ Landlord Heaven | Comparable analysis and justification Page 1 of 7
 Rent Increase Justification Report
 Evidence band: Strong evidence - Based on how many comparables you have, how recent they are, and how
 many are source-backed rather than manual or heavily overridden.
+Statutory and tribunal framing
+This report is prepared on the basis of Housing Act 1988 section 13(2) and section 13(4), as amended for
+assured tenancies from 1 May 2026.
+The new rent must be proposed on the current Form 4A, served with at least two months notice, aligned to the
+tenancy period, and timed so that the 52-week / 53-week anti-drift rule is satisfied.
+If the tenant refers the notice to the tribunal, the question is the open-market rent for the property on
+comparable terms rather than the size of the increase from the previous rent alone.
+Comparable selection, adjustment discipline, and evidence freshness are therefore central. Unsupported or
+stale comparables weaken the landlord position even where the notice itself is valid.
 Recorded reasoning
-The proposed rent of £1285.00 per month is below the adjusted median market rent of £1297.50 per month.
+The proposed rent of £1285.00 per month is below the justified median market rent of £1297.50 per month.
 Based on the comparables analysed under section 13(4) of the Housing Act 1988 (as amended), the
 proposed increase is presented as reasonable with a moderate likelihood of challenge and strong evidence.
-The proposed rent reflects recent local listings, condition, and current market positioning for similar
-two-bedroom homes.
+The selected justification factors score 0/100 (Weak). The proposed rent reflects recent local listings,
+condition, and current market positioning for similar two-bedroom homes.
 Case-specific note: The proposed rent reflects recent local listings, condition, and current market positioning
 for similar two-bedroom homes.
+Justification-weighted calculation
+No selected justification factors have been applied to the supportable range.
+Justification adjustment: 0%.
+Raw comparable range: lower quartile £1272.50 pcm | median £1297.50 pcm | upper quartile £1318.75 pcm.
+Adjusted supportable range: lower quartile £1272.50 pcm | median £1297.50 pcm | upper quartile £1318.75
+pcm.
+The proposed rent of £1285.00 pcm is assessed against the adjusted supportable range.
 Condition and adjustment check
 Condition considered: use the saved comparable notes, photographs, and any inspection material kept with
 the file to explain whether the subject property is stronger, weaker, or broadly similar.
 Size and bedroom count considered: 2 bedroom property compared against the saved comparable schedule.
 Adjustments applied: no separate manual adjustment is recorded beyond the comparable figures saved in the
 file, so the landlord position should explain why the chosen comparables were treated as sufficiently similar.
+Landlord Heaven | Comparable analysis and justification Page 2 of 7
+
+-- 15 of 34 --
+
+Rent Increase Justification Report
 Comparable overview
 - Comparable base: 8 comparable two-bedroom properties used in the market calculation, with all listed
 within the last 90 days and all source-backed
@@ -462,11 +483,6 @@ Recorded listing cards
 These thumbnail cards give the landlord and tenant a quick visual reference for the recorded local listings.
 Some listings may be context-only or excluded; the comparable schedule below controls which figures are
 used in the market calculation.
-Landlord Heaven | Comparable analysis and justification Page 2 of 7
-
--- 15 of 34 --
-
-Rent Increase Justification Report
 Listing
 Comparable 1: Flat 2, The Calls, Leeds LS1
 Raw rent £1240.00 pcm | adjusted £1240.00 pcm
@@ -482,6 +498,11 @@ Comparable 3: Flat 5, Brewery Wharf, Leeds LS10
 Raw rent £1275.00 pcm | adjusted £1275.00 pcm
 2 bedrooms | 0.40 miles away | source date 15 March 2026
 Source: scraped | listing link saved in case file
+Landlord Heaven | Comparable analysis and justification Page 3 of 7
+
+-- 16 of 34 --
+
+Rent Increase Justification Report
 Listing
 Comparable 4: Apartment 8, Park Row, Leeds LS1
 Raw rent £1290.00 pcm | adjusted £1290.00 pcm
@@ -492,11 +513,6 @@ Comparable 5: Flat 11, Riverside Court, Leeds LS1
 Raw rent £1305.00 pcm | adjusted £1305.00 pcm
 2 bedrooms | 0.50 miles away | source date 15 March 2026
 Source: scraped | listing link saved in case file
-Landlord Heaven | Comparable analysis and justification Page 3 of 7
-
--- 16 of 34 --
-
-Rent Increase Justification Report
 Listing
 Comparable 6: Apartment 6, Wellington Street, Leeds LS1
 Raw rent £1315.00 pcm | adjusted £1315.00 pcm
@@ -512,6 +528,11 @@ Comparable 8: Apartment 21, East Parade, Leeds LS1
 Raw rent £1345.00 pcm | adjusted £1345.00 pcm
 2 bedrooms | 0.50 miles away | source date 15 March 2026
 Source: scraped | listing link saved in case file
+Landlord Heaven | Comparable analysis and justification Page 4 of 7
+
+-- 17 of 34 --
+
+Rent Increase Justification Report
 Market evidence picture
 8 used comparable 2-bed homes in the market calculation
 Median calculated from 8 comparable listings used in the market calculation.
@@ -526,11 +547,6 @@ Comparable 4: Apartment 8, Park Row, Leeds LS1 at raw £1290.00 pcm, adjusted to
 March 2026. Included because it is a close like-for-like market match.
 Comparable 5: Flat 11, Riverside Court, Leeds LS1 at raw £1305.00 pcm, adjusted to £1305.00 pcm, dated 15
 March 2026. Included because it is a close like-for-like market match.
-Landlord Heaven | Comparable analysis and justification Page 4 of 7
-
--- 17 of 34 --
-
-Rent Increase Justification Report
 Comparable 6: Apartment 6, Wellington Street, Leeds LS1 at raw £1315.00 pcm, adjusted to £1315.00 pcm,
 dated 15 March 2026. Included because it is a close like-for-like market match.
 Comparables and adjustments
@@ -551,6 +567,11 @@ Distance: 0.30 miles
 Source date (published): 15 March 2026
 Adjustment reason: No adjustment applied
 Use / exclusion reason: Included because it is a close like-for-like market match.
+Landlord Heaven | Comparable analysis and justification Page 5 of 7
+
+-- 18 of 34 --
+
+Rent Increase Justification Report
 3. Flat 5, Brewery Wharf, Leeds LS10 | raw £1275.00 pcm | adjusted £1275.00 pcm
 Included in calculation: Yes
 Freshness: 24 days old
@@ -564,11 +585,6 @@ Included in calculation: Yes
 Freshness: 24 days old
 Source: scraped | https://example.com/leeds-rent-comparable-4
 Distance: 0.40 miles
-Landlord Heaven | Comparable analysis and justification Page 5 of 7
-
--- 18 of 34 --
-
-Rent Increase Justification Report
 Source date (published): 15 March 2026
 Adjustment reason: No adjustment applied
 Use / exclusion reason: Included because it is a close like-for-like market match.
@@ -589,6 +605,11 @@ Source date (published): 15 March 2026
 Adjustment reason: No adjustment applied
 Use / exclusion reason: Included because it is a close like-for-like market match.
 7. Flat 3, Dock Street, Leeds LS10 | raw £1330.00 pcm | adjusted £1330.00 pcm
+Landlord Heaven | Comparable analysis and justification Page 6 of 7
+
+-- 19 of 34 --
+
+Rent Increase Justification Report
 Included in calculation: Yes
 Freshness: 24 days old
 Source: scraped | https://example.com/leeds-rent-comparable-7
@@ -602,11 +623,6 @@ Freshness: 24 days old
 Source: scraped | https://example.com/leeds-rent-comparable-8
 Distance: 0.50 miles
 Source date (published): 15 March 2026
-Landlord Heaven | Comparable analysis and justification Page 6 of 7
-
--- 19 of 34 --
-
-Rent Increase Justification Report
 Adjustment reason: No adjustment applied
 Use / exclusion reason: Included because it is a close like-for-like market match.
 Final checks before service or filing

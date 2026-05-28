@@ -14,6 +14,7 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ValidationReport } from '@/components/validators/ValidationReport';
+import { PRODUCTS } from '@/lib/pricing/products';
 
 // Mock analytics
 vi.mock('@/lib/analytics', () => ({
@@ -29,13 +30,13 @@ vi.mock('@/lib/checkout/cta-mapper', () => ({
     return {
       primary: {
         label: isInvalid ? 'Start Eviction Pack' : 'Start Notice Only',
-        price: isInvalid ? 89.99 : 39.99,
+        price: isInvalid ? PRODUCTS.complete_pack.price : PRODUCTS.notice_only.price,
         href: `/wizard/flow?type=eviction&jurisdiction=${jurisdiction}&product=${isInvalid ? 'complete_pack' : 'notice_only'}&case_id=${caseId}&source=validator`,
         productKey: isInvalid ? 'complete_pack' : 'notice_only',
       },
       secondary: {
         label: isInvalid ? 'Start Notice Only' : 'Start Eviction Pack',
-        price: isInvalid ? 39.99 : 89.99,
+        price: isInvalid ? PRODUCTS.notice_only.price : PRODUCTS.complete_pack.price,
         href: `/wizard/flow?type=eviction&jurisdiction=${jurisdiction}&product=${isInvalid ? 'notice_only' : 'complete_pack'}&case_id=${caseId}&source=validator`,
         productKey: isInvalid ? 'notice_only' : 'complete_pack',
       },
@@ -124,7 +125,7 @@ describe('ValidationReport CTA Routing', () => {
     expect(screen.queryByRole('link', { name: /Start Notice Only/i })).toBeNull();
 
     // Fallback message should be shown
-    expect(screen.getByText(/Upload a document to get personalized recommendations/i)).toBeInTheDocument();
+    expect(screen.getByText(/Upload a document to get recommendations for your situation/i)).toBeInTheDocument();
   });
 
   it('displays prices in CTAs', () => {
@@ -139,9 +140,11 @@ describe('ValidationReport CTA Routing', () => {
       />
     );
 
-    // Check that prices are displayed
-    expect(screen.getByText(/£89.99/)).toBeInTheDocument();
-    expect(screen.getByText(/£39.99/)).toBeInTheDocument();
+    // Check that prices are displayed. The UI splits the pound sign and amount into nested spans.
+    const primaryCta = screen.getByRole('link', { name: /Start Eviction Pack/i });
+    const secondaryCta = screen.getByRole('link', { name: /Start Notice Only/i });
+    expect(primaryCta.textContent).toContain(PRODUCTS.complete_pack.displayPrice);
+    expect(secondaryCta.textContent).toContain(PRODUCTS.notice_only.displayPrice);
   });
 
   it('tracks CTA clicks with analytics', () => {
