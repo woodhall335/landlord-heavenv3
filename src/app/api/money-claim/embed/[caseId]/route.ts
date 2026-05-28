@@ -3,8 +3,16 @@ import { NextResponse } from 'next/server';
 import {
   generateDocument,
 } from '@/lib/documents/generator';
-import { getArrearsScheduleData } from '@/lib/documents/arrears-schedule-mapper';
 import { buildMoneyClaimGenerationInput } from '@/lib/documents/money-claim-generation-facts';
+import {
+  assertMoneyClaimFinancialsReady,
+  buildMoneyClaimFinancialTemplateData,
+  calculateMoneyClaimFinancials,
+} from '@/lib/documents/money-claim-financials';
+import {
+  makeFinancialStatementFillable,
+  makeReplyFormFillable,
+} from '@/lib/documents/money-claim-fillable-pap';
 import { fillN1Form, type CaseData } from '@/lib/documents/official-forms-filler';
 import { buildPdfEmbedHtml } from '@/lib/previews/documentEmbedShell';
 import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
@@ -219,15 +227,13 @@ export async function GET(
       );
     }
 
-    const {
-      facts: generationFacts,
-      caseFacts,
-      moneyClaimCase,
-    } = buildMoneyClaimGenerationInput({
+    const { moneyClaimCase } = buildMoneyClaimGenerationInput({
       facts: wizardFacts,
       caseId,
       jurisdiction,
     });
+    const financials = calculateMoneyClaimFinancials(moneyClaimCase);
+    assertMoneyClaimFinancialsReady(financials, 'money claim preview');
 
     let title = '';
     let html: string | null = null;
@@ -253,9 +259,9 @@ export async function GET(
         tenancy_start_date: moneyClaimCase.tenancy_start_date || '',
         rent_amount: moneyClaimCase.rent_amount || 0,
         rent_frequency: moneyClaimCase.rent_frequency || 'monthly',
-        total_claim_amount: moneyClaimCase.arrears_total || 0,
-        court_fee: moneyClaimCase.court_fee,
-        solicitor_costs: moneyClaimCase.solicitor_costs,
+        total_claim_amount: financials.total_claim_amount,
+        court_fee: financials.court_fee,
+        solicitor_costs: financials.solicitor_costs,
         court_name: moneyClaimCase.court_name,
         signatory_name:
           moneyClaimCase.signatory_name || moneyClaimCase.landlord_full_name || '',
@@ -280,72 +286,29 @@ export async function GET(
 
       const templateData: Record<string, any> = {
         ...moneyClaimCase,
+        ...buildMoneyClaimFinancialTemplateData(moneyClaimCase, financials),
         tenancy_start_date_formatted: formatUKDate(moneyClaimCase.tenancy_start_date),
         tenancy_end_date_formatted: formatUKDate(moneyClaimCase.tenancy_end_date),
         signature_date_formatted: formatUKDate(moneyClaimCase.signature_date),
         interest_start_date_formatted: formatUKDate(moneyClaimCase.interest_start_date),
+        generation_date: formatUKDate(new Date().toISOString().split('T')[0]),
         generated_date: formatUKDate(new Date().toISOString().split('T')[0]),
         rent_amount_formatted: formatCurrency(moneyClaimCase.rent_amount),
-        arrears_total_formatted: formatCurrency(moneyClaimCase.arrears_total),
-        court_fee_formatted: formatCurrency(moneyClaimCase.court_fee),
-        solicitor_costs_formatted: formatCurrency(moneyClaimCase.solicitor_costs),
+        arrears_total_formatted: formatCurrency(financials.arrears_total),
+        damages_total_formatted: formatCurrency(financials.damages_total),
+        other_total_formatted: formatCurrency(financials.other_total),
+        total_claim_amount_formatted: formatCurrency(financials.total_claim_amount),
+        court_fee_formatted: formatCurrency(financials.court_fee),
+        solicitor_costs_formatted: formatCurrency(financials.solicitor_costs),
         is_england: true,
-        has_interest: moneyClaimCase.claim_interest === true,
-        has_arrears: (moneyClaimCase.arrears_total || 0) > 0,
-        has_damages: (moneyClaimCase.damage_items || []).length > 0,
-        has_other_charges: (moneyClaimCase.other_charges || []).length > 0,
+        has_interest: financials.claim_interest,
+        has_arrears: financials.arrears_total > 0,
+        has_damages: financials.damages_total > 0,
+        has_other_charges: financials.other_total > 0,
         case_reference: caseId,
         claimant_reference:
           moneyClaimCase.claimant_reference || caseId.slice(0, 8).toUpperCase(),
       };
-
-      if (resolvedDocType === 'schedule_of_arrears') {
-        const arrearsItems =
-          generationFacts.arrears_items ||
-          generationFacts.issues?.rent_arrears?.arrears_items ||
-          caseFacts.issues?.rent_arrears?.arrears_items ||
-          [];
-
-        if (arrearsItems.length > 0) {
-          const arrearsScheduleData = getArrearsScheduleData({
-            arrears_items: arrearsItems,
-            total_arrears: moneyClaimCase.arrears_total || null,
-            rent_amount: moneyClaimCase.rent_amount || 0,
-            rent_frequency: moneyClaimCase.rent_frequency || 'monthly',
-            include_schedule: true,
-          });
-          templateData.arrears_schedule = arrearsScheduleData.arrears_schedule;
-          templateData.arrears_total = arrearsScheduleData.arrears_total;
-        }
-      }
-
-      if (resolvedDocType === 'interest_calculation') {
-        if (moneyClaimCase.claim_interest && moneyClaimCase.arrears_total) {
-          const rate = moneyClaimCase.interest_rate || 8;
-          const dailyRate = rate / 365;
-          const startDate = moneyClaimCase.interest_start_date
-            ? new Date(moneyClaimCase.interest_start_date)
-            : new Date();
-          const today = new Date();
-          const daysDiff = Math.max(
-            0,
-            Math.floor((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))
-          );
-          const interestAmount =
-            (moneyClaimCase.arrears_total * dailyRate * daysDiff) / 100;
-
-          templateData.interest_rate = rate;
-          templateData.daily_rate = dailyRate.toFixed(4);
-          templateData.days_elapsed = daysDiff;
-          templateData.interest_amount = interestAmount.toFixed(2);
-          templateData.interest_amount_formatted = formatCurrency(interestAmount);
-          templateData.total_with_interest =
-            moneyClaimCase.arrears_total + interestAmount;
-          templateData.total_with_interest_formatted = formatCurrency(
-            moneyClaimCase.arrears_total + interestAmount
-          );
-        }
-      }
 
       const rendered = await generateDocument({
         templatePath,
@@ -364,7 +327,14 @@ export async function GET(
         );
       }
 
-      html = buildPdfEmbedHtml(title, rendered.pdf);
+      const previewPdf =
+        resolvedDocType === 'reply_form'
+          ? await makeReplyFormFillable(rendered.pdf, templateData)
+          : resolvedDocType === 'financial_statement'
+            ? await makeFinancialStatementFillable(rendered.pdf, templateData)
+            : rendered.pdf;
+
+      html = buildPdfEmbedHtml(title, previewPdf);
     }
 
     if (!html) {

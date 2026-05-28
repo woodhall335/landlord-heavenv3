@@ -174,6 +174,38 @@ function parseCurrencyAmount(value: any): number | null {
   return null;
 }
 
+function normalizeMoneyClaimLineItems(value: any): Array<Record<string, any>> | null {
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => {
+        if (!item || typeof item !== 'object') return null;
+        const amount =
+          parseCurrencyAmount((item as any).amount) ??
+          parseCurrencyAmount((item as any).value) ??
+          parseCurrencyAmount((item as any).cost) ??
+          parseCurrencyAmount((item as any).total);
+        const description =
+          (item as any).description ||
+          (item as any).label ||
+          (item as any).category ||
+          (item as any).reason ||
+          'Money claim item';
+        return {
+          ...item,
+          description,
+          amount: amount ?? 0,
+        };
+      })
+      .filter(Boolean) as Array<Record<string, any>>;
+  }
+
+  if (typeof value === 'string' && value.trim()) {
+    return [{ description: value.trim(), amount: 0 }];
+  }
+
+  return null;
+}
+
 /**
  * Helper to set nested values on CaseFacts using paths like
  * "parties.landlord.name" or "issues.rent_arrears.arrears_items.0".
@@ -1178,6 +1210,8 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     getFirstValue(wizard, [
       'case_facts.issues.rent_arrears.total_arrears',
       'arrears.total_arrears', // Nested object format (complete_pack fixture)
+      'money_claim.totals.rent_arrears',
+      'money_claim.totals.arrears',
       'total_arrears',
       'arrears_total',
       'rent_arrears.total_arrears',
@@ -1776,24 +1810,50 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'court_route',
     'claim_type',
   ]);
-  base.court.claim_amount_rent ??= getFirstValue(wizard, [
+  const courtClaimAmountRent = getFirstValue(wizard, [
     'case_facts.court.claim_amount_rent',
+    'court.claim_amount_rent',
+    'money_claim.totals.rent_arrears',
+    'money_claim.totals.arrears',
+    'issues.rent_arrears.total_arrears',
     'claim_amount_rent',
     'total_arrears',
     'arrears_total',
   ]);
-  base.court.claim_amount_costs ??= getFirstValue(wizard, [
+  const parsedCourtClaimAmountRent = parseCurrencyAmount(courtClaimAmountRent);
+  if (base.court.claim_amount_rent === null || base.court.claim_amount_rent === undefined) {
+    base.court.claim_amount_rent = parsedCourtClaimAmountRent ?? courtClaimAmountRent;
+  }
+  const courtClaimAmountCosts = getFirstValue(wizard, [
     'case_facts.court.claim_amount_costs',
+    'court.claim_amount_costs',
     'claim_amount_costs',
   ]);
-  base.court.claim_amount_other ??= getFirstValue(wizard, [
+  const parsedCourtClaimAmountCosts = parseCurrencyAmount(courtClaimAmountCosts);
+  if (base.court.claim_amount_costs === null || base.court.claim_amount_costs === undefined) {
+    base.court.claim_amount_costs = parsedCourtClaimAmountCosts ?? courtClaimAmountCosts;
+  }
+  const courtClaimAmountOther = getFirstValue(wizard, [
     'case_facts.court.claim_amount_other',
+    'court.claim_amount_other',
+    'money_claim.totals.other',
     'claim_amount_other',
   ]);
-  base.court.total_claim_amount ??= getFirstValue(wizard, [
+  const parsedCourtClaimAmountOther = parseCurrencyAmount(courtClaimAmountOther);
+  if (base.court.claim_amount_other === null || base.court.claim_amount_other === undefined) {
+    base.court.claim_amount_other = parsedCourtClaimAmountOther ?? courtClaimAmountOther;
+  }
+  const courtTotalClaimAmount = getFirstValue(wizard, [
     'case_facts.court.total_claim_amount',
+    'court.total_claim_amount',
+    'money_claim.totals.combined_total',
+    'money_claim.total_claim_amount',
     'total_claim_amount',
   ]);
+  const parsedCourtTotalClaimAmount = parseCurrencyAmount(courtTotalClaimAmount);
+  if (base.court.total_claim_amount === null || base.court.total_claim_amount === undefined) {
+    base.court.total_claim_amount = parsedCourtTotalClaimAmount ?? courtTotalClaimAmount;
+  }
   base.court.claimant_reference ??= getFirstValue(wizard, [
     'case_facts.court.claimant_reference',
     'claimant_reference',
@@ -2091,30 +2151,62 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
 
   if (!base.money_claim.damage_items.length) {
     const damageItems = getFirstValue(wizard, [
+      'money_claim.damage_items',
       'damage_items',
       'case_facts.money_claim.damage_items',
       'damage_items_description',
     ]);
-    if (Array.isArray(damageItems)) {
-      base.money_claim.damage_items = damageItems as any;
-    } else if (typeof damageItems === 'string' && damageItems.trim()) {
-      base.money_claim.damage_items = [{ description: damageItems }];
+    const normalizedDamageItems = normalizeMoneyClaimLineItems(damageItems);
+    if (normalizedDamageItems) {
+      base.money_claim.damage_items = normalizedDamageItems as any;
     }
   }
 
   if (!base.money_claim.other_charges.length) {
     const otherCharges = getFirstValue(wizard, [
+      'money_claim.other_charges',
       'other_charges',
       'case_facts.money_claim.other_charges',
     ]);
-    if (Array.isArray(otherCharges)) {
-      base.money_claim.other_charges = otherCharges as any;
-    } else if (typeof otherCharges === 'string' && otherCharges.trim()) {
-      base.money_claim.other_charges = [{ description: otherCharges }];
+    const normalizedOtherCharges = normalizeMoneyClaimLineItems(otherCharges);
+    if (normalizedOtherCharges) {
+      base.money_claim.other_charges = normalizedOtherCharges as any;
+    }
+  }
+
+  if (!base.money_claim.damage_items.length) {
+    const moneyClaimTotals = getFirstValue(wizard, ['money_claim.totals']);
+    if (moneyClaimTotals && typeof moneyClaimTotals === 'object') {
+      const totalLineItems = [
+        ['damage', 'Property damage'],
+        ['cleaning', 'Cleaning costs'],
+        ['utilities', 'Unpaid utilities'],
+        ['council_tax', 'Council tax'],
+      ]
+        .map(([key, description]) => ({
+          category: key,
+          description,
+          amount: parseCurrencyAmount((moneyClaimTotals as any)[key]) ?? 0,
+        }))
+        .filter((item) => item.amount > 0);
+
+      if (totalLineItems.length) {
+        base.money_claim.damage_items = totalLineItems as any;
+      }
+    }
+  }
+
+  if (!base.money_claim.other_charges.length) {
+    const otherTotal = parseCurrencyAmount(getFirstValue(wizard, ['money_claim.totals.other']));
+    if (otherTotal && otherTotal > 0) {
+      base.money_claim.other_charges = [
+        { category: 'other', description: 'Other sums owed', amount: otherTotal },
+      ] as any;
     }
   }
 
   const chargeInterest = getFirstValue(wizard, [
+    'money_claim.charge_interest',
     'charge_interest',
     'case_facts.money_claim.charge_interest',
   ]);
@@ -2122,24 +2214,25 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     base.money_claim.charge_interest = coerceBoolean(chargeInterest);
   }
   base.money_claim.interest_start_date ??= getFirstValue(wizard, [
+    'money_claim.interest_start_date',
     'interest_start_date',
     'case_facts.money_claim.interest_start_date',
   ]);
   const interestRate = getFirstValue(wizard, [
+    'money_claim.interest_rate',
     'interest_rate',
     'case_facts.money_claim.interest_rate',
   ]);
   if (interestRate !== null && interestRate !== undefined) {
-    base.money_claim.interest_rate =
-      typeof interestRate === 'string' ? Number(interestRate) || null : (interestRate as any);
+    base.money_claim.interest_rate = parseCurrencyAmount(interestRate);
   }
   const solicitorCosts = getFirstValue(wizard, [
+    'money_claim.solicitor_costs',
     'solicitor_costs',
     'case_facts.money_claim.solicitor_costs',
   ]);
   if (solicitorCosts !== null && solicitorCosts !== undefined) {
-    base.money_claim.solicitor_costs =
-      typeof solicitorCosts === 'string' ? Number(solicitorCosts) || null : (solicitorCosts as any);
+    base.money_claim.solicitor_costs = parseCurrencyAmount(solicitorCosts);
   }
   base.money_claim.attempts_to_resolve ??= getFirstValue(wizard, [
     'attempts_to_resolve',

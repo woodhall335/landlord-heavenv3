@@ -33,9 +33,17 @@ import {
   getFinalRunningBalance,
   normalizeArrearsEntryRunningBalances,
 } from './arrears-schedule-mapper';
+import {
+  assertMoneyClaimFinancialsReady,
+  buildMoneyClaimFinancialTemplateData,
+  calculateMoneyClaimFinancials,
+  type MoneyClaimFinancials,
+} from './money-claim-financials';
+import {
+  makeFinancialStatementFillable,
+  makeReplyFormFillable,
+} from './money-claim-fillable-pap';
 import type { CaseFacts } from '@/lib/case-facts/schema';
-
-import type { CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 
 /**
  * Format a date string as UK legal format: "DD Month YYYY" (e.g., "14 July 2025")
@@ -226,20 +234,7 @@ export interface MoneyClaimPack {
   };
 }
 
-interface CalculatedTotals {
-  arrears_total: number;
-  damages_total: number;
-  other_total: number;
-  claim_interest: boolean;
-  interest_rate: number | null;
-  interest_to_date: number | null;
-  daily_interest: number | null;
-  interest_days: number | null;
-  total_claim_amount: number;
-  court_fee: number;
-  solicitor_costs: number;
-  total_with_fees: number;
-}
+type CalculatedTotals = MoneyClaimFinancials;
 
 function sumLineItems(items?: ClaimLineItem[]): number {
   return (items || []).reduce((total, item) => total + (item.amount || 0), 0);
@@ -267,6 +262,7 @@ function buildScheduleCalculationNotes(schedule: ArrearsEntry[]): string[] {
     .filter(Boolean);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function calculateTotals(claim: MoneyClaimCase): CalculatedTotals {
   const normalizedArrearsSchedule = normalizeArrearsEntryRunningBalances(claim.arrears_schedule || []);
   const arrears_total = roundMoney(
@@ -328,6 +324,7 @@ function calculateTotals(claim: MoneyClaimCase): CalculatedTotals {
     arrears_total,
     damages_total,
     other_total,
+    total_principal: basePrincipal,
     claim_interest: claimInterest,
     interest_rate,
     interest_to_date,
@@ -394,7 +391,7 @@ function resolveClaimantReference(claim: MoneyClaimCase): string {
   return claim.claimant_reference?.trim() || claim.case_id?.trim() || 'LANDLORD-HEAVEN-MC';
 }
 
-function buildN1Payload(claim: MoneyClaimCase, totals: CalculatedTotals): CaseData {
+function buildN1Payload(claim: MoneyClaimCase, totals: MoneyClaimFinancials): CaseData {
   const service = buildServiceContact(claim);
   const claimantReference = resolveClaimantReference(claim);
 
@@ -480,7 +477,8 @@ async function generateEnglandMoneyClaimPack(
   console.log('[money-claim-pack] Pre-generation validation passed');
   console.log('[money-claim-pack] Computed totals:', validationResult.computedTotals);
 
-  const totals = calculateTotals(claim);
+  const totals = calculateMoneyClaimFinancials(claim);
+  assertMoneyClaimFinancialsReady(totals, 'money claim pack');
   const generationDate = new Date().toISOString();
   const documents: MoneyClaimPackDocument[] = [];
 
@@ -525,13 +523,12 @@ async function generateEnglandMoneyClaimPack(
     payment_account_number: paymentAccountNumber,
     payment_reference: resolvePaymentReference(claim),
     has_bank_transfer_details: hasBankTransferDetails,
-    ...totals,
+    ...buildMoneyClaimFinancialTemplateData(claim, totals),
     // All dates pre-formatted as UK legal format (DD Month YYYY)
     generation_date: formattedGenerationDate,
     signature_date: formattedSignatureDate,
     tenancy_start_date: formattedTenancyStartDate,
     interest_start_date: formattedInterestStartDate,
-    total_principal: totals.arrears_total + totals.damages_total + totals.other_total,
     arrears_schedule: formattedArrearsSchedule,
     schedule_calculation_notes: scheduleCalculationNotes,
     damage_items: claim.damage_items || [],
@@ -665,7 +662,7 @@ async function generateEnglandMoneyClaimPack(
     category: 'guidance',
     document_type: 'reply_form',
     html: replyForm.html,
-    pdf: replyForm.pdf,
+    pdf: replyForm.pdf ? await makeReplyFormFillable(replyForm.pdf, extendedData) : replyForm.pdf,
     file_name: '06-reply-form.pdf',
   });
 
@@ -682,7 +679,9 @@ async function generateEnglandMoneyClaimPack(
     category: 'guidance',
     document_type: 'financial_statement_form',
     html: financialStatement.html,
-    pdf: financialStatement.pdf,
+    pdf: financialStatement.pdf
+      ? await makeFinancialStatementFillable(financialStatement.pdf, extendedData)
+      : financialStatement.pdf,
     file_name: '07-financial-statement-form.pdf',
   });
 
