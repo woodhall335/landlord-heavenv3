@@ -312,11 +312,7 @@ export function AnimatedReviewShell({
               </Card>
             </div>
 
-            {complete ? (
-              <div className="animate-wizard-review-rise rounded-3xl border border-primary/15 bg-white/90 p-3 shadow-[0_22px_70px_rgba(76,29,149,0.10)]">
-                {children}
-              </div>
-            ) : (
+            {!complete && (
               <Card className="border-primary/15 bg-white/95 p-5 shadow-[0_18px_55px_rgba(76,29,149,0.08)]">
                 <p className="text-sm font-semibold text-primary">Detailed review locked</p>
                 <p className="mt-2 text-sm leading-6 text-slate-600">
@@ -326,6 +322,12 @@ export function AnimatedReviewShell({
             )}
           </div>
         </div>
+
+        {complete && (
+          <div className="mt-5 w-full animate-wizard-review-rise rounded-3xl border border-primary/15 bg-white/90 p-3 shadow-[0_22px_70px_rgba(76,29,149,0.10)]">
+            {children}
+          </div>
+        )}
       </section>
 
       <style>{`

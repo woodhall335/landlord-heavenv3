@@ -961,7 +961,7 @@ function MoneyClaimReviewContent({
   const hasGeneratedRentSchedule = totalArrears > 0 || evidence.rent_schedule_uploaded === true;
 
   return (
-    <div className="max-w-5xl mx-auto p-6 space-y-6">
+    <div className="w-full p-6 space-y-6">
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div>
@@ -1448,7 +1448,7 @@ function EvictionReviewContent({
     analysis.recommended_route_label || analysis.recommended_route || 'Recommended route';
 
   return (
-    <div className="max-w-5xl mx-auto p-6 space-y-6">
+    <div className="w-full p-6 space-y-6">
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div>
@@ -2167,7 +2167,7 @@ function NoticeOnlyReviewContent({
     : 'Notice';
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto p-6">
+    <div className="w-full space-y-6 p-6">
       {/* Header */}
       <div className="text-center pb-6 border-b">
         <h1 className="text-3xl font-bold text-gray-900">Notice Review</h1>
@@ -3139,7 +3139,7 @@ function TenancyReviewContent({
   const startDate = facts.tenancy_start_date || facts.start_date;
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto p-6">
+    <div className="w-full space-y-6 p-6">
       {/* Header */}
       <div className="text-center pb-6 border-b">
         <h1 className="text-3xl font-bold text-gray-900">Tenancy Agreement Review</h1>
@@ -3527,7 +3527,7 @@ function ResidentialLettingReviewContent({
   ];
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto p-6">
+    <div className="w-full space-y-6 p-6">
       <div className="text-center pb-6 border-b">
         <h1 className="text-3xl font-bold text-gray-900">{productMeta?.label || 'Residential Letting Document'} Review</h1>
         <p className="text-gray-600 mt-2">
