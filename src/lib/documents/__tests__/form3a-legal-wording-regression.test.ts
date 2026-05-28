@@ -101,6 +101,50 @@ describe('Form 3A legal wording regression', () => {
     expect(explanationText).not.toContain('Both at the date of the service of the notice');
   });
 
+  it('enriches Ground 1A question 4.3 with structured sale evidence instead of a stale manual summary', async () => {
+    const pdfBytes = await fillForm3AForm({
+      ...BASE_FORM3A_CASE_DATA,
+      tenant_full_name: 'Michael Bennett',
+      landlord_full_name: 'Ian Ashley Cooper',
+      property_address: 'The Croft\nPottery Lane\nLeeds\nLS26 8PH',
+      tenancy_start_date: '2013-03-01',
+      notice_served_date: '2026-05-27',
+      notice_expiry_date: '2026-09-29',
+      ground_codes: ['1A'],
+      rent_amount: 400,
+      rent_frequency: 'monthly',
+      ground_1a: {
+        sale_reason:
+          "After my father's passing and receiving the grant of probate, I have decided to sell The Croft with Hillcrest Lodge and contiguous land.",
+        sale_steps_taken:
+          'Paul Baxter of Dacres Residential has been engaged for the residential properties and Ian Cox of Dacres Commercial for the adjoining land. Dacres visited on 17 March 2026 to appraise the site.',
+        decision_date: '2026-03-17',
+        intended_sale_timing:
+          'The properties are being marketed together because they form a continuous strip of land with access from Pottery Lane and the new Pottery Hill development.',
+        supporting_evidence:
+          'emails and phone calls with Dacres Residential and Dacres Commercial, plus the site appraisal record from 17 March 2026',
+      },
+      form3a_explanation:
+        'Ground 1A (the tenant has not occupied the property as their only or principal home). Date served 27 May 2026.',
+    });
+
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+    const form = pdfDoc.getForm();
+    const explanationText = normalizeText(
+      form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.explanationText).getText(),
+    );
+
+    expect(explanationText).toContain('Ground 1A - Sale of dwelling house');
+    expect(explanationText).toContain('dwelling-house is to be sold with vacant possession');
+    expect(explanationText).toContain("After my father's passing");
+    expect(explanationText).toContain('Dacres Residential');
+    expect(explanationText).toContain('Dacres Commercial');
+    expect(explanationText).toContain('17 March 2026');
+    expect(explanationText).toContain('continuous strip of land');
+    expect(explanationText).toContain('site appraisal record');
+    expect(explanationText).not.toContain('only or principal home');
+  });
+
   it('continues long multi-ground wording onto the Form 3A extra sheet', async () => {
     const pdfBytes = await fillForm3AForm({
       ...BASE_FORM3A_CASE_DATA,

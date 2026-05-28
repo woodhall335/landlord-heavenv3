@@ -2628,6 +2628,7 @@ async function generateEnglandOrWalesEvictionPack(
         evictionCase,
       });
     const section8Data: Section8NoticeData = {
+      ...currentSection8TemplateData,
       landlord_full_name: evictionCase.landlord_full_name,
       landlord_address: evictionCase.landlord_address,
       landlord_phone: evictionCase.landlord_phone,
@@ -5056,6 +5057,7 @@ export async function generateNoticeOnlyPack(
 
       const section8Doc = await generateSection8Notice(
         {
+          ...section8TemplateData,
           landlord_full_name: evictionCase.landlord_full_name,
           landlord_address: evictionCase.landlord_address,
           landlord_phone: evictionCase.landlord_phone,

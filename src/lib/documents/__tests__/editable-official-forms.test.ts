@@ -340,6 +340,53 @@ describe('Editable Official Forms - No Flatten', () => {
       expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.earliestDate).getText()).toBe('01102026');
     });
 
+    it('generateSection8Notice keeps structured Ground 1A facts in the official Form 3A explanation', async () => {
+      const generated = await generateSection8Notice({
+        landlord_full_name: COMPLETE_FORM3A_CASE_DATA.landlord_full_name,
+        landlord_address: COMPLETE_FORM3A_CASE_DATA.landlord_address,
+        landlord_phone: COMPLETE_FORM3A_CASE_DATA.landlord_phone,
+        landlord_email: COMPLETE_FORM3A_CASE_DATA.landlord_email,
+        tenant_full_name: COMPLETE_FORM3A_CASE_DATA.tenant_full_name,
+        property_address: COMPLETE_FORM3A_CASE_DATA.property_address,
+        tenancy_start_date: COMPLETE_FORM3A_CASE_DATA.tenancy_start_date,
+        rent_amount: 1200,
+        rent_frequency: 'monthly',
+        payment_date: 1,
+        grounds: [
+          {
+            code: '1A',
+            title: 'Sale of dwelling house',
+            legal_basis: 'Housing Act 1988, Schedule 2, Ground 1A',
+            particulars: 'The landlord intends to sell.',
+            mandatory: true,
+          },
+        ],
+        ground_1a: {
+          sale_reason: 'the property is being sold as part of an estate sale',
+          sale_steps_taken: 'estate agents have appraised the site and prepared marketing advice',
+          decision_date: '2026-03-17',
+          intended_sale_timing: 'marketing is expected after vacant possession is recovered',
+          supporting_evidence: 'agent emails and appraisal notes',
+        },
+        service_date: '2026-06-01',
+        notice_period_days: 122,
+        earliest_possession_date: '2026-10-01',
+        earliest_proceedings_date: '2026-10-01',
+        any_mandatory_ground: true,
+        any_discretionary_ground: false,
+      });
+
+      const pdfDoc = await PDFDocument.load(generated.pdf!);
+      const form = pdfDoc.getForm();
+      const explanation = form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.explanationText).getText() || '';
+
+      expect(explanation).toContain('Ground 1A - Sale of dwelling house');
+      expect(explanation).toContain('sold with vacant possession');
+      expect(explanation).toContain('estate sale');
+      expect(explanation).toContain('estate agents have appraised');
+      expect(explanation).toContain('agent emails and appraisal notes');
+    });
+
     it('maps every native Form 3A field from the case data into the official May PDF', async () => {
       const pdfBytes = await fillForm3AForm({
         ...COMPLETE_FORM3A_CASE_DATA,

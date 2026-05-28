@@ -400,6 +400,70 @@ function getGroundFacts(data: DraftingInput, code: EnglandGroundCode): DraftingI
   return flatFacts;
 }
 
+function hasMeaningfulValue(value: unknown): boolean {
+  if (value === undefined || value === null || value === '') return false;
+  if (Array.isArray(value)) return value.some((item) => hasMeaningfulValue(item));
+  if (typeof value === 'object') {
+    return Object.values(value as Record<string, unknown>).some((item) => hasMeaningfulValue(item));
+  }
+  return String(value).trim().length > 0;
+}
+
+function hasStructuredGroundFacts(data: DraftingInput, groundCodes: EnglandGroundCode[]): boolean {
+  return groundCodes.some((code) => Object.values(getGroundFacts(data, code)).some((value) => hasMeaningfulValue(value)));
+}
+
+function stripNarrativeOverrideFields(data: DraftingInput): DraftingInput {
+  const {
+    form3a_explanation,
+    ground_particulars,
+    section_8_particulars,
+    section8_details,
+    particulars_of_claim,
+    case_summary,
+    ...rest
+  } = data;
+
+  return rest;
+}
+
+function isContradictoryForm3ANarrative(value: string, groundCodes: EnglandGroundCode[]): boolean {
+  const normalized = value.replace(/\s+/g, ' ').trim().toLowerCase();
+  if (!normalized) return false;
+
+  if (
+    groundCodes.includes('1A') &&
+    /\bground\s*1a\b/.test(normalized) &&
+    /\bnot\s+occupied\b.*\b(?:only|principal)\s+home\b/.test(normalized)
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+function formatForm3AGroundExplanation(draft: EnglandGroundDraft): string {
+  return [`Ground ${draft.code} - ${draft.title}`, ...draft.noticeParagraphs].filter(Boolean).join('\n');
+}
+
+function normalizeNarrativeForComparison(value: string): string {
+  return value.replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
+function isSubstantiallySameNarrative(candidate: string, baseParagraphs: string[]): boolean {
+  const normalizedCandidate = normalizeNarrativeForComparison(candidate);
+  const normalizedBase = normalizeNarrativeForComparison(baseParagraphs.join(' '));
+
+  if (!normalizedCandidate || !normalizedBase) return false;
+  if (normalizedBase.includes(normalizedCandidate) || normalizedCandidate.includes(normalizedBase)) return true;
+
+  const matchingAnchors = baseParagraphs
+    .map((paragraph) => normalizeNarrativeForComparison(paragraph))
+    .filter((paragraph) => paragraph.length > 40 && normalizedCandidate.includes(paragraph));
+
+  return matchingAnchors.length >= 2;
+}
+
 function describeArrearsPeriods(data: DraftingInput): string {
   const items = Array.isArray(data.arrears_items) ? data.arrears_items : [];
   if (items.length === 0) return '';
@@ -1618,7 +1682,35 @@ export function buildEnglandPossessionDraftingModel(data: DraftingInput): Englan
 }
 
 export function buildEnglandForm3AExplanation(data: DraftingInput): string {
-  return buildEnglandPossessionDraftingModel(data).noticeExplanationParagraphs.join('\n\n');
+  const groundCodes = extractGroundCodes(data);
+  const structuredFactsPresent = hasStructuredGroundFacts(data, groundCodes);
+  const draftingSource = structuredFactsPresent ? stripNarrativeOverrideFields(data) : data;
+  const model = buildEnglandPossessionDraftingModel(draftingSource);
+  const baseParagraphs = structuredFactsPresent
+    ? dedupeParagraphs([
+        model.groundsLeadParagraph,
+        buildTenancyOverview(data),
+        ...model.groundDrafts.map(formatForm3AGroundExplanation),
+        ...model.groundsBridgeParagraphs,
+        buildNoticeTimelineSentence(data),
+      ])
+    : model.noticeExplanationParagraphs;
+  const userNarrative = extractNarrativeCandidates(data).find((candidate) => {
+    const trimmed = candidate.trim();
+    if (!trimmed) return false;
+    if (isContradictoryForm3ANarrative(trimmed, groundCodes)) return false;
+    if (structuredFactsPresent && isSubstantiallySameNarrative(trimmed, baseParagraphs)) return false;
+    return true;
+  });
+
+  const paragraphs = structuredFactsPresent
+    ? dedupeParagraphs([
+        ...baseParagraphs,
+        userNarrative && !isThinEnglandNarrative(userNarrative) ? `Additional landlord context: ${userNarrative}` : '',
+      ])
+    : model.noticeExplanationParagraphs;
+
+  return paragraphs.join('\n\n');
 }
 
 export function buildN119ReasonForPossessionText(data: DraftingInput): string {

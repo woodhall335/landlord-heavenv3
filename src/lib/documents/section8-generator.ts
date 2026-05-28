@@ -14,7 +14,6 @@ import {
 import { calculateEnglandPossessionNoticePeriod } from '@/lib/england-possession/ground-catalog';
 import { fillForm3AForm } from './england-official-form-fillers';
 import { buildEnglandForm3AGroundsText, getEnglandGroundLegalWording } from '@/lib/england-possession/legal-wording';
-import { buildEnglandForm3AExplanation } from '@/lib/england-possession/pack-drafting';
 import {
   ENGLAND_SECTION8_FORM_NAME,
   ENGLAND_SECTION8_NOTICE_NAME,
@@ -205,6 +204,11 @@ export interface Section8NoticeData {
   tenant_receives_benefits?: boolean;
   benefit_type?: string;
   arrears_include_benefit_period?: boolean;
+
+  // Ground-specific structured facts are supplied by the post-2026 England
+  // wizard as ground_1a, ground_6, ground_12, etc. Keep them available for
+  // the official Form 3A 4.3 drafting model.
+  [key: string]: any;
 }
 
 // ============================================================================
@@ -482,6 +486,7 @@ export async function generateSection8Notice(
   });
 
   const pdfBytes = await fillForm3AForm({
+    ...data,
     jurisdiction: 'england',
     landlord_full_name: data.landlord_full_name,
     landlord_address: data.landlord_address,
@@ -498,15 +503,6 @@ export async function generateSection8Notice(
     notice_expiry_date: data.earliest_possession_date,
     earliest_proceedings_date: canonicalEarliestProceedingsDate,
     form3a_grounds_text: await buildEnglandForm3AGroundsText(groundCodes),
-    form3a_explanation: buildEnglandForm3AExplanation({
-      ...data,
-      ground_codes: groundCodes,
-      notice_served_date: serviceDateForOfficialForm,
-      notice_expiry_date: data.earliest_possession_date,
-      earliest_proceedings_date: canonicalEarliestProceedingsDate,
-      payment_day: data.payment_date,
-      total_arrears: data.total_arrears ?? data.current_arrears_amount ?? data.arrears_at_notice_date,
-    }),
     signatory_name: data.landlord_full_name,
     signatory_capacity: 'landlord',
     signature_date: serviceDateForOfficialForm,

@@ -250,6 +250,31 @@ function isWeakForm3AGroundsText(value: string): boolean {
   return labelOnlyPattern.test(normalized);
 }
 
+function hasStructuredForm3AGroundEvidence(data: OfficialFormData): boolean {
+  const parsedGrounds = parseEnglandForm3AGroundCodes(getForm3AGroundSelectionSource(data));
+
+  return parsedGrounds.grounds.some((groundCode) => {
+    const normalized = String(groundCode).toLowerCase();
+    const nested = data[`ground_${normalized}`] || data[`ground${normalized}`];
+
+    if (nested && typeof nested === 'object') {
+      return Object.values(nested as Record<string, unknown>).some((value) => {
+        if (Array.isArray(value)) return value.some(Boolean);
+        if (value && typeof value === 'object') return Object.values(value as Record<string, unknown>).some(Boolean);
+        return value !== undefined && value !== null && String(value).trim() !== '';
+      });
+    }
+
+    const prefix = `ground_${normalized}.`;
+    return Object.entries(data).some(([key, value]) => (
+      key.startsWith(prefix) &&
+      value !== undefined &&
+      value !== null &&
+      String(value).trim() !== ''
+    ));
+  });
+}
+
 async function resolveForm3AGroundsText(data: OfficialFormData): Promise<string> {
   const groundSource = getForm3AGroundSelectionSource(data);
   const parsedGrounds = parseEnglandForm3AGroundCodes(groundSource);
@@ -563,9 +588,10 @@ export async function fillForm3AForm(
   const signatoryCapacity = String(data.signatory_capacity || 'landlord').toLowerCase();
   const draftedExplanation = buildEnglandForm3AExplanation(data);
   const rawExplanation = coerceFormText(data.form3a_explanation);
+  const structuredGroundEvidencePresent = hasStructuredForm3AGroundEvidence(data);
   const signatoryName = data.signatory_name || data.landlord_full_name || '';
   const form3AExplanation =
-    rawExplanation && !isWeakForm3AGroundsText(rawExplanation)
+    rawExplanation && !structuredGroundEvidencePresent && !isWeakForm3AGroundsText(rawExplanation)
       ? rawExplanation
       : draftedExplanation || rawExplanation || data.particulars_of_claim || '';
   const resolvedGroundsText = await resolveForm3AGroundsText(data);

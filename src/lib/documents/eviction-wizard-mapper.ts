@@ -453,6 +453,20 @@ function buildN5BFieldsForCaseData(
   };
 }
 
+function extractStructuredGroundFacts(facts: CaseFacts, wizardFacts: any): Record<string, any> {
+  const result: Record<string, any> = {};
+
+  for (const source of [facts as any, wizardFacts || {}]) {
+    for (const [key, value] of Object.entries(source)) {
+      if (/^ground_[a-z0-9]+$/i.test(key) || /^ground_[a-z0-9]+\./i.test(key)) {
+        result[key] = value;
+      }
+    }
+  }
+
+  return result;
+}
+
 function buildCaseData(
   facts: CaseFacts,
   evictionCase: EvictionCase,
@@ -471,6 +485,7 @@ function buildCaseData(
     .join(', ');
 
   return {
+    ...extractStructuredGroundFacts(facts, wizardFacts),
     landlord_full_name: evictionCase.landlord_full_name,
     landlord_2_name: evictionCase.landlord_2_name,
     landlord_address: evictionCase.landlord_address,

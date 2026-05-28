@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   ENGLAND_GROUND_DRAFT_REGISTRY,
+  buildEnglandForm3AExplanation,
   buildEnglandPossessionDraftingModel,
 } from '@/lib/england-possession/pack-drafting';
 import { listEnglandGroundDefinitions } from '@/lib/england-possession/ground-catalog';
@@ -153,6 +154,60 @@ describe('England ground-aware drafting model', () => {
     expect(text).toContain('22 Riverside Road');
     expect(text).toContain('local housing allowance');
     expect(text).not.toContain('statutory factual basis for possession when superior lease ends is met');
+  });
+
+  it('builds Form 3A explanation text with headings and specialist ground evidence', () => {
+    const text = buildEnglandForm3AExplanation({
+      ...baseData(),
+      ground_codes: ['6', '7B', '9', '12', '13', '14', '17'],
+      ground_6: {
+        works_description: 'structural repairs, rewiring, and replacement heating works',
+        possession_requirement_reason: 'the contractor needs vacant possession for structural access',
+        supporting_evidence: 'contractor quote and schedule of works',
+      },
+      ground_7b: {
+        affected_occupiers: 'the tenant and an adult occupier',
+        status_basis: 'a Home Office notice says the occupiers do not have a right to rent',
+        supporting_evidence: 'Home Office notice and right-to-rent check record',
+      },
+      ground_9: {
+        alternative_address: 'Flat 2, 18 North Street, Leeds LS1 2AB',
+        suitability_summary: "two-bedroom accommodation close to the tenant's work",
+        supporting_evidence: 'draft tenancy offer',
+      },
+      ground_12: {
+        tenancy_clause: '3.4',
+        breach_type: ['unauthorised subletting'],
+        breach_evidence: 'inspection notes and advert screenshots',
+      },
+      ground_13: {
+        damage_description: 'damage to internal doors and kitchen units in the kitchen and hallway',
+        evidence_available: 'inspection photographs',
+      },
+      ground_14: {
+        incidents_description: 'late-night shouting and threats to neighbours',
+        supporting_evidence: 'neighbour statements',
+      },
+      ground_17: {
+        statement_made: 'the tenant stated they had no pets before signing',
+        true_facts: 'inspection photographs show two dogs living at the property',
+      },
+    });
+
+    expect(text).toContain('Ground 6 - Redevelopment');
+    expect(text).toContain('structural repairs, rewiring, and replacement heating works');
+    expect(text).toContain('Ground 7B - No right to rent');
+    expect(text).toContain('Home Office notice');
+    expect(text).toContain('Ground 9 - Suitable alternative accommodation');
+    expect(text).toContain('18 North Street');
+    expect(text).toContain('Ground 12 - Breach of tenancy');
+    expect(text).toContain('unauthorised subletting');
+    expect(text).toContain('Ground 13 - Deterioration of property');
+    expect(text).toContain('kitchen and hallway');
+    expect(text).toContain('Ground 14 - Antisocial behaviour');
+    expect(text).toContain('late-night shouting');
+    expect(text).toContain('Ground 17 - False statement');
+    expect(text).toContain('the tenant stated they had no pets');
   });
 
   it('adds a bridge paragraph for mixed multi-ground claims', () => {
