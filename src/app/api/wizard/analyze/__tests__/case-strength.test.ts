@@ -59,4 +59,27 @@ describe('wizard analyze case strength', () => {
     expect(result.score).toBeLessThan(70);
     expect(result.compliance.length).toBeGreaterThan(0);
   });
+
+  it('does not penalise a money claim for missing uploads when the wizard no longer collects them', () => {
+    const facts = createEmptyCaseFacts();
+
+    facts.meta.product = 'money_claim';
+    facts.court.route = 'money_claim';
+    facts.property.country = 'england';
+    facts.issues.rent_arrears.has_arrears = true;
+    facts.issues.rent_arrears.total_arrears = 1775;
+    facts.money_claim.arrears_schedule_confirmed = true;
+    facts.money_claim.generate_pap_documents = true;
+    facts.money_claim.charge_interest = true;
+    facts.money_claim.interest_rate = 8;
+
+    const result = computeStrength(facts);
+
+    expect(result.score).toBeGreaterThanOrEqual(80);
+    expect(result.red_flags).toEqual([]);
+    expect(result.compliance.join(' ')).not.toMatch(/upload|not uploaded/i);
+    expect(result.compliance).toContain(
+      'Have the tenancy agreement ready to attach or exhibit if the tenant disputes the rent terms.'
+    );
+  });
 });

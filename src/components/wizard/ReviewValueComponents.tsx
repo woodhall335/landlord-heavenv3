@@ -24,7 +24,6 @@ import {
 import {
   type CanonicalJurisdiction,
   getJurisdictionName,
-  getLegalFramework,
 } from '@/lib/types/jurisdiction';
 
 // =============================================================================
@@ -105,6 +104,18 @@ export function JurisdictionExplainer({
   const canonicalJurisdiction = (jurisdiction?.toLowerCase() || 'england') as CanonicalJurisdiction;
   const info = JURISDICTION_INFO[canonicalJurisdiction] || JURISDICTION_INFO.england;
   const jurisdictionName = getJurisdictionName(canonicalJurisdiction);
+  const isMoneyClaim = product === 'money_claim';
+  const moneyClaimInfo =
+    isMoneyClaim && canonicalJurisdiction === 'england'
+      ? {
+          legislation: 'County Court money claim and Pre-Action Protocol for Debt Claims',
+          keyDifferences: [
+            'The Letter Before Claim should usually give the tenant 30 days to reply.',
+            'The claim needs a clear breakdown of rent arrears, interest, damages and any other sums.',
+            'Keep the tenancy agreement, rent account, payment evidence and correspondence ready in case the tenant disputes the debt.',
+          ],
+        }
+      : null;
 
   return (
     <Card className="p-4 border-purple-200 bg-purple-50/50">
@@ -117,7 +128,7 @@ export function JurisdictionExplainer({
             Your property is in {jurisdictionName}
           </h3>
           <p className="text-sm text-purple-800 mb-2">
-            We're using <span className="font-medium">{info.legislation}</span> rules to validate your case.
+            We're using <span className="font-medium">{moneyClaimInfo?.legislation ?? info.legislation}</span> rules to validate your case.
           </p>
 
           {/* Key differences */}
@@ -126,9 +137,9 @@ export function JurisdictionExplainer({
               What this means for you:
             </p>
             <ul className="text-xs text-purple-800 space-y-1">
-              {info.keyDifferences.slice(0, 3).map((diff, index) => (
+              {(moneyClaimInfo?.keyDifferences ?? info.keyDifferences).slice(0, 3).map((diff, index) => (
                 <li key={index} className="flex items-start gap-2">
-                  <span className="text-purple-500 mt-0.5">â€¢</span>
+                  <span className="text-purple-500 mt-0.5">&bull;</span>
                   <span>{diff}</span>
                 </li>
               ))}
@@ -223,7 +234,6 @@ export function ChecksSummaryBox({
   blockingIssues = [],
   warnings = [],
   risks = [],
-  infos = [],
   positives = [],
   product = 'complete_pack',
   caseHealth,

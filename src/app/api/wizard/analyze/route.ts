@@ -173,7 +173,7 @@ export function computeStrength(facts: CaseFacts): { score: number; red_flags: s
   if (isMoneyClaim) {
     // 1. Core requirement: there must be arrears
     if (arrears > 0 || hasArrearsFlag) {
-      score += 15;
+      score += 20;
     } else {
       red_flags.push(
         'No rent arrears recorded – a money claim usually requires a clear arrears figure. Update your arrears before issuing.'
@@ -196,41 +196,44 @@ export function computeStrength(facts: CaseFacts): { score: number; red_flags: s
       score -= 10;
     }
 
-    // 3. Tenancy agreement + rent schedule uploads
+    // 3. Evidence readiness. The money-claim wizard no longer collects uploads,
+    // so these are practical reminders rather than score penalties.
     if (!facts.evidence.tenancy_agreement_uploaded) {
       compliance.push(
-        'Upload your tenancy agreement or have a copy ready – the court may ask to see the written terms you rely on.'
+        'Have the tenancy agreement ready to attach or exhibit if the tenant disputes the rent terms.'
       );
-      score -= 5;
     }
 
     if (!facts.evidence.rent_schedule_uploaded) {
       compliance.push(
-        'Upload your rent schedule or attach it to your bundle – it should match the arrears figures in your claim.'
+        'Check the rent schedule generated from your answers and keep any rent account or payment record that supports it.'
       );
     }
 
     // 4. Pre-action steps / PAP-DEBT–style behaviour
-    const lbaSent = facts.money_claim.lba_sent;
+    const lbaSent =
+      facts.money_claim.letter_before_claim_sent === true ||
+      Boolean(facts.money_claim.pap_letter_date) ||
+      facts.money_claim.lba_sent === true;
+    const willGenerateLetter = facts.money_claim.generate_pap_documents === true;
     const papServed = facts.money_claim.pap_documents_served;
     const preActionConfirmed = facts.money_claim.pre_action_deadline_confirmation;
 
-    if (lbaSent === false || papServed === false) {
+    if ((lbaSent === false || papServed === false) && !willGenerateLetter) {
       red_flags.push(
         'Pre-action letters / information pack are not confirmed as sent – in England & Wales this can cause delays or cost orders.'
       );
       score -= 15;
-    } else if (!lbaSent && !papServed) {
+    } else if (!lbaSent && !papServed && !willGenerateLetter) {
       compliance.push(
         'Confirm that you have sent a clear demand / Letter Before Claim and given the tenant time to respond before issuing.'
       );
     }
 
-    if (preActionConfirmed === false) {
-      red_flags.push(
-        'You have not confirmed giving at least 14 days to respond before issuing – courts expect a reasonable response period.'
+    if (preActionConfirmed === false && !willGenerateLetter) {
+      compliance.push(
+        'Before issuing, make sure the tenant has had the 30-day PAP Debt response period after the Letter Before Claim.'
       );
-      score -= 10;
     }
 
     // 5. Jurisdiction sanity checks – E&W small-claims style
@@ -387,12 +390,9 @@ function buildCaseSummary(facts: CaseFacts, jurisdiction: string) {
     if (!hasArrearsSchedule) {
       missing_prerequisites.push('Detailed rent arrears schedule');
     }
-    if (!facts.evidence.tenancy_agreement_uploaded) {
-      missing_prerequisites.push('Tenancy agreement evidence');
-    }
-    if (!facts.evidence.rent_schedule_uploaded) {
-      missing_prerequisites.push('Rent schedule document upload');
-    }
+    // Evidence documents are no longer uploaded in the wizard. They should be
+    // held ready for filing or a defended claim, but they are not prerequisites
+    // for generating the pack.
     // Pre-action is satisfied if: already sent OR we'll generate it for them
     if (!lbaSent && !papServed && !willGenerateLetter) {
       missing_prerequisites.push('Pre-action demand / Letter Before Claim');
@@ -500,7 +500,7 @@ function buildCaseHealth(
   if (summary.pre_action_status === 'complete') {
     positives.push('Pre-action steps recorded as complete (letter + response period).');
   } else if (summary.pre_action_status === 'partial') {
-    positives.push('Some pre-action steps have been recorded, but not all details are complete yet.');
+    positives.push('PAP Debt paperwork is recorded or will be generated; wait the response period before issuing.');
   }
   if (summary.evidence_overview.tenancy_agreement_uploaded) {
     positives.push('Tenancy agreement marked as available.');
@@ -516,7 +516,7 @@ function buildCaseHealth(
       code: `missing_${lower.replace(/[^a-z0-9]+/gi, '_')}`,
       severity: 'risk',
       title: `Missing: ${item}`,
-      message: `You have not yet provided: ${item}. Add this before relying on the claim pack.`,
+      message: `You still need: ${item}. Add this before relying on the claim pack.`,
     };
 
     if (item === 'Clear rent arrears figure' || item === 'Pre-action demand / Letter Before Claim') {
@@ -545,6 +545,7 @@ function buildCaseHealth(
       lower.includes('pre-action letters') ||
       lower.includes('no notice date') ||
       lower.includes('less than 14 days') ||
+      lower.includes('30-day pap') ||
       lower.includes('no arrears recorded')
     ) {
       issue.severity = 'blocker';
@@ -576,6 +577,9 @@ function buildCaseHealth(
     overall_status = 'cannot_issue_yet';
     can_issue = false;
   } else if (totalRedFlags === 0 && summary.ready_for_issue === true) {
+    overall_status = 'ready_to_issue';
+    can_issue = true;
+  } else if (blockers.length === 0 && risks.length === 0 && strengthScore >= 75 && arrears > 0) {
     overall_status = 'ready_to_issue';
     can_issue = true;
   } else {
@@ -665,7 +669,7 @@ function craftAskHeavenAnswer(
   if (isMoneyClaim) {
     if (summary.ready_for_issue === true) {
       readinessLine =
-        ' On the information you have given, the claim looks broadly ready to issue, provided your evidence matches your answers.';
+        ' On the information you have given, the claim looks broadly ready to prepare, provided your evidence matches your answers and any required PAP response period has run before you issue.';
     } else if (summary.ready_for_issue === false) {
       if (summary.missing_prerequisites && summary.missing_prerequisites.length) {
         readinessLine =
@@ -1253,10 +1257,10 @@ export async function POST(request: Request) {
       is_court_ready = caseHealth.overall_status === 'ready_to_issue';
       if (caseHealth.overall_status === 'ready_to_issue') {
         readiness_summary =
-          'You appear ready to issue your money claim based on the information provided. We will generate your full pack with N1 / Simple Procedure forms and a filing checklist.';
+          'Your money claim looks ready to prepare from the answers provided. We will generate the claim pack, evidence prompts, PAP-Debt documents, and filing checklist; check the documents against your records before issuing.';
       } else if (caseHealth.overall_status === 'needs_work') {
         readiness_summary =
-          'Your money claim needs further work, but we will still generate your pack and highlight what to fix before issuing.';
+          'Your money claim can still be prepared, but a few details should be checked before issuing. We will generate the pack and highlight the points to review.';
       }
     }
 

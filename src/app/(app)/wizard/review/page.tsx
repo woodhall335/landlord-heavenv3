@@ -464,7 +464,7 @@ function ReviewPageInner() {
       return (
         <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
           <RiShieldCheckLine className="h-3 w-3 text-[#7C3AED]" />
-          {isMoneyClaimFlow ? 'Ready to issue' : 'Ready to use'}
+          {isMoneyClaimFlow ? 'Ready to prepare' : 'Ready to use'}
         </span>
       );
     }
@@ -674,8 +674,24 @@ function MoneyClaimReviewContent({
   // Get blockers, risks, warnings from case_health
   const blockers = caseHealth?.blockers ?? [];
   const risks = caseHealth?.risks ?? [];
-  const warnings = caseHealth?.warnings ?? [];
+  const rawWarnings = caseHealth?.warnings ?? [];
   const positives = caseHealth?.positives ?? [];
+  const normaliseIssueText = (value: any) =>
+    String(value?.message || value?.title || value || '')
+      .trim()
+      .toLowerCase();
+  const shownIssueTexts = new Set([
+    ...redFlags.map(normaliseIssueText),
+    ...complianceIssues.map(normaliseIssueText),
+    ...risks.map(normaliseIssueText),
+  ]);
+  const warnings = rawWarnings.filter((warning: any) => {
+    const text = normaliseIssueText(warning);
+    if (!text || shownIssueTexts.has(text)) return false;
+    shownIssueTexts.add(text);
+    return true;
+  });
+  const hasGeneratedRentSchedule = totalArrears > 0 || evidence.rent_schedule_uploaded === true;
 
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-6">
@@ -859,13 +875,13 @@ function MoneyClaimReviewContent({
               <RiErrorWarningLine className="h-5 w-5 text-amber-500" />
             )}
             <div>
-              <p className="text-sm font-medium text-gray-900">Letter Before Claim sent</p>
+              <p className="text-sm font-medium text-gray-900">Letter Before Claim</p>
               <p className="text-xs text-gray-600">
                 {preActionComplete
                   ? 'You have confirmed sending a pre-action demand letter.'
                   : preActionPartial
-                  ? 'Partially complete - some details may be missing.'
-                  : 'Not confirmed yet - courts expect PAP-DEBT compliance.'}
+                  ? 'This is recorded or will be generated in your pack. Do not issue until the PAP response period has run.'
+                  : 'Not confirmed yet. Your pack includes the PAP Debt documents, but they must be served before issuing.'}
               </p>
             </div>
           </div>
@@ -876,11 +892,13 @@ function MoneyClaimReviewContent({
               <RiErrorWarningLine className="h-5 w-5 text-amber-500" />
             )}
             <div>
-              <p className="text-sm font-medium text-gray-900">14-day response period</p>
+              <p className="text-sm font-medium text-gray-900">30-day PAP response period</p>
               <p className="text-xs text-gray-600">
                 {preActionComplete
                   ? 'Response deadline has passed or been confirmed.'
-                  : 'Ensure you have given 14+ days to respond before issuing.'}
+                  : preActionPartial
+                  ? 'If the Letter Before Claim is being generated now, wait 30 days after service before issuing.'
+                  : 'Before issuing, the tenant should usually have 30 days to reply to the Letter Before Claim.'}
               </p>
             </div>
           </div>
@@ -910,37 +928,37 @@ function MoneyClaimReviewContent({
           Evidence Checklist
         </h2>
         <p className="text-sm text-gray-600 mb-3">
-          Having these documents ready strengthens your claim and speeds up court processing.
+          You do not need to upload these here. Keep them ready so the figures in your pack can be checked against your records if the tenant disputes the claim.
         </p>
         <div className="grid md:grid-cols-2 gap-4">
           <div className="flex items-start gap-3">
             {evidence.tenancy_agreement_uploaded ? (
               <RiCheckboxCircleLine className="h-5 w-5 text-green-600 mt-0.5" />
             ) : (
-              <RiErrorWarningLine className="h-5 w-5 text-amber-500 mt-0.5" />
+              <div className="h-5 w-5 rounded-full border-2 border-gray-300 mt-0.5" />
             )}
             <div>
               <p className="text-sm font-medium text-gray-900">Tenancy Agreement</p>
               <p className="text-xs text-gray-600">
                 {evidence.tenancy_agreement_uploaded
-                  ? 'Available - proves the contractual terms.'
-                  : 'Not uploaded - essential for proving rent obligation.'}
+                  ? 'Recorded as available - this supports the rent terms.'
+                  : 'Have it ready - the court or tenant may ask to see the rent terms you rely on.'}
               </p>
             </div>
           </div>
 
           <div className="flex items-start gap-3">
-            {evidence.rent_schedule_uploaded ? (
+            {hasGeneratedRentSchedule ? (
               <RiCheckboxCircleLine className="h-5 w-5 text-green-600 mt-0.5" />
             ) : (
-              <RiErrorWarningLine className="h-5 w-5 text-amber-500 mt-0.5" />
+              <div className="h-5 w-5 rounded-full border-2 border-gray-300 mt-0.5" />
             )}
             <div>
               <p className="text-sm font-medium text-gray-900">Rent Schedule</p>
               <p className="text-xs text-gray-600">
-                {evidence.rent_schedule_uploaded
-                  ? 'Available - shows payment history.'
-                  : 'Not uploaded - courts expect a clear arrears breakdown.'}
+                {hasGeneratedRentSchedule
+                  ? 'Your pack will build this from your answers. Check it matches your rent account.'
+                  : 'Have a clear rent account ready before issuing.'}
               </p>
             </div>
           </div>
@@ -989,7 +1007,7 @@ function MoneyClaimReviewContent({
           <ul className="space-y-1">
             {positives.map((positive: string, i: number) => (
               <li key={i} className="text-sm text-green-800">
-                ? {positive}
+                Good - {positive}
               </li>
             ))}
           </ul>
@@ -999,7 +1017,7 @@ function MoneyClaimReviewContent({
       {/* Things to Fix or Improve */}
       {(redFlags.length > 0 || complianceIssues.length > 0) && (
         <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-4">Things to Fix or Improve</h2>
+          <h2 className="text-lg font-semibold mb-4">Before You Issue</h2>
           <div className="grid md:grid-cols-2 gap-4">
             {redFlags.length > 0 && (
               <div>
@@ -1013,7 +1031,7 @@ function MoneyClaimReviewContent({
             )}
             {complianceIssues.length > 0 && (
               <div>
-                <h3 className="text-sm font-medium text-red-800 mb-2">Compliance issues</h3>
+                <h3 className="text-sm font-medium text-red-800 mb-2">Checks to make</h3>
                 <ul className="space-y-1 text-sm text-red-900">
                   {complianceIssues.map((item, i) => (
                     <li key={i}>&bull; {item}</li>
@@ -1031,7 +1049,7 @@ function MoneyClaimReviewContent({
           <div className="flex items-start gap-3">
             <RiErrorWarningLine className="h-6 w-6 text-yellow-600 mt-1" />
             <div>
-              <h2 className="text-lg font-semibold text-yellow-900 mb-2">Important Warnings</h2>
+              <h2 className="text-lg font-semibold text-yellow-900 mb-2">Extra Checks</h2>
               <ul className="space-y-1">
                 {warnings.map((warning: any, i: number) => (
                   <li key={i} className="text-sm text-yellow-800">
