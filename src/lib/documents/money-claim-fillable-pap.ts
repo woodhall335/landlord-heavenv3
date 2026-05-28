@@ -1,4 +1,6 @@
-import { PDFDocument, rgb, StandardFonts, type PDFFont, type PDFPage } from 'pdf-lib';
+import { existsSync, readFileSync } from 'fs';
+import path from 'path';
+import { PDFDocument, rgb, StandardFonts, type PDFImage, type PDFFont, type PDFPage } from 'pdf-lib';
 
 type PdfInput = Buffer | Uint8Array | ArrayBuffer;
 
@@ -13,6 +15,12 @@ const SHADE = rgb(0.94, 0.94, 0.94);
 interface Fonts {
   regular: PDFFont;
   bold: PDFFont;
+}
+
+interface PdfResources {
+  pdf: PDFDocument;
+  fonts: Fonts;
+  logo: PDFImage | null;
 }
 
 interface TextFieldOptions {
@@ -142,6 +150,30 @@ function drawTitle(page: PDFPage, title: string, subtitle: string, fonts: Fonts)
   drawRule(page, MARGIN_X, 84, CONTENT_WIDTH);
 }
 
+function drawDocumentHeader(
+  page: PDFPage,
+  title: string,
+  subtitle: string,
+  fonts: Fonts,
+  logo: PDFImage | null
+) {
+  if (logo) {
+    const scaled = logo.scaleToFit(130, 28);
+    page.drawImage(logo, {
+      x: page.getWidth() - MARGIN_X - scaled.width,
+      y: y(page, 34) - scaled.height,
+      width: scaled.width,
+      height: scaled.height,
+    });
+  } else {
+    const fallback = 'Landlord Heaven';
+    const width = fonts.bold.widthOfTextAtSize(fallback, 11);
+    drawText(page, fallback, page.getWidth() - MARGIN_X - width, 48, fonts.bold, 11);
+  }
+
+  drawTitle(page, title, subtitle, fonts);
+}
+
 function drawHeading(page: PDFPage, title: string, top: number, fonts: Fonts) {
   drawText(page, title.toUpperCase(), MARGIN_X, top, fonts.bold, 12);
   drawRule(page, MARGIN_X, top + 8, CONTENT_WIDTH);
@@ -266,7 +298,9 @@ function addCheckbox(
     borderColor: INK,
     borderWidth: 0.8,
   });
-  drawWrapped(page, label, x + size + 8, top + 1, 440, fonts.regular, 9.5, 11);
+  if (label) {
+    drawWrapped(page, label, x + size + 8, top + size - 2, 440, fonts.regular, 9.5, 11);
+  }
 }
 
 function drawAmountField(
@@ -286,13 +320,26 @@ function drawAmountField(
   addTextField(pdf, page, name, 407, top + 1, 95, 18, { line: true, fontSize: 9 });
 }
 
-async function createPdf() {
+function readLogoBytes(): Buffer | null {
+  const logoPath = path.join(process.cwd(), 'public', 'images', 'logo.png');
+  if (!existsSync(logoPath)) return null;
+
+  try {
+    return readFileSync(logoPath);
+  } catch {
+    return null;
+  }
+}
+
+async function createPdf(): Promise<PdfResources> {
   const pdf = await PDFDocument.create();
   const fonts: Fonts = {
     regular: await pdf.embedFont(StandardFonts.Helvetica),
     bold: await pdf.embedFont(StandardFonts.HelveticaBold),
   };
-  return { pdf, fonts };
+  const logoBytes = readLogoBytes();
+  const logo = logoBytes ? await pdf.embedPng(logoBytes) : null;
+  return { pdf, fonts, logo };
 }
 
 async function finalize(pdf: PDFDocument, font: PDFFont) {
@@ -365,10 +412,10 @@ export async function makeReplyFormFillable(
   templateData: Record<string, any>
 ): Promise<Buffer> {
   void pdfInput;
-  const { pdf, fonts } = await createPdf();
+  const { pdf, fonts, logo } = await createPdf();
 
   const page1 = pdf.addPage(A4);
-  drawTitle(page1, 'Reply Form', 'Pre-Action Protocol for Debt Claims', fonts);
+  drawDocumentHeader(page1, 'Reply Form', 'Pre-Action Protocol for Debt Claims', fonts, logo);
   drawWrapped(
     page1,
     'This form is for the tenant or debtor to reply to the Letter Before Claim. The case details already provided by the landlord are shown below.',
@@ -438,7 +485,7 @@ export async function makeReplyFormFillable(
   addCheckbox(pdf, page1, 'response.financial_statement_enclosed', 80, top + 206, 'I have enclosed a Financial Statement Form.', fonts, 10);
 
   const page2 = pdf.addPage(A4);
-  drawTitle(page2, 'Reply Form', 'Dispute, documents and support needs', fonts);
+  drawDocumentHeader(page2, 'Reply Form', 'Dispute, documents and support needs', fonts, logo);
   drawHeading(page2, 'If you dispute the debt', 108, fonts);
   addCheckbox(pdf, page2, 'response.i_dispute_the_debt', 52, 138, 'Option 3: I dispute the debt or the amount claimed.', fonts, 11);
   const reasons = [
@@ -492,7 +539,7 @@ export async function makeReplyFormFillable(
   addTextField(pdf, page2, 'response.debt_advice_provider', 190, top + 216, 300, 18, { line: true });
 
   const page3 = pdf.addPage(A4);
-  drawTitle(page3, 'Reply Form', 'Declaration and return details', fonts);
+  drawDocumentHeader(page3, 'Reply Form', 'Declaration and return details', fonts, logo);
   drawHeading(page3, 'Declaration', 108, fonts);
   drawWrapped(
     page3,
@@ -521,10 +568,10 @@ export async function makeFinancialStatementFillable(
   templateData: Record<string, any>
 ): Promise<Buffer> {
   void pdfInput;
-  const { pdf, fonts } = await createPdf();
+  const { pdf, fonts, logo } = await createPdf();
 
   const cover = pdf.addPage(A4);
-  drawTitle(cover, 'Financial Statement Form', 'Pre-Action Protocol for Debt Claims', fonts);
+  drawDocumentHeader(cover, 'Financial Statement Form', 'Pre-Action Protocol for Debt Claims', fonts, logo);
   drawWrapped(
     cover,
     'Use this form to show income and outgoings if you want to propose a payment plan. The claim details already provided by the landlord are shown below.',
@@ -555,7 +602,7 @@ export async function makeFinancialStatementFillable(
   );
 
   const page1 = pdf.addPage(A4);
-  drawTitle(page1, 'Financial Statement Form', 'Your details and monthly income', fonts);
+  drawDocumentHeader(page1, 'Financial Statement Form', 'Your details and monthly income', fonts, logo);
   drawHeading(page1, 'Your details', 108, fonts);
   top = 136;
   top = drawInfoRow(pdf, page1, 'Full name', tenantName(templateData), 'debtor.full_name', top, fonts);
@@ -593,7 +640,7 @@ export async function makeFinancialStatementFillable(
   addTextField(pdf, page1, 'income.total', 407, top + 8, 95, 18, { line: true });
 
   const page2 = pdf.addPage(A4);
-  drawTitle(page2, 'Financial Statement Form', 'Monthly outgoings', fonts);
+  drawDocumentHeader(page2, 'Financial Statement Form', 'Monthly outgoings', fonts, logo);
   drawHeading(page2, 'Section 2: monthly outgoings', 108, fonts);
   top = 142;
   drawText(page2, 'Housing costs', MARGIN_X, top, fonts.bold, 11);
@@ -636,7 +683,7 @@ export async function makeFinancialStatementFillable(
   });
 
   const page3 = pdf.addPage(A4);
-  drawTitle(page3, 'Financial Statement Form', 'More outgoings and available income', fonts);
+  drawDocumentHeader(page3, 'Financial Statement Form', 'More outgoings and available income', fonts, logo);
   top = 112;
   drawText(page3, 'Childcare and education', MARGIN_X, top, fonts.bold, 11);
   top += 25;
@@ -681,7 +728,7 @@ export async function makeFinancialStatementFillable(
   addTextField(pdf, page3, 'creditors.details', 310, top + 148, 245, 58, { multiline: true });
 
   const page4 = pdf.addPage(A4);
-  drawTitle(page4, 'Financial Statement Form', 'Savings, offer and declaration', fonts);
+  drawDocumentHeader(page4, 'Financial Statement Form', 'Savings, offer and declaration', fonts, logo);
   drawHeading(page4, 'Section 4: savings and vehicles', 108, fonts);
   top = 142;
   drawWrapped(
