@@ -1,94 +1,163 @@
-import { PDFDocument, rgb, StandardFonts, type PDFPage, type PDFFont } from 'pdf-lib';
+import { PDFDocument, rgb, StandardFonts, type PDFFont, type PDFPage } from 'pdf-lib';
 
 type PdfInput = Buffer | Uint8Array | ArrayBuffer;
 
-interface FieldSpec {
-  name: string;
-  page: number;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
+const A4: [number, number] = [595.28, 841.89];
+const INK = rgb(0.08, 0.08, 0.09);
+const RULE = rgb(0.35, 0.35, 0.35);
+const SHADE = rgb(0.94, 0.94, 0.94);
+
+interface Fonts {
+  regular: PDFFont;
+  bold: PDFFont;
+}
+
+interface TextFieldOptions {
   multiline?: boolean;
   fontSize?: number;
+  line?: boolean;
+  border?: boolean;
 }
 
-interface CheckboxSpec {
-  name: string;
-  page: number;
-  x: number;
-  y: number;
-  size?: number;
-}
-
-function inputToBytes(input: PdfInput): Uint8Array {
-  if (input instanceof Uint8Array) return input;
-  return new Uint8Array(input);
-}
-
-async function loadOrCreatePdf(input: PdfInput, templateData: Record<string, any>) {
-  try {
-    return await PDFDocument.load(inputToBytes(input));
-  } catch {
-    const pdf = await PDFDocument.create();
-    const page = pdf.addPage([595.28, 841.89]);
-    const font = await pdf.embedFont(StandardFonts.Helvetica);
-    page.drawText('Landlord Heaven PAP-DEBT response form', { x: 40, y: 790, size: 14, font });
-    page.drawText(`Claimant: ${templateData.landlord_full_name || ''}`, { x: 40, y: 765, size: 10, font });
-    page.drawText(`Reference: ${templateData.claimant_reference || templateData.case_id || ''}`, { x: 40, y: 750, size: 10, font });
-    page.drawText(`Amount claimed: £${Number(templateData.total_claim_amount || 0).toFixed(2)}`, {
-      x: 40,
-      y: 735,
-      size: 10,
-      font,
-    });
-    return pdf;
-  }
-}
-
-function pageAt(pdf: PDFDocument, index: number): PDFPage {
-  const pages = pdf.getPages();
-  return pages[Math.min(index, pages.length - 1)] || pdf.addPage([595.28, 841.89]);
-}
-
-function yFromTop(page: PDFPage, top: number): number {
+function y(page: PDFPage, top: number): number {
   return page.getHeight() - top;
 }
 
-function addTextFields(pdf: PDFDocument, fields: FieldSpec[]) {
-  const form = pdf.getForm();
-  for (const field of fields) {
-    const page = pageAt(pdf, field.page);
-    const textField = form.createTextField(field.name);
-    if (field.multiline) textField.enableMultiline();
-    textField.addToPage(page, {
-      x: field.x,
-      y: yFromTop(page, field.y),
-      width: field.width,
-      height: field.height,
-      borderColor: rgb(1, 1, 1),
-      borderWidth: 0,
-      textColor: rgb(0.05, 0.05, 0.08),
-    });
-    textField.setFontSize(field.fontSize ?? 10);
-  }
+function fieldY(page: PDFPage, top: number, height: number): number {
+  return page.getHeight() - top - height;
 }
 
-function addCheckboxes(pdf: PDFDocument, fields: CheckboxSpec[]) {
-  const form = pdf.getForm();
-  for (const field of fields) {
-    const page = pageAt(pdf, field.page);
-    const checkbox = form.createCheckBox(field.name);
-    const size = field.size ?? 12;
-    checkbox.addToPage(page, {
-      x: field.x,
-      y: yFromTop(page, field.y),
-      width: size,
-      height: size,
-      borderColor: rgb(0.05, 0.05, 0.08),
-      borderWidth: 0.6,
-    });
+function drawText(
+  page: PDFPage,
+  text: string,
+  x: number,
+  top: number,
+  font: PDFFont,
+  size = 10
+) {
+  page.drawText(text, { x, y: y(page, top), size, font, color: INK });
+}
+
+function drawRule(page: PDFPage, x: number, top: number, width: number) {
+  page.drawLine({
+    start: { x, y: y(page, top) },
+    end: { x: x + width, y: y(page, top) },
+    thickness: 0.7,
+    color: RULE,
+  });
+}
+
+function drawBox(page: PDFPage, x: number, top: number, width: number, height: number) {
+  page.drawRectangle({
+    x,
+    y: fieldY(page, top, height),
+    width,
+    height,
+    borderColor: RULE,
+    borderWidth: 0.7,
+  });
+}
+
+function drawSection(page: PDFPage, title: string, top: number, fonts: Fonts) {
+  drawText(page, title, 42, top, fonts.bold, 13);
+  drawRule(page, 42, top + 8, 512);
+}
+
+function drawWrapped(
+  page: PDFPage,
+  text: string,
+  x: number,
+  top: number,
+  maxChars: number,
+  font: PDFFont,
+  size = 9,
+  lineGap = 12
+) {
+  const words = text.split(/\s+/);
+  const lines: string[] = [];
+  let current = '';
+
+  for (const word of words) {
+    const next = current ? `${current} ${word}` : word;
+    if (next.length > maxChars && current) {
+      lines.push(current);
+      current = word;
+    } else {
+      current = next;
+    }
   }
+  if (current) lines.push(current);
+
+  lines.forEach((line, index) => drawText(page, line, x, top + index * lineGap, font, size));
+  return top + lines.length * lineGap;
+}
+
+function addTextField(
+  pdf: PDFDocument,
+  page: PDFPage,
+  name: string,
+  x: number,
+  top: number,
+  width: number,
+  height: number,
+  options: TextFieldOptions = {}
+) {
+  if (options.line) {
+    drawRule(page, x, top + height - 2, width);
+  } else if (options.border || options.multiline) {
+    drawBox(page, x, top, width, height);
+  }
+
+  const field = pdf.getForm().createTextField(name);
+  if (options.multiline) field.enableMultiline();
+  field.addToPage(page, {
+    x,
+    y: fieldY(page, top, height),
+    width,
+    height,
+    borderWidth: 0,
+    textColor: INK,
+  });
+  field.setFontSize(options.fontSize ?? 10);
+}
+
+function addCheckbox(
+  pdf: PDFDocument,
+  page: PDFPage,
+  name: string,
+  x: number,
+  top: number,
+  label: string,
+  fonts: Fonts,
+  size = 10
+) {
+  const checkbox = pdf.getForm().createCheckBox(name);
+  checkbox.addToPage(page, {
+    x,
+    y: fieldY(page, top, size),
+    width: size,
+    height: size,
+    borderColor: INK,
+    borderWidth: 0.8,
+  });
+  drawText(page, label, x + size + 7, top + 1, fonts.regular, 9.5);
+}
+
+function drawHeader(page: PDFPage, title: string, subtitle: string, fonts: Fonts) {
+  const titleWidth = fonts.bold.widthOfTextAtSize(title, 16);
+  drawText(page, title, (page.getWidth() - titleWidth) / 2, 42, fonts.bold, 16);
+  const subtitleWidth = fonts.regular.widthOfTextAtSize(subtitle, 10);
+  drawText(page, subtitle, (page.getWidth() - subtitleWidth) / 2, 62, fonts.regular, 10);
+  drawRule(page, 42, 82, 512);
+}
+
+async function createPdf() {
+  const pdf = await PDFDocument.create();
+  const fonts: Fonts = {
+    regular: await pdf.embedFont(StandardFonts.Helvetica),
+    bold: await pdf.embedFont(StandardFonts.HelveticaBold),
+  };
+  return { pdf, fonts };
 }
 
 async function finalize(pdf: PDFDocument, font: PDFFont) {
@@ -96,156 +165,373 @@ async function finalize(pdf: PDFDocument, font: PDFFont) {
   return Buffer.from(await pdf.save());
 }
 
+function money(value: unknown): string {
+  const amount = Number(value || 0);
+  return `\u00a3${Number.isFinite(amount) ? amount.toFixed(2) : '0.00'}`;
+}
+
+function reference(templateData: Record<string, any>): string {
+  return templateData.claimant_reference || templateData.case_id || '';
+}
+
+function drawReturnDetails(page: PDFPage, templateData: Record<string, any>, fonts: Fonts, top: number) {
+  drawText(page, 'Return this form to:', 42, top, fonts.bold, 10);
+  drawText(page, templateData.landlord_full_name || '', 42, top + 18, fonts.regular, 9.5);
+  drawWrapped(page, templateData.landlord_address || '', 42, top + 33, 70, fonts.regular, 9.5);
+  drawText(page, templateData.landlord_postcode || '', 42, top + 62, fonts.regular, 9.5);
+  if (templateData.landlord_email) {
+    drawText(page, `Email: ${templateData.landlord_email}`, 42, top + 78, fonts.regular, 9.5);
+  }
+}
+
 export async function makeReplyFormFillable(
   pdfInput: PdfInput,
   templateData: Record<string, any>
 ): Promise<Buffer> {
-  const pdf = await loadOrCreatePdf(pdfInput, templateData);
-  const font = await pdf.embedFont(StandardFonts.Helvetica);
+  void pdfInput;
+  const { pdf, fonts } = await createPdf();
 
-  addTextFields(pdf, [
-    { name: 'debtor.full_name', page: 0, x: 282, y: 139, width: 245, height: 16 },
-    { name: 'debtor.address', page: 0, x: 282, y: 174, width: 245, height: 50, multiline: true },
-    { name: 'debtor.postcode', page: 0, x: 282, y: 244, width: 245, height: 16 },
-    { name: 'debtor.phone', page: 0, x: 282, y: 279, width: 245, height: 16 },
-    { name: 'debtor.email', page: 0, x: 282, y: 313, width: 245, height: 16 },
-    { name: 'response.payment_full_by_date', page: 0, x: 337, y: 480, width: 105, height: 14 },
-    { name: 'response.payment_weekly_amount', page: 0, x: 98, y: 592, width: 78, height: 14 },
-    { name: 'response.payment_monthly_amount', page: 0, x: 98, y: 620, width: 78, height: 14 },
-    { name: 'response.payment_offer_amount', page: 0, x: 126, y: 648, width: 70, height: 14 },
-    { name: 'response.payment_offer_frequency', page: 0, x: 232, y: 648, width: 95, height: 14 },
-  ]);
+  const page1 = pdf.addPage(A4);
+  drawHeader(page1, 'Reply Form', 'Use this form to respond to the Letter Before Claim', fonts);
 
-  addCheckboxes(pdf, [
-    { name: 'response.i_owe_all_of_the_debt', page: 0, x: 50, y: 458, size: 10 },
-    { name: 'response.i_need_payment_plan', page: 0, x: 50, y: 536, size: 10 },
-    { name: 'response.payment_weekly_selected', page: 0, x: 198, y: 592, size: 10 },
-    { name: 'response.payment_monthly_selected', page: 0, x: 198, y: 620, size: 10 },
-    { name: 'response.payment_other_selected', page: 0, x: 345, y: 648, size: 10 },
-    { name: 'response.financial_statement_enclosed', page: 0, x: 441, y: 683, size: 10 },
-  ]);
+  drawSection(page1, 'Your Details', 106, fonts);
+  const detailRows = [
+    ['Your full name:', 'debtor.full_name'],
+    ['Your address:', 'debtor.address'],
+    ['Your postcode:', 'debtor.postcode'],
+    ['Your telephone:', 'debtor.phone'],
+    ['Your email:', 'debtor.email'],
+  ] as const;
+  let top = 136;
+  for (const [label, name] of detailRows) {
+    drawText(page1, label, 54, top + 11, fonts.bold, 10);
+    const height = name === 'debtor.address' ? 44 : 18;
+    addTextField(pdf, page1, name, 230, top, 292, height, {
+      multiline: name === 'debtor.address',
+      line: name !== 'debtor.address',
+    });
+    top += height + 16;
+  }
 
-  addTextFields(pdf, [
-    { name: 'response.dispute_explanation', page: 1, x: 44, y: 250, width: 505, height: 84, multiline: true },
-    { name: 'response.evidence_other', page: 1, x: 113, y: 467, width: 250, height: 14 },
-    { name: 'response.requested_documents', page: 1, x: 44, y: 571, width: 505, height: 46, multiline: true },
-    { name: 'response.vulnerability_or_support_needs', page: 1, x: 44, y: 724, width: 505, height: 46, multiline: true },
-    { name: 'response.debt_advice_provider', page: 1, x: 222, y: 802, width: 260, height: 14 },
-  ]);
+  drawSection(page1, "Claimant's Details", top + 6, fonts);
+  top += 36;
+  drawText(page1, "Claimant's name:", 54, top, fonts.bold, 10);
+  drawText(page1, templateData.landlord_full_name || '', 230, top, fonts.regular, 10);
+  drawText(page1, 'Amount claimed:', 54, top + 22, fonts.bold, 10);
+  drawText(page1, money(templateData.total_claim_amount), 230, top + 22, fonts.regular, 10);
+  drawText(page1, 'Reference:', 54, top + 44, fonts.bold, 10);
+  drawText(page1, reference(templateData), 230, top + 44, fonts.regular, 10);
 
-  addCheckboxes(pdf, [
-    { name: 'response.i_dispute_the_debt', page: 1, x: 50, y: 62, size: 10 },
-    { name: 'response.dispute_paid_in_full', page: 1, x: 54, y: 155, size: 9 },
-    { name: 'response.dispute_never_lived_there', page: 1, x: 54, y: 174, size: 9 },
-    { name: 'response.dispute_amount_wrong', page: 1, x: 54, y: 192, size: 9 },
-    { name: 'response.dispute_rent_lower', page: 1, x: 54, y: 211, size: 9 },
-    { name: 'response.dispute_more_payments', page: 1, x: 54, y: 230, size: 9 },
-    { name: 'response.evidence_bank_statements', page: 1, x: 54, y: 375, size: 9 },
-    { name: 'response.evidence_receipts', page: 1, x: 54, y: 394, size: 9 },
-    { name: 'response.evidence_tenancy_agreement', page: 1, x: 54, y: 413, size: 9 },
-    { name: 'response.i_need_more_documents', page: 1, x: 50, y: 522, size: 10 },
-    { name: 'response.i_am_vulnerable', page: 1, x: 50, y: 675, size: 10 },
-  ]);
+  drawSection(page1, 'Your Response', top + 76, fonts);
+  top += 105;
+  drawText(page1, 'Please tick the option that applies.', 42, top, fonts.regular, 10);
+  addCheckbox(pdf, page1, 'response.i_owe_all_of_the_debt', 48, top + 28, 'Option 1: I will pay the debt in full', fonts, 11);
+  drawText(page1, 'I will pay in full by:', 76, top + 55, fonts.regular, 10);
+  addTextField(pdf, page1, 'response.payment_full_by_date', 210, top + 41, 145, 18, { line: true });
 
-  addTextFields(pdf, [
-    { name: 'signature.debtor_name', page: 2, x: 206, y: 123, width: 250, height: 16 },
-    { name: 'signature.date', page: 2, x: 206, y: 162, width: 150, height: 16 },
-  ]);
+  addCheckbox(pdf, page1, 'response.i_need_payment_plan', 48, top + 88, 'Option 2: I want to arrange a payment plan', fonts, 11);
+  drawText(page1, 'I can afford to pay:', 76, top + 116, fonts.regular, 10);
+  drawText(page1, '\u00a3', 212, top + 116, fonts.regular, 10);
+  addTextField(pdf, page1, 'response.payment_weekly_amount', 226, top + 102, 72, 18, { line: true });
+  addCheckbox(pdf, page1, 'response.payment_weekly_selected', 320, top + 107, 'per week', fonts, 10);
+  drawText(page1, '\u00a3', 212, top + 144, fonts.regular, 10);
+  addTextField(pdf, page1, 'response.payment_monthly_amount', 226, top + 130, 72, 18, { line: true });
+  addCheckbox(pdf, page1, 'response.payment_monthly_selected', 320, top + 135, 'per month', fonts, 10);
+  drawText(page1, 'Other:', 76, top + 172, fonts.regular, 10);
+  drawText(page1, '\u00a3', 126, top + 172, fonts.regular, 10);
+  addTextField(pdf, page1, 'response.payment_offer_amount', 140, top + 158, 65, 18, { line: true });
+  drawText(page1, 'per', 218, top + 172, fonts.regular, 10);
+  addTextField(pdf, page1, 'response.payment_offer_frequency', 244, top + 158, 92, 18, { line: true });
+  addCheckbox(pdf, page1, 'response.payment_other_selected', 354, top + 163, '', fonts, 10);
+  addCheckbox(pdf, page1, 'response.financial_statement_enclosed', 76, top + 202, 'Financial Statement Form enclosed', fonts, 10);
 
-  return finalize(pdf, font);
+  const page2 = pdf.addPage(A4);
+  drawHeader(page2, 'Reply Form', 'Dispute, documents and support needs', fonts);
+  drawSection(page2, 'Dispute The Debt', 106, fonts);
+  addCheckbox(pdf, page2, 'response.i_dispute_the_debt', 48, 136, 'Option 3: I dispute the debt', fonts, 11);
+  const reasons = [
+    ['response.dispute_paid_in_full', 'I have already paid this debt in full'],
+    ['response.dispute_never_lived_there', 'I have never lived at this property'],
+    ['response.dispute_amount_wrong', 'The amount claimed is incorrect'],
+    ['response.dispute_rent_lower', 'The rent was lower than stated'],
+    ['response.dispute_more_payments', 'I made more payments than the claimant has credited'],
+    ['response.dispute_damage_not_me', 'The damage was not caused by me'],
+    ['response.dispute_poor_condition', 'The property was in poor condition when I moved in'],
+    ['response.dispute_statute_barred', 'The debt is too old'],
+  ] as const;
+  top = 170;
+  for (const [name, label] of reasons) {
+    addCheckbox(pdf, page2, name, 58, top, label, fonts, 9);
+    top += 20;
+  }
+  drawText(page2, 'Full explanation:', 42, top + 12, fonts.bold, 10);
+  addTextField(pdf, page2, 'response.dispute_explanation', 42, top + 28, 512, 86, {
+    multiline: true,
+  });
+
+  drawSection(page2, 'Evidence Enclosed', top + 138, fonts);
+  top += 168;
+  const evidence = [
+    ['response.evidence_bank_statements', 'Bank statements'],
+    ['response.evidence_receipts', 'Receipts'],
+    ['response.evidence_tenancy_agreement', 'Tenancy agreement'],
+    ['response.evidence_inventory', 'Check-in report / inventory'],
+    ['response.evidence_photographs', 'Photographs'],
+    ['response.evidence_correspondence', 'Emails or letters'],
+  ] as const;
+  for (const [name, label] of evidence) {
+    addCheckbox(pdf, page2, name, 58, top, label, fonts, 9);
+    top += 19;
+  }
+  drawText(page2, 'Other:', 58, top + 2, fonts.regular, 9.5);
+  addTextField(pdf, page2, 'response.evidence_other', 104, top - 12, 250, 18, { line: true });
+
+  drawSection(page2, 'More Information Or Support', top + 36, fonts);
+  top += 66;
+  addCheckbox(pdf, page2, 'response.i_need_more_documents', 48, top, 'Option 4: I need more information or documents', fonts, 11);
+  addTextField(pdf, page2, 'response.requested_documents', 42, top + 28, 512, 58, {
+    multiline: true,
+  });
+  addCheckbox(pdf, page2, 'response.i_am_vulnerable', 48, top + 112, 'Option 5: I am in vulnerable circumstances', fonts, 11);
+  addTextField(pdf, page2, 'response.vulnerability_or_support_needs', 42, top + 140, 512, 58, {
+    multiline: true,
+  });
+  drawText(page2, 'I am seeking advice from:', 42, top + 228, fonts.regular, 10);
+  addTextField(pdf, page2, 'response.debt_advice_provider', 190, top + 214, 300, 18, { line: true });
+
+  const page3 = pdf.addPage(A4);
+  drawHeader(page3, 'Reply Form', 'Declaration and return details', fonts);
+  drawSection(page3, 'Declaration', 106, fonts);
+  drawWrapped(
+    page3,
+    'I confirm that the information I have given on this form is true and complete to the best of my knowledge.',
+    42,
+    138,
+    85,
+    fonts.regular,
+    10
+  );
+  drawText(page3, 'Your signature:', 42, 190, fonts.bold, 10);
+  addTextField(pdf, page3, 'signature.debtor_name', 160, 176, 280, 18, { line: true });
+  drawText(page3, 'Date:', 42, 222, fonts.bold, 10);
+  addTextField(pdf, page3, 'signature.date', 160, 208, 145, 18, { line: true });
+  drawReturnDetails(page3, templateData, fonts, 280);
+
+  return finalize(pdf, fonts.regular);
+}
+
+function drawAmountRow(
+  pdf: PDFDocument,
+  page: PDFPage,
+  label: string,
+  name: string,
+  top: number,
+  fonts: Fonts,
+  descriptionField?: string
+) {
+  drawText(page, label, 58, top, fonts.regular, 9.5);
+  if (descriptionField) {
+    addTextField(pdf, page, descriptionField, 205, top - 14, 118, 17, { line: true, fontSize: 9 });
+  }
+  drawText(page, '\u00a3', 388, top, fonts.regular, 9.5);
+  addTextField(pdf, page, name, 405, top - 14, 95, 17, { line: true, fontSize: 9 });
 }
 
 export async function makeFinancialStatementFillable(
   pdfInput: PdfInput,
   templateData: Record<string, any>
 ): Promise<Buffer> {
-  const pdf = await loadOrCreatePdf(pdfInput, templateData);
-  const font = await pdf.embedFont(StandardFonts.Helvetica);
+  void pdfInput;
+  const { pdf, fonts } = await createPdf();
 
-  addTextFields(pdf, [
-    { name: 'debtor.full_name', page: 1, x: 282, y: 151, width: 245, height: 16 },
-    { name: 'debtor.address', page: 1, x: 282, y: 186, width: 245, height: 34, multiline: true },
-    { name: 'debtor.postcode', page: 1, x: 282, y: 238, width: 245, height: 16 },
-    { name: 'debtor.date_of_birth', page: 1, x: 282, y: 272, width: 245, height: 16 },
-    { name: 'debtor.household_dependants', page: 1, x: 282, y: 306, width: 245, height: 16 },
-    { name: 'income.wages', page: 1, x: 391, y: 426, width: 115, height: 14 },
-    { name: 'income.self_employment', page: 1, x: 391, y: 457, width: 115, height: 14 },
-    { name: 'income.universal_credit', page: 1, x: 391, y: 488, width: 115, height: 14 },
-    { name: 'income.child_benefit', page: 1, x: 391, y: 519, width: 115, height: 14 },
-    { name: 'income.housing_benefit', page: 1, x: 391, y: 550, width: 115, height: 14 },
-    { name: 'income.pension', page: 1, x: 391, y: 581, width: 115, height: 14 },
-    { name: 'income.disability_benefit', page: 1, x: 391, y: 612, width: 115, height: 14 },
-    { name: 'income.carers_allowance', page: 1, x: 391, y: 643, width: 115, height: 14 },
-    { name: 'income.partner_income', page: 1, x: 391, y: 674, width: 115, height: 14 },
-    { name: 'income.other_description', page: 1, x: 177, y: 705, width: 145, height: 14 },
-    { name: 'income.other', page: 1, x: 391, y: 705, width: 115, height: 14 },
-    { name: 'income.total', page: 1, x: 391, y: 736, width: 115, height: 14 },
-  ]);
+  const cover = pdf.addPage(A4);
+  drawHeader(cover, 'Financial Statement Form', 'Pre-Action Protocol for Debt Claims', fonts);
+  drawWrapped(
+    cover,
+    'Use this form to show your income and outgoings if you want to propose a payment plan. Complete all sections honestly and return it with the Reply Form within 30 days.',
+    84,
+    150,
+    68,
+    fonts.regular,
+    11,
+    16
+  );
+  drawText(cover, `Claimant: ${templateData.landlord_full_name || ''}`, 84, 250, fonts.bold, 10);
+  drawText(cover, `Amount claimed: ${money(templateData.total_claim_amount)}`, 84, 272, fonts.bold, 10);
+  drawText(cover, `Reference: ${reference(templateData)}`, 84, 294, fonts.bold, 10);
 
-  addTextFields(pdf, [
-    { name: 'outgoings.rent_or_mortgage', page: 2, x: 391, y: 114, width: 115, height: 14 },
-    { name: 'outgoings.mortgage', page: 2, x: 391, y: 145, width: 115, height: 14 },
-    { name: 'outgoings.council_tax', page: 2, x: 391, y: 176, width: 115, height: 14 },
-    { name: 'outgoings.gas', page: 2, x: 391, y: 207, width: 115, height: 14 },
-    { name: 'outgoings.electricity', page: 2, x: 391, y: 238, width: 115, height: 14 },
-    { name: 'outgoings.water', page: 2, x: 391, y: 269, width: 115, height: 14 },
-    { name: 'outgoings.insurance', page: 2, x: 391, y: 300, width: 115, height: 14 },
-    { name: 'outgoings.food_groceries', page: 2, x: 391, y: 371, width: 115, height: 14 },
-    { name: 'outgoings.toiletries_household', page: 2, x: 391, y: 402, width: 115, height: 14 },
-    { name: 'outgoings.phone', page: 2, x: 391, y: 433, width: 115, height: 14 },
-    { name: 'outgoings.internet_tv', page: 2, x: 391, y: 464, width: 115, height: 14 },
-    { name: 'outgoings.clothing', page: 2, x: 391, y: 495, width: 115, height: 14 },
-    { name: 'outgoings.car_insurance_tax_mot', page: 2, x: 391, y: 566, width: 115, height: 14 },
-    { name: 'outgoings.fuel', page: 2, x: 391, y: 597, width: 115, height: 14 },
-    { name: 'outgoings.public_transport', page: 2, x: 391, y: 628, width: 115, height: 14 },
-    { name: 'outgoings.car_repairs', page: 2, x: 391, y: 659, width: 115, height: 14 },
-    { name: 'outgoings.childcare', page: 2, x: 391, y: 730, width: 115, height: 14 },
-    { name: 'outgoings.school_meals_uniforms', page: 2, x: 391, y: 761, width: 115, height: 14 },
-    { name: 'outgoings.child_maintenance', page: 2, x: 391, y: 792, width: 115, height: 14 },
-  ]);
+  const page1 = pdf.addPage(A4);
+  drawHeader(page1, 'Financial Statement Form', 'Your details and monthly income', fonts);
+  drawSection(page1, 'Your Details', 106, fonts);
+  const detailRows = [
+    ['Your full name:', 'debtor.full_name'],
+    ['Your address:', 'debtor.address'],
+    ['Your postcode:', 'debtor.postcode'],
+    ['Your date of birth:', 'debtor.date_of_birth'],
+    ['Number of dependants:', 'debtor.household_dependants'],
+  ] as const;
+  let top = 136;
+  for (const [label, name] of detailRows) {
+    drawText(page1, label, 54, top + 11, fonts.bold, 10);
+    const height = name === 'debtor.address' ? 36 : 18;
+    addTextField(pdf, page1, name, 230, top, 292, height, {
+      multiline: name === 'debtor.address',
+      line: name !== 'debtor.address',
+    });
+    top += height + 14;
+  }
 
-  addTextFields(pdf, [
-    { name: 'outgoings.prescriptions', page: 3, x: 391, y: 85, width: 115, height: 14 },
-    { name: 'outgoings.dental_optical', page: 3, x: 391, y: 116, width: 115, height: 14 },
-    { name: 'outgoings.other_medical', page: 3, x: 391, y: 147, width: 115, height: 14 },
-    { name: 'outgoings.credit_cards', page: 3, x: 391, y: 218, width: 115, height: 14 },
-    { name: 'outgoings.loan_repayments', page: 3, x: 391, y: 249, width: 115, height: 14 },
-    { name: 'outgoings.other_debts_description', page: 3, x: 177, y: 280, width: 145, height: 14 },
-    { name: 'outgoings.other_debts', page: 3, x: 391, y: 280, width: 115, height: 14 },
-    { name: 'outgoings.other_essential_description', page: 3, x: 198, y: 311, width: 124, height: 14 },
-    { name: 'outgoings.other_essential', page: 3, x: 391, y: 311, width: 115, height: 14 },
-    { name: 'priority_debts.details', page: 3, x: 44, y: 335, width: 278, height: 34, multiline: true },
-    { name: 'creditors.details', page: 3, x: 330, y: 335, width: 218, height: 34, multiline: true },
-    { name: 'outgoings.total', page: 3, x: 391, y: 380, width: 115, height: 14 },
-    { name: 'available_income.total_income', page: 3, x: 391, y: 488, width: 115, height: 14 },
-    { name: 'available_income.total_outgoings', page: 3, x: 391, y: 519, width: 115, height: 14 },
-    { name: 'available_income.net_available', page: 3, x: 391, y: 550, width: 115, height: 14 },
-    { name: 'assets.property_mortgage_outstanding', page: 3, x: 212, y: 696, width: 80, height: 14 },
-    { name: 'assets.property_value', page: 3, x: 391, y: 696, width: 115, height: 14 },
-    { name: 'assets.savings_value', page: 3, x: 391, y: 727, width: 115, height: 14 },
-    { name: 'assets.vehicle_value', page: 3, x: 391, y: 758, width: 115, height: 14 },
-    { name: 'assets.other_description', page: 3, x: 177, y: 789, width: 145, height: 14 },
-    { name: 'assets.other_value', page: 3, x: 391, y: 789, width: 115, height: 14 },
-  ]);
+  drawSection(page1, 'Section 1: Your Monthly Income', top + 8, fonts);
+  top += 40;
+  const incomeRows = [
+    ['Wages / salary after tax', 'income.wages'],
+    ['Self-employment income', 'income.self_employment'],
+    ['Universal Credit', 'income.universal_credit'],
+    ['Child Benefit / Child Tax Credit', 'income.child_benefit'],
+    ['Housing Benefit / LHA', 'income.housing_benefit'],
+    ['Pension', 'income.pension'],
+    ['DLA / PIP', 'income.disability_benefit'],
+    ["Carer's Allowance", 'income.carers_allowance'],
+    ["Partner's income", 'income.partner_income'],
+    ['Other income:', 'income.other', 'income.other_description'],
+  ] as const;
+  for (const row of incomeRows) {
+    drawAmountRow(pdf, page1, row[0], row[1], top, fonts, row[2]);
+    top += 26;
+  }
+  drawText(page1, 'Total monthly income:', 58, top + 8, fonts.bold, 10);
+  page1.drawRectangle({ x: 48, y: fieldY(page1, top - 12, 30), width: 480, height: 30, color: SHADE });
+  drawText(page1, '\u00a3', 388, top + 8, fonts.bold, 10);
+  addTextField(pdf, page1, 'income.total', 405, top - 6, 95, 18, { line: true });
 
-  addCheckboxes(pdf, [
-    { name: 'assets.property_owned_outright', page: 3, x: 151, y: 681, size: 9 },
-    { name: 'assets.property_mortgaged', page: 3, x: 205, y: 681, size: 9 },
-  ]);
+  const page2 = pdf.addPage(A4);
+  drawHeader(page2, 'Financial Statement Form', 'Monthly outgoings', fonts);
+  drawSection(page2, 'Section 2: Your Monthly Outgoings', 106, fonts);
+  top = 142;
+  drawText(page2, 'Housing costs', 42, top, fonts.bold, 11);
+  top += 26;
+  [
+    ['Rent (current property)', 'outgoings.rent_or_mortgage'],
+    ['Mortgage', 'outgoings.mortgage'],
+    ['Council Tax', 'outgoings.council_tax'],
+    ['Gas', 'outgoings.gas'],
+    ['Electricity', 'outgoings.electricity'],
+    ['Water', 'outgoings.water'],
+    ['Buildings / contents insurance', 'outgoings.insurance'],
+  ].forEach(([label, name]) => {
+    drawAmountRow(pdf, page2, label, name, top, fonts);
+    top += 24;
+  });
+  top += 12;
+  drawText(page2, 'Household costs', 42, top, fonts.bold, 11);
+  top += 26;
+  [
+    ['Food and groceries', 'outgoings.food_groceries'],
+    ['Toiletries and household products', 'outgoings.toiletries_household'],
+    ['Telephone / mobile phone', 'outgoings.phone'],
+    ['Internet / TV licence', 'outgoings.internet_tv'],
+    ['Clothing and footwear', 'outgoings.clothing'],
+  ].forEach(([label, name]) => {
+    drawAmountRow(pdf, page2, label, name, top, fonts);
+    top += 24;
+  });
+  top += 12;
+  drawText(page2, 'Travel and transport', 42, top, fonts.bold, 11);
+  top += 26;
+  [
+    ['Car insurance / tax / MOT', 'outgoings.car_insurance_tax_mot'],
+    ['Petrol / diesel', 'outgoings.fuel'],
+    ['Public transport', 'outgoings.public_transport'],
+    ['Car repairs / servicing', 'outgoings.car_repairs'],
+  ].forEach(([label, name]) => {
+    drawAmountRow(pdf, page2, label, name, top, fonts);
+    top += 24;
+  });
 
-  addTextFields(pdf, [
-    { name: 'payment_offer.amount', page: 4, x: 381, y: 91, width: 70, height: 14 },
-    { name: 'payment_offer.frequency', page: 4, x: 476, y: 91, width: 55, height: 14 },
-    { name: 'payment_offer.start_date', page: 4, x: 381, y: 122, width: 140, height: 14 },
-    { name: 'additional_information', page: 4, x: 44, y: 299, width: 505, height: 62, multiline: true },
-    { name: 'signature.debtor_name', page: 4, x: 206, y: 480, width: 250, height: 16 },
-    { name: 'signature.date', page: 4, x: 206, y: 518, width: 150, height: 16 },
-  ]);
+  const page3 = pdf.addPage(A4);
+  drawHeader(page3, 'Financial Statement Form', 'More outgoings and assets', fonts);
+  top = 112;
+  drawText(page3, 'Childcare and education', 42, top, fonts.bold, 11);
+  top += 26;
+  [
+    ['Childcare costs', 'outgoings.childcare'],
+    ['School meals / uniforms', 'outgoings.school_meals_uniforms'],
+    ['Child maintenance payments', 'outgoings.child_maintenance'],
+  ].forEach(([label, name]) => {
+    drawAmountRow(pdf, page3, label, name, top, fonts);
+    top += 24;
+  });
+  top += 12;
+  drawText(page3, 'Health and other regular payments', 42, top, fonts.bold, 11);
+  top += 26;
+  [
+    ['Prescription charges', 'outgoings.prescriptions'],
+    ['Dental / optical costs', 'outgoings.dental_optical'],
+    ['Other medical costs', 'outgoings.other_medical'],
+    ['Credit card minimum payments', 'outgoings.credit_cards'],
+    ['Loan repayments', 'outgoings.loan_repayments'],
+    ['Other debts:', 'outgoings.other_debts', 'outgoings.other_debts_description'],
+    ['Other essential costs:', 'outgoings.other_essential', 'outgoings.other_essential_description'],
+  ].forEach((row) => {
+    drawAmountRow(pdf, page3, row[0], row[1], top, fonts, row[2]);
+    top += 24;
+  });
+  drawText(page3, 'Total monthly outgoings:', 58, top + 12, fonts.bold, 10);
+  drawText(page3, '\u00a3', 388, top + 12, fonts.bold, 10);
+  addTextField(pdf, page3, 'outgoings.total', 405, top - 2, 95, 18, { line: true });
 
-  addCheckboxes(pdf, [
-    { name: 'payment_offer.current_rent_yes', page: 4, x: 381, y: 153, size: 10 },
-    { name: 'payment_offer.current_rent_no', page: 4, x: 436, y: 153, size: 10 },
-  ]);
+  drawSection(page3, 'Section 3: Available Income', top + 48, fonts);
+  top += 82;
+  drawAmountRow(pdf, page3, 'Total monthly income', 'available_income.total_income', top, fonts);
+  drawAmountRow(pdf, page3, 'Total monthly outgoings', 'available_income.total_outgoings', top + 26, fonts);
+  drawAmountRow(pdf, page3, 'Available income', 'available_income.net_available', top + 52, fonts);
 
-  return finalize(pdf, font);
+  drawSection(page3, 'Priority Debts And Creditors', top + 96, fonts);
+  drawText(page3, 'Priority debts:', 42, top + 126, fonts.bold, 10);
+  addTextField(pdf, page3, 'priority_debts.details', 42, top + 142, 245, 58, { multiline: true });
+  drawText(page3, 'Other creditors:', 310, top + 126, fonts.bold, 10);
+  addTextField(pdf, page3, 'creditors.details', 310, top + 142, 245, 58, { multiline: true });
+
+  const page4 = pdf.addPage(A4);
+  drawHeader(page4, 'Financial Statement Form', 'Assets, offer and declaration', fonts);
+  drawSection(page4, 'Section 4: Your Assets', 106, fonts);
+  top = 142;
+  addCheckbox(pdf, page4, 'assets.property_owned_outright', 58, top, 'Property owned outright', fonts, 10);
+  addCheckbox(pdf, page4, 'assets.property_mortgaged', 230, top, 'Property mortgaged', fonts, 10);
+  drawAmountRow(pdf, page4, 'Less mortgage outstanding', 'assets.property_mortgage_outstanding', top + 34, fonts);
+  drawAmountRow(pdf, page4, 'Property estimated value', 'assets.property_value', top + 60, fonts);
+  drawAmountRow(pdf, page4, 'Savings', 'assets.savings_value', top + 86, fonts);
+  drawAmountRow(pdf, page4, 'Vehicles', 'assets.vehicle_value', top + 112, fonts);
+  drawAmountRow(pdf, page4, 'Other assets:', 'assets.other_value', top + 138, fonts, 'assets.other_description');
+
+  drawSection(page4, 'Section 5: Your Payment Offer', top + 184, fonts);
+  top += 220;
+  drawText(page4, 'I can afford to pay:', 58, top, fonts.regular, 10);
+  drawText(page4, '\u00a3', 194, top, fonts.regular, 10);
+  addTextField(pdf, page4, 'payment_offer.amount', 210, top - 14, 80, 18, { line: true });
+  drawText(page4, 'per', 305, top, fonts.regular, 10);
+  addTextField(pdf, page4, 'payment_offer.frequency', 332, top - 14, 95, 18, { line: true });
+  drawText(page4, 'Starting from:', 58, top + 32, fonts.regular, 10);
+  addTextField(pdf, page4, 'payment_offer.start_date', 210, top + 18, 150, 18, { line: true });
+  addCheckbox(pdf, page4, 'payment_offer.current_rent_yes', 58, top + 66, 'I will continue to pay current rent in full: Yes', fonts, 10);
+  addCheckbox(pdf, page4, 'payment_offer.current_rent_no', 330, top + 66, 'No', fonts, 10);
+
+  drawSection(page4, 'Section 6: Additional Information', top + 108, fonts);
+  addTextField(pdf, page4, 'additional_information', 42, top + 140, 512, 72, { multiline: true });
+  drawSection(page4, 'Declaration', top + 238, fonts);
+  drawWrapped(
+    page4,
+    'I confirm that the information I have given on this form is true and complete to the best of my knowledge.',
+    42,
+    top + 270,
+    85,
+    fonts.regular,
+    10
+  );
+  drawText(page4, 'Your signature:', 42, top + 322, fonts.bold, 10);
+  addTextField(pdf, page4, 'signature.debtor_name', 160, top + 308, 280, 18, { line: true });
+  drawText(page4, 'Date:', 42, top + 354, fonts.bold, 10);
+  addTextField(pdf, page4, 'signature.date', 160, top + 340, 145, 18, { line: true });
+
+  return finalize(pdf, fonts.regular);
 }
