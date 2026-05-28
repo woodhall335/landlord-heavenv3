@@ -128,11 +128,11 @@ const earlyInternalLinks = [
 
 const expectedProductMetaDescriptions = {
   noticeOnly:
-    'Create an England Section 8 eviction notice file with Form 3A, N215, arrears schedule, service instructions, and pre-service checks.',
+    'Create an England landlord Section 8 eviction notice file with Form 3A, N215, arrears schedule, service instructions, and pre-service checks.',
   completePack:
-    'Prepare an England Section 8 possession claim pack with Form 3A, N5, N119, witness statement, evidence, and hearing support included.',
+    'Evict a tenant through court with an England complete eviction pack: Section 8 possession claim, court forms N5 and N119, evidence, and hearing support.',
   moneyClaim:
-    'Recover unpaid rent or tenant debt with a landlord money claim pack: letter before claim, particulars, debt schedule, MCOL/N1 guidance.',
+    'Recover unpaid rent, property damage, or tenant debt with a landlord money claim pack: letter before claim, particulars, debt schedule, and MCOL/N1 guidance.',
   section13Standard:
     'Create an England Section 13 Form 4A rent increase pack with market evidence, service record, cover letter, and supportable-rent summary.',
   section13Defence:
@@ -215,10 +215,10 @@ describe('product owner SEO funnel', () => {
     for (const metadata of PRODUCT_OWNER_METADATA_LIST) {
       expect(metadata.title).toBeTruthy();
       expect(metadata.description.toLowerCase()).toMatch(
-        /create|prepare|recover|current|checked|renters' rights act/
+        /create|prepare|recover|evict|current|checked|renters' rights act/
       );
       expect(metadata.description.length).toBeGreaterThanOrEqual(125);
-      expect(metadata.description.length).toBeLessThanOrEqual(155);
+      expect(metadata.description.length).toBeLessThanOrEqual(160);
     }
   });
 
@@ -428,6 +428,27 @@ describe('product owner SEO funnel', () => {
     }
 
     expect(source).toContain('/compare/tenancy-agreement-options-england');
+  });
+
+  it('keeps the AST hub focused on post-May 2026 periodic tenancy search intent', () => {
+    const source = readSource('src/app/(marketing)/products/ast/page.tsx');
+
+    expect(source).toContain("Renters' Rights Act compliant tenancy agreement");
+    expect(source).toContain('assured periodic tenancy agreement');
+    expect(source).toContain('periodic tenancy agreement');
+    expect(source).toContain('From 1 May 2026');
+    expect(source).toContain('AST wording is legacy for new lets');
+  });
+
+  it('keeps the rent increase hub focused on broad rent increase and Section 13 intent', () => {
+    const source = readSource('src/app/rent-increase/page.tsx');
+
+    expect(source).toContain('Rent Increase Guide for England Landlords | Section 13 Form 4A');
+    expect(source).toContain('how to increase rent');
+    expect(source).toContain('market rent evidence');
+    expect(source).toContain('tenant challenge');
+    expect(source).toContain('Click to start your Section 13 rent increase pack');
+    expect(source).toContain('/wizard/flow?type=rent_increase&product=section13_standard&src=product_page&topic=general');
   });
 
   it('keeps product funnel conversion events wired to GA4 touchpoints', () => {

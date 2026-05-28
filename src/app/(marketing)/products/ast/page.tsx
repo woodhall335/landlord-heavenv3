@@ -18,14 +18,18 @@ const canonicalUrl = getCanonicalUrl(descriptor.landingHref);
 const tenancyProducts = getPublicTenancyProducts();
 
 export const metadata: Metadata = {
-  title: 'England Tenancy Agreements | Compare Landlord Packs',
+  title: "Tenancy Agreement England | Renters' Rights Act Compliant",
   description:
-    'Compare England tenancy agreement packs for Standard, Premium, Student, HMO or shared-house, and Lodger lets before choosing the right route.',
+    "Create a Renters' Rights Act compliant England tenancy agreement. Compare assured periodic, Standard, Premium, Student, HMO and Lodger routes for post-May 2026 lets.",
   keywords: [
     'England tenancy agreement',
     'tenancy agreement template england',
+    "Renters' Rights Act compliant tenancy agreement",
+    'post-May 2026 tenancy agreement',
+    'periodic tenancy agreement',
     'periodic tenancy agreement england',
     'assured periodic tenancy agreement england',
+    'assured periodic tenancy agreement',
     'Standard tenancy agreement',
     'Premium tenancy agreement',
     'Student tenancy agreement',
@@ -36,9 +40,9 @@ export const metadata: Metadata = {
     canonical: canonicalUrl,
   },
   openGraph: {
-    title: 'England Tenancy Agreements | Compare Landlord Packs',
+    title: "Tenancy Agreement England | Renters' Rights Act Compliant",
     description:
-      'Compare Standard, Premium, Student, HMO / Shared House, and Lodger agreement options for landlords in England.',
+      "Choose a Renters' Rights Act compliant England tenancy agreement for an assured periodic, student, HMO, shared-house, or lodger setup.",
     url: canonicalUrl,
   },
 };
@@ -52,7 +56,7 @@ const routeCards: ProductSalesRouteCard[] = [
       tenancyProducts.find((product) => product.key === 'england_standard_tenancy_agreement')
         ?.priceLabel,
     whatItIs:
-      'The current England agreement for a straightforward whole-property let, with setup records, key clauses, and practical landlord wording.',
+      "The current England assured periodic tenancy agreement for a straightforward whole-property let, with Renters' Rights Act compliant setup records, key clauses, and practical landlord wording.",
     problemItSolves:
       "Gives landlords a clean starting point when the let is ordinary and does not need student, shared-house, or resident-landlord wording.",
     riskIfWrong:
@@ -70,7 +74,7 @@ const routeCards: ProductSalesRouteCard[] = [
       tenancyProducts.find((product) => product.key === 'england_premium_tenancy_agreement')
         ?.priceLabel,
     whatItIs:
-      'The fuller current England option for ordinary residential lets that need stronger management wording.',
+      "The fuller current England assured periodic tenancy agreement for ordinary residential lets that need stronger management wording under the Renters' Rights Act framework.",
     problemItSolves:
       'Helps when the landlord wants more detail around access, reporting, inspections, keys, repairs, and hand-back.',
     riskIfWrong:
@@ -137,7 +141,7 @@ const faqs: FAQItem[] = [
   {
     question: 'Who is this page for?',
     answer:
-      'It is for landlords putting a tenancy in place for property in England and choosing between the exact agreement products.',
+      "It is for landlords putting a tenancy in place for property in England and choosing between Renters' Rights Act compliant agreement products.",
   },
   {
     question: 'Why are there separate Standard, Premium, Student, HMO, and Lodger products?',
@@ -147,7 +151,7 @@ const faqs: FAQItem[] = [
   {
     question: 'Should I still use this if I searched for AST?',
     answer:
-      'Yes. If you searched for AST, this is the best place to choose the exact current England agreement that fits the property and the occupiers.',
+      'Yes, but AST wording is now legacy for new England lets from 1 May 2026. Use this page to choose the current assured periodic tenancy agreement that fits the property and occupiers.',
   },
   {
     question: 'What if I searched for periodic tenancy agreement or assured periodic tenancy agreement?',
@@ -173,11 +177,11 @@ export default function EnglandTenancyHubPage() {
     hero: {
       ...astHeroConfig,
       trustText:
-        'England tenancy agreements | Standard, Premium, Student, HMO, and Lodger',
-      title: 'Choose the right England',
+        "Renters' Rights Act compliant | Assured periodic tenancy agreements | England landlords",
+      title: 'Create the right England',
       highlightTitle: 'tenancy agreement for the let',
       subtitle:
-        'Choose the agreement that matches how the property will actually be occupied: ordinary let, fuller management terms, student house, HMO / shared house, or lodger.',
+        "From 1 May 2026, new England lets use assured periodic tenancy agreements. Choose the Renters' Rights Act compliant agreement that matches how the property will actually be occupied: ordinary let, fuller management terms, student house, HMO / shared house, or lodger.",
       showTrustPositioningBar: true,
       primaryCta: {
         label: 'Choose Standard agreement',
@@ -188,16 +192,55 @@ export default function EnglandTenancyHubPage() {
         href: '/premium-tenancy-agreement',
       },
     },
+    postHeroContent: (
+      <div className="rounded-[2.25rem] border border-[#E8E1F8] bg-[#FCFAFF] p-6 shadow-[0_18px_46px_rgba(24,11,49,0.06)] md:p-8">
+        <div className="grid gap-5 lg:grid-cols-3">
+          <article className="rounded-[1.5rem] border border-[#D8C8FF] bg-white p-5">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#6D28D9]">
+              Renters&apos; Rights Act
+            </p>
+            <h2 className="mt-3 text-2xl font-bold tracking-tight text-[#17142B]">
+              What changed after 1 May 2026?
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-[#4B5565]">
+              For new England private-rented lets, the starting point is now an assured periodic tenancy agreement. The agreement should reflect the current notice, rent increase, pets, repairs, bills, and written-information rules.
+            </p>
+          </article>
+          <article className="rounded-[1.5rem] border border-[#D8C8FF] bg-white p-5">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#6D28D9]">
+              Periodic vs old AST
+            </p>
+            <h2 className="mt-3 text-2xl font-bold tracking-tight text-[#17142B]">
+              AST wording is legacy for new lets
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-[#4B5565]">
+              Landlords still search for AST templates, but new England paperwork needs to match the assured periodic framework. Use this hub to choose the current route instead of adapting old AST wording.
+            </p>
+          </article>
+          <article className="rounded-[1.5rem] border border-[#D8C8FF] bg-white p-5">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#6D28D9]">
+              Which agreement?
+            </p>
+            <h2 className="mt-3 text-2xl font-bold tracking-tight text-[#17142B]">
+              Choose by how the property is let
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-[#4B5565]">
+              Standard and Premium cover ordinary whole-property lets. Student, HMO / Shared House, and Lodger routes handle specialist setups where a generic agreement can miss important landlord protections.
+            </p>
+          </article>
+        </div>
+      </div>
+    ),
     decisionBlock: {
       title: 'Choose the agreement before you start',
       intro:
-        'Start with the facts of the let. The right agreement depends on who will live there, whether the property is shared, and how much management detail you want in the paperwork.',
+        "Start with the facts of the let. The right Renters' Rights Act compliant tenancy agreement depends on who will live there, whether the property is shared, and how much management detail you want in the paperwork.",
       cards: [
         {
           eyebrow: 'Most common choice',
-          title: 'Start with Standard or Premium for an ordinary whole-property let',
+          title: 'Start with Standard or Premium for an ordinary assured periodic tenancy',
           body:
-            'If the property is being let as a normal residential home in England, Standard is the simple option and Premium is the fuller management option.',
+            'If the property is being let as a normal residential home in England, Standard is the simple assured periodic option and Premium is the fuller management option.',
           tone: 'positive',
         },
         {
@@ -218,9 +261,9 @@ export default function EnglandTenancyHubPage() {
       },
     },
     whatYouGet: {
-      title: 'Choose the agreement that fits the let',
+      title: "Choose the Renters' Rights Act compliant agreement that fits the let",
       intro:
-        'Compare the five England agreement options. Standard is the usual ordinary-let choice, Premium adds fuller management wording, and the specialist options cover student, shared-house, and lodger setups.',
+        'Compare the five England agreement options. Standard is the usual assured periodic tenancy agreement for ordinary lets, Premium adds fuller management wording, and the specialist options cover student, shared-house, and lodger setups.',
       routeCards,
     },
     objectionBlock: {
@@ -231,7 +274,12 @@ export default function EnglandTenancyHubPage() {
         {
           question: 'I searched for AST or periodic tenancy agreement. Where should I start?',
           answer:
-            'Usually with Standard or Premium. Those are the England whole-property options, and this page helps you choose between the simpler pack and the fuller management pack.',
+            "Usually with Standard or Premium. Those are the England whole-property assured periodic tenancy agreement options, and this page helps you choose between the simpler pack and the fuller management pack. If you searched for AST, treat that as legacy wording for new England lets.",
+        },
+        {
+          question: "Is this Renters' Rights Act compliant?",
+          answer:
+            "Yes. The England routes are positioned around the post-May 2026 assured periodic framework, including the written-information, rent increase, possession, pets, and management wording landlords need to consider.",
         },
         {
           question: 'How do I know if I need a specialist product?',
@@ -261,8 +309,13 @@ export default function EnglandTenancyHubPage() {
     whyYouNeedThis: {
       title: 'Why you need the right agreement first',
       intro:
-        'Many agreement problems start when the landlord chooses a product that does not match the occupiers, property, or management setup.',
+        "Many agreement problems start when the landlord chooses a product that does not match the occupiers, property, management setup, or current Renters' Rights Act framework.",
       cards: [
+        {
+          title: 'The current default is assured periodic',
+          body:
+            'For new England lets from 1 May 2026, the paperwork should be built around an assured periodic tenancy agreement rather than old AST assumptions.',
+        },
         {
           title: 'Different lets create different risks',
           body:
@@ -272,11 +325,6 @@ export default function EnglandTenancyHubPage() {
           title: 'Wrong paperwork weakens the tenancy early',
           body:
             'If the agreement does not match the real arrangement, or starts from an old one-size-fits-all form, the paperwork can feel unclear before the tenancy has begun.',
-        },
-        {
-          title: 'The exact product pages do the detail',
-          body:
-            'This page helps you choose. Each agreement page then explains the full pack and what each document does.',
         },
       ],
     },
@@ -345,6 +393,14 @@ export default function EnglandTenancyHubPage() {
         {
           label: 'Not sure which agreement? Compare all England options',
           href: '/compare/tenancy-agreement-options-england',
+        },
+        {
+          label: "Read the Renters' Rights Act tenancy guide",
+          href: '/tenancy-agreement-england-2026',
+        },
+        {
+          label: 'Assured periodic tenancy agreement guide',
+          href: '/assured-periodic-tenancy-agreement',
         },
         ...descriptor.defaultGuideLinks,
       ],

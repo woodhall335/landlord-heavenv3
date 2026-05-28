@@ -201,6 +201,8 @@ const anchorSets = {
   section13StandardProduct: [
     'Supported Rent Increase Pack',
     'Form 4A rent increase pack for landlords',
+    'Section 13 rent increase notice',
+    'rent increase guide for landlords',
     'supportable rent increase notice pack',
   ],
   section13DefenceProduct: [
@@ -212,11 +214,16 @@ const anchorSets = {
     'England tenancy agreements for landlords',
     'Residential Tenancy Agreement route for England',
     'England tenancy agreement comparison',
+    "Renters' Rights Act compliant tenancy agreement",
+    'assured periodic tenancy agreement',
+    'periodic tenancy agreement for England landlords',
   ],
   tenancySupporting: [
     'updated England tenancy agreement route',
     'Residential Tenancy Agreement for England',
     'Renters Rights compliant agreement guide',
+    'assured periodic tenancy agreement guide',
+    'post-May 2026 tenancy agreement',
   ],
   tenancyTransitionSupporting: [
     'Section 21 ending in 2026',
@@ -226,6 +233,8 @@ const anchorSets = {
   tenancyProduct: [
     'England tenancy agreement generator',
     'Residential Tenancy Agreement builder',
+    "Renters' Rights Act compliant tenancy agreement",
+    'periodic tenancy agreement builder',
     'tenancy agreement workflow for landlords',
   ],
 } as const;
@@ -1778,6 +1787,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
       pillar: [
         'Section 13 notice guide for landlords',
         'Form 4A rent increase route',
+        'rent increase guide for landlords',
         'rent increase in England',
       ],
       supporting: [

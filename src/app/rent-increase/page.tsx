@@ -16,23 +16,33 @@ import { StructuredData, breadcrumbSchema, pricingItemListSchema } from '@/lib/s
 const standardDescriptor = getPublicProductDescriptor('section13_standard')!;
 const defenceDescriptor = getPublicProductDescriptor('section13_defensive')!;
 const canonicalUrl = getCanonicalUrl('/rent-increase');
+const supportedRentIncreaseWizardHref =
+  '/wizard/flow?type=rent_increase&product=section13_standard&src=product_page&topic=general';
 
 export const metadata: Metadata = {
-  title: 'Check Rent Increase Supportability | Section 13 / Form 4A Packs',
+  title: 'Rent Increase Guide for England Landlords | Section 13 Form 4A',
   description:
-    'Check whether an England rent increase is supportable before serving Form 4A, using current local market comparables, evidence strength, and challenge-risk routing.',
+    'England landlord rent increase guide covering Section 13, Form 4A, notice periods, market rent evidence, tenant challenge risk, and the right pack to serve.',
   keywords: [
+    'rent increase',
+    'rent increase guide',
+    'rent increase landlord',
+    'rent increase england',
     'increase rent england',
+    'how to increase rent',
     'section 13 notice',
+    'section 13 rent increase',
     'form 4a rent increase',
+    'market rent evidence',
+    'tenant challenge rent increase',
     'rent increase section 13',
     'rent increase landlord pack',
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Check Rent Increase Supportability | Section 13 / Form 4A Packs',
+    title: 'Rent Increase Guide for England Landlords | Section 13 Form 4A',
     description:
-      'Compare the proposed rent with current local advertised rents, then choose the Supported or Tribunal-Ready Section 13 pack.',
+      'Learn how to increase rent in England with Section 13 and Form 4A, then choose the Supported or Tribunal-Ready rent increase pack.',
     url: canonicalUrl,
   },
 };
@@ -110,12 +120,12 @@ export default function RentIncreaseLandingPage() {
     hero: {
       preset: standardDescriptor.heroPreset,
       badge: standardDescriptor.heroBadge,
-      trustText: 'England Section 13 / Form 4A packs | current market comparables | post-1 May 2026 rules',
-      title: 'Check whether your rent increase is likely to stand up before you serve Form 4A',
+      trustText: 'England rent increase guide | Section 13 Form 4A | market rent evidence | tenant challenge risk',
+      title: 'Increase rent in England with the right Section 13 route',
       subtitle:
-        'Check the current rent, proposed rent, estimated market range, evidence strength, and challenge risk using current advertised rents for similar homes nearby, then choose the right Section 13 pack.',
+        'Before serving a rent increase, check when Section 13 applies, what notice period is needed, whether the proposed rent is supported by market evidence, and what to do if the tenant challenges it.',
       feature:
-        'Prepare a market-supported rent increase file, not just a notice.',
+        'Prepare a market-supported rent increase file, not just a Form 4A notice.',
       mediaSrc: '/images/increase-rent-hero.webp',
       mediaAlt: 'Section 13 rent increase workflow',
       showReviewPill: true,
@@ -136,7 +146,7 @@ export default function RentIncreaseLandingPage() {
               product="section13_standard"
               className="hero-btn-primary flex w-full justify-center text-center sm:w-auto"
             >
-              Check my rent increase
+              Create my rent increase notice
             </TrackedLink>
           </div>
           <div className="w-full sm:w-auto">
@@ -158,9 +168,9 @@ export default function RentIncreaseLandingPage() {
       ),
       children: (
         <ul className="mt-6 space-y-2 text-sm text-white/90 md:text-base">
-          <li>Built for England's Section 13 process using Form 4A under the post-1 May 2026 rules.</li>
-          <li>See how the proposed rent compares with current local advertised rents before serving.</li>
-          <li>Keep the notice, market evidence, rent summary, and service notes in one organised file.</li>
+          <li>Use Section 13 and Form 4A where that is the right England rent increase route.</li>
+          <li>Check the rent figure against current local market rent evidence before serving.</li>
+          <li>Keep the notice period, proposed start date, tenant challenge risk, evidence, and service notes in one organised file.</li>
         </ul>
       ),
     },
@@ -169,14 +179,26 @@ export default function RentIncreaseLandingPage() {
         <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#6D28D9]">
-              Market intelligence preview
+              Rent increase quick answer
             </p>
             <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#17142B] md:text-4xl">
-              See whether the figure is supportable before the notice goes out
+              Work out the route before the notice goes out
             </h2>
             <p className="mt-4 text-base leading-8 text-[#4B5565] md:text-lg">
-              The workflow reviews current local market listings and recent comparable rental evidence so you can see whether the proposed rent looks explainable before Form 4A is served.
+              For most England landlords, the safe order is: check the tenancy, confirm when the rent can increase, compare the proposed figure with market rent evidence, prepare Form 4A, serve it properly, and keep the evidence ready in case the tenant challenges the increase.
             </p>
+            <div className="mt-5 grid gap-3 sm:grid-cols-3">
+              {[
+                ['Section 13', 'Use the statutory route where it applies.'],
+                ['Form 4A', 'Put the rent, date, and tenancy details into the prescribed form.'],
+                ['Challenge risk', 'Keep market evidence ready if the tenant pushes back.'],
+              ].map(([label, body]) => (
+                <div key={label} className="rounded-2xl border border-[#D8C8FF] bg-white p-4">
+                  <p className="text-sm font-semibold text-[#4F2A96]">{label}</p>
+                  <p className="mt-2 text-sm leading-6 text-[#5B5470]">{body}</p>
+                </div>
+              ))}
+            </div>
           </div>
           <div className="rounded-[2rem] border border-[#D8C8FF] bg-white p-5 shadow-[0_14px_34px_rgba(24,11,49,0.05)]">
             <Image
@@ -195,16 +217,45 @@ export default function RentIncreaseLandingPage() {
     ),
     beforeWhyYouNeedThis: (
       <section className="scroll-mt-24 bg-white py-10 md:py-12" aria-label="Real market data preview">
-        <picture>
-          <source media="(max-width: 767px)" srcSet="/images/real-market-data-mobile.webp" />
-          <Image
-            src="/images/real-market-data-desktop.webp"
-            alt="Real market rental data report preview"
-            width={1920}
-            height={980}
-            className="h-auto w-full"
-          />
-        </picture>
+        <TrackedLink
+          href={supportedRentIncreaseWizardHref}
+          pagePath="/rent-increase"
+          pageType="entry_page"
+          ctaLabel="Click to start your Section 13 rent increase pack"
+          ctaPosition="section"
+          eventName="entry_page_primary_cta_click"
+          routeIntent="rent_increase"
+          product="section13_standard"
+          className="group block focus:outline-none focus:ring-2 focus:ring-primary/50"
+        >
+          <div className="mx-auto max-w-[1920px]">
+            <div className="px-4 pb-5 sm:px-6 lg:px-8">
+              <div className="mx-auto flex max-w-7xl flex-col gap-3 rounded-[2rem] border border-[#E8E1F8] bg-[#FCFAFF] p-5 shadow-[0_14px_34px_rgba(24,11,49,0.05)] md:flex-row md:items-center md:justify-between">
+                <div>
+                  <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#6D28D9]">
+                    Market rent evidence preview
+                  </p>
+                  <h2 className="mt-2 text-2xl font-bold tracking-tight text-[#17142B] md:text-3xl">
+                    Click to start your Section 13 rent increase pack
+                  </h2>
+                </div>
+                <span className="hero-btn-primary inline-flex justify-center text-center">
+                  Start the rent increase pack
+                </span>
+              </div>
+            </div>
+            <picture>
+              <source media="(max-width: 767px)" srcSet="/images/real-market-data-mobile.webp" />
+              <Image
+                src="/images/real-market-data-desktop.webp"
+                alt="Real market rental data report preview"
+                width={1920}
+                height={980}
+                className="h-auto w-full transition duration-300 group-hover:brightness-[0.98]"
+              />
+            </picture>
+          </div>
+        </TrackedLink>
       </section>
     ),
     whatYouGet: {
@@ -217,22 +268,22 @@ export default function RentIncreaseLandingPage() {
     whyYouNeedThis: {
       title: 'Why landlords use this before serving Form 4A',
       intro:
-        'A rent increase is easier to stand behind when the form, figure, dates, advertised-rent evidence, risk notes, and service record all match. This gives you a prepared landlord file before the tenant receives the notice.',
+        'A rent increase is easier to stand behind when the form, figure, dates, market rent evidence, risk notes, and service record all match. This gives you a prepared landlord file before the tenant receives the notice.',
       cards: [
         {
-          title: 'Do not treat it as just a form',
+          title: 'What can invalidate or weaken a Section 13 notice?',
           body:
-            'Form 4A matters, but so do the proposed rent, the start date, the tenancy details, and the current advertised rents for similar homes nearby. Those details need to work together.',
+            'Form 4A matters, but so do the proposed rent, the notice period, the start date, the tenancy details, and the service record. If those details conflict, the rent increase becomes easier to question.',
         },
         {
-          title: 'Match the pack to the level of risk',
+          title: 'What evidence supports market rent?',
           body:
-            'If the increase is straightforward, the Supported pack is usually enough. If the tenant has already objected, the proposed rent is sensitive, or you expect a tribunal challenge, start with the Tribunal-Ready route.',
+            'Current advertised rents for similar homes nearby, property condition notes, comparable size and location, and a calm explanation of why the proposed figure is reasonable all help the landlord file make sense.',
         },
         {
-          title: 'Keep the explanation ready',
+          title: 'What happens if the rent is too high?',
           body:
-            'Tenants often ask why the rent is changing. The pack keeps the figure, comparable listings, explanation, and service steps in one place so you can answer calmly and consistently.',
+            'The tenant may challenge the increase, ask for evidence, negotiate, or apply to tribunal. The stronger route is to check challenge risk before service, not after the tenant pushes back.',
         },
       ],
     },
@@ -244,7 +295,7 @@ export default function RentIncreaseLandingPage() {
         {
           title: 'Start with the supported route for a normal increase',
           body:
-            'For an ordinary rent increase, start with the Supported Rent Increase Pack. It gives you the Form 4A workflow, current comparable evidence, rent summary, cover letter, and service record without overcomplicating the job.',
+            'For an ordinary rent increase, start with the Supported Rent Increase Pack. It gives you the Section 13 Form 4A workflow, current comparable evidence, rent summary, cover letter, and service record without overcomplicating the job.',
         },
         {
           title: 'Use the tribunal-ready route when pushback is likely',
