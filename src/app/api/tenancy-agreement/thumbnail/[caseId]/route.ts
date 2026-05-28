@@ -18,6 +18,7 @@ import {
 } from '@/lib/residential-letting/products';
 import { resolveTenancyPreviewDocumentHtml } from '@/lib/previews/tenancyPreviewDocuments';
 import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
+import { assertPreviewAllowed } from '@/lib/payments/entitlement';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -140,10 +141,18 @@ export async function GET(
     }
 
     const pdfBytes = await htmlToPdf(previewDocument.html);
+    const entitlementProduct =
+      jurisdiction === 'england' && modernEnglandProduct ? modernEnglandProduct : requestedProduct || `ast_${tier}`;
+    const previewAccess = await assertPreviewAllowed({
+      caseId,
+      product: entitlementProduct,
+      userId: user?.id,
+    });
     const thumbnail = await pdfBytesToPreviewThumbnail(pdfBytes, {
       quality: 75,
       watermarkText: 'PREVIEW',
       documentId: `${previewDocument.document_type}-${caseId}`,
+      previewLock: { isPaid: previewAccess.isPaid },
     });
 
     const elapsed = Date.now() - startTime;
@@ -167,6 +176,8 @@ export async function GET(
       'X-Product': modernEnglandProduct || requestedProduct || tier,
       'X-Document-Type': previewDocument.document_type,
       'X-Thumbnail-Source': 'generated-pdf',
+      'X-Preview-Is-Paid': String(previewAccess.isPaid),
+      'X-Preview-Lock': 'smart-hybrid',
     };
 
     if (!isVercel) {

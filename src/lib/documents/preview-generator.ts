@@ -29,6 +29,8 @@ import {
 import { mapWizardToASTData } from './ast-wizard-mapper';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import { resolveEffectiveJurisdiction } from '@/lib/tenancy/jurisdiction';
+import { buildPreviewLockSummary, type PreviewLockState } from '@/lib/previews/preview-lock-policy';
+import { applyPreviewLockToImageBuffer } from '@/lib/previews/preview-lock-rendering';
 import crypto from 'crypto';
 
 // Force Node.js runtime - Puppeteer cannot run on Edge
@@ -79,6 +81,7 @@ export interface PreviewPage {
   url: string;
   mimeType: 'image/webp' | 'image/jpeg';
   expiresAt?: string;
+  previewLockState?: PreviewLockState;
 }
 
 /** Preview manifest returned by the API */
@@ -93,6 +96,7 @@ export interface PreviewManifest {
   generatedAt?: string;
   expiresAt?: string;
   factsHash?: string; // Hash of facts for cache validation
+  previewLock?: ReturnType<typeof buildPreviewLockSummary>;
 }
 
 /** Generation options */
@@ -104,6 +108,7 @@ export interface PreviewGenerationOptions {
   userEmail?: string;
   watermarkText?: string;
   forceRegenerate?: boolean;
+  isPaid?: boolean;
 }
 
 /** Internal preview cache entry */
@@ -122,6 +127,7 @@ interface GeneratedPage {
   buffer: Buffer;
   format: ImageFormat;
   mimeType: 'image/webp' | 'image/jpeg';
+  previewLockState?: PreviewLockState;
 }
 
 // ============================================================================
@@ -151,8 +157,8 @@ export function hashFacts(facts: Record<string, unknown>): string {
 /**
  * Get cache key for a preview (includes facts hash)
  */
-function getCacheKey(caseId: string, product: string, tier: string = 'standard'): string {
-  return `preview:${caseId}:${product}:${tier}`;
+function getCacheKey(caseId: string, product: string, tier: string = 'standard', isPaid = false): string {
+  return `preview:${caseId}:${product}:${tier}:${isPaid ? 'paid' : 'unpaid'}`;
 }
 
 /**
@@ -372,10 +378,12 @@ export async function generateMultiPageImages(
   options?: {
     maxPages?: number;
     preferFormat?: 'webp' | 'jpeg';
+    isPaid?: boolean;
   }
 ): Promise<{ pages: GeneratedPage[]; pageCount: number }> {
   const maxPages = options?.maxPages || MAX_PAGES;
   const preferFormat = options?.preferFormat || 'webp';
+  const isPaid = options?.isPaid === true;
   const isTestEnv = process.env.VITEST === 'true' || process.env.NODE_ENV === 'test';
 
   if (isTestEnv) {
@@ -385,6 +393,7 @@ export async function generateMultiPageImages(
           buffer: Buffer.from(`preview:${watermarkText}`),
           format: 'jpeg',
           mimeType: 'image/jpeg',
+          previewLockState: isPaid ? 'clear' : 'partial',
         },
       ],
       pageCount: 1,
@@ -471,14 +480,20 @@ export async function generateMultiPageImages(
           height: A4_HEIGHT,
         },
       });
+      const lockedImage = await applyPreviewLockToImageBuffer(pngBuffer as Buffer, {
+        isPaid,
+        pageCount,
+        pageNumber: i + 1,
+      });
 
       // Convert to preferred format (WebP with JPEG fallback)
       let pageResult: GeneratedPage;
       if (preferFormat === 'webp') {
-        pageResult = await convertToWebP(pngBuffer as Buffer);
+        pageResult = await convertToWebP(lockedImage.buffer);
       } else {
-        pageResult = await convertToJPEG(pngBuffer as Buffer);
+        pageResult = await convertToJPEG(lockedImage.buffer);
       }
+      pageResult.previewLockState = lockedImage.state;
 
       pages.push(pageResult);
     }
@@ -642,8 +657,8 @@ export async function cleanupOldPreviews(): Promise<{ deleted: number; errors: n
 export async function generateTenancyPreview(
   options: PreviewGenerationOptions
 ): Promise<PreviewManifest> {
-  const { caseId, product, tier = 'standard', userId, userEmail, forceRegenerate = false } = options;
-  const cacheKey = getCacheKey(caseId, product, tier);
+  const { caseId, product, tier = 'standard', userId, userEmail, forceRegenerate = false, isPaid = false } = options;
+  const cacheKey = getCacheKey(caseId, product, tier, isPaid);
 
   // Check for in-progress generation (concurrency guard)
   const existingGeneration = generationLocks.get(cacheKey);
@@ -735,12 +750,14 @@ export async function generateTenancyPreview(
       const watermarkText = createWatermarkText(caseId, userHash);
 
       // Generate multi-page images (WebP by default)
-      const { pages, pageCount } = await generateMultiPageImages(previewHtml, watermarkText);
+      const { pages, pageCount } = await generateMultiPageImages(previewHtml, watermarkText, {
+        isPaid,
+      });
 
       console.log(`[Preview] Generated ${pageCount} pages for case ${caseId}`);
 
       // Store images in Supabase
-      const { paths: storagePaths, formats } = await storePreviewImages(caseId, product, pages);
+      const { paths: storagePaths } = await storePreviewImages(caseId, product, pages);
 
       // Generate signed URLs
       const signedUrls = await generateSignedUrls(storagePaths);
@@ -756,12 +773,14 @@ export async function generateTenancyPreview(
         jurisdiction,
         pageCount,
         factsHash,
+        previewLock: buildPreviewLockSummary(pageCount, isPaid),
         pages: signedUrls.map((url, i) => ({
           page: i,
           width: OUTPUT_WIDTH,
           height: OUTPUT_HEIGHT,
           url,
           mimeType: pages[i].mimeType,
+          previewLockState: pages[i].previewLockState,
           expiresAt,
         })),
         generatedAt: new Date().toISOString(),
@@ -808,9 +827,10 @@ export async function generateTenancyPreview(
 export function getPreviewFromCache(
   caseId: string,
   product: string,
-  tier: string = 'standard'
+  tier: string = 'standard',
+  isPaid = false
 ): PreviewManifest | null {
-  const cacheKey = getCacheKey(caseId, product, tier);
+  const cacheKey = getCacheKey(caseId, product, tier, isPaid);
   const cached = previewCache.get(cacheKey);
 
   if (cached && cached.expiresAt > Date.now()) {
@@ -827,9 +847,10 @@ export function isPreviewCacheValid(
   caseId: string,
   product: string,
   tier: string,
-  factsHash: string
+  factsHash: string,
+  isPaid = false
 ): boolean {
-  const cacheKey = getCacheKey(caseId, product, tier);
+  const cacheKey = getCacheKey(caseId, product, tier, isPaid);
   const cached = previewCache.get(cacheKey);
 
   return !!(cached && cached.factsHash === factsHash && cached.expiresAt > Date.now());

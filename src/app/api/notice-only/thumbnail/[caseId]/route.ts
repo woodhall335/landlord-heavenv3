@@ -56,6 +56,7 @@ import {
   buildEnglandSection8CourtPackCalculation,
 } from '@/lib/documents/england-section8-court-pack';
 import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
+import { assertPreviewAllowed } from '@/lib/payments/entitlement';
 
 // Force Node.js runtime - Puppeteer/@sparticuz/chromium cannot run on Edge
 export const runtime = 'nodejs';
@@ -632,6 +633,12 @@ export async function GET(
       return errorResponse('INVALID_DOCUMENT_TYPE', `Unknown document type: ${documentType}`, 400);
     }
 
+    const previewAccess = await assertPreviewAllowed({
+      caseId,
+      product: pack || 'notice_only',
+      userId: user?.id,
+    });
+
     if (pack && PACK_PREVIEW_DOCUMENT_TYPES.has(resolvedDocType)) {
       let previewDocument: EvictionPackDocument | null = null;
 
@@ -679,6 +686,7 @@ export async function GET(
         const thumbnail = await pdfBytesToPreviewThumbnail(previewDocument.pdf, {
           watermarkText: 'PREVIEW',
           documentId: `${caseId}-${resolvedDocType}`,
+          previewLock: { isPaid: previewAccess.isPaid },
         });
 
         const headers: Record<string, string> = {
@@ -689,6 +697,8 @@ export async function GET(
           'X-Thumbnail-Runtime': 'nodejs',
           'X-Document-Type': resolvedDocType,
           'X-Thumbnail-Source': 'generated-pack-pdf',
+          'X-Preview-Is-Paid': String(previewAccess.isPaid),
+          'X-Preview-Lock': 'smart-hybrid',
         };
 
         if (!isVercel) {
@@ -1084,6 +1094,7 @@ export async function GET(
         quality: 75,
         watermarkText: 'PREVIEW',
         documentId: `${caseId}-${resolvedDocType}`,
+        previewLock: { isPaid: previewAccess.isPaid },
       });
 
       const elapsed = Date.now() - startTime;
@@ -1103,6 +1114,8 @@ export async function GET(
         'X-Thumbnail-Runtime': 'nodejs',
         'X-Document-Type': resolvedDocType,
         'X-Thumbnail-Source': 'generated-pdf',
+        'X-Preview-Is-Paid': String(previewAccess.isPaid),
+        'X-Preview-Lock': 'smart-hybrid',
       };
 
       // Only set Content-Length in non-Vercel environments

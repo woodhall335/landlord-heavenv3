@@ -37,6 +37,7 @@ import {
 } from '@/lib/documents/money-claim-financials';
 import { fillN1Form, CaseData } from '@/lib/documents/official-forms-filler';
 import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
+import { assertPreviewAllowed } from '@/lib/payments/entitlement';
 
 // Force Node.js runtime - Puppeteer/@sparticuz/chromium cannot run on Edge
 export const runtime = 'nodejs';
@@ -222,6 +223,12 @@ export async function GET(
       });
     }
 
+    const previewAccess = await assertPreviewAllowed({
+      caseId,
+      product: 'money_claim',
+      userId: user?.id,
+    });
+
     const wizardFacts = caseRow.wizard_facts || caseRow.collected_facts || caseRow.facts || {};
 
     // Determine jurisdiction - Money Claim is ENGLAND-ONLY
@@ -304,6 +311,7 @@ export async function GET(
         quality: 75,
         watermarkText: 'PREVIEW',
         documentId: `n1-${caseId}`,
+        previewLock: { isPaid: previewAccess.isPaid },
       });
 
       const elapsed = Date.now() - startTime;
@@ -321,6 +329,8 @@ export async function GET(
         'X-Thumbnail-Runtime': 'nodejs',
         'X-Document-Type': 'form_n1',
         'X-Source': 'official-pdf',
+        'X-Preview-Is-Paid': String(previewAccess.isPaid),
+        'X-Preview-Lock': 'smart-hybrid',
       };
 
       if (!isVercel) {
@@ -389,6 +399,7 @@ export async function GET(
       quality: 75,
       watermarkText: 'PREVIEW',
       documentId: `${resolvedDocType}-${caseId}`,
+      previewLock: { isPaid: previewAccess.isPaid },
     });
 
     const elapsed = Date.now() - startTime;
@@ -408,6 +419,8 @@ export async function GET(
       'X-Thumbnail-Runtime': 'nodejs',
       'X-Document-Type': resolvedDocType,
       'X-Thumbnail-Source': 'generated-pdf',
+      'X-Preview-Is-Paid': String(previewAccess.isPaid),
+      'X-Preview-Lock': 'smart-hybrid',
     };
 
     // Only set Content-Length in non-Vercel environments

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import { buildPdfEmbedHtml } from '@/lib/previews/documentEmbedShell';
+import { applyPreviewLockToPdfBytes } from '@/lib/previews/preview-lock-rendering';
 import {
   SECTION13_CORE_DOCUMENT_TYPES,
   generateSection13PreviewableDocument,
@@ -11,6 +12,7 @@ import { getDefaultSection13StateForCase, getSection13Comparables } from '@/lib/
 import type { Section13ProductSku } from '@/lib/section13/types';
 import { createAdminClient, tryGetServerUser } from '@/lib/supabase/server';
 import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
+import { assertPreviewAllowed } from '@/lib/payments/entitlement';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -124,6 +126,11 @@ export async function GET(
       facts,
       requestedProduct
     );
+    const previewAccess = await assertPreviewAllowed({
+      caseId,
+      product: productType,
+      userId: user?.id,
+    });
     const state = getDefaultSection13StateForCase(facts, productType);
     const comparables = await getSection13Comparables(supabase as any, caseId);
     state.preview = computeSection13Preview(state, comparables);
@@ -136,7 +143,10 @@ export async function GET(
       comparables,
     });
 
-    const html = buildPdfEmbedHtml(document.title, document.pdf);
+    const lockedPreview = await applyPreviewLockToPdfBytes(document.pdf, {
+      isPaid: previewAccess.isPaid,
+    });
+    const html = buildPdfEmbedHtml(document.title, lockedPreview.pdfBytes);
 
     return new NextResponse(html, {
       status: 200,
@@ -146,6 +156,8 @@ export async function GET(
         'X-Content-Type-Options': 'nosniff',
         'X-Document-Type': documentType,
         'X-Product': productType,
+        'X-Preview-Is-Paid': String(previewAccess.isPaid),
+        'X-Preview-Lock': 'smart-hybrid',
       },
     });
   } catch (error: any) {

@@ -11,6 +11,7 @@ import { NextResponse } from 'next/server';
 import { createAdminClient, tryGetServerUser } from '@/lib/supabase/server';
 import { htmlToPdf } from '@/lib/documents/generator';
 import { buildPdfEmbedHtml } from '@/lib/previews/documentEmbedShell';
+import { applyPreviewLockToPdfBytes } from '@/lib/previews/preview-lock-rendering';
 import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
 import type { TenancyJurisdiction } from '@/lib/documents/ast-generator';
 import {
@@ -19,6 +20,7 @@ import {
 } from '@/lib/residential-letting/products';
 import { resolveTenancyPreviewDocumentHtml } from '@/lib/previews/tenancyPreviewDocuments';
 import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
+import { assertPreviewAllowed } from '@/lib/payments/entitlement';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -143,13 +145,25 @@ export async function GET(
     }
 
     const pdfBytes = await htmlToPdf(previewDocument.html);
-    const html = buildPdfEmbedHtml(previewDocument.title, pdfBytes);
+    const entitlementProduct =
+      jurisdiction === 'england' && modernEnglandProduct ? modernEnglandProduct : requestedProduct || `ast_${tier}`;
+    const previewAccess = await assertPreviewAllowed({
+      caseId,
+      product: entitlementProduct,
+      userId: user?.id,
+    });
+    const lockedPreview = await applyPreviewLockToPdfBytes(pdfBytes, {
+      isPaid: previewAccess.isPaid,
+    });
+    const html = buildPdfEmbedHtml(previewDocument.title, lockedPreview.pdfBytes);
 
     return htmlResponse(html, {
       'X-Jurisdiction': jurisdiction,
       'X-Tier': tier,
       'X-Document-Type': previewDocument.document_type,
       'X-Preview-Source': 'generated-pdf',
+      'X-Preview-Is-Paid': String(previewAccess.isPaid),
+      'X-Preview-Lock': 'smart-hybrid',
       'X-Generation-Time': `${Date.now() - startTime}ms`,
     });
   } catch (error: any) {

@@ -11,6 +11,7 @@ import { getDefaultSection13StateForCase, getSection13Comparables } from '@/lib/
 import type { Section13ProductSku } from '@/lib/section13/types';
 import { createAdminClient, tryGetServerUser } from '@/lib/supabase/server';
 import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
+import { assertPreviewAllowed } from '@/lib/payments/entitlement';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -145,6 +146,11 @@ export async function GET(
       facts,
       requestedProduct
     );
+    const previewAccess = await assertPreviewAllowed({
+      caseId,
+      product: productType,
+      userId: user?.id,
+    });
     const state = getDefaultSection13StateForCase(facts, productType);
     const comparables = await getSection13Comparables(supabase as any, caseId);
     state.preview = computeSection13Preview(state, comparables);
@@ -160,6 +166,7 @@ export async function GET(
       quality: 75,
       watermarkText: 'PREVIEW',
       documentId: `${document.document_type}-${caseId}`,
+      previewLock: { isPaid: previewAccess.isPaid },
     });
 
     const elapsed = Date.now() - startTime;
@@ -178,6 +185,8 @@ export async function GET(
       'X-Thumbnail-Runtime': 'nodejs',
       'X-Document-Type': documentType,
       'X-Product': productType,
+      'X-Preview-Is-Paid': String(previewAccess.isPaid),
+      'X-Preview-Lock': 'smart-hybrid',
     };
 
     if (!isVercel) {

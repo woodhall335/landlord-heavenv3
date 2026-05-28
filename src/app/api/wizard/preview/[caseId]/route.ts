@@ -31,7 +31,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerSupabaseClient, createAdminClient, tryGetServerUser } from '@/lib/supabase/server';
+import { createAdminClient, tryGetServerUser } from '@/lib/supabase/server';
 import {
   generateTenancyPreview,
   getPreviewFromCache,
@@ -44,6 +44,7 @@ import { rateLimiters } from '@/lib/rate-limit';
 import { getEnglandCanonicalTenancyProduct } from '@/lib/tenancy/england-product-model';
 import { isResidentialLettingProductSku } from '@/lib/residential-letting/products';
 import { assertCaseReadAccess } from '@/lib/auth/case-access';
+import { assertPreviewAllowed } from '@/lib/payments/entitlement';
 
 // Force Node.js runtime - Puppeteer cannot run on Edge
 export const runtime = 'nodejs';
@@ -294,16 +295,22 @@ export async function GET(
       return errorResponse('ACCESS_DENIED', 'You do not have permission to view this case', 403, undefined, rateLimitHeaders);
     }
 
+    const previewAccess = await assertPreviewAllowed({
+      caseId,
+      product,
+      userId: user?.id,
+    });
+
     // Calculate facts hash for cache validation
     const facts = caseRow.collected_facts || caseRow.wizard_facts || caseRow.facts || {};
     const currentFactsHash = hashFacts(facts);
 
     // Check cache with facts hash validation (unless force regenerate)
     if (!forceRegenerate) {
-      const cachedManifest = getPreviewFromCache(caseId, product, tier);
+      const cachedManifest = getPreviewFromCache(caseId, product, tier, previewAccess.isPaid);
       if (cachedManifest && cachedManifest.status === 'ready') {
         // Verify facts hash matches
-        if (isPreviewCacheValid(caseId, product, tier, currentFactsHash)) {
+        if (isPreviewCacheValid(caseId, product, tier, currentFactsHash, previewAccess.isPaid)) {
           console.log(`[Wizard-Preview-API] Cache hit for case ${caseId} (facts hash valid)`);
           return NextResponse.json(cachedManifest, {
             status: 200,
@@ -331,6 +338,7 @@ export async function GET(
       userId: user?.id,
       userEmail: user?.email,
       forceRegenerate,
+      isPaid: previewAccess.isPaid,
     });
 
     const elapsed = Date.now() - startTime;
@@ -358,6 +366,7 @@ export async function GET(
         'Cache-Control': 'private, max-age=60',
         'X-Preview-Source': 'generated',
         'X-Page-Count': String(manifest.pageCount || 0),
+        'X-Preview-Is-Paid': String(previewAccess.isPaid),
         'X-Generation-Time': `${elapsed}ms`,
         'X-Facts-Hash': manifest.factsHash || '',
         ...rateLimitHeaders,
@@ -442,8 +451,14 @@ export async function POST(
     }
 
     // Check cache - if ready and not force regenerate, return immediately
+    const previewAccess = await assertPreviewAllowed({
+      caseId,
+      product,
+      userId: user?.id,
+    });
+
     if (!forceRegenerate) {
-      const cachedManifest = getPreviewFromCache(caseId, product, tier);
+      const cachedManifest = getPreviewFromCache(caseId, product, tier, previewAccess.isPaid);
       if (cachedManifest && cachedManifest.status === 'ready') {
         return NextResponse.json(cachedManifest, {
           status: 200,
@@ -472,6 +487,7 @@ export async function POST(
       userId: user?.id,
       userEmail: user?.email,
       forceRegenerate,
+      isPaid: previewAccess.isPaid,
     }).catch((err) => {
       console.error(`[Wizard-Preview-API] Background generation failed:`, err);
     });

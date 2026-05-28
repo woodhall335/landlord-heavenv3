@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { ChevronLeft, ChevronRight, Loader2, AlertCircle, ZoomIn, ZoomOut, X, RefreshCw } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader2, AlertCircle, ZoomIn, ZoomOut, X, RefreshCw, Lock } from 'lucide-react';
+
+export type PreviewLockState = 'clear' | 'partial' | 'locked';
 
 /** Page metadata from the preview API */
 export interface PreviewPage {
@@ -11,6 +13,7 @@ export interface PreviewPage {
   url: string;
   mimeType?: 'image/webp' | 'image/jpeg';
   expiresAt?: string;
+  previewLockState?: PreviewLockState;
 }
 
 /** Preview manifest from the API */
@@ -25,6 +28,11 @@ export interface PreviewManifest {
   generatedAt?: string;
   expiresAt?: string;
   factsHash?: string;
+  previewLock?: {
+    isPaid: boolean;
+    mode: 'smart-hybrid';
+    readablePages: number;
+  };
 }
 
 interface MultiPageViewerProps {
@@ -457,6 +465,11 @@ export function MultiPageViewer({
           {manifest.pages.map((page, index) => {
             const loadState = pageLoadStates.get(index);
             const imageUrl = getImageUrl(page, loadState?.retries || 0);
+            const lockState = page.previewLockState || 'clear';
+            const lockMessage =
+              lockState === 'partial'
+                ? 'This document is partially previewed before payment.'
+                : 'Unlock the full document pack after checkout.';
 
             return (
               <div
@@ -476,6 +489,25 @@ export function MultiPageViewer({
                 <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded z-10">
                   {index + 1}
                 </div>
+
+                {lockState !== 'clear' && (
+                  <div
+                    className={`pointer-events-none absolute inset-x-0 z-20 flex items-center justify-center p-5 ${
+                      lockState === 'partial' ? 'bottom-0 top-1/2' : 'inset-y-0'
+                    }`}
+                    aria-hidden="true"
+                  >
+                    <div className="max-w-[82%] rounded-2xl border border-primary/20 bg-white/95 px-5 py-4 text-center shadow-[0_18px_46px_rgba(76,29,149,0.16)]">
+                      <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                        <Lock className="h-5 w-5" />
+                      </div>
+                      <p className="mt-3 text-sm font-semibold text-gray-900">
+                        {lockState === 'partial' ? 'Lower half locked' : 'Preview locked'}
+                      </p>
+                      <p className="mt-1 text-xs leading-5 text-gray-600">{lockMessage}</p>
+                    </div>
+                  </div>
+                )}
 
                 {/* Loading state */}
                 {loadState?.loading && (
@@ -548,6 +580,11 @@ export function MultiPageViewer({
 
       {/* Footer with page indicator */}
       <div className="sticky bottom-0 z-10 bg-white border-t border-gray-200 px-4 py-2">
+        {manifest.previewLock && !manifest.previewLock.isPaid && (
+          <p className="mb-2 text-center text-xs font-medium text-gray-500">
+            Preview sample pages before payment. Unlock the full document pack after checkout.
+          </p>
+        )}
         <div className="flex gap-1 justify-center overflow-x-auto">
           {manifest.pages.map((_, index) => (
             <button

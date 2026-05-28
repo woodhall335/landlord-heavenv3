@@ -12,6 +12,7 @@ import { fileURLToPath } from 'url';
 import puppeteerCore from 'puppeteer-core';
 import { SITE_CONFIG } from '@/lib/site-config';
 import { normalizeDatesForRender, sanitizeISODatesInHTML, validateHtmlForPdfTextLayer } from './date-normalizer';
+import { applyPreviewLockToPdfBytes } from '@/lib/previews/preview-lock-rendering';
 
 const DEBUG_GOLDEN_PACKS =
   process.env.DEBUG_GOLDEN_PACKS === 'true' ||
@@ -2018,6 +2019,9 @@ export async function pdfToPreviewThumbnail(
     quality?: number;
     watermarkText?: string;
     documentId?: string;
+    previewLock?: {
+      isPaid: boolean;
+    };
   }
 ): Promise<Buffer> {
   const width = options?.width || 400;
@@ -2328,6 +2332,9 @@ export async function pdfBytesToPreviewThumbnail(
     quality?: number;
     watermarkText?: string;
     documentId?: string;
+    previewLock?: {
+      isPaid: boolean;
+    };
   }
 ): Promise<Buffer> {
   const width = options?.width || 400;
@@ -2344,10 +2351,18 @@ export async function pdfBytesToPreviewThumbnail(
     console.log(`[pdfBytesToPreviewThumbnail] Input size: ${pdfBytes.length} bytes`);
 
     // Validate PDF header
-    const pdfBuffer = Buffer.isBuffer(pdfBytes) ? pdfBytes : Buffer.from(pdfBytes);
+    let pdfBuffer = Buffer.isBuffer(pdfBytes) ? pdfBytes : Buffer.from(pdfBytes);
     const pdfHeader = pdfBuffer.slice(0, 5).toString('utf-8');
     if (!pdfHeader.startsWith('%PDF-')) {
       throw new Error(`Invalid PDF: Header "${pdfHeader}" does not start with %PDF-`);
+    }
+
+    if (options?.previewLock) {
+      const lockedPreview = await applyPreviewLockToPdfBytes(pdfBuffer, {
+        isPaid: options.previewLock.isPaid,
+      });
+      pdfBuffer = Buffer.from(lockedPreview.pdfBytes);
+      console.log(`[pdfBytesToPreviewThumbnail] Preview lock states: ${lockedPreview.pageStates.join(', ')}`);
     }
 
     // Convert PDF bytes to base64 for embedding in HTML

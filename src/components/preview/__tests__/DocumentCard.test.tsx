@@ -15,7 +15,7 @@ describe('DocumentCard', () => {
     category: 'Court form',
   };
 
-  it('opens a watermarked preview modal when a preview URL is available', () => {
+  it('opens a protected sample preview modal when a preview URL is available', () => {
     render(
       <DocumentCard
         document={{
@@ -28,15 +28,16 @@ describe('DocumentCard', () => {
       />
     );
 
+    fireEvent.load(screen.getByAltText('Preview of N1 claim form'));
     fireEvent.click(screen.getByText('Preview'));
 
-    expect(screen.getByTitle('N1 claim form full preview')).toHaveAttribute(
+    expect(screen.getByTitle('N1 claim form sample preview')).toHaveAttribute(
       'src',
       '/api/money-claim/embed/case-123?document_type=form_n1'
     );
-    expect(screen.getByTitle('N1 claim form full preview')).toHaveAttribute('sandbox', 'allow-scripts');
+    expect(screen.getByTitle('N1 claim form sample preview')).toHaveAttribute('sandbox', 'allow-scripts');
     expect(
-      screen.getByText('This is a watermarked preview. Downloads stay locked until payment.')
+      screen.getByText('Preview sample pages before payment. Unlock the full document pack after checkout.')
     ).toBeInTheDocument();
   });
 
@@ -56,7 +57,7 @@ describe('DocumentCard', () => {
     expect(screen.queryByText('Preview')).not.toBeInTheDocument();
   });
 
-  it('keeps the full preview available if only the thumbnail fails', () => {
+  it('keeps the sample preview available if only the thumbnail fails', () => {
     render(
       <DocumentCard
         document={{
@@ -72,7 +73,7 @@ describe('DocumentCard', () => {
     fireEvent.error(screen.getByAltText('Preview of N1 claim form'));
     fireEvent.click(screen.getByText('Preview'));
 
-    expect(screen.getByTitle('N1 claim form full preview')).toHaveAttribute(
+    expect(screen.getByTitle('N1 claim form sample preview')).toHaveAttribute(
       'src',
       '/api/money-claim/embed/case-123?document_type=form_n1'
     );

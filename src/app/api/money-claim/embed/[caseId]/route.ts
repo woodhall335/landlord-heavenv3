@@ -15,7 +15,9 @@ import {
 } from '@/lib/documents/money-claim-fillable-pap';
 import { fillN1Form, type CaseData } from '@/lib/documents/official-forms-filler';
 import { buildPdfEmbedHtml } from '@/lib/previews/documentEmbedShell';
+import { applyPreviewLockToPdfBytes } from '@/lib/previews/preview-lock-rendering';
 import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
+import { assertPreviewAllowed } from '@/lib/payments/entitlement';
 import { createAdminClient, tryGetServerUser } from '@/lib/supabase/server';
 import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 
@@ -200,6 +202,12 @@ export async function GET(
       });
     }
 
+    const previewAccess = await assertPreviewAllowed({
+      caseId,
+      product: 'money_claim',
+      userId: user?.id,
+    });
+
     const wizardFacts = caseRow.wizard_facts || caseRow.collected_facts || caseRow.facts || {};
     const jurisdiction = deriveCanonicalJurisdiction(
       caseRow.jurisdiction,
@@ -276,8 +284,11 @@ export async function GET(
       };
 
       const pdfBytes = await fillN1Form(n1Data);
+      const lockedPreview = await applyPreviewLockToPdfBytes(pdfBytes, {
+        isPaid: previewAccess.isPaid,
+      });
       title = 'Form N1 - Money Claim Form';
-      html = buildPdfEmbedHtml(title, pdfBytes);
+      html = buildPdfEmbedHtml(title, lockedPreview.pdfBytes);
     } else {
       const templatePath = getTemplatePath(resolvedDocType);
       if (!templatePath) {
@@ -333,8 +344,11 @@ export async function GET(
           : resolvedDocType === 'financial_statement'
             ? await makeFinancialStatementFillable(rendered.pdf, templateData)
             : rendered.pdf;
+      const lockedPreview = await applyPreviewLockToPdfBytes(previewPdf, {
+        isPaid: previewAccess.isPaid,
+      });
 
-      html = buildPdfEmbedHtml(title, previewPdf);
+      html = buildPdfEmbedHtml(title, lockedPreview.pdfBytes);
     }
 
     if (!html) {
@@ -353,6 +367,8 @@ export async function GET(
         'Cache-Control': 'private, no-store, max-age=0',
         'X-Content-Type-Options': 'nosniff',
         'X-Document-Type': resolvedDocType,
+        'X-Preview-Is-Paid': String(previewAccess.isPaid),
+        'X-Preview-Lock': 'smart-hybrid',
       },
     });
   } catch (error: any) {

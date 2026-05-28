@@ -143,7 +143,7 @@ export function buildPdfEmbedHtml(title: string, pdfBytes: Uint8Array): string {
       <div class="toolbar">
         <div>
           <strong>${escapeHtml(title)}</strong>
-          <span>Full completed preview rendered in-page.</span>
+          <span>Preview sample pages before payment. Unlock the full document pack after checkout.</span>
         </div>
         <div class="toolbar-actions">
           <button type="button" id="zoom-out">Zoom out</button>
@@ -151,9 +151,9 @@ export function buildPdfEmbedHtml(title: string, pdfBytes: Uint8Array): string {
           <button type="button" id="zoom-in">Zoom in</button>
         </div>
       </div>
-      <p id="status">Loading completed preview...</p>
+      <p id="status">Loading protected preview...</p>
       <div class="pages" id="pages">
-        <div class="loading">Preparing the completed preview...</div>
+        <div class="loading">Preparing the protected preview...</div>
       </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -176,7 +176,7 @@ export function buildPdfEmbedHtml(title: string, pdfBytes: Uint8Array): string {
       function applyZoom() {
         pagesEl.style.transform = 'scale(' + zoomScale + ')';
         pagesEl.style.transformOrigin = 'top center';
-        statusEl.textContent = 'Showing the full completed preview at ' + Math.round(zoomScale * 100) + '% zoom.';
+        statusEl.textContent = 'Showing the protected document preview at ' + Math.round(zoomScale * 100) + '% zoom.';
         updateZoomButtons();
       }
 
@@ -215,8 +215,8 @@ export function buildPdfEmbedHtml(title: string, pdfBytes: Uint8Array): string {
           applyZoom();
         } catch (error) {
           console.error('[Document-Embed] Failed to render PDF preview', error);
-          pagesEl.innerHTML = '<div class="error">The completed preview could not be rendered right now.</div>';
-          statusEl.textContent = 'The completed preview could not be loaded.';
+          pagesEl.innerHTML = '<div class="error">The protected preview could not be rendered right now.</div>';
+          statusEl.textContent = 'The protected preview could not be loaded.';
         }
       }
 
@@ -285,7 +285,7 @@ export function buildHtmlEmbedShell(title: string, documentHtml: string): string
   <body>
     <div class="toolbar">
       <strong>${escapeHtml(title)}</strong>
-      <span>Full completed preview rendered from your current answers.</span>
+      <span>Preview sample pages before payment. Unlock the full document pack after checkout.</span>
     </div>
     <div class="document-shell">
       <div class="document-card">${documentHtml}</div>

@@ -22,11 +22,13 @@ import {
 } from '@/lib/documents/eviction-pack-generator';
 import { buildEvictionPackGenerationFacts } from '@/lib/documents/eviction-pack-facts';
 import { buildPdfEmbedHtml } from '@/lib/previews/documentEmbedShell';
+import { applyPreviewLockToPdfBytes } from '@/lib/previews/preview-lock-rendering';
 import {
   applyEnglandSection8CourtPackCalculation,
   buildEnglandSection8CourtPackCalculation,
 } from '@/lib/documents/england-section8-court-pack';
 import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
+import { assertPreviewAllowed } from '@/lib/payments/entitlement';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -335,6 +337,12 @@ export async function GET(
       return errorResponse('INVALID_JURISDICTION', 'Invalid or missing jurisdiction', 422, { caseId });
     }
 
+    const previewAccess = await assertPreviewAllowed({
+      caseId,
+      product: pack || 'notice_only',
+      userId: user?.id,
+    });
+
     let selectedRoute =
       wizardFacts.selected_notice_route ||
       wizardFacts.eviction_route ||
@@ -394,7 +402,10 @@ export async function GET(
         );
       }
 
-      const html = buildPdfEmbedHtml(previewDocument.title, previewDocument.pdf);
+      const lockedPreview = await applyPreviewLockToPdfBytes(previewDocument.pdf, {
+        isPaid: previewAccess.isPaid,
+      });
+      const html = buildPdfEmbedHtml(previewDocument.title, lockedPreview.pdfBytes);
 
       return new NextResponse(html, {
         status: 200,
@@ -403,6 +414,8 @@ export async function GET(
           'Cache-Control': 'private, no-store, max-age=0',
           'X-Content-Type-Options': 'nosniff',
           'X-Preview-Source': 'generated-pack-pdf',
+          'X-Preview-Is-Paid': String(previewAccess.isPaid),
+          'X-Preview-Lock': 'smart-hybrid',
         },
       });
     }
@@ -578,7 +591,10 @@ export async function GET(
     }
 
     const previewPdfBytes = pdfBytes || (htmlContent ? await htmlToPdf(htmlContent) : null);
-    const html = previewPdfBytes ? buildPdfEmbedHtml(title, previewPdfBytes) : null;
+    const lockedPreview = previewPdfBytes
+      ? await applyPreviewLockToPdfBytes(previewPdfBytes, { isPaid: previewAccess.isPaid })
+      : null;
+    const html = lockedPreview ? buildPdfEmbedHtml(title, lockedPreview.pdfBytes) : null;
 
     if (!html) {
       return errorResponse('PREVIEW_GENERATION_FAILED', 'Could not generate completed preview', 500, { caseId, documentType });
@@ -590,6 +606,8 @@ export async function GET(
         'Content-Type': 'text/html; charset=utf-8',
         'Cache-Control': 'private, no-store, max-age=0',
         'X-Content-Type-Options': 'nosniff',
+        'X-Preview-Is-Paid': String(previewAccess.isPaid),
+        'X-Preview-Lock': 'smart-hybrid',
       },
     });
   } catch (error: any) {

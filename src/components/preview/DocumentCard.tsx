@@ -277,7 +277,7 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
               {previewUrl ? (
                 <iframe
                   src={previewUrl}
-                  title={`${document.title} full preview`}
+                  title={`${document.title} sample preview`}
                   className={`h-[75vh] w-full rounded-lg border bg-white shadow-lg transition-opacity duration-200 ${
                     previewLoaded ? 'opacity-100' : 'opacity-0'
                   }`}
@@ -288,7 +288,7 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
               ) : thumbnailUrl ? (
                 <img
                   src={thumbnailUrl}
-                  alt={`Full preview of ${document.title}`}
+                  alt={`Sample preview of ${document.title}`}
                   className={`mx-auto h-auto max-w-full rounded-lg bg-white shadow-lg transition-opacity duration-200 ${
                     previewLoaded ? 'opacity-100' : 'opacity-0'
                   }`}
@@ -299,13 +299,13 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
             </div>
             <div className="p-4 border-t bg-gray-50 flex items-center justify-between">
               <p className="text-sm text-gray-500">
-                This is a watermarked preview. Downloads stay locked until payment.
+                Preview sample pages before payment. Unlock the full document pack after checkout.
               </p>
               <button
                 onClick={onUnlock}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
               >
-                Unlock Full Document
+                Unlock full pack
               </button>
             </div>
           </div>

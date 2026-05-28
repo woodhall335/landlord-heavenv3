@@ -126,7 +126,7 @@ export function DocumentProofShowcase({
             }`}
           >
             <RiFullscreenLine className="h-4 w-4" />
-            {selectedEntry.previewUrl ? (compact ? 'Open full form' : 'Open full completed form') : compact ? 'Open proof' : 'Open larger proof'}
+            {selectedEntry.previewUrl ? (compact ? 'Open sample' : 'Open sample preview') : compact ? 'Open proof' : 'Open larger proof'}
           </button>
         </div>
 
@@ -201,7 +201,7 @@ export function DocumentProofShowcase({
                 <p className="mt-1 text-sm text-slate-600">{selectedEntry.description}</p>
               </div>
               <span className="rounded-full border border-[#ddd0ff] bg-[#f8f3ff] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#6b46c1]">
-                {selectedEntry.previewUrl ? 'Click to open full form' : 'First-page proof'}
+                {selectedEntry.previewUrl ? 'Sample preview' : 'First-page proof'}
               </span>
             </div>
           </div>
@@ -222,7 +222,7 @@ export function DocumentProofShowcase({
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#6b46c1]">
-                  Completed document viewer
+                  Protected preview
                 </p>
                 <p className="mt-1 text-sm text-slate-600">
                   {selectedIndex + 1} of {orderedEntries.length} in this pack
@@ -287,7 +287,7 @@ export function DocumentProofShowcase({
                 <iframe
                   key={selectedEntry.previewUrl}
                   src={selectedEntry.previewUrl}
-                  title={`${selectedEntry.title} full completed preview`}
+                  title={`${selectedEntry.title} sample preview`}
                   className="h-full min-h-[58vh] w-full bg-white sm:min-h-[70vh]"
                   loading="lazy"
                   sandbox="allow-scripts"
@@ -309,7 +309,7 @@ export function DocumentProofShowcase({
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="text-sm text-slate-600">
                 {selectedEntry.groupLabel ? `${selectedEntry.groupLabel}. ` : ''}
-                Tap through the documents to review the full completed pack before continuing.
+                Preview sample pages before payment. Unlock the full document pack after checkout.
               </div>
               <div className="flex gap-2">
                 <button
