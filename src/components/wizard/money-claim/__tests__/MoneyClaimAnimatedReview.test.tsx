@@ -6,7 +6,6 @@ import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
 import {
   getMoneyClaimReviewPhaseIndex,
   getMoneyClaimReviewProgress,
-  getMoneyClaimReviewSessionKey,
   getMoneyClaimVisibleSections,
   MONEY_CLAIM_REVIEW_DURATION_MS,
   MoneyClaimAnimatedReview,
@@ -133,23 +132,16 @@ describe('MoneyClaimAnimatedReview component', () => {
     expect(screen.getByText('Continue to document preview')).toBeEnabled();
     expect(screen.getByText('£1,775.00')).toBeInTheDocument();
     expect(screen.getByText('£1,810.50')).toBeInTheDocument();
-    expect(sessionStorage.getItem(getMoneyClaimReviewSessionKey('case-123'))).toBe('complete');
   });
 
-  it('skips the animation for the same case once the session has seen it', async () => {
-    sessionStorage.setItem(getMoneyClaimReviewSessionKey('case-123'), 'complete');
-
+  it('runs the full animation even when the same case is viewed again in the session', () => {
     render(<MoneyClaimAnimatedReview {...defaultProps} />);
 
-    await act(async () => {});
-
-    expect(screen.getByText('Continue to document preview')).toBeEnabled();
-    expect(screen.queryByText('Review running...')).not.toBeInTheDocument();
+    expect(screen.getByText('Review running...')).toBeDisabled();
+    expect(screen.queryByText('Continue to document preview')).not.toBeInTheDocument();
   });
 
   it('runs again for a different case id', () => {
-    sessionStorage.setItem(getMoneyClaimReviewSessionKey('case-123'), 'complete');
-
     render(<MoneyClaimAnimatedReview {...defaultProps} caseId="case-456" />);
 
     expect(screen.getByText('Review running...')).toBeDisabled();

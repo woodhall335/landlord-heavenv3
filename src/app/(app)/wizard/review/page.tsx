@@ -59,6 +59,7 @@ import {
 } from '@/components/ui/ComplianceTimingBlocker';
 import { isComplianceTimingBlock } from '@/lib/documents/compliance-timing-types';
 import { JurisdictionExplainer, ChecksSummaryBox } from '@/components/wizard/ReviewValueComponents';
+import { AnimatedReviewShell, type AnimatedReviewShellProps } from '@/components/wizard/AnimatedReviewShell';
 import { MoneyClaimAnimatedReview } from '@/components/wizard/money-claim/MoneyClaimAnimatedReview';
 
 // Tenancy product tier utilities - single source of truth for pricing and product resolution
@@ -112,6 +113,244 @@ const gbpFormatter = new Intl.NumberFormat('en-GB', {
 
 function formatCurrencyAmount(amount: number): string {
   return gbpFormatter.format(amount);
+}
+
+function readReviewText(value: unknown): string {
+  if (typeof value === 'string') return value;
+  if (value && typeof value === 'object') {
+    const item = value as { message?: unknown; title?: unknown; detail?: unknown };
+    return String(item.message || item.title || item.detail || '').trim();
+  }
+  return '';
+}
+
+function countItems(value: unknown): number {
+  if (Array.isArray(value)) return value.length;
+  if (typeof value === 'string' && value.trim()) return 1;
+  return 0;
+}
+
+function buildAnimatedReviewConfig({
+  analysis,
+  product,
+  jurisdiction,
+  isNoticeOnlyFlow,
+  isTenancyFlow,
+  isResidentialStandaloneFlow,
+  caseStrengthBand,
+  readinessSummary,
+  redFlags,
+  complianceIssues,
+}: {
+  analysis: any;
+  product: string;
+  jurisdiction: string;
+  caseType: string;
+  isNoticeOnlyFlow: boolean;
+  isTenancyFlow: boolean;
+  isResidentialStandaloneFlow: boolean;
+  caseStrengthBand: string;
+  readinessSummary: string | null;
+  redFlags: string[];
+  complianceIssues: string[];
+}): Omit<AnimatedReviewShellProps, 'children'> {
+  const facts = analysis?.case_facts || {};
+  const score = analysis?.case_strength_score;
+  const scoreValue = Number.isFinite(Number(score)) ? `${Number(score)}/100` : 'Reviewing';
+  const warnings = [
+    ...redFlags,
+    ...complianceIssues,
+    ...(analysis?.case_health?.warnings || []).map(readReviewText),
+    ...(analysis?.case_health?.risks || []).map(readReviewText),
+  ].filter(Boolean).slice(0, 5);
+  const positives = (analysis?.case_health?.positives || [])
+    .map(readReviewText)
+    .filter(Boolean)
+    .slice(0, 4);
+  const jurisdictionLabel =
+    jurisdiction === 'scotland'
+      ? 'Scotland'
+      : jurisdiction === 'wales'
+      ? 'Wales'
+      : jurisdiction === 'northern_ireland'
+      ? 'Northern Ireland'
+      : 'England';
+
+  if (isNoticeOnlyFlow) {
+    const selectedGroundCount =
+      countItems(facts.selected_grounds) ||
+      countItems(facts.grounds) ||
+      countItems(facts.grounds_for_possession);
+    return {
+      title: 'Notice review',
+      subtitle:
+        readinessSummary ||
+        'We are checking the landlord answers against the notice route before preparing the notice pack.',
+      routeLabel: `${jurisdictionLabel} notice route`,
+      scoreLabel: 'Notice readiness',
+      scoreValue,
+      scoreTone: caseStrengthBand,
+      phases: [
+        {
+          label: 'Opening notice review',
+          shortLabel: 'Route',
+          detail: 'Checking the jurisdiction, notice type and possession route selected for this landlord file.',
+        },
+        {
+          label: 'Checking grounds and timing',
+          shortLabel: 'Notice period',
+          detail: 'Reviewing selected grounds, rent arrears facts and the notice period logic.',
+        },
+        {
+          label: 'Checking statutory risk points',
+          shortLabel: 'Compliance',
+          detail: 'Looking for issues that could make the notice harder to rely on later.',
+        },
+        {
+          label: 'Preparing service prompts',
+          shortLabel: 'Service',
+          detail: 'Preparing reminders for service, dates, evidence and what the landlord should keep.',
+        },
+        {
+          label: 'Preparing final notice review',
+          shortLabel: 'Results',
+          detail: 'Putting together warnings, good points and the next action.',
+        },
+      ],
+      stats: [
+        { label: 'Jurisdiction', value: jurisdictionLabel },
+        { label: 'Grounds', value: selectedGroundCount ? String(selectedGroundCount) : 'Checking' },
+        { label: 'Warnings', value: String(warnings.length) },
+        { label: 'Output', value: 'Notice pack' },
+      ],
+      checks: [
+        'Notice route checked',
+        'Grounds reviewed',
+        'Timing reviewed',
+        'Service prompts prepared',
+        'Evidence reminders prepared',
+        'Final notice review ready',
+      ],
+      warnings,
+      positives: positives.length ? positives : ['The notice pack will be built from the answers provided.'],
+    };
+  }
+
+  if (isTenancyFlow || isResidentialStandaloneFlow) {
+    const rentAmount = Number(facts.rent_amount || facts.monthly_rent || facts.new_rent_amount || 0);
+    const startDate = facts.tenancy_start_date || facts.start_date || facts.document_date;
+    return {
+      title: isResidentialStandaloneFlow ? 'Document review' : 'Tenancy agreement review',
+      subtitle:
+        readinessSummary ||
+        'We are checking the landlord answers against the document route before preparing the agreement pack.',
+      routeLabel: `${jurisdictionLabel} landlord document route`,
+      scoreLabel: 'Document readiness',
+      scoreValue,
+      scoreTone: caseStrengthBand,
+      phases: [
+        {
+          label: 'Opening document review',
+          shortLabel: 'Route',
+          detail: 'Checking the product route, jurisdiction and landlord document type.',
+        },
+        {
+          label: 'Checking property and parties',
+          shortLabel: 'Parties',
+          detail: 'Reviewing landlord, tenant or occupier details and the property information.',
+        },
+        {
+          label: 'Checking rent and dates',
+          shortLabel: 'Terms',
+          detail: 'Reviewing rent, dates, term structure and any route-specific agreement details.',
+        },
+        {
+          label: 'Checking supporting documents',
+          shortLabel: 'Appendices',
+          detail: 'Preparing reminders for the records and appendices the landlord should keep with the pack.',
+        },
+        {
+          label: 'Preparing final document review',
+          shortLabel: 'Results',
+          detail: 'Putting together good points, warnings and the next action.',
+        },
+      ],
+      stats: [
+        { label: 'Jurisdiction', value: jurisdictionLabel },
+        { label: 'Rent', value: rentAmount > 0 ? formatCurrencyAmount(rentAmount) : 'Checking' },
+        { label: 'Start date', value: startDate ? String(startDate) : 'Checking' },
+        { label: 'Output', value: isResidentialStandaloneFlow ? 'Document pack' : 'Agreement pack' },
+      ],
+      checks: [
+        'Document route checked',
+        'Property details reviewed',
+        'Party details reviewed',
+        'Rent and dates reviewed',
+        'Supporting prompts prepared',
+        'Final document review ready',
+      ],
+      warnings,
+      positives: positives.length ? positives : ['The document will be generated from the landlord answers provided.'],
+    };
+  }
+
+  const selectedGroundCount =
+    countItems(facts.selected_grounds) ||
+    countItems(facts.grounds) ||
+    countItems(facts.grounds_for_possession);
+  return {
+    title: 'Possession pack review',
+    subtitle:
+      readinessSummary ||
+      'We are checking the landlord answers against the possession route before preparing the court pack.',
+    routeLabel: `${jurisdictionLabel} possession route`,
+    scoreLabel: 'Pack readiness',
+    scoreValue,
+    scoreTone: caseStrengthBand,
+    phases: [
+      {
+        label: 'Opening possession review',
+        shortLabel: 'Route',
+        detail: 'Checking the case route, jurisdiction and product selected for this landlord file.',
+      },
+      {
+        label: 'Checking notice and grounds',
+        shortLabel: 'Notice',
+        detail: 'Reviewing notice status, selected grounds and timing before the court pack is prepared.',
+      },
+      {
+        label: 'Checking court readiness',
+        shortLabel: 'Court file',
+        detail: 'Reviewing claim forms, service records, arrears evidence and hearing preparation prompts.',
+      },
+      {
+        label: 'Checking evidence prompts',
+        shortLabel: 'Evidence',
+        detail: 'Preparing reminders for the records the landlord should keep ready.',
+      },
+      {
+        label: 'Preparing final possession review',
+        shortLabel: 'Results',
+        detail: 'Putting together good points, warnings and the next action.',
+      },
+    ],
+    stats: [
+      { label: 'Jurisdiction', value: jurisdictionLabel },
+      { label: 'Grounds', value: selectedGroundCount ? String(selectedGroundCount) : 'Checking' },
+      { label: 'Warnings', value: String(warnings.length) },
+      { label: 'Output', value: product === 'complete_pack' ? 'Court pack' : 'Possession pack' },
+    ],
+    checks: [
+      'Possession route checked',
+      'Notice status reviewed',
+      'Grounds reviewed',
+      'Court file prompts prepared',
+      'Evidence reminders prepared',
+      'Final possession review ready',
+    ],
+    warnings,
+    positives: positives.length ? positives : ['The possession pack will be generated from the landlord answers provided.'],
+  };
 }
 
 function ReviewPageInner() {
@@ -480,6 +719,20 @@ function ReviewPageInner() {
     return null;
   })();
 
+  const animatedReviewConfig = buildAnimatedReviewConfig({
+    analysis,
+    product,
+    jurisdiction,
+    caseType,
+    isNoticeOnlyFlow,
+    isTenancyFlow,
+    isResidentialStandaloneFlow,
+    caseStrengthBand,
+    readinessSummary,
+    redFlags,
+    complianceIssues,
+  });
+
   // Render Money Claim specific content
   if (isMoneyClaimFlow) {
     return <MoneyClaimAnimatedReview
@@ -503,37 +756,95 @@ function ReviewPageInner() {
 
   // Render Notice Only specific content
   if (isNoticeOnlyFlow) {
-    return <NoticeOnlyReviewContent
-      caseId={caseId}
-      analysis={analysis}
-      jurisdiction={jurisdiction}
-      readinessBadge={readinessBadge}
-      redFlags={redFlags}
-      complianceIssues={complianceIssues}
-      blockingIssues={evictionBlockingIssues}
-      hasBlockingIssues={hasBlockingIssues}
-      hasAcknowledgedBlockers={hasAcknowledgedBlockers}
-      onAcknowledgeBlockers={setHasAcknowledgedBlockers}
-      onFixIssues={handleFixIssues}
-      recommendations={reviewRecommendations}
-      selectedAddOns={selectedAddOns}
-      onToggleAddOn={toggleAddOn}
-      onEdit={handleEdit}
-      onProceed={handleProceed}
-      isPaid={isPaid}
-      isRegenerating={isRegenerating}
-      isLoadingPaymentStatus={isLoadingPaymentStatus}
-    />;
+    return (
+      <AnimatedReviewShell {...animatedReviewConfig}>
+        <NoticeOnlyReviewContent
+          caseId={caseId}
+          analysis={analysis}
+          jurisdiction={jurisdiction}
+          readinessBadge={readinessBadge}
+          redFlags={redFlags}
+          complianceIssues={complianceIssues}
+          blockingIssues={evictionBlockingIssues}
+          hasBlockingIssues={hasBlockingIssues}
+          hasAcknowledgedBlockers={hasAcknowledgedBlockers}
+          onAcknowledgeBlockers={setHasAcknowledgedBlockers}
+          onFixIssues={handleFixIssues}
+          recommendations={reviewRecommendations}
+          selectedAddOns={selectedAddOns}
+          onToggleAddOn={toggleAddOn}
+          onEdit={handleEdit}
+          onProceed={handleProceed}
+          isPaid={isPaid}
+          isRegenerating={isRegenerating}
+          isLoadingPaymentStatus={isLoadingPaymentStatus}
+        />
+      </AnimatedReviewShell>
+    );
   }
 
   // Render Tenancy Agreement specific content
   if (isTenancyFlow) {
     if (isResidentialStandaloneFlow) {
-      return <ResidentialStandaloneReviewContent
+      return (
+        <AnimatedReviewShell {...animatedReviewConfig}>
+          <ResidentialStandaloneReviewContent
+            caseId={caseId}
+            analysis={analysis}
+            jurisdiction={jurisdiction}
+            product={product}
+            recommendations={reviewRecommendations}
+            selectedAddOns={selectedAddOns}
+            onToggleAddOn={toggleAddOn}
+            onEdit={handleEdit}
+            onProceed={handleProceed}
+            isPaid={isPaid}
+            isRegenerating={isRegenerating}
+            isLoadingPaymentStatus={isLoadingPaymentStatus}
+          />
+        </AnimatedReviewShell>
+      );
+    }
+
+    return (
+      <AnimatedReviewShell {...animatedReviewConfig}>
+        <TenancyReviewContent
+          caseId={caseId}
+          analysis={analysis}
+          jurisdiction={jurisdiction}
+          product={product}
+          recommendations={reviewRecommendations}
+          selectedAddOns={selectedAddOns}
+          onToggleAddOn={toggleAddOn}
+          onEdit={handleEdit}
+          onProceed={handleProceed}
+          isPaid={isPaid}
+          isRegenerating={isRegenerating}
+          isLoadingPaymentStatus={isLoadingPaymentStatus}
+        />
+      </AnimatedReviewShell>
+    );
+  }
+
+  // Render Eviction Complete Pack content
+  return (
+    <AnimatedReviewShell {...animatedReviewConfig}>
+      <EvictionReviewContent
         caseId={caseId}
         analysis={analysis}
         jurisdiction={jurisdiction}
         product={product}
+        readinessBadge={readinessBadge}
+        caseStrengthBand={caseStrengthBand}
+        readinessSummary={readinessSummary}
+        redFlags={redFlags}
+        complianceIssues={complianceIssues}
+        evidence={evidence}
+        blockingIssues={evictionBlockingIssues}
+        hasBlockingIssues={hasBlockingIssues}
+        hasAcknowledgedBlockers={hasAcknowledgedBlockers}
+        onAcknowledgeBlockers={setHasAcknowledgedBlockers}
+        onFixIssues={handleFixIssues}
         recommendations={reviewRecommendations}
         selectedAddOns={selectedAddOns}
         onToggleAddOn={toggleAddOn}
@@ -542,64 +853,22 @@ function ReviewPageInner() {
         isPaid={isPaid}
         isRegenerating={isRegenerating}
         isLoadingPaymentStatus={isLoadingPaymentStatus}
-      />;
-    }
-
-    return <TenancyReviewContent
-      caseId={caseId}
-      analysis={analysis}
-      jurisdiction={jurisdiction}
-      product={product}
-      recommendations={reviewRecommendations}
-      selectedAddOns={selectedAddOns}
-      onToggleAddOn={toggleAddOn}
-      onEdit={handleEdit}
-      onProceed={handleProceed}
-      isPaid={isPaid}
-      isRegenerating={isRegenerating}
-      isLoadingPaymentStatus={isLoadingPaymentStatus}
-    />;
-  }
-
-  // Render Eviction Complete Pack content
-  return <EvictionReviewContent
-    caseId={caseId}
-    analysis={analysis}
-    jurisdiction={jurisdiction}
-    product={product}
-    readinessBadge={readinessBadge}
-    caseStrengthBand={caseStrengthBand}
-    readinessSummary={readinessSummary}
-    redFlags={redFlags}
-    complianceIssues={complianceIssues}
-    evidence={evidence}
-    blockingIssues={evictionBlockingIssues}
-    hasBlockingIssues={hasBlockingIssues}
-    hasAcknowledgedBlockers={hasAcknowledgedBlockers}
-    onAcknowledgeBlockers={setHasAcknowledgedBlockers}
-    onFixIssues={handleFixIssues}
-    recommendations={reviewRecommendations}
-    selectedAddOns={selectedAddOns}
-    onToggleAddOn={toggleAddOn}
-    onEdit={handleEdit}
-    onProceed={handleProceed}
-    isPaid={isPaid}
-    isRegenerating={isRegenerating}
-    isLoadingPaymentStatus={isLoadingPaymentStatus}
-    regenerationError={regenerationError}
-    onFixSignatureDate={handleFixSignatureDate}
-    complianceTimingError={complianceTimingError}
-    onEditCompliance={() => {
-      // Navigate to compliance section of the wizard
-      const params = new URLSearchParams({
-        case_id: caseId || '',
-        step: 'section21_compliance',
-      });
-      if (product) params.set('product', product);
-      if (jurisdiction) params.set('jurisdiction', jurisdiction);
-      router.push(`/wizard/flow?${params.toString()}`);
-    }}
-  />;
+        regenerationError={regenerationError}
+        onFixSignatureDate={handleFixSignatureDate}
+        complianceTimingError={complianceTimingError}
+        onEditCompliance={() => {
+          // Navigate to compliance section of the wizard
+          const params = new URLSearchParams({
+            case_id: caseId || '',
+            step: 'section21_compliance',
+          });
+          if (product) params.set('product', product);
+          if (jurisdiction) params.set('jurisdiction', jurisdiction);
+          router.push(`/wizard/flow?${params.toString()}`);
+        }}
+      />
+    </AnimatedReviewShell>
+  );
 }
 
 // ============================================================================

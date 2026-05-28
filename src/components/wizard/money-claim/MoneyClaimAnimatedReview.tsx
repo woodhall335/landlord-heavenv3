@@ -88,10 +88,6 @@ export function getMoneyClaimVisibleSections(progress: number) {
   };
 }
 
-export function getMoneyClaimReviewSessionKey(caseId: string) {
-  return `money-claim-review-animation:${caseId}`;
-}
-
 function formatCurrencyAmount(value: number | null | undefined): string {
   return gbpFormatter.format(Number.isFinite(Number(value)) ? Number(value) : 0);
 }
@@ -122,17 +118,8 @@ function prefersReducedMotion() {
   );
 }
 
-function hasCompletedReviewAnimation(caseId: string) {
-  return (
-    typeof window !== 'undefined' &&
-    window.sessionStorage?.getItem(getMoneyClaimReviewSessionKey(caseId)) === 'complete'
-  );
-}
-
-function getInitialElapsed(caseId: string) {
-  return hasCompletedReviewAnimation(caseId) || prefersReducedMotion()
-    ? MONEY_CLAIM_REVIEW_DURATION_MS
-    : 0;
+function getInitialElapsed() {
+  return prefersReducedMotion() ? MONEY_CLAIM_REVIEW_DURATION_MS : 0;
 }
 
 function useReducedMotion() {
@@ -186,16 +173,10 @@ export function MoneyClaimAnimatedReview({
   isLoadingPaymentStatus,
 }: MoneyClaimAnimatedReviewProps) {
   const reducedMotion = useReducedMotion();
-  const [elapsed, setElapsed] = useState(() => getInitialElapsed(caseId));
+  const [elapsed, setElapsed] = useState(getInitialElapsed);
 
   useEffect(() => {
-    const sessionKey = getMoneyClaimReviewSessionKey(caseId);
-    const alreadyViewed = hasCompletedReviewAnimation(caseId);
-
-    if (alreadyViewed || reducedMotion) {
-      if (typeof window !== 'undefined') {
-        window.sessionStorage?.setItem(sessionKey, 'complete');
-      }
+    if (reducedMotion) {
       const syncTimer = window.setTimeout(() => setElapsed(MONEY_CLAIM_REVIEW_DURATION_MS), 0);
       return () => window.clearTimeout(syncTimer);
     }
@@ -204,7 +185,6 @@ export function MoneyClaimAnimatedReview({
     const resetTimer = window.setTimeout(() => setElapsed(0), 0);
     const completionTimer = window.setTimeout(() => {
       setElapsed(MONEY_CLAIM_REVIEW_DURATION_MS);
-      window.sessionStorage?.setItem(sessionKey, 'complete');
     }, MONEY_CLAIM_REVIEW_DURATION_MS);
 
     const timer = window.setInterval(() => {
@@ -213,7 +193,6 @@ export function MoneyClaimAnimatedReview({
       if (nextElapsed >= MONEY_CLAIM_REVIEW_DURATION_MS) {
         window.clearInterval(timer);
         window.clearTimeout(completionTimer);
-        window.sessionStorage?.setItem(sessionKey, 'complete');
       }
     }, TICK_MS);
 
