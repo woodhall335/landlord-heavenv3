@@ -8,6 +8,8 @@ export interface AskHeavenStepDraftTarget {
   questionText: string;
   currentValue?: string | null;
   seedAnswer: string;
+  localDraft?: string;
+  context?: Record<string, any>;
   apply: (text: string) => void | Promise<void>;
 }
 
@@ -55,6 +57,13 @@ export const AskHeavenStepAutofill: React.FC<AskHeavenStepAutofillProps> = ({
 
     try {
       for (const target of blankTargets) {
+        const localDraft = String(target.localDraft || '').trim();
+        if (localDraft) {
+          await target.apply(localDraft);
+          applied += 1;
+          continue;
+        }
+
         const response = await fetch('/api/ask-heaven/enhance-answer', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -66,6 +75,7 @@ export const AskHeavenStepAutofill: React.FC<AskHeavenStepAutofillProps> = ({
             question_id: target.id,
             question_text: target.questionText,
             answer: target.seedAnswer,
+            context: target.context || {},
           }),
         });
 

@@ -119,8 +119,8 @@ export async function enhanceAnswer(
     caseType,
     decisionContext,
     caseIntelContext,
+    wizardFacts,
   } = args;
-  // wizardFacts is available in args but not currently used in this function
 
   // If no key, just skip quietly
   if (!process.env.OPENAI_API_KEY && !hasCustomJsonAIClient()) {
@@ -152,6 +152,10 @@ export async function enhanceAnswer(
   // Build decision engine context (if available)
   const decisionEngineContext = decisionContext
     ? buildDecisionEngineContext(decisionContext)
+    : '';
+
+  const wizardFactContext = wizardFacts && Object.keys(wizardFacts).length > 0
+    ? `Additional wizard facts and drafting context:\n${JSON.stringify(wizardFacts, null, 2)}`
     : '';
 
   // Extract consistency flags from case-intel (if available)
@@ -199,6 +203,8 @@ General wording rules:
 ${jurisdictionGuidance}
 
 ${decisionEngineContext}
+
+${wizardFactContext}
 
 CRITICAL JSON INSTRUCTIONS:
 - You must respond ONLY with a single JSON object.

@@ -41,17 +41,75 @@ describe('section 8 notice date calculator', () => {
     expect(result.earliestCourtDate).toBe('2026-09-27');
   });
 
-  it('warns when a restricted sale or occupation ground may be too early', () => {
+  it('blocks Ground 1A when the notice expiry is before the 12-month ground availability date', () => {
     const result = calculateSection8NoticeDateResult({
       problem: 'sale',
       groundCodes: ['1A'],
-      actionDate: '2026-05-27',
+      actionDate: '2026-05-29',
+      serviceMethod: 'first_class_post',
+      tenancyStartDate: '2026-01-01',
+      noticeStatus: 'not_served',
+    });
+
+    expect(result.deemedServiceDate).toBe('2026-06-02');
+    expect(result.earliestCourtDate).toBe('2026-10-02');
+    expect(result.blockingIssues).toHaveLength(1);
+    expect(result.blockingIssues[0]).toMatchObject({
+      code: 'SECTION_8_BLOCKED',
+      groundCode: '1A',
+      earliestGroundExpiryDate: '2027-01-01',
+      currentNoticeExpiryDate: '2026-10-02',
+    });
+    expect(result.blockingIssues[0].message).toContain('cannot be relied upon');
+    expect(result.groundAvailability[0]).toMatchObject({
+      groundCode: '1A',
+      status: 'not_currently_available',
+      statusLabel: 'Not currently available',
+      earliestGroundExpiryDate: '2027-01-01',
+    });
+    expect(result.warnings.join(' ')).not.toContain('check whether it can be used');
+  });
+
+  it('marks Ground 1A available when the notice expiry is on or after the 12-month point', () => {
+    const result = calculateSection8NoticeDateResult({
+      problem: 'sale',
+      groundCodes: ['1A'],
+      actionDate: '2026-09-01',
       serviceMethod: 'hand_delivery',
       tenancyStartDate: '2026-01-01',
       noticeStatus: 'not_served',
     });
 
-    expect(result.warnings.join(' ')).toContain('before 01 January 2027');
+    expect(result.earliestCourtDate).toBe('2027-01-01');
+    expect(result.blockingIssues).toEqual([]);
+    expect(result.groundAvailability[0]).toMatchObject({
+      groundCode: '1A',
+      status: 'available',
+      statusLabel: 'Available',
+      earliestGroundExpiryDate: '2027-01-01',
+    });
+  });
+
+  it('uses landlord-facing evidence labels for Ground 1A sale evidence', () => {
+    const result = calculateSection8NoticeDateResult({
+      problem: 'sale',
+      groundCodes: ['1A'],
+      actionDate: '2026-09-01',
+      serviceMethod: 'hand_delivery',
+      tenancyStartDate: '2026-01-01',
+      noticeStatus: 'not_served',
+    });
+
+    expect(result.evidenceChecklist).toEqual(
+      expect.arrayContaining([
+        'Proof of ownership of the property',
+        'Statement confirming the genuine intention to sell',
+        'Supporting sale evidence, such as estate agent instruction, valuation, marketing plan, or sale preparation records',
+      ]),
+    );
+    expect(result.evidenceChecklist).not.toContain('ownership proof');
+    expect(result.evidenceChecklist).not.toContain('sale intention statement');
+    expect(result.evidenceChecklist).not.toContain('sale evidence');
   });
 
   it('sends expired notices to the court pack upsell', () => {

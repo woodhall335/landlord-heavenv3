@@ -15,6 +15,7 @@ type EnhanceAnswerBody = {
   question_id?: string;
   question_text?: string;
   answer?: string;
+  context?: Record<string, any>;
 };
 
 export async function POST(req: Request) {
@@ -37,6 +38,7 @@ export async function POST(req: Request) {
     question_id,
     question_text,
     answer,
+    context,
   } = body;
 
   if (!answer || !question_id) {
@@ -61,6 +63,7 @@ export async function POST(req: Request) {
     jurisdiction,
     product,
     caseType: case_type,
+    wizardFacts: context,
     // decisionContext, caseIntelContext, wizardFacts can be wired later if needed
   });
 

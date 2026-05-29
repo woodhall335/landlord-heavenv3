@@ -163,6 +163,9 @@ export const AskHeavenInlineEnhancer: React.FC<AskHeavenInlineEnhancerProps> = (
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             case_id: caseId,
+            case_type: context?.case_type || 'eviction',
+            jurisdiction: context?.jurisdiction,
+            product: context?.product,
             question_id: questionId,
             question_text: questionText || questionId,
             answer: trimmedAnswer,

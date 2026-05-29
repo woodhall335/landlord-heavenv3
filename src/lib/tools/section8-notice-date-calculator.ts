@@ -40,6 +40,8 @@ export interface Section8NoticeDateResult {
   noticePeriodDays: number;
   noticePeriodLabel: string;
   explanation: string;
+  groundAvailability: Section8GroundAvailability[];
+  blockingIssues: Section8BlockingIssue[];
   evidenceChecklist: string[];
   warnings: string[];
   nextStep: {
@@ -51,6 +53,29 @@ export interface Section8NoticeDateResult {
   };
   secondaryActions: Array<{ label: string; href: string }>;
   hasImmediateApplicationGround: boolean;
+}
+
+export type Section8GroundAvailabilityStatus = 'available' | 'not_currently_available' | 'needs_review';
+
+export interface Section8GroundAvailability {
+  groundCode: EnglandGroundCode;
+  groundTitle: string;
+  status: Section8GroundAvailabilityStatus;
+  statusLabel: 'Available' | 'Not currently available' | 'Needs review';
+  earliestGroundExpiryDate?: string;
+  currentNoticeExpiryDate: string;
+  message: string;
+}
+
+export interface Section8BlockingIssue {
+  code: 'SECTION_8_BLOCKED';
+  groundCode: EnglandGroundCode;
+  groundTitle: string;
+  message: string;
+  tenancyStartDate: string;
+  earliestGroundExpiryDate: string;
+  currentNoticeExpiryDate: string;
+  action: string;
 }
 
 export const SECTION8_NOTICE_PROBLEM_OPTIONS: Array<{
@@ -229,6 +254,22 @@ function unique(items: string[]): string[] {
   return Array.from(new Set(items.filter(Boolean)));
 }
 
+function compareDateOnly(left: string, right: string): number {
+  const leftTime = parseDateOnly(left).getTime();
+  const rightTime = parseDateOnly(right).getTime();
+  return leftTime === rightTime ? 0 : leftTime < rightTime ? -1 : 1;
+}
+
+function polishEvidenceLabel(item: string): string {
+  const polished: Record<string, string> = {
+    'ownership proof': 'Proof of ownership of the property',
+    'sale intention statement': 'Statement confirming the genuine intention to sell',
+    'sale evidence': 'Supporting sale evidence, such as estate agent instruction, valuation, marketing plan, or sale preparation records',
+  };
+
+  return polished[item] || item;
+}
+
 function buildNoticePeriodLabel(days: number, grounds: EnglandGroundDefinition[]): string {
   const monthGround = grounds.find((ground) => ground.noticePeriodMonths && ground.noticePeriodDays === days);
 
@@ -255,12 +296,89 @@ function buildEvidenceChecklist(grounds: EnglandGroundDefinition[]): string[] {
   return unique([
     'Completed Form 3A notice with the same grounds and dates used in your file',
     'Proof of service plan, plus N215 certificate of service if the case later goes to court',
-    ...evidence,
+    ...evidence.map(polishEvidenceLabel),
     'Short case summary explaining what has happened and what the landlord wants next',
   ]).slice(0, 9);
 }
 
-function buildWarnings(input: Section8NoticeDateInput, grounds: EnglandGroundDefinition[]): string[] {
+function buildGroundAvailability(
+  input: Section8NoticeDateInput,
+  grounds: EnglandGroundDefinition[],
+  calculatedNoticeExpiryDate: string,
+): { groundAvailability: Section8GroundAvailability[]; blockingIssues: Section8BlockingIssue[] } {
+  const blockingIssues: Section8BlockingIssue[] = [];
+  const groundAvailability = grounds.map<Section8GroundAvailability>((ground) => {
+    if (!ground.earliestUseAfterTenancyMonths) {
+      return {
+        groundCode: ground.code,
+        groundTitle: ground.title,
+        status: 'available',
+        statusLabel: 'Available',
+        currentNoticeExpiryDate: calculatedNoticeExpiryDate,
+        message: `Ground ${ground.code} has no 12-month ground-availability restriction in this calculator.`,
+      };
+    }
+
+    if (!input.tenancyStartDate) {
+      return {
+        groundCode: ground.code,
+        groundTitle: ground.title,
+        status: 'needs_review',
+        statusLabel: 'Needs review',
+        currentNoticeExpiryDate: calculatedNoticeExpiryDate,
+        message: `Ground ${ground.code} needs a tenancy start date before ground availability can be confirmed.`,
+      };
+    }
+
+    const earliestGroundExpiryDate = addCalendarMonths(input.tenancyStartDate, ground.earliestUseAfterTenancyMonths);
+    if (compareDateOnly(calculatedNoticeExpiryDate, earliestGroundExpiryDate) < 0) {
+      const action =
+        `Remove Ground ${ground.code} or move the notice/service date so the notice expiry is on or after ${formatDateLabel(earliestGroundExpiryDate)}.`;
+
+      blockingIssues.push({
+        code: 'SECTION_8_BLOCKED',
+        groundCode: ground.code,
+        groundTitle: ground.title,
+        message:
+          `Ground ${ground.code} (${ground.title}) cannot be relied upon because the notice would expire before the first ` +
+          `${ground.earliestUseAfterTenancyMonths} months of the tenancy have passed.`,
+        tenancyStartDate: input.tenancyStartDate,
+        earliestGroundExpiryDate,
+        currentNoticeExpiryDate: calculatedNoticeExpiryDate,
+        action,
+      });
+
+      return {
+        groundCode: ground.code,
+        groundTitle: ground.title,
+        status: 'not_currently_available',
+        statusLabel: 'Not currently available',
+        earliestGroundExpiryDate,
+        currentNoticeExpiryDate: calculatedNoticeExpiryDate,
+        message:
+          `The date calculation is shown for transparency, but Ground ${ground.code} is not available on this notice expiry date.`,
+      };
+    }
+
+    return {
+      groundCode: ground.code,
+      groundTitle: ground.title,
+      status: 'available',
+      statusLabel: 'Available',
+      earliestGroundExpiryDate,
+      currentNoticeExpiryDate: calculatedNoticeExpiryDate,
+      message: `Ground ${ground.code} is available because the notice expiry is on or after ${formatDateLabel(earliestGroundExpiryDate)}.`,
+    };
+  });
+
+  return { groundAvailability, blockingIssues };
+}
+
+function buildWarnings(
+  input: Section8NoticeDateInput,
+  grounds: EnglandGroundDefinition[],
+  groundAvailability: Section8GroundAvailability[],
+): string[] {
   const warnings: string[] = [];
 
   if (grounds.length === 0) {
@@ -276,14 +394,9 @@ function buildWarnings(input: Section8NoticeDateInput, grounds: EnglandGroundDef
     warnings.push('This route can depend on tenancy timing. Add the tenancy start date before relying on the result.');
   }
 
-  if (input.tenancyStartDate) {
-    for (const ground of restrictedGrounds) {
-      const allowedFrom = addCalendarMonths(input.tenancyStartDate, ground.earliestUseAfterTenancyMonths || 0);
-      if (parseDateOnly(input.actionDate) < parseDateOnly(allowedFrom)) {
-        warnings.push(
-          `Ground ${ground.code} is timing-sensitive. Based on the tenancy start date, check whether it can be used before ${formatDateLabel(allowedFrom)}.`
-        );
-      }
+  for (const availability of groundAvailability) {
+    if (availability.status === 'needs_review') {
+      warnings.push(`Ground ${availability.groundCode} status: Needs review. Add the tenancy start date to confirm ground availability.`);
     }
   }
 
@@ -360,6 +473,11 @@ export function calculateSection8NoticeDateResult(
   });
   const noticePeriodLabel = buildNoticePeriodLabel(calculation.notice_period_days, selectedGrounds);
   const hasRentGround = selectedGrounds.some((ground) => ['8', '10', '11'].includes(ground.code));
+  const { groundAvailability, blockingIssues } = buildGroundAvailability(
+    input,
+    selectedGrounds,
+    calculation.earliest_valid_date,
+  );
 
   return {
     selectedGrounds,
@@ -371,8 +489,10 @@ export function calculateSection8NoticeDateResult(
       deemedServiceDate === input.actionDate
         ? calculation.explanation
         : `We first allowed for deemed service on ${formatDateLabel(deemedServiceDate)}, then calculated the notice period from that date. ${calculation.explanation}`,
+    groundAvailability,
+    blockingIssues,
     evidenceChecklist: buildEvidenceChecklist(selectedGrounds),
-    warnings: buildWarnings(input, selectedGrounds),
+    warnings: buildWarnings(input, selectedGrounds, groundAvailability),
     nextStep: buildNextStep(input),
     secondaryActions: unique([
       hasRentGround ? '/tools/rent-arrears-calculator|Calculate rent arrears' : '',

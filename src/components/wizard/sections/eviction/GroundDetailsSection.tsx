@@ -20,34 +20,121 @@ interface GroundDetailsSectionProps {
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
 }
 
-function buildGroundFieldSeed(
-  panel: GroundDetailPanelConfig,
-  field: GroundDetailFieldConfig,
-  facts: WizardFacts,
-  selectedGrounds: string[],
-): string {
-  const filledPanelFacts = panel.fields
-    .map((panelField) => {
-      const value = String((facts as Record<string, any>)[panelField.field] || '').trim();
-      return value ? `${panelField.label}: ${value}` : '';
-    })
-    .filter(Boolean);
+function readFactString(facts: WizardFacts, path: string): string {
+  const factRecord = facts as Record<string, any>;
+  const directValue = factRecord[path];
+  if (directValue !== undefined && directValue !== null && String(directValue).trim()) {
+    return String(directValue).trim();
+  }
 
-  const propertyAddress = [
+  const nestedValue = path
+    .split('.')
+    .reduce<any>((value, key) => (value && typeof value === 'object' ? value[key] : undefined), facts as any);
+
+  return nestedValue === undefined || nestedValue === null ? '' : String(nestedValue).trim();
+}
+
+function buildPropertyAddress(facts: WizardFacts): string {
+  return [
     facts.property_address_line1,
     facts.property_address_town,
     facts.property_address_postcode,
   ]
     .filter(Boolean)
     .join(', ');
+}
+
+function buildGroundFactLines(
+  panel: GroundDetailPanelConfig,
+  facts: WizardFacts,
+  includeMissing = false,
+): string[] {
+  return panel.fields
+    .map((panelField) => {
+      const value = readFactString(facts, panelField.field);
+      if (!value && !includeMissing) {
+        return '';
+      }
+
+      return `${panelField.label}: ${value || 'not recorded'}`;
+    })
+    .filter(Boolean);
+}
+
+export function buildGroundDetailsContext(
+  panels: GroundDetailPanelConfig[],
+  facts: WizardFacts,
+): Record<string, any> {
+  return {
+    selected_ground_details: panels.map((panel) => ({
+      code: panel.code,
+      title: panel.title,
+      intro: panel.intro,
+      facts: Object.fromEntries(
+        panel.fields.map((field) => [
+          field.field,
+          {
+            label: field.label,
+            value: readFactString(facts, field.field) || null,
+            helpText: field.helpText,
+          },
+        ]),
+      ),
+    })),
+  };
+}
+
+function buildGroundContextBlock(
+  panels: GroundDetailPanelConfig[],
+  facts: WizardFacts,
+  includeMissing = false,
+): string {
+  return panels
+    .map((panel) => {
+      const factLines = buildGroundFactLines(panel, facts, includeMissing);
+
+      return [
+        `Ground ${panel.code} - ${panel.title}`,
+        panel.intro,
+        factLines.length > 0 ? factLines.map((line) => `- ${line}`).join('\n') : '- No ground-specific facts recorded yet.',
+      ].join('\n');
+    })
+    .join('\n\n');
+}
+
+function buildGroundSpecificRules(panel: GroundDetailPanelConfig): string[] {
+  if (panel.code === '1A') {
+    return [
+      'Ground 1A is the sale of dwelling house ground.',
+      'For Ground 1A, focus on the landlord intention to sell, sale reason, sale steps, decision date, timetable, and sale evidence.',
+      'Do not describe Ground 1A as rent arrears, breach of tenancy, failure to pay rent, failure to leave after a Notice to Leave, or non-compliance unless another selected ground and recorded facts specifically support that.',
+    ];
+  }
+
+  return [
+    `Use the legal meaning shown by Ground ${panel.code} - ${panel.title}.`,
+    'Do not substitute a different Section 8 ground or generic rent arrears wording.',
+  ];
+}
+
+export function buildGroundFieldSeed(
+  panel: GroundDetailPanelConfig,
+  field: GroundDetailFieldConfig,
+  facts: WizardFacts,
+  selectedGrounds: string[],
+): string {
+  const filledPanelFacts = buildGroundFactLines(panel, facts);
+  const propertyAddress = buildPropertyAddress(facts);
 
   return [
     `Selected grounds: ${selectedGrounds.join(', ') || `Ground ${panel.code}`}.`,
+    `Current ground: Ground ${panel.code} - ${panel.title}.`,
     propertyAddress ? `Property: ${propertyAddress}.` : '',
     facts.landlord_full_name ? `Landlord: ${facts.landlord_full_name}.` : '',
     facts.tenant_full_name ? `Tenant: ${facts.tenant_full_name}.` : '',
     facts.tenancy_start_date ? `Tenancy start date: ${facts.tenancy_start_date}.` : '',
     facts.notice_served_date ? `Notice served date: ${facts.notice_served_date}.` : '',
+    ...buildGroundSpecificRules(panel),
     `Draft a factual answer for "${field.label}" for Ground ${panel.code} - ${panel.title}.`,
     field.helpText ? `Guidance: ${field.helpText}` : '',
     filledPanelFacts.length > 0 ? `Related answers already given:\n- ${filledPanelFacts.join('\n- ')}` : '',
@@ -57,14 +144,12 @@ function buildGroundFieldSeed(
     .join('\n');
 }
 
-function buildSpecialistSectionSeed(facts: WizardFacts, selectedGrounds: string[]): string {
-  const propertyAddress = [
-    facts.property_address_line1,
-    facts.property_address_town,
-    facts.property_address_postcode,
-  ]
-    .filter(Boolean)
-    .join(', ');
+export function buildSpecialistSectionSeed(
+  facts: WizardFacts,
+  selectedGrounds: string[],
+  panels: GroundDetailPanelConfig[],
+): string {
+  const propertyAddress = buildPropertyAddress(facts);
 
   return [
     `Selected grounds: ${selectedGrounds.join(', ')}.`,
@@ -72,11 +157,64 @@ function buildSpecialistSectionSeed(facts: WizardFacts, selectedGrounds: string[
     facts.landlord_full_name ? `Landlord: ${facts.landlord_full_name}.` : '',
     facts.tenant_full_name ? `Tenant: ${facts.tenant_full_name}.` : '',
     facts.notice_served_date ? `Notice served date: ${facts.notice_served_date}.` : '',
+    'Ground-specific facts recorded in this wizard:',
+    buildGroundContextBlock(panels, facts, true),
+    ...panels.flatMap((panel) => buildGroundSpecificRules(panel)),
     'Draft clear possession particulars that explain why the selected specialist grounds apply, when the key events happened, and what records support them.',
-    'Do not add legal argument or invented facts. Keep the wording suitable for Form 3A and N119 particulars.',
+    'Use the ground-specific facts above. Do not replace them with generic arrears, breach, or Notice to Leave wording.',
+    'Do not add legal argument or invented facts. If a field is missing, say it is not recorded instead of guessing. Keep the wording suitable for Form 3A and N119 particulars.',
   ]
     .filter(Boolean)
     .join('\n');
+}
+
+export function buildSpecialistParticularsDraft(
+  facts: WizardFacts,
+  selectedGrounds: string[],
+  panels: GroundDetailPanelConfig[],
+): string {
+  const propertyAddress = buildPropertyAddress(facts);
+  const parties = [
+    propertyAddress ? `Property: ${propertyAddress}.` : '',
+    facts.landlord_full_name ? `Landlord: ${facts.landlord_full_name}.` : '',
+    facts.tenant_full_name ? `Tenant: ${facts.tenant_full_name}.` : '',
+    facts.notice_served_date ? `Notice service date recorded: ${facts.notice_served_date}.` : '',
+  ].filter(Boolean);
+
+  const groundParagraphs = panels.map((panel) => {
+    if (panel.code === '1A') {
+      const saleReason = readFactString(facts, 'ground_1a.sale_reason');
+      const saleSteps = readFactString(facts, 'ground_1a.sale_steps_taken');
+      const decisionDate = readFactString(facts, 'ground_1a.decision_date');
+      const saleTiming = readFactString(facts, 'ground_1a.intended_sale_timing');
+      const supportingEvidence = readFactString(facts, 'ground_1a.supporting_evidence');
+
+      return [
+        `Ground 1A - ${panel.title} is relied on because the landlord intends to sell the dwelling house${propertyAddress ? ` at ${propertyAddress}` : ''}.`,
+        saleReason ? `The recorded reason for the sale is: ${saleReason}.` : 'The reason for the proposed sale has not yet been recorded.',
+        saleSteps ? `Steps already taken toward the sale: ${saleSteps}.` : 'Steps already taken toward the sale have not yet been recorded.',
+        decisionDate ? `The decision to sell was made on ${decisionDate}.` : 'The decision date has not yet been recorded.',
+        saleTiming ? `Expected sale timetable: ${saleTiming}.` : 'The expected sale timetable has not yet been recorded.',
+        supportingEvidence ? `Supporting evidence recorded: ${supportingEvidence}.` : 'Supporting sale evidence has not yet been recorded.',
+      ].join(' ');
+    }
+
+    const factLines = buildGroundFactLines(panel, facts);
+    return [
+      `Ground ${panel.code} - ${panel.title} is relied on.`,
+      factLines.length > 0
+        ? factLines.join('. ') + '.'
+        : 'The ground-specific facts for this ground have not yet been recorded.',
+    ].join(' ');
+  });
+
+  return [
+    selectedGrounds.length > 0 ? `Selected grounds: ${selectedGrounds.join(', ')}.` : '',
+    parties.join(' '),
+    groundParagraphs.join('\n\n'),
+  ]
+    .filter(Boolean)
+    .join('\n\n');
 }
 
 export const GroundDetailsSection: React.FC<GroundDetailsSectionProps> = ({
@@ -85,11 +223,15 @@ export const GroundDetailsSection: React.FC<GroundDetailsSectionProps> = ({
   product,
   onUpdate,
 }) => {
-  const selectedGrounds = (facts.section8_grounds as string[]) || [];
+  const selectedGrounds = useMemo(
+    () => (Array.isArray(facts.section8_grounds) ? (facts.section8_grounds as string[]) : []),
+    [facts.section8_grounds],
+  );
   const panels = useMemo(() => getSelectedGroundDetailPanels(selectedGrounds), [selectedGrounds]);
   const hasArrearsGround = hasSelectedArrearsGrounds(selectedGrounds);
   const shouldShowGeneralParticulars = panels.length > 0 && !hasArrearsGround;
   const particularsText = String(facts.section8_details || '');
+  const groundDetailsContext = useMemo(() => buildGroundDetailsContext(panels, facts), [facts, panels]);
 
   const draftTargets = useMemo<AskHeavenStepDraftTarget[]>(() => {
     const panelTargets = panels.flatMap((panel) =>
@@ -97,9 +239,10 @@ export const GroundDetailsSection: React.FC<GroundDetailsSectionProps> = ({
         .filter((field) => field.type !== 'date')
         .map((field) => ({
           id: field.field,
-          currentValue: String((facts as Record<string, any>)[field.field] || ''),
+          currentValue: readFactString(facts, field.field),
           questionText: `${field.label} for Ground ${panel.code} - ${panel.title}`,
           seedAnswer: buildGroundFieldSeed(panel, field, facts, selectedGrounds),
+          context: groundDetailsContext,
           apply: (text: string) => onUpdate({ [field.field]: text }),
         })),
     );
@@ -114,11 +257,13 @@ export const GroundDetailsSection: React.FC<GroundDetailsSectionProps> = ({
         id: 'section8_details',
         currentValue: particularsText,
         questionText: 'Possession particulars for the selected specialist Section 8 grounds',
-        seedAnswer: buildSpecialistSectionSeed(facts, selectedGrounds),
+        seedAnswer: buildSpecialistSectionSeed(facts, selectedGrounds, panels),
+        localDraft: buildSpecialistParticularsDraft(facts, selectedGrounds, panels),
+        context: groundDetailsContext,
         apply: (text: string) => onUpdate({ section8_details: text }),
       },
     ];
-  }, [facts, onUpdate, panels, particularsText, selectedGrounds, shouldShowGeneralParticulars]);
+  }, [facts, groundDetailsContext, onUpdate, panels, particularsText, selectedGrounds, shouldShowGeneralParticulars]);
 
   if (panels.length === 0) {
     return null;
@@ -187,6 +332,8 @@ export const GroundDetailsSection: React.FC<GroundDetailsSectionProps> = ({
                 jurisdiction: 'england',
                 selected_grounds: selectedGrounds,
                 product,
+                ...groundDetailsContext,
+                section8_details_seed: buildSpecialistSectionSeed(facts, selectedGrounds, panels),
               }}
               apiMode="generic"
             />

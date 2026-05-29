@@ -8,6 +8,7 @@ import {
   CalendarDays,
   CheckCircle2,
   FileText,
+  Lock,
   Scale,
   ShieldCheck,
 } from 'lucide-react';
@@ -65,6 +66,7 @@ export function Section8NoticeDateCalculator() {
   const [serviceMethod, setServiceMethod] = useState<ServiceMethod>('first_class_post');
   const [noticeStatus, setNoticeStatus] = useState<Section8NoticeStatus>('not_served');
   const [tenancyStartDate, setTenancyStartDate] = useState('');
+  const [showAllGrounds, setShowAllGrounds] = useState(false);
 
   const result = useMemo(
     () =>
@@ -81,6 +83,14 @@ export function Section8NoticeDateCalculator() {
 
   const selectedProblem = SECTION8_NOTICE_PROBLEM_OPTIONS.find((option) => option.id === problem);
   const selectedServiceMethod = SECTION8_SERVICE_METHOD_OPTIONS.find((option) => option.id === serviceMethod);
+  const visibleGroundCodes = useMemo(() => {
+    if (showAllGrounds) {
+      return SECTION8_NOTICE_GROUND_OPTIONS;
+    }
+
+    return Array.from(new Set([...(selectedProblem?.defaultGrounds || []), ...groundCodes]));
+  }, [groundCodes, selectedProblem?.defaultGrounds, showAllGrounds]);
+  const hasBlockingIssues = result.blockingIssues.length > 0;
 
   const toggleGround = (groundCode: EnglandGroundCode) => {
     setGroundCodes((current) => {
@@ -165,7 +175,7 @@ export function Section8NoticeDateCalculator() {
                   </span>
                 </div>
                 <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                  {SECTION8_NOTICE_GROUND_OPTIONS.map((groundCode) => {
+                  {visibleGroundCodes.map((groundCode) => {
                     const ground = getEnglandGroundDefinition(groundCode);
                     if (!ground) return null;
                     const isSelected = groundCodes.includes(groundCode);
@@ -202,6 +212,13 @@ export function Section8NoticeDateCalculator() {
                     );
                   })}
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setShowAllGrounds((current) => !current)}
+                  className="mt-3 rounded-full border border-[#d8ccf8] bg-white px-4 py-2 text-xs font-semibold text-[#5b36b3] transition hover:border-[#b997ff] hover:bg-[#fbf8ff]"
+                >
+                  {showAllGrounds ? 'Hide advanced grounds' : 'Show all grounds'}
+                </button>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
@@ -318,6 +335,47 @@ export function Section8NoticeDateCalculator() {
                   </div>
                 </div>
 
+                {hasBlockingIssues ? (
+                  <div className="mt-6 rounded-2xl border border-red-200 bg-red-50 p-4">
+                    <div className="flex items-start gap-3">
+                      <AlertTriangle className="mt-1 h-5 w-5 shrink-0 text-red-700" />
+                      <div className="space-y-3">
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-red-800">
+                            SECTION_8_BLOCKED
+                          </p>
+                          <h4 className="mt-1 text-base font-semibold text-red-950">
+                            Ground availability blocker
+                          </h4>
+                        </div>
+                        {result.blockingIssues.map((issue) => (
+                          <div key={`${issue.code}-${issue.groundCode}`} className="text-sm leading-7 text-red-900">
+                            <p>{issue.message}</p>
+                            <dl className="mt-3 grid gap-2 sm:grid-cols-3">
+                              <div>
+                                <dt className="text-xs font-semibold uppercase tracking-wide text-red-700">Tenancy start</dt>
+                                <dd>{formatSection8ToolDate(issue.tenancyStartDate)}</dd>
+                              </div>
+                              <div>
+                                <dt className="text-xs font-semibold uppercase tracking-wide text-red-700">Earliest ground expiry</dt>
+                                <dd>{formatSection8ToolDate(issue.earliestGroundExpiryDate)}</dd>
+                              </div>
+                              <div>
+                                <dt className="text-xs font-semibold uppercase tracking-wide text-red-700">Current notice expiry</dt>
+                                <dd>{formatSection8ToolDate(issue.currentNoticeExpiryDate)}</dd>
+                              </div>
+                            </dl>
+                            <p className="mt-3 font-semibold">{issue.action}</p>
+                            <p className="mt-2">
+                              The date calculation is shown for transparency, but Ground {issue.groundCode} is not available on this expiry date.
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+
                 <div className="mt-6">
                   <p className="text-sm font-semibold text-[#2f2148]">Grounds included in this calculation</p>
                   <div className="mt-3 flex flex-wrap gap-2">
@@ -328,6 +386,25 @@ export function Section8NoticeDateCalculator() {
                       >
                         Ground {ground.code}: {ground.title}
                       </span>
+                    ))}
+                  </div>
+                  <div className="mt-3 grid gap-2">
+                    {result.groundAvailability.map((availability) => (
+                      <div
+                        key={availability.groundCode}
+                        className={`rounded-2xl border px-3 py-2 text-sm ${
+                          availability.status === 'not_currently_available'
+                            ? 'border-red-200 bg-red-50 text-red-900'
+                            : availability.status === 'needs_review'
+                              ? 'border-amber-200 bg-amber-50 text-amber-900'
+                              : 'border-emerald-200 bg-emerald-50 text-emerald-900'
+                        }`}
+                      >
+                        <span className="font-semibold">
+                          Ground {availability.groundCode} status: {availability.statusLabel}
+                        </span>
+                        <span className="mt-1 block leading-6">{availability.message}</span>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -371,22 +448,51 @@ export function Section8NoticeDateCalculator() {
               </StaggerReveal>
             </Reveal>
 
-            <ToolUpsellCard
-              toolName="Section 8 Notice Date Calculator"
-              toolType="calculator"
-              productName={result.nextStep.productName}
-              ctaLabel={result.nextStep.label}
-              ctaHref={result.nextStep.href}
-              jurisdiction="england"
-              jurisdictionLabel="England Form 3A route"
-              description={result.nextStep.description}
-              freeIncludes={[
-                'Notice period and deemed service date',
-                'Earliest court-paper date',
-                'Ground-led risk notes and evidence checklist',
-              ]}
-              paidIncludes={result.nextStep.paidIncludes}
-            />
+            {hasBlockingIssues ? (
+              <Reveal
+                as="section"
+                data-testid="tool-upsell-blocked"
+                className="rounded-[1.75rem] border border-red-200 bg-gradient-to-br from-red-50 via-white to-white p-6 shadow-[0_22px_60px_rgba(185,28,28,0.10)]"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <span className="inline-flex items-center rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-900">
+                      England Form 3A route
+                    </span>
+                    <h3 className="mt-3 text-2xl font-semibold text-gray-900">Fix blocking issues to continue</h3>
+                    <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-600">
+                      This timing result cannot be used to prepare a safe notice until the blocking issue above is fixed.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    disabled
+                    aria-disabled="true"
+                    className="inline-flex cursor-not-allowed items-center gap-2 rounded-full bg-gray-200 px-5 py-3 text-center text-sm font-semibold text-gray-500"
+                  >
+                    <Lock className="h-4 w-4" />
+                    Fix blocking issues to continue
+                  </button>
+                </div>
+              </Reveal>
+            ) : (
+              <ToolUpsellCard
+                toolName="Section 8 Notice Date Calculator"
+                toolType="calculator"
+                productName={result.nextStep.productName}
+                ctaLabel={result.nextStep.label}
+                ctaHref={result.nextStep.href}
+                jurisdiction="england"
+                jurisdictionLabel="England Form 3A route"
+                description={result.nextStep.description}
+                freeIncludes={[
+                  'Notice period and deemed service date',
+                  'Earliest court-paper date',
+                  'Ground-led risk notes and evidence checklist',
+                ]}
+                paidIncludes={result.nextStep.paidIncludes}
+              />
+            )}
 
             <Reveal className="rounded-[1.5rem] border border-[#eadcff] bg-white/85 p-4">
               <p className="text-sm font-semibold text-[#2f2148]">Useful next links</p>
