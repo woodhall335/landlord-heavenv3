@@ -92,6 +92,45 @@ export default function Section8StageComparisonPage() {
       />
 
       <Container className="py-12 md:py-16">
+        <section className="mb-10 rounded-lg border border-[#E8E1D7] bg-white p-6">
+          <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
+            Quick answer
+          </p>
+          <h2 className="mt-3 text-3xl font-bold text-[#141B2D]">
+            Use Notice Only before service, Complete Pack when court papers matter
+          </h2>
+          <p className="mt-4 max-w-4xl text-base leading-8 text-[#546075]">
+            If the landlord task is serving the current England Section 8 notice, use Notice Only to
+            prepare Form 3A, N215, service instructions, arrears schedule, checks, and case summary.
+            If the notice has expired or court is realistically next, use Complete Pack so the N5,
+            N119, witness statement, evidence checklist, filing guide, and hearing preparation line up
+            with the notice file.
+          </p>
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            <div className="rounded-lg border border-[#E8E1D7] bg-[#FCFBF8] p-4">
+              <h3 className="font-semibold text-[#141B2D]">Before service</h3>
+              <p className="mt-2 text-sm leading-6 text-[#546075]">
+                Check grounds, arrears totals, tenant details, service method, and the date you can
+                prove the notice was delivered.
+              </p>
+            </div>
+            <div className="rounded-lg border border-[#E8E1D7] bg-[#FCFBF8] p-4">
+              <h3 className="font-semibold text-[#141B2D]">After expiry</h3>
+              <p className="mt-2 text-sm leading-6 text-[#546075]">
+                Keep the court file consistent: notice copy, proof of service, chronology, witness
+                evidence, rent ledger, and filing route.
+              </p>
+            </div>
+            <div className="rounded-lg border border-[#E8E1D7] bg-[#FCFBF8] p-4">
+              <h3 className="font-semibold text-[#141B2D]">Next action</h3>
+              <p className="mt-2 text-sm leading-6 text-[#546075]">
+                Choose the product by stage, not price: a thin notice pack is wrong if you already
+                need court papers.
+              </p>
+            </div>
+          </div>
+        </section>
+
         <section className="grid gap-8 lg:grid-cols-[1fr_0.9fr]">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">

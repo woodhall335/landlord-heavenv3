@@ -163,6 +163,16 @@ export default function PossessionClaimGuidePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <SeoPageContextPanel pathname="/possession-claim-guide" />
+              <div className="mt-6 rounded-2xl border border-gray-200 bg-gray-50 p-5">
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Use this route when possession has moved beyond the notice stage
+                </h2>
+                <p className="mt-3 text-sm leading-7 text-gray-700">
+                  This guide fits when the landlord already has a notice history, the tenant has not
+                  left, and the next product question is whether the Complete Pack can organise the
+                  N5, N119, witness statement, evidence checklist, filing guide, and hearing route.
+                </p>
+              </div>
             </div>
           </div>
         </section>

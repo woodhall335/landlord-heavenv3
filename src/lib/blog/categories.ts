@@ -55,7 +55,7 @@ export const BLOG_CATEGORIES: Record<BlogRegion, CategoryConfig> = {
     slug: 'wales',
     name: 'Wales',
     title: 'Wales Landlord Guides 2026 | Contracts & Possession',
-    description: 'Complete guides for Welsh landlords on the Renting Homes (Wales) Act, Standard Occupation Contracts, Rent Smart Wales registration, and possession procedures.',
+    description: 'Start here for Welsh landlord guidance on the Renting Homes (Wales) Act, Standard Occupation Contracts, Rent Smart Wales registration, possession procedure, compliance checks, and the next document route.',
     metaDescription:
       'Browse Wales landlord guides on occupation contracts, the Renting Homes Act, Rent Smart Wales, possession procedure, and compliance steps.',
     flag: '/gb-wls.svg',
@@ -65,7 +65,7 @@ export const BLOG_CATEGORIES: Record<BlogRegion, CategoryConfig> = {
     slug: 'northern-ireland',
     name: 'Northern Ireland',
     title: 'Northern Ireland Landlord Guides 2026 | Tenancy & Possession',
-    description: 'Guides for landlords in Northern Ireland covering the Private Tenancies Order, landlord registration, deposit protection schemes, and eviction procedures.',
+    description: 'Start here for Northern Ireland landlord guidance on private tenancies, landlord registration, deposit protection, notices, possession procedure, compliance checks, and the next document route.',
     metaDescription:
       'Browse Northern Ireland landlord guides on private tenancies, deposit protection, landlord registration, notices, and possession procedure.',
     flag: '/gb-nir.svg',
@@ -75,7 +75,7 @@ export const BLOG_CATEGORIES: Record<BlogRegion, CategoryConfig> = {
     slug: 'uk',
     name: 'UK-Wide',
     title: 'UK Landlord Guides 2026 | Eviction, Arrears & Compliance',
-    description: 'UK-wide landlord guides covering topics that apply across all jurisdictions: insurance, tax, tenant referencing, right to rent checks, and general compliance.',
+    description: 'Start here for UK-wide landlord guidance on eviction, arrears, insurance, tax, tenant referencing, right to rent checks, general compliance, and the next practical route.',
     metaDescription:
       'Browse UK landlord guides on eviction, rent arrears, safety rules, right to rent, insurance, tax, and wider compliance responsibilities.',
     flag: '/lgb.svg',

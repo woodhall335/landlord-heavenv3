@@ -51,7 +51,20 @@ export default function RefundsPage() {
               Digital Products Policy
             </p>
             <p className="text-gray-700">
-              All products are instantly delivered digital documents. Please review our refund policy below.
+              Short answer: all products are instantly delivered digital documents. Please review
+              the refund policy below before purchase, because refunds are limited to technical
+              errors, duplicate charges, and unauthorized transactions.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8">
+            <h2 className="text-xl font-semibold text-charcoal mb-3">How to use this refund policy</h2>
+            <p className="text-gray-700 text-sm leading-6">
+              Use this page as a checklist before you contact support: confirm whether the issue is a
+              technical error, duplicate charge, unauthorized transaction, subscription cancellation,
+              or a document-choice problem. If you need the next action, use the report steps below
+              and include your account email, order number, screenshots, and a clear description of
+              what happened.
             </p>
           </div>
 

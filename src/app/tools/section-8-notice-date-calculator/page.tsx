@@ -124,10 +124,15 @@ export default function Section8NoticeDateCalculatorPage() {
           <Reveal className="rounded-[1.5rem] border border-[#eadcff] bg-[#fbf8ff] p-5 shadow-sm md:p-6">
             <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#6d28d9]">Plain-English timing check</p>
             <p className="mt-3 text-base leading-8 text-[#4d4561]">
-              This page is for landlords dealing with an England Section 8/Form 3A notice. It helps you avoid the
+              Use this tool when you are a landlord dealing with an England Section 8/Form 3A notice. It helps you avoid the
               common timing mistake: counting from the wrong date or treating the date as the only thing that matters.
               If the tenant has not been served yet, the result points toward Notice Only. If the notice has expired
               and the tenant is still there, the result points toward the court-paper stage.
+            </p>
+            <p className="mt-3 text-base leading-8 text-[#4d4561]">
+              The calculator is the right fit when you need timing, deemed service, evidence prompts,
+              and a clear product route before you prepare documents. It is not a substitute for checking
+              the grounds, arrears ledger, service method, and court-readiness of the full file.
             </p>
           </Reveal>
         </div>

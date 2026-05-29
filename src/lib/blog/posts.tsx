@@ -16435,6 +16435,9 @@ const allBlogPosts: BlogPost[] = [
     content: (
       <>
         <p className="lead">
+          Quick answer: use a Standard Occupation Contract when you are letting residential
+          property in Wales and need the written statement, prescribed terms, landlord
+          obligations, and contract-holder rights to match the Renting Homes framework.
           Since December 2022, all private sector tenancies in Wales are governed by the
           Renting Homes (Wales) Act 2016. This replaced traditional assured shorthold
           tenancies with Standard Occupation Contracts. Understanding these new contracts

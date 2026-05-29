@@ -44,6 +44,17 @@ export default function PrivacyPage() {
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 md:p-12">
           <p className="text-sm text-gray-500 mb-8">Last updated: November 22, 2025</p>
 
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8">
+            <h2 className="text-xl font-semibold text-charcoal mb-3">How to use this privacy policy</h2>
+            <p className="text-gray-700 text-sm leading-6">
+              Use this page as a practical checklist for personal data: first check what information
+              we collect, then review why we use it, who supports the service, how long records are
+              kept, and which UK GDPR rights you can exercise. If you need a next action, use the
+              contact details in the rights section and include the account email, document order, or
+              support reference that relates to the request.
+            </p>
+          </div>
+
           <div className="bg-primary-subtle border-l-4 border-primary p-4 mb-8">
             <p className="text-charcoal font-semibold mb-2 flex items-center gap-2">
               <ShieldCheck className="w-5 h-5 text-primary" />

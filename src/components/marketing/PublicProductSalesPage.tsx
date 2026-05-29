@@ -628,6 +628,103 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
   );
 }
 
+function ProductFitProofBand({
+  content,
+  analytics,
+}: {
+  content: ProductSalesPageContent;
+  analytics?: ProductSalesPageContent['analytics'];
+}) {
+  const routeName = content.hero.title;
+  const primary = content.hero.primaryCta ?? content.cta.primary;
+  const priceLabel = content.earlyProofBand?.priceLabel;
+  const includedItems = [
+    ...(content.earlyProofBand?.includedBullets ?? []),
+    ...(content.whatYouGet.items?.slice(0, 2).map((item) => item.name) ?? []),
+    ...(content.whatYouGet.routeCards?.slice(0, 2).map((item) => item.name) ?? []),
+  ].slice(0, 4);
+
+  return (
+    <section id="product-fit-proof" className="scroll-mt-24 bg-white py-10 md:py-12">
+      <Container>
+        <div className="mx-auto max-w-6xl">
+          <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+            <Reveal className="max-w-3xl">
+              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#6D28D9]">
+                Product fit
+              </p>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#17142B] md:text-4xl">
+                Use this when {routeName.toLowerCase()} is the job you need to get right
+              </h2>
+              <p className="mt-4 text-base leading-8 text-[#4B5565] md:text-lg">
+                This page is designed for landlords who want a practical document route, not a generic
+                template hunt. Use it to check whether the product fits the tenant problem, see what
+                paperwork is included, preview the evidence and compliance support, and move into the
+                paid pack only when the next action is clear.
+              </p>
+            </Reveal>
+
+            <StaggerReveal className="grid gap-4 md:grid-cols-2">
+              <article className="rounded-[1.5rem] border border-[#E8E1F8] bg-[#FCFAFF] p-5">
+                <h3 className="text-lg font-semibold text-[#17142B]">What you should know before buying</h3>
+                <p className="mt-3 text-sm leading-7 text-[#4B5565] md:text-base">
+                  The route should match the landlord problem, the property jurisdiction, the tenant
+                  facts, and the stage you are at. If the page points you to a notice, court pack, money
+                  claim, rent increase, or tenancy agreement, it is because that is the practical next
+                  step this product is built around.
+                </p>
+              </article>
+              <article className="rounded-[1.5rem] border border-[#E8E1F8] bg-[#FCFAFF] p-5">
+                <h3 className="text-lg font-semibold text-[#17142B]">Proof, preview, and compliance cues</h3>
+                <p className="mt-3 text-sm leading-7 text-[#4B5565] md:text-base">
+                  Look for the included document list, sample or preview evidence, checklist wording,
+                  court-readiness cues, and FAQs before you start. Those visible signals matter more for
+                  SEO and trust than hidden meta keywords.
+                </p>
+              </article>
+              <article className="rounded-[1.5rem] border border-[#D9F2E7] bg-[#F2FBF6] p-5">
+                <h3 className="text-lg font-semibold text-[#134E3A]">Usually included here</h3>
+                {includedItems.length ? (
+                  <ul className="mt-3 space-y-2 text-sm leading-6 text-[#215245] md:text-base">
+                    {includedItems.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="mt-3 text-sm leading-7 text-[#215245] md:text-base">
+                    Guided questions, document preparation, practical checks, and a clearer file for the
+                    landlord task this page describes.
+                  </p>
+                )}
+              </article>
+              <article className="rounded-[1.5rem] border border-[#E8E1F8] bg-white p-5">
+                <h3 className="text-lg font-semibold text-[#17142B]">Next action</h3>
+                <p className="mt-3 text-sm leading-7 text-[#4B5565] md:text-base">
+                  {priceLabel ? `${priceLabel}. ` : ''}Start only after the page matches your facts; use
+                  the FAQs and comparison sections if you are still deciding between routes.
+                </p>
+                <TrackedLink
+                  href={primary.href}
+                  pagePath={analytics?.pagePath || '/products'}
+                  pageType={analytics?.pageType || 'product_page'}
+                  ctaLabel={primary.label}
+                  ctaPosition="section"
+                  eventName="entry_page_primary_cta_click"
+                  routeIntent={analytics?.routeIntent}
+                  product={inferProductFromHref(primary.href)}
+                  className="mt-5 inline-flex items-center justify-center rounded-xl bg-[#6D28D9] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#5B21B6]"
+                >
+                  {primary.label}
+                </TrackedLink>
+              </article>
+            </StaggerReveal>
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
 export function PublicProductSalesPage({ content }: { content: ProductSalesPageContent }) {
   const {
     analytics,
@@ -674,6 +771,7 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
         />
       ) : null}
       <UniversalHero {...hero} preTitleLabel={heroPreTitleLabel}>{hero.children}</UniversalHero>
+      <ProductFitProofBand content={content} analytics={analytics} />
       {postHeroContent ? <section className="scroll-mt-24 bg-white py-10 md:py-12"><Container><Reveal className="mx-auto max-w-6xl">{postHeroContent}</Reveal></Container></section> : null}
       {afterPostHeroContent ? <>{afterPostHeroContent}</> : null}
       {decisionBlock ? <DecisionBlock content={decisionBlock} analytics={analytics} /> : null}

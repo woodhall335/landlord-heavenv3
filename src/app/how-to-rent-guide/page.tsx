@@ -112,6 +112,19 @@ export default function HowToRentGuidePage() {
           <div className="max-w-4xl mx-auto py-12">
             <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm mb-12">
               <div className="prose prose-slate max-w-none">
+                <h2>Quick answer for landlords</h2>
+                <p>
+                  Use this page as a compliance checklist before a new tenancy, notice review, or
+                  possession route. The practical steps are simple: get the latest How to Rent guide,
+                  serve it at the right time, keep evidence of service, and check the rest of the
+                  tenancy file before you rely on any notice.
+                </p>
+                <p>
+                  Example: if you emailed the guide before move-in, keep the email, attachment,
+                  delivery record, and version date. If you handed it over in person, keep a signed
+                  acknowledgement or a clear move-in checklist showing what was provided.
+                </p>
+
                 <h2>What is the How to Rent Guide?</h2>
                 <p>
                   The &quot;How to Rent: the checklist for renting in England&quot; is a government-published

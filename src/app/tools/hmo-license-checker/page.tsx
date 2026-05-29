@@ -413,13 +413,40 @@ export default function HMOLicenseChecker() {
 
       <section className="border-b border-gray-100 bg-white py-6">
         <Container>
-          <p className="mx-auto max-w-4xl text-base leading-7 text-gray-700">
-            If the check points to shared occupation or multiple households,{' '}
-            <Link href="/hmo-shared-house-tenancy-agreement" className="font-semibold text-primary hover:underline">
-              create an HMO tenancy agreement and house rules pack
-            </Link>{' '}
-            before you issue terms to the occupiers.
-          </p>
+          <div className="mx-auto max-w-5xl">
+            <p className="text-base leading-7 text-gray-700">
+              Use this checker when you need a quick landlord view on whether a property may be an HMO,
+              whether local licensing checks matter, and what evidence to confirm before letting to
+              multiple occupiers. If the check points to shared occupation or multiple households,{' '}
+              <Link href="/hmo-shared-house-tenancy-agreement" className="font-semibold text-primary hover:underline">
+                create an HMO tenancy agreement and house rules pack
+              </Link>{' '}
+              before you issue terms to the occupiers.
+            </p>
+            <div className="mt-5 grid gap-4 md:grid-cols-3">
+              <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+              <h2 className="text-base font-semibold text-gray-900">Step 1: what the tool checks</h2>
+                <p className="mt-2 text-sm leading-6 text-gray-600">
+                  Occupier count, household count, shared facilities, property type, postcode area,
+                  and council-facing licensing indicators.
+                </p>
+              </div>
+              <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+              <h2 className="text-base font-semibold text-gray-900">Step 2: proof to keep</h2>
+                <p className="mt-2 text-sm leading-6 text-gray-600">
+                  Keep the checker result, council confirmation, room-size evidence, fire safety
+                  checks, and tenancy agreement route together before move-in.
+                </p>
+              </div>
+              <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+              <h2 className="text-base font-semibold text-gray-900">Step 3: limits and council check</h2>
+                <p className="mt-2 text-sm leading-6 text-gray-600">
+                  This is a practical screening tool. Councils set local schemes, so use the result
+                  as a checklist and confirm the final licensing position with the authority.
+                </p>
+              </div>
+            </div>
+          </div>
         </Container>
       </section>
 

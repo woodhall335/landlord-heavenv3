@@ -41,6 +41,14 @@ export function RentCheckerSeoPage(props: RentCheckerSeoPageProps) {
                   {title}
                 </h1>
                 <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">{intro}</p>
+                <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600">
+                  Use this page when you need the search intent answered before you open the
+                  checker: what the rent increase tool checks, where the limits are, which evidence
+                  matters, and which paid Section 13 route usually fits next. The aim is to make the
+                  decision useful before you touch Form 4A or a tribunal-ready response, especially
+                  where the tenant may challenge the figure or the comparables need explaining in
+                  writing before any notice is served.
+                </p>
 
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <Link

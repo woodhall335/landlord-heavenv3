@@ -45,6 +45,16 @@ export default function TermsPage() {
           <p className="text-sm text-gray-500 mb-8">Last updated: November 22, 2025</p>
 
           <div className="prose prose-gray max-w-none">
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8">
+              <h2 className="text-xl font-semibold text-charcoal mb-3">How to use these terms</h2>
+              <p className="text-gray-700 text-sm leading-6">
+                Start here if you want to understand what Landlord Heaven provides, what you are
+                responsible for before using generated documents, and what limits apply to digital
+                products. Use the payment, refunds, acceptable use, data protection, and contact
+                sections as a checklist before purchase or when resolving an account issue.
+              </p>
+            </div>
+
             <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">1. Agreement to Terms</h2>
             <p className="text-gray-700 leading-relaxed mb-4">
               By accessing and using Landlord Heaven ("we", "us", "our"), you accept and agree to be bound by these

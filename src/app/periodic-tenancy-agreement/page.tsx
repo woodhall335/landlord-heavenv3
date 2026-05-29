@@ -128,7 +128,8 @@ export default function PeriodicTenancyPage() {
               <p className="text-lg leading-8 text-slate-700">
                 A periodic tenancy can still be set out in a written agreement. The important point
                 is that the wording matches the tenancy you are creating and the current England
-                route for a new let.
+                route for a new let. Use the sample, preview, FAQs, and compliance notes as proof
+                points before you choose the agreement route.
               </p>
               <p className="text-lg leading-8 text-slate-700">
                 If you are trying to create a new England tenancy now, the next step is not to hunt

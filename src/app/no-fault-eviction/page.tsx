@@ -111,6 +111,13 @@ export default function NoFaultEvictionPage() {
                   Form 6A, N5B, or accelerated-possession guidance as if it were current. Follow
                   the current possession and eviction rules instead.
                 </p>
+                <p>
+                  Use this page as the decision point: first check whether your question is genuinely
+                  historical, then check which current notice or possession route fits the facts, and
+                  finally choose the document pack only when the evidence, dates, and service plan
+                  are clear. Keep the page in the file as your transition note so the reason for
+                  avoiding legacy no-fault wording is obvious later in your landlord decision record.
+                </p>
 
                 <h2>What you should do instead</h2>
                 <p>

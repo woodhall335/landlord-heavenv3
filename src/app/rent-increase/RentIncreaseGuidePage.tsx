@@ -199,6 +199,39 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
               </div>
             </article>
 
+            <article className="rounded-2xl border border-[#E6DBFF] bg-white p-6 md:p-8">
+              <p className="text-sm font-semibold uppercase tracking-wide text-primary">
+                Route fit and proof
+              </p>
+              <h2 className="mt-2 text-3xl font-bold text-[#2a2161]">
+                Use this rent increase route when the proposed figure needs to stand up
+              </h2>
+              <div className="mt-5 grid gap-5 md:grid-cols-3">
+                <div className="rounded-xl border border-[#E6DBFF] bg-[#FCFAFF] p-4">
+                  <h3 className="font-semibold text-[#2a2161]">When it fits</h3>
+                  <p className="mt-2 text-sm leading-6 text-gray-700">
+                    Use this page when the property is in England, the rent increase depends on
+                    Section 13 or Form 4A timing, and you need to decide whether the Standard or
+                    Defence route is safer.
+                  </p>
+                </div>
+                <div className="rounded-xl border border-[#E6DBFF] bg-[#FCFAFF] p-4">
+                  <h3 className="font-semibold text-[#2a2161]">What to check</h3>
+                  <p className="mt-2 text-sm leading-6 text-gray-700">
+                    Check market evidence, proposed start date, service method, current tenancy
+                    position, tenant challenge risk, and whether your comparables are strong enough.
+                  </p>
+                </div>
+                <div className="rounded-xl border border-[#E6DBFF] bg-[#FCFAFF] p-4">
+                  <h3 className="font-semibold text-[#2a2161]">Next action</h3>
+                  <p className="mt-2 text-sm leading-6 text-gray-700">
+                    Start with the free checker, preview the sample proof where shown, then prepare
+                    the rent increase pack that matches the risk level before you serve the notice.
+                  </p>
+                </div>
+              </div>
+            </article>
+
             {config.slug === 'form-4a-guide' ? (
               <RentIncreaseChallengeChecker
                 mode="embedded"

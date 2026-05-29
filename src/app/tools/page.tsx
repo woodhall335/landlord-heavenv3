@@ -55,6 +55,45 @@ export default function ToolsHubPage() {
         variant="pastel"
       />
 
+      <section className="premium-surface premium-surface-white py-10">
+        <Container>
+          <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-primary">
+                Tool hub
+              </p>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">
+                Use the free tool first, then choose the landlord document route
+              </h2>
+              <p className="mt-4 text-base leading-8 text-gray-600">
+                This hub is for landlords who need a fast check before committing to paperwork. Use
+                the calculators and checkers to clarify arrears, HMO licensing, rent increase risk,
+                notice timing, and next-step evidence. If the result shows you need documents, the
+                page routes you toward the right paid pack instead of leaving you with a loose answer.
+              </p>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="rounded-2xl border border-gray-200 bg-gray-50 p-5">
+                <h3 className="text-lg font-semibold text-gray-900">What each tool checks</h3>
+                <p className="mt-2 text-sm leading-6 text-gray-600">
+                  Dates, figures, council/licensing indicators, rent evidence, and whether a landlord
+                  should prepare a notice, court pack, tenancy agreement, money claim, or rent increase
+                  pack next.
+                </p>
+              </div>
+              <div className="rounded-2xl border border-gray-200 bg-gray-50 p-5">
+                <h3 className="text-lg font-semibold text-gray-900">Limits and next action</h3>
+                <p className="mt-2 text-sm leading-6 text-gray-600">
+                  The free tools are guidance helpers, not legal advice. Treat the result as a
+                  practical checklist, then use the linked product route when you need documents,
+                  proof, service records, or a stronger file.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
       {featuredTools.length > 0 && (
         <section id="featured-tools" className="premium-surface premium-surface-white py-12">
           <Container>

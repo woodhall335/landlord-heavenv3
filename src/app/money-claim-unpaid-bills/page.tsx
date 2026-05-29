@@ -149,6 +149,29 @@ export default function MoneyClaimUnpaidBillsPage() {
           <Container>
             <div className="mx-auto max-w-5xl">
               <SeoPageContextPanel pathname="/money-claim-unpaid-bills" />
+              <div className="mt-6 grid gap-4 md:grid-cols-3">
+                <div className="rounded-2xl border border-gray-200 bg-gray-50 p-5">
+                  <h2 className="text-lg font-semibold text-gray-900">Step 1: check liability</h2>
+                  <p className="mt-2 text-sm leading-6 text-gray-700">
+                    Match each bill to the tenancy agreement, occupation dates, account holder, and
+                    any inclusive-rent wording before you claim.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-gray-200 bg-gray-50 p-5">
+                  <h2 className="text-lg font-semibold text-gray-900">Step 2: collect proof</h2>
+                  <p className="mt-2 text-sm leading-6 text-gray-700">
+                    Keep provider statements, receipts, final bills, payment evidence, and a simple
+                    schedule showing how each unpaid bill was calculated.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-gray-200 bg-gray-50 p-5">
+                  <h2 className="text-lg font-semibold text-gray-900">Step 3: choose the next action</h2>
+                  <p className="mt-2 text-sm leading-6 text-gray-700">
+                    Use the guide for the checklist and examples, then prepare the Money Claim Pack
+                    when the tenant debt and evidence are clear.
+                  </p>
+                </div>
+              </div>
             </div>
           </Container>
         </section>
@@ -463,5 +486,4 @@ export default function MoneyClaimUnpaidBillsPage() {
     </>
   );
 }
-
 

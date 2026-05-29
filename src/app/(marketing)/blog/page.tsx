@@ -141,8 +141,35 @@ export default function BlogPage() {
               </h2>
               <p className="mt-4 text-lg text-slate-600">
                 Begin with the England landlord problem in plain English, understand the route, and
-                then move into the right product when you are ready.
+                then move into the right product when you are ready, with clear evidence checks.
               </p>
+              <p className="mt-4 text-base leading-8 text-slate-600">
+                Use this hub when you are not sure whether the next step is a Section 8 notice,
+                possession claim, money claim, rent increase notice, tenancy agreement, or a free
+                tool check. Each guide is written to answer the search query quickly, explain the
+                evidence and compliance points that matter, and connect you to a document route only
+                where that route genuinely fits the landlord problem.
+              </p>
+              <div className="mt-5 grid gap-3 text-sm text-slate-700 md:grid-cols-3">
+                <div className="rounded-xl border border-[#e3d3ff] bg-white p-4">
+                  <h3 className="font-semibold text-slate-900">Answer first</h3>
+                  <p className="mt-2 leading-6">
+                    Start with the short answer, then read the deeper process if you need more context.
+                  </p>
+                </div>
+                <div className="rounded-xl border border-[#e3d3ff] bg-white p-4">
+                  <h3 className="font-semibold text-slate-900">Evidence next</h3>
+                  <p className="mt-2 leading-6">
+                    Check dates, notices, arrears records, service proof, and tenancy documents before acting.
+                  </p>
+                </div>
+                <div className="rounded-xl border border-[#e3d3ff] bg-white p-4">
+                  <h3 className="font-semibold text-slate-900">Product route</h3>
+                  <p className="mt-2 leading-6">
+                    Move into Notice Only, Complete Pack, Money Claim, rent increase, or tenancy agreement support when the guide shows a clear fit.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </section>

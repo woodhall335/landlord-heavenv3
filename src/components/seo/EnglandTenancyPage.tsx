@@ -267,6 +267,11 @@ export function EnglandTenancyPage({
                   {introTitle}
                 </h2>
                 <div className="mt-4 space-y-4 text-lg leading-8 text-[#546075]">
+                  <p>
+                    Short answer: use this page when you need an England landlord tenancy agreement route
+                    that matches the occupiers, property setup, deposit position, guarantor details, and
+                    current rules before you start drafting.
+                  </p>
                   {introBody.map((paragraph, index) => (
                     <p key={`sales-intro-${index}`}>{paragraph}</p>
                   ))}
@@ -623,6 +628,11 @@ export function EnglandTenancyPage({
                 {introTitle}
               </h2>
               <div className="mt-4 space-y-4 text-lg leading-8 text-[#546075]">
+                <p>
+                  Short answer: use this page to match the tenancy agreement search term to the current
+                  landlord document route, then choose the Standard, Premium, Student, HMO / Shared House,
+                  Lodger, Scotland, Wales, or Northern Ireland path that fits the property.
+                </p>
                 {introBody.map((paragraph, index) => (
                   <p key={`intro-body-${index}`}>{paragraph}</p>
                 ))}

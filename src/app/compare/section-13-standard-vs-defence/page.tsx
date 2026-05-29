@@ -100,6 +100,50 @@ export default function Section13ComparisonPage() {
       />
 
       <Container className="py-12 md:py-16">
+        <section className="mb-10 rounded-lg border border-[#E8E1D7] bg-white p-6">
+          <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
+            Quick answer
+          </p>
+          <h2 className="mt-3 text-3xl font-bold text-[#141B2D]">
+            Use Supported for normal service, Tribunal-Ready for a likely fight
+          </h2>
+          <p className="mt-4 max-w-4xl text-base leading-8 text-[#546075]">
+            Use the Supported Rent Increase Pack when you need a clean Form 4A notice, service
+            record, market evidence, and landlord checklist for an increase that looks ordinary.
+            Use the Tribunal-Ready pack when the tenant has objected, the proposed rent is near the
+            edge of the market evidence, or you want the response material and bundle checklist ready
+            before a challenge lands.
+          </p>
+          <p className="mt-3 max-w-4xl text-base leading-8 text-[#546075]">
+            Step through the comparison before buying: check the current rent, check the proposed
+            increase, check comparable evidence, then choose the pack that leaves you with the
+            clearest service record and next action.
+          </p>
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            <div className="rounded-lg border border-[#E8E1D7] bg-[#FCFBF8] p-4">
+              <h3 className="font-semibold text-[#141B2D]">Evidence check</h3>
+              <p className="mt-2 text-sm leading-6 text-[#546075]">
+                Compare current rent, proposed rent, comparable listings, condition, location, and
+                the date you want the new rent to start.
+              </p>
+            </div>
+            <div className="rounded-lg border border-[#E8E1D7] bg-[#FCFBF8] p-4">
+              <h3 className="font-semibold text-[#141B2D]">Challenge risk</h3>
+              <p className="mt-2 text-sm leading-6 text-[#546075]">
+                Treat objection history, weak comparables, large jumps, and poor property condition
+                as reasons to choose the stronger pack.
+              </p>
+            </div>
+            <div className="rounded-lg border border-[#E8E1D7] bg-[#FCFBF8] p-4">
+              <h3 className="font-semibold text-[#141B2D]">Next action</h3>
+              <p className="mt-2 text-sm leading-6 text-[#546075]">
+                Preview the included documents, check the FAQs, then start the pack that matches the
+                risk level before serving the notice.
+              </p>
+            </div>
+          </div>
+        </section>
+
         <section className="rounded-lg border border-[#E8E1D7] bg-white p-6">
           <h2 className="text-3xl font-bold text-[#141B2D]">Which situation fits?</h2>
           <div className="mt-6 overflow-hidden rounded-lg border border-[#E8E1D7]">

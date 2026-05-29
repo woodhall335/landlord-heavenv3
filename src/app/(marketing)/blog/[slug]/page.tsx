@@ -804,8 +804,9 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 What this guide will help with
               </p>
               <p className="mt-2 text-sm text-white/85">
-                This guide explains the problem in plain English, then helps
-                you work out the next sensible step.
+                For landlords searching for {post.targetKeyword}, this guide gives the short answer first,
+                explains the evidence or compliance checks, and points you toward the next sensible
+                document, tool, or guide.
               </p>
             </div>
           </div>
@@ -859,6 +860,20 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                   </ol>
                 </Reveal>
               )}
+
+              <Reveal as="section" className="mt-8 rounded-2xl border border-[#e9dcff] bg-[#fbf8ff] p-5 shadow-[0_14px_34px_rgba(105,46,212,0.08)] md:p-6" aria-label="Use this guide when">
+                <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">Use this guide when</p>
+                <h2 className="mt-2 text-xl font-bold text-gray-900">You need a practical landlord answer, not just a definition</h2>
+                <p className="mt-3 text-sm leading-7 text-gray-700">
+                  Use this page when you need to understand {post.targetKeyword} in landlord terms, check
+                  the evidence or compliance points that matter, and decide whether the next step is a guide,
+                  free tool, notice pack, court pack, tenancy agreement, rent increase pack, or money claim route.
+                </p>
+                <p className="mt-3 text-sm leading-7 text-gray-700">
+                  The useful SEO value here is the visible explanation, examples, FAQs, and internal links,
+                  not the hidden meta keywords.
+                </p>
+              </Reveal>
 
               {isTop30UpgradedPost(post.slug) && (
                 <Reveal as="section" className="mt-8 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-5 shadow-[0_14px_34px_rgba(105,46,212,0.08)] md:p-6" aria-label="Recommended next routes">

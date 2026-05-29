@@ -43,6 +43,7 @@
     "audit:seo-metadata": "npx -p node@20 -p tsx tsx scripts/seo-metadata-audit.ts",
     "audit:seo-keywords": "npx -p node@20 -p tsx tsx scripts/seo-keyword-mapping-audit.ts",
     "audit:seo-unified-coverage": "npx -p node@20 -p tsx tsx scripts/seo-unified-coverage-audit.ts --write",
+    "audit:seo-content-quality": "npx -p node@20 -p tsx tsx scripts/seo-content-quality-audit.ts",
     "audit:eviction-rules": "npx -p node@20 -p tsx tsx scripts/audit-eviction-rules.ts",
     "validation:status": "npx -p node@20 -p tsx tsx scripts/validation-status.ts",
     "validation:phase14-report": "npx -p node@20 -p tsx tsx scripts/phase14-impact-report.ts",

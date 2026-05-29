@@ -31,6 +31,16 @@ export default function CookiesPage() {
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 md:p-12">
           <p className="text-sm text-gray-500 mb-8">Last updated: November 22, 2025</p>
 
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8">
+            <h2 className="text-xl font-semibold text-charcoal mb-3">How to use this cookie policy</h2>
+            <p className="text-gray-700 text-sm leading-6">
+              Use this page as a practical checklist: first check which cookies are essential, then
+              decide whether optional analytics or marketing cookies are acceptable, and finally use
+              your browser controls or cookie preferences to change your choice. If your question is
+              about account data rather than cookies, use the Privacy Policy next.
+            </p>
+          </div>
+
           <div className="bg-primary-subtle border-l-4 border-primary p-4 mb-8">
             <p className="text-charcoal font-semibold mb-2 flex items-center gap-2">
               <Cookie className="w-5 h-5 text-primary" />

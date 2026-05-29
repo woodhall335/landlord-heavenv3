@@ -141,6 +141,18 @@ export default function MoneyClaimAbandonedGoodsPage() {
           <Container>
             <div className="mx-auto max-w-5xl">
               <SeoPageContextPanel pathname="/money-claim-abandoned-goods" />
+              <div className="mt-6 rounded-2xl border border-gray-200 bg-gray-50 p-5">
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Use this money claim route when clearance costs are the debt
+                </h2>
+                <p className="mt-3 text-sm leading-7 text-gray-700">
+                  This page fits when the possession issue is over or separate, the tenant has left
+                  belongings behind, and your practical next step is recovering storage, disposal,
+                  cleaning, or clearance costs. Keep the notice to collect goods, photos, quotes,
+                  receipts, timeline, and any sale proceeds evidence before starting the paid Money
+                  Claim Pack.
+                </p>
+              </div>
             </div>
           </Container>
         </section>

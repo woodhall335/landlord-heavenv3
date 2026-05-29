@@ -135,6 +135,36 @@ export default function TenancyAgreementOptionsComparisonPage() {
           <p className="mt-3 max-w-3xl text-base leading-7 text-[#546075]">
             Start with how the property will be occupied. A solicitor is better for bespoke disputes; a cheap template may be enough for very simple cases, but it will not check whether the agreement matches the tenancy you are setting up.
           </p>
+          <p className="mt-3 max-w-3xl text-base leading-7 text-[#546075]">
+            Use this comparison when you need the agreement route, sample preview, setup checklist,
+            and supporting documents to match the actual let before move-in. The right choice depends
+            on who lives there, whether the landlord also lives there, whether the property is shared,
+            whether students or guarantors are involved, and how much management wording you want in
+            the pack.
+          </p>
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            <div className="rounded-lg border border-[#E8E1D7] bg-[#FCFBF8] p-4">
+              <h3 className="font-semibold text-[#141B2D]">Check the facts</h3>
+              <p className="mt-2 text-sm leading-6 text-[#546075]">
+                Confirm occupiers, landlord residence, room or whole-property setup, deposit
+                position, guarantors, pets, utilities, and handover records.
+              </p>
+            </div>
+            <div className="rounded-lg border border-[#E8E1D7] bg-[#FCFBF8] p-4">
+              <h3 className="font-semibold text-[#141B2D]">Preview the proof</h3>
+              <p className="mt-2 text-sm leading-6 text-[#546075]">
+                Look for included addenda, house rules, handover forms, sample wording, compliance
+                checks, and FAQs before choosing a paid agreement.
+              </p>
+            </div>
+            <div className="rounded-lg border border-[#E8E1D7] bg-[#FCFBF8] p-4">
+              <h3 className="font-semibold text-[#141B2D]">Next action</h3>
+              <p className="mt-2 text-sm leading-6 text-[#546075]">
+                Start from the AST hub if you are unsure, or open the exact agreement page when the
+                setup clearly matches one route.
+              </p>
+            </div>
+          </div>
           <div className="mt-6 grid gap-4 md:grid-cols-5">
             {tenancyOptions.map((option) => (
               <Link key={option.href} href={option.href} className="rounded-lg border border-[#E8E1D7] p-4 hover:border-[#7C3AED]">

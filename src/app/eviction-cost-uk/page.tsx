@@ -168,6 +168,17 @@ export default function EvictionCostUkPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <SeoPageContextPanel pathname="/eviction-cost-uk" />
+              <div className="mt-6 rounded-2xl border border-gray-200 bg-gray-50 p-5">
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Use this route when cost is deciding the next eviction step
+                </h2>
+                <p className="mt-3 text-sm leading-7 text-gray-700">
+                  This page fits landlords comparing DIY paperwork, solicitor support, notice-stage
+                  documents, court papers, bailiff fees, and lost-rent risk. Use it to decide whether
+                  Notice Only, Complete Pack, or Money Claim is the next practical product route
+                  before you spend more on the wrong stage.
+                </p>
+              </div>
             </div>
           </div>
         </section>

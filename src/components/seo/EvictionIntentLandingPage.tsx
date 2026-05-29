@@ -339,6 +339,12 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
             <p className="mt-1 text-lg font-semibold text-charcoal">{`What is the safest practical way to deal with ${config.keyword}?`}</p>
             <p className="mt-3 text-sm font-semibold uppercase tracking-wide text-primary">Short answer</p>
             <p className="mt-1 text-gray-700">Most landlords do better when they slow down just enough to serve the right notice, use wording that fits the facts, and keep one clean evidence trail from the start. That usually saves far more time than rushing ahead with the wrong dates, the wrong wording, or service you cannot prove later.</p>
+            <p className="mt-3 text-gray-700">
+              Use this route when the searched problem is live, the property is in the jurisdiction
+              described above, and you need a practical next step: notice, court papers, money claim,
+              tenancy paperwork, or a supporting guide. If the facts are unusual, use the page to
+              identify the evidence and compliance questions before buying or serving anything.
+            </p>
             <p className="mt-3 text-sm font-semibold uppercase tracking-wide text-primary">What to do next</p>
             <ol className="mt-4 list-decimal space-y-2 pl-5 text-gray-700">
               <li>Work out whether you are dealing with old Section 21 wording or a live England case under the current rules.</li>
