@@ -25,7 +25,17 @@ export function getCurrentFrameworkMetadata(config: CurrentFrameworkPageConfig):
   return {
     title: config.title,
     description: config.description,
-    keywords: normalizeKeywordList(config.keywords).slice(0, SEO_KEYWORDS_RECOMMENDED_MAX),
+    keywords: normalizeKeywordList([
+      ...config.keywords,
+      config.heroTitle,
+      config.title.replace(/\s*\|.*$/, ''),
+      `${config.heroTitle.replace(/[?:|].*$/, '').trim()} landlord guide`,
+      'England landlord documents',
+      'Renters Rights Act landlord guidance',
+      'section 8 notice england',
+      'possession claim england',
+      ...config.relatedLinks.map((guide) => guide.title),
+    ]).slice(0, SEO_KEYWORDS_RECOMMENDED_MAX),
     alternates: { canonical },
     openGraph: {
       title: config.title,

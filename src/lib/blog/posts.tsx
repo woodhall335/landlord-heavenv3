@@ -39309,7 +39309,7 @@ const allBlogPosts: BlogPost[] = [
   // POST: What to Do When Tenant Won't Pay
   {
     slug: 'what-to-do-when-tenant-wont-pay',
-    title: 'What to Do When a Tenant Won\'t Pay: Complete Action Plan 2026',
+    title: 'Tenant Won\'t Pay Rent? Landlord Action Plan 2026',
     description: 'Step-by-step guide for landlords when tenants refuse to pay rent or other debts. From first contact to court action and enforcement.',
     metaDescription: 'Tenant won\'t pay rent? Complete action plan for UK landlords covering communication, legal letters, court claims, and enforcement options.',
     date: '2026-01-15',

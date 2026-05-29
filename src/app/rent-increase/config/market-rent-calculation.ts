@@ -13,7 +13,7 @@ export const marketRentCalculationPage: RentIncreaseGuidePage = {
     'Explains practical pricing method landlords can defend.',
     'Connects pricing logic directly to notice and report outputs.',
   ],
-  metaTitle: 'Market Rent Calculation UK: Comparable Method for Section 13 Rent Increases',
+  metaTitle: 'Market Rent Calculation Guide for Section 13 Landlords',
   metaDescription:
     'Learn how to calculate market rent for Section 13 proposals using comparables, adjustments, quartiles, and evidence-quality checks.',
   primaryKeyword: 'market rent calculation',

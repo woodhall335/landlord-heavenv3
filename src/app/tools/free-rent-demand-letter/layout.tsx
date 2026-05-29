@@ -12,6 +12,14 @@ export const metadata: Metadata = generateMetadata({
     'rent arrears letter',
     'landlord demand letter',
     'free rent demand letter',
+    'unpaid rent demand letter',
+    'tenant arrears letter template',
+    'letter before claim rent arrears',
+    'late rent letter landlord',
+    'rent arrears payment demand',
+    'landlord arrears notice letter',
+    'pre-action rent arrears letter',
+    'tenant payment request letter',
   ],
 });
 

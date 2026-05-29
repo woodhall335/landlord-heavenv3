@@ -29,7 +29,11 @@ import {
   breadcrumbSchema,
 } from '@/lib/seo/structured-data';
 import {
+  buildAskHeavenKeywords,
   formatAskHeavenJurisdiction,
+  getAskHeavenH1,
+  getAskHeavenH2Headings,
+  getAskHeavenSeoTitle,
   normalizeAskHeavenMetaDescription,
   truncateAskHeavenMetaTitle,
 } from '@/lib/ask-heaven/seo-metadata';
@@ -83,8 +87,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       ? ` (${formatAskHeavenJurisdiction(question.jurisdictions[0])})`
       : '';
 
-  const rawTitle = `${question.question}${jurisdictionSuffix} | Ask Heaven`;
+  const rawTitle = `${getAskHeavenSeoTitle(question)}${jurisdictionSuffix} | Ask Heaven`;
   const title = truncateAskHeavenMetaTitle(rawTitle, 70);
+  const keywords = buildAskHeavenKeywords(question);
   // Build description (target 150-160 chars)
   const description = normalizeAskHeavenMetaDescription(
     question.summary,
@@ -95,6 +100,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    keywords,
     robots,
     openGraph: {
       title,
@@ -138,6 +144,8 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
   const recommendedProduct = chatTopic
     ? getRecommendedProduct(chatTopic, resolvedJurisdiction, intent ?? undefined)
     : null;
+  const pageH1 = getAskHeavenH1(question);
+  const seoH2Headings = getAskHeavenH2Headings(question);
   const nextStepActions = getAskHeavenNextStepActions({
     topic: chatTopic,
     jurisdiction: primaryJurisdiction,
@@ -197,12 +205,23 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
         initialTopic={chatTopic}
         initialQuestionText={question.question}
         showReviewWarning={question.status !== 'approved' && !isCanarySlug}
-        chatHeading={question.question}
+        chatHeading={pageH1}
         chatSubheading="Plain-English landlord help for England, Wales, Scotland, and Northern Ireland"
       />
       <div className="bg-white pb-12">
         <div className="container mx-auto px-4 pt-8">
           <div className="max-w-4xl mx-auto">
+            <section className="mb-8 rounded-2xl border border-gray-200 bg-gray-50 p-5">
+              <h2 className="text-xl font-semibold text-gray-900">{seoH2Headings[0]}</h2>
+              <p className="mt-2 text-sm leading-relaxed text-gray-700">{question.summary}</p>
+              {seoH2Headings[1] && (
+                <h2 className="mt-5 text-xl font-semibold text-gray-900">{seoH2Headings[1]}</h2>
+              )}
+              <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                Use the recommended action below to move from the answer into the right notice,
+                agreement, evidence pack, or recovery step for your case.
+              </p>
+            </section>
             <NextStepWidget
               location="ask_heaven_slug"
               primaryAction={nextStepActions.primaryAction}

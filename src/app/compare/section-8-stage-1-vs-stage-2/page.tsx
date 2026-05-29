@@ -33,7 +33,7 @@ const faqs = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Section 8 Notice or Court Pack?',
+  title: 'Section 8 Notice or Court Pack? Compare Landlord Options',
   description:
     'Decide whether you need to serve Form 3A first or prepare the N5, N119, and possession claim documents as well.',
   keywords: [
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Section 8 Notice or Court Pack?',
+    title: 'Section 8 Notice or Court Pack? Compare Landlord Options',
     description:
       'Decide whether you need the Section 8 notice first or the complete possession court pack.',
     url: canonicalUrl,
@@ -81,7 +81,7 @@ export default function Section8StageComparisonPage() {
 
       <UniversalHero
         badge="Compare"
-        title="Section 8 Notice or Court Pack?"
+        title="Section 8 Notice or Court Pack? Compare Landlord Options"
         subtitle="If you have not served notice yet, start with Form 3A and proof of service. If the case is heading to court, prepare the N5, N119, evidence, and hearing file too."
         primaryCta={{ label: 'Create the Section 8 notice', href: '/products/notice-only' }}
         secondaryCta={{ label: 'Prepare court papers', href: '/products/complete-pack' }}

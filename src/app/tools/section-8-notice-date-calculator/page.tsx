@@ -31,6 +31,13 @@ export const metadata: Metadata = generateMetadata({
     'form 3a notice date',
     'when can landlord apply to court section 8',
     'section 8 deemed service date',
+    'section 8 service date calculator',
+    'section 8 court date calculator',
+    'section 8 earliest court date',
+    'form 3a service calculation',
+    'section 8 rent arrears notice period',
+    'landlord eviction notice dates',
+    'section 8 notice timing england',
   ],
 });
 

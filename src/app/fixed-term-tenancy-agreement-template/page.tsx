@@ -18,6 +18,13 @@ export const metadata: Metadata = {
     'fixed term tenancy agreement',
     'fixed term tenancy agreement template',
     'england tenancy agreement',
+    'fixed term tenancy template england',
+    'legacy ast fixed term agreement',
+    'assured periodic tenancy agreement',
+    'standard tenancy agreement england',
+    'premium tenancy agreement england',
+    'renters rights act tenancy agreement',
+    'landlord tenancy agreement template',
   ],
   alternates: { canonical: canonicalUrl },
 };

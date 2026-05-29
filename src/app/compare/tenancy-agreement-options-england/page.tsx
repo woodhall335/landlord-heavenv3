@@ -74,6 +74,14 @@ export const metadata: Metadata = {
     'tenancy agreement options england',
     'compare tenancy agreements',
     'landlord tenancy agreement pack',
+    'standard tenancy agreement england',
+    'premium tenancy agreement landlord',
+    'student tenancy agreement england',
+    'hmo shared house tenancy agreement',
+    'lodger agreement england',
+    'assured shorthold tenancy options',
+    'choose tenancy agreement landlord',
+    'england rental agreement comparison',
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
@@ -138,6 +146,9 @@ export default function TenancyAgreementOptionsComparisonPage() {
         </section>
 
         <section className="mt-12 overflow-hidden rounded-lg border border-[#E8E1D7] bg-white">
+          <div className="border-b border-[#E8E1D7] p-6">
+            <h2 className="text-3xl font-bold text-[#141B2D]">Compare the live England agreement routes</h2>
+          </div>
           <table className="w-full text-left text-sm">
             <thead className="bg-[#F7F2FF] text-[#2A2161]">
               <tr>

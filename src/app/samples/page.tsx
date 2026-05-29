@@ -83,9 +83,17 @@ export const metadata: Metadata = {
   keywords: [
     'landlord document samples',
     'section 8 notice sample',
+    'form 3a sample pack',
+    'complete eviction pack sample',
+    'n5 n119 court pack example',
     'tenancy agreement sample',
+    'assured tenancy agreement example',
+    'hmo tenancy agreement sample',
     'rent increase pack sample',
+    'form 4a example',
     'money claim pack sample',
+    'particulars of claim example',
+    'landlord legal document examples',
   ],
   alternates: {
     canonical: canonicalUrl,

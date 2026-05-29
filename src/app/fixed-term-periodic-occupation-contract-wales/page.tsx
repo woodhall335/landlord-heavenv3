@@ -25,7 +25,7 @@ import {
 
 // Page constants for analytics
 const PAGE_PATH = '/fixed-term-periodic-occupation-contract-wales';
-const PAGE_TITLE = 'Fixed Term vs Periodic Occupation Contract Wales';
+const PAGE_TITLE = 'Fixed Term vs Periodic Occupation Contract Wales Guide';
 const PAGE_TYPE = 'tenancy' as const;
 
 const astProductHref = '/products/ast';
@@ -33,7 +33,7 @@ const astProductHref = '/products/ast';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Fixed Term vs Periodic Contract Wales',
+  title: 'Fixed Term vs Periodic Occupation Contract Wales Guide',
   description:
     'Plain-English landlord guide to choosing between fixed-term and periodic occupation contracts in Wales, including what happens when the fixed term ends.',
   keywords: [
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     canonical: 'https://landlordheaven.co.uk/fixed-term-periodic-occupation-contract-wales',
   },
   openGraph: {
-    title: 'Fixed Term vs Periodic Contract Wales',
+    title: 'Fixed Term vs Periodic Occupation Contract Wales Guide',
     description:
       'Landlord guide to fixed-term and periodic occupation contracts in Wales, including notice rules, automatic conversion, and break clause considerations.',
     type: 'website',
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Fixed Term vs Periodic Contract Wales',
+    title: 'Fixed Term vs Periodic Occupation Contract Wales Guide',
     description:
       'Compare fixed-term and periodic occupation contracts in Wales, including Section 173 notice timing and break clause guidance.',
   },
@@ -136,7 +136,7 @@ export default function FixedTermPeriodicOccupationContractWalesPage() {
         <UniversalHero
           badge="Wales Only"
           badgeIcon={<Scale className="w-4 h-4" />}
-          title="Fixed Term vs Periodic Occupation Contract Wales"
+          title="Fixed Term vs Periodic Occupation Contract Wales Guide"
           subtitle={
             <>
               Compare <strong>fixed-term</strong> and <strong>periodic occupation contracts</strong>{' '}

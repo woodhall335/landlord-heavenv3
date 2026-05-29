@@ -1,5 +1,63 @@
 import type { AskHeavenQuestion } from '@/lib/ask-heaven/questions/types';
 
+const TOPIC_KEYWORD_MAP: Record<AskHeavenQuestion['primary_topic'], string[]> = {
+  eviction: [
+    'landlord eviction help',
+    'section 8 notice advice',
+    'possession claim guidance',
+  ],
+  arrears: [
+    'rent arrears landlord help',
+    'recover unpaid rent',
+    'tenant not paying rent',
+  ],
+  deposit: [
+    'tenancy deposit rules',
+    'landlord deposit dispute',
+    'deposit protection guidance',
+  ],
+  tenancy: [
+    'tenancy agreement help',
+    'landlord tenancy advice',
+    'rental agreement guidance',
+  ],
+  compliance: [
+    'landlord compliance help',
+    'rental property compliance',
+    'landlord legal obligations',
+  ],
+  damage_claim: [
+    'tenant damage claim',
+    'landlord property damage',
+    'recover damage costs from tenant',
+  ],
+  notice_periods: [
+    'landlord notice period',
+    'eviction notice period',
+    'tenant notice rules',
+  ],
+  court_process: [
+    'landlord court process',
+    'possession hearing guidance',
+    'county court landlord claim',
+  ],
+  tenant_rights: [
+    'tenant rights landlord question',
+    'landlord duties to tenant',
+    'rental rights guidance',
+  ],
+  landlord_obligations: [
+    'landlord obligations guidance',
+    'landlord legal duties',
+    'rental compliance obligations',
+  ],
+  other: [
+    'landlord question answer',
+    'ask heaven landlord help',
+    'uk landlord guidance',
+  ],
+};
+
 export function truncateAskHeavenMetaTitle(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
 
@@ -61,6 +119,49 @@ export function normalizeAskHeavenMetaDescription(
   return finalDescription;
 }
 
+export function getAskHeavenSeoTitle(question: AskHeavenQuestion): string {
+  return question.seo_title?.trim() || question.question;
+}
+
+export function getAskHeavenH1(question: AskHeavenQuestion): string {
+  return question.seo_h1?.trim() || question.question;
+}
+
+export function buildAskHeavenKeywords(question: AskHeavenQuestion): string[] {
+  const explicitKeywords = normalizeKeywordList(question.seo_keywords ?? []);
+  if (explicitKeywords.length >= 10) {
+    return explicitKeywords.slice(0, 12);
+  }
+
+  const jurisdictionLabels = question.jurisdictions.map(formatAskHeavenJurisdiction);
+  return normalizeKeywordList([
+    ...explicitKeywords,
+    question.question,
+    question.summary,
+    question.primary_topic.replace(/_/g, ' '),
+    ...jurisdictionLabels.map((label) => `${label} landlord help`),
+    ...jurisdictionLabels.map((label) => `${label} rental law question`),
+    ...TOPIC_KEYWORD_MAP[question.primary_topic],
+    'Ask Heaven landlord answer',
+    'landlord legal guidance UK',
+    'landlord next steps',
+  ]).slice(0, 12);
+}
+
+export function getAskHeavenH2Headings(question: AskHeavenQuestion): string[] {
+  const explicitHeadings = normalizeKeywordList(question.seo_h2_headings ?? []);
+  if (explicitHeadings.length >= 2) {
+    return explicitHeadings.slice(0, 4);
+  }
+
+  const topicLabel = question.primary_topic.replace(/_/g, ' ');
+  return [
+    ...explicitHeadings,
+    `What this ${topicLabel} answer covers`,
+    'Recommended next steps for landlords',
+  ].slice(0, 4);
+}
+
 export function formatAskHeavenJurisdiction(jurisdiction: string): string {
   const map: Record<string, string> = {
     england: 'England',
@@ -103,4 +204,26 @@ function truncateToWordBoundary(text: string, maxLength: number): string {
     : trimmed
   ).trim();
   return `${candidate.replace(/[.,;:!?-]+$/, '')}.`;
+}
+
+function normalizeKeywordList(values: string[]): string[] {
+  const seen = new Set<string>();
+  const normalized: string[] = [];
+
+  for (const value of values) {
+    const keyword = value.replace(/\s+/g, ' ').trim();
+    if (!keyword) {
+      continue;
+    }
+
+    const key = keyword.toLowerCase();
+    if (seen.has(key)) {
+      continue;
+    }
+
+    seen.add(key);
+    normalized.push(keyword);
+  }
+
+  return normalized;
 }

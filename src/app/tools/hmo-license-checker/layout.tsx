@@ -12,6 +12,14 @@ export const metadata: Metadata = generateMetadata({
     'hmo license checker england',
     'hmo council checker',
     'landlord hmo tool',
+    'does my property need an hmo licence',
+    'mandatory hmo licence checker',
+    'additional hmo licensing checker',
+    'selective licensing landlord check',
+    'hmo licensing rules england',
+    'shared house licence checker',
+    'local council hmo licence',
+    'landlord compliance hmo',
   ],
 });
 

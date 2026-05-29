@@ -12,6 +12,14 @@ export const metadata: Metadata = generateMetadata({
     'arrears schedule calculator',
     'landlord arrears tool',
     'rent arrears interest calculator',
+    'tenant rent arrears calculator',
+    'unpaid rent calculator',
+    'rent debt schedule',
+    'section 8 arrears schedule',
+    'money claim rent arrears calculator',
+    'late rent payment calculator',
+    'landlord rent debt calculator',
+    'rent arrears evidence schedule',
   ],
 });
 

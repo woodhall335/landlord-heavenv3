@@ -617,9 +617,9 @@ export default function HMOLicenseChecker() {
       <div className="mt-12 space-y-8">
         {/* Section 1: What is an HMO? */}
         <div className="rounded-xl bg-primary-50 p-6">
-          <h3 className="mb-4 text-xl font-semibold text-gray-900">
+          <h2 className="mb-4 text-xl font-semibold text-gray-900">
             What is an HMO (House in Multiple Occupation)?
-          </h3>
+          </h2>
           <div className="space-y-3 text-sm text-gray-700 leading-relaxed">
             <p>
               A House in Multiple Occupation (HMO) is a property rented out by at least 3 people who are
@@ -645,9 +645,9 @@ export default function HMOLicenseChecker() {
 
         {/* Section 2: Do I Need an HMO License? */}
         <div className="rounded-xl bg-blue-50 p-6">
-          <h3 className="mb-4 text-xl font-semibold text-gray-900">
+          <h2 className="mb-4 text-xl font-semibold text-gray-900">
             Do I Need an HMO License?
-          </h3>
+          </h2>
           <div className="space-y-3 text-sm text-gray-700 leading-relaxed">
             <p>
               <strong>Standard Test (Mandatory Licensing):</strong> Your property definitely needs

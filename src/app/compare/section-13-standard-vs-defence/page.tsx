@@ -41,6 +41,14 @@ export const metadata: Metadata = {
     'tribunal ready rent increase pack',
     'form 4a rent increase',
     'rent increase tribunal challenge',
+    'section 13 rent increase pack',
+    'landlord rent increase evidence',
+    'tenant rent increase challenge',
+    'market rent evidence pack',
+    'rent increase notice form 4a',
+    'tribunal rent increase bundle',
+    'section 13 standard vs defence',
+    'england landlord rent increase pack',
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
@@ -138,6 +146,9 @@ export default function Section13ComparisonPage() {
         </section>
 
         <section className="mt-12 grid gap-5 md:grid-cols-3">
+          <div className="md:col-span-3">
+            <h2 className="text-3xl font-bold text-[#141B2D]">Common Section 13 pack questions</h2>
+          </div>
           {faqs.map((faq) => (
             <article key={faq.question} className="rounded-lg border border-[#E8E1D7] bg-white p-5">
               <h3 className="font-semibold text-[#141B2D]">{faq.question}</h3>

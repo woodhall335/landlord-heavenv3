@@ -27,7 +27,7 @@ import {
 
 // Page constants for analytics
 const PAGE_PATH = '/joint-occupation-contract-wales';
-const PAGE_TITLE = 'Joint Occupation Contract Wales';
+const PAGE_TITLE = 'Joint Occupation Contract Wales Landlord Guide';
 const PAGE_TYPE = 'tenancy' as const;
 
 const astProductHref = '/products/ast';
@@ -35,7 +35,7 @@ const astProductHref = '/products/ast';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Joint Occupation Contract Wales | Multiple Contract-Holders',
+  title: 'Joint Occupation Contract Wales Landlord Guide',
   description:
     'Plain-English landlord guide to joint occupation contracts in Wales, including multiple contract-holders, joint liability, and adding or removing holders.',
   keywords: [
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     canonical: 'https://landlordheaven.co.uk/joint-occupation-contract-wales',
   },
   openGraph: {
-    title: 'Joint Occupation Contract Wales | Landlord Heaven',
+    title: 'Joint Occupation Contract Wales Landlord Guide',
     description:
       'Landlord guide to joint occupation contracts for multiple contract-holders in Wales, with current Renting Homes Act compliance.',
     type: 'website',
@@ -101,7 +101,7 @@ export default function JointOccupationContractWalesPage() {
         <UniversalHero
           badge="Wales Only"
           badgeIcon={<Scale className="w-4 h-4" />}
-          title="Joint Occupation Contract Wales"
+          title="Joint Occupation Contract Wales Landlord Guide"
           subtitle={
             <>
               Create an occupation contract for <strong>multiple contract-holders</strong> in

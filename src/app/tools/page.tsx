@@ -17,10 +17,16 @@ export const metadata = generateMetadata({
   keywords: [
     'free landlord tools',
     'rent arrears calculator',
-    'HMO checker',
+    'HMO licence checker',
     'rent demand letter generator',
     'ask heaven landlord help',
     'landlord compliance tools',
+    'section 8 notice date calculator',
+    'rent increase checker',
+    'landlord document tools',
+    'free property management tools',
+    'tenant arrears tools',
+    'landlord legal calculators',
   ],
 });
 
@@ -103,6 +109,9 @@ export default function ToolsHubPage() {
       <section className="py-10 md:py-14 bg-white">
         <Container>
           <div className="mx-auto max-w-6xl">
+            <div className="mb-6 text-center">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Compliance Timing Tools</h2>
+            </div>
             <Section21ComplianceTimingPanel />
           </div>
         </Container>

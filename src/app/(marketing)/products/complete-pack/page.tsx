@@ -31,6 +31,10 @@ export const metadata: Metadata = {
     'N5 possession claim form',
     'N119 particulars of claim',
     'rent arrears possession claim',
+    'complete eviction pack england',
+    'court-ready eviction documents',
+    'section 8 witness statement',
+    'possession claim evidence bundle',
   ],
   alternates: {
     canonical: canonicalUrl,

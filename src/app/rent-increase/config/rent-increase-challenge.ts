@@ -13,7 +13,7 @@ export const rentIncreaseChallengePage: RentIncreaseGuidePage = {
     'Shows how to respond clearly without overpromising outcomes.',
     'Connects challenge handling to existing notice and evidence outputs.',
   ],
-  metaTitle: 'Tenant Challenge Rent Increase: Landlord Guide to Responses and Tribunal Path',
+  metaTitle: 'Tenant Rent Increase Challenge Guide for Landlords',
   metaDescription:
     'Landlord guide to handling tenant rent increase challenges in England. Learn objection pathways, response structure, evidence continuity, and escalation readiness.',
   primaryKeyword: 'tenant challenge rent increase',

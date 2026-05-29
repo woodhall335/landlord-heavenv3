@@ -710,9 +710,9 @@ export default function RentDemandLetterGenerator() {
 
               <div className="mt-12 space-y-8">
                 <div className="rounded-xl bg-primary-50 p-6">
-                  <h3 className="mb-4 text-xl font-semibold text-gray-900">
+                  <h2 className="mb-4 text-xl font-semibold text-gray-900">
                     When to Send a Rent Demand Letter
-                  </h3>
+                  </h2>
                   <div className="space-y-3 text-sm text-gray-700 leading-relaxed">
                     <p>
                       A rent demand letter is a written notice asking the tenant to clear overdue rent.
@@ -747,9 +747,9 @@ export default function RentDemandLetterGenerator() {
                 </div>
 
                 <div className="rounded-xl bg-blue-50 p-6">
-                  <h3 className="mb-4 text-xl font-semibold text-gray-900">
+                  <h2 className="mb-4 text-xl font-semibold text-gray-900">
                     How to Serve a Demand Letter
-                  </h3>
+                  </h2>
                   <div className="space-y-3 text-sm text-gray-700 leading-relaxed">
                     <p>
                       The letter needs to reach the tenant properly if you want it to carry weight later.

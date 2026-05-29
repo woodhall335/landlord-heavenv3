@@ -30,6 +30,10 @@ export const metadata: Metadata = {
     'landlord MCOL pack',
     'landlord money claim pack',
     'money claim unpaid rent',
+    'recover unpaid rent after tenant leaves',
+    'tenant debt recovery',
+    'claim tenant property damage',
+    'county court claim rent arrears',
   ],
   alternates: {
     canonical: canonicalUrl,

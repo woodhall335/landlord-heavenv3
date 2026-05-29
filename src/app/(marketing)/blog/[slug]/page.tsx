@@ -46,6 +46,7 @@ import { NextSteps } from '@/components/blog/NextSteps';
 import { MoneyClaimBridge } from '@/components/marketing/CommercialBridge';
 import { getBlogImagesForPost, getBlogImagesForPostThumb } from '@/lib/blog/image-manifest';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
+import { getBlogPostManualSeoKeywords } from '@/lib/blog/manual-seo-keywords';
 import { getBlogProductCta } from '@/lib/blog/product-cta-map';
 import {
   getPostsForTopicHub,
@@ -313,6 +314,23 @@ export async function generateStaticParams() {
   return [...categoryParams, ...topicHubParams, ...postParams];
 }
 
+function buildBlogPostKeywords(post: BlogPost, seoConfig: ReturnType<typeof getBlogSeoConfig>): string[] {
+  return normalizeKeywordList([
+    ...getBlogPostManualSeoKeywords(post),
+    post.targetKeyword,
+    ...post.secondaryKeywords,
+    post.title,
+    seoConfig.metaTitle,
+    `${post.targetKeyword} guide`,
+    `${post.targetKeyword} landlords`,
+    post.category,
+    ...post.tags,
+    seoConfig.pillarLink.label,
+    ...seoConfig.supportingLinks.map((link) => link.label),
+    seoConfig.primaryCommercialLink.anchorText,
+  ]).slice(0, 12);
+}
+
 export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
   const { slug } = await params;
 
@@ -326,7 +344,16 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
     const canonicalUrl = getCanonicalUrl(`/blog/${slug}`);
     const pageTitle = sanitizePageTitle(config.title);
     const socialTitle = buildBrandedTitle(pageTitle);
-    const keywords = normalizeKeywordList(config.relatedTopics).slice(0, 8);
+    const keywords = normalizeKeywordList([
+      config.name,
+      config.title,
+      ...config.relatedTopics,
+      `${config.name} landlord guide`,
+      `${config.name} landlord documents`,
+      `${config.name} eviction guidance`,
+      `${config.name} tenancy guidance`,
+      `${config.name} rent arrears guidance`,
+    ]).slice(0, 12);
 
     return {
       title: pageTitle,
@@ -355,7 +382,18 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
     const canonicalUrl = getCanonicalUrl(`/blog/${slug}`);
     const pageTitle = sanitizePageTitle(topicHub.title);
     const socialTitle = buildBrandedTitle(pageTitle);
-    const keywords = normalizeKeywordList([topicHub.name, pageTitle]).slice(0, 8);
+    const keywords = normalizeKeywordList([
+      topicHub.name,
+      pageTitle,
+      topicHub.title,
+      `${topicHub.name} landlord guide`,
+      `${topicHub.name} landlord documents`,
+      `${topicHub.name} templates`,
+      `${topicHub.name} checklist`,
+      `${topicHub.name} England`,
+      `${topicHub.name} UK landlords`,
+      topicHub.metaDescription,
+    ]).slice(0, 12);
 
     return {
       title: pageTitle,
@@ -399,7 +437,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
   const canonicalUrl = getCanonicalUrl(seoConfig.canonicalPath);
   const pageTitle = sanitizePageTitle(seoConfig.metaTitle);
   const socialTitle = buildBrandedTitle(pageTitle);
-  const keywords = normalizeKeywordList([post.targetKeyword, ...post.secondaryKeywords]).slice(0, 8);
+  const keywords = buildBlogPostKeywords(post, seoConfig);
 
   return {
     title: pageTitle,
@@ -593,7 +631,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
       '@id': `${SITE_ORIGIN}/blog/${slug}`,
     },
     wordCount: post.wordCount,
-    keywords: [post.targetKeyword, ...post.secondaryKeywords].join(', '),
+    keywords: getBlogPostManualSeoKeywords(post).join(', '),
     ...(post.reviewer && {
       reviewedBy: {
         '@type': 'Person',

@@ -32,7 +32,7 @@ export const SEO_TITLE_RECOMMENDED_MIN = 32;
 export const SEO_TITLE_RECOMMENDED_MAX = 72;
 export const SEO_DESCRIPTION_RECOMMENDED_MIN = 120;
 export const SEO_DESCRIPTION_RECOMMENDED_MAX = 170;
-export const SEO_KEYWORDS_RECOMMENDED_MAX = 8;
+export const SEO_KEYWORDS_RECOMMENDED_MAX = 12;
 
 const MOJIBAKE_PATTERN = /(?:\u00C3\u0192|\u00C3\u201A|\u00C3\u00A2|\u00C3\u00B0\u00C5\u00B8|\u00C3\u00AF\u00C2\u00B8)/;
 
@@ -42,12 +42,18 @@ const MOJIBAKE_PATTERN = /(?:\u00C3\u0192|\u00C3\u201A|\u00C3\u00A2|\u00C3\u00B0
  */
 export const CORE_KEYWORDS = [
   'UK landlord',
+  'England landlord documents',
   'eviction notice',
   'section 21',
   'section 8',
+  'section 13 rent increase',
+  'money claim for landlords',
   'tenancy agreement',
   'court-ready documents',
   'landlord eviction case bundles',
+  'landlord legal documents',
+  'rent arrears help',
+  'property compliance paperwork',
 ];
 
 /**
@@ -55,38 +61,60 @@ export const CORE_KEYWORDS = [
  */
 export const PRODUCT_KEYWORDS = {
   eviction: [
-    'eviction notice UK',
-    'section 21 notice',
-    'section 8 notice',
+    'eviction notice england',
+    'section 8 notice england',
+    'form 3a section 8 notice',
     'evict tenant',
-    'notice to leave',
-    'possession order',
-    'court-ready notice',
+    'evict tenant not paying rent',
+    'rent arrears eviction',
+    'section 8 grounds',
+    'n215 certificate of service',
+    'possession claim england',
+    'n5 n119 possession claim',
+    'court-ready eviction notice',
+    'landlord eviction documents',
   ],
   money_claim: [
-    'money claim online',
-    'MCOL',
+    'money claim online landlord',
+    'MCOL landlord claim',
     'rent arrears claim',
     'tenant debt recovery',
     'CCJ tenant',
     'small claims court',
     'unpaid rent claim',
+    'letter before claim rent arrears',
+    'particulars of claim rent arrears',
+    'landlord debt recovery pack',
+    'claim tenant property damage',
+    'recover unpaid rent after tenant leaves',
   ],
   tenancy: [
-    'tenancy agreement template',
-    'AST template',
-    'assured shorthold tenancy',
-    'PRT Scotland',
-    'occupation contract Wales',
+    'tenancy agreement england',
+    'tenancy agreement template england',
+    'assured periodic tenancy agreement',
+    'assured shorthold tenancy agreement',
+    'renters rights act tenancy agreement',
+    'standard tenancy agreement',
+    'premium tenancy agreement',
+    'student tenancy agreement',
+    'hmo tenancy agreement',
+    'lodger agreement',
     'landlord tenancy agreement',
-    'rental agreement UK',
+    'rental agreement england',
   ],
   tool: [
     'free landlord tool',
-    'section 21 generator',
     'eviction notice generator',
-    'rent calculator',
-    'landlord calculator',
+    'rent arrears calculator',
+    'landlord document generator',
+    'section 8 date calculator',
+    'rent demand letter generator',
+    'hmo licence checker',
+    'rent increase checker',
+    'landlord compliance checker',
+    'form 4a rent calculator',
+    'mcol landlord tool',
+    'property management calculator',
   ],
 };
 

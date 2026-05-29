@@ -20,7 +20,20 @@ export function getRentIncreaseGuideMetadata(config: RentIncreaseGuidePage): Met
   return {
     title: config.metaTitle,
     description: config.metaDescription,
-    keywords: [config.primaryKeyword, config.intentLabel, 'section 13', 'form 4a', 'rent increase england'],
+    keywords: [
+      config.primaryKeyword,
+      config.intentLabel,
+      config.heroTitle,
+      'section 13',
+      'form 4a',
+      'rent increase england',
+      'section 13 notice',
+      'form 4a rent increase',
+      'market rent evidence',
+      'tenant challenge rent increase',
+      'landlord rent increase notice',
+      'section 13 tribunal',
+    ],
     alternates: { canonical },
     openGraph: {
       title: config.metaTitle,

@@ -56,8 +56,8 @@ export const homeHeroConfig: HeroConfig = {
   ...withPreset('home'),
   preset: 'home',
   trustText: 'England landlord documents checked before you serve, file, or raise rent',
-  title: 'Solicitor-quality landlord documents.',
-  highlightTitle: 'Without the solicitor bill.',
+  title: 'England landlord documents',
+  highlightTitle: 'without the solicitor bill.',
   subtitle: (
     <>
       Section 8 notices, court papers, rent increases, money claims, and tenancy

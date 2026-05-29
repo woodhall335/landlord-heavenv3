@@ -51,6 +51,10 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
     'Form 4A England',
     'section 13 notice rent increase',
     'form 4a rent increase',
+    'market evidence rent increase',
+    'supported rent increase pack',
+    'section 13 service record',
+    'landlord rent increase notice',
   ],
   heroTitle: 'Create a Form 4A rent increase pack with market evidence.',
   heroSubtitle:
@@ -250,6 +254,10 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
     'tribunal evidence checklist',
     "Renters' Rights Act tribunal pack",
     'section 13 tribunal defence',
+    'rent increase challenge response',
+    'section 13 evidence bundle',
+    'form 4a tribunal preparation',
+    'landlord rent tribunal pack',
   ],
   heroTitle: 'Prepare for a Section 13 rent challenge before it lands.',
   heroSubtitle:

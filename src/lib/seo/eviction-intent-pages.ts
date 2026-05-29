@@ -1302,9 +1302,9 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
 
   'tenant-refusing-inspection': {
     slug: 'tenant-refusing-inspection',
-    title: 'Tenant Refusing Inspection? Rights, Process and Next Steps',
+    title: 'Tenant Refusing Inspection? Landlord Access and Evidence Guide',
     description: 'Landlord guide for England when a tenant refuses inspections, covering access records, informal steps, and when stronger action may become realistic.',
-    h1: 'Tenant Refusing Inspection? Rights, Process and Next Steps',
+    h1: 'Tenant Refusing Inspection? Landlord Access and Evidence Guide',
     heroSubheadline: 'If the tenant keeps refusing inspections, this guide helps you separate everyday access issues from the situations that may justify stronger formal action.',
     heroCta: 'Start the right notice',
     secondaryCta: { label: 'Need court papers too? Start the complete pack', product: 'complete_pack', src: 'tenant_refusing_inspection' },
@@ -2469,12 +2469,26 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
 };
 
 export function getIntentPageMetadata(config: IntentPageConfig): Metadata {
+  const productKeywords =
+    config.primaryProduct === 'complete_pack'
+      ? ['complete eviction pack', 'possession claim pack', 'court-ready landlord documents']
+      : ['section 8 notice pack', 'eviction notice pack', 'form 3a notice file'];
+
   return generateMetadataForPageType({
     title: config.title,
     description: config.description,
     path: `/${config.slug}`,
     type: 'website',
-    keywords: [config.keyword],
+    keywords: [
+      config.keyword,
+      config.title.replace(/\s*\|.*$/, ''),
+      config.h1,
+      `${config.keyword} england`,
+      `${config.keyword} for landlords`,
+      ...productKeywords,
+      ...config.relatedLinks.map((link) => link.label),
+      ...config.proofBullets,
+    ],
     pageType: 'seo_landing',
   });
 }

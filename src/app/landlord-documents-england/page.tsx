@@ -97,6 +97,13 @@ export const metadata: Metadata = {
     'landlord document packs',
     'eviction notices england',
     'tenancy agreement england',
+    'landlord forms and packs',
+    'section 8 notice england',
+    'rent arrears documents england',
+    'money claim landlord pack',
+    'england tenancy agreement routes',
+    'landlord compliance documents',
+    'rental property forms england',
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
@@ -131,6 +138,7 @@ export default function LandlordDocumentsEnglandPage() {
         <Container className="py-10">
           <div className="mx-auto max-w-5xl rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">Bridge page</p>
+            <h2 className="mt-3 text-3xl font-bold text-slate-950">Live landlord document routes for England</h2>
             <p className="mt-3 text-lg leading-8 text-slate-700">
               The older standalone England document pages have been retired. Use the live routes below to reach the current public entry points without dead ends or outdated product journeys.
             </p>

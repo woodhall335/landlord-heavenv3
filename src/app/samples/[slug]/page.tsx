@@ -69,7 +69,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: config.metaTitle,
     description: config.metaDescription,
-    keywords: [config.targetKeyword, config.productName, 'landlord document sample'],
+    keywords: config.seoKeywords,
     alternates: {
       canonical: canonicalUrl,
     },

@@ -69,6 +69,30 @@ export interface AskHeavenQuestion {
   question: string;
 
   /**
+   * Optional hand-edited SEO title for approved public Q&A pages.
+   * Falls back to the question text when editorial SEO data has not been added.
+   */
+  seo_title?: string | null;
+
+  /**
+   * Optional hand-edited page H1 for approved public Q&A pages.
+   * Falls back to the question text when editorial SEO data has not been added.
+   */
+  seo_h1?: string | null;
+
+  /**
+   * Optional hand-edited SEO keyword targets for this exact Q&A page.
+   * Approved/indexable questions should carry at least ten page-specific targets.
+   */
+  seo_keywords?: string[] | null;
+
+  /**
+   * Optional hand-edited H2 plan for this exact Q&A page.
+   * Used to keep the rendered page aligned with the editorial search intent.
+   */
+  seo_h2_headings?: string[] | null;
+
+  /**
    * Full answer in Markdown format.
    * Must be >500 words for indexing eligibility.
    */
@@ -151,6 +175,10 @@ export interface AskHeavenQuestionListItem {
 export interface CreateAskHeavenQuestionInput {
   slug: string;
   question: string;
+  seo_title?: string | null;
+  seo_h1?: string | null;
+  seo_keywords?: string[] | null;
+  seo_h2_headings?: string[] | null;
   answer_md: string;
   summary: string;
   primary_topic: AskHeavenPrimaryTopic;
@@ -167,6 +195,10 @@ export interface UpdateAskHeavenQuestionInput {
   id: string;
   slug?: string;
   question?: string;
+  seo_title?: string | null;
+  seo_h1?: string | null;
+  seo_keywords?: string[] | null;
+  seo_h2_headings?: string[] | null;
   answer_md?: string;
   summary?: string;
   primary_topic?: AskHeavenPrimaryTopic;
