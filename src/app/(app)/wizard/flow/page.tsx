@@ -9,7 +9,6 @@
 'use client';
 
 import React, { Suspense, useState, useEffect, useCallback, useRef } from 'react';
-import Image from 'next/image';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { StructuredWizard } from '@/components/wizard/StructuredWizard';
 import { MoneyClaimSectionFlow } from '@/components/wizard/flows/MoneyClaimSectionFlow';
@@ -44,7 +43,6 @@ import {
   isRetiredPublicSku,
 } from '@/lib/public-retirements';
 import {
-  PUBLIC_PRODUCT_DESCRIPTORS,
   getPublicProductOwnerHref,
   isPubliclyStartableProduct,
 } from '@/lib/public-products';
@@ -277,21 +275,15 @@ function WizardFlowContent() {
     jurisdiction === 'england' &&
     !editCaseId &&
     effectiveProduct === 'tenancy_agreement';
-  const showEnglandEvictionProductChooser =
-    type === 'eviction' &&
-    jurisdiction === 'england' &&
-    !editCaseId &&
-    mode !== 'edit' &&
-    searchParams.get('entry') !== 'steps';
   const evictionFlowProduct =
     type === 'eviction'
       ? normalizedProduct === 'notice_only'
         ? 'notice_only'
         : normalizedProduct === 'complete_pack'
           ? 'complete_pack'
-          : product === 'notice_only'
-            ? 'notice_only'
-            : 'complete_pack'
+          : product === 'complete_pack'
+            ? 'complete_pack'
+            : 'notice_only'
       : null;
   const tenancyFlowProduct: TenancyFlowProduct =
     normalizedProduct === 'ast_standard' ||
@@ -326,7 +318,6 @@ function WizardFlowContent() {
     // Only track once per component mount AND per session
     if (hasTrackedStartRef.current) return;
     if (!hasRequiredParams || !jurisdiction) return;
-    if (showEnglandEvictionProductChooser) return;
 
     const trackingProduct = normalizedProduct || product;
     if (!trackingProduct) return;
@@ -379,7 +370,6 @@ function WizardFlowContent() {
     normalizedProduct,
     product,
     searchParams,
-    showEnglandEvictionProductChooser,
     type,
   ]);
 
@@ -472,7 +462,7 @@ function WizardFlowContent() {
           startProduct = rawProduct;
         } else {
           // Sensible default if someone deep-links without a product
-          startProduct = 'complete_pack';
+          startProduct = 'notice_only';
         }
       } else {
         // Fallback for any other future types
@@ -535,7 +525,7 @@ function WizardFlowContent() {
     }
 
     // All supported case types now use structured / section flows
-    if (showEnglandTenancyChooser || showEnglandEvictionProductChooser) {
+    if (showEnglandTenancyChooser) {
       setLoading(false);
       return;
     }
@@ -551,7 +541,6 @@ function WizardFlowContent() {
   }, [
     editCaseId,
     hasRequiredParams,
-    showEnglandEvictionProductChooser,
     showEnglandTenancyChooser,
     startStructuredWizard,
     type,
@@ -614,141 +603,10 @@ function WizardFlowContent() {
     router.push(`/wizard/flow?${params.toString()}`);
   };
 
-  const handleStartEnglandEvictionFlow = (selectedProduct: 'notice_only' | 'complete_pack') => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('type', 'eviction');
-    params.set('product', PUBLIC_PRODUCT_DESCRIPTORS[selectedProduct].productType);
-    params.set('entry', 'steps');
-    params.delete('jurisdiction');
-    params.delete('case_id');
-    router.push(`/wizard/flow?${params.toString()}`);
-  };
-
-  const renderEnglandEvictionChooser = () => {
-    if (type !== 'eviction' || jurisdiction !== 'england') {
-      return null;
-    }
-
-    const activeProduct = evictionFlowProduct === 'notice_only' ? 'notice_only' : 'complete_pack';
-    const productChoices = [
-      {
-        key: 'notice_only' as const,
-        title: 'Stage 1: Section 8 Notice & Service Pack',
-        subtitle: 'Built to hold up if challenged',
-        imageSrc: '/images/eviction-notice-generator-wizard.webp',
-        imageAlt: 'Stage 1 Section 8 Notice and Service Pack wizard preview',
-        description:
-          'Choose this if you need the Form 3A notice, front-page case summary, service playbook, compliance snapshot, and arrears support lined up before you serve anything.',
-      },
-      {
-        key: 'complete_pack' as const,
-        title: 'Stage 2: Section 8 Court & Possession Pack',
-        subtitle: 'Carry the case into court without breaking the file',
-        imageSrc: '/images/complete-eviction-pack-wizard.webp',
-        imageAlt: 'Stage 2 Section 8 Court and Possession Pack wizard preview',
-        description:
-          'Choose this if you want the full combined pack: Stage 1 notice and service documents plus Stage 2 court documents, all working together from the start.',
-      },
-    ];
-
-    return (
-      <div className="min-h-screen bg-slate-50">
-        <div className="mx-auto flex min-h-screen max-w-5xl items-center px-4 py-12 sm:px-6 lg:px-8">
-          <div className="w-full rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_28px_80px_rgba(15,23,42,0.08)] sm:p-8 lg:p-10">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-              England eviction wizard
-            </p>
-            <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-              Choose the pack you want to start with
-            </h1>
-            <p className="mt-3 max-w-3xl text-base leading-7 text-slate-600">
-              Pick the Section 8 notice generator if you need the notice-stage documents first, or
-              go straight into the full court possession pack if you want the notice and court
-              paperwork joined up from the start.
-            </p>
-            <p className="mt-3 text-sm font-medium text-slate-500">
-              Your questions start on the first real step after you choose a product.
-            </p>
-
-            <div className="mt-8 grid gap-4 lg:grid-cols-2">
-              {productChoices.map((choice) => {
-                const isActive = activeProduct === choice.key;
-
-                return (
-                  <button
-                    key={choice.key}
-                    type="button"
-                    onClick={() => handleStartEnglandEvictionFlow(choice.key)}
-                    className={`group rounded-[1.75rem] border p-5 text-left transition ${
-                      isActive
-                        ? 'border-violet-500 bg-[linear-gradient(135deg,#7C3AED_0%,#5B21B6_100%)] text-white shadow-[0_20px_50px_rgba(91,33,182,0.3)]'
-                        : 'border-slate-200 bg-slate-50 text-slate-900 hover:border-violet-300 hover:bg-violet-50/50'
-                    }`}
-                  >
-                    <div className="mb-5 overflow-hidden rounded-[1.4rem] border border-white/12 bg-white/80 shadow-[0_18px_34px_rgba(15,23,42,0.08)]">
-                      <Image
-                        src={choice.imageSrc}
-                        alt={choice.imageAlt}
-                        width={1200}
-                        height={760}
-                        className="h-auto w-full object-cover"
-                        sizes="(min-width: 1024px) 32rem, 100vw"
-                        priority={isActive}
-                      />
-                    </div>
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <div className="text-lg font-semibold">{choice.title}</div>
-                        <div className={`mt-1 text-sm ${isActive ? 'text-violet-100' : 'text-slate-500'}`}>
-                          {choice.subtitle}
-                        </div>
-                      </div>
-                      <span
-                        className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${
-                          isActive ? 'bg-white/15 text-white' : 'bg-violet-100 text-violet-700'
-                        }`}
-                      >
-                        {isActive ? 'Selected' : 'Choose'}
-                      </span>
-                    </div>
-                    <p className={`mt-4 text-sm leading-6 ${isActive ? 'text-violet-50' : 'text-slate-600'}`}>
-                      {choice.description}
-                    </p>
-                    <div
-                      className={`mt-6 inline-flex items-center text-sm font-semibold ${
-                        isActive ? 'text-white' : 'text-slate-900'
-                      }`}
-                    >
-                      {isActive ? 'Continue to the first step' : 'Start with this pack'}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-              <p className="text-sm font-semibold text-slate-900">What changes next</p>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
-                The wizard will move into the real questions after this screen. Notice Only starts
-                with Section 8 notice basics. Complete Pack starts with the possession route and
-                court-pack overview. The product switcher will not keep following you through every
-                step.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   // Show loading state while initializing or checking order status
   if (loading || !caseId || !orderCheckDone) {
     if (showEnglandTenancyChooser && !editCaseId) {
       return <EnglandTenancyProductChooser onSelect={handleSelectEnglandProduct} />;
-    }
-
-    if (showEnglandEvictionProductChooser) {
-      return renderEnglandEvictionChooser();
     }
 
     return (
@@ -766,10 +624,6 @@ function WizardFlowContent() {
 
   if (showEnglandTenancyChooser) {
     return <EnglandTenancyProductChooser onSelect={handleSelectEnglandProduct} />;
-  }
-
-  if (showEnglandEvictionProductChooser) {
-    return renderEnglandEvictionChooser();
   }
 
   // 🟦 NEW: For money_claim, use the section-based premium flow
