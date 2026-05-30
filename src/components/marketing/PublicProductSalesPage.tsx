@@ -651,39 +651,31 @@ function ProductFitProofBand({
           <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
             <Reveal className="max-w-3xl">
               <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#6D28D9]">
-                Product fit
+                Is this right for you?
               </p>
               <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#17142B] md:text-4xl">
-                Use this when {routeName.toLowerCase()} is the job you need to get right
+                Make sure {routeName.toLowerCase()} is the right next step for your situation
               </h2>
               <p className="mt-4 text-base leading-8 text-[#4B5565] md:text-lg">
-                This page is designed for landlords who want a practical document route, not a generic
-                template hunt. Use it to check whether the product fits the tenant problem, see what
-                paperwork is included, preview the evidence and compliance support, and move into the
-                paid pack only when the next action is clear.
+                Before you buy: Check what's inside, see real examples, and confirm this covers your specific circumstances. This page is built to help you make a confident decision, not to rush you into a purchase.
               </p>
             </Reveal>
 
             <StaggerReveal className="grid gap-4 md:grid-cols-2">
               <article className="rounded-[1.5rem] border border-[#E8E1F8] bg-[#FCFAFF] p-5">
-                <h3 className="text-lg font-semibold text-[#17142B]">What you should know before buying</h3>
+                <h3 className="text-lg font-semibold text-[#17142B]">Your situation matters</h3>
                 <p className="mt-3 text-sm leading-7 text-[#4B5565] md:text-base">
-                  The route should match the landlord problem, the property jurisdiction, the tenant
-                  facts, and the stage you are at. If the page points you to a notice, court pack, money
-                  claim, rent increase, or tenancy agreement, it is because that is the practical next
-                  step this product is built around.
+                  Every landlord's circumstances are different. This solution is designed for specific property types, jurisdictions, and tenant situations. If this page describes your facts, it's the practical next step. If not, use the comparison section to find what fits.
                 </p>
               </article>
               <article className="rounded-[1.5rem] border border-[#E8E1F8] bg-[#FCFAFF] p-5">
-                <h3 className="text-lg font-semibold text-[#17142B]">Proof, preview, and compliance cues</h3>
+                <h3 className="text-lg font-semibold text-[#17142B]">See what you're getting</h3>
                 <p className="mt-3 text-sm leading-7 text-[#4B5565] md:text-base">
-                  Look for the included document list, sample or preview evidence, checklist wording,
-                  court-readiness cues, and FAQs before you start. Those visible signals matter more for
-                  SEO and trust than hidden meta keywords.
+                  Look at the document checklist, view sample forms, and read the guidance included. This transparency means you know exactly what to expect before you commit—and you can confirm it matches your needs.
                 </p>
               </article>
               <article className="rounded-[1.5rem] border border-[#D9F2E7] bg-[#F2FBF6] p-5">
-                <h3 className="text-lg font-semibold text-[#134E3A]">Usually included here</h3>
+                <h3 className="text-lg font-semibold text-[#134E3A]">What's in the pack</h3>
                 {includedItems.length ? (
                   <ul className="mt-3 space-y-2 text-sm leading-6 text-[#215245] md:text-base">
                     {includedItems.map((item) => (
@@ -692,16 +684,14 @@ function ProductFitProofBand({
                   </ul>
                 ) : (
                   <p className="mt-3 text-sm leading-7 text-[#215245] md:text-base">
-                    Guided questions, document preparation, practical checks, and a clearer file for the
-                    landlord task this page describes.
+                    Targeted documents, practical checklists, court-ready guidance, and step-by-step support for this specific landlord task.
                   </p>
                 )}
               </article>
               <article className="rounded-[1.5rem] border border-[#E8E1F8] bg-white p-5">
-                <h3 className="text-lg font-semibold text-[#17142B]">Next action</h3>
+                <h3 className="text-lg font-semibold text-[#17142B]">Ready to proceed?</h3>
                 <p className="mt-3 text-sm leading-7 text-[#4B5565] md:text-base">
-                  {priceLabel ? `${priceLabel}. ` : ''}Start only after the page matches your facts; use
-                  the FAQs and comparison sections if you are still deciding between routes.
+                  {priceLabel ? `${priceLabel}. ` : ''}Make sure the page matched your situation first. Use the FAQs and comparison sections if you're still choosing between options.
                 </p>
                 <TrackedLink
                   href={primary.href}
@@ -939,10 +929,10 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
 
               {howItWorks.imageSrc ? (
                 <ImageLinkWrapper
-                href={howItWorks.imageHref}
-                className={`premium-image-frame relative block min-h-[360px] overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)] md:min-h-[440px] lg:min-h-full ${
-                  howItWorks.mobileImageFirstFullBleed ? 'hidden lg:block' : ''
-                }`}
+                  href={howItWorks.imageHref}
+                  className={`premium-image-frame relative block min-h-[360px] overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)] md:min-h-[440px] ${
+                    howItWorks.mobileImageFirstFullBleed ? 'hidden lg:block' : ''
+                  }`}
                 >
                   <Image
                     src={howItWorks.imageSrc}
