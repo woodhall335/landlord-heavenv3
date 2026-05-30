@@ -628,6 +628,40 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
   );
 }
 
+function simplifyProductName(fullTitle: string): string {
+  // Extract the core product name from full titles like:
+  // "Create a Section 8 Eviction Notice and Service File" -> "Section 8 notice"
+  // "Complete Eviction Pack" -> "Complete Pack"
+  // "Standard Tenancy Agreement" -> "Standard Agreement"
+
+  const title = fullTitle.trim();
+
+  // Section 8/21 notices
+  if (title.includes('Section 8') && title.includes('Notice')) return 'Section 8 notice';
+  if (title.includes('Section 21') && title.includes('Notice')) return 'Section 21 notice';
+
+  // Tenancy agreements
+  if (title.includes('Tenancy Agreement')) {
+    if (title.includes('Standard')) return 'Standard Agreement';
+    if (title.includes('Premium')) return 'Premium Agreement';
+    if (title.includes('Student')) return 'Student Agreement';
+    if (title.includes('HMO') || title.includes('Shared House')) return 'HMO Agreement';
+    if (title.includes('Lodger')) return 'Lodger Agreement';
+    return 'Tenancy Agreement';
+  }
+
+  // Packs
+  if (title.includes('Complete')) return 'Complete Pack';
+  if (title.includes('Court')) return 'Court Pack';
+  if (title.includes('Eviction')) return 'Eviction Pack';
+
+  // Money claims
+  if (title.includes('Money Claim')) return 'Money Claim';
+
+  // Default fallback
+  return title;
+}
+
 function ProductFitProofBand({
   content,
   analytics,
@@ -635,9 +669,10 @@ function ProductFitProofBand({
   content: ProductSalesPageContent;
   analytics?: ProductSalesPageContent['analytics'];
 }) {
-  const routeName = content.hero.title;
   const primary = content.hero.primaryCta ?? content.cta.primary;
   const priceLabel = content.earlyProofBand?.priceLabel;
+  const simplifiedProductName = simplifyProductName(content.hero.title);
+  
   const includedItems = [
     ...(content.earlyProofBand?.includedBullets ?? []),
     ...(content.whatYouGet.items?.slice(0, 2).map((item) => item.name) ?? []),
@@ -654,28 +689,28 @@ function ProductFitProofBand({
                 Is this right for you?
               </p>
               <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#17142B] md:text-4xl">
-                Make sure {routeName.toLowerCase()} is the right next step for your situation
+                Before you buy {simplifiedProductName.toLowerCase()}: make sure it fits your situation
               </h2>
               <p className="mt-4 text-base leading-8 text-[#4B5565] md:text-lg">
-                Before you buy: Check what's inside, see real examples, and confirm this covers your specific circumstances. This page is built to help you make a confident decision, not to rush you into a purchase.
+                Every landlord's circumstances are different. This page shows you what's inside, gives you real examples, and helps you confirm this is the practical next step for your case. Only proceed when you're confident it matches your facts.
               </p>
             </Reveal>
 
             <StaggerReveal className="grid gap-4 md:grid-cols-2">
               <article className="rounded-[1.5rem] border border-[#E8E1F8] bg-[#FCFAFF] p-5">
-                <h3 className="text-lg font-semibold text-[#17142B]">Your situation matters</h3>
+                <h3 className="text-lg font-semibold text-[#17142B]">Check it matches your case</h3>
                 <p className="mt-3 text-sm leading-7 text-[#4B5565] md:text-base">
-                  Every landlord's circumstances are different. This solution is designed for specific property types, jurisdictions, and tenant situations. If this page describes your facts, it's the practical next step. If not, use the comparison section to find what fits.
+                  This pack is designed for a specific situation. Read the page to see if your property type, tenancy stage, and grounds align with what we cover here. If they don't, use the comparison section to find what does.
                 </p>
               </article>
               <article className="rounded-[1.5rem] border border-[#E8E1F8] bg-[#FCFAFF] p-5">
-                <h3 className="text-lg font-semibold text-[#17142B]">See what you're getting</h3>
+                <h3 className="text-lg font-semibold text-[#17142B]">See exactly what's included</h3>
                 <p className="mt-3 text-sm leading-7 text-[#4B5565] md:text-base">
-                  Look at the document checklist, view sample forms, and read the guidance included. This transparency means you know exactly what to expect before you commit—and you can confirm it matches your needs.
+                  Look at the document list below, view sample pages, and read the practical guidance. You'll know exactly what to expect before you buy—and whether it covers everything you need.
                 </p>
               </article>
               <article className="rounded-[1.5rem] border border-[#D9F2E7] bg-[#F2FBF6] p-5">
-                <h3 className="text-lg font-semibold text-[#134E3A]">What's in the pack</h3>
+                <h3 className="text-lg font-semibold text-[#134E3A]">What's in this pack</h3>
                 {includedItems.length ? (
                   <ul className="mt-3 space-y-2 text-sm leading-6 text-[#215245] md:text-base">
                     {includedItems.map((item) => (
@@ -691,7 +726,7 @@ function ProductFitProofBand({
               <article className="rounded-[1.5rem] border border-[#E8E1F8] bg-white p-5">
                 <h3 className="text-lg font-semibold text-[#17142B]">Ready to proceed?</h3>
                 <p className="mt-3 text-sm leading-7 text-[#4B5565] md:text-base">
-                  {priceLabel ? `${priceLabel}. ` : ''}Make sure the page matched your situation first. Use the FAQs and comparison sections if you're still choosing between options.
+                  {priceLabel ? `${priceLabel}. ` : ''}Only continue if this page matched your facts and situation. Use the FAQs and comparisons below if you're still deciding.
                 </p>
                 <TrackedLink
                   href={primary.href}
