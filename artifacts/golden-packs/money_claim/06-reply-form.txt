@@ -10,9 +10,9 @@ Telephone
 Email
 CLAIMANT'S DETAILS
 Claimant's name Alice Landlord
-Amount claimed £2962.45
-Letter date 28 May 2026
-Reply deadline 27 June 2026
+Amount claimed £2964.34
+Letter date 31 May 2026
+Reply deadline 30 June 2026
 Reference golden-money-claim-001
 YOUR RESPONSE
 Tick the option that applies.

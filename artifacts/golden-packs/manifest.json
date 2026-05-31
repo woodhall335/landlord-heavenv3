@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-28T19:35:13.903Z",
+  "generatedAt": "2026-05-31T17:25:18.046Z",
   "outputRoot": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\golden-packs",
   "packs": [
     {
@@ -797,7 +797,7 @@
         },
         {
           "title": "What Happens Next",
-          "description": "Next-step guide covering service, notice expiry, and the Stage 2 court handoff.",
+          "description": "Next-step guide covering service, notice expiry, and moving to court if needed.",
           "category": "guidance",
           "documentType": "what_happens_next",
           "fileName": "what_happens_next.pdf",
@@ -1001,7 +1001,7 @@
         },
         {
           "title": "Hearing Preparation Guide",
-          "description": "Court-facing hearing guide covering validity, service, grounds, arrears, and the documents to bring.",
+          "description": "Hearing guide covering validity, service, grounds, arrears, and the documents to bring.",
           "category": "guidance",
           "documentType": "hearing_checklist",
           "fileName": "hearing_checklist.pdf",

@@ -543,7 +543,7 @@ function buildBridgeParagraphs(definitions: EnglandGroundDefinition[]): string[]
 
   if (reasons.includes('rent_arrears_serious') || reasons.includes('rent_arrears_other')) {
     return [
-      'The arrears history, service chronology, and any further tenancy concerns should be read together as part of one possession case, while each statutory ground remains separately pleaded.',
+      'The arrears history, service chronology, and any further tenancy concerns should be read together as one possession case, while each ground is still explained clearly on its own.',
     ];
   }
 
@@ -660,7 +660,7 @@ function buildBreachDraft(data: DraftingInput, definition: EnglandGroundDefiniti
   const paragraphs = [
     'Ground 12 is relied on because the claimant says the tenant has failed to comply with obligations in the tenancy agreement.',
     clause ? `The alleged breach is said to concern clause or term ${clause}.` : '',
-    breachTypeText ? `The pleaded breach concerns ${breachTypeText}.` : '',
+    breachTypeText ? `The breach relied on concerns ${breachTypeText}.` : '',
     breachDates ? `The relevant incidents or dates are recorded as ${breachDates}.` : '',
     breachEvidence ? `The claimant intends to rely on the following supporting material: ${breachEvidence}.` : '',
     warnings ? `The tenancy file records warnings or requests to remedy the breach: ${warnings}.` : '',
@@ -751,7 +751,7 @@ function buildAsbDraft(data: DraftingInput, definition: EnglandGroundDefinition)
   const paragraphs = [
     `Ground ${definition.code} is relied on because the claimant says the tenant's conduct has caused nuisance, annoyance, unlawful use, or other serious neighbourhood impact relevant to this ground.`,
     incidents ? `The conduct relied on is summarised as follows: ${incidents}.` : '',
-    incidentCount > 0 ? `The current pack data records ${incidentCount} incident${incidentCount === 1 ? '' : 's'} relevant to this ground.` : '',
+    incidentCount > 0 ? `The answers provided record ${incidentCount} incident${incidentCount === 1 ? '' : 's'} relevant to this ground.` : '',
     affected ? `Those said to have been affected include ${affected}.` : '',
     warnings ? `The file records prior warnings or interventions: ${warnings}.` : '',
     policeReference ? `Police involvement is recorded under reference ${policeReference}.` : '',
@@ -984,7 +984,7 @@ function buildOccupationDraft(data: DraftingInput, definition: EnglandGroundDefi
   const paragraphs = [
     leadParagraph,
     factualBasis ? `The claimant says ${factualBasis}.` : '',
-    occupierSummary ? `The route is said to apply because it concerns ${occupierSummary}.` : '',
+    occupierSummary ? `This ground is said to apply because it concerns ${occupierSummary}.` : '',
     triggerDate ? `The key date relied on for this route is ${triggerDate}.` : '',
     noticeOrStatusDetails ? `The claimant also relies on ${noticeOrStatusDetails}.` : '',
     evidence ? `The supporting material presently identified includes ${evidence}.` : '',
@@ -1009,7 +1009,7 @@ function buildOccupationDraft(data: DraftingInput, definition: EnglandGroundDefi
     hearingWarnings:
       definition.commonReason === 'students_or_workers'
         ? [
-            'The court is likely to expect clear evidence of the qualifying occupier category and why this statutory route is engaged on current facts.',
+            'The court is likely to expect clear evidence of the qualifying occupier category and why this ground applies on the current facts.',
           ]
         : [],
     timelineItems: [
@@ -1327,7 +1327,7 @@ function buildEvidenceChecklistSection(params: {
   return {
     overviewParagraphs: dedupeParagraphs([
       groundsLeadParagraph,
-      'Assemble the evidence so the court can follow the tenancy history, the notice chronology, and the factual basis of each pleaded ground without having to infer missing steps.',
+      'Assemble the evidence so the court can follow the tenancy history, the notice dates, and the facts behind each ground without having to infer missing steps.',
       buildNoticeTimelineSentence(data),
     ]),
     collectionItems: dedupeList([
@@ -1337,7 +1337,7 @@ function buildEvidenceChecklistSection(params: {
       groundCodes.some((code) => ['8', '10', '11'].includes(code))
         ? 'Up-to-date rent account and arrears schedule, including payments made after service if any.'
         : '',
-      'Any correspondence, inspection records, warning letters, or official notices relevant to the pleaded grounds.',
+      'Any correspondence, inspection records, warning letters, or official notices relevant to the grounds you are relying on.',
       ...defenceRiskEvidenceItems,
     ]),
     groundSections: buildEvidenceChecklistSections(groundDrafts),
@@ -1346,7 +1346,7 @@ function buildEvidenceChecklistSection(params: {
       'Make sure dates, party names, and property details match across the notice, the witness statement, and the court forms.',
       groundCodes.some((code) => ['8', '10', '11'].includes(code))
         ? 'Update the arrears figures immediately before issue and again before any hearing.'
-        : 'Check that each specialist ground is supported by the specific prior-notice, status, or occupancy evidence required for that route.',
+        : 'Check that each specialist ground is supported by the prior-notice, status, or occupancy evidence required for that ground.',
       hasDefenceRiskInputs
         ? 'If the tenant is likely to dispute the claim, make sure the bundle contains the documents that answer those points directly rather than leaving the judge to infer the response.'
         : '',
@@ -1389,7 +1389,7 @@ function buildCourtFilingGuideSection(params: {
     afterIssueItems: dedupeList([
       'Monitor for any defence, witness evidence, or counterclaim and update the bundle so the response documents answer it directly.',
       'If circumstances materially change after issue, update the figures or factual chronology promptly and reflect that change consistently across the pack.',
-      'Before the hearing, re-check every court-facing document for blank placeholders, stale dates, or unsupported allegations.',
+      'Before the hearing, re-check every document that will be shown to the court for blank placeholders, stale dates, or unsupported allegations.',
     ]),
     warningParagraphs: dedupeParagraphs([
       ...groundDrafts.flatMap((draft) => draft.hearingWarnings),
@@ -1398,7 +1398,7 @@ function buildCourtFilingGuideSection(params: {
         : 'Do not assume Possession Claim Online is available for every claim. If the case is not an eligible rent-arrears-only Section 8 claim, keep to the paper N5 and N119 route.',
       groundCodes.some((code) => ['8', '10', '11'].includes(code))
         ? 'Do not rely on a stale arrears figure or assume that a mandatory arrears ground still applies if payments have reduced the balance.'
-        : 'Keep the pleaded grounds fact-specific and ensure the same evidence-led account is carried through the claim forms, witness material, and bundle.',
+        : 'Keep the grounds fact-specific and ensure the same evidence-led account is carried through the claim forms, witness material, and bundle.',
     ]),
   };
 }
@@ -1415,7 +1415,7 @@ function buildRoadmapSection(params: {
     overviewParagraphs: dedupeParagraphs([
       groundsLeadParagraph,
       buildNoticeTimelineSentence(data),
-      'The steps below should be treated as one continuous possession workflow: serve the notice correctly, preserve the evidence, issue the claim only once the notice period has run, and keep the bundle updated through to hearing.',
+      'The steps below should be treated as one clear possession process: serve the notice correctly, preserve the evidence, issue the claim only once the notice period has run, and keep the bundle updated through to hearing.',
     ]),
     noticeStageItems: dedupeList([
       `Serve the ${ENGLAND_SECTION8_NOTICE_NAME} using a permitted method and keep a clear service record.`,
@@ -1462,7 +1462,7 @@ function buildPreviewSummarySection(params: {
     ]),
     readinessItems: dedupeList([
       ...preActionParagraphs,
-      'The same ground-specific narrative should carry through the notice, any witness statement, and the court claim materials.',
+      'The same explanation of the grounds should carry through the notice, any witness statement, and the court claim materials.',
     ]),
   };
 }
@@ -1548,7 +1548,7 @@ export function buildEnglandPossessionDraftingModel(data: DraftingInput): Englan
     n119OtherBreachParagraphs:
       n119OtherBreachParagraphs.length > 0
         ? n119OtherBreachParagraphs
-        : ['No separate non-arrears breach particulars are relied on beyond the pleaded grounds and the supporting documents.'],
+        : ['No separate non-arrears breach details are relied on beyond the grounds and the supporting documents.'],
     n119StepsParagraphs: preActionParagraphs,
     n119DefendantCircumstancesParagraphs: defendantCircumstancesParagraphs,
     n119FinancialParagraphs: financialParagraphs,
@@ -1586,7 +1586,7 @@ export function buildEnglandPossessionDraftingModel(data: DraftingInput): Englan
         'Keep the notice timeline consistent across the proof of service, witness statement, and court forms.',
         groundCodes.some((code) => ['8', '10', '11'].includes(code))
           ? 'Update the arrears schedule to the latest practicable date before issuing proceedings or attending any hearing.'
-          : 'Retain the supporting documents that explain why the statutory ground remains factually justified at issue and at hearing.',
+          : 'Retain the supporting documents that explain why the ground remains factually justified at issue and at hearing.',
       ]),
       commonMistakes: dedupeList([
         'Using one service date on the notice and a different date in the support documents.',
@@ -1606,12 +1606,12 @@ export function buildEnglandPossessionDraftingModel(data: DraftingInput): Englan
         `Check that the same party names, address, grounds, court name, and notice timeline appear consistently across the ${ENGLAND_SECTION8_NOTICE_NAME}, the support documents, and any court forms.`,
         ...groundDrafts.flatMap((draft) => (draft.hearingWarnings.length > 0 ? draft.hearingWarnings : [])),
         groundCodes.some((code) => ['8', '10', '11'].includes(code))
-          ? 'If arrears grounds are relied on, make sure the arrears schedule and the pleaded figures still match the current rent account.'
+          ? 'If arrears grounds are relied on, make sure the arrears schedule and the figures in the case still match the current rent account.'
           : '',
       ]),
       afterServiceItems: dedupeList([
         'Review the pack as a whole before issue so that dates, court details, and ground wording remain aligned.',
-        'Remove empty or unused sections rather than leaving placeholder text or blank visual gaps in court-facing documents.',
+        'Remove empty or unused sections rather than leaving placeholder text or blank gaps in documents for the court.',
       ]),
       riskParagraphs: dedupeParagraphs(groundDrafts.flatMap((draft) => draft.riskParagraphs)),
     },
@@ -1621,12 +1621,12 @@ export function buildEnglandPossessionDraftingModel(data: DraftingInput): Englan
         'Review the notice, service record, witness statement, and bundle index together so the pack remains internally consistent.',
         groundCodes.some((code) => ['8', '10', '11'].includes(code))
           ? 'Update the arrears schedule and check that the figure to be stated to the judge matches the latest rent account.'
-          : 'Check that the witness statement and exhibits still describe the pleaded ground accurately as at the hearing date.',
+          : 'Check that the witness statement and exhibits still describe the ground accurately as at the hearing date.',
         'Check whether the tenant has filed a defence, witness statement, or counterclaim and identify the documents that answer it.',
       ]),
       documentItems: dedupeList(['Indexed court bundle', 'Original tenancy agreement', ENGLAND_SECTION8_NOTICE_NAME, 'Proof of service evidence', ...evidenceItems]),
       atHearingItems: dedupeList([
-        'Keep submissions short, factual, and tied to the pleaded ground or grounds.',
+        'Keep submissions short, factual, and tied to the ground or grounds you are relying on.',
         groundCodes.some((code) => ['8', '10', '11'].includes(code))
           ? 'Explain the current arrears position, the rent cadence, and the documents supporting the running balance.'
           : 'Explain why the statutory ground is made out on the facts and where the supporting evidence appears in the bundle.',
@@ -1649,7 +1649,7 @@ export function buildEnglandPossessionDraftingModel(data: DraftingInput): Englan
       groundRows: dedupeRows(groundDrafts.flatMap((draft) => draft.bundleRows)),
       preparationItems: dedupeList([
         'Paginate the bundle consistently and update the exhibit references if documents are added or removed.',
-        'Keep the court-facing bundle free from unused sections, stray technical notes, and irrelevant material.',
+        'Keep the court bundle free from unused sections, stray technical notes, and irrelevant material.',
       ]),
     },
     witness: {

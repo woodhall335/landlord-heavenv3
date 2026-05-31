@@ -865,7 +865,7 @@ function buildCaseSummaryComplianceItems(params: {
         buildComplianceStatusItem(
           'critical',
           'Deposit protection not confirmed',
-          'Deposit protection status is not confirmed in the available pack data.',
+          'Deposit protection status is not confirmed in the answers provided.',
           'Check the tenancy file and confirm the deposit position before relying on the notice.',
         ),
       );
@@ -921,7 +921,7 @@ function buildCaseSummaryComplianceItems(params: {
         buildComplianceStatusItem(
           'critical',
           'Deposit protection not confirmed',
-          'Deposit protection status is not confirmed in the current pack data. For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order until the deposit position is clear.',
+          'Deposit protection status is not confirmed in the answers provided. For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order until the deposit position is clear.',
           'Check the tenancy file and confirm the deposit position before serving or issuing.',
         ),
       );
@@ -929,8 +929,8 @@ function buildCaseSummaryComplianceItems(params: {
       items.push(
         buildComplianceStatusItem(
           'ok',
-          'Deposit position not confirmed in pack data',
-          'Deposit protection status is not confirmed in the current pack data.',
+          'Deposit position not confirmed in the answers provided',
+          'Deposit protection status is not confirmed in the answers provided.',
           'Check the file and record the deposit position so the evidence set stays complete.',
         ),
       );
@@ -1018,7 +1018,7 @@ function buildCaseSummaryComplianceItems(params: {
       buildComplianceStatusItem(
         'ok',
         'How to Rent record not confirmed',
-        'How to Rent service is not confirmed in the current pack data. That does not automatically invalidate a Section 8 notice, but it is worth checking the tenancy file and recording what was served.',
+        'How to Rent service is not confirmed in the answers provided. That does not automatically invalidate a Section 8 notice, but it is worth checking the tenancy file and recording what was served.',
         'Check the tenancy file and record the position so the file stays complete.',
       ),
     );
@@ -1070,7 +1070,7 @@ function buildPackSupportingLine(
   stage: EnglandSection8PackStage,
   supportProfile?: EnglandGroundSupportProfile,
 ): string {
-  const evidenceFocus = supportProfile?.evidenceFocusLabel || 'ground-specific evidence';
+  const evidenceFocus = supportProfile?.evidenceFocusLabel || 'evidence for each ground';
   return stage === 'stage1'
     ? `This pack aligns the notice, service, and ${evidenceFocus} so your case does not fall apart on technical errors.`
     : `This pack builds a possession claim using the selected grounds and ${evidenceFocus} without breaking on inconsistency.`;
@@ -1078,10 +1078,10 @@ function buildPackSupportingLine(
 
 function buildPackRiskLine(supportProfile?: EnglandGroundSupportProfile): string {
   if (supportProfile?.hasArrearsGrounds) {
-    return 'Most possession cases fail on notice, service, evidence, or consistency errors. Keep the arrears and ground-specific evidence aligned as the case moves forward.';
+    return 'Most possession cases fail on notice, service, evidence, or consistency errors. Keep the arrears evidence and evidence for each ground aligned as the case moves forward.';
   }
 
-  return 'Most possession cases fail on notice, service, evidence, or consistency errors. Keep the ground-specific evidence aligned as the case moves forward.';
+  return 'Most possession cases fail on notice, service, evidence, or consistency errors. Keep the evidence for each ground aligned as the case moves forward.';
 }
 
 function buildPackStatusLabel(
@@ -1109,7 +1109,7 @@ function buildPackOutcomeBullets(
   stage: EnglandSection8PackStage,
   supportProfile?: EnglandGroundSupportProfile,
 ): string[] {
-  const evidenceFocus = supportProfile?.evidenceFocusLabel || 'ground-specific evidence';
+  const evidenceFocus = supportProfile?.evidenceFocusLabel || 'evidence for each ground';
 
   if (stage === 'stage1') {
     return [
@@ -1159,8 +1159,8 @@ function buildPackNextSteps(
         step: '3',
         title: 'Keep the file aligned',
         detail: supportProfile?.hasArrearsGrounds
-          ? 'This pack continues directly into the court-stage paperwork without re-keying the core facts, arrears position, or selected-ground evidence.'
-          : 'This pack continues directly into the court-stage paperwork without re-keying the core facts or selected-ground evidence.',
+          ? 'This pack continues directly into the court-stage paperwork without entering the same details again for the core facts, arrears position, or evidence for the grounds selected.'
+          : 'This pack continues directly into the court-stage paperwork without entering the same details again for the core facts or evidence for the grounds selected.',
       },
     ];
   }
@@ -1178,7 +1178,7 @@ function buildPackNextSteps(
       title: 'Prepare for the hearing',
       detail: supportProfile?.hasArrearsGrounds
         ? 'At the hearing, the court will consider notice validity, service, whether the grounds apply, and whether the arrears are proved. Keep the file updated to the latest practicable date.'
-        : 'At the hearing, the court will consider notice validity, service, whether the grounds apply, and whether the selected-ground evidence proves the case. Keep the file updated to the latest practicable date.',
+        : 'At the hearing, the court will consider notice validity, service, whether the grounds apply, and whether the evidence for the grounds selected proves the case. Keep the file updated to the latest practicable date.',
     },
     {
       step: '3',
@@ -2188,7 +2188,7 @@ async function generateEvidenceChecklist(
     ground_support_profile: englandSupportProfile,
     ground_evidence_sections: englandSupportProfile?.groundEvidenceSections || [],
     ground_evidence_items: englandSupportProfile?.evidenceItems || [],
-    evidence_focus_label: englandSupportProfile?.evidenceFocusLabel || 'ground-specific evidence',
+    evidence_focus_label: englandSupportProfile?.evidenceFocusLabel || 'evidence for each ground',
     drafting_model: englandDraftingModel,
     required_evidence: englandSupportProfile?.requiredEvidence ||
       evictionCase.grounds.map((g) => {
@@ -3543,7 +3543,7 @@ export async function generateCompleteEvictionPack(
 	            periods_missed: periodsMissed,
 	            schedule_calculation_notes: scheduleCalculationNotes,
 	            schedule_role_note:
-	              'This schedule supports the pleaded arrears grounds, the witness evidence, and the court claim materials.',
+	              'This schedule supports the arrears grounds, the witness evidence, and the court claim materials.',
           },
           isPreview: false,
           outputFormat: 'both',
@@ -3920,7 +3920,7 @@ export async function generateCompleteEvictionPack(
       title: isSection21 ? 'Hearing Checklist (Section 21)' : 'Hearing Preparation Guide',
       description: isSection21
         ? 'Preparation checklist for Section 21 accelerated possession'
-        : 'Court-facing hearing guide covering validity, service, grounds, arrears, and the documents to bring.',
+        : 'Hearing guide covering validity, service, grounds, arrears, and the documents to bring.',
       category: 'guidance',
       document_type: 'hearing_checklist',
       html: hearingChecklistDoc.html,
@@ -4116,12 +4116,12 @@ export async function generateCompleteEvictionPack(
       data: {
         ...stage2SummaryData,
         checklist_title: 'Court Readiness Status',
-        decision_engine_title: 'Court readiness decision engine',
+        decision_engine_title: 'Court readiness check',
         status_reasoning_title: 'Court status',
         next_move_title: 'Issue decision',
         legend_critical_text: 'Resolve this before issuing proceedings or relying on the file in court.',
         legend_risk_text: 'This may not stop issue automatically, but it can weaken the file or create delay if left unmanaged.',
-        legend_ok_text: 'The current pack data records this point, but you still need to retain the underlying evidence for court.',
+        legend_ok_text: 'The answers provided record this point, but you still need to retain the underlying evidence for court.',
       },
       isPreview: false,
       outputFormat: 'both',
@@ -5149,7 +5149,7 @@ export async function generateNoticeOnlyPack(
         ground_support_profile: englandNoticeSupportProfile,
         ground_evidence_sections: englandNoticeSupportProfile?.groundEvidenceSections || [],
         ground_evidence_items: englandNoticeSupportProfile?.evidenceItems || [],
-        evidence_focus_label: englandNoticeSupportProfile?.evidenceFocusLabel || 'ground-specific evidence',
+        evidence_focus_label: englandNoticeSupportProfile?.evidenceFocusLabel || 'evidence for each ground',
         required_evidence: englandNoticeSupportProfile?.requiredEvidence || section8TemplateData.required_evidence,
         status_label: stage1SummaryData.status_label,
         compliance_status_items: stage1SummaryData.compliance_status_items,
@@ -5354,7 +5354,7 @@ export async function generateNoticeOnlyPack(
                 claimant_reference: caseId,
                 pack_context_label: 'Stage 1: Section 8 Notice & Service Pack',
                 schedule_role_note:
-                  'This schedule supports the pleaded arrears grounds and should be kept with the served notice and service record.',
+                  'This schedule supports the arrears grounds and should be kept with the served notice and service record.',
               },
               isPreview: false,
               outputFormat: 'both',
@@ -5383,7 +5383,7 @@ export async function generateNoticeOnlyPack(
         });
         documents.push({
           title: 'What Happens Next',
-          description: 'Next-step guide covering service, notice expiry, and the Stage 2 court handoff.',
+          description: 'Next-step guide covering service, notice expiry, and moving to court if needed.',
           category: 'guidance',
           document_type: 'what_happens_next',
           html: whatHappensNextDoc.html,

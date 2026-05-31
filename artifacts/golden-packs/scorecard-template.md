@@ -1,6 +1,6 @@
 # England Golden Pack Scorecard
 
-Generated: 2026-05-28T19:35:13.903Z
+Generated: 2026-05-31T17:24:29.403Z
 Output root: C:/Users/t_moh/Documents/GitHub/landlord-heavenv3/artifacts/golden-packs
 
 Suggested scoring rubric (/10):

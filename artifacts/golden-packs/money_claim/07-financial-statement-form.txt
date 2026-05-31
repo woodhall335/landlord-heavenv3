@@ -5,7 +5,7 @@ claim details already provided by the landlord are shown below.
 Tenant / debtor Tom Tenant
 Property / address 2 High Street London E1 2BB
 Claimant Alice Landlord
-Amount claimed £2962.45
+Amount claimed £2964.34
 Reference golden-money-claim-001
 Complete the sections that apply to your circumstances and return this form with the Reply Form
 within 30 days. This is focused on whether a payment plan is realistic.

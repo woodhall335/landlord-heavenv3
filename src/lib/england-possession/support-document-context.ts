@@ -238,7 +238,7 @@ export function buildEnglandGroundSupportProfile(input: DraftingContextInput | E
     evidenceItems,
     groundEvidenceSections,
     requiredEvidence: buildRequiredEvidence(groundCodes),
-    evidenceFocusLabel: hasArrearsGrounds ? 'arrears and ground-specific evidence' : 'ground-specific evidence',
+    evidenceFocusLabel: hasArrearsGrounds ? 'arrears evidence and evidence for each ground' : 'evidence for each ground',
   };
 }
 

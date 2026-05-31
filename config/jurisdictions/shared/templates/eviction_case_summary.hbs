@@ -425,8 +425,8 @@
 
   {{#if court_pack_validation_summary}}
   <div class="panel" style="margin-top: 1.1em;">
-    <h3>Court-pack validation summary</h3>
-    <p>This summary shows the recalculated service and notice dates used across the court pack.</p>
+    <h3>Dates used in this pack</h3>
+    <p>These are the service and notice dates used across the documents.</p>
     <dl class="summary-grid">
       <dt>Deemed service date used</dt>
       <dd>{{format_date court_pack_validation_summary.deemed_service_date "long"}}</dd>
@@ -496,8 +496,8 @@
     {{else}}
       <div class="risk-card ok">
         <div class="chip">ok</div>
-        <h3>No immediate blocker identified from the structured checks</h3>
-        <p>The current pack data does not show an immediate blocker from the structured checks, but the file should stay under review as facts change.</p>
+        <h3>No immediate blocker found from the answers provided</h3>
+        <p>The checks we can run from your answers do not show an immediate blocker, but the file should stay under review as facts change.</p>
         <p><strong>Action:</strong> Keep the notice, service, and evidence file aligned as the case progresses.</p>
       </div>
     {{/if}}

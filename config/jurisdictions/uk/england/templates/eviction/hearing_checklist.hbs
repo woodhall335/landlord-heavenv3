@@ -135,7 +135,7 @@
 <body>
   <div class="header">
     <h1>Hearing Preparation Guide</h1>
-    <h2>Prepare the hearing file, {{#if has_arrears_grounds}}updated arrears position{{else}}ground-specific evidence{{/if}}, and speaking points for the possession hearing{{#if (contains groundsReliedUpon "Ground 8")}} - with Ground 8 kept under review at both notice and hearing stage{{/if}}</h2>
+    <h2>Prepare the hearing file, {{#if has_arrears_grounds}}updated arrears position{{else}}evidence for each ground{{/if}}, and speaking points for the possession hearing{{#if (contains groundsReliedUpon "Ground 8")}} - with Ground 8 kept under review at both notice and hearing stage{{/if}}</h2>
   </div>
 
   <div class="summary-box">
@@ -186,7 +186,7 @@
 
   {{#if court_pack_validation_summary}}
   <div class="timeline-box">
-    <h3>Court-pack validation summary</h3>
+    <h3>Dates used in this pack</h3>
     <dl class="summary-grid">
       <dt>Deemed service date used</dt>
       <dd>{{format_date court_pack_validation_summary.deemed_service_date "long"}}</dd>
@@ -214,7 +214,7 @@
       <li>Is the notice valid?</li>
       <li>Was it served correctly?</li>
       <li>Do the grounds apply?</li>
-      <li>Is the {{#if has_arrears_grounds}}arrears evidence{{else}}ground-specific evidence{{/if}} proven?</li>
+      <li>Is the {{#if has_arrears_grounds}}arrears evidence{{else}}evidence for each ground{{/if}} proven?</li>
       {{#if (contains groundsReliedUpon "Ground 8")}}
       <li>Does Ground 8 still meet the threshold at the hearing as well as at service stage?</li>
       {{/if}}
@@ -240,7 +240,7 @@
       </li>
       {{else}}
       <li>
-        Update the ground-specific evidence to the latest practicable date.
+        Update the evidence for each ground to the latest practicable date.
         <div class="notes">Keep sale, occupation, redevelopment, conduct, status, or breach records current for the grounds relied on.</div>
       </li>
       {{/if}}
@@ -250,7 +250,7 @@
       </li>
       <li>
         Review the {{notice_name}}, proof of service, witness statement, and bundle index together.
-        <div class="notes">The court name, dates, and {{#if has_arrears_grounds}}arrears figure{{else}}ground-specific evidence{{/if}} should match across the pack.</div>
+        <div class="notes">The court name, dates, and {{#if has_arrears_grounds}}arrears figure{{else}}evidence for each ground{{/if}} should match across the pack.</div>
       </li>
       {{/if}}
     </ul>
@@ -323,7 +323,7 @@
       {{#if has_arrears_grounds}}
       <li>The updated arrears schedule and any supporting payment records.</li>
       {{else}}
-      <li>The updated ground-specific evidence supporting each pleaded ground.</li>
+      <li>The updated evidence supporting each ground you are relying on.</li>
       {{/if}}
       <li>Photo ID and any key correspondence relevant to the grounds relied on.</li>
       {{/if}}
@@ -351,10 +351,10 @@
         {{/each}}
       {{else}}
       <li>
-        Arrive early, check in with the usher, and keep your bundle open to the notice, service evidence, and {{#if has_arrears_grounds}}arrears figures{{else}}ground-specific evidence{{/if}}.
+        Arrive early, check in with the usher, and keep your bundle open to the notice, service evidence, and {{#if has_arrears_grounds}}arrears figures{{else}}evidence for each ground{{/if}}.
       </li>
       <li>
-        Be ready to explain the {{#if has_arrears_grounds}}current arrears, {{/if}}service timeline, and the evidence supporting each pleaded ground.
+        Be ready to explain the {{#if has_arrears_grounds}}current arrears, {{/if}}service timeline, and the evidence supporting each ground you are relying on.
       </li>
       <li>
         Keep your answers short, factual, and tied to the documents in the bundle rather than broad allegations.
@@ -389,7 +389,7 @@
       {{#if has_arrears_grounds}}
       <li>Update the arrears figure before the hearing if payments are made.</li>
       {{else}}
-      <li>Update the ground-specific evidence if anything material changes before the hearing.</li>
+      <li>Update the evidence for each ground if anything material changes before the hearing.</li>
       {{/if}}
       <li>Ensure the N5, N119, notice, and witness statement dates match.</li>
       <li>Do not sign the statement of truth unless the current file is accurate.</li>
@@ -416,7 +416,7 @@
       {{else}}
       <li>
         The pleaded facts materially change before or at the hearing.
-        <div class="notes">Update the ground-specific evidence immediately and reassess whether the selected grounds still stand.</div>
+        <div class="notes">Update the evidence immediately and reassess whether the selected grounds still stand.</div>
       </li>
       {{/if}}
       <li>

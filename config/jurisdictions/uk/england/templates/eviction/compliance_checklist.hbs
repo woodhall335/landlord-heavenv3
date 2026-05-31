@@ -211,13 +211,13 @@
     </div>
     <div class="legend-item">
       <div class="status-chip ok">OK</div>
-      <p>{{#if legend_ok_text}}{{legend_ok_text}}{{else}}The current pack data records this point, but you still need to retain the underlying evidence.{{/if}}</p>
+      <p>{{#if legend_ok_text}}{{legend_ok_text}}{{else}}The answers provided record this point, but you still need to keep the underlying evidence.{{/if}}</p>
     </div>
   </div>
 
   {{#if court_pack_validation_summary}}
   <div class="action-box">
-    <h3>Court-pack validation summary</h3>
+    <h3>Dates used in this pack</h3>
     <p><strong>Deemed service date used:</strong> {{format_date court_pack_validation_summary.deemed_service_date "long"}}</p>
     <p><strong>Notice expiry date:</strong> {{format_date court_pack_validation_summary.notice_expiry_date "long"}}</p>
     <p><strong>Earliest proceedings date:</strong> {{format_date court_pack_validation_summary.earliest_proceedings_date "long"}}</p>
@@ -243,7 +243,7 @@
   </div>
   {{/if}}
 
-  <h2 class="section-title">{{#if decision_engine_title}}{{decision_engine_title}}{{else}}Decision Engine{{/if}}</h2>
+  <h2 class="section-title">{{#if decision_engine_title}}{{decision_engine_title}}{{else}}Readiness check{{/if}}</h2>
   <div class="items">
     {{#if compliance_status_items.length}}
     {{#each compliance_status_items}}
@@ -260,25 +260,25 @@
     <div class="item ok">
       <div class="status-chip ok">OK</div>
       <h3>Deposit position not confirmed in the file</h3>
-      <p>Deposit protection status is not confirmed in the current pack data.</p>
+      <p>Deposit protection status is not confirmed in the answers provided.</p>
       <p><strong>Action:</strong> Check the tenancy file and record the deposit position before relying on the notice.</p>
     </div>
     <div class="item risk">
       <div class="status-chip risk">Significant risk</div>
       <h3>Gas safety record not confirmed</h3>
-      <p>No gas safety provision is recorded in the current pack data. This does not automatically invalidate a Section 8 notice, but it can create regulatory or evidential risk.</p>
+      <p>No gas safety record is confirmed in the answers provided. This does not automatically invalidate a Section 8 notice, but it can create regulatory or evidence risk.</p>
       <p><strong>Action:</strong> Locate the gas safety record or document why it does not apply before the file is challenged.</p>
     </div>
     <div class="item risk">
       <div class="status-chip risk">Significant risk</div>
       <h3>EPC record not confirmed</h3>
-      <p>No EPC provision is recorded in the current pack data. This is not treated here as automatic Section 8 invalidity, but it remains a legal and evidential risk that should be addressed.</p>
+      <p>No EPC record is confirmed in the answers provided. This is not treated here as automatic Section 8 invalidity, but it remains a legal and evidence risk that should be addressed.</p>
       <p><strong>Action:</strong> Locate the EPC record or explain the position in the evidence file.</p>
     </div>
     <div class="item ok">
       <div class="status-chip ok">OK</div>
       <h3>How to Rent record not confirmed</h3>
-      <p>How to Rent service is not confirmed in the current pack data.</p>
+      <p>How to Rent service is not confirmed in the answers provided.</p>
       <p><strong>Action:</strong> Check the tenancy file and record what was served so the file stays complete.</p>
     </div>
     {{/if}}
@@ -288,7 +288,7 @@
   <div class="action-box">
     <h3>{{status_label}}</h3>
     <p>{{next_step_text}}</p>
-    <p class="muted">Use this checklist as a practical decision engine. It does not replace the tenancy file, the service record, or legal advice on the facts of the case.</p>
+    <p class="muted">Use this checklist as a practical readiness check. It does not replace the tenancy file, the service record, or legal advice on the facts of the case.</p>
   </div>
 </body>
 </html>

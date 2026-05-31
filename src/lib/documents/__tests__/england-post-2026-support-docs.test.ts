@@ -84,8 +84,8 @@ describe('England Section 8 support document templates', () => {
 
     expect(template).toContain('{{#each next_steps}}');
     expect(template).toContain('What Happens Next');
-    expect(template).toContain('Stage 2 handoff');
-    expect(template).toContain('single continuous file');
+    expect(template).toContain('If you need to go to court');
+    expect(template).toContain('continues the case started with the notice');
   });
 
   it('renders the new Stage 2 court support templates', () => {

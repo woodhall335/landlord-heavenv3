@@ -22,7 +22,7 @@ describe('Section 8 bundle consistency', () => {
     expect(content).toContain('Notice expiry date');
     expect(content).toContain('Earliest proceedings date');
     expect(content).toContain('Latest proceedings date');
-    expect(content).toContain('Court-pack validation summary');
+    expect(content).toContain('Dates used in this pack');
     expect(content).toContain('Deemed service date used');
   });
 
@@ -86,7 +86,7 @@ describe('Section 8 bundle consistency', () => {
       '{{#if (or (hasValue notice_service_date) (hasValue notice_expiry_date) (hasValue earliest_proceedings_date))}}'
     );
     expect(content).toContain('Latest proceedings date');
-    expect(content).toContain('Court-pack validation summary');
+    expect(content).toContain('Dates used in this pack');
     expect(content).toContain('What the court will consider');
     expect(content).toContain('Ground 8 reminder:');
     expect(content).toContain('Suggested court bundle order');
@@ -111,7 +111,7 @@ describe('Section 8 bundle consistency', () => {
 
     expect(content).toContain('{{#if (hasValue notice_expiry_date)}}');
     expect(content).toContain('{{#if (hasValue earliest_proceedings_date)}}');
-    expect(content).toContain('Court-pack validation summary');
+    expect(content).toContain('Dates used in this pack');
     expect(content).toContain('{{pack_summary_title}}');
     expect(content).toContain('{{#each compliance_status_items}}');
     expect(content).toContain('Case Risks &amp; Compliance');
@@ -153,8 +153,8 @@ describe('Section 8 bundle consistency', () => {
     expect(content).toContain('{{#each compliance_status_items}}');
     expect(content).toContain('{{status_label}}');
     expect(content).toContain('{{next_step_text}}');
-    expect(content).toContain('Decision Engine');
-    expect(content).toContain('Court-pack validation summary');
+    expect(content).toContain('Readiness check');
+    expect(content).toContain('Dates used in this pack');
   });
 
   test('what-happens-next template wires the stage handoff and next steps', () => {
@@ -163,7 +163,7 @@ describe('Section 8 bundle consistency', () => {
 
     expect(content).toContain('{{#each next_steps}}');
     expect(content).toContain('{{#if (eq pack_stage "stage1")}}');
-    expect(content).toContain('Stage 2 handoff');
-    expect(content).toContain('single continuous file');
+    expect(content).toContain('If you need to go to court');
+    expect(content).toContain('continues the case started with the notice');
   });
 });

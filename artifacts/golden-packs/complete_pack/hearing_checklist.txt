@@ -3,9 +3,9 @@ golden-complete-pack-001
 JURISDICTION
 england
 GENERATED
-28 May 2026
+31 May 2026
 Hearing Preparation Guide
-Prepare the hearing file, updated arrears position, and speaking points for the possession hearing - with Ground 8
+Prepare the hearing file, evidence for each ground, and speaking points for the possession hearing - with Ground 8
 kept under review at both notice and hearing stage
 PROPERTY 16 Willow Mews York YO24 3HX
 TENANT Ivy Carleton
@@ -14,24 +14,21 @@ HEARING DATE To be notified by court
 Notice timeline
 The claimant seeks possession of 16 Willow Mews York YO24 3HX relying on Ground 8 (Rent arrears),
 Ground 10 (Any rent arrears).
-Form 3A notice served on 28 May 2026, expiring on 29 June 2026, with proceedings not intended before
-29 June 2026.
-NOTICE SERVICE DATE 28 May 2026
-NOTICE EXPIRY DATE 29 June 2026
+Form 3A notice served on 31 May 2026, expiring on 1 July 2026, with proceedings not intended before 1
+July 2026.
+NOTICE SERVICE DATE 31 May 2026
+NOTICE EXPIRY DATE 1 July 2026
 EARLIEST PROCEEDINGS
 DATE
-29 June 2026
-Court-pack validation summary
+1 July 2026
+Dates used in this pack
 DEEMED SERVICE DATE
 USED
-1 June 2026
-NOTICE EXPIRY DATE 29 June 2026
+3 June 2026
+NOTICE EXPIRY DATE 1 July 2026
 EARLIEST PROCEEDINGS
 DATE
-29 June 2026
-TOTAL ARREARS £3600.00
-GROUND 8 THRESHOLD £3600.00
-GROUND 8 STATUS AT
+1 July 2026
 
 -- 1 of 5 --
 
@@ -40,7 +37,7 @@ Before the hearing
 Is the notice valid?
 Was it served correctly?
 Do the grounds apply?
-Are the arrears proven?
+Is the evidence for each ground proven?
 Does Ground 8 still meet the threshold at the hearing as well as at service stage?
 Review the notice, service record, witness statement, and bundle index together so the pack remains
 internally consistent.
@@ -59,20 +56,17 @@ Witness statement
 Tenancy agreement
 Form 3A notice
 N215 or other service evidence
-Arrears schedule
-Rent ledger or bank statements
+Ground-specific evidence for each selected ground
 Compliance evidence
 Correspondence, photos, and other exhibits
 Disrepair or set-off.
 Check inspection history, repair reports, and whether any sum is said to have been withheld or set off.
-Payments not credited.
-Check the ledger, bank statements, and the updated arrears schedule before the hearing.
 Wrong service or wrong date challenge.
 Check Form 3A, the service record, and every date used in the claim papers.
 Deposit or compliance challenge.
 Check the tenancy file for deposit, safety, and service records that may be relevant to credibility or defence points.
 Hardship or adjournment request.
-Stay factual and keep the focus on notice validity, service, grounds, and the current arrears position.
+Stay factual and keep the focus on notice validity, service, grounds, and the current evidence position.
 Counterclaim.
 Check what has actually been pleaded and what evidence is needed to answer it.
 
@@ -92,11 +86,11 @@ Payment ledger, bank statements, or rent receipts
 Copies of payment demands or arrears correspondence
 Inconsistent dates between the notice, N215, witness statement, and claim papers.
 Missing or unclear service evidence.
-Arrears figures that do not match the latest schedule or payment history.
+Ground-specific evidence that does not match the pleaded facts.
 Issuing before the notice period has expired or before the earliest proceedings date.
 Using the wrong court or the wrong defendant details.
 Signing a statement of truth that does not match the current file.
-Keep submissions short, factual, and tied to the pleaded ground or grounds.
+Keep submissions short, factual, and tied to the ground or grounds you are relying on.
 Explain the current arrears position, the rent cadence, and the documents supporting the running balance.
 Be ready to identify what you accept, what you dispute, and which exhibit addresses the point.
 
@@ -104,10 +98,10 @@ Be ready to identify what you accept, what you dispute, and which exhibit addres
 
 Procedural warnings
 If the case changes
-Date: 28 May 2026
+Date: 31 May 2026
 Do not issue before expiry or before the earliest proceedings date.
 Verify the court, the claimant names, and the defendant name and address before issue.
-Update the arrears figure before the hearing if payments are made.
+Update the evidence for each ground if anything material changes before the hearing.
 Ensure the N5, N119, notice, and witness statement dates match.
 Do not sign the statement of truth unless the current file is accurate.
 If the tenant raises disrepair, set-off, or a counterclaim, keep the response anchored to the pleadings and

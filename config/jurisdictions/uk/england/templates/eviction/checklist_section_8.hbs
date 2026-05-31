@@ -261,7 +261,7 @@
           <li>{{this}}</li>
             {{/each}}
           {{else}}
-          <li>The pack uses the same canonical notice timeline across the notice, proof of service, summary, and bundle documents.</li>
+          <li>The notice, proof of service, summary, and bundle documents all use the same notice dates.</li>
           <li>The correct prescribed notice form is used for the case.</li>
           <li>The landlord, tenant, and property details are complete and match the tenancy records.</li>
           <li>Each ground relied on is identified clearly and supported with particulars.</li>
@@ -299,7 +299,7 @@
           {{/if}}
           <li>Do not change locks or remove belongings without a court order and lawful enforcement.</li>
           <li>Do not leave the service method or service evidence undocumented.</li>
-          <li>Do not let one court-facing document use a different court name or notice timeline from the others.</li>
+          <li>Do not let one document use a different court name or notice timeline from the others.</li>
           {{/if}}
         </ul>
       </div>
@@ -307,7 +307,7 @@
   </div>
 
   <div class="callout critical">
-    <p><strong>Risk warning:</strong> A possession claim can be delayed or contested if the notice dates, service evidence, or grounds particulars are inconsistent across the pack, even where the underlying {{#if has_arrears_grounds}}arrears or {{/if}}ground-specific evidence is strong.</p>
+    <p><strong>Risk warning:</strong> A possession claim can be delayed or contested if the notice dates, service evidence, or grounds details are inconsistent across the pack, even where the underlying {{#if has_arrears_grounds}}arrears or {{/if}}evidence for each ground is strong.</p>
     {{#if drafting_model.validityChecklist.riskParagraphs.length}}
       {{#each drafting_model.validityChecklist.riskParagraphs}}
     <p>{{this}}</p>

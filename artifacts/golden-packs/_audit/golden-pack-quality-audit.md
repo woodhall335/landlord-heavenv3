@@ -1,6 +1,6 @@
 # Golden Pack Full Quality Audit
 
-Generated: 2026-05-28T19:36:14.065Z
+Generated: 2026-05-31T17:37:14.698Z
 Scope: All manifests and extracted text artifacts in `artifacts/golden-packs`.
 
 ## Summary
@@ -15,12 +15,16 @@ Scope: All manifests and extracted text artifacts in `artifacts/golden-packs`.
 - `notice_only`: 9.1/10 | keep=7, rewrite=0, merge=1, remove=0, critical=0, high=0, medium=1
 - `section13_defensive`: 10.0/10 | keep=13, rewrite=0, merge=0, remove=0, critical=0, high=0, medium=0
 - `section13_standard`: 10.0/10 | keep=5, rewrite=0, merge=0, remove=0, critical=0, high=0, medium=0
+- `section8_court_pack_qa/complete_pack_electronic_after_cutoff_above_threshold`: 8.8/10 | keep=13, rewrite=0, merge=2, remove=0, critical=0, high=0, medium=1
+- `section8_court_pack_qa/complete_pack_first_class_post_above_threshold`: 8.8/10 | keep=13, rewrite=0, merge=2, remove=0, critical=0, high=0, medium=1
+- `section8_court_pack_qa/notice_only_first_class_post_above_threshold`: 9.1/10 | keep=7, rewrite=0, merge=1, remove=0, critical=0, high=0, medium=1
+- `section8_court_pack_qa/notice_only_personal_after_cutoff_at_threshold`: 9.1/10 | keep=7, rewrite=0, merge=1, remove=0, critical=0, high=0, medium=1
 
 ## Cross-Pack Systemic Issues
 
 - Mojibake/encoding defects: 0 documents
 - Blank manifest categories: 0 documents
-- Thin documents relative to purpose: 3 documents
+- Thin documents relative to purpose: 7 documents
 - Raw internal values visible to users: 0 documents
 
 ## Stage 2: Section 8 Court & Possession Pack (`complete_pack`)
@@ -30,19 +34,19 @@ Score: 8.8/10
 | Document | Category | Pages | Words | Disposition | Findings |
 | --- | --- | ---: | ---: | --- | --- |
 | Arrears Engagement Letter | bonus | 2 | 241 | keep | none |
-| Case Summary — Stage 2 Court & Possession | guidance | 5 | 987 | keep | none |
+| Case Summary — Stage 2 Court & Possession | guidance | 5 | 999 | keep | none |
 | Certificate of Service (Form N215) | evidence_tool | 5 | 864 | keep | none |
-| Court Bundle Index | evidence_tool | 3 | 346 | keep | none |
-| Court Filing Guide | guidance | 2 | 458 | keep | none |
-| Court Readiness Status | guidance | 2 | 431 | keep | none |
-| Evidence Collection Checklist | evidence_tool | 2 | 278 | merge | none |
+| Court Bundle Index | evidence_tool | 3 | 337 | keep | none |
+| Court Filing Guide | guidance | 2 | 464 | keep | none |
+| Court Readiness Status | guidance | 2 | 438 | keep | none |
+| Evidence Collection Checklist | evidence_tool | 2 | 289 | merge | none |
 | Form 3A notice | notice | 10 | 2470 | keep | none |
 | Form N119 - Particulars of Claim | court_form | 5 | 716 | keep | none |
 | Form N5 - Claim for Possession | court_form | 4 | 511 | keep | none |
-| Hearing Preparation Guide | guidance | 5 | 713 | keep | none |
-| Schedule of Arrears | evidence_tool | 2 | 250 | keep | none |
-| Service Instructions | guidance | 3 | 583 | keep | none |
-| What Happens Next | guidance | 1 | 214 | merge | medium: Document is thin for its category (214 words; expected around 220+). |
+| Hearing Preparation Guide | guidance | 5 | 693 | keep | none |
+| Schedule of Arrears | evidence_tool | 2 | 249 | keep | none |
+| Service Instructions | guidance | 3 | 580 | keep | none |
+| What Happens Next | guidance | 1 | 205 | merge | medium: Document is thin for its category (205 words; expected around 220+). |
 | Witness Statement | court_form | 3 | 792 | keep | none |
 
 ## HMO / Shared House Tenancy Agreement & House Management Pack (`england_hmo_shared_house_tenancy_agreement`)
@@ -139,7 +143,7 @@ Score: 8.9/10
 | Money Claims Filing Guide | guidance | 6 | 1331 | keep | none |
 | Particulars of claim | particulars | 2 | 292 | keep | none |
 | Reply Form | guidance | 3 | 348 | keep | none |
-| Schedule of arrears | schedule | 2 | 192 | keep | none |
+| Schedule of arrears | schedule | 2 | 191 | keep | none |
 
 ## Stage 1: Section 8 Notice & Service Pack (`notice_only`)
 
@@ -147,14 +151,14 @@ Score: 9.1/10
 
 | Document | Category | Pages | Words | Disposition | Findings |
 | --- | --- | ---: | ---: | --- | --- |
-| Case Summary — Stage 1 Notice & Service | guidance | 5 | 970 | keep | none |
+| Case Summary — Stage 1 Notice & Service | guidance | 5 | 985 | keep | none |
 | Certificate of Service (Form N215) | evidence_tool | 5 | 864 | keep | none |
 | Form 3A notice | notice | 10 | 2470 | keep | none |
-| Pre-Service Compliance Declaration | guidance | 2 | 410 | keep | none |
+| Pre-Service Compliance Declaration | guidance | 2 | 421 | keep | none |
 | Rent Schedule / Arrears Statement | evidence_tool | 2 | 196 | keep | none |
-| Service & Validity Checklist | guidance | 3 | 521 | keep | none |
-| Service Instructions | guidance | 3 | 587 | keep | none |
-| What Happens Next | guidance | 1 | 149 | merge | medium: Document is thin for its category (149 words; expected around 220+). |
+| Service & Validity Checklist | guidance | 3 | 523 | keep | none |
+| Service Instructions | guidance | 3 | 597 | keep | none |
+| What Happens Next | guidance | 1 | 166 | merge | medium: Document is thin for its category (166 words; expected around 220+). |
 
 ## Tribunal-Ready Rent Increase Pack (`section13_defensive`)
 
@@ -188,11 +192,91 @@ Score: 10.0/10
 | Rent increase justification report | evidence | 7 | 2031 | keep | none |
 | Rent Increase Summary | guidance | 2 | 349 | keep | none |
 
+## Section 8 Complete Pack QA - Electronic After Cutoff - Above Threshold (`section8_court_pack_qa/complete_pack_electronic_after_cutoff_above_threshold`)
+
+Score: 8.8/10
+
+| Document | Category | Pages | Words | Disposition | Findings |
+| --- | --- | ---: | ---: | --- | --- |
+| Arrears Engagement Letter | bonus | 2 | 242 | keep | none |
+| Case Summary — Stage 2 Court & Possession | guidance | 5 | 992 | keep | none |
+| Certificate of Service (Form N215) | evidence_tool | 5 | 864 | keep | none |
+| Court Bundle Index | evidence_tool | 3 | 337 | keep | none |
+| Court Filing Guide | guidance | 2 | 464 | keep | none |
+| Court Readiness Status | guidance | 2 | 429 | keep | none |
+| Evidence Collection Checklist | evidence_tool | 2 | 289 | merge | none |
+| Form 3A notice | notice | 10 | 2470 | keep | none |
+| Form N119 - Particulars of Claim | court_form | 5 | 716 | keep | none |
+| Form N5 - Claim for Possession | court_form | 4 | 511 | keep | none |
+| Hearing Preparation Guide | guidance | 5 | 693 | keep | none |
+| Schedule of Arrears | evidence_tool | 2 | 263 | keep | none |
+| Service Instructions | guidance | 3 | 584 | keep | none |
+| What Happens Next | guidance | 1 | 205 | merge | medium: Document is thin for its category (205 words; expected around 220+). |
+| Witness Statement | court_form | 3 | 803 | keep | none |
+
+## Section 8 Complete Pack QA - First Class Post - Above Threshold (`section8_court_pack_qa/complete_pack_first_class_post_above_threshold`)
+
+Score: 8.8/10
+
+| Document | Category | Pages | Words | Disposition | Findings |
+| --- | --- | ---: | ---: | --- | --- |
+| Arrears Engagement Letter | bonus | 2 | 242 | keep | none |
+| Case Summary — Stage 2 Court & Possession | guidance | 5 | 992 | keep | none |
+| Certificate of Service (Form N215) | evidence_tool | 5 | 864 | keep | none |
+| Court Bundle Index | evidence_tool | 3 | 337 | keep | none |
+| Court Filing Guide | guidance | 2 | 464 | keep | none |
+| Court Readiness Status | guidance | 2 | 429 | keep | none |
+| Evidence Collection Checklist | evidence_tool | 2 | 289 | merge | none |
+| Form 3A notice | notice | 10 | 2470 | keep | none |
+| Form N119 - Particulars of Claim | court_form | 5 | 716 | keep | none |
+| Form N5 - Claim for Possession | court_form | 4 | 511 | keep | none |
+| Hearing Preparation Guide | guidance | 5 | 693 | keep | none |
+| Schedule of Arrears | evidence_tool | 2 | 263 | keep | none |
+| Service Instructions | guidance | 3 | 580 | keep | none |
+| What Happens Next | guidance | 1 | 205 | merge | medium: Document is thin for its category (205 words; expected around 220+). |
+| Witness Statement | court_form | 3 | 802 | keep | none |
+
+## Section 8 Notice Only QA - First Class Post - Above Threshold (`section8_court_pack_qa/notice_only_first_class_post_above_threshold`)
+
+Score: 9.1/10
+
+| Document | Category | Pages | Words | Disposition | Findings |
+| --- | --- | ---: | ---: | --- | --- |
+| Case Summary — Stage 1 Notice & Service | guidance | 5 | 980 | keep | none |
+| Certificate of Service (Form N215) | evidence_tool | 5 | 864 | keep | none |
+| Form 3A notice | notice | 10 | 2470 | keep | none |
+| Pre-Service Compliance Declaration | guidance | 2 | 412 | keep | none |
+| Rent Schedule / Arrears Statement | evidence_tool | 2 | 210 | keep | none |
+| Service & Validity Checklist | guidance | 3 | 523 | keep | none |
+| Service Instructions | guidance | 3 | 597 | keep | none |
+| What Happens Next | guidance | 1 | 166 | merge | medium: Document is thin for its category (166 words; expected around 220+). |
+
+## Section 8 Notice Only QA - Personal After Cutoff - At Threshold (`section8_court_pack_qa/notice_only_personal_after_cutoff_at_threshold`)
+
+Score: 9.1/10
+
+| Document | Category | Pages | Words | Disposition | Findings |
+| --- | --- | ---: | ---: | --- | --- |
+| Case Summary — Stage 1 Notice & Service | guidance | 5 | 989 | keep | none |
+| Certificate of Service (Form N215) | evidence_tool | 5 | 864 | keep | none |
+| Form 3A notice | notice | 10 | 2470 | keep | none |
+| Pre-Service Compliance Declaration | guidance | 2 | 421 | keep | none |
+| Rent Schedule / Arrears Statement | evidence_tool | 2 | 196 | keep | none |
+| Service & Validity Checklist | guidance | 3 | 512 | keep | none |
+| Service Instructions | guidance | 3 | 602 | keep | none |
+| What Happens Next | guidance | 1 | 166 | merge | medium: Document is thin for its category (166 words; expected around 220+). |
+
 ## Highest Priority Document Fixes
 
-- `complete_pack/what_happens_next` -> merge: Document is thin for its category (214 words; expected around 220+).
-- `notice_only/what_happens_next` -> merge: Document is thin for its category (149 words; expected around 220+).
+- `complete_pack/what_happens_next` -> merge: Document is thin for its category (205 words; expected around 220+).
+- `notice_only/what_happens_next` -> merge: Document is thin for its category (166 words; expected around 220+).
+- `section8_court_pack_qa/complete_pack_electronic_after_cutoff_above_threshold/what_happens_next` -> merge: Document is thin for its category (205 words; expected around 220+).
+- `section8_court_pack_qa/complete_pack_first_class_post_above_threshold/what_happens_next` -> merge: Document is thin for its category (205 words; expected around 220+).
+- `section8_court_pack_qa/notice_only_first_class_post_above_threshold/what_happens_next` -> merge: Document is thin for its category (166 words; expected around 220+).
+- `section8_court_pack_qa/notice_only_personal_after_cutoff_at_threshold/what_happens_next` -> merge: Document is thin for its category (166 words; expected around 220+).
 - `complete_pack/evidence_checklist` -> merge: 
+- `section8_court_pack_qa/complete_pack_electronic_after_cutoff_above_threshold/evidence_checklist` -> merge: 
+- `section8_court_pack_qa/complete_pack_first_class_post_above_threshold/evidence_checklist` -> merge: 
 
 ## Notes
 

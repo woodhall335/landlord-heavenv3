@@ -38,3 +38,56 @@ Start wizard error: Error: Missing SUPABASE_URL
   60 |   }
   61 |
   62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+⨯ SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>) {
+  page: '/wizard/flow'
+}
+⨯ SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>) {
+  page: '/wizard/flow'
+}
+⨯ SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>) {
+  page: '/wizard/flow'
+}
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+Start wizard error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at POST (src\app\api\wizard\start\route.ts:358:52)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+Start wizard error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at POST (src\app\api\wizard\start\route.ts:358:52)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+⨯ SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>) {
+  page: '/wizard/flow'
+}
+Start wizard error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at POST (src\app\api\wizard\start\route.ts:358:52)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {

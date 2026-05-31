@@ -1,7 +1,34 @@
 import { describe, expect, test } from 'vitest';
 
-import { generateNoticeOnlyPack } from '../eviction-pack-generator';
+import { generateCompleteEvictionPack, generateNoticeOnlyPack } from '../eviction-pack-generator';
 import { buildEnglandSection8CompletePackFacts } from '@/lib/testing/fixtures/complete-pack';
+
+const BANNED_SUPPORT_COPY = [
+  'Court-pack validation summary',
+  'Decision Engine',
+  'decision engine',
+  'current pack data',
+  'available pack data',
+  'structured checks',
+  'canonical notice timeline',
+  'selected-ground evidence',
+  'ground-specific evidence',
+  're-keying',
+  'Stage 2 handoff',
+  'pleaded arrears',
+  'pleaded figures',
+  'pleaded ground',
+  'court-facing',
+];
+
+function supportDocumentText(pack: {
+  documents: Array<{ document_type?: string; title?: string; description?: string; html?: string }>;
+}): string {
+  return pack.documents
+    .filter((document) => !['section8_notice', 'proof_of_service'].includes(document.document_type || ''))
+    .map((document) => `${document.title}\n${document.description}\n${document.html}`)
+    .join('\n\n');
+}
 
 describe('Section 8 Stage 1 compliance mapping', () => {
   test('treats date and rating aliases as recorded compliance in the Stage 1 summary', async () => {
@@ -38,7 +65,7 @@ describe('Section 8 Stage 1 compliance mapping', () => {
 
     expect(caseSummaryHtml).toContain('How to Rent record recorded');
     expect(caseSummaryHtml).not.toContain('How to Rent record not confirmed');
-  });
+  }, 90000);
 
   test('uses a clean-pass canonical Section 8 fixture by default', () => {
     const facts = buildEnglandSection8CompletePackFacts();
@@ -92,7 +119,83 @@ describe('Section 8 Stage 1 compliance mapping', () => {
 
     expect(documentTypes).not.toContain('arrears_schedule');
     expect(caseSummaryHtml).not.toContain('Arrears at notice date');
-    expect(serviceInstructionsHtml).toContain('ground-specific evidence');
+    expect(serviceInstructionsHtml).toContain('evidence for each ground');
     expect(serviceInstructionsHtml).not.toContain('arrears schedule line up');
   });
+
+  test('renders active support documents in plain landlord-facing language', async () => {
+    const noticeOnlyFacts = buildEnglandSection8CompletePackFacts({
+      overrides: {
+        section8_grounds: ['Ground 1A'],
+        ground_codes: ['Ground 1A'],
+        selected_grounds: ['Ground 1A'],
+        notice_served_date: '2026-05-30',
+        notice_service_date: '2026-05-30',
+        notice_date: '2026-05-30',
+        notice_expiry_date: '2026-09-30',
+        earliest_possession_date: '2026-09-30',
+        total_arrears: 3600,
+        rent_arrears_amount: 3600,
+        arrears_items: [
+          { period_start: '2026-02-01', period_end: '2026-02-28', rent_due: 1200, rent_paid: 0, amount_owed: 1200 },
+          { period_start: '2026-03-01', period_end: '2026-03-31', rent_due: 1200, rent_paid: 0, amount_owed: 1200 },
+          { period_start: '2026-04-01', period_end: '2026-04-30', rent_due: 1200, rent_paid: 0, amount_owed: 1200 },
+        ],
+        ground_1a: {
+          sale_reason: 'The landlord intends to sell the property.',
+          sale_steps_taken: 'Valuation and agent discussions.',
+          sale_decision_date: '2026-05-01',
+          sale_timetable: 'Marketing after notice expiry.',
+          sale_evidence: 'Valuation record and agent correspondence.',
+        },
+        ground_particulars: {
+          ground_1a: {
+            summary: 'Ground 1A: the landlord intends to sell the property and has obtained valuation evidence.',
+          },
+        },
+      },
+    });
+    const completePackFacts = buildEnglandSection8CompletePackFacts({
+      overrides: {
+        section8_grounds: ['Ground 1A', 'Ground 8'],
+        ground_codes: ['Ground 1A', 'Ground 8'],
+        selected_grounds: ['Ground 1A', 'Ground 8'],
+        notice_served_date: '2026-05-30',
+        notice_service_date: '2026-05-30',
+        notice_date: '2026-05-30',
+        notice_expiry_date: '2026-09-30',
+        earliest_possession_date: '2026-09-30',
+        total_arrears: 3600,
+        rent_arrears_amount: 3600,
+        arrears_items: [
+          { period_start: '2026-02-01', period_end: '2026-02-28', rent_due: 1200, rent_paid: 0, amount_owed: 1200 },
+          { period_start: '2026-03-01', period_end: '2026-03-31', rent_due: 1200, rent_paid: 0, amount_owed: 1200 },
+          { period_start: '2026-04-01', period_end: '2026-04-30', rent_due: 1200, rent_paid: 0, amount_owed: 1200 },
+        ],
+        ground_1a: {
+          sale_reason: 'The landlord intends to sell the property.',
+          sale_steps_taken: 'Valuation and agent discussions.',
+          sale_decision_date: '2026-05-01',
+          sale_timetable: 'Marketing after notice expiry.',
+          sale_evidence: 'Valuation record and agent correspondence.',
+        },
+        ground_particulars: {
+          ground_1a: {
+            summary: 'Ground 1A: the landlord intends to sell the property and has obtained valuation evidence.',
+          },
+        },
+      },
+    });
+
+    const noticeOnlyPack = await generateNoticeOnlyPack(noticeOnlyFacts);
+    const completePack = await generateCompleteEvictionPack(completePackFacts);
+    const renderedText = `${supportDocumentText(noticeOnlyPack)}\n${supportDocumentText(completePack)}`;
+
+    for (const phrase of BANNED_SUPPORT_COPY) {
+      expect(renderedText).not.toContain(phrase);
+    }
+    expect(renderedText).toContain('Dates used in this pack');
+    expect(renderedText).toContain('evidence for each ground');
+    expect(renderedText).toContain('If you need to go to court');
+  }, 90000);
 });

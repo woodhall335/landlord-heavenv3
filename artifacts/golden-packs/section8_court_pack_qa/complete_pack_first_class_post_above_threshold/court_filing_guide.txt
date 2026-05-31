@@ -1,0 +1,59 @@
+--- title: Court Filing Guide category: guidance description: How to file your England post-2026 possession
+claim filename: court_filing_guide.pdf ---
+CASE ID
+qa-complete-post-001
+JURISDICTION
+england
+GENERATED
+31 May 2026
+Court Filing Guide
+England possession claim guidance for the current pack.
+COURT York County Court and Family Court
+LANDLORD Daniel Mercer
+TENANT Ivy Carleton
+PROPERTY 16 Willow Mews York YO24 3HX
+GROUNDS RELIED ON Ground 8 - Rent arrears, Ground 10 - Any rent arrears
+NOTICE SERVICE DATE 4 March 2026
+EARLIEST PROCEEDINGS
+DATE
+3 April 2026
+The claimant seeks possession of 16 Willow Mews York YO24 3HX relying on Ground 8 (Rent arrears),
+Ground 10 (Any rent arrears).
+Form 3A notice served on 4 March 2026, expiring on 3 April 2026, with proceedings not intended before
+3 April 2026.
+If the matter is not resolved after service of the Form 3A notice, the claim should be prepared for filing in
+York County Court and Family Court using the same factual basis and dates as the notice pack.
+The default route in this pack remains the paper county court claim using Form N5 and Form N119.
+Possession Claim Online may be available only for eligible rent-arrears-only Section 8 claims, so treat
+that as a limited alternative rather than the general rule.
+Before Issue
+Review the notice, proof of service, witness statement, and claim forms together before issue.
+Check that the same court name, notice timeline, and grounds appear consistently across the pack.
+Refresh the arrears schedule to the latest practicable date before filing.
+
+-- 1 of 2 --
+
+What To File
+File Form N5, Form N119, the notice, and the supporting proof-of-service record together with any
+required fee or fee-remission material.
+Prepare an indexed bundle containing the tenancy documents, the served notice, service evidence,
+and the ground-specific documents relied on.
+Updated rent statement and arrears schedule
+Payment ledger, bank statements, or rent receipts
+Copies of payment demands or arrears correspondence
+After Issue
+Monitor for any defence, witness evidence, or counterclaim and update the bundle so the response
+documents answer it directly.
+If circumstances materially change after issue, update the figures or factual chronology promptly and
+reflect that change consistently across the pack.
+Before the hearing, re-check every document that will be shown to the court for blank placeholders,
+stale dates, or unsupported allegations.
+Ground 8 should only be advanced as a mandatory ground if the arrears still satisfy the threshold of
+£3,600.00 at the hearing.
+Only treat Possession Claim Online as potentially available if the claim is genuinely confined to eligible
+rent-arrears-only Section 8 grounds. Mixed-ground or non-arrears claims should stay on the paper N5
+and N119 route.
+Do not rely on a stale arrears figure or assume that a mandatory arrears ground still applies if payments
+have reduced the balance.
+
+-- 2 of 2 --

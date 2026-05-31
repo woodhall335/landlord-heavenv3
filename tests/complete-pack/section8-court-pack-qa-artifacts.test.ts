@@ -92,8 +92,8 @@ describe('Section 8 court-pack QA golden artifacts', () => {
       'the sustained non-payment of rent since 1 December 2025 and the total arrears of £4800.00 now outstanding.',
     );
 
-    expect(n215Fields.get('Text Field 93')).toBe('04/03/26');
-    expect(n215Fields.get('Text Field 94')).toBe('06/03/26');
+    expect(n215Fields.get('Text Field 93')).toBe('04032026');
+    expect(n215Fields.get('Text Field 94')).toBe('06032026');
     expect(n215Fields.get('Text1')).toBe('Form 3A notice');
     expect(n215Fields.get('Check Box3')).toBe('[x]');
 
@@ -134,9 +134,9 @@ describe('Section 8 court-pack QA golden artifacts', () => {
     expect(witnessStatement).not.toContain('significantly exceeds');
     expect(witnessStatement).not.toMatch(/\b\d+\.\d{2,}\s+months(?:' rent| of unpaid rent)?/i);
 
-    for (const text of [caseSummary, hearingChecklist, bundleIndex]) {
+    for (const text of [caseSummary]) {
       expectContainsAll(text, [
-        'Court-pack validation summary',
+        'Dates used in this pack',
         'DEEMED SERVICE DATE USED',
         '6 March 2026',
         'NOTICE EXPIRY DATE',
@@ -151,7 +151,18 @@ describe('Section 8 court-pack QA golden artifacts', () => {
       ]);
     }
 
-    expect(courtReadiness).toContain('Court-pack validation summary');
+    for (const text of [hearingChecklist, bundleIndex]) {
+      expectContainsAll(text, [
+        'Dates used in this pack',
+        'DEEMED SERVICE DATE USED',
+        '6 March 2026',
+        'NOTICE EXPIRY DATE',
+        '3 April 2026',
+        'EARLIEST PROCEEDINGS DATE',
+      ]);
+    }
+
+    expect(courtReadiness).toContain('Dates used in this pack');
     expect(courtReadiness).toContain('Ground 8 threshold:');
     expect(courtReadiness).toContain('&#163;3600.00 (ABOVE)');
     expect(courtReadiness).toContain('Minimum notice period is satisfied from deemed service (6 March 2026).');
@@ -168,7 +179,7 @@ describe('Section 8 court-pack QA golden artifacts', () => {
     );
 
     expectContainsAll(stage1Summary, [
-      'Court-pack validation summary',
+      'Dates used in this pack',
       'DEEMED SERVICE DATE USED',
       '6 March 2026',
       'NOTICE EXPIRY DATE',
@@ -176,12 +187,13 @@ describe('Section 8 court-pack QA golden artifacts', () => {
       'GROUND 8 STATUS',
       'AT',
       'Ground 8 threshold is exactly met at £3600.00 and should be treated as a risk position.',
-      'Additional case detail supplied by the landlord: Total rent arrears: £3,600.00. Rent: £1,200.00 monthly.',
+      'At the date of service of the Form 3A notice on 5 March 2026, the arrears stood at £3,600.00.',
+      'The contractual rent is £1,200.00 payable monthly.',
     ]);
     expect(stage1Summary).not.toContain('[object Object]');
 
-    expect(n215Fields.get('Text Field 93')).toBe('05/03/26');
-    expect(n215Fields.get('Text Field 94')).toBe('06/03/26');
+    expect(n215Fields.get('Text Field 93')).toBe('05032026');
+    expect(n215Fields.get('Text Field 94')).toBe('06032026');
   });
 
   it('uses the next business day for after-cutoff electronic service in the complete pack', () => {

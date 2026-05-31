@@ -3,17 +3,18 @@ golden-notice-only-001
 JURISDICTION
 england
 GENERATED
-28 May 2026
+31 May 2026
 Stage 1: Section 8 Notice & Service Pack
 Case Summary - Stage 1
 Notice & Service
 Built to hold up if challenged
-This pack aligns the notice, service, and evidence so
-your case does not fall apart on technical errors.
+This pack aligns the notice, service, and arrears
+evidence and evidence for each ground so your case
+does not fall apart on technical errors.
 READY TO SERVE - NOTICE FILE ALIGNED
-Case ID: golden-notice-only-001 | Jurisdiction: england | Generated: 28 May 2026
-Most possession cases fail on notice, service, or consistency errors. Keep the file aligned and
-under review as the case moves forward.
+Case ID: golden-notice-only-001 | Jurisdiction: england | Generated: 31 May 2026
+Most possession cases fail on notice, service, evidence, or consistency errors. Keep the arrears
+evidence and evidence for each ground aligned as the case moves forward.
 Eviction journey
 Stage 1 covers service of the notice and the wait for expiry before the case can move on.
 PROPERTY
@@ -26,11 +27,11 @@ Ground 8 (mandatory), Ground 10
 ARREARS
 £3600.00
 NOTICE SERVED
-28 May 2026
+31 May 2026
 NOTICE EXPIRY DATE
-29 June 2026
+1 July 2026
 EARLIEST PROCEEDINGS DATE
-29 June 2026
+1 July 2026
 CLAIMANT
 Daniel Mercer
 Serve Notice
@@ -52,14 +53,14 @@ evidence to the judge
 
 -- 1 of 5 --
 
-Court-pack validation summary
-This summary shows the recalculated service and notice dates used across the court pack.
+Dates used in this pack
+These are the service and notice dates used across the documents.
 DEEMED SERVICE DATE USED
-1 June 2026
+3 June 2026
 NOTICE EXPIRY DATE
-29 June 2026
+1 July 2026
 EARLIEST PROCEEDINGS DATE
-29 June 2026
+1 July 2026
 TOTAL ARREARS
 £3600.00
 GROUND 8 THRESHOLD
@@ -67,15 +68,16 @@ GROUND 8 THRESHOLD
 GROUND 8 STATUS
 AT
 passed: Arrears total aligned at £3600.00.
-passed: Minimum notice period is satisfied from deemed service (1 June 2026).
+passed: Minimum notice period is satisfied from deemed service (3 June 2026).
 passed: Ground 8 threshold is exactly met at £3600.00 and should be treated as a risk position.
 passed: No cross-document conflicts were detected against the recalculated court-pack values.
 What this pack does
 Prepares a Section 8 notice and service
 record that can be relied on without the case
 being rejected on avoidable technical errors.
-Keeps the notice, service route, and
-supporting evidence aligned in one file.
+Keeps the notice, service route, and arrears
+evidence and evidence for each ground
+aligned in one file.
 Reduces the risk of rejection, delay, or
 inconsistency before the case reaches court.
 Next step
@@ -95,12 +97,11 @@ review.
 
 Case Risks & Compliance
 OK
-No immediate blocker identified from the
-structured checks
-The current pack data does not show an
-immediate blocker from the structured checks,
-but the file should stay under review as facts
-change.
+No immediate blocker found from the
+answers provided
+The checks we can run from your answers do
+not show an immediate blocker, but the file
+should stay under review as facts change.
 Action: Keep the notice, service, and evidence
 file aligned as the case progresses.
 Compliance Snapshot
@@ -128,8 +129,8 @@ Action: Keep the service record with the tenancy
 file.
 NOTICE TIMELINE RECORDED
 OK
-Notice served on 28 May 2026 with earliest
-proceedings date 29 June 2026.
+Notice served on 31 May 2026 with earliest
+proceedings date 1 July 2026.
 Action: Keep the service date, expiry date, and
 proceedings date aligned across the notice,
 N215, and any court papers.
@@ -142,7 +143,7 @@ Ground 10 (Any rent arrears).
 The tenancy began on 1 January 2024. The contractual rent is £1,200.00 payable monthly on the 1st day
 of each rental period.
 Ground 8 is relied on as the serious rent arrears ground.
-At the date of service of the Form 3A notice on 28 May 2026, the arrears stood at £3,600.00.
+At the date of service of the Form 3A notice on 31 May 2026, the arrears stood at £3,600.00.
 That figure meets the statutory Ground 8 threshold of £3,600.00 (3 months).
 The rent account and arrears schedule show the unpaid or short-paid periods between 1 January 2026
 and 31 March 2026, 3 missed payments.
@@ -150,15 +151,15 @@ Ground 10 is relied on because rent lawfully due was unpaid when the notice was 
 part of the claim history.
 The arrears balance relied on for Ground 10 is £3,600.00.
 The arrears history, service chronology, and any further tenancy concerns should be read together as
-part of one possession case, while each statutory ground remains separately pleaded.
-Form 3A notice served on 28 May 2026, expiring on 29 June 2026, with proceedings not intended before
-29 June 2026.
+one possession case, while each ground is still explained clearly on its own.
+Form 3A notice served on 31 May 2026, expiring on 1 July 2026, with proceedings not intended before 1
+July 2026.
 Procedural Notes
 The rent account first shows an unpaid or short-paid period from 1 January 2026. The most recent
 affected rental period is 1 March 2026. The current arrears total is £3,600.00 across 3 missed or short-
 paid rental periods.
-The Form 3A notice service milestone currently recorded is 28 May 2026. The possession / proceedings
-date currently recorded in the file is 29 June 2026.
+The Form 3A notice service milestone currently recorded is 31 May 2026. The possession / proceedings
+date currently recorded in the file is 1 July 2026.
 Defendant Circumstances
 The claimant is not aware of any further information about the defendant's circumstances beyond the
 matters set out in the claim papers.
@@ -169,7 +170,7 @@ Financial Position
 The claimant seeks possession and, if the court thinks fit, judgment for rent arrears currently quantified at
 £3,600.00.
 The contractual rent is £1,200.00 payable monthly.
-Form 3A notice served on 28 May 2026, expiring on 29 June 2026, with proceedings not intended before
-29 June 2026.
+Form 3A notice served on 31 May 2026, expiring on 1 July 2026, with proceedings not intended before 1
+July 2026.
 
 -- 5 of 5 --
