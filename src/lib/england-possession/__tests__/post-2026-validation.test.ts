@@ -93,6 +93,67 @@ describe('England post-2026 validation', () => {
     expect(result.blockingIssues.some((issue) => issue.code === 'NOTICE_PERIOD_TOO_SHORT')).toBe(false);
   });
 
+  it('blocks a notice expiry date that is too short for a 4-week selected ground', () => {
+    const result = validateEnglandPost2026WizardFacts({
+      ...CORE_ENGLAND_FACTS,
+      section8_grounds: ['Ground 8'],
+      notice_served_date: '2026-05-30',
+      notice_expiry_date: '2026-06-20',
+      rent_amount: 1200,
+      rent_frequency: 'monthly',
+      total_arrears: 4200,
+    });
+
+    expect(result.earliestValidDate).toBe('2026-06-27');
+    expect(result.blockingIssues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'NOTICE_PERIOD_TOO_SHORT',
+          message: 'Notice expiry date is too early. Earliest valid date is 27 June 2026.',
+        }),
+      ]),
+    );
+  });
+
+  it('uses the latest required expiry date when selected grounds have different notice periods', () => {
+    const result = validateEnglandPost2026WizardFacts({
+      ...CORE_ENGLAND_FACTS,
+      section8_grounds: ['Ground 8', 'Ground 1A'],
+      tenancy_start_date: '2020-11-16',
+      notice_served_date: '2026-05-30',
+      notice_expiry_date: '2026-06-27',
+      rent_amount: 1200,
+      rent_frequency: 'monthly',
+      total_arrears: 4200,
+    });
+
+    expect(result.earliestValidDate).toBe('2026-09-30');
+    expect(result.blockingIssues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'NOTICE_PERIOD_TOO_SHORT',
+          message: 'Notice expiry date is too early. Earliest valid date is 30 September 2026.',
+        }),
+      ]),
+    );
+  });
+
+  it('allows a later expiry date for mixed selected grounds', () => {
+    const result = validateEnglandPost2026WizardFacts({
+      ...CORE_ENGLAND_FACTS,
+      section8_grounds: ['Ground 8', 'Ground 1A'],
+      tenancy_start_date: '2020-11-16',
+      notice_served_date: '2026-05-30',
+      notice_expiry_date: '2026-10-15',
+      rent_amount: 1200,
+      rent_frequency: 'monthly',
+      total_arrears: 4200,
+    });
+
+    expect(result.earliestValidDate).toBe('2026-09-30');
+    expect(result.blockingIssues.some((issue) => issue.code === 'NOTICE_PERIOD_TOO_SHORT')).toBe(false);
+  });
+
   it('blocks unresolved deposit protection failures for most Form 3A grounds', () => {
     const result = validateEnglandPost2026WizardFacts({
       ...CORE_ENGLAND_FACTS,
@@ -121,6 +182,7 @@ describe('England post-2026 validation', () => {
   it('calculates the earliest valid Form 3A date using calendar months where required', () => {
     expect(calculateEarliestValidPossessionDate('2026-04-01', ['Ground 1A'])).toBe('2026-08-01');
     expect(calculateEarliestValidPossessionDate('2026-04-01', ['Ground 8'])).toBe('2026-04-29');
+    expect(calculateEarliestValidPossessionDate('2026-04-01', ['Ground 8', 'Ground 1A'])).toBe('2026-08-01');
   });
 
   it('normalizes full wizard ground labels to bare England ground codes', () => {

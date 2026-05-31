@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 
 import { ClaimsWizard } from '@/components/claims/ClaimsWizard';
 import { CLAIM_TYPE_CONFIGS } from '@/lib/claims/config';
@@ -62,7 +63,9 @@ export default function ClaimsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <ClaimsWizard />
+      <Suspense fallback={null}>
+        <ClaimsWizard />
+      </Suspense>
     </>
   );
 }

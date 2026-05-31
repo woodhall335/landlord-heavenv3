@@ -35,6 +35,15 @@ export function getGroundNoticePeriod(groundCode: string | number): number {
   return getEnglandGroundNoticePeriodDays(groundCode);
 }
 
+function formatNoticePeriodForDays(days: number): string {
+  if (days >= 120) return '4 calendar months';
+  if (days >= 61) return '2 calendar months';
+  if (days === 28) return '4 weeks';
+  if (days === 14) return '2 weeks';
+  if (days === 0) return 'immediate application';
+  return `${days} days`;
+}
+
 export function calculateCombinedNoticePeriod(grounds: Array<string | number>): {
   noticePeriodDays: number;
   drivingGrounds: string[];
@@ -56,13 +65,13 @@ export function calculateCombinedNoticePeriod(grounds: Array<string | number>): 
     days: getGroundNoticePeriod(ground),
   }));
 
-  let explanation = `Selected grounds require ${result.noticePeriodDays} days minimum notice.`;
+  let explanation = `Selected grounds require ${formatNoticePeriodForDays(result.noticePeriodDays)} minimum notice.`;
   if (result.immediateApplicationAllowed && result.noticePeriodDays === 0) {
     explanation = 'Selected ground(s) allow immediate court proceedings.';
   } else if (result.noticePeriodDays >= 120) {
-    explanation = `${result.drivingGrounds.map((ground) => `Ground ${ground}`).join(', ')} require 4 months notice.`;
+    explanation = `${result.drivingGrounds.map((ground) => `Ground ${ground}`).join(', ')} require 4 calendar months notice.`;
   } else if (result.noticePeriodDays >= 61) {
-    explanation = `${result.drivingGrounds.map((ground) => `Ground ${ground}`).join(', ')} require 2 months notice.`;
+    explanation = `${result.drivingGrounds.map((ground) => `Ground ${ground}`).join(', ')} require 2 calendar months notice.`;
   } else if (result.noticePeriodDays === 28) {
     explanation = `${result.drivingGrounds.map((ground) => `Ground ${ground}`).join(', ')} require 4 weeks notice.`;
   } else if (result.noticePeriodDays === 14) {
@@ -98,8 +107,8 @@ export function compareNoticePeriods(
     increasesNotice,
     increaseAmount,
     explanation: increasesNotice
-      ? `Adding the extra grounds increases the notice period from ${selectedResult.noticePeriodDays} days to ${combinedResult.noticePeriodDays} days.`
-      : `Notice period remains ${selectedResult.noticePeriodDays} days.`,
+      ? `Adding the extra grounds increases the notice period from ${formatNoticePeriodForDays(selectedResult.noticePeriodDays)} to ${formatNoticePeriodForDays(combinedResult.noticePeriodDays)}.`
+      : `Notice period remains ${formatNoticePeriodForDays(selectedResult.noticePeriodDays)}.`,
   };
 }
 

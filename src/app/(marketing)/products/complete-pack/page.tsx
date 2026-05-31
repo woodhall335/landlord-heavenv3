@@ -50,7 +50,7 @@ const faqs: FAQItem[] = [
   {
     question: 'What does the Stage 2 Court & Possession Pack include?',
     answer:
-      'It is the full solicitor-approved Section 8 court and possession file for England landlords. It includes everything in Stage 1 plus N5, N119, witness statement, court readiness status, court bundle index, evidence collection checklist, court filing guide, hearing checklist, eviction case summary, and arrears engagement letter.',
+      'It is the full Solicitor-approved Section 8 court and possession file for England landlords. It includes everything in Stage 1 plus N5, N119, witness statement, court readiness status, court bundle index, evidence collection checklist, court filing guide, hearing checklist, eviction case summary, and arrears engagement letter.',
   },
   {
     question: 'Who is this built for?',
@@ -154,7 +154,7 @@ export default function CompleteEvictionPackPage() {
     earlyProofBand: {
       priceLabel: product.displayPrice,
       valueSummary:
-        'Prepare the full possession claim file, not just the court forms. You can check the claim forms and supporting file before you pay. This is procedural document preparation, not legal advice.',
+        'Prepare the full possession file, not just the court forms. You can check the claim forms and supporting file before you pay. This is procedural document preparation, not legal advice.',
       imageSrc: '/images/complete-pack.webp',
       imageAlt: 'Preview of the complete Section 8 eviction pack',
       imageHref: descriptor.wizardHref,

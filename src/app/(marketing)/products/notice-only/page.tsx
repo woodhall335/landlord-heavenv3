@@ -51,7 +51,7 @@ const faqs: FAQItem[] = [
   {
     question: 'What does this product generate?',
     answer:
-      'It generates an 8-document solicitor-approved Section 8 notice and service file for England landlords: Form 3A Section 8 notice, N215 certificate of service, rent arrears schedule, service instructions, validity checklist, compliance declaration, case summary, and what-happens-next guide.',
+      'It generates an 8-document Solicitor-approved Section 8 notice and service file for England landlords: Form 3A Section 8 notice, N215 certificate of service, rent arrears schedule, service instructions, validity checklist, compliance declaration, case summary, and what-happens-next guide.',
   },
   {
     question: 'Why is the arrears schedule included?',

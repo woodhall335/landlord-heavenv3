@@ -181,6 +181,40 @@ describe('NoticeSection specialist England ground capture', () => {
     expect(updatesSpy).toHaveBeenCalledWith({ notice_expiry_date: '2026-10-15' });
   });
 
+  it('review service panel uses the strictest minimum when multiple grounds are selected', async () => {
+    const updatesSpy = vi.fn();
+
+    render(
+      <PlannedNoticeServiceReviewPanel
+        facts={{
+          __meta: { product: 'notice_only', original_product: 'notice_only', jurisdiction: 'england' },
+          eviction_route: 'section_8',
+          section8_grounds: ['Ground 8', 'Ground 1A'],
+          notice_date: '2026-05-30',
+          notice_service_date: '2026-05-30',
+          notice_served_date: '2026-05-30',
+          notice_service_method: 'email',
+          notice_expiry_date: '2026-06-27',
+          rent_amount: 1200,
+          rent_frequency: 'monthly',
+          total_arrears: 4200,
+        }}
+        onUpdate={updatesSpy}
+      />
+    );
+
+    const expiryInput = screen.getByLabelText(/Notice expiry date/i);
+    expect(expiryInput).toHaveAttribute('min', '2026-09-30');
+    expect(screen.getByText(/Earliest valid date: 30 September 2026/i)).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(updatesSpy).toHaveBeenCalledWith({ notice_expiry_date: '2026-09-30' });
+    });
+
+    fireEvent.change(expiryInput, { target: { value: '2026-10-15' } });
+    expect(updatesSpy).toHaveBeenCalledWith({ notice_expiry_date: '2026-10-15' });
+  });
+
   it('uses arrears-specific helper copy when only arrears grounds are selected', () => {
     renderControlledNoticeSection({
       __meta: { product: 'notice_only', original_product: 'notice_only', jurisdiction: 'england' },

@@ -2127,6 +2127,8 @@ function NoticeOnlyReviewContent({
   // Calculate notice periods
   const selectedOnlyPeriod = calculateCombinedNoticePeriod(selectedGrounds);
   const includedPeriod = calculateCombinedNoticePeriod(includedGroundCodes);
+  const formatNoticePeriodLabel = (label: string): string =>
+    label.replace(/\b(2|4) months\b/g, '$1 calendar months');
   const formatNoticePeriod = (grounds: string[], days: number): string => {
     const drivingLabels = Array.from(
       new Set(
@@ -2137,7 +2139,7 @@ function NoticeOnlyReviewContent({
           .filter((ground) => ground.noticePeriodDays === days)
           .map((ground) => ground.noticePeriodLabel),
       ),
-    );
+    ).map(formatNoticePeriodLabel);
 
     return drivingLabels.join(' / ') || `${days} days`;
   };
@@ -2476,7 +2478,9 @@ function NoticeOnlyReviewContent({
                             {groundInfo.type}
                           </span>
                           <span className="text-xs text-gray-500">
-                            {catalogGround?.noticePeriodLabel || `${groundInfo.noticePeriodDays} days`} notice
+                            {catalogGround?.noticePeriodLabel
+                              ? formatNoticePeriodLabel(catalogGround.noticePeriodLabel)
+                              : `${groundInfo.noticePeriodDays} days`} notice
                           </span>
                         </div>
                       </div>
@@ -2532,8 +2536,9 @@ function NoticeOnlyReviewContent({
                           {ground.type}
                         </span>
                         <span className="text-xs text-gray-500">
-                          {getEnglandGroundDefinition(ground.code)?.noticePeriodLabel ||
-                            `${ground.notice_period_days || getGroundDescription(ground.code).noticePeriodDays} days`} notice
+                          {getEnglandGroundDefinition(ground.code)?.noticePeriodLabel
+                            ? formatNoticePeriodLabel(getEnglandGroundDefinition(ground.code)!.noticePeriodLabel)
+                            : `${ground.notice_period_days || getGroundDescription(ground.code).noticePeriodDays} days`} notice
                         </span>
                       </div>
                       {ground.reasoning && (

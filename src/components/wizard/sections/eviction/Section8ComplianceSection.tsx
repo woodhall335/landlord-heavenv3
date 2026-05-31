@@ -100,7 +100,7 @@ export const Section8ComplianceSection: React.FC<Section8ComplianceSectionProps>
           <div>
             <h3 className="text-lg font-semibold tracking-tight text-[#20103f]">Section 8 compliance record</h3>
             <p className="mt-2 text-sm leading-6 text-[#62597c]">
-              This records the wider compliance position behind the Form 3A notice. Not every answer here blocks a Section 8 route in the same way it would a Section 21 route, but it does affect risk, evidence, and how defensible the file looks if the tenant pushes back.
+              This records the wider compliance position behind the Form 3A notice. Not every answer here blocks service, but it does affect risk, evidence, and how defensible the file looks if the tenant pushes back.
             </p>
           </div>
         </div>

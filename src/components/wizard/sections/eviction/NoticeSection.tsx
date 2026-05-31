@@ -318,6 +318,10 @@ function getSelectedSection8Grounds(facts: WizardFacts): string[] {
   return Array.isArray(facts.section8_grounds) ? (facts.section8_grounds as string[]) : [];
 }
 
+function formatNoticePeriodLabel(label: string): string {
+  return label.replace(/\b(2|4) months\b/g, '$1 calendar months');
+}
+
 function getNoticePeriodForGrounds(selectedGrounds: string[]) {
   if (selectedGrounds.length === 0) {
     return {
@@ -337,7 +341,7 @@ function getNoticePeriodForGrounds(selectedGrounds: string[]) {
     new Set(
       matchingGrounds
         .filter((ground) => ground.period === calculated.noticePeriodDays)
-        .map((ground) => ground.periodLabel || `${ground.period} days`)
+        .map((ground) => formatNoticePeriodLabel(ground.periodLabel || `${ground.period} days`))
     )
   );
   const noticePeriodMonths = Math.max(0, ...matchingGrounds.map((ground) => ground.periodMonths || 0));

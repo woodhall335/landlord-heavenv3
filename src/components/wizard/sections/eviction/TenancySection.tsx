@@ -118,6 +118,9 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
 }) => {
   // Get jurisdiction-specific tenancy types
   const tenancyTypes = useMemo(() => getTenancyTypesForJurisdiction(jurisdiction), [jurisdiction]);
+  const isEnglandForm3ARoute =
+    jurisdiction === 'england' &&
+    String(facts.eviction_route || facts.recommended_route || '').toLowerCase() === 'section_8';
 
   const tenancyType = facts.tenancy_type || '';
   const rentFrequency = facts.rent_frequency || 'monthly';
@@ -272,7 +275,11 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
             onChange={(v) => onUpdate({ fixed_term_end_date: v })}
             validation={{ required: true }}
             required
-            helperText="Section 21 notices cannot expire before the fixed term ends (unless there is a break clause)."
+            helperText={
+              isEnglandForm3ARoute
+                ? 'For a fixed-term tenancy, check the tenancy agreement before choosing a possession date that falls before the fixed term ends.'
+                : 'Section 21 notices cannot expire before the fixed term ends (unless there is a break clause).'
+            }
             sectionId={SECTION_ID}
             className="max-w-xs"
           />
@@ -307,18 +314,32 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
                 onChange={(v) => onUpdate({ break_clause_date: v })}
                 validation={{ required: true }}
                 required
-                helperText="The earliest date the break clause can be exercised. This is often 6 months after tenancy start. Section 21 notices can expire on or after this date (subject to 2-month notice period)."
+                helperText={
+                  isEnglandForm3ARoute
+                    ? 'The earliest date the break clause can be exercised. This is often 6 months after tenancy start.'
+                    : 'The earliest date the break clause can be exercised. This is often 6 months after tenancy start. Section 21 notices can expire on or after this date (subject to 2-month notice period).'
+                }
                 sectionId={SECTION_ID}
                 className="max-w-xs"
               />
             </div>
           )}
 
-          {/* Info box for fixed term and Section 21 */}
+          {/* Info box for fixed term timing */}
           <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-            <h5 className="text-sm font-medium text-blue-900 mb-1">Fixed Term & Section 21</h5>
+            <h5 className="text-sm font-medium text-blue-900 mb-1">
+              {isEnglandForm3ARoute ? 'Fixed Term & Form 3A' : 'Fixed Term & Section 21'}
+            </h5>
             <p className="text-xs text-blue-800">
-              {facts.has_break_clause === true ? (
+              {isEnglandForm3ARoute ? (
+                facts.has_break_clause === true ? (
+                  <>If the tenancy has a break clause, record the earliest date it can be used and keep the clause with the notice file.</>
+                ) : facts.has_break_clause === false ? (
+                  <>Without a break clause, a possession date before the fixed term end can be harder to justify. Keep the fixed term date and tenancy agreement with the notice file.</>
+                ) : (
+                  <>Check whether the tenancy has a break clause before relying on a possession date before the fixed term end.</>
+                )
+              ) : facts.has_break_clause === true ? (
                 <>If you have a break clause, you can serve a Section 21 notice that expires on or after the break clause date (subject to minimum 2-month notice).</>
               ) : facts.has_break_clause === false ? (
                 <>Without a break clause, a Section 21 notice cannot expire before the fixed term end date. You can still serve the notice during the fixed term, but it will expire on the fixed term end date (or 2 months from service, whichever is later).</>
