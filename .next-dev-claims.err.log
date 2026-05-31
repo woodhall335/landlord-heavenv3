@@ -1,0 +1,28 @@
+⚠ ./src/components/claims/ClaimsWizard.tsx
+Attempted import error: 'ShieldPound' is not exported from '__barrel_optimize__?names=ArrowRight,Car,CheckCircle2,ChevronRight,HandCoins,HardHat,Home,Lock,PackageOpen,ReceiptText,ShieldCheck,ShieldPound,Sparkles,UserRoundCheck!=!lucide-react' (imported as 'ShieldPound').
+
+Import trace for requested module:
+./src/components/claims/ClaimsWizard.tsx
+
+./src/components/claims/ClaimsWizard.tsx
+Attempted import error: 'ShieldPound' is not exported from '__barrel_optimize__?names=ArrowRight,Car,CheckCircle2,ChevronRight,HandCoins,HardHat,Home,Lock,PackageOpen,ReceiptText,ShieldCheck,ShieldPound,Sparkles,UserRoundCheck!=!lucide-react' (imported as 'ShieldPound').
+
+Import trace for requested module:
+./src/components/claims/ClaimsWizard.tsx
+⨯ SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>) {
+  page: '/claims'
+}
+⨯ SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>) {
+  page: '/claims'
+}
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
