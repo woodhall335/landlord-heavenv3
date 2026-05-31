@@ -37,6 +37,11 @@ import {
   type EnglandGroundCode,
 } from '@/lib/england-possession/ground-catalog';
 import {
+  formatUkLongDate,
+  getForm3AEarliestExpiryDate,
+  getForm3AExpiryIssue,
+} from '@/lib/england-possession/form3a-expiry';
+import {
   EVICTION_HINT_CLASS,
   EVICTION_LABEL_CLASS,
 } from '@/components/wizard/sections/eviction/ui';
@@ -356,6 +361,11 @@ export function calculatePlannedNoticeExpiryDate(
   facts: WizardFacts,
   fallbackDate: string = getTodayIsoDate()
 ): string {
+  const earliestForm3ADate = getForm3AEarliestExpiryDate(facts as Record<string, any>);
+  if (earliestForm3ADate) {
+    return earliestForm3ADate;
+  }
+
   const serviceDate = getPlannedNoticeServiceDate(facts, fallbackDate);
   const expiryDate = new Date(serviceDate);
   const period = getNoticePeriodForGrounds(getSelectedSection8Grounds(facts));
@@ -390,8 +400,13 @@ export function isPlannedNoticeServiceReady(facts: WizardFacts): boolean {
   return (
     Boolean(serviceDate) &&
     Boolean(facts.notice_service_method) &&
-    hasCompleteCollectibleN215ServiceFacts(facts)
+    hasCompleteCollectibleN215ServiceFacts(facts) &&
+    !getForm3AExpiryIssue(facts as Record<string, any>).isTooEarly
   );
+}
+
+export function getPlannedNoticeExpiryBlocker(facts: WizardFacts): string | null {
+  return getForm3AExpiryIssue(facts as Record<string, any>).message;
 }
 
 export function buildPlannedNoticeServiceDefaults(
@@ -405,7 +420,12 @@ export function buildPlannedNoticeServiceDefaults(
     notice_served_date: serviceDate,
   };
 
-  if (!facts.notice_expiry_date) {
+  const calculatedExpiryDate = calculatePlannedNoticeExpiryDate(
+    { ...facts, notice_date: serviceDate, notice_service_date: serviceDate, notice_served_date: serviceDate },
+    fallbackDate
+  );
+
+  if (!facts.notice_expiry_date || String(facts.notice_expiry_date) < calculatedExpiryDate) {
     updates.notice_expiry_date = calculatePlannedNoticeExpiryDate(
       { ...facts, notice_date: serviceDate, notice_service_date: serviceDate, notice_served_date: serviceDate },
       fallbackDate
@@ -434,11 +454,13 @@ export const PlannedNoticeServiceReviewPanel: React.FC<PlannedNoticeServiceRevie
 }) => {
   const today = useMemo(() => getTodayIsoDate(), []);
   const serviceDate = getPlannedNoticeServiceDate(facts, today);
-  const period = getNoticePeriodForGrounds(getSelectedSection8Grounds(facts));
+  const userEditedExpiryRef = React.useRef(false);
   const suggestedExpiryDate = useMemo(
     () => calculatePlannedNoticeExpiryDate(facts, today),
     [facts, today]
   );
+  const expiryIssue = useMemo(() => getForm3AExpiryIssue(facts as Record<string, any>), [facts]);
+  const earliestExpiryDate = expiryIssue.earliestDate || suggestedExpiryDate;
   const serviceReady = isPlannedNoticeServiceReady(facts);
 
   useEffect(() => {
@@ -450,6 +472,13 @@ export const PlannedNoticeServiceReviewPanel: React.FC<PlannedNoticeServiceRevie
       });
     }
   }, [facts.notice_date, facts.notice_service_date, facts.notice_served_date, onUpdate, today]);
+
+  useEffect(() => {
+    if (!earliestExpiryDate) return;
+    if (!facts.notice_expiry_date || (!userEditedExpiryRef.current && facts.notice_expiry_date < earliestExpiryDate)) {
+      void onUpdate({ notice_expiry_date: earliestExpiryDate });
+    }
+  }, [earliestExpiryDate, facts.notice_expiry_date, onUpdate]);
 
   const handleServiceDateChange = (value: string) => {
     void onUpdate({
@@ -525,21 +554,30 @@ export const PlannedNoticeServiceReviewPanel: React.FC<PlannedNoticeServiceRevie
             id="review_notice_expiry_date"
             type="date"
             className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+            min={earliestExpiryDate || undefined}
             value={facts.notice_expiry_date || ''}
-            onChange={(event) => void onUpdate({ notice_expiry_date: event.target.value })}
+            onChange={(event) => {
+              userEditedExpiryRef.current = true;
+              void onUpdate({ notice_expiry_date: event.target.value });
+            }}
           />
           {!facts.notice_expiry_date && (
             <button
               type="button"
-              onClick={() => void onUpdate({ notice_expiry_date: suggestedExpiryDate })}
+              onClick={() => void onUpdate({ notice_expiry_date: earliestExpiryDate })}
               className="text-sm text-[#7C3AED] underline hover:text-purple-700"
             >
-              Use suggested: {suggestedExpiryDate}
+              Use suggested: {earliestExpiryDate}
             </button>
           )}
         </div>
+        {expiryIssue.isTooEarly && expiryIssue.message && (
+          <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-xs font-medium text-red-700">
+            {expiryIssue.message}
+          </p>
+        )}
         <p className="text-xs text-gray-500">
-          Minimum {period.noticePeriodLabel} from service for your selected Form 3A grounds. You can override if needed.
+          Earliest valid date: {formatUkLongDate(earliestExpiryDate)}. You can choose a later date if needed.
         </p>
       </div>
     </section>

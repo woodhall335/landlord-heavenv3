@@ -778,6 +778,67 @@ function getEnglandMoneyClaimContents(): PackItem[] {
   ];
 }
 
+function getEnglandGenericSmallClaimContents(): PackItem[] {
+  return [
+    {
+      key: 'generic_letter_before_claim',
+      title: 'Letter Before Claim',
+      description: 'Pre-action letter setting out the claim, amount, and response deadline.',
+      category: 'Guidance',
+      required: true,
+    },
+    {
+      key: 'generic_particulars_of_claim',
+      title: 'Particulars of Claim',
+      description: 'Structured particulars for the small claim.',
+      category: 'Court forms',
+      required: true,
+    },
+    {
+      key: 'generic_schedule_of_loss',
+      title: 'Schedule of Loss',
+      description: 'Money breakdown based on the user-entered line items.',
+      category: 'Evidence',
+      required: true,
+    },
+    {
+      key: 'generic_evidence_index',
+      title: 'Evidence Index',
+      description: 'Index of selected evidence and what each item shows.',
+      category: 'Evidence',
+      required: true,
+    },
+    {
+      key: 'generic_filing_guide',
+      title: 'Filing Guide',
+      description: 'Step-by-step filing guidance for the user.',
+      category: 'Guidance',
+      required: true,
+    },
+    {
+      key: 'generic_service_guide',
+      title: 'Service Guide',
+      description: 'Guidance on sending documents and keeping proof.',
+      category: 'Guidance',
+      required: true,
+    },
+    {
+      key: 'generic_hearing_preparation',
+      title: 'Hearing Preparation',
+      description: 'Practical hearing preparation checklist.',
+      category: 'Guidance',
+      required: true,
+    },
+    {
+      key: 'generic_enforcement_guide',
+      title: 'Enforcement Guide',
+      description: 'Post-judgment enforcement options.',
+      category: 'Guidance',
+      required: true,
+    },
+  ];
+}
+
 /**
  * ENGLAND LEGACY AST CONTENTS
  *
@@ -1406,6 +1467,9 @@ export function getPackContents(args: GetPackContentsArgs): PackItem[] {
       case 'complete_pack':
         return getEnglandCompletePackContents(args);
       case 'money_claim':
+        if (args.route === 'generic_small_claim') {
+          return getEnglandGenericSmallClaimContents();
+        }
         return getEnglandMoneyClaimContents();
       case 'section13_standard':
       case 'section13_defensive':

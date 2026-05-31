@@ -161,6 +161,7 @@ function WizardFlowContent() {
   const recoveryToken = searchParams.get('recovery_token');
   const rentCheckerToken = searchParams.get('rent_checker_token');
   const mode = searchParams.get('mode');
+  const step = searchParams.get('step');
   const jumpTo = searchParams.get('jump_to'); // Question ID to jump to (from End Validator "Fix this" button)
   const fixMode = searchParams.get('fix_mode') === 'true'; // Single-question fix mode (returns to validation after save)
   const highlightSectionsParam = searchParams.get('highlight_sections');
@@ -694,6 +695,7 @@ function WizardFlowContent() {
         key={`notice-only-${evictionFlowProduct}-${caseId}`}
         caseId={caseId}
         jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland'}
+        initialStep={step}
       />
     );
   }

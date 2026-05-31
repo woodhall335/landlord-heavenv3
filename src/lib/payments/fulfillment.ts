@@ -759,6 +759,34 @@ async function generateDocumentsForProduct(params: {
   }
 
   if (productType === 'money_claim') {
+    const { isGenericSmallClaimFacts } = await import(
+      '@/lib/documents/generic-claim-pack-generator'
+    );
+
+    if (isGenericSmallClaimFacts(wizardFacts)) {
+      const { generateGenericSmallClaimPack } = await import(
+        '@/lib/documents/generic-claim-pack-generator'
+      );
+      const pack = await generateGenericSmallClaimPack(wizardFacts);
+
+      return persistGeneratedDocuments(supabase, {
+        caseId,
+        userId,
+        jurisdiction,
+        orderId,
+        productType,
+        documents: pack.documents,
+        metadata: {
+          pack_type: pack.pack_type,
+          claim_category:
+            wizardFacts.claim_category ||
+            wizardFacts.generic_claim?.category ||
+            wizardFacts.__meta?.claim_category ||
+            null,
+        },
+      });
+    }
+
     const { generateMoneyClaimPack } = await import('@/lib/documents/money-claim-pack-generator');
     const { buildMoneyClaimGenerationInput } = await import(
       '@/lib/documents/money-claim-generation-facts'
@@ -888,7 +916,15 @@ export async function fulfillOrder({
   }
 
   const wizardFacts = (caseData as any).collected_facts || {};
-  const route = wizardFacts.selected_notice_route || wizardFacts.eviction_route;
+  const isGenericClaimsMoneyClaim =
+    productType === 'money_claim' &&
+    (wizardFacts.claim_flow_mode === 'generic_small_claim' ||
+      wizardFacts.__meta?.claim_flow_mode === 'generic_small_claim' ||
+      wizardFacts.__meta?.generic_claim_pack === true ||
+      wizardFacts.generic_claim?.flow_mode === 'generic_small_claim');
+  const route = isGenericClaimsMoneyClaim
+    ? 'generic_small_claim'
+    : wizardFacts.selected_notice_route || wizardFacts.eviction_route;
   const hasArrears = wizardFacts.has_arrears || wizardFacts.arrears_claimed;
   const caseType = (caseData as any).case_type || null;
 

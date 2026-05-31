@@ -65,6 +65,7 @@ import {
   NoticeSection,
   PlannedNoticeServiceReviewPanel,
   buildPlannedNoticeServiceDefaults,
+  getPlannedNoticeExpiryBlocker,
   isPlannedNoticeServiceReady,
 } from '../sections/eviction/NoticeSection';
 import { GroundDetailsSection } from '../sections/eviction/GroundDetailsSection';
@@ -513,6 +514,14 @@ const SECTIONS: WizardSection[] = [
 
       return false;
     },
+    hasBlockers: (facts, jurisdiction) => {
+      if (jurisdiction !== 'england' || facts.eviction_route !== 'section_8') {
+        return [];
+      }
+
+      const blocker = getPlannedNoticeExpiryBlocker(facts);
+      return blocker ? [blocker] : [];
+    },
   },
   {
     id: 'section8_compliance',
@@ -904,12 +913,14 @@ interface NoticeOnlySectionFlowProps {
   caseId: string;
   jurisdiction: 'england' | 'wales' | 'scotland';
   initialFacts?: WizardFacts;
+  initialStep?: string | null;
 }
 
 export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
   caseId,
   jurisdiction,
   initialFacts,
+  initialStep,
 }) => {
   const router = useRouter();
 
@@ -1098,6 +1109,14 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       setCurrentSectionIndex(Math.max(visibleSections.length - 1, 0));
     }
   }, [currentSectionIndex, visibleSections.length]);
+
+  useEffect(() => {
+    if (!initialStep) return;
+    const index = visibleSections.findIndex((section) => section.id === initialStep);
+    if (index >= 0) {
+      setCurrentSectionIndex(index);
+    }
+  }, [initialStep, visibleSections]);
 
   // Save facts to backend
   const saveFactsToServer = useCallback(

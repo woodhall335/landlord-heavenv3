@@ -4,7 +4,7 @@
 
 import React, { useState } from 'react';
 import { describe, it, expect, vi } from 'vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import { NoticeSection, PlannedNoticeServiceReviewPanel } from '../NoticeSection';
@@ -148,6 +148,37 @@ describe('NoticeSection specialist England ground capture', () => {
       notice_service_date: '2026-05-08',
       notice_served_date: '2026-05-08',
     });
+  });
+
+  it('review service panel enforces the Ground 1A calendar-month minimum while allowing later dates', async () => {
+    const updatesSpy = vi.fn();
+
+    render(
+      <PlannedNoticeServiceReviewPanel
+        facts={{
+          __meta: { product: 'notice_only', original_product: 'notice_only', jurisdiction: 'england' },
+          eviction_route: 'section_8',
+          section8_grounds: ['Ground 1A'],
+          notice_date: '2026-05-30',
+          notice_service_date: '2026-05-30',
+          notice_served_date: '2026-05-30',
+          notice_service_method: 'email',
+          notice_expiry_date: '2026-08-15',
+        }}
+        onUpdate={updatesSpy}
+      />
+    );
+
+    const expiryInput = screen.getByLabelText(/Notice expiry date/i);
+    expect(expiryInput).toHaveAttribute('min', '2026-09-30');
+    expect(screen.getByText(/Notice expiry date is too early\. Earliest valid date is 30 September 2026\./i)).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(updatesSpy).toHaveBeenCalledWith({ notice_expiry_date: '2026-09-30' });
+    });
+
+    fireEvent.change(expiryInput, { target: { value: '2026-10-15' } });
+    expect(updatesSpy).toHaveBeenCalledWith({ notice_expiry_date: '2026-10-15' });
   });
 
   it('uses arrears-specific helper copy when only arrears grounds are selected', () => {

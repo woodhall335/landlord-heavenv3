@@ -6,7 +6,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { getPackContents, isProductSupported } from '../pack-contents';
-import type { GetPackContentsArgs, PackItem } from '../pack-contents';
+import type { GetPackContentsArgs } from '../pack-contents';
 
 describe('getPackContents', () => {
   describe('notice_only product', () => {
@@ -220,6 +220,27 @@ describe('getPackContents', () => {
         expect(items.find(i => i.key === 'particulars_of_claim')).toBeDefined();
         expect(items.find(i => i.key === 'letter_before_claim')).toBeDefined();
         expect(items.find(i => i.key === 'enforcement_guide')).toBeDefined();
+      });
+
+      it('returns generic small-claim items when the claims app route is stored', () => {
+        const args: GetPackContentsArgs = {
+          product: 'money_claim',
+          jurisdiction: 'england',
+          route: 'generic_small_claim',
+        };
+        const items = getPackContents(args);
+
+        expect(items.map((item) => item.key)).toEqual([
+          'generic_letter_before_claim',
+          'generic_particulars_of_claim',
+          'generic_schedule_of_loss',
+          'generic_evidence_index',
+          'generic_filing_guide',
+          'generic_service_guide',
+          'generic_hearing_preparation',
+          'generic_enforcement_guide',
+        ]);
+        expect(items.find(i => i.key === 'n1_claim')).toBeUndefined();
       });
 
       it('returns no money claim items for Wales because the product is England only', () => {

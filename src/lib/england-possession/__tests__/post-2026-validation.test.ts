@@ -60,6 +60,39 @@ describe('England post-2026 validation', () => {
     expect(result.earliestValidDate).toBe('2026-08-01');
   });
 
+  it('blocks the Wincanton Ground 1A customer date and gives the calendar-month expiry', () => {
+    const result = validateEnglandPost2026WizardFacts({
+      ...CORE_ENGLAND_FACTS,
+      section8_grounds: ['Ground 1A'],
+      tenancy_start_date: '2020-11-16',
+      notice_served_date: '2026-05-30',
+      notice_expiry_date: '2026-08-15',
+    });
+
+    expect(result.earliestValidDate).toBe('2026-09-30');
+    expect(result.blockingIssues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'NOTICE_PERIOD_TOO_SHORT',
+          message: 'Notice expiry date is too early. Earliest valid date is 30 September 2026.',
+        }),
+      ]),
+    );
+  });
+
+  it('allows the Wincanton Ground 1A customer date at the calendar-month expiry', () => {
+    const result = validateEnglandPost2026WizardFacts({
+      ...CORE_ENGLAND_FACTS,
+      section8_grounds: ['Ground 1A'],
+      tenancy_start_date: '2020-11-16',
+      notice_served_date: '2026-05-30',
+      notice_expiry_date: '2026-09-30',
+    });
+
+    expect(result.earliestValidDate).toBe('2026-09-30');
+    expect(result.blockingIssues.some((issue) => issue.code === 'NOTICE_PERIOD_TOO_SHORT')).toBe(false);
+  });
+
   it('blocks unresolved deposit protection failures for most Form 3A grounds', () => {
     const result = validateEnglandPost2026WizardFacts({
       ...CORE_ENGLAND_FACTS,

@@ -23,6 +23,7 @@ import { getLawProfile } from '@/lib/law-profile';
 import { normalizeJurisdiction } from '@/lib/types/jurisdiction';
 import { getSelectedGrounds } from '@/lib/grounds';
 import { enrichEnglandSection8SupportContext } from '@/lib/england-possession/support-document-context';
+import { validateEnglandPost2026WizardFacts } from '@/lib/england-possession/post-2026-validation';
 import { assertCaseReadAccess } from '@/lib/auth/case-access';
 
 export const runtime = 'nodejs';
@@ -1055,6 +1056,46 @@ export async function POST(request: Request) {
     } else {
       // Fallback if no decision engine output
       finalRecommendedRoute = route;
+    }
+
+    if (
+      caseData.case_type === 'eviction' &&
+      canonicalJurisdiction === 'england' &&
+      finalRecommendedRoute === 'section_8' &&
+      product === 'notice_only' &&
+      decisionEngineOutput
+    ) {
+      const post2026Validation = validateEnglandPost2026WizardFacts(wizardFacts as Record<string, any>);
+      const post2026BlockingIssues = post2026Validation.blockingIssues.map((issue) => ({
+        route: 'section_8',
+        issue: issue.code,
+        description: issue.message,
+        action_required: issue.code === 'NOTICE_PERIOD_TOO_SHORT'
+          ? 'Update the notice expiry date in Final notice service details.'
+          : 'Update the highlighted notice answers before continuing.',
+        severity: 'blocking' as const,
+        legal_basis: issue.legalBasis,
+        fields: issue.fields,
+        affected_question_id: issue.code === 'NOTICE_PERIOD_TOO_SHORT'
+          ? 'notice_expiry_date'
+          : issue.fields[0],
+        target_step: issue.code === 'NOTICE_PERIOD_TOO_SHORT'
+          ? 'review'
+          : undefined,
+      }));
+
+      if (post2026BlockingIssues.length > 0) {
+        const existingKeys = new Set(
+          decisionEngineOutput.blocking_issues.map((issue) => `${issue.route}:${issue.issue}`),
+        );
+        decisionEngineOutput = {
+          ...decisionEngineOutput,
+          blocking_issues: [
+            ...decisionEngineOutput.blocking_issues,
+            ...post2026BlockingIssues.filter((issue) => !existingKeys.has(`${issue.route}:${issue.issue}`)),
+          ],
+        };
+      }
     }
 
     const routeScopedDecisionEngineOutput: RouteScopedDecisionOutput | null =

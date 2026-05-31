@@ -137,6 +137,20 @@ function addCalendarMonthsIso(dateStr: string, months: number): string {
   return date.toISOString().split('T')[0];
 }
 
+function formatUkLongDate(dateStr: string): string {
+  const date = new Date(`${dateStr}T00:00:00Z`);
+  if (Number.isNaN(date.getTime())) {
+    return dateStr;
+  }
+
+  return date.toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
+}
+
 export function calculateEarliestValidPossessionDate(
   serviceDate: string,
   grounds: Array<string | number>,
@@ -436,8 +450,8 @@ export function validateEnglandPost2026WizardFacts(
       blockingIssues.push({
         code: 'NOTICE_PERIOD_TOO_SHORT',
         severity: 'blocking',
-        message: `The notice expiry date is too early for the selected Form 3A ground(s). The earliest valid date is ${earliestValidDate}.`,
-        fields: ['notice_served_date', 'notice_service_date', 'notice_expiry_date', 'section8_grounds'],
+        message: `Notice expiry date is too early. Earliest valid date is ${formatUkLongDate(earliestValidDate)}.`,
+        fields: ['notice_expiry_date', 'notice_served_date', 'notice_service_date', 'section8_grounds'],
         legalBasis: 'Housing Act 1988 section 8 notice periods as amended from 1 May 2026',
       });
     }

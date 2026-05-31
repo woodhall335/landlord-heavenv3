@@ -42,6 +42,10 @@ import {
   hasArrearsGround,
 } from '@/lib/grounds/notice-period-utils';
 import {
+  getEnglandGroundDefinition,
+  normalizeEnglandGroundCode,
+} from '@/lib/england-possession/ground-catalog';
+import {
   isArrearsEvidenceComplete,
 } from '@/lib/grounds/evidence-suggestions';
 import { saveCaseFacts } from '@/lib/wizard/facts-client';
@@ -95,6 +99,7 @@ import {
   isMoneyClaimAddOnEligible,
 } from '@/lib/wizard-crosssell';
 import { getSelectedRouteBlockingIssues } from '@/lib/decision-engine/routeScopedBlockingIssues';
+import { getNoticeOnlyFixStepForIssue } from '@/lib/wizard/notice-only-issue-routing';
 
 interface ReviewAddOnRecommendation {
   sku: string;
@@ -564,7 +569,7 @@ function ReviewPageInner() {
   const complianceIssues: string[] = analysis.compliance_issues || [];
   const evidence = analysis.evidence_overview || {};
 
-  const handleEdit = () => {
+  const openWizardEdit = (step?: string | null) => {
     // Normalize product for jurisdiction to ensure Scotland flows use PRT, not AST
     const normalizedJurisdiction = (jurisdiction || 'england') as CanonicalJurisdiction;
     const normalizedProduct = isTenancyFlow
@@ -581,10 +586,26 @@ function ReviewPageInner() {
       mode: 'edit', // Prevent redirect back to review when all questions are answered
     });
 
+    if (step) {
+      params.set('step', step);
+    }
+
     router.push(`/wizard/flow?${params.toString()}`);
   };
 
+  const handleEdit = () => {
+    openWizardEdit();
+  };
+
   const handleFixIssues = () => {
+    if (product === 'notice_only') {
+      const targetStep = getNoticeOnlyFixStepForIssue(evictionBlockingIssues[0]);
+      if (targetStep) {
+        openWizardEdit(targetStep);
+        return;
+      }
+    }
+
     document.getElementById('critical-issues')?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -2106,6 +2127,22 @@ function NoticeOnlyReviewContent({
   // Calculate notice periods
   const selectedOnlyPeriod = calculateCombinedNoticePeriod(selectedGrounds);
   const includedPeriod = calculateCombinedNoticePeriod(includedGroundCodes);
+  const formatNoticePeriod = (grounds: string[], days: number): string => {
+    const drivingLabels = Array.from(
+      new Set(
+        grounds
+          .map((ground) => normalizeEnglandGroundCode(ground))
+          .map((ground) => (ground ? getEnglandGroundDefinition(ground) : null))
+          .filter((ground): ground is NonNullable<typeof ground> => Boolean(ground))
+          .filter((ground) => ground.noticePeriodDays === days)
+          .map((ground) => ground.noticePeriodLabel),
+      ),
+    );
+
+    return drivingLabels.join(' / ') || `${days} days`;
+  };
+  const selectedOnlyPeriodLabel = formatNoticePeriod(selectedGrounds, selectedOnlyPeriod.noticePeriodDays);
+  const includedPeriodLabel = formatNoticePeriod(includedGroundCodes, includedPeriod.noticePeriodDays);
   const periodComparison = compareNoticePeriods(
     selectedGrounds,
     additionalRecommendedGrounds.map(g => g.code)
@@ -2176,7 +2213,7 @@ function NoticeOnlyReviewContent({
         </p>
         {isSection8 && includedGroundCodes.length > 0 && (
           <p className="text-sm text-gray-500 mt-1">
-            Minimum notice period: <span className="font-semibold">{includedPeriod.noticePeriodDays} days</span>
+            Minimum notice period: <span className="font-semibold">{includedPeriodLabel}</span>
           </p>
         )}
         <div className="mt-4">
@@ -2222,12 +2259,17 @@ function NoticeOnlyReviewContent({
           <ul className="space-y-3">
             {blockingIssues.map((issue: any, index: number) => (
               <li key={index} className="flex items-start gap-3 bg-white p-4 rounded border border-red-100">
-                <span className="text-red-500 mt-0.5">?</span>
+                <RiCloseLine className="mt-0.5 h-5 w-5 shrink-0 text-red-500" />
                 <div>
                   <p className="font-medium text-red-900">{issue.description || issue}</p>
                   {issue.action_required && (
                     <p className="text-sm text-red-700 mt-1">
                       <strong>Action:</strong> {issue.action_required}
+                    </p>
+                  )}
+                  {issue.affected_question_id && (
+                    <p className="mt-1 text-xs font-medium text-red-600">
+                      Affected answer: {String(issue.affected_question_id).replace(/_/g, ' ')}
                     </p>
                   )}
                 </div>
@@ -2415,6 +2457,7 @@ function NoticeOnlyReviewContent({
               <ul className="space-y-3">
                 {selectedGrounds.map((groundCode, index) => {
                   const groundInfo = getGroundDescription(groundCode);
+                  const catalogGround = getEnglandGroundDefinition(normalizeEnglandGroundCode(groundCode) || '');
                   return (
                     <li key={index} className="flex items-start gap-3 p-3 bg-green-50 rounded border border-green-200">
                       <span className="font-mono text-sm bg-green-200 px-2 py-1 rounded shrink-0">
@@ -2433,7 +2476,7 @@ function NoticeOnlyReviewContent({
                             {groundInfo.type}
                           </span>
                           <span className="text-xs text-gray-500">
-                            {groundInfo.noticePeriodDays} days notice
+                            {catalogGround?.noticePeriodLabel || `${groundInfo.noticePeriodDays} days`} notice
                           </span>
                         </div>
                       </div>
@@ -2442,7 +2485,7 @@ function NoticeOnlyReviewContent({
                 })}
               </ul>
               <p className="text-sm text-gray-600 mt-3">
-                <strong>Notice period for selected grounds:</strong> {selectedOnlyPeriod.noticePeriodDays} days
+                <strong>Notice period for selected grounds:</strong> {selectedOnlyPeriodLabel}
               </p>
             </Card>
           )}
@@ -2489,7 +2532,8 @@ function NoticeOnlyReviewContent({
                           {ground.type}
                         </span>
                         <span className="text-xs text-gray-500">
-                          {ground.notice_period_days || getGroundDescription(ground.code).noticePeriodDays} days notice
+                          {getEnglandGroundDefinition(ground.code)?.noticePeriodLabel ||
+                            `${ground.notice_period_days || getGroundDescription(ground.code).noticePeriodDays} days`} notice
                         </span>
                       </div>
                       {ground.reasoning && (
@@ -2516,7 +2560,7 @@ function NoticeOnlyReviewContent({
                     <p className="text-xs text-gray-500 mt-0.5">
                       {includeRecommendedGrounds ? (
                         <span className="text-blue-700">
-                          Your notice will include {includedGroundCodes.length} ground(s) with a {includedPeriod.noticePeriodDays}-day notice period.
+                          Your notice will include {includedGroundCodes.length} ground(s) with a {includedPeriodLabel} notice period.
                         </span>
                       ) : (
                         'Your notice will only include your selected grounds.'
@@ -2530,8 +2574,8 @@ function NoticeOnlyReviewContent({
               {includeRecommendedGrounds && periodComparison.increasesNotice && (
                 <div className="mt-4 p-3 bg-blue-100 border border-blue-200 rounded text-sm">
                   <p className="text-blue-900">
-                    <strong>Confirmed:</strong> Your notice period is now {includedPeriod.noticePeriodDays} days
-                    (increased from {selectedOnlyPeriod.noticePeriodDays} days).
+                    <strong>Confirmed:</strong> Your notice period is now {includedPeriodLabel}
+                    (increased from {selectedOnlyPeriodLabel}).
                     The court cannot hear your case until after this period expires.
                   </p>
                 </div>
@@ -2572,7 +2616,7 @@ function NoticeOnlyReviewContent({
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Minimum notice period:</span>
-                <span className="font-semibold text-lg">{includedPeriod.noticePeriodDays} days</span>
+                <span className="font-semibold text-lg">{includedPeriodLabel}</span>
               </div>
               <p className="text-xs text-gray-500 mt-2">
                 {includedPeriod.explanation}
