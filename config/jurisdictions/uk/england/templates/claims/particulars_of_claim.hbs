@@ -1,0 +1,73 @@
+<h1>Particulars of Claim</h1>
+<p><strong>{{brand_name}}</strong></p>
+
+<hr>
+
+<p><strong>Claimant:</strong> {{claimant_name}}</p>
+<p><strong>Defendant:</strong> {{defendant_name}}</p>
+<p><strong>Claim type:</strong> {{claim_label}}</p>
+
+<h2>Summary</h2>
+<p>{{claim_summary}}</p>
+
+{{#if category_context}}
+<h2>Background facts</h2>
+<p>{{category_context}}</p>
+{{/if}}
+
+<h2>Legal basis</h2>
+<p>{{legal_rules.legal_basis}}</p>
+
+<h2>Required elements checked by the interview</h2>
+<ol>
+  {{#each required_element_checks}}
+  <li>{{element}}</li>
+  {{/each}}
+</ol>
+
+{{#if category_facts.length}}
+<h2>Category-specific facts</h2>
+<table border="1" cellpadding="8" cellspacing="0" width="100%">
+  {{#each category_facts}}
+  <tr>
+    <td width="35%"><strong>{{label}}</strong></td>
+    <td width="65%">{{value}}</td>
+  </tr>
+  {{/each}}
+</table>
+{{/if}}
+
+<h2>Pre-action conduct</h2>
+<p>{{pre_action_summary}}</p>
+<p><em>{{legal_rules.pre_action_rule}}</em></p>
+
+<h2>Amount claimed</h2>
+<p>
+  The claimant claims {{currency total_claim_amount}}, as particularised in the attached Schedule of Loss,
+  plus the court fee and any interest the court allows.
+</p>
+
+{{#if claim_interest}}
+<h2>Interest</h2>
+<p>
+  The claimant has asked for interest to be considered. The pack records a review rate of
+  {{interest_rate}}% per year and a daily figure of {{currency daily_interest}}. The claimant should check
+  the legal basis before filing.
+</p>
+{{/if}}
+
+<h2>Relief sought</h2>
+<ol>
+  <li>Judgment for {{currency total_claim_amount}}.</li>
+  <li>The issue fee of {{currency court_fee}}.</li>
+  {{#if claim_interest}}
+  <li>Interest if the court is satisfied it is recoverable.</li>
+  {{/if}}
+  <li>Any further order the court considers appropriate.</li>
+</ol>
+
+<h2>Statement of truth</h2>
+<p>I believe that the facts stated in these particulars of claim are true.</p>
+<p>Signed: _________________________ {{signatory_name}}</p>
+<p>Dated: _________________________ {{signature_date}}</p>
+<p><em>This document must be checked, signed, and dated before filing.</em></p>

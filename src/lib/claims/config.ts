@@ -78,6 +78,17 @@ const genericAboutQuestions = (contextQuestion: ClaimQuestionConfig): ClaimQuest
     mapsToDocument: true,
   },
   {
+    id: 'claimant_postcode',
+    questionText: 'What is the claimant postcode?',
+    typingText: 'The official N1 form needs the claimant service postcode separately.',
+    helperText: 'Enter the postcode for the claimant address for service.',
+    fieldPath: 'claimant.postcode',
+    answerType: 'text',
+    required: true,
+    mapsToDocument: true,
+    validation: { minLength: 5, requiredMessage: 'Enter the claimant postcode.' },
+  },
+  {
     id: 'defendant_name',
     questionText: 'Who owes the money or refund?',
     typingText: 'Next I need the defendant name.',
@@ -96,6 +107,17 @@ const genericAboutQuestions = (contextQuestion: ClaimQuestionConfig): ClaimQuest
     answerType: 'address',
     required: true,
     mapsToDocument: true,
+  },
+  {
+    id: 'defendant_postcode',
+    questionText: 'What is the defendant postcode?',
+    typingText: 'The official N1 form also needs the defendant postcode.',
+    helperText: 'Enter the postcode for the defendant service address.',
+    fieldPath: 'defendant.postcode',
+    answerType: 'text',
+    required: true,
+    mapsToDocument: true,
+    validation: { minLength: 5, requiredMessage: 'Enter the defendant postcode.' },
   },
   {
     id: 'claim_value_estimate',
@@ -246,13 +268,17 @@ const standardPackOutputs = [
   '06-service-guide.pdf',
   '07-hearing-preparation.pdf',
   '08-enforcement-guide.pdf',
+  '09-interest-calculation.pdf when interest is selected',
+  '10-n1-claim-form.pdf official N1 form',
 ];
 
 const genericRequiredFields = [
   'claimant.name',
   'claimant.address',
+  'claimant.postcode',
   'defendant.name',
   'defendant.address',
+  'defendant.postcode',
   'generic_claim.category',
   'generic_claim.summary',
   'generic_claim.key_dates',

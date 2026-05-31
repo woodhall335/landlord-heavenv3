@@ -307,7 +307,7 @@
   </div>
 
   <div class="callout critical">
-    <p><strong>Risk warning:</strong> A possession claim can be delayed or contested if the notice dates, service evidence, or grounds particulars are inconsistent across the pack, even where the underlying arrears or breach evidence is strong.</p>
+    <p><strong>Risk warning:</strong> A possession claim can be delayed or contested if the notice dates, service evidence, or grounds particulars are inconsistent across the pack, even where the underlying {{#if has_arrears_grounds}}arrears or {{/if}}ground-specific evidence is strong.</p>
     {{#if drafting_model.validityChecklist.riskParagraphs.length}}
       {{#each drafting_model.validityChecklist.riskParagraphs}}
     <p>{{this}}</p>

@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { enrichEnglandSection8SupportContext } from '@/lib/england-possession/support-document-context';
+import {
+  buildEnglandGroundSupportProfile,
+  enrichEnglandSection8SupportContext,
+} from '@/lib/england-possession/support-document-context';
 
 describe('England Section 8 support document context', () => {
   it('normalizes canonical labels, dates, and drafting model data for support docs', () => {
@@ -25,6 +28,8 @@ describe('England Section 8 support document context', () => {
     expect(result.earliest_proceedings_date).toBe('2026-03-19');
     expect(result.notice_expiry_date_formatted).toBe('19/03/2026');
     expect(result.ground_descriptions).toContain('Ground 8');
+    expect(result.has_arrears_grounds).toBe(true);
+    expect(result.ground_support_profile.hasArrearsGrounds).toBe(true);
     expect(result.drafting_model.caseSummary.narrativeParagraphs.join(' ')).toContain('Ground 8 is relied on');
     expect(result.preview_summary.shortTitle).toContain('England possession case');
   });
@@ -76,5 +81,44 @@ describe('England Section 8 support document context', () => {
     expect(result.landlord_address).toBe('27 Rowan Avenue\nLeeds\nWest Yorkshire\nLS8 2PF');
     expect(result.latest_proceedings_date_formatted).toBe('29/12/2026');
     expect(result.notice_name).toBe(result.notice_type);
+  });
+
+  it('builds non-arrears support for sale, redevelopment, conduct, and specialist grounds', () => {
+    const profile = buildEnglandGroundSupportProfile({
+      ground_codes: ['Ground 1A', 'Ground 6', 'Ground 14', 'Ground 4A', 'Ground 5H', 'Ground 18'],
+    });
+
+    expect(profile.hasArrearsGrounds).toBe(false);
+    expect(profile.hasSaleOrUseGrounds).toBe(true);
+    expect(profile.hasRedevelopmentGrounds).toBe(true);
+    expect(profile.hasBreachOrConductGrounds).toBe(true);
+    expect(profile.hasSpecialStatusGrounds).toBe(true);
+    expect(profile.evidenceItems).toContain('sale evidence');
+    expect(profile.evidenceItems).toContain('works/planning evidence');
+    expect(profile.evidenceItems).toContain('complaints log');
+    expect(profile.evidenceItems).toContain('stepping stone scheme evidence');
+    expect(profile.evidenceItems).not.toContain('arrears schedule');
+  });
+
+  it('keeps arrears support only for arrears grounds and combines mixed evidence cleanly', () => {
+    const arrearsProfile = buildEnglandGroundSupportProfile(['Ground 8', 'Ground 10', 'Ground 11']);
+
+    expect(arrearsProfile.hasArrearsGrounds).toBe(true);
+    expect(arrearsProfile.evidenceItems).toContain('arrears schedule');
+    expect(arrearsProfile.evidenceItems).toContain('rent ledger');
+
+    const mixedSaleAndArrears = buildEnglandGroundSupportProfile(['Ground 1A', 'Ground 8']);
+    expect(mixedSaleAndArrears.hasArrearsGrounds).toBe(true);
+    expect(mixedSaleAndArrears.hasSaleOrUseGrounds).toBe(true);
+    expect(mixedSaleAndArrears.evidenceItems).toContain('sale evidence');
+    expect(mixedSaleAndArrears.evidenceItems).toContain('arrears schedule');
+
+    const mixedRedevelopmentAndBreach = buildEnglandGroundSupportProfile(['Ground 6', 'Ground 12']);
+    expect(mixedRedevelopmentAndBreach.hasArrearsGrounds).toBe(false);
+    expect(mixedRedevelopmentAndBreach.hasRedevelopmentGrounds).toBe(true);
+    expect(mixedRedevelopmentAndBreach.hasBreachOrConductGrounds).toBe(true);
+    expect(mixedRedevelopmentAndBreach.evidenceItems).toContain('works/planning evidence');
+    expect(mixedRedevelopmentAndBreach.evidenceItems).toContain('breach evidence');
+    expect(mixedRedevelopmentAndBreach.evidenceItems).not.toContain('arrears schedule');
   });
 });

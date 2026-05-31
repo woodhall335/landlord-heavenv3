@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { PRODUCTS } from '@/lib/pricing/products';
 import { CLAIM_PACK_DISPLAY_PRICE, CLAIM_PACK_PRICE, CLAIM_TYPE_CONFIGS } from '../config';
+import { getGenericClaimLegalRules } from '../legal-rules';
 import { CLAIM_STEP_IDS, getClaimHandoffHref, validateAllClaimConfigs } from '../validation';
 
 describe('claim type configs', () => {
@@ -71,6 +72,9 @@ describe('claim type configs', () => {
       );
       expect(config.packOutputs.join(' ')).not.toMatch(/tenant|tenancy|rent arrears/i);
       expect(config.packOutputs).toContain('04-evidence-index.pdf');
+      expect(config.packOutputs).toContain('10-n1-claim-form.pdf official N1 form');
+      expect(getGenericClaimLegalRules(config.id)?.official_forms).toContain('N1 claim form');
+      expect(getGenericClaimLegalRules(config.id)?.required_elements.length).toBeGreaterThanOrEqual(4);
     }
   });
 });

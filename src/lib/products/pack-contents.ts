@@ -836,6 +836,20 @@ function getEnglandGenericSmallClaimContents(): PackItem[] {
       category: 'Guidance',
       required: true,
     },
+    {
+      key: 'generic_interest_calculation',
+      title: 'Interest Calculation',
+      description: 'Interest review sheet included when the user opts to consider interest.',
+      category: 'Guidance',
+      required: false,
+    },
+    {
+      key: 'n1_claim',
+      title: 'Form N1 (official PDF)',
+      description: 'Completed official N1 claim form for England County Court money claims.',
+      category: 'Court forms',
+      required: true,
+    },
   ];
 }
 

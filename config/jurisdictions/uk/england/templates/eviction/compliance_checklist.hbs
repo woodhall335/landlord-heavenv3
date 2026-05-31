@@ -221,8 +221,10 @@
     <p><strong>Deemed service date used:</strong> {{format_date court_pack_validation_summary.deemed_service_date "long"}}</p>
     <p><strong>Notice expiry date:</strong> {{format_date court_pack_validation_summary.notice_expiry_date "long"}}</p>
     <p><strong>Earliest proceedings date:</strong> {{format_date court_pack_validation_summary.earliest_proceedings_date "long"}}</p>
+    {{#if has_arrears_grounds}}
     <p><strong>Total arrears:</strong> {{currency court_pack_validation_summary.total_arrears}}</p>
     <p><strong>Ground 8 threshold:</strong> {{currency court_pack_validation_summary.ground_8_threshold}} ({{court_pack_validation_summary.ground_8_status}})</p>
+    {{/if}}
     <ul>
       {{#each court_pack_validation_summary.checks}}
       <li><strong>{{status}}:</strong> {{message}}</li>

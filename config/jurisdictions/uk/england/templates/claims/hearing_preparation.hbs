@@ -1,0 +1,37 @@
+<h1>Hearing Preparation</h1>
+<p><strong>{{brand_name}}</strong> - {{claim_label}}</p>
+
+<hr>
+
+<h2>Core points to be ready to explain</h2>
+<ol>
+  {{#each legal_rules.required_elements}}
+  <li>{{this}}</li>
+  {{/each}}
+</ol>
+
+<h2>Claim summary</h2>
+<p>{{claim_summary}}</p>
+
+<h2>Evidence bundle</h2>
+<p>
+  Prepare a bundle that follows the Evidence Index. Put documents in date order where possible and make
+  sure names, dates, amounts, and messages are readable.
+</p>
+
+{{#if evidence_rows.length}}
+<ul>
+  {{#each evidence_rows}}
+  <li>{{label}} - {{description}}</li>
+  {{/each}}
+</ul>
+{{/if}}
+
+<h2>Hearing checklist</h2>
+<ul>
+  <li>Particulars of Claim checked against the evidence.</li>
+  <li>Schedule of Loss totals checked.</li>
+  <li>Copies of all key evidence available.</li>
+  <li>Short chronology prepared.</li>
+  <li>Notes prepared on attempts to resolve the dispute.</li>
+</ul>

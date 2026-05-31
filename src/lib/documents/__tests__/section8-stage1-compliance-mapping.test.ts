@@ -51,4 +51,48 @@ describe('Section 8 Stage 1 compliance mapping', () => {
     expect(facts.epc_rating).toBe('C');
     expect(facts.how_to_rent_provided).toBe(true);
   });
+
+  test('does not generate arrears support documents or arrears summary copy for non-arrears grounds', async () => {
+    const facts = buildEnglandSection8CompletePackFacts({
+      overrides: {
+        section8_grounds: ['Ground 1A'],
+        ground_codes: ['Ground 1A'],
+        selected_grounds: ['Ground 1A'],
+        notice_served_date: '2026-05-30',
+        notice_service_date: '2026-05-30',
+        notice_date: '2026-05-30',
+        notice_expiry_date: '2026-09-30',
+        earliest_possession_date: '2026-09-30',
+        total_arrears: 2400,
+        rent_arrears_amount: 2400,
+        arrears_items: [
+          { period_start: '2026-01-01', period_end: '2026-01-31', rent_due: 1200, rent_paid: 0, amount_owed: 1200 },
+        ],
+        ground_1a: {
+          sale_reason: 'The landlord intends to sell the property.',
+          sale_steps_taken: 'Valuation and agent discussions.',
+          sale_decision_date: '2026-05-01',
+          sale_timetable: 'Marketing after notice expiry.',
+          sale_evidence: 'Valuation record and agent correspondence.',
+        },
+        ground_particulars: {
+          ground_1a: {
+            summary: 'Ground 1A: the landlord intends to sell the property and has obtained valuation evidence.',
+          },
+        },
+      },
+    });
+
+    const pack = await generateNoticeOnlyPack(facts);
+    const documentTypes = pack.documents.map((document) => document.document_type);
+    const caseSummaryHtml =
+      pack.documents.find((document) => document.document_type === 'case_summary')?.html || '';
+    const serviceInstructionsHtml =
+      pack.documents.find((document) => document.document_type === 'service_instructions')?.html || '';
+
+    expect(documentTypes).not.toContain('arrears_schedule');
+    expect(caseSummaryHtml).not.toContain('Arrears at notice date');
+    expect(serviceInstructionsHtml).toContain('ground-specific evidence');
+    expect(serviceInstructionsHtml).not.toContain('arrears schedule line up');
+  });
 });

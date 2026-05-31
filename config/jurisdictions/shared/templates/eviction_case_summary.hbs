@@ -391,10 +391,14 @@
       <span class="label">Grounds</span>
       <div class="value">{{grounds_summary_text}}</div>
     </div>
-    <div class="fact-card">
-      <span class="label">Arrears</span>
-      <div class="value">{{currency current_arrears_total}}</div>
-    </div>
+    {{#if has_arrears_grounds}}
+      {{#if (or (hasValue current_arrears_total) (eq current_arrears_total 0))}}
+      <div class="fact-card">
+        <span class="label">Arrears</span>
+        <div class="value">{{currency current_arrears_total}}</div>
+      </div>
+      {{/if}}
+    {{/if}}
     {{#if (hasValue notice_served_date)}}
     <div class="fact-card">
       <span class="label">Notice served</span>
@@ -430,12 +434,14 @@
       <dd>{{format_date court_pack_validation_summary.notice_expiry_date "long"}}</dd>
       <dt>Earliest proceedings date</dt>
       <dd>{{format_date court_pack_validation_summary.earliest_proceedings_date "long"}}</dd>
+      {{#if has_arrears_grounds}}
       <dt>Total arrears</dt>
       <dd>{{currency court_pack_validation_summary.total_arrears}}</dd>
       <dt>Ground 8 threshold</dt>
       <dd>{{currency court_pack_validation_summary.ground_8_threshold}}</dd>
       <dt>Ground 8 status</dt>
       <dd>{{court_pack_validation_summary.ground_8_status}}</dd>
+      {{/if}}
     </dl>
     <ul>
       {{#each court_pack_validation_summary.checks}}
@@ -459,7 +465,9 @@
       <p>{{next_step_text}}</p>
       {{#if court_name}}<p><strong>Court:</strong> {{court_name}}</p>{{/if}}
       {{#if (hasValue payment_day_display)}}<p><strong>Rent due:</strong> {{payment_day_display}}</p>{{/if}}
+      {{#if has_arrears_grounds}}
       {{#if (or (hasValue arrears_at_notice_date) (eq arrears_at_notice_date 0))}}<p><strong>Arrears at notice date:</strong> {{currency arrears_at_notice_date}}</p>{{/if}}
+      {{/if}}
     </div>
   </div>
 

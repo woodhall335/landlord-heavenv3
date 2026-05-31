@@ -135,7 +135,7 @@
 <body>
   <div class="header">
     <h1>Hearing Preparation Guide</h1>
-    <h2>Prepare the hearing file, updated arrears position, and speaking points for the possession hearing{{#if (contains groundsReliedUpon "Ground 8")}} - with Ground 8 kept under review at both notice and hearing stage{{/if}}</h2>
+    <h2>Prepare the hearing file, {{#if has_arrears_grounds}}updated arrears position{{else}}ground-specific evidence{{/if}}, and speaking points for the possession hearing{{#if (contains groundsReliedUpon "Ground 8")}} - with Ground 8 kept under review at both notice and hearing stage{{/if}}</h2>
   </div>
 
   <div class="summary-box">
@@ -194,6 +194,7 @@
       <dd>{{format_date court_pack_validation_summary.notice_expiry_date "long"}}</dd>
       <dt>Earliest proceedings date</dt>
       <dd>{{format_date court_pack_validation_summary.earliest_proceedings_date "long"}}</dd>
+      {{#if has_arrears_grounds}}
       <dt>Total arrears</dt>
       <dd>{{currency court_pack_validation_summary.total_arrears}}</dd>
       {{#if (contains groundsReliedUpon "Ground 8")}}
@@ -201,6 +202,7 @@
       <dd>{{currency court_pack_validation_summary.ground_8_threshold}}</dd>
       <dt>Ground 8 status</dt>
       <dd>{{court_pack_validation_summary.ground_8_status}}</dd>
+      {{/if}}
       {{/if}}
     </dl>
   </div>
@@ -212,7 +214,7 @@
       <li>Is the notice valid?</li>
       <li>Was it served correctly?</li>
       <li>Do the grounds apply?</li>
-      <li>Are the arrears proven?</li>
+      <li>Is the {{#if has_arrears_grounds}}arrears evidence{{else}}ground-specific evidence{{/if}} proven?</li>
       {{#if (contains groundsReliedUpon "Ground 8")}}
       <li>Does Ground 8 still meet the threshold at the hearing as well as at service stage?</li>
       {{/if}}
@@ -231,17 +233,24 @@
         File the court bundle and serve the same bundle on the defendant in accordance with any case directions.
         <div class="notes">Keep proof that the bundle was filed and served.</div>
       </li>
+      {{#if has_arrears_grounds}}
       <li>
         Update the schedule of arrears to the latest practicable date.
         <div class="notes">{{#if (contains groundsReliedUpon "Ground 8")}}Ground 8 must usually be satisfied at both notice and hearing stage if you want the mandatory ground to succeed.{{else}}Keep the arrears figure current for the grounds relied on.{{/if}}</div>
       </li>
+      {{else}}
+      <li>
+        Update the ground-specific evidence to the latest practicable date.
+        <div class="notes">Keep sale, occupation, redevelopment, conduct, status, or breach records current for the grounds relied on.</div>
+      </li>
+      {{/if}}
       <li>
         Check whether the tenant has filed a defence, witness statement, or counterclaim.
         <div class="notes">Be ready to respond briefly and factually.</div>
       </li>
       <li>
         Review the {{notice_name}}, proof of service, witness statement, and bundle index together.
-        <div class="notes">The court name, dates, and arrears figure should match across the pack.</div>
+        <div class="notes">The court name, dates, and {{#if has_arrears_grounds}}arrears figure{{else}}ground-specific evidence{{/if}} should match across the pack.</div>
       </li>
       {{/if}}
     </ul>
@@ -256,8 +265,12 @@
       <li>Tenancy agreement</li>
       <li>Form 3A notice</li>
       <li>N215 or other service evidence</li>
+      {{#if has_arrears_grounds}}
       <li>Arrears schedule</li>
       <li>Rent ledger or bank statements</li>
+      {{else}}
+      <li>Ground-specific evidence for each selected ground</li>
+      {{/if}}
       <li>Compliance evidence</li>
       <li>Correspondence, photos, and other exhibits</li>
     </ul>
@@ -270,10 +283,12 @@
         Disrepair or set-off.
         <div class="notes">Check inspection history, repair reports, and whether any sum is said to have been withheld or set off.</div>
       </li>
+      {{#if has_arrears_grounds}}
       <li>
         Payments not credited.
         <div class="notes">Check the ledger, bank statements, and the updated arrears schedule before the hearing.</div>
       </li>
+      {{/if}}
       <li>
         Wrong service or wrong date challenge.
         <div class="notes">Check Form 3A, the service record, and every date used in the claim papers.</div>
@@ -284,7 +299,7 @@
       </li>
       <li>
         Hardship or adjournment request.
-        <div class="notes">Stay factual and keep the focus on notice validity, service, grounds, and the current arrears position.</div>
+        <div class="notes">Stay factual and keep the focus on notice validity, service, grounds, and the current {{#if has_arrears_grounds}}arrears position{{else}}evidence position{{/if}}.</div>
       </li>
       <li>
         Counterclaim.
@@ -305,7 +320,11 @@
       <li>The original tenancy agreement.</li>
       <li>The original {{notice_name}}.</li>
       <li>The original proof of service certificate or service evidence.</li>
+      {{#if has_arrears_grounds}}
       <li>The updated arrears schedule and any supporting payment records.</li>
+      {{else}}
+      <li>The updated ground-specific evidence supporting each pleaded ground.</li>
+      {{/if}}
       <li>Photo ID and any key correspondence relevant to the grounds relied on.</li>
       {{/if}}
     </ul>
@@ -316,7 +335,7 @@
     <ul class="checklist">
       <li>Inconsistent dates between the notice, N215, witness statement, and claim papers.</li>
       <li>Missing or unclear service evidence.</li>
-      <li>Arrears figures that do not match the latest schedule or payment history.</li>
+      <li>{{#if has_arrears_grounds}}Arrears figures that do not match the latest schedule or payment history.{{else}}Ground-specific evidence that does not match the pleaded facts.{{/if}}</li>
       <li>Issuing before the notice period has expired or before the earliest proceedings date.</li>
       <li>Using the wrong court or the wrong defendant details.</li>
       <li>Signing a statement of truth that does not match the current file.</li>
@@ -332,10 +351,10 @@
         {{/each}}
       {{else}}
       <li>
-        Arrive early, check in with the usher, and keep your bundle open to the notice, service evidence, and arrears figures.
+        Arrive early, check in with the usher, and keep your bundle open to the notice, service evidence, and {{#if has_arrears_grounds}}arrears figures{{else}}ground-specific evidence{{/if}}.
       </li>
       <li>
-        Be ready to explain the current arrears, the service timeline, and the evidence supporting each pleaded ground.
+        Be ready to explain the {{#if has_arrears_grounds}}current arrears, {{/if}}service timeline, and the evidence supporting each pleaded ground.
       </li>
       <li>
         Keep your answers short, factual, and tied to the documents in the bundle rather than broad allegations.
@@ -367,7 +386,11 @@
     <ul class="checklist">
       <li>Do not issue before expiry or before the earliest proceedings date.</li>
       <li>Verify the court, the claimant names, and the defendant name and address before issue.</li>
+      {{#if has_arrears_grounds}}
       <li>Update the arrears figure before the hearing if payments are made.</li>
+      {{else}}
+      <li>Update the ground-specific evidence if anything material changes before the hearing.</li>
+      {{/if}}
       <li>Ensure the N5, N119, notice, and witness statement dates match.</li>
       <li>Do not sign the statement of truth unless the current file is accurate.</li>
     </ul>
@@ -385,10 +408,17 @@
         The tenant attends with a defence.
         <div class="notes">Read it, identify what you accept or dispute, and point the judge to the relevant documents.</div>
       </li>
+      {{#if has_arrears_grounds}}
       <li>
         The tenant makes a partial payment before or at the hearing.
         <div class="notes">{{#if (contains groundsReliedUpon "Ground 8")}}Update the arrears figure immediately and reconsider whether Ground 8 still stands.{{else}}Update the arrears figure immediately and reassess whether the arrears grounds still stand.{{/if}}</div>
       </li>
+      {{else}}
+      <li>
+        The pleaded facts materially change before or at the hearing.
+        <div class="notes">Update the ground-specific evidence immediately and reassess whether the selected grounds still stand.</div>
+      </li>
+      {{/if}}
       <li>
         The tenant raises housing disrepair or a counterclaim.
         <div class="notes">Stay factual and explain what notice, inspection, or repair steps are evidenced in your file.</div>

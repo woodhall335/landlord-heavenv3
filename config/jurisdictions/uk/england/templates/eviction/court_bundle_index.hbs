@@ -192,12 +192,14 @@
       <dd>{{format_date court_pack_validation_summary.notice_expiry_date "long"}}</dd>
       <dt>Earliest proceedings date</dt>
       <dd>{{format_date court_pack_validation_summary.earliest_proceedings_date "long"}}</dd>
+      {{#if has_arrears_grounds}}
       <dt>Total arrears</dt>
       <dd>{{currency court_pack_validation_summary.total_arrears}}</dd>
       <dt>Ground 8 threshold</dt>
       <dd>{{currency court_pack_validation_summary.ground_8_threshold}}</dd>
       <dt>Ground 8 status</dt>
       <dd>{{court_pack_validation_summary.ground_8_status}}</dd>
+      {{/if}}
     </dl>
   </div>
   {{/if}}
@@ -267,7 +269,7 @@
       </tr>
 
       <tr class="section-header">
-        <td colspan="6">{{#if drafting_model.bundleIndex.sectionTitle}}{{drafting_model.bundleIndex.sectionTitle}}{{else}}D. Arrears evidence{{/if}}</td>
+        <td colspan="6">{{#if drafting_model.bundleIndex.sectionTitle}}{{drafting_model.bundleIndex.sectionTitle}}{{else}}{{#if has_arrears_grounds}}D. Arrears evidence{{else}}D. Ground-specific evidence{{/if}}{{/if}}</td>
       </tr>
       {{#if drafting_model.bundleIndex.groundRows.length}}
         {{#each drafting_model.bundleIndex.groundRows}}
@@ -281,6 +283,7 @@
       </tr>
         {{/each}}
       {{else}}
+      {{#if has_arrears_grounds}}
       <tr>
         <td class="checkbox-col"><span class="checkbox"></span></td>
         <td class="tab-number">D1</td>
@@ -297,6 +300,18 @@
         <td class="page-ref"></td>
         <td class="page-ref"></td>
       </tr>
+      {{else}}
+      {{#each required_evidence}}
+      <tr>
+        <td class="checkbox-col"><span class="checkbox"></span></td>
+        <td class="tab-number">D{{add @index 1}}</td>
+        <td>{{ground}} - {{title}}</td>
+        <td>{{#each evidence_items}}{{this}}{{#unless @last}}; {{/unless}}{{/each}}</td>
+        <td class="page-ref"></td>
+        <td class="page-ref"></td>
+      </tr>
+      {{/each}}
+      {{/if}}
       {{/if}}
 
       <tr class="section-header">

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   ArrowRight,
@@ -53,6 +53,38 @@ const accentClasses: Record<string, string> = {
 };
 
 const GENERIC_EVIDENCE_DESCRIPTION_FIELD = 'generic_claim.evidence_descriptions';
+
+function useTypewriterText(text: string, speedMs = 16): string {
+  const [typingState, setTypingState] = useState({ text, visibleChars: 0 });
+
+  useEffect(() => {
+    if (!text) return;
+
+    let index = 0;
+    const timer = window.setInterval(() => {
+      index += 1;
+      setTypingState({ text, visibleChars: index });
+      if (index >= text.length) {
+        window.clearInterval(timer);
+      }
+    }, speedMs);
+
+    return () => window.clearInterval(timer);
+  }, [speedMs, text]);
+
+  return typingState.text === text ? text.slice(0, typingState.visibleChars) : '';
+}
+
+function TypewriterText({ text, className }: { text: string; className?: string }) {
+  const displayText = useTypewriterText(text);
+
+  return (
+    <span className={className} aria-label={text}>
+      {displayText}
+      {displayText.length < text.length && <span className="ml-0.5 animate-pulse text-violet-600">|</span>}
+    </span>
+  );
+}
 
 function getInitialAnswers(config: ClaimTypeConfig): ClaimWizardAnswers {
   return {
@@ -415,6 +447,7 @@ export function ClaimsWizard() {
   const isCheckStep = stepIndex === 4;
   const isResultsStep = stepIndex === 5;
   const currentStepProgress = Math.round(((stepIndex + 1) / steps.length) * 100);
+  const activeTypingText = activeQuestion?.typingText ?? config.stepFlow[stepIndex]?.aiIntro ?? '';
 
   function selectConfig(nextConfig: ClaimTypeConfig) {
     setConfig(nextConfig);
@@ -640,7 +673,7 @@ export function ClaimsWizard() {
                     <div>
                       <p className="text-sm font-semibold text-violet-900">Ask Heaven is checking what we need next...</p>
                       <p className="mt-2 text-base leading-7 text-slate-700">
-                        {activeQuestion?.typingText ?? config.stepFlow[stepIndex]?.aiIntro}
+                        <TypewriterText text={activeTypingText} />
                       </p>
                     </div>
                   </div>
@@ -712,7 +745,9 @@ export function ClaimsWizard() {
                     </div>
                     {activeQuestion && (
                       <div>
-                        <h3 className="text-2xl font-bold text-slate-950">{activeQuestion.questionText}</h3>
+                        <h3 className="text-2xl font-bold text-slate-950" aria-label={activeQuestion.questionText}>
+                          <TypewriterText text={activeQuestion.questionText} />
+                        </h3>
                         <p className="mt-2 text-sm leading-6 text-slate-600">{activeQuestion.helperText}</p>
                         <div className="mt-5">
                           <QuestionInput
@@ -774,7 +809,9 @@ export function ClaimsWizard() {
                   </div>
                 ) : activeQuestion ? (
                   <div className="mt-8">
-                    <h3 className="text-3xl font-bold tracking-tight text-slate-950">{activeQuestion.questionText}</h3>
+                    <h3 className="text-3xl font-bold tracking-tight text-slate-950" aria-label={activeQuestion.questionText}>
+                      <TypewriterText text={activeQuestion.questionText} />
+                    </h3>
                     <p className="mt-3 max-w-3xl text-base leading-7 text-slate-600">{activeQuestion.helperText}</p>
                     <div className="mt-6">
                       <QuestionInput

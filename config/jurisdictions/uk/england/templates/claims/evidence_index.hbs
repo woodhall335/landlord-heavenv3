@@ -1,0 +1,33 @@
+<h1>Evidence Index</h1>
+<p><strong>{{brand_name}}</strong> - {{claim_label}}</p>
+
+<hr>
+
+<p><strong>Claimant:</strong> {{claimant_name}}</p>
+<p><strong>Defendant:</strong> {{defendant_name}}</p>
+
+{{#if evidence_rows.length}}
+<table border="1" cellpadding="8" cellspacing="0" width="100%">
+  <tr>
+    <th align="left" width="35%">Evidence item</th>
+    <th align="left" width="65%">What this evidence shows</th>
+  </tr>
+  {{#each evidence_rows}}
+  <tr>
+    <td>{{label}}</td>
+    <td>{{#if description}}{{description}}{{else}}Description not entered.{{/if}}</td>
+  </tr>
+  {{/each}}
+</table>
+{{else}}
+<p>No evidence items were selected in the wizard.</p>
+{{/if}}
+
+<h2>Evidence prompts considered</h2>
+<ul>
+  {{#each visible_evidence_items}}
+  <li>{{label}} - {{helperText}}</li>
+  {{/each}}
+</ul>
+
+<p><strong>{{evidence_footer}}</strong></p>

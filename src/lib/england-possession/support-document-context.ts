@@ -1,6 +1,7 @@
 import {
   getEnglandGroundDefinition,
   normalizeEnglandGroundCode,
+  type EnglandCommonReasonKey,
   type EnglandGroundCode,
 } from '@/lib/england-possession/ground-catalog';
 import {
@@ -92,18 +93,22 @@ function collectGroundValues(value: unknown, rawValues: string[]): void {
   rawValues.push(String(value));
 }
 
-function extractGroundCodes(input: DraftingContextInput): EnglandGroundCode[] {
+export function extractEnglandSupportGroundCodes(input: DraftingContextInput | unknown): EnglandGroundCode[] {
   const rawValues: string[] = [];
+  const source = input && typeof input === 'object' ? input as DraftingContextInput : {};
 
-  collectGroundValues(input.selected_ground_codes, rawValues);
-  collectGroundValues(input.ground_codes, rawValues);
-  collectGroundValues(input.selected_grounds, rawValues);
-  collectGroundValues(input.section8_grounds, rawValues);
-  collectGroundValues(input.grounds, rawValues);
-  collectGroundValues(getFirstValue(input, 'section8.grounds', 'section8_grounds.selected_grounds'), rawValues);
+  collectGroundValues(Array.isArray(input) ? input : undefined, rawValues);
+  collectGroundValues(typeof input === 'string' || typeof input === 'number' ? input : undefined, rawValues);
 
-  if (input.ground_numbers) {
-    String(input.ground_numbers)
+  collectGroundValues(source.selected_ground_codes, rawValues);
+  collectGroundValues(source.ground_codes, rawValues);
+  collectGroundValues(source.selected_grounds, rawValues);
+  collectGroundValues(source.section8_grounds, rawValues);
+  collectGroundValues(source.grounds, rawValues);
+  collectGroundValues(getFirstValue(source, 'section8.grounds', 'section8_grounds.selected_grounds'), rawValues);
+
+  if (source.ground_numbers) {
+    String(source.ground_numbers)
       .split(',')
       .map((entry) => entry.trim())
       .filter(Boolean)
@@ -130,8 +135,116 @@ function buildRequiredEvidence(groundCodes: EnglandGroundCode[]) {
   });
 }
 
+function removeArrearsDraftingFields<T extends DraftingContextInput>(input: T): T {
+  return {
+    ...input,
+    arrears: undefined,
+    arrears_items: [],
+    arrears_schedule: [],
+    arrears_total: undefined,
+    total_arrears: undefined,
+    rent_arrears_amount: undefined,
+    arrears_amount: undefined,
+    current_arrears: undefined,
+    current_arrears_total: undefined,
+    current_arrears_amount: undefined,
+    arrears_at_notice_date: undefined,
+    ground_8_threshold: undefined,
+    ground_8_status: undefined,
+    issues: {
+      ...(input.issues || {}),
+      rent_arrears: undefined,
+    },
+  };
+}
+
+const ARREARS_GROUNDS = new Set<EnglandGroundCode>(['8', '10', '11']);
+const SALE_OR_USE_REASONS = new Set<EnglandCommonReasonKey>(['use_or_sale']);
+const REDEVELOPMENT_REASONS = new Set<EnglandCommonReasonKey>(['redevelopment']);
+const BREACH_OR_CONDUCT_REASONS = new Set<EnglandCommonReasonKey>([
+  'asb_or_legal_breach',
+  'tenancy_breach',
+  'deterioration',
+  'no_right_to_rent',
+]);
+
+export type EnglandGroundEvidenceSection = {
+  ground: string;
+  code: EnglandGroundCode;
+  title: string;
+  commonReason: EnglandCommonReasonKey | 'unknown';
+  mandatory: boolean;
+  mandatoryLabel: 'mandatory' | 'discretionary';
+  noticePeriodLabel: string;
+  courtClaimPath: string;
+  evidenceItems: string[];
+  evidence_items: string[];
+};
+
+export type EnglandGroundSupportProfile = {
+  groundCodes: EnglandGroundCode[];
+  hasArrearsGrounds: boolean;
+  hasSaleOrUseGrounds: boolean;
+  hasRedevelopmentGrounds: boolean;
+  hasBreachOrConductGrounds: boolean;
+  hasSpecialStatusGrounds: boolean;
+  evidenceItems: string[];
+  groundEvidenceSections: EnglandGroundEvidenceSection[];
+  requiredEvidence: ReturnType<typeof buildRequiredEvidence>;
+  evidenceFocusLabel: string;
+};
+
+export function buildEnglandGroundSupportProfile(input: DraftingContextInput | EnglandGroundCode[] | unknown): EnglandGroundSupportProfile {
+  const groundCodes = extractEnglandSupportGroundCodes(input);
+  const definitions = groundCodes
+    .map((code) => getEnglandGroundDefinition(code))
+    .filter((definition): definition is NonNullable<ReturnType<typeof getEnglandGroundDefinition>> => Boolean(definition));
+  const hasArrearsGrounds = groundCodes.some((code) => ARREARS_GROUNDS.has(code));
+  const hasSaleOrUseGrounds = definitions.some((definition) => SALE_OR_USE_REASONS.has(definition.commonReason));
+  const hasRedevelopmentGrounds = definitions.some((definition) => REDEVELOPMENT_REASONS.has(definition.commonReason));
+  const hasBreachOrConductGrounds = definitions.some((definition) =>
+    BREACH_OR_CONDUCT_REASONS.has(definition.commonReason),
+  );
+  const hasSpecialStatusGrounds = definitions.some((definition) => {
+    if (hasArrearsGrounds && ARREARS_GROUNDS.has(definition.code)) return false;
+    if (SALE_OR_USE_REASONS.has(definition.commonReason)) return false;
+    if (REDEVELOPMENT_REASONS.has(definition.commonReason)) return false;
+    if (BREACH_OR_CONDUCT_REASONS.has(definition.commonReason)) return false;
+    return true;
+  });
+  const evidenceItems = Array.from(new Set(
+    definitions.flatMap((definition) => definition.evidenceCategories || []),
+  ));
+  const groundEvidenceSections: EnglandGroundEvidenceSection[] = definitions.map((definition) => ({
+    ground: `Ground ${definition.code}`,
+    code: definition.code,
+    title: definition.title,
+    commonReason: definition.commonReason,
+    mandatory: definition.mandatory,
+    mandatoryLabel: definition.mandatory ? 'mandatory' : 'discretionary',
+    noticePeriodLabel: definition.noticePeriodLabel,
+    courtClaimPath: definition.courtClaimPath,
+    evidenceItems: definition.evidenceCategories || ['Ground-specific evidence'],
+    evidence_items: definition.evidenceCategories || ['Ground-specific evidence'],
+  }));
+
+  return {
+    groundCodes,
+    hasArrearsGrounds,
+    hasSaleOrUseGrounds,
+    hasRedevelopmentGrounds,
+    hasBreachOrConductGrounds,
+    hasSpecialStatusGrounds,
+    evidenceItems,
+    groundEvidenceSections,
+    requiredEvidence: buildRequiredEvidence(groundCodes),
+    evidenceFocusLabel: hasArrearsGrounds ? 'arrears and ground-specific evidence' : 'ground-specific evidence',
+  };
+}
+
 export type EnglandSection8SupportContext = DraftingContextInput & {
   drafting_model: EnglandPossessionDraftingModel;
+  ground_support_profile: EnglandGroundSupportProfile;
   selected_ground_codes: EnglandGroundCode[];
   notice_name: string;
   form_name: string;
@@ -141,7 +254,8 @@ export type EnglandSection8SupportContext = DraftingContextInput & {
 export function enrichEnglandSection8SupportContext<T extends DraftingContextInput>(
   input: T,
 ): T & EnglandSection8SupportContext {
-  const groundCodes = extractGroundCodes(input);
+  const supportProfile = buildEnglandGroundSupportProfile(input);
+  const groundCodes = supportProfile.groundCodes;
   const selectedGrounds = groundCodes.map((code) => `Ground ${code}`);
   const landlordFullName = getFirstText(
     input,
@@ -203,8 +317,9 @@ export function enrichEnglandSection8SupportContext<T extends DraftingContextInp
     .map((code) => getEnglandGroundDefinition(code))
     .filter((definition): definition is NonNullable<ReturnType<typeof getEnglandGroundDefinition>> => Boolean(definition));
 
+  const draftingInput = supportProfile.hasArrearsGrounds ? input : removeArrearsDraftingFields(input);
   const draftingModel = buildEnglandPossessionDraftingModel({
-    ...input,
+    ...draftingInput,
     ground_codes: groundCodes,
     selected_ground_codes: groundCodes,
     selected_grounds: selectedGrounds,
@@ -230,7 +345,16 @@ export function enrichEnglandSection8SupportContext<T extends DraftingContextInp
     ground_descriptions: groundDescriptions,
     has_mandatory_ground: definitions.some((definition) => definition.mandatory),
     has_ground_1a: groundCodes.includes('1A'),
-    uses_rent_arrears_grounds: groundCodes.some((code) => ['8', '10', '11'].includes(code)),
+    uses_rent_arrears_grounds: supportProfile.hasArrearsGrounds,
+    has_arrears_grounds: supportProfile.hasArrearsGrounds,
+    has_sale_or_use_grounds: supportProfile.hasSaleOrUseGrounds,
+    has_redevelopment_grounds: supportProfile.hasRedevelopmentGrounds,
+    has_breach_or_conduct_grounds: supportProfile.hasBreachOrConductGrounds,
+    has_special_status_grounds: supportProfile.hasSpecialStatusGrounds,
+    ground_support_profile: supportProfile,
+    ground_evidence_sections: supportProfile.groundEvidenceSections,
+    ground_evidence_items: supportProfile.evidenceItems,
+    evidence_focus_label: supportProfile.evidenceFocusLabel,
     is_england_post_2026: true,
     form_name: ENGLAND_SECTION8_FORM_NAME,
     notice_name: ENGLAND_SECTION8_NOTICE_NAME,
@@ -270,7 +394,7 @@ export function enrichEnglandSection8SupportContext<T extends DraftingContextInp
       input.display_possession_date_formatted || formatDateUK(input.display_possession_date || noticeExpiryDate),
     clean_output: input.clean_output ?? input.court_mode ?? false,
     court_mode: input.court_mode ?? input.clean_output ?? false,
-    required_evidence: input.required_evidence || buildRequiredEvidence(groundCodes),
+    required_evidence: input.required_evidence || supportProfile.requiredEvidence,
     preview_summary: draftingModel.previewSummary,
     drafting_model: draftingModel,
   };

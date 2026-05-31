@@ -113,7 +113,7 @@
     {{#if (eq pack_stage "stage1")}}
     <h3>Stage 2 handoff</h3>
     <p>If this proceeds to court, the Stage 2 Court & Possession Pack builds directly on this file.</p>
-    <p class="muted">The same notice, service record, arrears position, and core facts should carry forward without being rebuilt from scratch.</p>
+    <p class="muted">The same notice, service record, {{#if has_arrears_grounds}}arrears position{{else}}ground-specific evidence{{/if}}, and core facts should carry forward without being rebuilt from scratch.</p>
     {{else}}
     <h3>After court preparation</h3>
     <p>Keep the issued claim, service record, hearing bundle, and any later enforcement papers aligned in the same case file.</p>

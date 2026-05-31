@@ -239,8 +239,11 @@ describe('getPackContents', () => {
           'generic_service_guide',
           'generic_hearing_preparation',
           'generic_enforcement_guide',
+          'generic_interest_calculation',
+          'n1_claim',
         ]);
-        expect(items.find(i => i.key === 'n1_claim')).toBeUndefined();
+        expect(items.find(i => i.key === 'generic_interest_calculation')?.required).toBe(false);
+        expect(items.find(i => i.key === 'n1_claim')?.category).toBe('Court forms');
       });
 
       it('returns no money claim items for Wales because the product is England only', () => {

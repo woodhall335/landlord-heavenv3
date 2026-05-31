@@ -47,7 +47,6 @@ import {
   shouldIncludeSchedulePdf,
   getLegacyArrearsWarning,
 } from './arrears-schedule-mapper';
-import { hasArrearsGroundsSelected } from '@/lib/arrears-engine';
 import type { ArrearsItem, TenancyFacts } from '@/lib/case-facts/schema';
 import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
 import { mapNoticeOnlyFacts } from '@/lib/case-facts/normalize';
@@ -96,6 +95,11 @@ import {
   ENGLAND_SECTION8_NOTICE_TITLE,
   ENGLAND_SECTION8_NOTICE_TYPE_LABEL,
 } from '@/lib/england-possession/section8-terminology';
+import {
+  buildEnglandGroundSupportProfile,
+  enrichEnglandSection8SupportContext,
+  type EnglandGroundSupportProfile,
+} from '@/lib/england-possession/support-document-context';
 import {
   applyEnglandSection8CourtPackCalculation,
   buildEnglandSection8CourtPackCalculation,
@@ -1062,14 +1066,22 @@ function buildPackStrapline(stage: EnglandSection8PackStage): string {
     : 'Carry the case into court without breaking the file';
 }
 
-function buildPackSupportingLine(stage: EnglandSection8PackStage): string {
+function buildPackSupportingLine(
+  stage: EnglandSection8PackStage,
+  supportProfile?: EnglandGroundSupportProfile,
+): string {
+  const evidenceFocus = supportProfile?.evidenceFocusLabel || 'ground-specific evidence';
   return stage === 'stage1'
-    ? 'This pack aligns the notice, service, and evidence so your case does not fall apart on technical errors.'
-    : 'This pack builds a possession claim that can be issued and relied on in court without breaking on inconsistency.';
+    ? `This pack aligns the notice, service, and ${evidenceFocus} so your case does not fall apart on technical errors.`
+    : `This pack builds a possession claim using the selected grounds and ${evidenceFocus} without breaking on inconsistency.`;
 }
 
-function buildPackRiskLine(): string {
-  return 'Most possession cases fail on notice, service, or consistency errors. Keep the file aligned and under review as the case moves forward.';
+function buildPackRiskLine(supportProfile?: EnglandGroundSupportProfile): string {
+  if (supportProfile?.hasArrearsGrounds) {
+    return 'Most possession cases fail on notice, service, evidence, or consistency errors. Keep the arrears and ground-specific evidence aligned as the case moves forward.';
+  }
+
+  return 'Most possession cases fail on notice, service, evidence, or consistency errors. Keep the ground-specific evidence aligned as the case moves forward.';
 }
 
 function buildPackStatusLabel(
@@ -1093,18 +1105,23 @@ function buildPackStatusLabel(
     : 'READY FOR COURT - CLAIM FILE ALIGNED';
 }
 
-function buildPackOutcomeBullets(stage: EnglandSection8PackStage): string[] {
+function buildPackOutcomeBullets(
+  stage: EnglandSection8PackStage,
+  supportProfile?: EnglandGroundSupportProfile,
+): string[] {
+  const evidenceFocus = supportProfile?.evidenceFocusLabel || 'ground-specific evidence';
+
   if (stage === 'stage1') {
     return [
       'Prepares a Section 8 notice and service record that can be relied on without the case being rejected on avoidable technical errors.',
-      'Keeps the notice, service route, and supporting evidence aligned in one file.',
+      `Keeps the notice, service route, and ${evidenceFocus} aligned in one file.`,
       'Reduces the risk of rejection, delay, or inconsistency before the case reaches court.',
     ];
   }
 
   return [
     'Builds a possession claim that can be issued and relied on in court without breaking on inconsistency.',
-    'Carries the served notice, claim forms, service record, and arrears evidence in one continuous case file.',
+    `Carries the served notice, claim forms, service record, and ${evidenceFocus} in one continuous case file.`,
     'Reduces the risk of delay, contradiction, or avoidable challenge in court.',
   ];
 }
@@ -1122,6 +1139,7 @@ function buildPackNextStep(stage: EnglandSection8PackStage, noticeExpiryDate?: s
 function buildPackNextSteps(
   stage: EnglandSection8PackStage,
   noticeExpiryDate?: string,
+  supportProfile?: EnglandGroundSupportProfile,
 ): PackNextStepItem[] {
   if (stage === 'stage1') {
     return [
@@ -1140,7 +1158,9 @@ function buildPackNextSteps(
       {
         step: '3',
         title: 'Keep the file aligned',
-        detail: 'This pack continues directly into the court-stage paperwork without re-keying the core facts.',
+        detail: supportProfile?.hasArrearsGrounds
+          ? 'This pack continues directly into the court-stage paperwork without re-keying the core facts, arrears position, or selected-ground evidence.'
+          : 'This pack continues directly into the court-stage paperwork without re-keying the core facts or selected-ground evidence.',
       },
     ];
   }
@@ -1156,7 +1176,9 @@ function buildPackNextSteps(
     {
       step: '2',
       title: 'Prepare for the hearing',
-      detail: 'At the hearing, the court will consider notice validity, service, whether the grounds apply, and whether the arrears are proved. Keep the file updated to the latest practicable date.',
+      detail: supportProfile?.hasArrearsGrounds
+        ? 'At the hearing, the court will consider notice validity, service, whether the grounds apply, and whether the arrears are proved. Keep the file updated to the latest practicable date.'
+        : 'At the hearing, the court will consider notice validity, service, whether the grounds apply, and whether the selected-ground evidence proves the case. Keep the file updated to the latest practicable date.',
     },
     {
       step: '3',
@@ -1187,17 +1209,30 @@ function buildStage2CourtEvidenceSections(evictionCase: EvictionCase): Array<{
   items: string[];
 }> {
   const noticeLabel = getNoticeTypeLabel(evictionCase);
+  const supportProfile = buildEnglandGroundSupportProfile({
+    ground_codes: (evictionCase.grounds || []).map((ground) =>
+      typeof ground === 'string' ? ground : ground.code,
+    ),
+  });
+  const coreEvidenceItems = [
+    'Signed tenancy agreement',
+    `Served ${noticeLabel} copy`,
+    ...(
+      supportProfile.hasArrearsGrounds
+        ? ['Rent account or arrears proof']
+        : ['Ground-specific evidence for each selected ground']
+    ),
+  ];
+  const usefulEvidenceItems = supportProfile.hasArrearsGrounds
+    ? ['Supporting correspondence', 'Any payment-history explanations or updated ledger notes']
+    : ['Supporting correspondence', 'Any chronology, photographs, notices, status records, or third-party documents that support the selected grounds'];
 
   return [
     {
       severity: 'critical',
       label: 'Critical',
       title: 'Core claim evidence',
-      items: [
-        'Signed tenancy agreement',
-        'Rent account or arrears proof',
-        `Served ${noticeLabel} copy`,
-      ],
+      items: coreEvidenceItems,
     },
     {
       severity: 'risk',
@@ -1213,10 +1248,7 @@ function buildStage2CourtEvidenceSections(evictionCase: EvictionCase): Array<{
       severity: 'ok',
       label: 'OK',
       title: 'Useful supporting material',
-      items: [
-        'Supporting correspondence',
-        'Any payment-history explanations or updated ledger notes',
-      ],
+      items: usefulEvidenceItems,
     },
   ];
 }
@@ -1264,6 +1296,7 @@ function buildEnglandSection8PackSummaryData(params: {
   arrearsAtNoticeDate?: number | null;
   paymentDay?: number | null;
   usualPaymentWeekday?: string | null;
+  supportProfile?: EnglandGroundSupportProfile;
 }): Record<string, any> {
   const {
     stage,
@@ -1279,7 +1312,12 @@ function buildEnglandSection8PackSummaryData(params: {
     arrearsAtNoticeDate,
     paymentDay,
     usualPaymentWeekday,
+    supportProfile: providedSupportProfile,
   } = params;
+  const supportProfile = providedSupportProfile || buildEnglandGroundSupportProfile({
+    ground_codes: (evictionCase.grounds || []).map((ground) => typeof ground === 'string' ? ground : ground.code),
+  });
+  const hasArrearsGrounds = supportProfile.hasArrearsGrounds;
 
   const complianceStatusItems = buildCaseSummaryComplianceItems({
     evictionCase,
@@ -1294,30 +1332,51 @@ function buildEnglandSection8PackSummaryData(params: {
     caseData?.deemed_service_date ||
     wizardFacts?.deemed_service_date;
   const resolvedCurrentArrearsTotal =
-    currentArrearsTotal ??
-    section8RenderData?.current_arrears_total ??
-    section8RenderData?.total_arrears ??
-    caseData?.current_arrears ??
-    caseData?.total_arrears ??
-    wizardFacts?.current_arrears ??
-    wizardFacts?.total_arrears ??
-    evictionCase.current_arrears;
+    hasArrearsGrounds
+      ? currentArrearsTotal ??
+        section8RenderData?.current_arrears_total ??
+        section8RenderData?.total_arrears ??
+        caseData?.current_arrears ??
+        caseData?.total_arrears ??
+        wizardFacts?.current_arrears ??
+        wizardFacts?.total_arrears ??
+        evictionCase.current_arrears
+      : null;
   const resolvedArrearsAtNoticeDate =
-    arrearsAtNoticeDate ??
-    section8RenderData?.arrears_at_notice_date ??
-    caseData?.arrears_at_notice_date ??
-    wizardFacts?.arrears_at_notice_date ??
-    resolvedCurrentArrearsTotal;
+    hasArrearsGrounds
+      ? arrearsAtNoticeDate ??
+        section8RenderData?.arrears_at_notice_date ??
+        caseData?.arrears_at_notice_date ??
+        wizardFacts?.arrears_at_notice_date ??
+        resolvedCurrentArrearsTotal
+      : null;
   const caseSummaryDraftingData = {
     ...wizardFacts,
     ...evictionCase,
     ...(caseData || {}),
     ...(section8RenderData || {}),
     ground_codes: (evictionCase.grounds || []).map((ground) => typeof ground === 'string' ? ground : ground.code),
-    total_arrears: resolvedCurrentArrearsTotal,
-    current_arrears: resolvedCurrentArrearsTotal,
-    current_arrears_total: resolvedCurrentArrearsTotal,
-    arrears_at_notice_date: resolvedArrearsAtNoticeDate,
+    ...(hasArrearsGrounds
+      ? {
+          total_arrears: resolvedCurrentArrearsTotal,
+          current_arrears: resolvedCurrentArrearsTotal,
+          current_arrears_total: resolvedCurrentArrearsTotal,
+          arrears_at_notice_date: resolvedArrearsAtNoticeDate,
+        }
+      : {
+          arrears: undefined,
+          arrears_items: [],
+          arrears_schedule: [],
+          total_arrears: undefined,
+          arrears_total: undefined,
+          rent_arrears_amount: undefined,
+          current_arrears: undefined,
+          current_arrears_total: undefined,
+          current_arrears_amount: undefined,
+          arrears_at_notice_date: undefined,
+          ground_8_threshold: undefined,
+          ground_8_status: undefined,
+        }),
     notice_service_date: noticeServedDate,
     notice_served_date: noticeServedDate,
     section_8_notice_date: noticeServedDate,
@@ -1334,19 +1393,21 @@ function buildEnglandSection8PackSummaryData(params: {
     section8RenderData?.validation_summary ||
     caseData?.validation_summary ||
     wizardFacts?.validation_summary;
-  const resolvedGround8Threshold =
-    section8RenderData?.ground_8_threshold ||
-    caseData?.ground_8_threshold ||
-    wizardFacts?.ground_8_threshold ||
-    (typeof validationSummarySource?.ground_8_threshold === 'number' &&
-    validationSummarySource.ground_8_threshold > 0
-      ? validationSummarySource.ground_8_threshold
-      : undefined);
-  const resolvedGround8Status =
-    section8RenderData?.ground_8_status ||
-    caseData?.ground_8_status ||
-    wizardFacts?.ground_8_status ||
-    validationSummarySource?.ground_8_status;
+  const resolvedGround8Threshold = hasArrearsGrounds
+    ? section8RenderData?.ground_8_threshold ||
+      caseData?.ground_8_threshold ||
+      wizardFacts?.ground_8_threshold ||
+      (typeof validationSummarySource?.ground_8_threshold === 'number' &&
+      validationSummarySource.ground_8_threshold > 0
+        ? validationSummarySource.ground_8_threshold
+        : undefined)
+    : undefined;
+  const resolvedGround8Status = hasArrearsGrounds
+    ? section8RenderData?.ground_8_status ||
+      caseData?.ground_8_status ||
+      wizardFacts?.ground_8_status ||
+      validationSummarySource?.ground_8_status
+    : undefined;
   const resolvedValidationSummary = validationSummarySource
     ? {
         ...validationSummarySource,
@@ -1357,14 +1418,15 @@ function buildEnglandSection8PackSummaryData(params: {
           validationSummarySource.notice_expiry_date || noticeExpiryDate,
         earliest_proceedings_date:
           validationSummarySource.earliest_proceedings_date || earliestProceedingsDate,
-        total_arrears: resolvedCurrentArrearsTotal,
+        ...(hasArrearsGrounds ? { total_arrears: resolvedCurrentArrearsTotal } : {}),
         ground_8_threshold:
-          typeof validationSummarySource.ground_8_threshold === 'number' &&
+          hasArrearsGrounds && typeof validationSummarySource.ground_8_threshold === 'number' &&
           validationSummarySource.ground_8_threshold > 0
             ? validationSummarySource.ground_8_threshold
             : resolvedGround8Threshold,
-        ground_8_status:
-          validationSummarySource.ground_8_status || resolvedGround8Status,
+        ground_8_status: hasArrearsGrounds
+          ? validationSummarySource.ground_8_status || resolvedGround8Status
+          : undefined,
         all_consistency_checks_passed:
           typeof validationSummarySource.all_consistency_checks_passed === 'boolean'
             ? validationSummarySource.all_consistency_checks_passed
@@ -1400,6 +1462,16 @@ function buildEnglandSection8PackSummaryData(params: {
     arrears_at_notice_date: resolvedArrearsAtNoticeDate,
     ground_8_threshold: resolvedGround8Threshold,
     ground_8_status: resolvedGround8Status,
+    has_arrears_grounds: supportProfile.hasArrearsGrounds,
+    has_sale_or_use_grounds: supportProfile.hasSaleOrUseGrounds,
+    has_redevelopment_grounds: supportProfile.hasRedevelopmentGrounds,
+    has_breach_or_conduct_grounds: supportProfile.hasBreachOrConductGrounds,
+    has_special_status_grounds: supportProfile.hasSpecialStatusGrounds,
+    ground_support_profile: supportProfile,
+    ground_evidence_sections: supportProfile.groundEvidenceSections,
+    ground_evidence_items: supportProfile.evidenceItems,
+    evidence_focus_label: supportProfile.evidenceFocusLabel,
+    required_evidence: supportProfile.requiredEvidence,
     court_pack_validation_summary: resolvedValidationSummary,
     grounds_summary_text: buildSection8GroundsSummary(evictionCase),
     case_narrative_text: buildN119ReasonForPossessionText(caseSummaryDraftingData),
@@ -1417,15 +1489,15 @@ function buildEnglandSection8PackSummaryData(params: {
     pack_title: buildPackTitle(stage),
     pack_summary_title: stageTitle,
     pack_strapline: buildPackStrapline(stage),
-    pack_supporting_line: buildPackSupportingLine(stage),
+    pack_supporting_line: buildPackSupportingLine(stage, supportProfile),
     ...journeyData,
-    risk_line: buildPackRiskLine(),
+    risk_line: buildPackRiskLine(supportProfile),
     status_label: buildPackStatusLabel(stage, complianceStatusItems),
     primary_status_item: buildPrimaryStatusItem(complianceStatusItems),
     key_risk_titles: buildTopRiskTitles(complianceStatusItems),
-    what_this_pack_does: buildPackOutcomeBullets(stage),
+    what_this_pack_does: buildPackOutcomeBullets(stage, supportProfile),
     next_step_text: buildPackNextStep(stage, noticeExpiryDate),
-    next_steps: buildPackNextSteps(stage, noticeExpiryDate),
+    next_steps: buildPackNextSteps(stage, noticeExpiryDate, supportProfile),
   };
 }
 
@@ -2086,6 +2158,13 @@ async function generateEvidenceChecklist(
     ? `Section 8 (${evictionCase.grounds.map(g => g.code).join(', ')})`
     : evictionCase.case_type === 'no_fault' ? 'Section 21' : 'Possession Claim';
   const useEnglandDraftingModel = jurisdiction === 'england' && !isSection21;
+  const englandSupportProfile = useEnglandDraftingModel
+    ? buildEnglandGroundSupportProfile({
+        ground_codes: evictionCase.grounds.map((ground) =>
+          typeof ground === 'string' ? ground : ground.code,
+        ),
+      })
+    : null;
   const englandDraftingModel = useEnglandDraftingModel
     ? buildEnglandPossessionDraftingModel(evictionCase as unknown as Record<string, any>)
     : null;
@@ -2101,18 +2180,25 @@ async function generateEvidenceChecklist(
     generated_date: new Date().toISOString().split('T')[0],
     grounds_data: groundsData,
     is_england_post_2026: useEnglandDraftingModel,
+    has_arrears_grounds: englandSupportProfile?.hasArrearsGrounds || false,
+    has_sale_or_use_grounds: englandSupportProfile?.hasSaleOrUseGrounds || false,
+    has_redevelopment_grounds: englandSupportProfile?.hasRedevelopmentGrounds || false,
+    has_breach_or_conduct_grounds: englandSupportProfile?.hasBreachOrConductGrounds || false,
+    has_special_status_grounds: englandSupportProfile?.hasSpecialStatusGrounds || false,
+    ground_support_profile: englandSupportProfile,
+    ground_evidence_sections: englandSupportProfile?.groundEvidenceSections || [],
+    ground_evidence_items: englandSupportProfile?.evidenceItems || [],
+    evidence_focus_label: englandSupportProfile?.evidenceFocusLabel || 'ground-specific evidence',
     drafting_model: englandDraftingModel,
-    required_evidence: evictionCase.grounds.map((g) => {
-      const groundDetails = getGroundDetails(groundsData, g.code);
-      return {
-        ground: g.code,
-        title: g.title,
-        evidence_items:
-          useEnglandDraftingModel && englandDraftingModel
-            ? []
-            : groundDetails?.required_evidence || [],
-      };
-    }),
+    required_evidence: englandSupportProfile?.requiredEvidence ||
+      evictionCase.grounds.map((g) => {
+        const groundDetails = getGroundDetails(groundsData, g.code);
+        return {
+          ground: g.code,
+          title: g.title,
+          evidence_items: groundDetails?.required_evidence || [],
+        };
+      }),
   };
 
   const doc = await generateDocument({
@@ -3218,13 +3304,25 @@ export async function generateCompleteEvictionPack(
       wizardFacts?.grounds ||
       []
   );
+  const englandSupportProfile = jurisdiction === 'england'
+    ? buildEnglandGroundSupportProfile({ ground_codes: selectedGroundCodes })
+    : null;
+  const hasEnglandArrearsGrounds = englandSupportProfile?.hasArrearsGrounds || false;
 
   // Determine case type for validation
   const evictionRoute = wizardFacts?.eviction_route || wizardFacts?.notice_type || wizardFacts?.selected_notice_route;
   const isooFault = evictionRoute?.toLowerCase?.().includes('section 21') ||
                      evictionRoute?.toLowerCase?.().includes('section_21') ||
                      evictionRoute === 'no_fault';
-  const caseType = isooFault ? 'no_fault' : 'rent_arrears';
+  const caseType = isooFault
+    ? 'no_fault'
+    : hasEnglandArrearsGrounds
+      ? 'rent_arrears'
+      : englandSupportProfile?.hasSaleOrUseGrounds || englandSupportProfile?.hasRedevelopmentGrounds
+        ? 'landlord_needs'
+        : englandSupportProfile?.hasBreachOrConductGrounds
+          ? 'breach'
+          : 'other';
 
   // Only validate for England/Wales - Scotland has different requirements
   if (jurisdiction === 'england' || jurisdiction === 'wales') {
@@ -3281,7 +3379,7 @@ export async function generateCompleteEvictionPack(
     };
   }
 
-  const hasArrearsInputs = arrearsItemsInput.length > 0 || totalArrearsInput > 0;
+  const hasArrearsInputs = hasEnglandArrearsGrounds && (arrearsItemsInput.length > 0 || totalArrearsInput > 0);
   const canonicalArrears = hasArrearsInputs ? computeEvictionArrears({
     arrears_items: arrearsItemsInput,
     total_arrears: totalArrearsInput,
@@ -3360,7 +3458,7 @@ export async function generateCompleteEvictionPack(
       : null);
 
   // 1.1 Generate Schedule of Arrears if arrears grounds selected
-  if (hasArrearsGroundsSelected(selectedGroundCodes)) {
+  if (hasEnglandArrearsGrounds) {
     try {
       const rentAmount = rentAmountInput;
       const rentFrequency = rentFrequencyInput;
@@ -3836,7 +3934,7 @@ export async function generateCompleteEvictionPack(
   }
 
   // Engagement letter (for arrears cases) - generated as FIoAL FORM for court packs
-  if (hasArrearsGroundsSelected(selectedGroundCodes)) {
+  if (hasEnglandArrearsGrounds) {
     try {
       // Generate as final form (fully populated, no placeholders) for complete pack
       const today = new Date();
@@ -3983,8 +4081,12 @@ export async function generateCompleteEvictionPack(
     wizardFacts?.notice_expiry_date ||
     wizardFacts?.earliest_possession_date ||
     earliestProceedingsDate;
-  const currentArrearsTotal = canonicalArrears?.total ?? evictionCase.current_arrears ?? totalArrearsInput;
-  const arrearsAtNoticeDate = canonicalArrears?.arrearsAtNoticeDate ?? evictionCase.arrears_at_notice_date ?? currentArrearsTotal;
+  const currentArrearsTotal = hasEnglandArrearsGrounds
+    ? canonicalArrears?.total ?? evictionCase.current_arrears ?? totalArrearsInput
+    : null;
+  const arrearsAtNoticeDate = hasEnglandArrearsGrounds
+    ? canonicalArrears?.arrearsAtNoticeDate ?? evictionCase.arrears_at_notice_date ?? currentArrearsTotal
+    : null;
   const paymentDay = rentDueDayInput || wizardFacts?.rent_due_day || wizardFacts?.payment_day || evictionCase.payment_day;
   const usualPaymentWeekday =
     wizardFacts?.usual_payment_weekday ||
@@ -4005,6 +4107,7 @@ export async function generateCompleteEvictionPack(
     arrearsAtNoticeDate,
     paymentDay,
     usualPaymentWeekday,
+    supportProfile: englandSupportProfile || undefined,
   });
 
   if (isEnglandSection8Case) {
@@ -4101,8 +4204,8 @@ export async function generateCompleteEvictionPack(
     process.env.NODE_ENV !== 'production' ||
     process.env.ENFORCE_ARREARS_CONSISTENCY === 'true';
 
-  if (canonicalArrears && hasArrearsGroundsSelected(selectedGroundCodes)) {
-    const ground8Selected = selectedGroundCodes.includes(8);
+  if (canonicalArrears && hasEnglandArrearsGrounds) {
+    const ground8Selected = englandSupportProfile?.groundCodes.includes('8') || false;
     const ground8Eligible = isGround8Eligible({
       arrearsTotal: canonicalArrears.total,
       rentAmount: rentAmountInput,
@@ -4285,6 +4388,10 @@ export async function generateNoticeOnlyPack(
       wizardFacts?.grounds ||
       []
   );
+  const englandNoticeSupportProfile = jurisdiction === 'england'
+    ? buildEnglandGroundSupportProfile({ ground_codes: selectedGroundCodes })
+    : null;
+  const noticeHasArrearsGrounds = englandNoticeSupportProfile?.hasArrearsGrounds || false;
 
   try {
     assertNoticeOnlyValid({
@@ -4896,7 +5003,7 @@ export async function generateNoticeOnlyPack(
         wizardFacts.rent_arrears_amount ||
         null;
       const canonicalNoticeArrears =
-        noticeArrearsItems.length > 0 || Number(noticeTotalArrearsInput || 0) > 0
+        noticeHasArrearsGrounds && (noticeArrearsItems.length > 0 || Number(noticeTotalArrearsInput || 0) > 0)
           ? computeEvictionArrears({
               arrears_items: noticeArrearsItems,
               total_arrears: noticeTotalArrearsInput,
@@ -4987,18 +5094,20 @@ export async function generateNoticeOnlyPack(
         section8TemplateData.earliest_proceedings_date ||
         section8TemplateData.earliest_possession_date ||
         section8TemplateData.notice_expiry_date;
-      const currentArrearsTotal =
-        section8TemplateData.current_arrears ??
-        section8TemplateData.current_arrears_total ??
-        section8TemplateData.total_arrears ??
-        section8TemplateData.arrears_total ??
-        wizardFacts?.arrears_total ??
-        wizardFacts?.issues?.rent_arrears?.total_arrears ??
-        evictionCase.current_arrears ??
-        0;
-      const arrearsAtNoticeDate =
-        section8TemplateData.arrears_at_notice_date ??
-        currentArrearsTotal;
+      const currentArrearsTotal = noticeHasArrearsGrounds
+        ? section8TemplateData.current_arrears ??
+          section8TemplateData.current_arrears_total ??
+          section8TemplateData.total_arrears ??
+          section8TemplateData.arrears_total ??
+          wizardFacts?.arrears_total ??
+          wizardFacts?.issues?.rent_arrears?.total_arrears ??
+          evictionCase.current_arrears ??
+          0
+        : null;
+      const arrearsAtNoticeDate = noticeHasArrearsGrounds
+        ? section8TemplateData.arrears_at_notice_date ??
+          currentArrearsTotal
+        : null;
       const paymentDay =
         noticeRentDueDay ||
         wizardFacts?.rent_due_day ||
@@ -5022,6 +5131,7 @@ export async function generateNoticeOnlyPack(
         arrearsAtNoticeDate,
         paymentDay,
         usualPaymentWeekday,
+        supportProfile: englandNoticeSupportProfile || undefined,
       });
       const stage1SupportData = {
         ...section8TemplateData,
@@ -5029,8 +5139,18 @@ export async function generateNoticeOnlyPack(
         pack_stage_label: 'Stage 1',
         pack_title: buildPackTitle('stage1'),
         pack_strapline: buildPackStrapline('stage1'),
-        pack_supporting_line: buildPackSupportingLine('stage1'),
-        risk_line: buildPackRiskLine(),
+        pack_supporting_line: buildPackSupportingLine('stage1', englandNoticeSupportProfile || undefined),
+        risk_line: buildPackRiskLine(englandNoticeSupportProfile || undefined),
+        has_arrears_grounds: noticeHasArrearsGrounds,
+        has_sale_or_use_grounds: englandNoticeSupportProfile?.hasSaleOrUseGrounds || false,
+        has_redevelopment_grounds: englandNoticeSupportProfile?.hasRedevelopmentGrounds || false,
+        has_breach_or_conduct_grounds: englandNoticeSupportProfile?.hasBreachOrConductGrounds || false,
+        has_special_status_grounds: englandNoticeSupportProfile?.hasSpecialStatusGrounds || false,
+        ground_support_profile: englandNoticeSupportProfile,
+        ground_evidence_sections: englandNoticeSupportProfile?.groundEvidenceSections || [],
+        ground_evidence_items: englandNoticeSupportProfile?.evidenceItems || [],
+        evidence_focus_label: englandNoticeSupportProfile?.evidenceFocusLabel || 'ground-specific evidence',
+        required_evidence: englandNoticeSupportProfile?.requiredEvidence || section8TemplateData.required_evidence,
         status_label: stage1SummaryData.status_label,
         compliance_status_items: stage1SummaryData.compliance_status_items,
         primary_status_item: stage1SummaryData.primary_status_item,
@@ -5200,11 +5320,7 @@ export async function generateNoticeOnlyPack(
       }
 
       // 6. Generate Rent Schedule / Arrears Statement if arrears grounds selected
-      const hasArrearsGrounds = evictionCase.grounds.some((g) =>
-        ['Ground 8', 'Ground 10', 'Ground 11'].some((ag) => g.code.includes(ag) || g.code === ag)
-      );
-
-      if (hasArrearsGrounds) {
+      if (noticeHasArrearsGrounds) {
         try {
           const arrearsItems = noticeArrearsItems;
           const rentDueDay = noticeRentDueDay || wizardFacts.rent_due_day || evictionCase.payment_day || null;

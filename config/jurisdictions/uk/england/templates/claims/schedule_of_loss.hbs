@@ -1,0 +1,45 @@
+<h1>Schedule of Loss</h1>
+<p><strong>{{brand_name}}</strong> - {{claim_label}}</p>
+
+<hr>
+
+<p><strong>Claimant:</strong> {{claimant_name}}</p>
+<p><strong>Defendant:</strong> {{defendant_name}}</p>
+
+<table border="1" cellpadding="8" cellspacing="0" width="100%">
+  <tr>
+    <th align="left">Description</th>
+    <th align="left">Amount</th>
+  </tr>
+  {{#each line_items}}
+  <tr>
+    <td>{{description}}</td>
+    <td>{{currency amount}}</td>
+  </tr>
+  {{/each}}
+  <tr>
+    <td><strong>Total before court fee</strong></td>
+    <td><strong>{{currency total_claim_amount}}</strong></td>
+  </tr>
+  <tr>
+    <td>Court issue fee estimate</td>
+    <td>{{currency court_fee}}</td>
+  </tr>
+  <tr>
+    <td><strong>Total including issue fee</strong></td>
+    <td><strong>{{currency total_with_fees}}</strong></td>
+  </tr>
+</table>
+
+{{#if claim_interest}}
+<h2>Interest requested for review</h2>
+<p>
+  Interest has been marked for review. Current reference rate: {{interest_rate}}% per year.
+  Daily interest reference figure: {{currency daily_interest}}.
+</p>
+{{/if}}
+
+<p>
+  Court fees are payable directly to HMCTS when filing. The court may add the issue fee to the judgment
+  if the claim succeeds.
+</p>

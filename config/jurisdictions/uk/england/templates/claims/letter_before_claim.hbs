@@ -1,0 +1,64 @@
+<h1>Letter Before Claim</h1>
+<p><strong>{{brand_name}}</strong></p>
+<p><em>{{claim_label}}</em></p>
+
+<hr>
+
+<p><strong>From:</strong> {{claimant_name}}<br>{{claimant_address}}</p>
+<p><strong>To:</strong> {{defendant_name}}<br>{{defendant_address}}</p>
+<p><strong>Date:</strong> {{generation_date}}</p>
+
+<h2>Dear {{defendant_name}}</h2>
+
+<p>
+  This is a letter before claim. {{claimant_name}} says that you owe
+  {{currency total_claim_amount}} in relation to the following dispute:
+</p>
+
+<p>{{claim_summary}}</p>
+
+{{#if category_context}}
+<h2>Background</h2>
+<p>{{category_context}}</p>
+{{/if}}
+
+<h2>Legal basis being relied on</h2>
+<p>{{legal_rules.legal_basis}}</p>
+
+<h2>Amount claimed</h2>
+<table border="1" cellpadding="8" cellspacing="0" width="100%">
+  <tr>
+    <th align="left">Item</th>
+    <th align="left">Amount</th>
+  </tr>
+  {{#each line_items}}
+  <tr>
+    <td>{{description}}</td>
+    <td>{{currency amount}}</td>
+  </tr>
+  {{/each}}
+  <tr>
+    <td><strong>Total claimed before court fee</strong></td>
+    <td><strong>{{currency total_claim_amount}}</strong></td>
+  </tr>
+</table>
+
+{{#if claim_interest}}
+<p>
+  The claimant also wants interest considered. The daily interest figure currently recorded for review is
+  {{currency daily_interest}} per day at {{interest_rate}}% per year.
+</p>
+{{/if}}
+
+<h2>Pre-action position</h2>
+<p>{{pre_action_summary}}</p>
+<p>{{legal_rules.pre_action_rule}}</p>
+
+<h2>What is required now</h2>
+<p>
+  Please pay the amount claimed, make a clear written proposal, or explain why you dispute the claim.
+  If the matter is not resolved, the claimant may issue a county court money claim using the attached
+  particulars, schedule of loss, evidence index, and Form N1.
+</p>
+
+<p><strong>Signed:</strong> _________________________ {{claimant_name}}</p>
