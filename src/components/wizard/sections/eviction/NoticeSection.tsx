@@ -556,6 +556,7 @@ export const PlannedNoticeServiceReviewPanel: React.FC<PlannedNoticeServiceRevie
         <div className="flex flex-wrap items-center gap-3">
           <input
             id="review_notice_expiry_date"
+            data-field-id="notice_expiry_date"
             type="date"
             className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
             min={earliestExpiryDate || undefined}
@@ -1158,6 +1159,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
             </label>
             <input
               id="notice_date"
+              data-field-id="notice_service_date"
               type="date"
               className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={facts.notice_date || facts.notice_service_date || today}
@@ -1203,6 +1205,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
               <div className="flex items-center gap-3">
                 <input
                   id="notice_expiry_date_inline"
+                  data-field-id="notice_expiry_date"
                   type="date"
                   className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
                   value={facts.notice_expiry_date || ''}
@@ -1548,6 +1551,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
             </label>
             <input
               id="notice_served_date"
+              data-field-id="notice_served_date"
               type="date"
               className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={facts.notice_served_date || ''}
@@ -1602,6 +1606,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
             <div className="flex items-center gap-3">
               <input
                 id="notice_expiry_date"
+                data-field-id="notice_expiry_date"
                 type="date"
                 className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
                 value={facts.notice_expiry_date || ''}
@@ -1694,7 +1699,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
                     <p className="mt-2 text-xs font-medium text-[#5b36b3]">
                       Next step:{' '}
                       {hasSpecialistGroundDetails
-                        ? 'continue to Ground details so we can anchor the selected specialist grounds properly.'
+                        ? 'continue to Ground details so we can add the extra facts for the selected grounds properly.'
                         : hasArrearsGround
                           ? 'continue to About the arrears so the arrears schedule and particulars stay aligned.'
                           : 'continue to the next step to keep the notice pack moving.'}

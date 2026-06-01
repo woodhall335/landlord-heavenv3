@@ -44,9 +44,72 @@ const OCCUPATION_STYLE_GROUND_CODES = new Set<EnglandGroundCode>([
 
 const CONDUCT_GROUND_CODES = new Set<EnglandGroundCode>(['7A', '14', '14A', '14ZA']);
 const DAMAGE_GROUND_CODES = new Set<EnglandGroundCode>(['13', '15']);
+const BREACH_GROUND_CODES = new Set<EnglandGroundCode>(['12', '17']);
+const REDEVELOPMENT_GROUND_CODES = new Set<EnglandGroundCode>(['6', '6B']);
 
 export function groundFactPath(code: EnglandGroundCode, field: string): string {
   return `ground_${code.toLowerCase()}.${field}`;
+}
+
+export function getGroundDetailFieldId(code: EnglandGroundCode | string, field: string): string {
+  return `${code}-${field.replace(/[^a-z0-9]+/gi, '-')}`;
+}
+
+export function getGroundDetailExamples(code: EnglandGroundCode): string[] {
+  if (code === '1A') {
+    return [
+      'valuation or estate agent appraisal',
+      'estate agent instruction, marketing preparation, or sale correspondence',
+      'mortgage, remortgage, or financial records explaining the sale reason',
+      'short sale timetable and landlord statement of intention',
+    ];
+  }
+
+  if (REDEVELOPMENT_GROUND_CODES.has(code)) {
+    return [
+      'works schedule or scope of works',
+      'planning, building-control, surveyor, or structural records',
+      'contractor quotes, project timetable, funding approval, or access records',
+    ];
+  }
+
+  if (CONDUCT_GROUND_CODES.has(code)) {
+    return [
+      'incident log with dates and locations',
+      'warning letters, neighbour complaints, or witness statements',
+      'police, council, court, managing-agent, or housing records where relevant',
+    ];
+  }
+
+  if (DAMAGE_GROUND_CODES.has(code)) {
+    return [
+      'check-in inventory and inspection records',
+      'dated photographs or videos',
+      'repair quotes, invoices, contractor reports, or correspondence',
+    ];
+  }
+
+  if (BREACH_GROUND_CODES.has(code)) {
+    return [
+      'the tenancy clause or false statement relied on',
+      'dated messages, warning letters, inspection notes, or application records',
+      'a short chronology showing what happened and when',
+    ];
+  }
+
+  if (OCCUPATION_STYLE_GROUND_CODES.has(code)) {
+    return [
+      'documents showing the qualifying status or relationship',
+      'prior notice, employment, education, licence, or scheme records where relevant',
+      'a short note explaining the factual trigger and key date',
+    ];
+  }
+
+  return [
+    'records showing why this ground applies',
+    'key dates and correspondence',
+    'supporting documents or witness material',
+  ];
 }
 
 export function hasSelectedArrearsGrounds(selectedGrounds: string[]): boolean {
@@ -561,7 +624,7 @@ export const Section8GroundDetailPanels: React.FC<Section8GroundDetailPanelsProp
             {panel.fields.map((field) => {
               const value = String((facts as Record<string, any>)[field.field] || '');
               const isTextArea = field.type === 'textarea';
-              const fieldId = `${panel.code}-${field.field.replace(/[^a-z0-9]+/gi, '-')}`;
+              const fieldId = getGroundDetailFieldId(panel.code, field.field);
 
               return (
                 <div key={field.field} className={isTextArea ? 'space-y-1.5 md:col-span-2' : 'space-y-1.5'}>
@@ -571,6 +634,7 @@ export const Section8GroundDetailPanels: React.FC<Section8GroundDetailPanelsProp
                   {isTextArea ? (
                     <textarea
                       id={fieldId}
+                      data-field-id={field.field}
                       rows={4}
                       className={`${EVICTION_TEXTAREA_CLASS} min-h-[130px]`}
                       value={value}
@@ -580,6 +644,7 @@ export const Section8GroundDetailPanels: React.FC<Section8GroundDetailPanelsProp
                   ) : (
                     <input
                       id={fieldId}
+                      data-field-id={field.field}
                       type={field.type || 'text'}
                       className={EVICTION_INPUT_CLASS}
                       value={value}
@@ -591,6 +656,16 @@ export const Section8GroundDetailPanels: React.FC<Section8GroundDetailPanelsProp
                 </div>
               );
             })}
+          </div>
+          <div className="rounded-2xl border border-[#ece4ff] bg-[#faf7ff] px-4 py-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#6f54c8]">
+              Helpful examples for Ground {panel.code}
+            </p>
+            <ul className="mt-2 list-disc space-y-1 pl-5 text-xs leading-5 text-[#62597c]">
+              {getGroundDetailExamples(panel.code).map((example) => (
+                <li key={example}>{example}</li>
+              ))}
+            </ul>
           </div>
         </section>
       ))}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
 import AskHeavenStepAutofill, { type AskHeavenStepDraftTarget } from '@/components/wizard/AskHeavenStepAutofill';
@@ -18,6 +18,7 @@ interface GroundDetailsSectionProps {
   caseId: string;
   product: 'notice_only' | 'complete_pack';
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
+  onImmediateUpdate?: (updates: Record<string, any>) => void | Promise<void>;
 }
 
 function readFactString(facts: WizardFacts, path: string): string {
@@ -118,7 +119,66 @@ function buildGroundSpecificRules(panel: GroundDetailPanelConfig): string[] {
 }
 
 function isFieldWorthDrafting(field: GroundDetailFieldConfig): boolean {
-  return field.type !== 'date';
+  return field.type === 'textarea';
+}
+
+function buildGroundSummaryCopy(panels: GroundDetailPanelConfig[]) {
+  const codes = panels.map((panel) => panel.code);
+  if (codes.length === 1) {
+    const code = codes[0];
+    if (code === '1A') {
+      return {
+        eyebrow: 'Sale ground summary',
+        title: 'Summary for the notice and court papers',
+        description: 'Use the sale facts above to explain why Ground 1A is being relied on.',
+      };
+    }
+    if (code === '6' || code === '6B') {
+      return {
+        eyebrow: 'Redevelopment ground summary',
+        title: 'Summary for the notice and court papers',
+        description: 'Use the redevelopment facts above to explain why this ground is being relied on.',
+      };
+    }
+    if (['7A', '12', '13', '14', '14A', '14ZA', '15', '17'].includes(code)) {
+      return {
+        eyebrow: 'Breach or conduct summary',
+        title: 'Summary for the notice and court papers',
+        description: 'Use the recorded events, dates, and evidence above to explain why this ground is being relied on.',
+      };
+    }
+  }
+
+  return {
+    eyebrow: 'Summary for selected grounds',
+    title: 'Summary for the notice and court papers',
+    description: 'Pull the facts above into one clear summary for Form 3A and the N119 court particulars.',
+  };
+}
+
+function buildMissingSummaryPrompt(panels: GroundDetailPanelConfig[], facts: WizardFacts): string | null {
+  const missingByPanel = panels
+    .map((panel) => {
+      const missing = panel.fields
+        .filter((field) => {
+          const key = field.field.toLowerCase();
+          return (
+            field.type === 'date' ||
+            key.includes('evidence') ||
+            key.includes('steps') ||
+            key.includes('timetable') ||
+            key.includes('timing')
+          );
+        })
+        .filter((field) => !readFactString(facts, field.field))
+        .map((field) => field.label);
+
+      return missing.length > 0 ? `Ground ${panel.code}: ${missing.slice(0, 3).join(', ')}` : '';
+    })
+    .filter(Boolean);
+
+  if (missingByPanel.length === 0) return null;
+  return `For a stronger draft, add the missing facts first: ${missingByPanel.join('; ')}.`;
 }
 
 export function buildGroundFieldSeed(
@@ -167,7 +227,7 @@ export function buildSpecialistSectionSeed(
     'Ground-specific facts recorded in this wizard:',
     buildGroundContextBlock(panels, facts, true),
     ...panels.flatMap((panel) => buildGroundSpecificRules(panel)),
-    'Draft clear possession particulars that explain why the selected specialist grounds apply, when the key events happened, and what records support them.',
+    'Draft a clear summary for the notice and court papers that explains why the selected grounds apply, when the key events happened, and what records support them.',
     'Use the ground-specific facts above. Do not replace them with generic arrears, breach, or Notice to Leave wording.',
     'Do not add legal argument or invented facts. If a field is missing, say it is not recorded instead of guessing. Keep the wording suitable for Form 3A and N119 particulars.',
   ]
@@ -229,7 +289,9 @@ export const GroundDetailsSection: React.FC<GroundDetailsSectionProps> = ({
   caseId,
   product,
   onUpdate,
+  onImmediateUpdate,
 }) => {
+  const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const selectedGrounds = useMemo(
     () => (Array.isArray(facts.section8_grounds) ? (facts.section8_grounds as string[]) : []),
     [facts.section8_grounds],
@@ -239,6 +301,22 @@ export const GroundDetailsSection: React.FC<GroundDetailsSectionProps> = ({
   const shouldShowGeneralParticulars = panels.length > 0 && !hasArrearsGround;
   const particularsText = String(facts.section8_details || '');
   const groundDetailsContext = useMemo(() => buildGroundDetailsContext(panels, facts), [facts, panels]);
+  const summaryCopy = useMemo(() => buildGroundSummaryCopy(panels), [panels]);
+  const summarySeed = useMemo(
+    () => buildSpecialistSectionSeed(facts, selectedGrounds, panels),
+    [facts, panels, selectedGrounds],
+  );
+  const summaryLocalDraft = useMemo(
+    () => buildSpecialistParticularsDraft(facts, selectedGrounds, panels),
+    [facts, panels, selectedGrounds],
+  );
+  const missingSummaryPrompt = useMemo(
+    () => buildMissingSummaryPrompt(panels, facts),
+    [facts, panels],
+  );
+  const applyGeneratedUpdate = onImmediateUpdate || onUpdate;
+  const handleSaved = () => setSaveMessage('Draft saved');
+  const handleSaveError = () => setSaveMessage('Could not save draft. Try again.');
 
   const draftTargets = useMemo<AskHeavenStepDraftTarget[]>(() => {
     return panels.flatMap((panel) =>
@@ -263,9 +341,9 @@ export const GroundDetailsSection: React.FC<GroundDetailsSectionProps> = ({
     <div className="space-y-6">
       <section className="rounded-[1.5rem] border border-[#e6dcff] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,243,255,0.94))] p-5 shadow-[0_14px_34px_rgba(76,29,149,0.06)]">
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#6f54c8]">Ground details</p>
-        <h3 className="mt-2 text-lg font-semibold tracking-tight text-[#20103f]">Anchor the specialist grounds to the facts</h3>
+        <h3 className="mt-2 text-lg font-semibold tracking-tight text-[#20103f]">Add the extra facts for the grounds you selected</h3>
         <p className="mt-2 max-w-3xl text-sm leading-6 text-[#60597a]">
-          Keep this step focused on what happened, when it happened, why each specialist ground is relied on, and what records support it.
+          Keep this step focused on what happened, when it happened, why each ground is relied on, and what records support it.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
           {selectedGrounds.map((ground) => (
@@ -287,22 +365,30 @@ export const GroundDetailsSection: React.FC<GroundDetailsSectionProps> = ({
         product={product}
         buttonLabel="Draft these ground details for me"
         helperText="Fill in the dates and any short factual answers you already know first. Ask Heaven will then fill blank written fields from those facts."
-        emptyStateText="The specialist-ground writing fields already have content. You can edit them manually or refine them later."
+        emptyStateText="The writing fields for these grounds already have content. You can edit them manually or refine them later."
         targets={draftTargets}
-        applyAll={(updates) => onUpdate(updates)}
+        applyAll={(updates) => applyGeneratedUpdate(updates)}
+        onSaved={handleSaved}
+        onSaveError={handleSaveError}
       />
+      {saveMessage && (
+        <p className={`text-sm ${saveMessage.startsWith('Could') ? 'text-red-700' : 'text-emerald-700'}`}>
+          {saveMessage}
+        </p>
+      )}
 
       {shouldShowGeneralParticulars && (
         <section className="rounded-[1.45rem] border border-[#e7dbff] bg-white p-5 shadow-sm">
           <div className="space-y-1">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#6f54c8]">Ground summary</p>
-            <h4 className="text-base font-semibold text-[#20103f]">Section 8 particulars for these grounds</h4>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#6f54c8]">{summaryCopy.eyebrow}</p>
+            <h4 className="text-base font-semibold text-[#20103f]">{summaryCopy.title}</h4>
             <p className="text-sm leading-6 text-[#62597c]">
-              Pull the selected specialist grounds into one short factual summary that can feed the Form 3A notice and the N119 claim particulars.
+              {summaryCopy.description}
             </p>
           </div>
           <textarea
             id="ground-details-section8-details"
+            data-field-id="section8_details"
             rows={6}
             className="mt-4 min-h-[180px] w-full rounded-2xl border border-[#dccbff] bg-[#fcfbff] px-4 py-3 text-sm text-[#221342] outline-none transition focus:border-[#7C3AED]"
             value={particularsText}
@@ -312,26 +398,34 @@ export const GroundDetailsSection: React.FC<GroundDetailsSectionProps> = ({
           <p className="mt-2 text-xs leading-5 text-[#62597c]">
             Keep the wording factual and grounded in the events you have recorded above.
           </p>
+          {missingSummaryPrompt && !particularsText.trim() && (
+            <p className="mt-2 rounded-2xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-800">
+              {missingSummaryPrompt}
+            </p>
+          )}
           <div className="mt-3">
             <AskHeavenInlineEnhancer
               caseId={caseId}
               questionId="section8_details"
-              questionText="Possession particulars for the selected specialist Section 8 grounds"
+              questionText="Summary for the notice and court papers"
               answer={particularsText}
-              onApply={(newText) => void onUpdate({ section8_details: newText })}
+              onApply={(newText) => applyGeneratedUpdate({ section8_details: newText })}
               showWhenEmptyWithSeed
-              emptyAnswerSeed={buildSpecialistSectionSeed(facts, selectedGrounds, panels)}
+              emptyAnswerSeed={particularsText.trim() ? summarySeed : summaryLocalDraft || summarySeed}
               buttonLabel={particularsText.trim() ? 'Enhance with Ask Heaven' : 'Draft with Ask Heaven'}
               helperText={particularsText.trim()
                 ? 'AI will improve clarity and court-readiness'
                 : 'Ask Heaven will draft this summary from the ground details above'
               }
+              onSaved={handleSaved}
+              onSaveError={handleSaveError}
               context={{
                 jurisdiction: 'england',
                 selected_grounds: selectedGrounds,
                 product,
                 ...groundDetailsContext,
-                section8_details_seed: buildSpecialistSectionSeed(facts, selectedGrounds, panels),
+                section8_details_seed: summarySeed,
+                section8_details_local_draft: summaryLocalDraft,
               }}
               apiMode="generic"
             />

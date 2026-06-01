@@ -1,20 +1,32 @@
 import { describe, expect, it } from 'vitest';
 
-import { getNoticeOnlyFixStepForIssue } from '../notice-only-issue-routing';
+import { getWizardFixTargetForIssue } from '../notice-only-issue-routing';
 
-describe('notice-only issue routing', () => {
-  it('routes notice period blockers to the final review/service step', () => {
+describe('wizard issue routing', () => {
+  it('routes notice expiry blockers to the notice service review field', () => {
     expect(
-      getNoticeOnlyFixStepForIssue({
+      getWizardFixTargetForIssue({
         code: 'NOTICE_PERIOD_TOO_SHORT',
-        fields: ['notice_expiry_date', 'notice_served_date', 'section8_grounds'],
+        fields: ['notice_expiry_date'],
       }),
-    ).toBe('review');
+    ).toEqual({ step: 'review', field: 'notice_expiry_date' });
   });
 
-  it('routes grounds, compliance, and ground detail issues to their owning steps', () => {
-    expect(getNoticeOnlyFixStepForIssue({ fields: ['section8_grounds'] })).toBe('notice');
-    expect(getNoticeOnlyFixStepForIssue({ fields: ['deposit_protected'] })).toBe('section8_compliance');
-    expect(getNoticeOnlyFixStepForIssue({ fields: ['ground_1a.sale_steps_taken'] })).toBe('ground_details');
+  it('routes ground detail blockers to ground evidence and preserves the field', () => {
+    expect(
+      getWizardFixTargetForIssue({
+        code: 'GROUND_DETAIL_MISSING',
+        fields: ['ground_1a.decision_date'],
+      }),
+    ).toEqual({ step: 'ground_details', field: 'ground_1a.decision_date' });
+  });
+
+  it('routes compliance blockers to pre-notice checks', () => {
+    expect(
+      getWizardFixTargetForIssue({
+        code: 'COMPLIANCE_FIELD_MISSING',
+        fields: ['breathing_space_checked'],
+      }),
+    ).toEqual({ step: 'section8_compliance', field: 'breathing_space_checked' });
   });
 });

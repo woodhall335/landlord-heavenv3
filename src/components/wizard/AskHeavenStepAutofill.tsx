@@ -22,6 +22,8 @@ interface AskHeavenStepAutofillProps {
   emptyStateText?: string;
   targets: AskHeavenStepDraftTarget[];
   applyAll?: (drafts: Record<string, string>) => void | Promise<void>;
+  onSaved?: () => void;
+  onSaveError?: (message: string) => void;
 }
 
 export const AskHeavenStepAutofill: React.FC<AskHeavenStepAutofillProps> = ({
@@ -33,6 +35,8 @@ export const AskHeavenStepAutofill: React.FC<AskHeavenStepAutofillProps> = ({
   emptyStateText = 'All written fields in this step already have content.',
   targets,
   applyAll,
+  onSaved,
+  onSaveError,
 }) => {
   const [isDrafting, setIsDrafting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -109,8 +113,13 @@ export const AskHeavenStepAutofill: React.FC<AskHeavenStepAutofillProps> = ({
       }
 
       setDraftedCount(applied);
+      if (applied > 0) {
+        onSaved?.();
+      }
     } catch (draftError: any) {
-      setError(draftError?.message || 'Ask Heaven could not draft these sections right now.');
+      const message = draftError?.message || 'Ask Heaven could not draft these sections right now.';
+      setError(message);
+      onSaveError?.(message);
     } finally {
       setIsDrafting(false);
     }

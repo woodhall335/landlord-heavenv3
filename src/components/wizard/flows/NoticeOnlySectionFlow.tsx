@@ -914,6 +914,7 @@ interface NoticeOnlySectionFlowProps {
   jurisdiction: 'england' | 'wales' | 'scotland';
   initialFacts?: WizardFacts;
   initialStep?: string | null;
+  initialFocusField?: string | null;
 }
 
 export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
@@ -921,6 +922,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
   jurisdiction,
   initialFacts,
   initialStep,
+  initialFocusField,
 }) => {
   const router = useRouter();
 
@@ -1118,6 +1120,18 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     }
   }, [initialStep, visibleSections]);
 
+  useEffect(() => {
+    if (!initialFocusField || loading) return;
+    const timer = window.setTimeout(() => {
+      const escapedField = CSS.escape(initialFocusField);
+      const target = document.querySelector<HTMLElement>(`[data-field-id="${escapedField}"], #${escapedField}`);
+      target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      target?.focus?.({ preventScroll: true });
+    }, 250);
+
+    return () => window.clearTimeout(timer);
+  }, [currentSectionIndex, initialFocusField, loading]);
+
   // Save facts to backend
   const saveFactsToServer = useCallback(
     async (updatedFacts: WizardFacts) => {
@@ -1173,6 +1187,21 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
           pendingFactsRef.current = null;
         }
       }, 500);
+    },
+    [facts, saveFactsToServer]
+  );
+
+  const handleImmediateUpdate = useCallback(
+    async (updates: Record<string, any>) => {
+      const updatedFacts = { ...facts, ...updates };
+      setFacts(updatedFacts);
+      pendingFactsRef.current = updatedFacts;
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+        saveTimeoutRef.current = null;
+      }
+      await saveFactsToServer(updatedFacts);
+      pendingFactsRef.current = null;
     },
     [facts, saveFactsToServer]
   );
@@ -1454,10 +1483,11 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
             {...englandWalesProps}
             caseId={caseId}
             product="notice_only"
+            onImmediateUpdate={handleImmediateUpdate}
           />
         );
       case 'section8_arrears':
-        return <Section8ArrearsSection {...englandWalesProps} caseId={caseId} product="notice_only" />;
+        return <Section8ArrearsSection {...englandWalesProps} caseId={caseId} product="notice_only" onImmediateUpdate={handleImmediateUpdate} />;
       case 'notice':
         // Wales uses WalesNoticeSection, England uses NoticeSection
         return isWales

@@ -99,7 +99,7 @@ import {
   isMoneyClaimAddOnEligible,
 } from '@/lib/wizard-crosssell';
 import { getSelectedRouteBlockingIssues } from '@/lib/decision-engine/routeScopedBlockingIssues';
-import { getNoticeOnlyFixStepForIssue } from '@/lib/wizard/notice-only-issue-routing';
+import { getWizardFixTargetForIssue } from '@/lib/wizard/notice-only-issue-routing';
 
 interface ReviewAddOnRecommendation {
   sku: string;
@@ -650,7 +650,7 @@ function ReviewPageInner() {
   const complianceIssues: string[] = analysis.compliance_issues || [];
   const evidence = analysis.evidence_overview || {};
 
-  const openWizardEdit = (step?: string | null) => {
+  const openWizardEdit = (step?: string | null, field?: string | null) => {
     // Normalize product for jurisdiction to ensure Scotland flows use PRT, not AST
     const normalizedJurisdiction = (jurisdiction || 'england') as CanonicalJurisdiction;
     const normalizedProduct = isTenancyFlow
@@ -670,6 +670,9 @@ function ReviewPageInner() {
     if (step) {
       params.set('step', step);
     }
+    if (field) {
+      params.set('field', field);
+    }
 
     router.push(`/wizard/flow?${params.toString()}`);
   };
@@ -679,15 +682,24 @@ function ReviewPageInner() {
   };
 
   const handleFixIssues = () => {
-    if (product === 'notice_only') {
-      const targetStep = getNoticeOnlyFixStepForIssue(evictionBlockingIssues[0]);
-      if (targetStep) {
-        openWizardEdit(targetStep);
+    if (!isMoneyClaimFlow) {
+      const target = getWizardFixTargetForIssue(evictionBlockingIssues[0]);
+      if (target) {
+        openWizardEdit(target.step, target.field);
         return;
       }
     }
 
     document.getElementById('critical-issues')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleFixIssue = (issue: any) => {
+    const target = getWizardFixTargetForIssue(issue);
+    if (target) {
+      openWizardEdit(target.step, target.field);
+      return;
+    }
+    handleFixIssues();
   };
 
   // Navigate to Court & Signing step to fix signature date issues
@@ -873,6 +885,7 @@ function ReviewPageInner() {
           hasAcknowledgedBlockers={hasAcknowledgedBlockers}
           onAcknowledgeBlockers={setHasAcknowledgedBlockers}
           onFixIssues={handleFixIssues}
+          onFixIssue={handleFixIssue}
           recommendations={reviewRecommendations}
           selectedAddOns={selectedAddOns}
           onToggleAddOn={toggleAddOn}
@@ -1055,6 +1068,7 @@ function ReviewPageInner() {
         hasAcknowledgedBlockers={hasAcknowledgedBlockers}
         onAcknowledgeBlockers={setHasAcknowledgedBlockers}
         onFixIssues={handleFixIssues}
+        onFixIssue={handleFixIssue}
         recommendations={reviewRecommendations}
         selectedAddOns={selectedAddOns}
         onToggleAddOn={toggleAddOn}
@@ -1607,6 +1621,7 @@ interface EvictionReviewContentProps {
   hasAcknowledgedBlockers: boolean;
   onAcknowledgeBlockers: (acknowledged: boolean) => void;
   onFixIssues: () => void;
+  onFixIssue?: (issue: any) => void;
   recommendations: ReviewAddOnRecommendation[];
   selectedAddOns: string[];
   onToggleAddOn: (sku: string) => void;
@@ -1641,6 +1656,7 @@ function EvictionReviewContent({
   hasAcknowledgedBlockers,
   onAcknowledgeBlockers,
   onFixIssues,
+  onFixIssue,
   recommendations,
   selectedAddOns,
   onToggleAddOn,
@@ -1779,6 +1795,16 @@ function EvictionReviewContent({
                       <p className="text-sm text-red-700 mt-1">
                         Action suggested: {issue.action_required}
                       </p>
+                    )}
+                    {onFixIssue && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="mt-3 border-red-300 text-red-700 hover:bg-red-50"
+                        onClick={() => onFixIssue(issue)}
+                      >
+                        Fix this answer
+                      </Button>
                     )}
                   </div>
                 ))}
@@ -2241,6 +2267,7 @@ interface NoticeOnlyReviewContentProps {
   hasAcknowledgedBlockers: boolean;
   onAcknowledgeBlockers: (acknowledged: boolean) => void;
   onFixIssues: () => void;
+  onFixIssue?: (issue: any) => void;
   recommendations: ReviewAddOnRecommendation[];
   selectedAddOns: string[];
   onToggleAddOn: (sku: string) => void;
@@ -2263,6 +2290,7 @@ function NoticeOnlyReviewContent({
   hasAcknowledgedBlockers,
   onAcknowledgeBlockers,
   onFixIssues,
+  onFixIssue,
   recommendations,
   selectedAddOns,
   onToggleAddOn,
@@ -2462,6 +2490,16 @@ function NoticeOnlyReviewContent({
                     <p className="mt-1 text-xs font-medium text-red-600">
                       Affected answer: {String(issue.affected_question_id).replace(/_/g, ' ')}
                     </p>
+                  )}
+                  {onFixIssue && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="mt-3 border-red-300 text-red-700 hover:bg-red-50"
+                      onClick={() => onFixIssue(issue)}
+                    >
+                      Fix this answer
+                    </Button>
                   )}
                 </div>
               </li>

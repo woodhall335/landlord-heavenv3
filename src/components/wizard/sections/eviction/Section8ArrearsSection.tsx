@@ -47,6 +47,7 @@ interface Section8ArrearsSectionProps {
   caseId?: string;
   product?: 'notice_only' | 'complete_pack';
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
+  onImmediateUpdate?: (updates: Record<string, any>) => void | Promise<void>;
 }
 
 function ArrearsCheckpointCard({
@@ -106,6 +107,7 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
   caseId,
   product = 'complete_pack',
   onUpdate,
+  onImmediateUpdate,
 }) => {
   const selectedGrounds = (facts.section8_grounds as string[]) || [];
   const selectedGroundCodes = useMemo(
@@ -521,6 +523,7 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
         caseId={caseId}
         product={product}
         onUpdate={onUpdate}
+        onImmediateUpdate={onImmediateUpdate}
       />
     </div>
   );
@@ -540,6 +543,7 @@ interface ParticularsProps {
   caseId?: string;
   product: 'notice_only' | 'complete_pack';
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
+  onImmediateUpdate?: (updates: Record<string, any>) => void | Promise<void>;
 }
 
 const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
@@ -549,7 +553,10 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
   caseId,
   product,
   onUpdate,
+  onImmediateUpdate,
 }) => {
+  const [saveMessage, setSaveMessage] = React.useState<string | null>(null);
+  const applyGeneratedUpdate = onImmediateUpdate || onUpdate;
   const particularsText = facts.section8_details || '';
   const hasArrearsGround = selectedGrounds.some((ground) =>
     ['8', '10', '11'].includes(normalizeEnglandGroundCode(ground) || '')
@@ -617,12 +624,12 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
     <div className="pt-6 border-t border-gray-200 space-y-4">
       <div>
         <h4 className="text-base font-medium text-gray-900 mb-1">
-          Possession particulars
+          {hasArrearsGround ? 'Rent arrears particulars' : 'Summary for the notice and court papers'}
         </h4>
         <p className="text-sm leading-6 text-gray-600">
           {hasArrearsGround
-            ? 'Describe the possession grounds using the arrears schedule and any other selected grounds.'
-            : 'Describe the factual basis for the selected Section 8 grounds in clear, court-ready prose.'}
+            ? 'Describe the arrears position using the arrears schedule and any other selected grounds.'
+            : 'Describe the factual basis for the selected grounds in clear, practical prose.'}
           {' '}This will feed the Form 3A explanation and the N119 court particulars.
         </p>
       </div>
@@ -655,15 +662,22 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
             currentValue: particularsText,
             questionText: 'Possession particulars for the selected Form 3A and N119 grounds',
             seedAnswer: particularsSeedAnswer,
-            apply: (text: string) => onUpdate({ section8_details: text }),
+            apply: (text: string) => applyGeneratedUpdate({ section8_details: text }),
           },
         ]}
+        onSaved={() => setSaveMessage('Draft saved')}
+        onSaveError={() => setSaveMessage('Could not save draft. Try again.')}
       />
+      {saveMessage && (
+        <p className={`text-sm ${saveMessage.startsWith('Could') ? 'text-red-700' : 'text-emerald-700'}`}>
+          {saveMessage}
+        </p>
+      )}
 
       {/* Particulars textarea */}
       <div className="space-y-2">
         <label htmlFor="section8_details" className={EVICTION_LABEL_CLASS}>
-          Possession particulars for selected grounds
+          {hasArrearsGround ? 'Rent arrears particulars' : 'Summary for selected grounds'}
           <span className="text-red-500 ml-1">*</span>
         </label>
         <textarea
@@ -689,9 +703,11 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
         questionId="section8_details"
         questionText="Possession particulars for the selected Form 3A and N119 grounds"
         answer={particularsText}
-        onApply={(newText) => onUpdate({ section8_details: newText })}
+        onApply={(newText) => applyGeneratedUpdate({ section8_details: newText })}
         context={enhanceContext}
         apiMode="generic"
+        onSaved={() => setSaveMessage('Draft saved')}
+        onSaveError={() => setSaveMessage('Could not save draft. Try again.')}
       />
     </div>
   );

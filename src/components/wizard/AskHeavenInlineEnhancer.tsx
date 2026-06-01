@@ -36,7 +36,7 @@ export interface AskHeavenInlineEnhancerProps {
   /** Current text value to enhance */
   answer: string;
   /** Callback when user applies the suggestion */
-  onApply: (newText: string) => void;
+  onApply: (newText: string) => void | Promise<void>;
   /** Human-readable question text (required for generic mode) */
   questionText?: string;
   /** Additional context for the AI (used in generic mode) */
@@ -55,6 +55,8 @@ export interface AskHeavenInlineEnhancerProps {
   helperText?: string;
   /** Whether to show in a compact style */
   compact?: boolean;
+  onSaved?: () => void;
+  onSaveError?: (message: string) => void;
 }
 
 interface EnhanceResult {
@@ -123,6 +125,8 @@ export const AskHeavenInlineEnhancer: React.FC<AskHeavenInlineEnhancerProps> = (
   buttonLabel = 'Enhance with Ask Heaven',
   helperText = 'AI will improve clarity and court-readiness',
   compact = false,
+  onSaved,
+  onSaveError,
 }) => {
   const [isEnhancing, setIsEnhancing] = useState(false);
   const [enhancedResult, setEnhancedResult] = useState<EnhanceResult | null>(null);
@@ -202,13 +206,20 @@ export const AskHeavenInlineEnhancer: React.FC<AskHeavenInlineEnhancerProps> = (
     }
   }, [shouldShowButton, effectiveMode, caseId, questionId, answerForRequest, questionText, context]);
 
-  const handleApply = useCallback(() => {
+  const handleApply = useCallback(async () => {
     if (enhancedResult?.suggested_wording) {
-      onApply(enhancedResult.suggested_wording);
-      setEnhancedResult(null);
-      setError(null);
+      try {
+        await onApply(enhancedResult.suggested_wording);
+        setEnhancedResult(null);
+        setError(null);
+        onSaved?.();
+      } catch (applyError: any) {
+        const message = applyError?.message || 'Could not save the Ask Heaven wording. Try again.';
+        setError(message);
+        onSaveError?.(message);
+      }
     }
-  }, [enhancedResult, onApply]);
+  }, [enhancedResult, onApply, onSaveError, onSaved]);
 
   const handleDismiss = useCallback(() => {
     setEnhancedResult(null);

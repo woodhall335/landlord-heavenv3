@@ -53,6 +53,8 @@ describe('GroundDetailsSection Ask Heaven autofill', () => {
       decisionDate.compareDocumentPosition(bulkDraftButton) & Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
     expect(screen.getByRole('button', { name: /Draft with Ask Heaven/i })).toBeInTheDocument();
+    expect(screen.getByText(/Sale ground summary/i)).toBeInTheDocument();
+    expect(screen.getByText(/valuation or estate agent appraisal/i)).toBeInTheDocument();
 
     fireEvent.click(bulkDraftButton);
 
@@ -63,11 +65,13 @@ describe('GroundDetailsSection Ask Heaven autofill', () => {
     expect(onUpdate).toHaveBeenCalledWith({
       'ground_1a.sale_reason': 'Drafted answer for ground_1a.sale_reason',
       'ground_1a.sale_steps_taken': 'Drafted answer for ground_1a.sale_steps_taken',
-      'ground_1a.intended_sale_timing': 'Drafted answer for ground_1a.intended_sale_timing',
       'ground_1a.supporting_evidence': 'Drafted answer for ground_1a.supporting_evidence',
     });
     expect(onUpdate).not.toHaveBeenCalledWith(expect.objectContaining({
       'ground_1a.decision_date': expect.anything(),
+    }));
+    expect(onUpdate).not.toHaveBeenCalledWith(expect.objectContaining({
+      'ground_1a.intended_sale_timing': expect.anything(),
     }));
     expect(onUpdate).not.toHaveBeenCalledWith(expect.objectContaining({
       section8_details: expect.anything(),

@@ -162,6 +162,7 @@ function WizardFlowContent() {
   const rentCheckerToken = searchParams.get('rent_checker_token');
   const mode = searchParams.get('mode');
   const step = searchParams.get('step');
+  const focusField = searchParams.get('field') || searchParams.get('focus_field');
   const jumpTo = searchParams.get('jump_to'); // Question ID to jump to (from End Validator "Fix this" button)
   const fixMode = searchParams.get('fix_mode') === 'true'; // Single-question fix mode (returns to validation after save)
   const highlightSectionsParam = searchParams.get('highlight_sections');
@@ -678,6 +679,8 @@ function WizardFlowContent() {
         upgradeFromNoticeOnly={
           jurisdiction === 'england' && searchParams.get('upgrade_from') === 'notice_only'
         }
+        initialStep={step}
+        initialFocusField={focusField}
       />
     );
   }
@@ -696,6 +699,7 @@ function WizardFlowContent() {
         caseId={caseId}
         jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland'}
         initialStep={step}
+        initialFocusField={focusField}
       />
     );
   }

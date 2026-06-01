@@ -560,6 +560,8 @@ interface EvictionSectionFlowProps {
   jurisdiction: 'england' | 'wales' | 'scotland';
   /** Pre-loaded facts from notice-only flow (for data reuse) */
   initialFacts?: WizardFacts;
+  initialStep?: string | null;
+  initialFocusField?: string | null;
   /** True when the user is continuing from the England notice-only flow */
   upgradeFromNoticeOnly?: boolean;
 }
@@ -625,6 +627,8 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
   caseId,
   jurisdiction,
   initialFacts,
+  initialStep,
+  initialFocusField,
   upgradeFromNoticeOnly = false,
 }) => {
   const router = useRouter();
@@ -774,6 +778,26 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
   }, [currentSectionIndex, visibleSections.length]);
 
   useEffect(() => {
+    if (!initialStep) return;
+    const index = visibleSections.findIndex((section) => section.id === initialStep);
+    if (index >= 0) {
+      setCurrentSectionIndex(index);
+    }
+  }, [initialStep, visibleSections]);
+
+  useEffect(() => {
+    if (!initialFocusField || loading) return;
+    const timer = window.setTimeout(() => {
+      const escapedField = CSS.escape(initialFocusField);
+      const target = document.querySelector<HTMLElement>(`[data-field-id="${escapedField}"], #${escapedField}`);
+      target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      target?.focus?.({ preventScroll: true });
+    }, 250);
+
+    return () => window.clearTimeout(timer);
+  }, [currentSectionIndex, initialFocusField, loading]);
+
+  useEffect(() => {
     if (
       !upgradeFromNoticeOnly ||
       jurisdiction !== 'england' ||
@@ -849,6 +873,21 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
           pendingFactsRef.current = null;
         }
       }, 500);
+    },
+    [facts, saveFactsToServer]
+  );
+
+  const handleImmediateUpdate = useCallback(
+    async (updates: Record<string, any>) => {
+      const updatedFacts = { ...facts, ...updates };
+      setFacts(updatedFacts);
+      pendingFactsRef.current = updatedFacts;
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+        saveTimeoutRef.current = null;
+      }
+      await saveFactsToServer(updatedFacts);
+      pendingFactsRef.current = null;
     },
     [facts, saveFactsToServer]
   );
@@ -1057,10 +1096,11 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
             {...englandWalesProps}
             caseId={caseId}
             product="complete_pack"
+            onImmediateUpdate={handleImmediateUpdate}
           />
         );
       case 'section8_arrears':
-        return <Section8ArrearsSection {...englandWalesProps} caseId={caseId} product="complete_pack" />;
+        return <Section8ArrearsSection {...englandWalesProps} caseId={caseId} product="complete_pack" onImmediateUpdate={handleImmediateUpdate} />;
       case 'evidence':
         return <EvidenceSection {...englandWalesProps} caseId={caseId} />;
       case 'court_signing':
