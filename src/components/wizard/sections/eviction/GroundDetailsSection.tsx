@@ -234,7 +234,7 @@ export const GroundDetailsSection: React.FC<GroundDetailsSectionProps> = ({
   const groundDetailsContext = useMemo(() => buildGroundDetailsContext(panels, facts), [facts, panels]);
 
   const draftTargets = useMemo<AskHeavenStepDraftTarget[]>(() => {
-    const panelTargets = panels.flatMap((panel) =>
+    return panels.flatMap((panel) =>
       panel.fields
         .filter((field) => field.type !== 'date')
         .map((field) => ({
@@ -246,24 +246,7 @@ export const GroundDetailsSection: React.FC<GroundDetailsSectionProps> = ({
           apply: (text: string) => onUpdate({ [field.field]: text }),
         })),
     );
-
-    if (!shouldShowGeneralParticulars) {
-      return panelTargets;
-    }
-
-    return [
-      ...panelTargets,
-      {
-        id: 'section8_details',
-        currentValue: particularsText,
-        questionText: 'Possession particulars for the selected specialist Section 8 grounds',
-        seedAnswer: buildSpecialistSectionSeed(facts, selectedGrounds, panels),
-        localDraft: buildSpecialistParticularsDraft(facts, selectedGrounds, panels),
-        context: groundDetailsContext,
-        apply: (text: string) => onUpdate({ section8_details: text }),
-      },
-    ];
-  }, [facts, groundDetailsContext, onUpdate, panels, particularsText, selectedGrounds, shouldShowGeneralParticulars]);
+  }, [facts, groundDetailsContext, onUpdate, panels, selectedGrounds]);
 
   if (panels.length === 0) {
     return null;
@@ -294,9 +277,10 @@ export const GroundDetailsSection: React.FC<GroundDetailsSectionProps> = ({
         jurisdiction="england"
         product={product}
         buttonLabel="Draft these ground details for me"
-        helperText="Ask Heaven will fill blank ground-detail fields only, using the grounds you selected and the facts already in your case."
+        helperText="Ask Heaven will fill blank written ground-detail fields only, using the grounds you selected and the facts already in your case. Dates stay for you to confirm."
         emptyStateText="The specialist-ground writing fields already have content. You can edit them manually or refine them later."
         targets={draftTargets}
+        applyAll={(updates) => onUpdate(updates)}
       />
 
       <Section8GroundDetailPanels facts={facts} panels={panels} onUpdate={onUpdate} />

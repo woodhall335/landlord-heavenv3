@@ -21,6 +21,7 @@ interface AskHeavenStepAutofillProps {
   helperText: string;
   emptyStateText?: string;
   targets: AskHeavenStepDraftTarget[];
+  applyAll?: (drafts: Record<string, string>) => void | Promise<void>;
 }
 
 export const AskHeavenStepAutofill: React.FC<AskHeavenStepAutofillProps> = ({
@@ -31,6 +32,7 @@ export const AskHeavenStepAutofill: React.FC<AskHeavenStepAutofillProps> = ({
   helperText,
   emptyStateText = 'All written fields in this step already have content.',
   targets,
+  applyAll,
 }) => {
   const [isDrafting, setIsDrafting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -54,12 +56,17 @@ export const AskHeavenStepAutofill: React.FC<AskHeavenStepAutofillProps> = ({
     setIsDrafting(true);
     setError(null);
     let applied = 0;
+    const draftedUpdates: Record<string, string> = {};
 
     try {
       for (const target of blankTargets) {
         const localDraft = String(target.localDraft || '').trim();
         if (localDraft) {
-          await target.apply(localDraft);
+          if (applyAll) {
+            draftedUpdates[target.id] = localDraft;
+          } else {
+            await target.apply(localDraft);
+          }
           applied += 1;
           continue;
         }
@@ -89,8 +96,16 @@ export const AskHeavenStepAutofill: React.FC<AskHeavenStepAutofillProps> = ({
           continue;
         }
 
-        await target.apply(suggestion);
+        if (applyAll) {
+          draftedUpdates[target.id] = suggestion;
+        } else {
+          await target.apply(suggestion);
+        }
         applied += 1;
+      }
+
+      if (applyAll && Object.keys(draftedUpdates).length > 0) {
+        await applyAll(draftedUpdates);
       }
 
       setDraftedCount(applied);

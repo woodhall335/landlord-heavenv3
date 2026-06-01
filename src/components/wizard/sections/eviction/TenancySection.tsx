@@ -111,6 +111,9 @@ const BREAK_CLAUSE_OPTIONS = [
   { value: 'no', label: 'No' },
 ];
 
+const ENGLAND_FORM_3A_TENANCY_TYPE = 'ast_periodic';
+const ENGLAND_FORM_3A_TENANCY_TYPE_LABEL = 'Periodic Tenancy Agreement';
+
 export const TenancySection: React.FC<TenancySectionProps> = ({
   facts,
   jurisdiction,
@@ -130,7 +133,7 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
   // - Wales: standard_fixed is fixed term (handled by OccupationContractSection)
   // - Scotland: PRT has NO fixed term concept - all PRTs are open-ended
   const isScotland = jurisdiction === 'scotland';
-  const isFixedTerm = !isScotland && (tenancyType === 'ast_fixed' || tenancyType === 'standard_fixed');
+  const isFixedTerm = !isEnglandForm3ARoute && !isScotland && (tenancyType === 'ast_fixed' || tenancyType === 'standard_fixed');
 
   // N5B-specific questions only apply to England Section 21 complete pack
   const isSection21 = facts.eviction_route === 'section_21' || facts.selected_notice_route === 'section_21';
@@ -151,6 +154,14 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Only run once on mount - intentionally empty deps
+
+  useEffect(() => {
+    if (!isEnglandForm3ARoute || tenancyType === ENGLAND_FORM_3A_TENANCY_TYPE) {
+      return;
+    }
+
+    void onUpdate({ tenancy_type: ENGLAND_FORM_3A_TENANCY_TYPE });
+  }, [isEnglandForm3ARoute, onUpdate, tenancyType]);
 
   // Helper text for rent due day based on frequency
   const getRentDueDayHelper = () => {
@@ -188,21 +199,41 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
       />
 
       {/* Tenancy type */}
-      <ValidatedSelect
-        id="tenancy_type"
-        label="Tenancy type"
-        value={tenancyType}
-        onChange={(v) => onUpdate({ tenancy_type: v })}
-        options={tenancyTypes}
-        validation={{ required: true }}
-        required
-        helperText={isScotland
-          ? 'The tenancy type affects which grounds apply. Most modern tenancies are PRTs.'
-          : 'The tenancy type affects which notices can be used and notice periods.'
-        }
-        sectionId={SECTION_ID}
-        className="max-w-md"
-      />
+      {isEnglandForm3ARoute ? (
+        <div className="max-w-md space-y-1">
+          <label htmlFor="tenancy_type" className="block text-sm font-semibold text-[#27134a]">
+            Tenancy type<span className="text-red-500 ml-1">*</span>
+          </label>
+          <input
+            id="tenancy_type"
+            name="tenancy_type"
+            type="text"
+            value={ENGLAND_FORM_3A_TENANCY_TYPE_LABEL}
+            readOnly
+            aria-readonly="true"
+            className="w-full rounded-2xl border border-[#ddd2ff] bg-gray-100 px-4 py-3 text-sm text-[#20163a] shadow-none"
+          />
+          <p className="text-xs leading-5 text-[#6b6580]">
+            Current England Form 3A possession routes use the periodic tenancy framework, so this is fixed for this pack.
+          </p>
+        </div>
+      ) : (
+        <ValidatedSelect
+          id="tenancy_type"
+          label="Tenancy type"
+          value={tenancyType}
+          onChange={(v) => onUpdate({ tenancy_type: v })}
+          options={tenancyTypes}
+          validation={{ required: true }}
+          required
+          helperText={isScotland
+            ? 'The tenancy type affects which grounds apply. Most modern tenancies are PRTs.'
+            : 'The tenancy type affects which notices can be used and notice periods.'
+          }
+          sectionId={SECTION_ID}
+          className="max-w-md"
+        />
+      )}
 
       {/* N5B Q7: Tenancy Agreement Date (England Section 21 only) */}
       {showN5BQuestions && (
@@ -423,20 +454,6 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
           </div>
         )}
       </div>
-
-      {/* Legal info for Section 8 (England only) */}
-      {!isScotland && facts.eviction_route === 'section_8' && (
-        <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
-          <h4 className="text-sm font-medium text-amber-900 mb-1">
-            Section 8 Rent Details
-          </h4>
-          <p className="text-sm text-amber-800">
-            The rent amount and due day are critical for Section 8 notices, especially Ground 8
-            (rent arrears). The notice must accurately describe the rental period and calculate
-            whether arrears meet the 2-month threshold.
-          </p>
-        </div>
-      )}
 
       {/* Legal info for Scotland rent arrears (Ground 18) */}
       {isScotland && (
