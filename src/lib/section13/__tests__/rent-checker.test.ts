@@ -144,7 +144,8 @@ describe('buildRentCheckerResult', () => {
     });
 
     expect(result.resultState).toBe('landlord_moderate_risk');
-    expect(result.primaryCtaLabel).toBe('Prepare my tribunal-ready file - £34.99');
+    expect(result.primaryCtaLabel).toBe('Prepare my tribunal-ready rent increase pack');
+    expect(result.primaryCtaSubtext).toContain('prepare Form 4A');
     expect(result.secondaryCtaLabel).toBe('Start with standard notice pack');
   });
 });

@@ -458,10 +458,10 @@ function buildLowRiskResult(
       'Record how and when the notice is served.',
       'Use the same figures across every document.',
     ],
-    primaryCtaLabel: `Build my supported rent increase pack - ${PRODUCTS.section13_standard.displayPrice}`,
+    primaryCtaLabel: 'Create my Form 4A pack from this result',
     primaryCtaHref: buildPrimaryWizardHref('section13_standard', 'landlord_low_risk'),
     primaryCtaSubtext:
-      'Create Form 4A, rent summary, justification report, cover letter, and proof of service.',
+      'We will carry these answers into the wizard and prepare Form 4A, the rent summary, evidence record, and proof of service.',
     primaryCtaTracksCheckout: true,
   };
 }
@@ -485,30 +485,35 @@ function buildModerateRiskResult(
     | 'secondaryCtaTracksCheckout'
   >
 ): RentCheckerResult {
-  return {
+  const output: RentCheckerResult = {
     ...base,
     resultState: 'landlord_moderate_risk',
     headline: 'This increase looks supportable — but could be challenged',
     subheadline:
-      'The market evidence supports the increase, but the risk of tenant challenge is not negligible.',
+      'Based on the details entered, the proposed rent appears to sit within the supportable range. Keep recent comparable evidence and proof of service with the pack.',
     moneyImpactLabel: 'Potential uplift:',
     moneyImpactValue: `${formatSignedMoney(base.monthlyDiff)}/month (${formatSignedMoney(base.annualDiff)}/year)`,
     whatThisMeans:
-      'The proposed rent appears supported by comparable evidence, but it may be close enough to the upper market range that a tenant could question it. If challenged, the strength of your comparables, dates, service record, and explanation will matter.',
+      'The proposed rent appears supported by the market evidence available, but the tenant may still question it. If that happens, the comparables, dates, proof of service, and written explanation will matter.',
     nextSteps: [
       'Check that Form 4A dates are valid.',
       'Keep proof of service.',
       'Use recent comparable evidence.',
       'Prepare a response file in case the tenant refers it to tribunal.',
     ],
-    primaryCtaLabel: `Prepare my tribunal-ready file - ${PRODUCTS.section13_defensive.displayPrice}`,
+    primaryCtaLabel: 'Prepare my tribunal-ready rent increase pack',
     primaryCtaHref: buildPrimaryWizardHref('section13_defensive', 'landlord_moderate_risk'),
     primaryCtaSubtext:
-      'Build the notice, evidence, and tribunal-ready defence file before the tenant challenges.',
+      'We will carry these answers into the wizard and prepare Form 4A, the rent summary, evidence record, and proof of service.',
     primaryCtaTracksCheckout: true,
     secondaryCtaLabel: 'Start with standard notice pack',
     secondaryCtaHref: buildPrimaryWizardHref('section13_standard', 'landlord_moderate_risk'),
     secondaryCtaTracksCheckout: true,
+  };
+
+  return {
+    ...output,
+    headline: 'This increase may be supportable, but prepare the evidence before serving Form 4A.',
   };
 }
 
@@ -557,10 +562,10 @@ function buildHighRiskResult(
       'Consider lowering the proposed figure.',
       'Prepare a tribunal defence file before sending Form 4A.',
     ],
-    primaryCtaLabel: `Prepare my tribunal-ready file - ${PRODUCTS.section13_defensive.displayPrice}`,
+    primaryCtaLabel: 'Prepare my tribunal-ready rent increase pack',
     primaryCtaHref: buildPrimaryWizardHref('section13_defensive', 'landlord_high_risk'),
     primaryCtaSubtext:
-      'Strengthen the evidence and prepare for challenge before relying on the increase.',
+      'We will carry these answers into the wizard and prepare Form 4A, the rent summary, evidence record, and proof of service.',
     primaryCtaTracksCheckout: true,
     secondaryCtaLabel: 'View standard notice pack',
     secondaryCtaHref: buildLandingHref('section13_standard', 'landlord_high_risk', {

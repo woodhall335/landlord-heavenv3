@@ -9,7 +9,7 @@ const baseResult = {
   marketMedian: 1025,
   challengeRiskLabel: 'Moderate',
   evidenceStrength: 'Strong',
-  primaryCtaLabel: 'Prepare my tribunal-ready file - £34.99',
+  primaryCtaLabel: 'Prepare my tribunal-ready rent increase pack',
   primaryCtaHref:
     '/wizard/flow?type=rent_increase&jurisdiction=england&product=section13_defensive&src=rent_checker',
   bundleCtaHref: '/products/section-13-defence?src=rent_checker',

@@ -281,23 +281,23 @@ function deriveAdjustedCheckerResult(
     proposedRent == null || marketLow == null || marketMedian == null || marketHigh == null
       ? result.proposedPositionLabel
       : proposedRent > marketHigh
-        ? 'Above justified market'
+        ? 'Above supportable range'
         : proposedRent > marketMedian
-          ? 'Above justified median'
+          ? 'Above supportable median'
           : proposedRent < marketLow
-            ? 'Below justified market'
-            : 'Within justified range';
+            ? 'Below supportable range'
+            : 'Within supportable range';
   const challengeExplanation =
     justification.justificationAdjustmentPercent > 0
-      ? `Selected justification factors adjust the supportable range by ${justification.justificationAdjustmentPercent}%${justification.justificationAdjustmentCapped ? ' after the 30% cap' : ''}. ${
+      ? `The extra property details entered move the supportable range by ${justification.justificationAdjustmentPercent}%${justification.justificationAdjustmentCapped ? ', capped at 30%' : ''}. ${
           proposedRent != null && marketHigh != null && proposedRent > marketHigh
-            ? 'The proposed rent remains above the adjusted supportable range.'
-            : 'The proposed rent is now assessed against that adjusted range.'
+            ? 'The proposed rent is still above that range.'
+            : 'The proposed rent looks broadly aligned with the market calculation currently available.'
         }`
       : result.challengeExplanation;
   const saferRangeGuidance =
     proposedRent != null && marketMedian != null && marketLow != null && proposedRent > marketMedian
-      ? `A more supportable rent may be closer to ${formatCurrency(marketLow)}-${formatCurrency(marketMedian)} pcm after the selected justification factors.`
+      ? `A safer rent may be closer to ${formatCurrency(marketLow)}-${formatCurrency(marketMedian)} pcm based on the evidence entered.`
       : null;
   const withinJustifiedRange =
     proposedRent != null &&
@@ -311,7 +311,7 @@ function deriveAdjustedCheckerResult(
     proposedRent <= marketHigh;
   const headline =
     nextRisk === 'moderate' && atOrBelowJustifiedHigh
-      ? 'This increase may be supportable, but keep the evidence file tight before serving notice'
+      ? 'This increase may be supportable, but prepare the evidence before serving Form 4A.'
     : nextRisk === 'low'
         ? 'You can likely increase this rent safely'
         : proposedRent != null && marketHigh != null && proposedRent > marketHigh
@@ -320,12 +320,12 @@ function deriveAdjustedCheckerResult(
   const subheadline =
     nextRisk === 'moderate' && atOrBelowJustifiedHigh
       ? withinJustifiedRange
-        ? 'The selected justification factors bring the proposed figure within the adjusted range, but the file still needs clear comparable evidence and service discipline.'
-        : 'The selected justification factors put the proposed figure at or below the adjusted supportable range, but the file still needs clear comparable evidence and service discipline.'
+        ? 'Based on the details entered, the proposed rent appears to sit within the supportable range. Keep recent comparable evidence and proof of service with the pack.'
+        : 'Based on the details entered, the proposed rent appears to sit near the supportable range. Keep recent comparable evidence and proof of service with the pack.'
       : nextRisk === 'low'
         ? 'Your proposed rent sits within the supportable local market range and is backed by usable comparable evidence.'
         : proposedRent != null && marketHigh != null && proposedRent > marketHigh
-          ? 'Even after selected justification factors, the proposed figure remains above the supportable market range.'
+          ? 'Even after the extra property details entered, the proposed rent remains above the supportable market range.'
           : result.subheadline;
 
   return {
@@ -350,13 +350,11 @@ function deriveAdjustedCheckerResult(
     saferRangeGuidance,
     primaryCtaLabel:
       recommendedProduct === 'section13_standard'
-        ? `Build my supported rent increase pack - ${PRODUCTS.section13_standard.displayPrice}`
-        : `Prepare my tribunal-ready file - ${PRODUCTS.section13_defensive.displayPrice}`,
+        ? 'Create my Form 4A pack from this result'
+        : 'Prepare my tribunal-ready rent increase pack',
     primaryCtaHref: PRODUCTS[recommendedProduct].wizardHref,
     primaryCtaSubtext:
-      recommendedProduct === 'section13_standard'
-        ? 'Create Form 4A, rent summary, justification report, cover letter, and proof of service.'
-        : 'Strengthen the evidence and prepare for challenge before relying on the increase.',
+      'We will carry these answers into the wizard and prepare Form 4A, the rent summary, evidence record, and proof of service.',
     preview: {
       ...result.preview,
       lowerQuartile: marketLow,
@@ -432,12 +430,7 @@ function CtaLink({
 
 export function ResultHeroCard({ result }: { result: RentCheckerResult }) {
   const tone = getToneClasses(result);
-  const badgeLabel =
-    result.challengeRiskLabel === 'Low'
-      ? 'Supportable'
-      : result.challengeRiskLabel === 'Moderate'
-        ? 'Prepare well'
-        : 'Higher risk';
+  const badgeLabel = 'Prepare evidence';
 
   return (
     <div className={clsx('overflow-hidden rounded-3xl border bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)] standalone-premium-hover-lift', tone.border)}>
@@ -479,7 +472,7 @@ export function MarketPositionCard({ result }: { result: RentCheckerResult }) {
           <dd className="font-semibold text-slate-950">{formatLabel(result.propertyCondition)}</dd>
         </div>
         <div className="flex items-start justify-between gap-4">
-          <dt>Adjusted supportable range</dt>
+          <dt>Supportable market range</dt>
           <dd className="text-right">
             <div className="font-semibold text-slate-950">
             {result.marketLow != null && result.marketHigh != null
@@ -488,20 +481,20 @@ export function MarketPositionCard({ result }: { result: RentCheckerResult }) {
             </div>
             {result.justificationAdjustmentPercent > 0 ? (
               <div className="mt-1 text-xs leading-5 text-slate-500">
-                Raw range {formatCurrency(result.rawMarketLow)} - {formatCurrency(result.rawMarketHigh)} pcm, adjusted by {result.justificationAdjustmentPercent}%.
+                Original range {formatCurrency(result.rawMarketLow)} - {formatCurrency(result.rawMarketHigh)} pcm, before the extra property details entered.
               </div>
             ) : null}
           </dd>
         </div>
         <div className="flex items-start justify-between gap-4">
-          <dt>{result.justificationAdjustmentPercent > 0 ? 'Adjusted market median' : 'Market median'}</dt>
+          <dt>Market median</dt>
           <dd className="max-w-[14rem] text-right">
             <div className="font-semibold text-slate-950">
               {result.marketMedian != null ? `${formatCurrency(result.marketMedian)} pcm` : 'Unavailable'}
             </div>
             {result.justificationAdjustmentPercent > 0 && result.rawMarketMedian != null ? (
               <div className="mt-1 text-xs leading-5 text-slate-500">
-                Raw median {formatCurrency(result.rawMarketMedian)} pcm before selected factors.
+                Original median {formatCurrency(result.rawMarketMedian)} pcm before the extra property details entered.
               </div>
             ) : null}
             <div className="mt-1 text-xs leading-5 text-slate-500">{result.medianExplanation}</div>
@@ -564,7 +557,7 @@ export function RiskEvidenceCard({ result }: { result: RentCheckerResult }) {
       </dl>
       <div className="mt-5 space-y-3">
         <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Why this risk band</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Why we marked this as {result.challengeRisk} risk</p>
           <p className="mt-2 text-sm leading-6 text-slate-700">{result.challengeExplanation}</p>
         </div>
         {result.saferRangeGuidance ? (
@@ -619,7 +612,7 @@ export function ConditionScenarioCard({ result }: { result: RentCheckerResult })
         <div>
           <h3 className="text-xl font-semibold text-slate-950">Condition scenario</h3>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
-            Move the slider to see a condition-only illustration from the raw comparable range. This does not include the selected justification factors or overwrite the official result above.
+            Move the slider to see a condition-only illustration from the market range. This does not change the result above.
           </p>
         </div>
         <span className="inline-flex w-fit rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-indigo-700">
@@ -1397,7 +1390,6 @@ export function RentCheckerResultPage({
             conditionScenario={adjustedResult.propertyCondition}
             onChange={setJustificationResult}
           />
-          <ComparableListingsCard result={adjustedResult} />
         </div>
         <RecommendedActionCard result={adjustedResult} trackingContext={trackingContext} />
       </div>
@@ -1407,11 +1399,6 @@ export function RentCheckerResultPage({
         <NextStepsCard result={adjustedResult} trackingContext={trackingContext} />
       </div>
 
-      <EmailReportCapture result={adjustedResult} />
-      <ProductComparisonStrip result={adjustedResult} />
-      {adjustedResult.showBundleUpsell ? (
-        <BundleUpsellBlock result={adjustedResult} trackingContext={trackingContext} />
-      ) : null}
       <DisclaimerBlock result={adjustedResult} />
 
       <div className="flex justify-end">
@@ -1429,9 +1416,7 @@ export function RentCheckerResultPage({
               data-testid="tool-upsell-cta"
             >
               <Button fullWidth className="bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-300">
-              {adjustedResult.recommendedProduct === 'section13_standard'
-                ? `Build my pack - ${PRODUCTS.section13_standard.displayPrice}`
-                : `Prepare tribunal file - ${PRODUCTS.section13_defensive.displayPrice}`}
+              {adjustedResult.primaryCtaLabel}
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
