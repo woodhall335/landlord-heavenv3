@@ -144,6 +144,15 @@ async function applyRentCheckerHandoffToSection13Draft(params: {
   }
 }
 
+function replaceWizardUrlWithCaseId(caseId: string, product: string) {
+  if (typeof window === 'undefined') return;
+
+  const url = new URL(window.location.href);
+  url.searchParams.set('case_id', caseId);
+  url.searchParams.set('product', product);
+  window.history.replaceState(window.history.state, '', `${url.pathname}?${url.searchParams.toString()}`);
+}
+
 function WizardFlowContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -512,6 +521,7 @@ function WizardFlowContent() {
       }
 
       setCaseId(newCaseId);
+      replaceWizardUrlWithCaseId(newCaseId, startProduct);
       setInitialQuestion(data.next_question ?? null);
     } catch (err) {
       console.error('Failed to initialize case:', err);
