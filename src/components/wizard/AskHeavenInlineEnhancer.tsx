@@ -45,6 +45,10 @@ export interface AskHeavenInlineEnhancerProps {
   apiMode?: ApiMode;
   /** Minimum characters before showing enhance button (default: 20) */
   minChars?: number;
+  /** Show the button for an empty answer when a contextual draft seed is available. */
+  showWhenEmptyWithSeed?: boolean;
+  /** Drafting seed to send when the current answer is blank. */
+  emptyAnswerSeed?: string;
   /** Custom button label */
   buttonLabel?: string;
   /** Custom helper text shown next to button */
@@ -114,6 +118,8 @@ export const AskHeavenInlineEnhancer: React.FC<AskHeavenInlineEnhancerProps> = (
   context,
   apiMode = 'auto',
   minChars = 20,
+  showWhenEmptyWithSeed = false,
+  emptyAnswerSeed,
   buttonLabel = 'Enhance with Ask Heaven',
   helperText = 'AI will improve clarity and court-readiness',
   compact = false,
@@ -133,7 +139,9 @@ export const AskHeavenInlineEnhancer: React.FC<AskHeavenInlineEnhancerProps> = (
 
   // Check if we should show the button
   const trimmedAnswer = answer?.trim() || '';
-  const shouldShowButton = trimmedAnswer.length >= minChars;
+  const trimmedEmptySeed = emptyAnswerSeed?.trim() || '';
+  const answerForRequest = trimmedAnswer || (showWhenEmptyWithSeed ? trimmedEmptySeed : '');
+  const shouldShowButton = trimmedAnswer.length >= minChars || Boolean(showWhenEmptyWithSeed && trimmedEmptySeed);
 
   const handleEnhance = useCallback(async () => {
     if (!shouldShowButton) return;
@@ -152,7 +160,7 @@ export const AskHeavenInlineEnhancer: React.FC<AskHeavenInlineEnhancerProps> = (
           body: JSON.stringify({
             case_id: caseId,
             question_id: questionId,
-            answer: trimmedAnswer,
+            answer: answerForRequest,
             mode: 'enhance_only',
           }),
         });
@@ -168,7 +176,7 @@ export const AskHeavenInlineEnhancer: React.FC<AskHeavenInlineEnhancerProps> = (
             product: context?.product,
             question_id: questionId,
             question_text: questionText || questionId,
-            answer: trimmedAnswer,
+            answer: answerForRequest,
             context: context || {},
           }),
         });
@@ -192,7 +200,7 @@ export const AskHeavenInlineEnhancer: React.FC<AskHeavenInlineEnhancerProps> = (
     } finally {
       setIsEnhancing(false);
     }
-  }, [shouldShowButton, effectiveMode, caseId, questionId, trimmedAnswer, questionText, context]);
+  }, [shouldShowButton, effectiveMode, caseId, questionId, answerForRequest, questionText, context]);
 
   const handleApply = useCallback(() => {
     if (enhancedResult?.suggested_wording) {

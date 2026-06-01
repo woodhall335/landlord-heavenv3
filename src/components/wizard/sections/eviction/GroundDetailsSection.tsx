@@ -117,6 +117,10 @@ function buildGroundSpecificRules(panel: GroundDetailPanelConfig): string[] {
   ];
 }
 
+function isFieldWorthDrafting(field: GroundDetailFieldConfig): boolean {
+  return field.type !== 'date';
+}
+
 export function buildGroundFieldSeed(
   panel: GroundDetailPanelConfig,
   field: GroundDetailFieldConfig,
@@ -138,7 +142,10 @@ export function buildGroundFieldSeed(
     `Draft a factual answer for "${field.label}" for Ground ${panel.code} - ${panel.title}.`,
     field.helpText ? `Guidance: ${field.helpText}` : '',
     filledPanelFacts.length > 0 ? `Related answers already given:\n- ${filledPanelFacts.join('\n- ')}` : '',
-    'Keep the wording neutral, specific, and limited to facts that can safely be inferred from the current case answers.',
+    field.type === 'textarea'
+      ? 'Keep the wording neutral, specific, and limited to facts that can safely be inferred from the current case answers.'
+      : 'Keep this answer short. Do not turn it into a paragraph and do not say that information is unspecified.',
+    'Do not invent dates, completed sale steps, agent discussions, buyer interest, documents, or a timetable unless they are already recorded in the case answers.',
   ]
     .filter(Boolean)
     .join('\n');
@@ -236,7 +243,7 @@ export const GroundDetailsSection: React.FC<GroundDetailsSectionProps> = ({
   const draftTargets = useMemo<AskHeavenStepDraftTarget[]>(() => {
     return panels.flatMap((panel) =>
       panel.fields
-        .filter((field) => field.type !== 'date')
+        .filter(isFieldWorthDrafting)
         .map((field) => ({
           id: field.field,
           currentValue: readFactString(facts, field.field),
@@ -272,18 +279,18 @@ export const GroundDetailsSection: React.FC<GroundDetailsSectionProps> = ({
         </div>
       </section>
 
+      <Section8GroundDetailPanels facts={facts} panels={panels} onUpdate={onUpdate} />
+
       <AskHeavenStepAutofill
         caseId={caseId}
         jurisdiction="england"
         product={product}
         buttonLabel="Draft these ground details for me"
-        helperText="Ask Heaven will fill blank written ground-detail fields only, using the grounds you selected and the facts already in your case. Dates stay for you to confirm."
+        helperText="Fill in the dates and any short factual answers you already know first. Ask Heaven will then fill blank written fields from those facts."
         emptyStateText="The specialist-ground writing fields already have content. You can edit them manually or refine them later."
         targets={draftTargets}
         applyAll={(updates) => onUpdate(updates)}
       />
-
-      <Section8GroundDetailPanels facts={facts} panels={panels} onUpdate={onUpdate} />
 
       {shouldShowGeneralParticulars && (
         <section className="rounded-[1.45rem] border border-[#e7dbff] bg-white p-5 shadow-sm">
@@ -312,6 +319,13 @@ export const GroundDetailsSection: React.FC<GroundDetailsSectionProps> = ({
               questionText="Possession particulars for the selected specialist Section 8 grounds"
               answer={particularsText}
               onApply={(newText) => void onUpdate({ section8_details: newText })}
+              showWhenEmptyWithSeed
+              emptyAnswerSeed={buildSpecialistSectionSeed(facts, selectedGrounds, panels)}
+              buttonLabel={particularsText.trim() ? 'Enhance with Ask Heaven' : 'Draft with Ask Heaven'}
+              helperText={particularsText.trim()
+                ? 'AI will improve clarity and court-readiness'
+                : 'Ask Heaven will draft this summary from the ground details above'
+              }
               context={{
                 jurisdiction: 'england',
                 selected_grounds: selectedGrounds,

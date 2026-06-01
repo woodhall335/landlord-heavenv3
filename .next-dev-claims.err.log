@@ -113,3 +113,4 @@ Start wizard error: Error: Missing SUPABASE_URL
   60 |   }
   61 |
   62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+⚠ Server is approaching the used memory threshold, restarting...

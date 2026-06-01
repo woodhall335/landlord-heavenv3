@@ -465,3 +465,11 @@
  GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 620ms (compile: 271ms, proxy.ts: 102ms, render: 247ms)
  GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 5.4s (compile: 3.3s, proxy.ts: 43ms, render: 2.1s)
  GET /claims 200 in 347ms (compile: 188ms, proxy.ts: 20ms, render: 139ms)
+▲ Next.js 16.1.1 (webpack)
+- Local:         http://127.0.0.1:5000
+- Network:       http://127.0.0.1:5000
+- Experiments (use with caution):
+  · serverActions
+
+✓ Starting...
+✓ Ready in 14.3s

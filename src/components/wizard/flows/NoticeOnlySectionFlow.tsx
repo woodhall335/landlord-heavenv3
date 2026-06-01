@@ -1194,26 +1194,32 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     };
   }, [saveFactsToServer]);
 
-  // Flush pending saves when tab is hidden (reduces debounce loss window)
+  // Flush pending saves when the page is hidden or unloaded (reduces debounce loss window)
   useEffect(() => {
+    const flushPendingSave = () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+        saveTimeoutRef.current = null;
+      }
+      if (pendingFactsRef.current) {
+        void saveFactsToServer(pendingFactsRef.current);
+        pendingFactsRef.current = null;
+      }
+    };
+
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
-        // Clear any pending debounce timeout
-        if (saveTimeoutRef.current) {
-          clearTimeout(saveTimeoutRef.current);
-          saveTimeoutRef.current = null;
-        }
-        // Flush any pending changes when tab is hidden
-        if (pendingFactsRef.current) {
-          saveFactsToServer(pendingFactsRef.current);
-          pendingFactsRef.current = null;
-        }
+        flushPendingSave();
       }
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('pagehide', flushPendingSave);
+    window.addEventListener('beforeunload', flushPendingSave);
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('pagehide', flushPendingSave);
+      window.removeEventListener('beforeunload', flushPendingSave);
     };
   }, [saveFactsToServer]);
 

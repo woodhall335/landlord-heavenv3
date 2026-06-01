@@ -47,7 +47,14 @@ describe('GroundDetailsSection Ask Heaven autofill', () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: /Draft these ground details for me/i }));
+    const decisionDate = screen.getByLabelText(/When was the decision to sell made/i);
+    const bulkDraftButton = screen.getByRole('button', { name: /Draft these ground details for me/i });
+    expect(
+      decisionDate.compareDocumentPosition(bulkDraftButton) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Draft with Ask Heaven/i })).toBeInTheDocument();
+
+    fireEvent.click(bulkDraftButton);
 
     await waitFor(() => {
       expect(onUpdate).toHaveBeenCalledTimes(1);
