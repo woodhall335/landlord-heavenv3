@@ -67,9 +67,9 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
 > = {
   'form-3-section-8': {
     slug: 'form-3-section-8',
-    title: 'Form 3A Section 8 Notice 2026: England Landlord Guide',
+    title: 'Serve Form 3A Section 8 Notice Correctly | England 2026',
     description:
-      'Form 3A Section 8 notice guide for England landlords. Check grounds, dates, service proof, N215, and the N5/N119 court path before you serve.',
+      'Serve the current England Form 3A Section 8 notice with the right grounds, dates, service proof, and next step before avoidable mistakes cost time.',
     keywords: [
       'form 3a',
       'form 3a section 8',
@@ -87,9 +87,9 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
       'england possession notice',
       'renters rights act form 3a',
     ],
-    heroTitle: 'Form 3A Section 8 Notice Form for England Landlords',
+    heroTitle: 'Serve Form 3A correctly before the case loses time',
     heroSubtitle:
-      'Use this page when you need the current England Form 3A notice form, clear ground selection, and a notice-stage process that fits the rules in force from 1 May 2026.',
+      'Use this page when you need the current England Form 3A notice, clear ground selection, correct notice dates, and a service record you can rely on if the case later goes to court.',
     heroBullets: [
       'Focused on the current England Form 3A route.',
       'Explains grounds, evidence, timing, and service in plain English.',

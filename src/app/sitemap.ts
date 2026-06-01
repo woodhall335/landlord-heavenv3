@@ -8,6 +8,7 @@
  * - Blog posts use their actual updatedDate/date (real content changes)
  * - Static/legal pages omit lastModified (rarely change)
  * - Product/tool pages use a stable quarterly date (not "now")
+ * - Commercial pages changed in the SEO rescue use the release date for that change
  *
  * Using "now" for everything creates noise in search console and suggests
  * false freshness signals to Google.
@@ -59,6 +60,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Use a stable date for pages that don't change frequently
   // Update this quarterly when making significant site-wide changes
   const STABLE_PRODUCT_DATE = new Date('2026-01-01');
+  const SEO_RESCUE_RELEASE_DATE = new Date('2026-06-01');
   const phase3SitemapExclusions = new Set(getPhase3SitemapExclusions());
   const publicOwnerPages = [...getPublicCatalogProducts(), ...getPublicTenancyProducts()];
 
@@ -147,7 +149,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   const requestedIndexablePages = [
-    { path: '/common-prt-tenancy-mistakes-scotland', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/eviction-cost-uk', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/eviction-process-uk', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/eviction-timeline-uk', priority: 0.85, changeFrequency: 'weekly' as const },
@@ -368,6 +369,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const blogPostPages: MetadataRoute.Sitemap = blogPosts.flatMap((post) => {
     const postRegion = getPostRegion(post.slug);
     if (!isPublicBlogDiscoveryRegion(postRegion)) return [];
+    if (isNonEnglandPublicDiscoveryPath(`/blog/${post.slug}`)) return [];
     const seoConfig = getBlogSeoConfig(post, postRegion);
     if (!seoConfig.isIndexable) return [];
     return [
@@ -405,17 +407,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // Pages that always get stable dates (products, tools, etc.)
-  const blogCategoryPages = getPublicBlogRegions().map((slug) => ({
-    path: `/blog/${slug}`,
-    priority: 0.8,
-    changeFrequency: 'weekly' as const,
-  }));
+  const blogCategoryPages = getPublicBlogRegions()
+    .map((slug) => ({
+      path: `/blog/${slug}`,
+      priority: 0.8,
+      changeFrequency: 'weekly' as const,
+    }))
+    .filter((page) => !isNonEnglandPublicDiscoveryPath(page.path));
 
-  const blogHubPages = getPublicTopicHubs().map((slug) => ({
-    path: `/blog/${slug}`,
-    priority: 0.82,
-    changeFrequency: 'weekly' as const,
-  }));
+  const blogHubPages = getPublicTopicHubs()
+    .map((slug) => ({
+      path: `/blog/${slug}`,
+      priority: 0.82,
+      changeFrequency: 'weekly' as const,
+    }))
+    .filter((page) => !isNonEnglandPublicDiscoveryPath(page.path));
   const publicEditorialBlogPaths = new Set<string>([
     '/blog',
     ...blogCategoryPages.map((page) => page.path),
@@ -423,7 +429,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...blogPosts
       .filter((post) => getBlogSeoConfig(post, getPostRegion(post.slug)).isIndexable)
       .map((post) => `/blog/${post.slug}`),
-  ]);
+  ].filter((path) => !isNonEnglandPublicDiscoveryPath(path)));
 
   const datedPages = [
     ...productPages,
@@ -467,6 +473,29 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     );
   };
 
+  const commercialSeoRescuePaths = new Set<string>([
+    ...publicOwnerPages.map((product) => product.landingHref),
+    '/pricing',
+    '/samples',
+    '/form-3-section-8',
+    '/n5-n119-possession-claim',
+    '/section-8-notice-template',
+    '/how-to-rent-guide',
+    '/renters-rights-act-information-sheet-2026',
+    '/rent-increase',
+    '/rent-increase/form-4a-guide',
+    '/rent-increase/section-13-notice',
+    '/rent-increase/how-to-increase-rent',
+    '/money-claim',
+    '/money-claim-n1-claim-form',
+    '/money-claim-online-mcol',
+    '/how-to-sue-tenant-for-unpaid-rent',
+    '/tenancy-agreements/england',
+  ]);
+
+  const lastModifiedForPath = (path: string) =>
+    commercialSeoRescuePaths.has(path) ? SEO_RESCUE_RELEASE_DATE : STABLE_PRODUCT_DATE;
+
   // Build sitemap entries
   const marketingEntries = marketingPages.map((page) => {
     const entry: {
@@ -481,7 +510,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: page.priority,
     };
 
-    if (page.hasDate) entry.lastModified = STABLE_PRODUCT_DATE;
+    if (page.hasDate) entry.lastModified = lastModifiedForPath(page.path);
     if (page.path === '/') {
       entry.images = [`${SITE_ORIGIN}/images/mascots/landlord-heaven-owl-tenancy-tools.png`];
     }
@@ -490,7 +519,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const datedEntries = datedPages.map((page) => ({
     url: `${SITE_ORIGIN}${page.path}`,
-    lastModified: STABLE_PRODUCT_DATE,
+    lastModified: lastModifiedForPath(page.path),
     changeFrequency: page.changeFrequency,
     priority: page.priority,
   }));
@@ -508,7 +537,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .filter((path) => !coveredPaths.has(path) && isIndexablePath(path))
     .map((path) => ({
       url: `${SITE_ORIGIN}${path}`,
-      lastModified: STABLE_PRODUCT_DATE,
+      lastModified: lastModifiedForPath(path),
       changeFrequency: path === '/' || path.startsWith('/products') || path.startsWith('/tools') ? 'weekly' : 'monthly',
       priority: path === '/' ? 1.0 : path.startsWith('/products') ? 0.9 : path.startsWith('/tools') ? 0.8 : 0.7,
     }));

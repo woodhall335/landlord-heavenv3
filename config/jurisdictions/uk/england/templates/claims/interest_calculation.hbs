@@ -17,6 +17,12 @@
     <td><strong>Reference annual rate</strong></td>
     <td>{{interest_rate}}%</td>
   </tr>
+  {{#if interest_start_date}}
+  <tr>
+    <td><strong>Interest start date recorded</strong></td>
+    <td>{{interest_start_date}}</td>
+  </tr>
+  {{/if}}
   <tr>
     <td><strong>Reference daily interest</strong></td>
     <td>{{currency daily_interest}}</td>

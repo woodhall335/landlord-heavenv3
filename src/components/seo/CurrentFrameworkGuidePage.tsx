@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
-import { Section8Bridge } from '@/components/marketing/CommercialBridge';
+import { NoticeOnlyBridge } from '@/components/marketing/CommercialBridge';
 import { Container } from '@/components/ui/Container';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
@@ -199,10 +199,10 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
         <Container>
           <div className="mx-auto max-w-5xl space-y-8">
             {isForm3Section8 ? (
-              <Section8Bridge
+              <NoticeOnlyBridge
                 sourcePage={pagePath}
                 ctaPosition="top"
-                headline="Choose Notice Only or Complete Pack before you serve Form 3A"
+                headline="Serve Form 3A with the right dates and service record"
               />
             ) : null}
 
@@ -285,10 +285,10 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
         <Container>
           <div className="mx-auto max-w-5xl">
             {isForm3Section8 ? (
-              <Section8Bridge
+              <NoticeOnlyBridge
                 sourcePage={pagePath}
                 ctaPosition="faq"
-                headline="Before the FAQs, choose the next step that fits your case"
+                headline="Before the FAQs, choose the notice step that fits your case"
               />
             ) : null}
           </div>

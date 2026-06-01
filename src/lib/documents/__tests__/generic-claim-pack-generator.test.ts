@@ -4,7 +4,16 @@ import { generateGenericSmallClaimPack, isGenericSmallClaimFacts } from '../gene
 
 vi.mock('../generator', () => ({
   generateDocument: vi.fn(async ({ templatePath, data }: { templatePath: string; data: any }) => ({
-    html: `template:${templatePath};brand:${data.brand_name};evidence:${data.evidence_rows?.map((row: any) => row.description).join('|')}`,
+    html: [
+      `template:${templatePath}`,
+      `brand:${data.brand_name}`,
+      `defendant_email:${data.defendant_email ?? ''}`,
+      `pre_action_sent_date:${data.pre_action_sent_date ?? ''}`,
+      `response_deadline:${data.response_deadline ?? ''}`,
+      `interest_start_date:${data.interest_start_date ?? ''}`,
+      `filing_route:${data.preferred_filing_route ?? ''}`,
+      `evidence:${data.evidence_rows?.map((row: any) => row.description).join('|')}`,
+    ].join(';'),
     pdf: Buffer.from(`pdf:${templatePath}`),
     metadata: {},
   })),
@@ -31,7 +40,7 @@ describe('generic small-claim pack generator', () => {
       claim_category: 'unpaid_invoice',
       claim_flow_mode: 'generic_small_claim',
       claimant: { name: 'Acme Ltd', address: '1 High Street, London, SW1A 1AA', postcode: 'SW1A 1AA' },
-      defendant: { name: 'Beta Ltd', address: '2 Low Street, London, SW1A 2AA', postcode: 'SW1A 2AA' },
+      defendant: { name: 'Beta Ltd', address: '2 Low Street, London, SW1A 2AA', postcode: 'SW1A 2AA', email: 'accounts@example.com' },
       generic_claim: {
         category: 'unpaid_invoice',
         flow_mode: 'generic_small_claim',
@@ -39,6 +48,12 @@ describe('generic small-claim pack generator', () => {
         summary: 'Invoice 1042 was issued for completed work and remains unpaid after reminders.',
         line_items: 'Invoice 1042 - 450.00',
         pre_action: 'Payment was chased by email twice.',
+        key_dates: {
+          pre_action_sent_date: '2026-05-01',
+          response_deadline: '2026-05-15',
+          interest_start_date: '2026-04-15',
+        },
+        preferred_filing_route: 'paper_n1',
         interest: true,
         evidence_items: ['invoice', 'chaser_emails'],
         evidence_descriptions: {
@@ -56,6 +71,11 @@ describe('generic small-claim pack generator', () => {
     expect(evidenceIndex?.file_name).toBe('04-evidence-index.pdf');
     expect(evidenceIndex?.html).toContain('Shows the invoice amount, date, and due date.');
     expect(evidenceIndex?.html).toContain('Shows payment was requested after the due date.');
+    expect(evidenceIndex?.html).toContain('defendant_email:accounts@example.com');
+    expect(evidenceIndex?.html).toContain('pre_action_sent_date:1 May 2026');
+    expect(evidenceIndex?.html).toContain('response_deadline:15 May 2026');
+    expect(evidenceIndex?.html).toContain('interest_start_date:15 April 2026');
+    expect(evidenceIndex?.html).toContain('filing_route:Paper Form N1');
     expect(evidenceIndex?.pdf).toBeInstanceOf(Buffer);
 
     const n1 = pack.documents.find((doc) => doc.document_type === 'n1_claim');

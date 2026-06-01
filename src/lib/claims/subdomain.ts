@@ -1,9 +1,22 @@
 const STATIC_PREFIXES = ['/_next', '/api', '/favicon.ico', '/icon.png', '/apple-icon.png'];
 
-export function shouldRewriteClaimsSubdomain(hostname: string, pathname: string): boolean {
-  const host = hostname.toLowerCase().split(':')[0];
+function normalizeHostname(hostname: string | null | undefined): string {
+  return (hostname ?? '')
+    .split(',')[0]
+    .trim()
+    .toLowerCase()
+    .split(':')[0];
+}
 
-  if (host !== 'claims.landlordheaven.co.uk') {
+export function isClaimsSubdomainHost(hostname: string | null | undefined): boolean {
+  return normalizeHostname(hostname) === 'claims.landlordheaven.co.uk';
+}
+
+export function shouldRewriteClaimsSubdomain(
+  hostname: string | null | undefined,
+  pathname: string,
+): boolean {
+  if (!isClaimsSubdomainHost(hostname)) {
     return false;
   }
 
@@ -12,6 +25,13 @@ export function shouldRewriteClaimsSubdomain(hostname: string, pathname: string)
   }
 
   return !STATIC_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
+}
+
+export function shouldRewriteClaimsSubdomainFromHosts(
+  hostnames: Array<string | null | undefined>,
+  pathname: string,
+): boolean {
+  return hostnames.some((hostname) => shouldRewriteClaimsSubdomain(hostname, pathname));
 }
 
 export function getClaimsRewritePath(pathname: string): string {

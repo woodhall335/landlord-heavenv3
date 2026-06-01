@@ -33,7 +33,7 @@ import {
 } from '@/lib/seo/internal-links';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
-import { Section8Bridge } from '@/components/marketing/CommercialBridge';
+import { NoticeOnlyBridge } from '@/components/marketing/CommercialBridge';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { section8NoticeTemplateFAQs } from '@/data/faqs';
 import { FunnelCta, CrossSellBar } from '@/components/funnels';
@@ -51,9 +51,9 @@ const noticeOnlyProductHref = '/products/notice-only';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Section 8 Notice Template 2026: Form 3A Guide for England',
+  title: 'Serve a Section 8 Notice Without Date or Service Mistakes',
   description:
-    'Plain-English Section 8 notice template guide for England landlords. Choose Notice Only for Form 3A service or Complete Pack for notice and court preparation.',
+    'England landlords: use the Section 8 Form 3A template guide to choose the right grounds, dates, service proof, and Notice Only next step before serving.',
   keywords: [
     'section 8 notice',
     'section 8 notice template',
@@ -76,9 +76,9 @@ export const metadata: Metadata = {
     canonical: canonicalUrl,
   },
   openGraph: {
-    title: 'Section 8 Notice Template 2026: Form 3A Guide for England',
+    title: 'Serve a Section 8 Notice Without Date or Service Mistakes',
     description:
-      'Learn how Section 8 Form 3 works, what a notice should include, and when to use guided Notice Only paperwork.',
+      'Learn how Section 8 Form 3A works, what the notice should include, and when to use guided Notice Only paperwork before service.',
     type: 'article',
     url: canonicalUrl,
     siteName: 'Landlord Heaven',
@@ -86,9 +86,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Section 8 Notice Template 2026: Form 3A Guide for England',
+    title: 'Serve a Section 8 Notice Without Date or Service Mistakes',
     description:
-      'Form 3 guidance, common grounds, notice content, service rules, and guided Section 8 paperwork for landlords.',
+      'Form 3A guidance, notice dates, service rules, and guided Section 8 paperwork for landlords.',
   },
   robots: {
     index: true,
@@ -151,7 +151,7 @@ export default function Section8NoticeTemplatePage() {
           description: metadata.description as string,
           url: canonicalUrl,
           datePublished: '2026-03-01',
-          dateModified: '2026-03-20',
+          dateModified: '2026-06-01',
         })}
       />
       <StructuredData
@@ -166,8 +166,8 @@ export default function Section8NoticeTemplatePage() {
 
       <main className="min-h-screen bg-[#fcfaff]">
         <UniversalHero
-          title="Section 8 Notice Template"
-          subtitle="Learn how Section 8 Form 3 works, what a grounds-based notice should include, and when to use guided Notice Only paperwork instead of relying on a blank form."
+          title="Serve a Section 8 notice without date or service mistakes"
+          subtitle="Use this guide to understand Form 3A, choose grounds that fit the facts, and move into guided Notice Only paperwork before anything goes to the tenant."
           primaryCta={{ label: `Create my Section 8 notice - ${noticeOnlyPrice}`, href: noticeOnlyProductHref }}
           secondaryCta={{ label: `Start full eviction support - ${completePackPrice}`, href: completePackProductHref }}
           showTrustPositioningBar
@@ -179,10 +179,10 @@ export default function Section8NoticeTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="mx-auto mb-6 max-w-5xl">
               <SeoPageContextPanel pathname="/section-8-notice-template" />
-              <Section8Bridge
+              <NoticeOnlyBridge
                 sourcePage="/section-8-notice-template"
                 ctaPosition="top"
-                headline="Choose Notice Only or Complete Pack before relying on a template"
+                headline="Need to serve the notice, not just read a template?"
               />
             </div>
             <nav
@@ -1161,10 +1161,10 @@ export default function Section8NoticeTemplatePage() {
         <section className="bg-white py-8">
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-5xl">
-              <Section8Bridge
+              <NoticeOnlyBridge
                 sourcePage="/section-8-notice-template"
                 ctaPosition="faq"
-                headline="Before you check the FAQs, choose the next step that fits the case"
+                headline="Before you check the FAQs, decide whether the notice is ready to serve"
               />
             </div>
           </div>

@@ -142,6 +142,7 @@ function buildAnimatedReviewConfig({
   isNoticeOnlyFlow,
   isTenancyFlow,
   isResidentialStandaloneFlow,
+  isSection13Flow,
   caseStrengthBand,
   readinessSummary,
   redFlags,
@@ -154,6 +155,7 @@ function buildAnimatedReviewConfig({
   isNoticeOnlyFlow: boolean;
   isTenancyFlow: boolean;
   isResidentialStandaloneFlow: boolean;
+  isSection13Flow: boolean;
   caseStrengthBand: string;
   readinessSummary: string | null;
   redFlags: string[];
@@ -299,6 +301,81 @@ function buildAnimatedReviewConfig({
     };
   }
 
+  if (isSection13Flow) {
+    const currentRent = Number(
+      facts.section13?.tenancy?.currentRentAmount ||
+      facts.section13?.current_rent_amount ||
+      facts.rent_amount ||
+      facts.current_rent_amount ||
+      0
+    );
+    const proposedRent = Number(
+      facts.section13?.proposal?.proposedRentAmount ||
+      facts.section13?.proposed_rent_amount ||
+      facts.new_rent_amount ||
+      facts.proposed_rent_amount ||
+      0
+    );
+    const effectiveDate =
+      facts.section13?.proposal?.effectiveDate ||
+      facts.section13?.proposed_start_date ||
+      facts.rent_increase_effective_date ||
+      facts.proposed_start_date;
+    return {
+      title: 'Rent increase review',
+      subtitle:
+        readinessSummary ||
+        'We are checking the landlord answers against the Section 13 route before preparing the rent increase pack.',
+      routeLabel: `${jurisdictionLabel} Section 13 route`,
+      scoreLabel: 'Rent increase readiness',
+      scoreValue,
+      scoreTone: caseStrengthBand,
+      phases: [
+        {
+          label: 'Opening rent increase review',
+          shortLabel: 'Route',
+          detail: 'Checking the product route, jurisdiction and Section 13 pack selected.',
+        },
+        {
+          label: 'Checking tenancy and rent',
+          shortLabel: 'Rent',
+          detail: 'Reviewing current rent, proposed rent, tenancy dates and rent frequency.',
+        },
+        {
+          label: 'Checking timing',
+          shortLabel: 'Timing',
+          detail: 'Reviewing the proposed start date and service details for the Form 4A notice.',
+        },
+        {
+          label: 'Checking evidence',
+          shortLabel: 'Evidence',
+          detail: 'Preparing reminders for market evidence, comparables and service records.',
+        },
+        {
+          label: 'Preparing final rent increase review',
+          shortLabel: 'Results',
+          detail: 'Putting together good points, warnings and the next action.',
+        },
+      ],
+      stats: [
+        { label: 'Jurisdiction', value: jurisdictionLabel },
+        { label: 'Current rent', value: currentRent > 0 ? formatCurrencyAmount(currentRent) : 'Checking' },
+        { label: 'Proposed rent', value: proposedRent > 0 ? formatCurrencyAmount(proposedRent) : 'Checking' },
+        { label: 'Start date', value: effectiveDate ? String(effectiveDate) : 'Checking' },
+      ],
+      checks: [
+        'Section 13 route checked',
+        'Rent figures reviewed',
+        'Timing reviewed',
+        'Evidence prompts prepared',
+        'Service prompts prepared',
+        'Final rent increase review ready',
+      ],
+      warnings,
+      positives: positives.length ? positives : ['The rent increase pack will be generated from the landlord answers provided.'],
+    };
+  }
+
   const selectedGroundCount =
     countItems(facts.selected_grounds) ||
     countItems(facts.grounds) ||
@@ -403,6 +480,10 @@ function ReviewPageInner() {
   // Detect flow type based on product
   const isMoneyClaimFlow = product === 'money_claim' || product === 'sc_money_claim' || caseType === 'money_claim';
   const isNoticeOnlyFlow = product === 'notice_only';
+  const isSection13Flow =
+    product === 'section13_standard' ||
+    product === 'section13_defensive' ||
+    caseType === 'rent_increase';
   const isTenancyFlow = product === 'tenancy_agreement' || product === 'ast_standard' || product === 'ast_premium' || caseType === 'tenancy_agreement';
   const isResidentialStandaloneFlow = isResidentialLettingProductSku(product);
   const evictionAddOnRecommendations: ReviewAddOnRecommendation[] =
@@ -748,6 +829,7 @@ function ReviewPageInner() {
     isNoticeOnlyFlow,
     isTenancyFlow,
     isResidentialStandaloneFlow,
+    isSection13Flow,
     caseStrengthBand,
     readinessSummary,
     redFlags,
@@ -800,6 +882,113 @@ function ReviewPageInner() {
           isRegenerating={isRegenerating}
           isLoadingPaymentStatus={isLoadingPaymentStatus}
         />
+      </AnimatedReviewShell>
+    );
+  }
+
+  if (isSection13Flow) {
+    const facts = analysis?.case_facts || {};
+    const currentRent = Number(
+      facts.section13?.tenancy?.currentRentAmount ||
+      facts.section13?.current_rent_amount ||
+      facts.rent_amount ||
+      facts.current_rent_amount ||
+      0
+    );
+    const proposedRent = Number(
+      facts.section13?.proposal?.proposedRentAmount ||
+      facts.section13?.proposed_rent_amount ||
+      facts.new_rent_amount ||
+      facts.proposed_rent_amount ||
+      0
+    );
+    const effectiveDate =
+      facts.section13?.proposal?.effectiveDate ||
+      facts.section13?.proposed_start_date ||
+      facts.rent_increase_effective_date ||
+      facts.proposed_start_date;
+    const serviceDate =
+      facts.section13?.proposal?.serviceDate ||
+      facts.section13?.notice_service_date ||
+      facts.notice_service_date;
+
+    return (
+      <AnimatedReviewShell {...animatedReviewConfig}>
+        <div className="space-y-6">
+          <Card className="p-6">
+            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">Section 13 rent increase pack</h2>
+                <p className="mt-2 text-sm leading-6 text-gray-600">
+                  Review the rent figures, dates, market evidence prompts and service details before generating the pack.
+                </p>
+              </div>
+              {readinessBadge}
+            </div>
+            {readinessSummary && (
+              <div className="mt-5 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm leading-6 text-blue-900">
+                {readinessSummary}
+              </div>
+            )}
+            <div className="mt-6 grid gap-4 md:grid-cols-4">
+              <div className="rounded-lg bg-gray-50 p-4">
+                <p className="text-sm text-gray-500">Current rent</p>
+                <p className="mt-1 font-semibold text-gray-900">{currentRent > 0 ? formatCurrencyAmount(currentRent) : 'Check required'}</p>
+              </div>
+              <div className="rounded-lg bg-gray-50 p-4">
+                <p className="text-sm text-gray-500">Proposed rent</p>
+                <p className="mt-1 font-semibold text-gray-900">{proposedRent > 0 ? formatCurrencyAmount(proposedRent) : 'Check required'}</p>
+              </div>
+              <div className="rounded-lg bg-gray-50 p-4">
+                <p className="text-sm text-gray-500">New rent starts</p>
+                <p className="mt-1 font-semibold text-gray-900">{effectiveDate || 'Check required'}</p>
+              </div>
+              <div className="rounded-lg bg-gray-50 p-4">
+                <p className="text-sm text-gray-500">Service date</p>
+                <p className="mt-1 font-semibold text-gray-900">{serviceDate || 'To confirm'}</p>
+              </div>
+            </div>
+          </Card>
+
+          {(redFlags.length > 0 || complianceIssues.length > 0) && (
+            <Card id="critical-issues" className="p-6 border-amber-200 bg-amber-50">
+              <h3 className="font-semibold text-amber-950">Checks before serving</h3>
+              <ul className="mt-3 space-y-2 text-sm leading-6 text-amber-900">
+                {[...redFlags, ...complianceIssues].map((issue, index) => (
+                  <li key={`${issue}-${index}`}>- {issue}</li>
+                ))}
+              </ul>
+            </Card>
+          )}
+
+          <Card className="p-6">
+            <h3 className="font-semibold text-gray-900">Included in this pack</h3>
+            <div className="mt-4 grid gap-3 md:grid-cols-2">
+              {[
+                'Form 4A Section 13 notice',
+                'Rent increase summary',
+                'Market evidence prompts',
+                'Proof of service record',
+                product === 'section13_defensive' ? 'Tribunal response preparation' : 'Service and next-step guide',
+                product === 'section13_defensive' ? 'Tribunal bundle guidance' : 'Landlord checklist',
+              ].map((item) => (
+                <div key={item} className="flex items-start gap-3 rounded-lg bg-gray-50 p-3 text-sm text-gray-700">
+                  <RiCheckboxCircleLine className="mt-0.5 h-5 w-5 text-[#7C3AED]" />
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-between">
+            <Button variant="outline" onClick={handleEdit}>
+              Edit answers
+            </Button>
+            <Button onClick={handleProceed} disabled={isLoadingPaymentStatus || isRegenerating}>
+              {isPaid && editWindowOpen ? (isRegenerating ? 'Regenerating...' : 'Regenerate documents') : 'Continue'}
+            </Button>
+          </div>
+        </div>
       </AnimatedReviewShell>
     );
   }

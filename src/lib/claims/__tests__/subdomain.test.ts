@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
-import { getClaimsRewritePath, shouldRewriteClaimsSubdomain } from '../subdomain';
+import {
+  getClaimsRewritePath,
+  isClaimsSubdomainHost,
+  shouldRewriteClaimsSubdomain,
+  shouldRewriteClaimsSubdomainFromHosts,
+} from '../subdomain';
 
 describe('claims subdomain routing', () => {
   it('rewrites the claims subdomain root to the claims app', () => {
@@ -11,6 +16,17 @@ describe('claims subdomain routing', () => {
   it('supports a file-claim alias for ads and direct campaigns', () => {
     expect(shouldRewriteClaimsSubdomain('claims.landlordheaven.co.uk', '/file-claim')).toBe(true);
     expect(getClaimsRewritePath('/file-claim')).toBe('/claims');
+  });
+
+  it('recognises forwarded host header values from Vercel', () => {
+    expect(isClaimsSubdomainHost('claims.landlordheaven.co.uk:443')).toBe(true);
+    expect(isClaimsSubdomainHost('claims.landlordheaven.co.uk, landlord-heavenv3.vercel.app')).toBe(true);
+    expect(
+      shouldRewriteClaimsSubdomainFromHosts(
+        ['landlord-heavenv3.vercel.app', 'claims.landlordheaven.co.uk'],
+        '/',
+      ),
+    ).toBe(true);
   });
 
   it('does not rewrite app assets, APIs, or already rewritten claims paths', () => {

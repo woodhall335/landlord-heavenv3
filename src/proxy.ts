@@ -10,6 +10,8 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 
+import { getClaimsRewritePath, shouldRewriteClaimsSubdomainFromHosts } from '@/lib/claims/subdomain';
+
 function getAllowedOrigins(): string[] {
   const envOrigins = process.env.ALLOWED_ORIGINS;
   if (envOrigins) {
@@ -105,19 +107,34 @@ async function refreshSupabaseSession(request: NextRequest, response: NextRespon
 }
 
 export async function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { hostname, pathname } = request.nextUrl;
   const origin = request.headers.get('origin');
+  const forwardedHost = request.headers.get('x-forwarded-host');
+  const host = request.headers.get('host');
 
   if (pathname.startsWith('/api/') && request.method === 'OPTIONS') {
     const response = new NextResponse(null, { status: 204 });
     return addCorsHeaders(response, origin);
   }
 
-  let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
-  });
+  let response: NextResponse;
+
+  if (shouldRewriteClaimsSubdomainFromHosts([forwardedHost, host, hostname], pathname)) {
+    const rewriteUrl = request.nextUrl.clone();
+    rewriteUrl.pathname = getClaimsRewritePath(pathname);
+
+    response = NextResponse.rewrite(rewriteUrl, {
+      request: {
+        headers: request.headers,
+      },
+    });
+  } else {
+    response = NextResponse.next({
+      request: {
+        headers: request.headers,
+      },
+    });
+  }
 
   response = await refreshSupabaseSession(request, response);
 

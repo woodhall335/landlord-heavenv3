@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
@@ -20,6 +19,7 @@ import {
 } from 'lucide-react';
 import { clsx } from 'clsx';
 
+import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
 import { CLAIM_CONFIGS_BY_SLUG, CLAIM_PACK_DISPLAY_PRICE, CLAIM_TYPE_CONFIGS } from '@/lib/claims/config';
 import type { ClaimQuestionConfig, ClaimTypeConfig, ClaimWizardAnswers, ClaimWizardAnswerValue } from '@/lib/claims/types';
 import {
@@ -27,7 +27,7 @@ import {
   buildGenericEvidenceIndexRows,
   getVisibleEvidenceItems,
 } from '@/lib/claims/evidence';
-import { getClaimHandoffHref, getFlowModeLabel } from '@/lib/claims/validation';
+import { getFlowModeLabel } from '@/lib/claims/validation';
 
 const steps = ['Claim type', 'About the claim', 'Details', 'Evidence', 'Check', 'Results'];
 
@@ -192,13 +192,34 @@ function QuestionInput({
     'w-full rounded-2xl border border-violet-200 bg-white px-4 py-3 text-base text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-violet-500 focus:ring-4 focus:ring-violet-100';
 
   if (question.answerType === 'textarea' || question.answerType === 'address') {
+    const textValue = typeof value === 'string' ? value : '';
     return (
-      <textarea
-        className={clsx(inputClass, 'min-h-[156px] resize-y leading-7')}
-        value={typeof value === 'string' ? value : ''}
-        onChange={(event) => onChange(event.target.value)}
-        placeholder="Type the answer here..."
-      />
+      <div className="space-y-3">
+        <textarea
+          className={clsx(inputClass, 'min-h-[156px] resize-y leading-7')}
+          value={textValue}
+          onChange={(event) => onChange(event.target.value)}
+          placeholder="Type the answer here..."
+        />
+        {question.answerType === 'textarea' ? (
+          <AskHeavenInlineEnhancer
+            questionId={question.fieldPath}
+            questionText={question.questionText}
+            answer={textValue}
+            onApply={onChange}
+            context={{
+              case_type: 'money_claim',
+              jurisdiction: 'england',
+              product: 'money_claim',
+              claim_category: config.id,
+              claim_flow_mode: config.flowMode,
+              question_id: question.id,
+            }}
+            apiMode="generic"
+            helperText="Ask Heaven can make this clearer and more court-ready"
+          />
+        ) : null}
+      </div>
     );
   }
 
@@ -324,6 +345,25 @@ function QuestionInput({
                     onChange={(event) => onDescriptionChange?.(item.id, event.target.value)}
                     placeholder="Example: Shows the invoice was due on 14 May and the defendant accepted the work."
                   />
+                  <div className="mt-3">
+                    <AskHeavenInlineEnhancer
+                      questionId={`${question.fieldPath}.${item.id}`}
+                      questionText={`What does the ${item.label} evidence show?`}
+                      answer={descriptions[item.id] ?? ''}
+                      onApply={(newText) => onDescriptionChange?.(item.id, newText)}
+                      context={{
+                        case_type: 'money_claim',
+                        jurisdiction: 'england',
+                        product: 'money_claim',
+                        claim_category: config.id,
+                        claim_flow_mode: config.flowMode,
+                        evidence_item: item.id,
+                      }}
+                      apiMode="generic"
+                      compact
+                      helperText="Improve the evidence description"
+                    />
+                  </div>
                   {(item.requiredForDocument || item.recommended) && (
                     <p className="mt-2 text-xs font-medium text-slate-500">Required for selected recommended or required evidence.</p>
                   )}
@@ -371,13 +411,32 @@ function QuestionInput({
   }
 
   if (question.answerType === 'line_items') {
+    const textValue = typeof value === 'string' ? value : '';
     return (
-      <textarea
-        className={clsx(inputClass, 'min-h-[140px] resize-y leading-7')}
-        value={typeof value === 'string' ? value : ''}
-        onChange={(event) => onChange(event.target.value)}
-        placeholder="Example: Invoice 1042 - 450.00; chaser fee - 25.00"
-      />
+      <div className="space-y-3">
+        <textarea
+          className={clsx(inputClass, 'min-h-[140px] resize-y leading-7')}
+          value={textValue}
+          onChange={(event) => onChange(event.target.value)}
+          placeholder="Example: Invoice 1042 - 450.00; chaser fee - 25.00"
+        />
+        <AskHeavenInlineEnhancer
+          questionId={question.fieldPath}
+          questionText={question.questionText}
+          answer={textValue}
+          onApply={onChange}
+          context={{
+            case_type: 'money_claim',
+            jurisdiction: 'england',
+            product: 'money_claim',
+            claim_category: config.id,
+            claim_flow_mode: config.flowMode,
+            question_id: question.id,
+          }}
+          apiMode="generic"
+          helperText="Ask Heaven can tidy this into a clearer schedule"
+        />
+      </div>
     );
   }
 
@@ -472,7 +531,7 @@ export function ClaimsWizard() {
     }));
   }
 
-  async function handleGenericCheckout() {
+  async function handleClaimsCheckout() {
     setCheckoutError(null);
     setIsCheckingOut(true);
 
@@ -568,8 +627,6 @@ export function ClaimsWizard() {
   const canAdvance =
     (!activeQuestion?.required || isAnswered(answers[activeQuestion.fieldPath]) || isClaimTypeStep || isResultsStep) &&
     (!isGenericEvidenceQuestion || selectedEvidenceDescriptionsReady);
-  const handoffHref = getClaimHandoffHref(config);
-
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,#F4ECFF_0,#FBF8FF_38%,#FFFFFF_100%)] px-4 py-8 text-slate-950 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl rounded-[2rem] border border-violet-100 bg-white/95 shadow-[0_30px_90px_rgba(76,29,149,0.12)]">
@@ -766,9 +823,7 @@ export function ClaimsWizard() {
                   <div className="mt-8 rounded-2xl border border-violet-100 bg-white p-5">
                     <h3 className="text-2xl font-bold text-slate-950">Your claim pack route</h3>
                     <p className="mt-3 text-base leading-7 text-slate-600">
-                      {config.flowMode === 'landlord_money_claim'
-                        ? 'This claim should continue in the existing landlord Money Claim Pack so the current paid document generator stays unchanged.'
-                        : 'This generic claim route will use the unified Money Claim Pack checkout, then generate the generic small-claim document pack from these answers.'}
+                      The claims service will save these answers, take payment, and generate the document pack for this claim type from the facts collected here. You do not need to restart in another wizard.
                     </p>
                     <div className="mt-6 grid gap-3">
                       {config.packOutputs.map((output) => (
@@ -782,25 +837,15 @@ export function ClaimsWizard() {
                       <p className="font-semibold">Unified Money Claim Pack fee: {CLAIM_PACK_DISPLAY_PRICE}</p>
                       <p className="mt-1">Court fees are separate and payable directly to HMCTS.</p>
                     </div>
-                    {config.flowMode === 'landlord_money_claim' ? (
-                      <Link
-                        href={handoffHref}
-                        className="mt-7 inline-flex items-center justify-center gap-2 rounded-2xl bg-violet-600 px-6 py-4 font-bold text-white shadow-lg shadow-violet-200 transition hover:bg-violet-700"
-                      >
-                        Continue to landlord Money Claim Pack
-                        <ArrowRight className="size-5" />
-                      </Link>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={handleGenericCheckout}
-                        disabled={isCheckingOut}
-                        className="mt-7 inline-flex items-center justify-center gap-2 rounded-2xl bg-violet-600 px-6 py-4 font-bold text-white shadow-lg shadow-violet-200 transition hover:bg-violet-700 disabled:cursor-wait disabled:bg-slate-300 disabled:text-slate-600 disabled:shadow-none"
-                      >
-                        {isCheckingOut ? 'Preparing checkout...' : 'Continue to checkout'}
-                        <ArrowRight className="size-5" />
-                      </button>
-                    )}
+                    <button
+                      type="button"
+                      onClick={handleClaimsCheckout}
+                      disabled={isCheckingOut}
+                      className="mt-7 inline-flex items-center justify-center gap-2 rounded-2xl bg-violet-600 px-6 py-4 font-bold text-white shadow-lg shadow-violet-200 transition hover:bg-violet-700 disabled:cursor-wait disabled:bg-slate-300 disabled:text-slate-600 disabled:shadow-none"
+                    >
+                      {isCheckingOut ? 'Preparing checkout...' : 'Continue to checkout'}
+                      <ArrowRight className="size-5" />
+                    </button>
                     {checkoutError && (
                       <div className="mt-4 rounded-2xl bg-rose-50 p-4 text-sm font-medium text-rose-800">
                         {checkoutError}

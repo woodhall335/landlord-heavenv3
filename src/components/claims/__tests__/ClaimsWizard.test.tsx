@@ -55,18 +55,38 @@ describe('ClaimsWizard', () => {
     expect(screen.getByText(/generic small-claim pack/i)).toBeInTheDocument();
   });
 
-  it('routes landlord debt claims to the protected existing money-claim flow', () => {
+  it('keeps landlord debt claims inside the claims checkout flow', () => {
     render(<ClaimsWizard />);
 
     fireEvent.click(screen.getByRole('button', { name: /landlord debt claim/i }));
 
-    for (const answer of ['John Smith', 'Sarah Doe', '25 High Street', '2025-01-01']) {
+    for (const answer of [
+      'John Smith',
+      '1 Claimant Street',
+      'SW1A 1AA',
+      'Sarah Doe',
+      '2 Defendant Road',
+      'SW1A 2AA',
+      '25 High Street',
+      'SW1A 3AA',
+      '2025-01-01',
+    ]) {
       const field = screen.getByPlaceholderText(/type the answer here/i);
       fireEvent.change(field, { target: { value: answer } });
       fireEvent.click(screen.getByRole('button', { name: /continue/i }));
     }
 
-    for (const answer of ['1200', 'monthly', 'January rent - 1200', 'Cleaning - 100', 'The tenant owes rent under the agreement and has not paid.', true]) {
+    for (const answer of [
+      '1200',
+      'monthly',
+      '1st of each month',
+      'January rent - 1200',
+      'Cleaning - 100',
+      'The tenant owes rent under the agreement and has not paid.',
+      'Payment was chased twice by email.',
+      true,
+      '2025-02-01',
+    ]) {
       if (typeof answer === 'boolean') {
         fireEvent.click(screen.getByRole('button', { name: /yes/i }));
       } else {
@@ -85,11 +105,9 @@ describe('ClaimsWizard', () => {
     fireEvent.click(screen.getByRole('button', { name: /yes/i }));
     fireEvent.click(screen.getByRole('button', { name: /continue/i }));
 
-    const link = screen.getByRole('link', { name: /continue to landlord money claim pack/i });
-    expect(link).toHaveAttribute(
-      'href',
-      '/wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim'
-    );
+    expect(screen.getByRole('button', { name: /continue to checkout/i })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /continue to landlord money claim pack/i })).not.toBeInTheDocument();
+    expect(screen.getByText(/you do not need to restart in another wizard/i)).toBeInTheDocument();
     expect(screen.queryByText(/suggested based on your story/i)).not.toBeInTheDocument();
     expect(screen.queryByLabelText(/what does this evidence show/i)).not.toBeInTheDocument();
   });

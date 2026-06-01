@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { Container } from '@/components/ui/Container';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { CommercialBridge } from '@/components/marketing/CommercialBridge';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { getCanonicalUrl } from '@/lib/seo';
@@ -14,9 +15,9 @@ import { howToRentGuideFAQs } from '@/data/faqs';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'How to Rent Guide 2026: Latest PDF & Landlord Checklist',
+  title: 'How to Rent Guide 2026: Compliance Check Before Notice',
   description:
-    'How to Rent guide 2026 for England landlords: when to give the latest PDF, how to evidence service, and what to do before notice or a new tenancy.',
+    'Check the latest How to Rent guide before a new tenancy or possession notice, then choose the right tenancy agreement or notice pack with evidence of service.',
   keywords: [
     'how to rent guide',
     'how to rent checklist',
@@ -26,9 +27,9 @@ export const metadata: Metadata = {
     'prescribed information tenants',
   ],
   openGraph: {
-    title: 'How to Rent Guide 2026: Latest PDF & Landlord Checklist',
+    title: 'How to Rent Guide 2026: Compliance Check Before Notice',
     description:
-      'Landlord guide to the latest How to Rent PDF, evidence of service, and practical next steps.',
+      'Landlord guide to the latest How to Rent PDF, evidence of service, and the right next step before a tenancy or possession notice.',
     type: 'article',
     url: getCanonicalUrl('/how-to-rent-guide'),
   },
@@ -42,7 +43,7 @@ const breadcrumbs = [
   { name: 'How to Rent Guide', url: '/how-to-rent-guide' },
 ];
 const noticeOnlyHref = '/products/notice-only';
-const tenancyProductHref = '/standard-tenancy-agreement';
+const tenancyProductHref = '/products/ast';
 
 const actionChooserItems = [
   {
@@ -91,10 +92,10 @@ export default function HowToRentGuidePage() {
         {/* Hero Section */}
         <UniversalHero
           badge="Landlord Guide"
-          title="How to Rent Guide 2026 for Landlords"
-          subtitle="Landlord-focused guide to the latest How to Rent PDF, when to serve it, and how to evidence compliance."
-          primaryCta={{ label: 'Start Notice Only', href: noticeOnlyHref }}
-          secondaryCta={{ label: 'Create tenancy agreement', href: tenancyProductHref }}
+          title="How to Rent compliance check before notice or tenancy"
+          subtitle="Check the latest How to Rent guide, keep evidence of service, and choose the right tenancy agreement or notice pack before the file is relied on."
+          primaryCta={{ label: 'Create tenancy agreement', href: tenancyProductHref }}
+          secondaryCta={{ label: 'Start Notice Only', href: noticeOnlyHref }}
           align="center"
           showTrustPositioningBar
         />
@@ -103,6 +104,25 @@ export default function HowToRentGuidePage() {
           <Container>
             <div className="mx-auto max-w-4xl">
               <SeoPageContextPanel pathname="/how-to-rent-guide" />
+              <CommercialBridge
+                sourcePage="/how-to-rent-guide"
+                intent="tenancy_agreement"
+                headline="Checking How to Rent before a new tenancy or notice?"
+                primaryProduct="ast_standard"
+                primaryHref={tenancyProductHref}
+                primaryLabel="Create the right tenancy agreement"
+                secondaryProduct="notice_only"
+                secondaryHref={noticeOnlyHref}
+                secondaryLabel="Checking before notice? Start Notice Only"
+                ctaPosition="top"
+                riskMessage="Missing compliance evidence can delay the next step"
+                proofPoints={[
+                  'Create an England tenancy pack for the property setup',
+                  'Keep How to Rent evidence with the tenancy file',
+                  'Use Notice Only if you are checking compliance before serving notice',
+                ]}
+                body="If you are setting up a new tenancy, start with the tenancy agreement. If you are checking How to Rent because you may serve notice, use Notice Only so the compliance record and notice file are checked together."
+              />
             </div>
           </Container>
         </section>
@@ -132,7 +152,7 @@ export default function HowToRentGuidePage() {
                 </p>
                 <p>
                   If you are preparing the written statement of terms at the same time, you can{' '}
-                  <Link href="/standard-tenancy-agreement">
+                  <Link href="/products/ast">
                     create a Renters' Rights Act compliant tenancy agreement
                   </Link>{' '}
                   for the tenancy file before you serve the How to Rent guide, or choose the{' '}
@@ -159,34 +179,33 @@ export default function HowToRentGuidePage() {
 
                 <h2>Why Does It Matter for Landlords?</h2>
                 <p>
-                  The How to Rent guide is one of the &quot;prescribed requirements&quot; for Section 21
-                  notices under the Deregulation Act 2015. If you don&apos;t provide it:
+                  The How to Rent guide is part of the wider compliance file landlords should keep
+                  for an England tenancy. If you cannot show what was given to the tenant and when,
+                  later notice or court work becomes harder to evidence.
                 </p>
                 <ul>
                   <li>
-                    <strong>You cannot serve a valid Section 21 notice</strong> until you have
-                    provided it
+                    A weak compliance record can slow down a possession case
                   </li>
                   <li>
-                    Any Section 21 notice served before providing the guide is <strong>invalid</strong>
+                    Missing service evidence creates avoidable questions if the tenant challenges the file
                   </li>
                   <li>
-                    You will not be able to use the accelerated possession procedure
+                    New-tenancy paperwork is easier to defend when the guide, agreement, and setup records match
                   </li>
                 </ul>
                 <p>
-                  If you are reviewing the file before service, start with our{' '}
-                  <Link href="/section-21-ban-uk">Section 21 transition guide</Link>, work through the{' '}
-                  <Link href="/section-21-validity-checklist">Section 21 validity checklist</Link>,
-                  and only then move into the{' '}
-                  <Link href={noticeOnlyHref}>validated Section 8 notice builder</Link> once the compliance
-                  record is clean.
+                  If you are reviewing the file before service, use the{' '}
+                  <Link href={noticeOnlyHref}>Notice Only route</Link> to check the compliance record,
+                  notice dates, grounds, and service evidence together. If you are setting up a new
+                  let, start with the <Link href={tenancyProductHref}>England tenancy agreement pack</Link>
+                  so the tenancy file is clean from day one.
                 </p>
 
                 <h2>When to Provide It</h2>
                 <p>
-                  You must provide the How to Rent guide to tenants at the start of a new assured
-                  shorthold tenancy. Best practice:
+                  Provide the How to Rent guide to tenants at the start of a new England private
+                  tenancy. Best practice:
                 </p>
                 <ol>
                   <li>
@@ -229,8 +248,8 @@ export default function HowToRentGuidePage() {
 
                 <h2>Other Prescribed Requirements</h2>
                 <p>
-                  The How to Rent guide is just one of the requirements for a valid Section 21. You
-                  must also:
+                  The How to Rent guide is only one part of the wider landlord compliance record.
+                  You should also keep clear evidence that you:
                 </p>
                 <ul>
                   <li>Protect the deposit in a government-approved scheme</li>
@@ -239,8 +258,8 @@ export default function HowToRentGuidePage() {
                   <li>Provide a valid Energy Performance Certificate (EPC)</li>
                 </ul>
                 <p>
-                  <Link href="/eviction-notice-template">
-                    Start the eviction notice pack once your Section 21 compliance file is ready
+                  <Link href={noticeOnlyHref}>
+                    Start Notice Only once the compliance file is ready for notice checks
                   </Link>
                 </p>
               </div>

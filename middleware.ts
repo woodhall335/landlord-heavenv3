@@ -1,11 +1,13 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
-import { getClaimsRewritePath, shouldRewriteClaimsSubdomain } from '@/lib/claims/subdomain';
+import { getClaimsRewritePath, shouldRewriteClaimsSubdomainFromHosts } from '@/lib/claims/subdomain';
 
 export function middleware(request: NextRequest) {
   const { hostname, pathname } = request.nextUrl;
+  const forwardedHost = request.headers.get('x-forwarded-host');
+  const host = request.headers.get('host');
 
-  if (!shouldRewriteClaimsSubdomain(hostname, pathname)) {
+  if (!shouldRewriteClaimsSubdomainFromHosts([forwardedHost, host, hostname], pathname)) {
     return NextResponse.next();
   }
 

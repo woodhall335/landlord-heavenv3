@@ -23,16 +23,16 @@ const completePackProductHref = '/products/complete-pack';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'N5 and N119 Possession Claim Forms: Court Pack for Landlords',
+  title: 'Prepare N5 and N119 Court Papers After Notice',
   description:
-    'Plain-English England landlord guide to N5 and N119 possession claim forms, court evidence, and when to use the Complete Pack.',
+    'Prepare England N5 and N119 possession claim papers after a Section 8 notice, with evidence, service proof, hearing preparation, and Complete Pack next steps.',
   alternates: {
     canonical,
   },
   openGraph: {
-    title: 'N5 and N119 Possession Claim Forms: Court Pack for Landlords',
+    title: 'Prepare N5 and N119 Court Papers After Notice',
     description:
-      'Plain-English guidance for landlords on the N5 and N119 court claim route, including evidence, hearing preparation, and common delay points.',
+      'Guidance for landlords on preparing N5 and N119 court papers after notice, including evidence, service proof, hearing preparation, and common delay points.',
     url: canonical,
     siteName: 'LandlordHeaven',
     type: 'article',
@@ -131,7 +131,7 @@ function CtaBand({
 
 function CourtClaimBridge({
   ctaPosition,
-  headline = 'Need the complete court pack for N5 and N119?',
+  headline = 'Need N5 and N119 papers that match the notice?',
 }: {
   ctaPosition: 'top' | 'mid' | 'bottom' | 'faq';
   headline?: string;
@@ -143,16 +143,16 @@ function CourtClaimBridge({
       headline={headline}
       primaryProduct="complete_pack"
       primaryHref={completePackProductHref}
-      primaryLabel="Build complete eviction pack"
+      primaryLabel="Prepare my court papers"
       secondaryProduct="notice_only"
       secondaryHref={noticeOnlyProductHref}
       secondaryLabel="Still at notice stage? Notice Only"
       ctaPosition={ctaPosition}
-      riskMessage="A court claim needs more than a served notice"
+      riskMessage="A court claim can stall if the notice and evidence do not line up"
       proofPoints={[
         'Prepare N5 and N119 together',
         'Build the witness statement and chronology',
-        'Keep the arrears schedule, evidence, and readiness checks aligned',
+        'Keep the service record, evidence, and readiness checks aligned',
       ]}
       body="Use Complete Pack when the case is moving toward court and the landlord needs the claim forms, evidence file, and hearing preparation to read as one coherent pack."
     />
@@ -177,7 +177,7 @@ export default function Page() {
           description: metadata.description as string,
           url: canonical,
           datePublished: '2026-03-01',
-          dateModified: '2026-03-13',
+          dateModified: '2026-06-01',
         })}
       />
 
@@ -190,8 +190,8 @@ export default function Page() {
       />
 
       <UniversalHero
-        title="N5 and N119 Possession Claim Guide"
-        subtitle="A practical landlord guide to the standard possession claim route, what evidence usually matters, and how to prepare a stronger court file."
+        title="Prepare N5 and N119 court papers after notice"
+        subtitle="Use this guide when the notice stage is ending and the next risk is a weak court file, missing evidence, or claim forms that do not match the notice already served."
         primaryCta={{ label: 'Start Complete Pack', href: completePackProductHref }}
         secondaryCta={{ label: 'Still at notice stage? Notice Only', href: noticeOnlyProductHref }}
         mediaSrc="/images/wizard-icons/07-review-finish.png"

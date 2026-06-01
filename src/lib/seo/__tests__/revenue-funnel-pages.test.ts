@@ -62,7 +62,7 @@ describe('revenue-focused SEO funnels', () => {
     expect(guide).toContain("href:");
     expect(guide).toContain("'#rent-increase-checker'");
     expect(standaloneTool).toContain('<RentIncreaseChallengeChecker />');
-    expect(form4a).toContain('Form 4A Rent Increase Notice 2026: Section 13 Guide');
+    expect(form4a).toContain('Form 4A Rent Increase: Serve Notice With Evidence');
     expect(section13).toContain('Section 13 Notice 2026: Increase Rent Properly in England');
   });
 
@@ -140,13 +140,13 @@ describe('revenue-focused SEO funnels', () => {
     const section8Template = readRepoFile('src', 'app', 'section-8-notice-template', 'page.tsx');
     const n5 = readRepoFile('src', 'app', 'n5-n119-possession-claim', 'page.tsx');
 
-    expect(form3).toContain('Section8Bridge');
-    expect(section8Template).toContain('Section8Bridge');
-    expect(section8Template).toContain('Section 8 Notice Template 2026: Form 3A Guide for England');
+    expect(form3).toContain('NoticeOnlyBridge');
+    expect(section8Template).toContain('NoticeOnlyBridge');
+    expect(section8Template).toContain('Serve a Section 8 Notice Without Date or Service Mistakes');
     expect(n5).toContain('CourtClaimBridge');
-    expect(n5).toContain('Build complete eviction pack');
+    expect(n5).toContain('Prepare my court papers');
     expect(n5).toContain('Prepare N5 and N119 together');
-    expect(n5).toContain('N5 and N119 Possession Claim Forms: Court Pack for Landlords');
+    expect(n5).toContain('Prepare N5 and N119 Court Papers After Notice');
   });
 
   it('routes MCOL and money claim content to the Money Claim Pack', () => {

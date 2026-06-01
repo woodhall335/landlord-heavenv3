@@ -4,18 +4,18 @@ import { sections, type RentIncreaseGuidePage } from './types';
 export const form4aGuidePage: RentIncreaseGuidePage = {
   slug: 'form-4a-guide',
   path: `${RENT_INCREASE_HUB_PATH}/form-4a-guide`,
-  title: 'Form 4A Rent Increase Guide',
-  heroTitle: 'Form 4A Rent Increase Notice 2026 for England Landlords',
+  title: 'Form 4A Rent Increase Evidence Guide',
+  heroTitle: 'Serve a Form 4A rent increase with evidence',
   heroSubtitle:
-    'Form-specific help for landlords preparing a Section 13 Form 4A rent increase notice: what each part is doing, what quality looks like, and how to avoid drafting errors.',
+    'Help for landlords preparing a Section 13 Form 4A rent increase notice: check the proposed figure, service dates, and evidence before the tenant receives it.',
   heroBullets: [
-    'Form 4A completion intent: field quality, consistency, and service readiness.',
-    'Explains how Form 4A fits into a full evidence-backed pack.',
-    'Designed for landlords checking quality before service.',
+    'Check dates, rent figures, and service readiness before you serve.',
+    'Connect Form 4A to the evidence that supports the proposed rent.',
+    'Choose the standard route or prepare for a likely tenant challenge.',
   ],
-  metaTitle: 'Form 4A Rent Increase Notice 2026: Section 13 Guide',
+  metaTitle: 'Form 4A Rent Increase: Serve Notice With Evidence',
   metaDescription:
-    'England landlord guide to Form 4A rent increase notices. Check Section 13 dates, market support, service, and evidence before you serve.',
+    'Serve an England Form 4A rent increase notice with the right Section 13 dates, market evidence, service record, and next step if the tenant may challenge.',
   primaryKeyword: 'form 4a',
   intentLabel: 'form completion / form-specific help',
   introAngle:

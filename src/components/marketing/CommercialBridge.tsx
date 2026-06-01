@@ -284,6 +284,41 @@ export function Section8Bridge({
   );
 }
 
+export function NoticeOnlyBridge({
+  sourcePage,
+  ctaPosition,
+  headline = 'Need to serve a Section 8 notice correctly?',
+  className,
+}: {
+  sourcePage: string;
+  ctaPosition: GrowthCtaPosition;
+  headline?: string;
+  className?: string;
+}) {
+  return (
+    <CommercialBridge
+      sourcePage={sourcePage}
+      intent="section8_notice"
+      headline={headline}
+      primaryProduct="notice_only"
+      primaryHref="/products/notice-only"
+      primaryLabel="Create my Section 8 notice"
+      secondaryProduct="complete_pack"
+      secondaryHref="/products/complete-pack"
+      secondaryLabel="Need court papers too? Complete Pack"
+      ctaPosition={ctaPosition}
+      riskMessage="Wrong dates or service can make the notice fail"
+      proofPoints={[
+        'Prepare Form 3A around the grounds you are relying on',
+        'Check notice dates and service evidence before the tenant receives it',
+        'Keep the notice file ready if the case later needs N5 and N119 court papers',
+      ]}
+      body="Use Notice Only when the urgent job is serving the Form 3A notice properly. If the tenant is likely to stay after the notice expires, the Complete Pack covers the later court papers."
+      className={className}
+    />
+  );
+}
+
 export function MoneyClaimBridge({
   sourcePage,
   ctaPosition,

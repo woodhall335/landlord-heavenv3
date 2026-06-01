@@ -9,6 +9,10 @@ function toPathSet(entries: Awaited<ReturnType<typeof sitemap>>): Set<string> {
   return new Set(entries.map((entry) => new URL(entry.url).pathname));
 }
 
+function entryByPath(entries: Awaited<ReturnType<typeof sitemap>>, path: string) {
+  return entries.find((entry) => new URL(entry.url).pathname === path);
+}
+
 describe('sitemap indexability regression', () => {
   beforeEach(() => {
     delete process.env.SUPABASE_URL;
@@ -33,6 +37,14 @@ describe('sitemap indexability regression', () => {
     const paths = toPathSet(await sitemap());
 
     [
+      '/products/notice-only',
+      '/products/complete-pack',
+      '/products/money-claim',
+      '/products/ast',
+      '/products/section-13-standard',
+      '/products/section-13-defence',
+      '/pricing',
+      '/samples',
       '/how-to-evict-tenant',
       '/how-to-sue-tenant-for-unpaid-rent',
       '/money-claim-n1-claim-form',
@@ -47,6 +59,22 @@ describe('sitemap indexability regression', () => {
     });
   });
 
+  it('uses the SEO rescue release date for product and high-intent bridge pages', async () => {
+    const entries = await sitemap();
+
+    [
+      '/products/notice-only',
+      '/products/complete-pack',
+      '/form-3-section-8',
+      '/n5-n119-possession-claim',
+      '/section-8-notice-template',
+      '/how-to-rent-guide',
+      '/rent-increase/form-4a-guide',
+    ].forEach((path) => {
+      expect(entryByPath(entries, path)?.lastModified?.toISOString().slice(0, 10)).toBe('2026-06-01');
+    });
+  });
+
   it('keeps retired, private, asset, and non-editorial regional URLs out', async () => {
     const paths = toPathSet(await sitemap());
 
@@ -56,7 +84,11 @@ describe('sitemap indexability regression', () => {
     expect(paths).not.toContain('/wizard');
     expect(paths).not.toContain('/official-forms/n325-eng.pdf');
     expect(paths).not.toContain('/favicon.ico');
-    expect(paths).toContain('/blog/rent-smart-wales');
+    expect(paths).not.toContain('/blog/rent-smart-wales');
+    expect(paths).not.toContain('/blog/wales');
+    expect(paths).not.toContain('/blog/scotland');
+    expect(paths).not.toContain('/blog/northern-ireland');
+    expect(paths).not.toContain('/common-prt-tenancy-mistakes-scotland');
     expect(paths).not.toContain('/tenancy-agreements/wales');
     expect(paths).not.toContain('/tenancy-agreements/scotland');
   });

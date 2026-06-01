@@ -100,7 +100,7 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
           description: config.metaDescription,
           url: canonical,
           datePublished: '2026-04-09',
-          dateModified: '2026-04-09',
+          dateModified: config.slug === 'form-4a-guide' ? '2026-06-01' : '2026-04-09',
         })}
       />
       <StructuredData data={faqPageSchema(config.faqs)} />

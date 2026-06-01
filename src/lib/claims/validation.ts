@@ -83,15 +83,11 @@ export function validateAllClaimConfigs(): ClaimConfigValidationIssue[] {
 }
 
 export function getClaimHandoffHref(config: ClaimTypeConfig): string {
-  if (config.flowMode === 'landlord_money_claim') {
-    return '/wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim';
-  }
-
   return `/claims?claim=${config.slug}`;
 }
 
 export function getFlowModeLabel(flowMode: ClaimFlowMode): string {
   return flowMode === 'landlord_money_claim'
-    ? 'Existing landlord Money Claim Pack'
+    ? 'Landlord debt claim pack'
     : 'Generic small-claim pack';
 }

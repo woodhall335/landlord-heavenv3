@@ -4,8 +4,8 @@
 
 <hr>
 
-<p><strong>From:</strong> {{claimant_name}}<br>{{claimant_address}}</p>
-<p><strong>To:</strong> {{defendant_name}}<br>{{defendant_address}}</p>
+<p><strong>From:</strong> {{claimant_name}}<br>{{claimant_address}}{{#if claimant_email}}<br>{{claimant_email}}{{/if}}{{#if claimant_phone}}<br>{{claimant_phone}}{{/if}}</p>
+<p><strong>To:</strong> {{defendant_name}}<br>{{defendant_address}}{{#if defendant_email}}<br>{{defendant_email}}{{/if}}</p>
 <p><strong>Date:</strong> {{generation_date}}</p>
 
 <h2>Dear {{defendant_name}}</h2>
@@ -52,11 +52,18 @@
 
 <h2>Pre-action position</h2>
 <p>{{pre_action_summary}}</p>
+{{#if pre_action_sent_date}}
+<p><strong>Most recent demand sent:</strong> {{pre_action_sent_date}}</p>
+{{/if}}
+{{#if response_deadline}}
+<p><strong>Response deadline given:</strong> {{response_deadline}}</p>
+{{/if}}
 <p>{{legal_rules.pre_action_rule}}</p>
 
 <h2>What is required now</h2>
 <p>
   Please pay the amount claimed, make a clear written proposal, or explain why you dispute the claim.
+  {{#if response_deadline}}Please respond by {{response_deadline}}.{{/if}}
   If the matter is not resolved, the claimant may issue a county court money claim using the attached
   particulars, schedule of loss, evidence index, and Form N1.
 </p>

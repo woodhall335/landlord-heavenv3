@@ -64,9 +64,13 @@ type GenericClaimCase = {
   defendant_name: string;
   defendant_address: string;
   defendant_postcode: string;
+  defendant_email?: string;
   claim_summary: string;
   category_context: string;
   pre_action_summary: string;
+  pre_action_sent_date?: string;
+  response_deadline?: string;
+  preferred_filing_route?: string;
   line_items: GenericClaimLineItem[];
   total_claim_amount: number;
   court_fee: number;
@@ -74,6 +78,7 @@ type GenericClaimCase = {
   total_with_fees: number;
   claim_interest: boolean;
   interest_rate: number | null;
+  interest_start_date?: string;
   daily_interest: number | null;
   interest_to_date: number | null;
   evidence_rows: Array<{ id: string; label: string; description: string }>;
@@ -211,7 +216,8 @@ function roundMoney(value: number): number {
 }
 
 function formatUKLegalDate(dateInput: string | Date | undefined): string {
-  const date = dateInput ? new Date(dateInput) : new Date();
+  if (!dateInput) return '';
+  const date = new Date(dateInput);
   if (Number.isNaN(date.getTime())) return '';
 
   return new Intl.DateTimeFormat('en-GB', {
@@ -225,6 +231,13 @@ function formatUKLegalDate(dateInput: string | Date | undefined): string {
 function extractPostcode(address: string): string {
   const match = address.toUpperCase().match(/\b([A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})\b/);
   return match?.[1]?.replace(/\s+/, ' ').trim() ?? '';
+}
+
+function formatFilingRoute(value: string): string | undefined {
+  if (value === 'online_if_suitable') return 'Online if suitable';
+  if (value === 'paper_n1') return 'Paper Form N1';
+  if (value === 'not_sure') return 'Not sure yet';
+  return value.trim() || undefined;
 }
 
 function resolveClaimConfig(facts: Record<string, any>): ClaimTypeConfig {
@@ -281,10 +294,10 @@ function parseLineItems(facts: Record<string, any>): GenericClaimLineItem[] {
     .map((line) => line.trim())
     .filter(Boolean)
     .map((line) => {
-      const amountMatch = line.match(/(-?£?\s*\d+(?:,\d{3})*(?:\.\d{1,2})?)\s*$/);
+      const amountMatch = line.match(/(£?\s*\d+(?:,\d{3})*(?:\.\d{1,2})?)\s*$/);
       const amount = amountMatch ? Number(amountMatch[1].replace(/[^0-9.-]/g, '')) : 0;
       const description = amountMatch
-        ? line.slice(0, amountMatch.index).replace(/[-:–—,\s]+$/, '').trim()
+        ? line.slice(0, amountMatch.index).replace(/[-:–—,/\s]+$/, '').trim()
         : line;
       return {
         description: description || line,
@@ -363,6 +376,10 @@ function buildGenericClaimCase(config: ClaimTypeConfig, facts: Record<string, an
   const claimSummary = textFact(facts, 'generic_claim.summary');
   const categoryContext = textFact(facts, 'generic_claim.category_context');
   const preActionSummary = textFact(facts, 'generic_claim.pre_action');
+  const preActionSentDate = formatUKLegalDate(textFact(facts, 'generic_claim.key_dates.pre_action_sent_date')) || undefined;
+  const responseDeadline = formatUKLegalDate(textFact(facts, 'generic_claim.key_dates.response_deadline')) || undefined;
+  const interestStartDate = formatUKLegalDate(textFact(facts, 'generic_claim.key_dates.interest_start_date')) || undefined;
+  const preferredFilingRoute = formatFilingRoute(textFact(facts, 'generic_claim.preferred_filing_route'));
   const evidenceRows = buildEvidenceRows(config, facts);
   const particulars = [
     `${textFact(facts, 'claimant.name', 'The Claimant')} claims against ${textFact(facts, 'defendant.name', 'the Defendant')} for ${config.label.toLowerCase()}.`,
@@ -387,9 +404,13 @@ function buildGenericClaimCase(config: ClaimTypeConfig, facts: Record<string, an
     defendant_name: textFact(facts, 'defendant.name', 'Defendant'),
     defendant_address: defendantAddress,
     defendant_postcode: textFact(facts, 'defendant.postcode') || extractPostcode(defendantAddress),
+    defendant_email: textFact(facts, 'defendant.email') || undefined,
     claim_summary: claimSummary,
     category_context: categoryContext,
     pre_action_summary: preActionSummary,
+    pre_action_sent_date: preActionSentDate,
+    response_deadline: responseDeadline,
+    preferred_filing_route: preferredFilingRoute,
     line_items: lineItems.length > 0 ? lineItems : [{ description: 'Claim value estimate', amount: totalClaimAmount }],
     total_claim_amount: totalClaimAmount,
     court_fee: courtFee,
@@ -397,6 +418,7 @@ function buildGenericClaimCase(config: ClaimTypeConfig, facts: Record<string, an
     total_with_fees: roundMoney(totalClaimAmount + courtFee),
     claim_interest: claimInterest,
     interest_rate: interestRate,
+    interest_start_date: interestStartDate,
     daily_interest: dailyInterest,
     interest_to_date: null,
     evidence_rows: evidenceRows,

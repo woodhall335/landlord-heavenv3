@@ -357,3 +357,105 @@
  POST /api/wizard/start 500 in 15.3s (compile: 14.0s, proxy.ts: 257ms, render: 1078ms)
  GET /claims 200 in 3.9s (compile: 1871ms, proxy.ts: 487ms, render: 1573ms)
  GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 4.1s (compile: 3.1s, proxy.ts: 488ms, render: 491ms)
+ GET /claims 200 in 9.9s (compile: 124ms, proxy.ts: 209ms, render: 9.6s)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 4.2s (compile: 121ms, proxy.ts: 164ms, render: 3.9s)
+[supabase-admin] {
+  route: '/api/wizard/start',
+  writesUsingAdmin: true,
+  hasUrl: false,
+  hasServiceRoleKey: false,
+  hasAnonKey: false,
+  isEdgeRuntime: false,
+  isProduction: false
+}
+ POST /api/wizard/start 500 in 746ms (compile: 39ms, proxy.ts: 43ms, render: 664ms)
+ GET /claims 200 in 19.0s (compile: 5.0s, proxy.ts: 1104ms, render: 12.9s)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 19.5s (compile: 6.1s, proxy.ts: 1103ms, render: 12.3s)
+ GET /claims 200 in 9.9s (compile: 662ms, proxy.ts: 1705ms, render: 7.5s)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 14.2s (compile: 986ms, proxy.ts: 1705ms, render: 11.5s)
+ GET /claims 200 in 11.7s (compile: 208ms, proxy.ts: 6.8s, render: 4.7s)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 17.4s (compile: 4.2s, proxy.ts: 6.6s, render: 6.6s)
+ GET /claims 200 in 8.2s (compile: 5.7s, proxy.ts: 210ms, render: 2.3s)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 8.4s (compile: 5.9s, proxy.ts: 209ms, render: 2.3s)
+ GET /claims 200 in 701ms (compile: 348ms, proxy.ts: 133ms, render: 220ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 837ms (compile: 59ms, proxy.ts: 217ms, render: 562ms)
+ GET /claims 200 in 734ms (compile: 43ms, proxy.ts: 86ms, render: 605ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 1021ms (compile: 129ms, proxy.ts: 86ms, render: 805ms)
+ GET /claims 200 in 768ms (compile: 29ms, proxy.ts: 116ms, render: 623ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 811ms (compile: 215ms, proxy.ts: 116ms, render: 479ms)
+ GET /claims 200 in 308ms (compile: 56ms, proxy.ts: 42ms, render: 210ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 344ms (compile: 127ms, proxy.ts: 43ms, render: 175ms)
+ GET /claims 200 in 665ms (compile: 52ms, proxy.ts: 81ms, render: 533ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 2.2s (compile: 153ms, proxy.ts: 81ms, render: 1970ms)
+ GET /claims 200 in 469ms (compile: 85ms, proxy.ts: 22ms, render: 363ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 641ms (compile: 213ms, proxy.ts: 22ms, render: 407ms)
+ GET /claims 200 in 891ms (compile: 54ms, proxy.ts: 70ms, render: 767ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 1930ms (compile: 319ms, proxy.ts: 70ms, render: 1540ms)
+ GET /claims 200 in 4.4s (compile: 1313ms, proxy.ts: 1721ms, render: 1375ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 2.7s (compile: 607ms, proxy.ts: 1990ms, render: 89ms)
+ GET /claims 200 in 2.9s (compile: 529ms, proxy.ts: 43ms, render: 2.3s)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 2.8s (compile: 1434ms, proxy.ts: 1304ms, render: 104ms)
+ GET /claims 200 in 1746ms (compile: 202ms, proxy.ts: 980ms, render: 564ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 1814ms (compile: 465ms, proxy.ts: 981ms, render: 368ms)
+ GET /claims 200 in 3.0s (compile: 679ms, proxy.ts: 586ms, render: 1698ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 3.3s (compile: 1733ms, proxy.ts: 586ms, render: 1017ms)
+ GET /claims 200 in 2.5s (compile: 779ms, proxy.ts: 99ms, render: 1618ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 2.6s (compile: 2.2s, proxy.ts: 99ms, render: 268ms)
+ GET /claims 200 in 2.1s (compile: 350ms, proxy.ts: 53ms, render: 1651ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 2.4s (compile: 1596ms, proxy.ts: 53ms, render: 718ms)
+ GET /claims 200 in 27.7s (compile: 254ms, proxy.ts: 26.6s, render: 828ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 28.0s (compile: 862ms, proxy.ts: 26.6s, render: 554ms)
+ GET /claims 200 in 534ms (compile: 83ms, proxy.ts: 56ms, render: 395ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 536ms (compile: 148ms, proxy.ts: 71ms, render: 317ms)
+ GET /claims 200 in 4.4s (compile: 732ms, proxy.ts: 2.9s, render: 795ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 4.4s (compile: 981ms, proxy.ts: 2.9s, render: 569ms)
+ GET /claims 200 in 1100ms (compile: 96ms, proxy.ts: 96ms, render: 908ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 1187ms (compile: 282ms, proxy.ts: 96ms, render: 809ms)
+ GET /claims 200 in 722ms (compile: 42ms, proxy.ts: 62ms, render: 618ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 738ms (compile: 203ms, proxy.ts: 62ms, render: 473ms)
+ GET /claims 200 in 6.9s (compile: 5.1s, proxy.ts: 313ms, render: 1437ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 11.9s (compile: 5.3s, proxy.ts: 314ms, render: 6.3s)
+ GET /claims 200 in 6.5s (compile: 4.9s, proxy.ts: 186ms, render: 1391ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 6.6s (compile: 5.8s, proxy.ts: 186ms, render: 547ms)
+ GET /claims 200 in 1101ms (compile: 31ms, proxy.ts: 105ms, render: 966ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 1179ms (compile: 129ms, proxy.ts: 105ms, render: 945ms)
+ GET /claims 200 in 434ms (compile: 33ms, proxy.ts: 76ms, render: 325ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 632ms (compile: 154ms, proxy.ts: 76ms, render: 402ms)
+ GET /claims 200 in 375ms (compile: 58ms, proxy.ts: 58ms, render: 259ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 845ms (compile: 132ms, proxy.ts: 58ms, render: 655ms)
+ GET /claims 200 in 4.8s (compile: 506ms, proxy.ts: 104ms, render: 4.2s)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 11.3s (compile: 1674ms, proxy.ts: 111ms, render: 9.5s)
+ GET /claims 404 in 1424ms (compile: 954ms, proxy.ts: 117ms, render: 353ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 404 in 1454ms (compile: 953ms, proxy.ts: 117ms, render: 383ms)
+ GET /claims 200 in 103s (compile: 38ms, proxy.ts: 77ms, render: 102s)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 104s (compile: 1744ms, proxy.ts: 72ms, render: 102s)
+○ Compiling /api/wizard/start ...
+[supabase-admin] {
+  route: '/api/wizard/start',
+  writesUsingAdmin: true,
+  hasUrl: false,
+  hasServiceRoleKey: false,
+  hasAnonKey: false,
+  isEdgeRuntime: false,
+  isProduction: false
+}
+[supabase-admin-env] { hasUrl: false, hasServiceRoleKey: false }
+ POST /api/wizard/start 500 in 27.6s (compile: 27.0s, proxy.ts: 91ms, render: 416ms)
+ GET /claims 200 in 3.3s (compile: 1084ms, proxy.ts: 224ms, render: 1982ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 3.7s (compile: 2.8s, proxy.ts: 224ms, render: 702ms)
+ GET /claims 200 in 500ms (compile: 33ms, proxy.ts: 26ms, render: 440ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 595ms (compile: 142ms, proxy.ts: 26ms, render: 428ms)
+ GET /claims 200 in 21.8s (compile: 12.4s, proxy.ts: 1381ms, render: 8.0s)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 24.6s (compile: 14.4s, proxy.ts: 1381ms, render: 8.8s)
+ GET /claims 200 in 26.6s (compile: 13.2s, proxy.ts: 2.7s, render: 10.8s)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 26.7s (compile: 15.8s, proxy.ts: 2.7s, render: 8.2s)
+ GET /claims 200 in 508ms (compile: 19ms, proxy.ts: 33ms, render: 456ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 547ms (compile: 153ms, proxy.ts: 34ms, render: 360ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 460ms (compile: 61ms, proxy.ts: 49ms, render: 351ms)
+ GET /claims 200 in 104ms (compile: 8ms, proxy.ts: 16ms, render: 81ms)
+ GET /claims 200 in 114ms (compile: 11ms, proxy.ts: 19ms, render: 85ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 95ms (compile: 17ms, proxy.ts: 11ms, render: 67ms)
+ GET /claims 200 in 242ms (compile: 29ms, proxy.ts: 51ms, render: 162ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 251ms (compile: 109ms, proxy.ts: 51ms, render: 91ms)
+ GET /claims 200 in 236ms (compile: 12ms, proxy.ts: 38ms, render: 186ms)
+ GET /wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim 200 in 249ms (compile: 62ms, proxy.ts: 38ms, render: 149ms)

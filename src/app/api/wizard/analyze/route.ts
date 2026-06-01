@@ -76,6 +76,15 @@ function normaliseEvidence(facts: CaseFacts): EvidenceSnapshot {
 
 function computeRoute(facts: CaseFacts, jurisdiction: string, caseType: string, wizardFacts?: any): string {
   if (caseType === 'money_claim') return 'money_claim';
+  if (caseType === 'tenancy_agreement') return 'tenancy_agreement';
+  if (caseType === 'rent_increase') {
+    return wizardFacts?.section13?.selectedPlan ||
+      wizardFacts?.section13?.selected_plan ||
+      wizardFacts?.section13?.product ||
+      wizardFacts?.selectedPlan ||
+      wizardFacts?.selected_plan ||
+      'section13_standard';
+  }
   if (jurisdiction === 'scotland') return 'notice_to_leave';
   // Check user's explicit eviction_route selection from Case Basics first
   if (wizardFacts?.eviction_route) return wizardFacts.eviction_route;
@@ -138,7 +147,10 @@ function getMonthlyRentForScoring(facts: CaseFacts): number | null {
  * Compute a richer case-strength score, with money-claim and eviction awareness.
  * This is a readiness/confidence indicator, not a guarantee of court outcome.
  */
-export function computeStrength(facts: CaseFacts): { score: number; red_flags: string[]; compliance: string[] } {
+export function computeStrength(
+  facts: CaseFacts,
+  caseType: string = 'eviction'
+): { score: number; red_flags: string[]; compliance: string[] } {
   const red_flags: string[] = [];
   const compliance: string[] = [];
 
@@ -264,6 +276,97 @@ export function computeStrength(facts: CaseFacts): { score: number; red_flags: s
         'You indicated a claim for damages but did not list any damage items – add a short description and amount for each.'
       );
       score -= 5;
+    }
+  } else if (caseType === 'tenancy_agreement') {
+    score = 65;
+
+    const hasProperty =
+      hasText(facts.property.address_line1) ||
+      hasText(facts.property.address?.line1) ||
+      hasText((facts as any).property_address_line1);
+    const hasPostcode =
+      hasText(facts.property.postcode) ||
+      hasText(facts.property.address?.postcode) ||
+      hasText((facts as any).property_address_postcode);
+    const hasLandlord = hasText(facts.parties.landlord.name) || hasText((facts as any).landlord_full_name);
+    const hasTenant =
+      facts.parties.tenants.some((tenant) => hasText(tenant.name)) ||
+      (Array.isArray((facts as any).tenants) && (facts as any).tenants.length > 0);
+    const hasRent = Boolean(facts.tenancy.rent_amount && facts.tenancy.rent_amount > 0);
+    const hasStartDate = hasText(facts.tenancy.start_date) || hasText((facts as any).tenancy_start_date);
+
+    if (hasProperty && hasPostcode) score += 8;
+    else {
+      compliance.push('Check the property address and postcode before generating the agreement.');
+      score -= 8;
+    }
+
+    if (hasLandlord) score += 7;
+    else {
+      compliance.push('Add the landlord name exactly as it should appear in the agreement.');
+      score -= 7;
+    }
+
+    if (hasTenant) score += 7;
+    else {
+      compliance.push('Add every tenant or occupier who should be named in the agreement.');
+      score -= 7;
+    }
+
+    if (hasRent) score += 5;
+    else {
+      compliance.push('Check the rent amount and payment frequency before generating the agreement.');
+      score -= 5;
+    }
+
+    if (hasStartDate) score += 5;
+    else {
+      compliance.push('Add the tenancy start date before generating the agreement.');
+      score -= 5;
+    }
+
+    if ((facts.tenancy as any).deposit_taken === true && facts.tenancy.deposit_protected === false) {
+      compliance.push('If a deposit is taken, make sure the deposit protection and prescribed information steps are completed on time.');
+    }
+  } else if (caseType === 'rent_increase') {
+    score = 65;
+
+    const section13 = (facts as any).section13 || {};
+    const currentRent =
+      Number(section13?.tenancy?.currentRentAmount || section13?.current_rent_amount || facts.tenancy.rent_amount || 0);
+    const proposedRent =
+      Number(section13?.proposal?.proposedRentAmount || section13?.proposed_rent_amount || (facts as any).new_rent_amount || 0);
+    const effectiveDate =
+      section13?.proposal?.proposedStartDate ||
+      section13?.proposal?.effectiveDate ||
+      section13?.proposed_start_date ||
+      (facts as any).rent_increase_effective_date;
+    const serviceDate =
+      section13?.proposal?.serviceDate ||
+      section13?.notice_service_date ||
+      (facts as any).notice_service_date;
+
+    if (currentRent > 0) score += 6;
+    else {
+      compliance.push('Check the current rent before preparing the Section 13 notice.');
+      score -= 6;
+    }
+
+    if (proposedRent > 0) score += 6;
+    else {
+      compliance.push('Add the proposed rent before preparing the Section 13 notice.');
+      score -= 6;
+    }
+
+    if (hasText(effectiveDate)) score += 6;
+    else {
+      compliance.push('Add the date the new rent should start so the Form 4A timing can be checked.');
+      score -= 6;
+    }
+
+    if (hasText(serviceDate)) score += 4;
+    else {
+      compliance.push('Record the expected service date and method so the Section 13 service record is complete.');
     }
   } else {
     // =======================================
@@ -617,11 +720,12 @@ function buildCaseHealth(
 function craftAskHeavenAnswer(
   question: string | undefined,
   facts: CaseFacts,
-  jurisdiction: string
+  jurisdiction: string,
+  caseType: string = 'eviction'
 ) {
   if (!question) return null;
 
-  const { score, red_flags, compliance } = computeStrength(facts);
+  const { score, red_flags, compliance } = computeStrength(facts, caseType);
   const summary = buildCaseSummary(facts, jurisdiction);
   const arrears = facts.issues.rent_arrears.total_arrears;
   // Interest: only show if user explicitly opted in via charge_interest === true
@@ -754,6 +858,9 @@ export async function POST(request: Request) {
     // Load flat WizardFacts from DB and convert to nested CaseFacts for analysis
     const wizardFacts = await getOrCreateWizardFacts(adminSupabase, case_id);
     const facts = wizardFactsToCaseFacts(wizardFacts);
+    if ((wizardFacts as any)?.section13) {
+      (facts as any).section13 = (wizardFacts as any).section13;
+    }
 
     if (!canonicalJurisdiction) {
       canonicalJurisdiction =
@@ -819,12 +926,13 @@ export async function POST(request: Request) {
       (facts.meta?.original_product as string | undefined) ||
       (caseData as any)?.product ||
       (caseData.case_type === 'eviction' ? 'complete_pack' : caseData.case_type);
-    const { score, red_flags, compliance } = computeStrength(facts);
+    const { score, red_flags, compliance } = computeStrength(facts, caseData.case_type);
     const summary = buildCaseSummary(facts, canonicalJurisdiction);
     const askHeavenAnswer = craftAskHeavenAnswer(
       question,
       facts,
-      canonicalJurisdiction
+      canonicalJurisdiction,
+      caseData.case_type
     );
 
     // NEW: compute structured case_health block for the UI (money-claim aware)
@@ -1275,6 +1383,13 @@ export async function POST(request: Request) {
       }
     } else if (caseData.case_type === 'money_claim') {
       recommended_route_label = 'Money claim (County Court / Simple Procedure)';
+    } else if (caseData.case_type === 'tenancy_agreement') {
+      recommended_route_label = 'Tenancy agreement document pack';
+    } else if (caseData.case_type === 'rent_increase') {
+      recommended_route_label =
+        effectiveRoute === 'section13_defensive'
+          ? 'Section 13 tribunal-ready rent increase pack'
+          : 'Section 13 supported rent increase pack';
     }
 
     // Readiness flags - NEVER used to block generation or payment, only for messaging
@@ -1303,6 +1418,18 @@ export async function POST(request: Request) {
         readiness_summary =
           'Your money claim can still be prepared, but a few details should be checked before issuing. We will generate the pack and highlight the points to review.';
       }
+    } else if (caseData.case_type === 'tenancy_agreement') {
+      is_court_ready = red_flags.length === 0;
+      readiness_summary =
+        compliance.length > 0
+          ? 'Your tenancy agreement can be prepared from the answers provided. Check the highlighted setup points before you sign or serve the pack.'
+          : 'Your tenancy agreement answers look ready for document generation. Check the final agreement against your records before signing.';
+    } else if (caseData.case_type === 'rent_increase') {
+      is_court_ready = red_flags.length === 0;
+      readiness_summary =
+        compliance.length > 0
+          ? 'Your Section 13 rent increase pack can be prepared, but check the highlighted timing, rent, and service points before serving.'
+          : 'Your Section 13 rent increase answers look ready for document generation. Check the Form 4A, market evidence, and service record before serving.';
     }
 
     const wf = wizardFacts as any;
@@ -1441,6 +1568,17 @@ export async function POST(request: Request) {
       // HMO
       is_hmo: wf?.is_hmo ?? wf?.property?.is_hmo,
       hmo_license_number: wf?.hmo_licence_number ?? wf?.hmo_license_number,
+
+      // Section 13 rent increase fields
+      section13: wf?.section13,
+      current_rent_amount:
+        wf?.section13?.tenancy?.currentRentAmount ?? wf?.current_rent_amount ?? wf?.rent_amount,
+      proposed_rent_amount:
+        wf?.section13?.proposal?.proposedRentAmount ?? wf?.proposed_rent_amount ?? wf?.new_rent_amount,
+      proposed_start_date:
+        wf?.section13?.proposal?.proposedStartDate ?? wf?.proposed_start_date ?? wf?.rent_increase_effective_date,
+      notice_service_date:
+        wf?.section13?.proposal?.serviceDate ?? wf?.notice_service_date,
     };
 
     return NextResponse.json({

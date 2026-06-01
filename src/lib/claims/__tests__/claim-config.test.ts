@@ -40,14 +40,12 @@ describe('claim type configs', () => {
     );
   });
 
-  it('keeps landlord claims on the existing money-claim generator route', () => {
+  it('keeps landlord claims inside the claims app while using the landlord document model', () => {
     const landlordConfig = CLAIM_TYPE_CONFIGS.find((config) => config.id === 'landlord_debt_claim');
 
     expect(landlordConfig?.flowMode).toBe('landlord_money_claim');
-    expect(getClaimHandoffHref(landlordConfig!)).toBe(
-      '/wizard/flow?type=money_claim&product=money_claim&src=claims_app&topic=debt&claim_category=landlord_debt_claim'
-    );
-    expect(landlordConfig?.packOutputs.join(' ')).toContain('Current landlord Money Claim Pack');
+    expect(getClaimHandoffHref(landlordConfig!)).toBe('/claims?claim=landlord-debt-claim');
+    expect(landlordConfig?.packOutputs.join(' ')).toContain('Landlord debt claim pack');
   });
 
   it('keeps generic claim configs out of landlord-only flow mode and copy', () => {
@@ -63,7 +61,6 @@ describe('claim type configs', () => {
           'defendant.address',
           'generic_claim.category',
           'generic_claim.summary',
-          'generic_claim.key_dates',
           'generic_claim.line_items',
           'generic_claim.evidence_items',
           'generic_claim.pre_action',
@@ -76,5 +73,38 @@ describe('claim type configs', () => {
       expect(getGenericClaimLegalRules(config.id)?.official_forms).toContain('N1 claim form');
       expect(getGenericClaimLegalRules(config.id)?.required_elements.length).toBeGreaterThanOrEqual(4);
     }
+  });
+
+  it('asks fuller pack-generation questions for generic and landlord claim outputs', () => {
+    const genericConfig = CLAIM_TYPE_CONFIGS.find((config) => config.id === 'unpaid_invoice')!;
+    const genericFields = genericConfig.stepFlow.flatMap((step) => step.questions.map((question) => question.fieldPath));
+
+    expect(genericFields).toEqual(
+      expect.arrayContaining([
+        'claimant.email',
+        'claimant.phone',
+        'defendant.email',
+        'generic_claim.key_dates.pre_action_sent_date',
+        'generic_claim.key_dates.response_deadline',
+        'generic_claim.key_dates.interest_start_date',
+        'generic_claim.preferred_filing_route',
+      ])
+    );
+
+    const landlordConfig = CLAIM_TYPE_CONFIGS.find((config) => config.id === 'landlord_debt_claim')!;
+    const landlordFields = landlordConfig.stepFlow.flatMap((step) => step.questions.map((question) => question.fieldPath));
+
+    expect(landlordFields).toEqual(
+      expect.arrayContaining([
+        'landlord_address_line1',
+        'landlord_address_postcode',
+        'defendant_address_line1',
+        'defendant_address_postcode',
+        'property_address_postcode',
+        'rent_due_day',
+        'money_claim.attempts_to_resolve',
+        'money_claim.interest_start_date',
+      ])
+    );
   });
 });

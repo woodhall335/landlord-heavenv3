@@ -37,7 +37,117 @@ function setNestedValue(target: Record<string, any>, path: string, value: unknow
   cursor[parts[parts.length - 1]] = value;
 }
 
-function buildCollectedFacts(claimCategory: ClaimTypeId, answers: Record<string, ClaimWizardAnswerValue>) {
+type ParsedClaimLineItem = {
+  description: string;
+  amount: number;
+};
+
+function parseMoneyAmount(value: unknown): number {
+  if (typeof value === 'number' && Number.isFinite(value)) return value;
+  if (typeof value !== 'string') return 0;
+  const parsed = Number(value.replace(/[^0-9.-]/g, ''));
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function parseClaimLineItems(value: unknown): ParsedClaimLineItem[] {
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => {
+        if (!item || typeof item !== 'object') return null;
+        const record = item as Record<string, unknown>;
+        const description = String(record.description ?? record.label ?? '').trim();
+        const amount = parseMoneyAmount(record.amount);
+        return description ? { description, amount } : null;
+      })
+      .filter((item): item is ParsedClaimLineItem => Boolean(item));
+  }
+
+  const text = typeof value === 'string' ? value : '';
+  return text
+    .split(/\r?\n|;/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const amountMatch = line.match(/(\p{Sc}?\s*\d+(?:,\d{3})*(?:\.\d{1,2})?)\s*$/u);
+      const amount = amountMatch ? parseMoneyAmount(amountMatch[1]) : 0;
+      const description = amountMatch
+        ? line.slice(0, amountMatch.index).replace(/[-:,/\s]+$/, '').trim()
+        : line;
+      return {
+        description: description || line,
+        amount,
+      };
+    });
+}
+
+function normaliseLandlordDebtFacts(facts: Record<string, any>) {
+  const arrearsItems = parseClaimLineItems(facts.arrears_items);
+  const damageItems = parseClaimLineItems(facts.money_claim?.damage_items);
+  const evidenceItems = Array.isArray(facts.money_claim?.evidence_items)
+    ? facts.money_claim.evidence_items
+    : [];
+
+  facts.claiming_rent_arrears = arrearsItems.length > 0;
+  facts.claiming_damages = damageItems.length > 0;
+  facts.claiming_other = damageItems.some((item) => /utility|council|bill|other|charge/i.test(item.description));
+  facts.claim_types = [
+    ...(facts.claiming_rent_arrears ? ['rent_arrears'] : []),
+    ...(facts.claiming_damages ? ['property_damage'] : []),
+    ...(facts.claiming_other ? ['other_tenant_debt'] : []),
+  ];
+
+  facts.landlord_address = facts.landlord_address_line1;
+  facts.landlord_postcode = facts.landlord_address_postcode;
+  facts.tenant_address = facts.defendant_address_line1;
+  facts.tenant_postcode = facts.defendant_address_postcode;
+  facts.property_address = facts.property_address_line1;
+  facts.property_postcode = facts.property_address_postcode;
+  facts.arrears_items = arrearsItems.map((item) => ({
+    period: item.description,
+    amount_due: item.amount,
+    amount_paid: 0,
+    arrears: item.amount,
+    notes: item.description,
+  }));
+  facts.total_arrears = facts.arrears_items.reduce((total: number, item: any) => total + (item.arrears || 0), 0);
+
+  facts.issues = {
+    ...(facts.issues || {}),
+    rent_arrears: {
+      ...(facts.issues?.rent_arrears || {}),
+      has_arrears: facts.claiming_rent_arrears,
+      arrears_items: facts.arrears_items,
+      total_arrears: facts.total_arrears,
+    },
+  };
+
+  facts.money_claim = {
+    ...(facts.money_claim || {}),
+    damage_items: damageItems,
+    damage_claim: damageItems.length > 0,
+    attempts_to_resolve: facts.money_claim?.attempts_to_resolve,
+    interest_rate: facts.money_claim?.charge_interest === true ? facts.money_claim?.interest_rate ?? 8 : facts.money_claim?.interest_rate,
+    other_amounts_types: damageItems.map((item) => {
+      if (/clean/i.test(item.description)) return 'cleaning';
+      if (/utility|bill/i.test(item.description)) return 'unpaid_utilities';
+      if (/council/i.test(item.description)) return 'unpaid_council_tax';
+      if (/other|charge/i.test(item.description)) return 'other_charges';
+      return 'property_damage';
+    }),
+  };
+  facts.attempts_to_resolve = facts.money_claim.attempts_to_resolve;
+
+  facts.evidence = {
+    ...(facts.evidence || {}),
+    tenancy_agreement_uploaded: evidenceItems.includes('tenancy_agreement'),
+    rent_schedule_uploaded: evidenceItems.includes('rent_schedule'),
+    correspondence_uploaded: evidenceItems.includes('chaser_correspondence'),
+    other_evidence_uploaded: evidenceItems.includes('deposit_statement'),
+    photos_uploaded: evidenceItems.includes('damage_photos'),
+  };
+}
+
+export function buildCollectedFacts(claimCategory: ClaimTypeId, answers: Record<string, ClaimWizardAnswerValue>) {
   const config = CLAIM_CONFIGS_BY_ID[claimCategory];
   const facts: Record<string, any> = {
     ...answers,
@@ -64,6 +174,10 @@ function buildCollectedFacts(claimCategory: ClaimTypeId, answers: Record<string,
     category: claimCategory,
     flow_mode: config.flowMode,
   };
+
+  if (config.flowMode === 'landlord_money_claim') {
+    normaliseLandlordDebtFacts(facts);
+  }
 
   return facts;
 }

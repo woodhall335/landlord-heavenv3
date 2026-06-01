@@ -3,19 +3,19 @@ import { SEO_PRICES } from '@/lib/pricing/products';
 export const PRODUCT_OWNER_METADATA = {
   noticeOnly: {
     path: '/products/notice-only',
-    title: `Section 8 Eviction Notice & Service File | ${SEO_PRICES.evictionNotice.display}`,
+    title: `Serve a Section 8 Form 3A Notice | ${SEO_PRICES.evictionNotice.display}`,
     description:
-      'Create an England landlord Section 8 eviction notice file with Form 3A, N215, arrears schedule, service instructions, and pre-service checks.',
+      'Create an England Section 8 Form 3A notice file with ground selection, notice dates, N215 service proof, and pre-service checks before the tenant receives it.',
   },
   completePack: {
     path: '/products/complete-pack',
-    title: `Section 8 Possession Claim Pack | N5 & N119 | ${SEO_PRICES.evictionBundle.display}`,
+    title: `Prepare Section 8 Court Papers | N5 & N119 | ${SEO_PRICES.evictionBundle.display}`,
     description:
-      'Evict a tenant through court with an England complete eviction pack: Section 8 possession claim, court forms N5 and N119, evidence, and hearing support.',
+      'Prepare England Section 8 court papers after notice, including N5 and N119, evidence prompts, witness statement support, and hearing preparation.',
   },
   moneyClaim: {
     path: '/products/money-claim',
-    title: `Rent Arrears Money Claim Pack | MCOL & N1 | ${SEO_PRICES.moneyClaim.display}`,
+    title: `Recover Unpaid Rent Money Claim Pack | MCOL & N1 | ${SEO_PRICES.moneyClaim.display}`,
     description:
       'Recover unpaid rent, property damage, or tenant debt with a landlord money claim pack: letter before claim, particulars, debt schedule, and MCOL/N1 guidance.',
   },

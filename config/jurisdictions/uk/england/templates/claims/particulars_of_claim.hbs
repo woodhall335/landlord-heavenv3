@@ -39,6 +39,12 @@
 
 <h2>Pre-action conduct</h2>
 <p>{{pre_action_summary}}</p>
+{{#if pre_action_sent_date}}
+<p>The most recent clear demand was sent on {{pre_action_sent_date}}.</p>
+{{/if}}
+{{#if response_deadline}}
+<p>The defendant was asked to respond by {{response_deadline}}.</p>
+{{/if}}
 <p><em>{{legal_rules.pre_action_rule}}</em></p>
 
 <h2>Amount claimed</h2>
@@ -51,7 +57,7 @@
 <h2>Interest</h2>
 <p>
   The claimant has asked for interest to be considered. The pack records a review rate of
-  {{interest_rate}}% per year and a daily figure of {{currency daily_interest}}. The claimant should check
+  {{interest_rate}}% per year{{#if interest_start_date}} from {{interest_start_date}}{{/if}} and a daily figure of {{currency daily_interest}}. The claimant should check
   the legal basis before filing.
 </p>
 {{/if}}
