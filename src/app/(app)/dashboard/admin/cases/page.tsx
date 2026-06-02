@@ -24,6 +24,9 @@ interface AdminCasesApiResponse {
     paid_or_generated: number;
     requires_action: number;
     failed_fulfillment: number;
+    started_drafts: number;
+    unpaid_started: number;
+    anonymous_started: number;
     preview_abandoned: number;
     edit_window_open: number;
     docs_ready: number;
@@ -35,14 +38,20 @@ interface AdminCasesApiResponse {
     pageSize: number;
     totalCount: number;
     totalPages: number;
+    cleanupPolicy?: {
+      appliesTo: string;
+      retentionDays: number;
+      excludes: string[];
+    };
   };
   error?: string;
 }
 
-type ModalAction = "retry" | "resume" | "regenerate" | "reopen" | "restart" | null;
+type ModalAction = "retry" | "resume" | "regenerate" | "reopen" | "restart" | "delete" | null;
 
 const presetOptions: Array<{ value: AdminCasesPreset; label: string }> = [
   { value: "needs_attention", label: "Needs attention" },
+  { value: "started_drafts", label: "Started drafts" },
   { value: "paid_awaiting_docs", label: "Paid awaiting docs" },
   { value: "preview_abandoned", label: "Preview abandoned" },
   { value: "edit_window_open", label: "Edit window open" },
@@ -94,9 +103,11 @@ export default function AdminCasesPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [stats, setStats] = useState<AdminCasesApiResponse["stats"] | null>(null);
+  const [cleanupPolicy, setCleanupPolicy] = useState<AdminCasesApiResponse["meta"]["cleanupPolicy"] | null>(null);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [modalAction, setModalAction] = useState<ModalAction>(null);
   const [selectedCase, setSelectedCase] = useState<AdminCaseRecord | null>(null);
+  const [deleteConfirmationText, setDeleteConfirmationText] = useState("");
   const [actionLoading, setActionLoading] = useState(false);
   const [selectedCaseIds, setSelectedCaseIds] = useState<string[]>([]);
   const [bulkRestartLoading, setBulkRestartLoading] = useState(false);
@@ -128,6 +139,7 @@ export default function AdminCasesPage() {
         setHasAccess(false);
         setCases([]);
         setStats(null);
+        setCleanupPolicy(null);
         setTotalPages(1);
         setTotalCount(0);
         return;
@@ -140,12 +152,14 @@ export default function AdminCasesPage() {
       setHasAccess(true);
       setCases(data.cases || []);
       setStats(data.stats);
+      setCleanupPolicy(data.meta?.cleanupPolicy || null);
       setTotalPages(data.meta?.totalPages || 1);
       setTotalCount(data.meta?.totalCount || 0);
     } catch (error: any) {
       console.error("Error loading admin cases:", error);
       setCases([]);
       setStats(null);
+      setCleanupPolicy(null);
       setTotalPages(1);
       setTotalCount(0);
       setMessage({ type: "error", text: error.message || "Failed to load cases" });
@@ -194,11 +208,13 @@ export default function AdminCasesPage() {
   const openModal = (action: Exclude<ModalAction, null>, caseItem: AdminCaseRecord) => {
     setSelectedCase(caseItem);
     setModalAction(action);
+    setDeleteConfirmationText("");
   };
 
   const closeModal = () => {
     setSelectedCase(null);
     setModalAction(null);
+    setDeleteConfirmationText("");
   };
 
   const handleAction = async () => {
@@ -206,6 +222,32 @@ export default function AdminCasesPage() {
 
     setActionLoading(true);
     try {
+      if (modalAction === "delete") {
+        if (deleteConfirmationText !== "DELETE") {
+          throw new Error("Type DELETE to confirm permanent deletion.");
+        }
+
+        const response = await fetch(`/api/admin/cases/${selectedCase.case_id}`, {
+          method: "DELETE",
+        });
+        const payload = await response.json().catch(() => ({}));
+
+        if (!response.ok || !payload.ok) {
+          throw new Error(payload.error || payload.message || "Failed to delete case");
+        }
+
+        const detachedOrders = Number(payload.order_links_detached_by_on_delete_set_null || 0);
+        const storageRemoved = Number(payload.storage_removed || 0);
+        setMessage({
+          type: "success",
+          text: `Case permanently deleted. ${detachedOrders} linked order${detachedOrders === 1 ? "" : "s"} detached; ${storageRemoved} document file${storageRemoved === 1 ? "" : "s"} removed.`,
+        });
+        setCases((current) => current.filter((caseItem) => caseItem.case_id !== selectedCase.case_id));
+        closeModal();
+        await loadCases();
+        return;
+      }
+
       const actionPath =
         modalAction === "retry"
           ? "retry-fulfillment"
@@ -330,6 +372,8 @@ export default function AdminCasesPage() {
       ? "Regenerate final documents?"
       : modalAction === "restart"
       ? "Send restart link?"
+      : modalAction === "delete"
+      ? "Permanently delete this case?"
       : "Reopen edit window?";
 
   const modalMessage =
@@ -341,6 +385,23 @@ export default function AdminCasesPage() {
       ? "This will delete and regenerate the current final documents from the latest case data."
       : modalAction === "restart"
       ? "This will email the customer a secure link to resume their saved draft and continue to checkout."
+      : modalAction === "delete"
+      ? (
+        <div className="space-y-3 text-left">
+          <p>
+            This permanently deletes the case and linked case data. Linked orders are kept, but their case link is removed by the database.
+          </p>
+          <p className="font-semibold text-red-700">
+            This cannot be undone. Type DELETE to confirm.
+          </p>
+          <input
+            value={deleteConfirmationText}
+            onChange={(event) => setDeleteConfirmationText(event.target.value)}
+            placeholder="DELETE"
+            className="w-full rounded-lg border border-red-200 px-3 py-2 text-sm font-semibold text-charcoal outline-none focus:border-red-500 focus:ring-2 focus:ring-red-100"
+          />
+        </div>
+      )
       : "This will reopen the 30-day edit window from now so support can update answers and regenerate documents.";
 
   if (loading) {
@@ -377,7 +438,7 @@ export default function AdminCasesPage() {
         <div className="mb-8">
           <h1 className="mb-2 text-3xl font-bold text-charcoal">Admin Case Manager</h1>
           <p className="text-gray-600">
-            Support and operations console for paid or generated cases across all users.
+            Support and operations console for paid cases, generated packs, abandoned previews, and started drafts.
           </p>
         </div>
 
@@ -393,7 +454,7 @@ export default function AdminCasesPage() {
           </div>
         )}
 
-        <div className="mb-6 grid gap-4 md:grid-cols-3 xl:grid-cols-7">
+        <div className="mb-6 grid gap-4 md:grid-cols-3 xl:grid-cols-10">
           <div className="rounded-lg border border-gray-200 bg-white p-5">
             <p className="text-sm text-gray-600">Paid / Generated</p>
             <p className="mt-2 text-3xl font-bold text-charcoal">{stats?.paid_or_generated || 0}</p>
@@ -405,6 +466,18 @@ export default function AdminCasesPage() {
           <div className="rounded-lg border border-gray-200 bg-white p-5">
             <p className="text-sm text-gray-600">Failed Fulfillment</p>
             <p className="mt-2 text-3xl font-bold text-red-700">{stats?.failed_fulfillment || 0}</p>
+          </div>
+          <div className="rounded-lg border border-gray-200 bg-white p-5">
+            <p className="text-sm text-gray-600">Started Drafts</p>
+            <p className="mt-2 text-3xl font-bold text-blue-700">{stats?.started_drafts || 0}</p>
+          </div>
+          <div className="rounded-lg border border-gray-200 bg-white p-5">
+            <p className="text-sm text-gray-600">Unpaid Started</p>
+            <p className="mt-2 text-3xl font-bold text-blue-700">{stats?.unpaid_started || 0}</p>
+          </div>
+          <div className="rounded-lg border border-gray-200 bg-white p-5">
+            <p className="text-sm text-gray-600">Anonymous Started</p>
+            <p className="mt-2 text-3xl font-bold text-slate-700">{stats?.anonymous_started || 0}</p>
           </div>
           <div className="rounded-lg border border-gray-200 bg-white p-5">
             <p className="text-sm text-gray-600">Preview Abandoned</p>
@@ -440,6 +513,15 @@ export default function AdminCasesPage() {
             </button>
           ))}
         </div>
+
+        {preset === "started_drafts" && (
+          <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-950">
+            <p className="font-semibold">Started draft cleanup</p>
+            <p className="mt-1">
+              Automatic cleanup currently applies only to {cleanupPolicy?.appliesTo || "anonymous unclaimed wizard cases with no linked checkout order"} older than {cleanupPolicy?.retentionDays || 14} days. Logged-in drafts and cases with orders stay visible here until an admin deletes them.
+            </p>
+          </div>
+        )}
 
         <div className="mb-6 rounded-lg border border-gray-200 bg-white p-6">
           <div className="grid gap-4 md:grid-cols-4 xl:grid-cols-8">
@@ -648,6 +730,16 @@ export default function AdminCasesPage() {
                             Preview abandoned
                           </div>
                         )}
+                        {caseItem.is_started_draft && (
+                          <div className="mt-2 inline-block rounded-full bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-700">
+                            Started draft
+                          </div>
+                        )}
+                        {caseItem.is_anonymous_started && (
+                          <div className="mt-2 inline-block rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700">
+                            Anonymous draft
+                          </div>
+                        )}
                       </td>
                       <td className="p-4">
                         <span className={`inline-block rounded-full px-2 py-1 text-xs font-semibold ${statusPillClass(caseItem.payment_status)}`}>
@@ -768,6 +860,9 @@ export default function AdminCasesPage() {
                               Reopen edit window
                             </button>
                           )}
+                          <button onClick={() => openModal("delete", caseItem)} className="text-left font-semibold text-red-700 hover:text-red-800">
+                            Delete case
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -808,9 +903,10 @@ export default function AdminCasesPage() {
           onConfirm={handleAction}
           title={modalTitle}
           message={modalMessage}
-          confirmLabel="Confirm"
-          variant={modalAction === "regenerate" ? "warning" : "default"}
+          confirmLabel={modalAction === "delete" ? "Delete permanently" : "Confirm"}
+          variant={modalAction === "delete" ? "danger" : modalAction === "regenerate" ? "warning" : "default"}
           isLoading={actionLoading}
+          confirmDisabled={modalAction === "delete" && deleteConfirmationText !== "DELETE"}
         />
       </Container>
     </div>

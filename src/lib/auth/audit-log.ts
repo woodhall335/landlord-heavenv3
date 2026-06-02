@@ -18,7 +18,8 @@ export type MutationAction =
   | 'admin_retry_fulfillment'
   | 'admin_resume_fulfillment'
   | 'admin_document_regenerate'
-  | 'admin_reopen_edit_window';
+  | 'admin_reopen_edit_window'
+  | 'admin_case_hard_deleted';
 
 export interface MutationLogEntry {
   id?: string;

@@ -7,6 +7,7 @@ import {
   type AdminCasesSortBy,
   getAdminCaseRiskRank,
   getAdminProductName,
+  isAdminStartedDraftCase,
 } from '@/lib/admin/case-manager';
 import { deriveVisibleFulfillmentState } from '@/lib/payments/fulfillment-routing';
 import {
@@ -86,6 +87,9 @@ type AdminCasesResponse = {
     paid_or_generated: number;
     requires_action: number;
     failed_fulfillment: number;
+    started_drafts: number;
+    unpaid_started: number;
+    anonymous_started: number;
     preview_abandoned: number;
     edit_window_open: number;
     docs_ready: number;
@@ -97,6 +101,11 @@ type AdminCasesResponse = {
     pageSize: number;
     totalCount: number;
     totalPages: number;
+    cleanupPolicy: {
+      appliesTo: string;
+      retentionDays: number;
+      excludes: string[];
+    };
   };
 };
 
@@ -147,6 +156,8 @@ function applyPreset(caseItem: AdminCaseRecord, preset: AdminCasesPreset): boole
       );
     case 'paid_awaiting_docs':
       return caseItem.payment_status === 'paid' && !caseItem.has_final_documents;
+    case 'started_drafts':
+      return caseItem.is_started_draft;
     case 'preview_abandoned':
       return caseItem.is_preview_abandoned;
     case 'edit_window_open':
@@ -463,6 +474,7 @@ export async function GET(request: NextRequest) {
       const productType = deriveCaseProductType(caseItem, relatedOrder || null);
       const recoveryContact = deriveCaseRecoveryContact(caseItem, userRecord || null);
       const paymentStatusValue = relatedOrder?.payment_status || null;
+      const hasAnyOrder = Boolean(relatedOrder?.id);
       const visibleFulfillmentStatus = visibleFulfillmentState.fulfillmentStatus;
       const requiresAction = visibleFulfillmentStatus === 'requires_action';
       const failedFulfillment = visibleFulfillmentStatus === 'failed';
@@ -474,6 +486,14 @@ export async function GET(request: NextRequest) {
         hasPreviewDocuments: previewDocumentCount > 0,
       });
       const recoveryEventSummary = recoveryEventByCase.get(caseItem.id) || null;
+      const isStartedDraft = isAdminStartedDraftCase({
+        status: caseItem.status,
+        payment_status: paymentStatusValue,
+        has_any_order: hasAnyOrder,
+        has_final_documents: hasFinalDocuments,
+        wizard_progress: caseItem.wizard_progress || 0,
+        wizard_completed_at: caseItem.wizard_completed_at || null,
+      });
 
       return {
         case_id: caseItem.id,
@@ -490,6 +510,7 @@ export async function GET(request: NextRequest) {
         product_type: productType,
         product_name: getAdminProductName(productType),
         payment_status: paymentStatusValue,
+        has_any_order: hasAnyOrder,
         fulfillment_status: visibleFulfillmentStatus,
         has_final_documents: hasFinalDocuments,
         final_document_count: finalDocumentCount,
@@ -502,6 +523,8 @@ export async function GET(request: NextRequest) {
         failed_fulfillment: failedFulfillment,
         documents_ready: documentsReady,
         is_preview_abandoned: previewAbandoned,
+        is_started_draft: isStartedDraft,
+        is_anonymous_started: isStartedDraft && !caseItem.user_id,
         recovery_email: recoveryContact.email,
         recovery_last_event_type: recoveryEventSummary?.lastEventType || null,
         recovery_last_event_at: recoveryEventSummary?.lastEventAt || null,
@@ -525,12 +548,7 @@ export async function GET(request: NextRequest) {
       };
     });
 
-    let filteredCases = normalizedCases.filter(
-      (caseItem) =>
-        caseItem.payment_status === 'paid' ||
-        caseItem.has_final_documents ||
-        caseItem.is_preview_abandoned
-    );
+    let filteredCases = normalizedCases;
 
     if (preset !== 'all') {
       filteredCases = filteredCases.filter((caseItem) => applyPreset(caseItem, preset));
@@ -611,9 +629,22 @@ export async function GET(request: NextRequest) {
       cases: paginatedCases,
       stats: {
         total: filteredCases.length,
-        paid_or_generated: filteredCases.length,
+        paid_or_generated: filteredCases.filter(
+          (caseItem) =>
+            caseItem.payment_status === 'paid' ||
+            caseItem.has_final_documents ||
+            caseItem.is_preview_abandoned
+        ).length,
         requires_action: filteredCases.filter((caseItem) => caseItem.requires_action).length,
         failed_fulfillment: filteredCases.filter((caseItem) => caseItem.failed_fulfillment).length,
+        started_drafts: filteredCases.filter((caseItem) => caseItem.is_started_draft).length,
+        unpaid_started: filteredCases.filter(
+          (caseItem) =>
+            caseItem.is_started_draft &&
+            caseItem.payment_status !== 'paid' &&
+            !caseItem.has_final_documents
+        ).length,
+        anonymous_started: filteredCases.filter((caseItem) => caseItem.is_anonymous_started).length,
         preview_abandoned: filteredCases.filter((caseItem) => caseItem.is_preview_abandoned).length,
         edit_window_open: filteredCases.filter((caseItem) => caseItem.edit_window_open).length,
         docs_ready: filteredCases.filter((caseItem) => caseItem.documents_ready).length,
@@ -625,6 +656,15 @@ export async function GET(request: NextRequest) {
         pageSize,
         totalCount,
         totalPages,
+        cleanupPolicy: {
+          appliesTo: 'Anonymous unclaimed wizard cases with no linked checkout order',
+          retentionDays: 14,
+          excludes: [
+            'Logged-in or claimed drafts',
+            'Cases with a linked order',
+            'Archived cases',
+          ],
+        },
       },
     };
 

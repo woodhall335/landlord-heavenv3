@@ -14,6 +14,7 @@ interface ConfirmationModalProps {
   cancelLabel?: string;
   variant?: 'danger' | 'warning' | 'default';
   isLoading?: boolean;
+  confirmDisabled?: boolean;
 }
 
 export function ConfirmationModal({
@@ -26,6 +27,7 @@ export function ConfirmationModal({
   cancelLabel = 'Cancel',
   variant = 'default',
   isLoading = false,
+  confirmDisabled = false,
 }: ConfirmationModalProps) {
   if (!isOpen) return null;
 
@@ -95,7 +97,7 @@ export function ConfirmationModal({
           </Button>
           <button
             onClick={onConfirm}
-            disabled={isLoading}
+            disabled={isLoading || confirmDisabled}
             className={`w-full sm:w-auto px-6 py-2.5 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 ${styles.confirmBg}`}
           >
             {isLoading ? (

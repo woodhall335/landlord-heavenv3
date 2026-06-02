@@ -4,6 +4,7 @@ export type AdminCasesPreset =
   | 'all'
   | 'needs_attention'
   | 'paid_awaiting_docs'
+  | 'started_drafts'
   | 'preview_abandoned'
   | 'edit_window_open'
   | 'docs_ready';
@@ -25,6 +26,7 @@ export interface AdminCaseRecord {
   product_type: string | null;
   product_name: string | null;
   payment_status: string | null;
+  has_any_order: boolean;
   fulfillment_status: string | null;
   has_final_documents: boolean;
   final_document_count: number;
@@ -37,6 +39,8 @@ export interface AdminCaseRecord {
   failed_fulfillment: boolean;
   documents_ready: boolean;
   is_preview_abandoned: boolean;
+  is_started_draft: boolean;
+  is_anonymous_started: boolean;
   recovery_email: string | null;
   recovery_last_event_type: string | null;
   recovery_last_event_at: string | null;
@@ -57,6 +61,9 @@ export interface AdminCasesStats {
   paid_or_generated: number;
   requires_action: number;
   failed_fulfillment: number;
+  started_drafts: number;
+  unpaid_started: number;
+  anonymous_started: number;
   preview_abandoned: number;
   edit_window_open: number;
   docs_ready: number;
@@ -85,6 +92,26 @@ export function getAdminJurisdictionLabel(jurisdiction: string): string {
 
 export function getAdminProductName(productType: string | null): string {
   return getAdminProductLabel(productType);
+}
+
+export function isAdminStartedDraftCase(caseItem: {
+  status: string | null;
+  payment_status: string | null;
+  has_any_order: boolean;
+  has_final_documents: boolean;
+  wizard_progress: number | null;
+  wizard_completed_at?: string | null;
+}): boolean {
+  if (caseItem.status === 'archived') return false;
+  if (caseItem.payment_status === 'paid') return false;
+  if (caseItem.has_any_order) return false;
+  if (caseItem.has_final_documents) return false;
+
+  return (
+    caseItem.status === 'in_progress' ||
+    Boolean(caseItem.wizard_completed_at) ||
+    Number(caseItem.wizard_progress || 0) > 0
+  );
 }
 
 export function buildAdminCaseEditHref(caseItem: Pick<AdminCaseRecord, 'case_id' | 'case_type' | 'jurisdiction' | 'product_type'>): string {
