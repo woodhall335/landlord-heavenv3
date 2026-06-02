@@ -20,6 +20,10 @@ import { isAdmin } from '@/lib/auth';
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
 import { getAdminProductLabel } from '@/lib/admin/products';
+import {
+  buildAssistedEvidenceSummary,
+  normalizeAssistedPrepService,
+} from '@/lib/assisted-prep';
 
 export async function GET(request: NextRequest) {
   try {
@@ -109,6 +113,16 @@ export async function GET(request: NextRequest) {
           .single();
         const caseData = order.case_id ? caseById.get(order.case_id) : null;
         const assistedIntake = caseData?.collected_facts?.assisted_intake || null;
+        const assistedEvidenceSummary = assistedIntake
+          ? buildAssistedEvidenceSummary({
+              service: normalizeAssistedPrepService(
+                assistedIntake.service ||
+                caseData?.collected_facts?.selected_assisted_service ||
+                null
+              ),
+              evidence: caseData?.collected_facts?.evidence || null,
+            })
+          : null;
 
         return {
           id: order.id,
@@ -124,6 +138,10 @@ export async function GET(request: NextRequest) {
           stripe_payment_intent_id: order.stripe_payment_intent_id,
           metadata: order.metadata || null,
           assisted_intake: assistedIntake,
+          uploaded_evidence_count: assistedEvidenceSummary?.uploaded_evidence_count || 0,
+          uploaded_evidence: assistedEvidenceSummary?.uploaded_evidence || [],
+          missing_recommended_evidence: assistedEvidenceSummary?.missing_recommended_evidence || [],
+          latest_upload_at: assistedEvidenceSummary?.latest_upload_at || null,
           case_workflow_status: caseData?.workflow_status || null,
           created_at: order.created_at,
         };

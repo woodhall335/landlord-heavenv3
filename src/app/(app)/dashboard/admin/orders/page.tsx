@@ -4,7 +4,13 @@ import { useState, useEffect, useCallback } from "react";
 import { Container } from "@/components/ui";
 import { useRouter } from "next/navigation";
 import { ADMIN_PRODUCT_OPTIONS, getAdminProductLabel } from "@/lib/admin/products";
-import { isAssistedPrepSku, type AssistedPrepStatus } from "@/lib/assisted-prep";
+import {
+  isAssistedPrepSku,
+  type AssistedEvidenceFileSummary,
+  type AssistedEvidenceUploadSlot,
+  type AssistedPrepStatus,
+} from "@/lib/assisted-prep";
+import { AssistedAdminActionModal } from "@/components/admin/AssistedAdminActionModal";
 
 interface Order {
   id: string;
@@ -29,6 +35,10 @@ interface Order {
     service_facts?: Record<string, string>;
     source_case_id?: string | null;
   } | null;
+  uploaded_evidence_count?: number;
+  uploaded_evidence?: AssistedEvidenceFileSummary[];
+  missing_recommended_evidence?: AssistedEvidenceUploadSlot[];
+  latest_upload_at?: string | null;
 }
 
 interface OrdersApiResponse {
@@ -43,6 +53,19 @@ interface OrdersApiResponse {
   error?: string;
 }
 
+type AssistedEmailType =
+  | "missing_information"
+  | "blockers_action_summary"
+  | "no_show_reschedule"
+  | "no_response_refund_offer"
+  | "refund_processed"
+  | "pack_ready";
+
+type AssistedAction =
+  | { kind: "status"; orderId: string; status: AssistedPrepStatus }
+  | { kind: "email"; orderId: string; emailType: AssistedEmailType }
+  | null;
+
 export default function AdminOrdersPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -56,6 +79,8 @@ export default function AdminOrdersPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [assistedAction, setAssistedAction] = useState<AssistedAction>(null);
+  const [assistedActionLoading, setAssistedActionLoading] = useState(false);
   const ordersPerPage = 20;
 
   const checkAdminAccess = useCallback(async () => {
@@ -185,8 +210,7 @@ export default function AdminOrdersPage() {
     }
   }
 
-  async function handleAssistedStatus(orderId: string, status: AssistedPrepStatus) {
-    const note = window.prompt("Optional internal note for this status change:", "") || "";
+  async function submitAssistedStatus(orderId: string, status: AssistedPrepStatus, note: string) {
     try {
       const response = await fetch("/api/admin/orders/assisted-status", {
         method: "POST",
@@ -206,26 +230,7 @@ export default function AdminOrdersPage() {
     }
   }
 
-  async function handleAssistedEmail(
-    orderId: string,
-    emailType:
-      | "missing_information"
-      | "blockers_action_summary"
-      | "no_show_reschedule"
-      | "no_response_refund_offer"
-      | "refund_processed"
-      | "pack_ready"
-  ) {
-    const noteRequired = emailType === "missing_information" || emailType === "blockers_action_summary";
-    const note = noteRequired
-      ? window.prompt("Add the missing information or blocker summary to send to the customer:", "")
-      : window.prompt("Optional message to include:", "") || "";
-
-    if (noteRequired && !note?.trim()) {
-      setMessage({ type: "error", text: "Please add a short message before sending this email." });
-      return;
-    }
-
+  async function submitAssistedEmail(orderId: string, emailType: AssistedEmailType, note: string) {
     const url =
       emailType === "pack_ready"
         ? "/api/admin/orders/send-assisted-ready"
@@ -252,6 +257,74 @@ export default function AdminOrdersPage() {
     } catch (error: any) {
       setMessage({ type: "error", text: error.message || "Failed to send assisted email" });
     }
+  }
+
+  async function handleAssistedModalSubmit(note: string) {
+    if (!assistedAction) return;
+    setAssistedActionLoading(true);
+    try {
+      if (assistedAction.kind === "status") {
+        await submitAssistedStatus(assistedAction.orderId, assistedAction.status, note);
+      } else {
+        await submitAssistedEmail(assistedAction.orderId, assistedAction.emailType, note);
+      }
+      setAssistedAction(null);
+    } finally {
+      setAssistedActionLoading(false);
+    }
+  }
+
+  async function openEvidence(evidence: AssistedEvidenceFileSummary) {
+    const evidenceId = evidence.documentId || evidence.id;
+    try {
+      const response = await fetch(`/api/evidence/download?evidenceId=${evidenceId}`);
+      const payload = await response.json();
+      if (!response.ok || !payload.signedUrl) {
+        throw new Error(payload.error || "Could not open evidence.");
+      }
+      window.open(payload.signedUrl, "_blank", "noopener,noreferrer");
+    } catch (error: any) {
+      setMessage({ type: "error", text: error.message || "Could not open evidence." });
+    }
+  }
+
+  function assistedActionModalCopy(action: AssistedAction) {
+    if (!action) {
+      return {
+        title: "",
+        description: "",
+        noteLabel: "Note",
+        noteRequired: false,
+        sensitive: false,
+        submitLabel: "Submit",
+      };
+    }
+    if (action.kind === "status") {
+      const sensitive = action.status === "blocked_refund_due";
+      return {
+        title: `Update assisted status to ${action.status}`,
+        description: sensitive
+          ? "This marks the case as blocked or refund due. Add a short internal note explaining why."
+          : "Add an optional internal note for the assisted case history.",
+        noteLabel: "Internal note",
+        noteRequired: sensitive,
+        sensitive,
+        submitLabel: "Update status",
+      };
+    }
+
+    const noteRequired = action.emailType === "missing_information" || action.emailType === "blockers_action_summary";
+    const sensitive = action.emailType === "no_response_refund_offer" || action.emailType === "blockers_action_summary";
+    return {
+      title: action.emailType === "pack_ready" ? "Send pack ready email" : "Send assisted prep email",
+      description: noteRequired
+        ? "This message goes to the customer. Add the missing information or blocker summary in plain English."
+        : "Add an optional customer-facing note, or send the standard email without one.",
+      noteLabel: noteRequired ? "Customer message" : "Optional message",
+      noteRequired,
+      sensitive,
+      submitLabel: action.emailType === "pack_ready" ? "Send pack ready" : "Send email",
+    };
   }
 
   async function handleExportCSV() {
@@ -461,6 +534,25 @@ export default function AdminOrdersPage() {
                           {order.assisted_intake.source_case_id ? (
                             <div>Imported from {order.assisted_intake.source_case_id.slice(0, 8)}...</div>
                           ) : null}
+                          <div className="mt-2 border-t border-violet-100 pt-2">
+                            <div className="font-semibold">Uploaded evidence: {order.uploaded_evidence_count || 0}</div>
+                            {order.latest_upload_at ? <div>Latest {new Date(order.latest_upload_at).toLocaleDateString("en-GB")}</div> : null}
+                            {(order.uploaded_evidence || []).slice(0, 3).map((evidence) => (
+                              <button
+                                key={evidence.id}
+                                type="button"
+                                onClick={() => openEvidence(evidence)}
+                                className="block truncate text-left text-primary hover:underline"
+                              >
+                                {evidence.fileName}
+                              </button>
+                            ))}
+                            {(order.missing_recommended_evidence || []).length > 0 ? (
+                              <div className="mt-1 text-violet-700">
+                                Missing likely: {(order.missing_recommended_evidence || []).slice(0, 2).map((item) => item.label).join(", ")}
+                              </div>
+                            ) : null}
+                          </div>
                         </div>
                       ) : null}
                     </td>
@@ -518,40 +610,40 @@ export default function AdminOrdersPage() {
                         )}
                         {isAssistedPrepSku(order.product_type) && order.payment_status === "paid" && (
                           <>
-                            <button onClick={() => handleAssistedStatus(order.id, "callback_booked")} className="text-primary hover:underline text-sm">
+                            <button onClick={() => setAssistedAction({ kind: "status", orderId: order.id, status: "callback_booked" })} className="text-primary hover:underline text-sm">
                               Mark callback booked
                             </button>
-                            <button onClick={() => handleAssistedStatus(order.id, "in_review")} className="text-primary hover:underline text-sm">
+                            <button onClick={() => setAssistedAction({ kind: "status", orderId: order.id, status: "in_review" })} className="text-primary hover:underline text-sm">
                               Mark in review
                             </button>
-                            <button onClick={() => handleAssistedStatus(order.id, "blocked_refund_due")} className="text-error hover:underline text-sm">
+                            <button onClick={() => setAssistedAction({ kind: "status", orderId: order.id, status: "blocked_refund_due" })} className="text-error hover:underline text-sm">
                               Mark blocked/refund due
                             </button>
-                            <button onClick={() => handleAssistedStatus(order.id, "pack_prepared")} className="text-primary hover:underline text-sm">
+                            <button onClick={() => setAssistedAction({ kind: "status", orderId: order.id, status: "pack_prepared" })} className="text-primary hover:underline text-sm">
                               Mark pack prepared
                             </button>
-                            <button onClick={() => handleAssistedEmail(order.id, "pack_ready")} className="text-success hover:underline text-sm">
+                            <button onClick={() => setAssistedAction({ kind: "email", orderId: order.id, emailType: "pack_ready" })} className="text-success hover:underline text-sm">
                               Send pack ready
                             </button>
-                            <button onClick={() => handleAssistedStatus(order.id, "completed")} className="text-primary hover:underline text-sm">
+                            <button onClick={() => setAssistedAction({ kind: "status", orderId: order.id, status: "completed" })} className="text-primary hover:underline text-sm">
                               Mark completed
                             </button>
-                            <button onClick={() => handleAssistedEmail(order.id, "missing_information")} className="text-primary hover:underline text-sm">
+                            <button onClick={() => setAssistedAction({ kind: "email", orderId: order.id, emailType: "missing_information" })} className="text-primary hover:underline text-sm">
                               Missing info email
                             </button>
-                            <button onClick={() => handleAssistedEmail(order.id, "blockers_action_summary")} className="text-error hover:underline text-sm">
+                            <button onClick={() => setAssistedAction({ kind: "email", orderId: order.id, emailType: "blockers_action_summary" })} className="text-error hover:underline text-sm">
                               Blocker email
                             </button>
-                            <button onClick={() => handleAssistedEmail(order.id, "no_show_reschedule")} className="text-primary hover:underline text-sm">
+                            <button onClick={() => setAssistedAction({ kind: "email", orderId: order.id, emailType: "no_show_reschedule" })} className="text-primary hover:underline text-sm">
                               No-show email
                             </button>
-                            <button onClick={() => handleAssistedEmail(order.id, "no_response_refund_offer")} className="text-warning hover:underline text-sm">
+                            <button onClick={() => setAssistedAction({ kind: "email", orderId: order.id, emailType: "no_response_refund_offer" })} className="text-warning hover:underline text-sm">
                               7-day refund offer
                             </button>
                           </>
                         )}
                         {isAssistedPrepSku(order.product_type) && order.payment_status === "refunded" && (
-                          <button onClick={() => handleAssistedEmail(order.id, "refund_processed")} className="text-primary hover:underline text-sm">
+                          <button onClick={() => setAssistedAction({ kind: "email", orderId: order.id, emailType: "refund_processed" })} className="text-primary hover:underline text-sm">
                             Send refund email
                           </button>
                         )}
@@ -621,6 +713,14 @@ export default function AdminOrdersPage() {
           </div>
         </div>
       </Container>
+      <AssistedAdminActionModal
+        open={Boolean(assistedAction)}
+        {...assistedActionModalCopy(assistedAction)}
+        loading={assistedActionLoading}
+        confirmLabel="I understand this is a sensitive assisted-prep action."
+        onClose={() => setAssistedAction(null)}
+        onSubmit={handleAssistedModalSubmit}
+      />
     </div>
   );
 }

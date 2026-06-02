@@ -1,4 +1,5 @@
 import { PRODUCTS, type ProductSku } from '@/lib/pricing/products';
+import { EvidenceCategory, EVIDENCE_CATEGORY_LABELS } from '@/lib/evidence/schema';
 
 export type AssistedPrepService = 'section8' | 'money_claim' | 'possession';
 export type AssistedPrepSku =
@@ -43,6 +44,30 @@ export type AssistedPrepConfig = {
   primaryCta: string;
   checklist: string[];
   finalChecklistNote: string;
+};
+
+export type AssistedEvidenceUploadSlot = {
+  key: string;
+  label: string;
+  helperText: string;
+  category: EvidenceCategory;
+  questionId: string;
+  services: AssistedPrepService[];
+};
+
+export type AssistedEvidenceFileSummary = {
+  id: string;
+  documentId?: string | null;
+  fileName: string;
+  category?: string | null;
+  uploadedAt?: string | null;
+};
+
+export type AssistedEvidenceSummary = {
+  uploaded_evidence_count: number;
+  uploaded_evidence: AssistedEvidenceFileSummary[];
+  missing_recommended_evidence: AssistedEvidenceUploadSlot[];
+  latest_upload_at: string | null;
 };
 
 export const ASSISTED_PREP_CHECKLIST_INTRO =
@@ -137,12 +162,91 @@ export const ASSISTED_PREP_SERVICES = Object.values(ASSISTED_PREP_CONFIGS);
 
 export const ASSISTED_PREP_SKUS = ASSISTED_PREP_SERVICES.map((service) => service.sku) as AssistedPrepSku[];
 
+export const ASSISTED_EVIDENCE_UPLOAD_SLOTS: AssistedEvidenceUploadSlot[] = [
+  {
+    key: 'tenancy_agreement',
+    label: EVIDENCE_CATEGORY_LABELS[EvidenceCategory.TENANCY_AGREEMENT],
+    helperText: 'The signed tenancy agreement, if you have it.',
+    category: EvidenceCategory.TENANCY_AGREEMENT,
+    questionId: 'assisted_prep_tenancy_agreement',
+    services: ['section8', 'money_claim', 'possession'],
+  },
+  {
+    key: 'rent_records',
+    label: 'Rent statement or arrears ledger',
+    helperText: 'Rent statement, arrears ledger, or debt breakdown.',
+    category: EvidenceCategory.ARREARS_LEDGER,
+    questionId: 'assisted_prep_rent_records',
+    services: ['section8', 'money_claim', 'possession'],
+  },
+  {
+    key: 'served_notice',
+    label: 'Notice already served',
+    helperText: 'Any Section 8 notice or other notice already given to the tenant.',
+    category: EvidenceCategory.NOTICE_S8,
+    questionId: 'assisted_prep_served_notice',
+    services: ['section8', 'possession'],
+  },
+  {
+    key: 'proof_of_service',
+    label: 'Proof of service',
+    helperText: 'Certificate of service, proof of postage, photo, email proof, or delivery record.',
+    category: EvidenceCategory.NOTICE_SERVED_PROOF,
+    questionId: 'assisted_prep_proof_of_service',
+    services: ['section8', 'possession'],
+  },
+  {
+    key: 'correspondence',
+    label: EVIDENCE_CATEGORY_LABELS[EvidenceCategory.CORRESPONDENCE],
+    helperText: 'Important emails, letters, texts, complaints, warnings, or tenant replies.',
+    category: EvidenceCategory.CORRESPONDENCE,
+    questionId: 'assisted_prep_correspondence',
+    services: ['section8', 'money_claim', 'possession'],
+  },
+  {
+    key: 'letter_before_claim',
+    label: EVIDENCE_CATEGORY_LABELS[EvidenceCategory.LBA_LETTER],
+    helperText: 'The letter before claim and proof it was sent.',
+    category: EvidenceCategory.LBA_LETTER,
+    questionId: 'assisted_prep_letter_before_claim',
+    services: ['money_claim'],
+  },
+  {
+    key: 'photos_or_invoices',
+    label: 'Photos, invoices, or receipts',
+    helperText: 'Photos, invoices, receipts, estimates, or other proof of the amount claimed.',
+    category: EvidenceCategory.OTHER,
+    questionId: 'assisted_prep_photos_invoices',
+    services: ['money_claim', 'possession'],
+  },
+  {
+    key: 'compliance_documents',
+    label: 'Deposit or property compliance documents',
+    helperText: 'Deposit protection, prescribed information, EPC, gas safety, or How to Rent records.',
+    category: EvidenceCategory.DEPOSIT_PROTECTION,
+    questionId: 'assisted_prep_compliance_documents',
+    services: ['section8', 'possession'],
+  },
+  {
+    key: 'other_documents',
+    label: EVIDENCE_CATEGORY_LABELS[EvidenceCategory.OTHER],
+    helperText: 'Anything else you think helps explain the case.',
+    category: EvidenceCategory.OTHER,
+    questionId: 'assisted_prep_other_documents',
+    services: ['section8', 'money_claim', 'possession'],
+  },
+];
+
 export function isAssistedPrepSku(value: string | null | undefined): value is AssistedPrepSku {
   return Boolean(value && (ASSISTED_PREP_SKUS as string[]).includes(value));
 }
 
 export function getAssistedPrepConfig(service: AssistedPrepService): AssistedPrepConfig {
   return ASSISTED_PREP_CONFIGS[service];
+}
+
+export function getAssistedEvidenceUploadSlots(service: AssistedPrepService): AssistedEvidenceUploadSlot[] {
+  return ASSISTED_EVIDENCE_UPLOAD_SLOTS.filter((slot) => slot.services.includes(service));
 }
 
 export function getAssistedPrepConfigBySku(sku: string | null | undefined): AssistedPrepConfig | null {
@@ -176,6 +280,56 @@ export function assistedServiceForProduct(product: string | null | undefined): A
   if (product === 'complete_pack') return 'possession';
   if (product === 'notice_only') return 'section8';
   return null;
+}
+
+export function normalizeAssistedEvidenceFile(value: unknown): AssistedEvidenceFileSummary | null {
+  if (!value || typeof value !== 'object') return null;
+  const file = value as Record<string, any>;
+  const id = typeof file.id === 'string' ? file.id : '';
+  const documentId = typeof file.document_id === 'string' ? file.document_id : null;
+  const fileName =
+    typeof file.file_name === 'string'
+      ? file.file_name
+      : typeof file.filename === 'string'
+        ? file.filename
+        : typeof file.name === 'string'
+          ? file.name
+          : 'Uploaded document';
+
+  if (!id && !documentId) return null;
+
+  return {
+    id: id || documentId || fileName,
+    documentId,
+    fileName,
+    category: typeof file.category === 'string' ? file.category : null,
+    uploadedAt: typeof file.uploaded_at === 'string' ? file.uploaded_at : typeof file.created_at === 'string' ? file.created_at : null,
+  };
+}
+
+export function buildAssistedEvidenceSummary(params: {
+  service: AssistedPrepService;
+  evidence?: Record<string, any> | null;
+}): AssistedEvidenceSummary {
+  const files = Array.isArray(params.evidence?.files)
+    ? params.evidence.files
+        .map((file) => normalizeAssistedEvidenceFile(file))
+        .filter((file): file is AssistedEvidenceFileSummary => Boolean(file))
+    : [];
+  const slots = getAssistedEvidenceUploadSlots(params.service);
+  const uploadedCategories = new Set(files.map((file) => file.category).filter(Boolean));
+  const missing = slots.filter((slot) => !uploadedCategories.has(slot.category));
+  const latest = files
+    .map((file) => file.uploadedAt)
+    .filter((value): value is string => Boolean(value))
+    .sort((a, b) => new Date(b).getTime() - new Date(a).getTime())[0] || null;
+
+  return {
+    uploaded_evidence_count: files.length,
+    uploaded_evidence: files,
+    missing_recommended_evidence: missing,
+    latest_upload_at: latest,
+  };
 }
 
 export function buildAssistedPrepStartHref(params: {

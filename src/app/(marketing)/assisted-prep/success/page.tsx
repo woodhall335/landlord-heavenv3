@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { AssistedPrepChecklist } from '@/components/assisted-prep/AssistedPrepChecklist';
+import { AssistedEvidenceUploadPanel } from '@/components/assisted-prep/AssistedEvidenceUploadPanel';
 import { CalendlyBookingButton } from '@/components/assisted-prep/CalendlyBookingButton';
 import {
   ASSISTED_PREP_PROMISE,
@@ -58,7 +59,11 @@ export default async function AssistedPrepSuccessPage({ searchParams }: PageProp
             </p>
           </section>
 
-          <AssistedPrepChecklist service={service} />
+          {caseId ? (
+            <AssistedEvidenceUploadPanel caseId={caseId} service={service} />
+          ) : (
+            <AssistedPrepChecklist service={service} />
+          )}
         </div>
       </main>
     </>

@@ -23,6 +23,10 @@ import {
   deriveCaseRecoveryContact,
   isPreviewAbandonedCase,
 } from '@/lib/cases/recovery';
+import {
+  buildAssistedEvidenceSummary,
+  normalizeAssistedPrepService,
+} from '@/lib/assisted-prep';
 
 type RawCase = {
   id: string;
@@ -473,6 +477,16 @@ export async function GET(request: NextRequest) {
       const userRecord = caseItem.user_id ? users.get(caseItem.user_id) : null;
       const productType = deriveCaseProductType(caseItem, relatedOrder || null);
       const assistedIntake = caseItem.collected_facts?.assisted_intake || null;
+      const assistedEvidenceSummary = assistedIntake
+        ? buildAssistedEvidenceSummary({
+            service: normalizeAssistedPrepService(
+              assistedIntake.service ||
+              caseItem.collected_facts?.selected_assisted_service ||
+              null
+            ),
+            evidence: caseItem.collected_facts?.evidence || null,
+          })
+        : null;
       const recoveryContact = deriveCaseRecoveryContact(caseItem, userRecord || null);
       const paymentStatusValue = relatedOrder?.payment_status || null;
       const hasAnyOrder = Boolean(relatedOrder?.id);
@@ -511,6 +525,10 @@ export async function GET(request: NextRequest) {
         product_type: productType,
         product_name: getAdminProductName(productType),
         assisted_intake: assistedIntake,
+        uploaded_evidence_count: assistedEvidenceSummary?.uploaded_evidence_count || 0,
+        uploaded_evidence: assistedEvidenceSummary?.uploaded_evidence || [],
+        missing_recommended_evidence: assistedEvidenceSummary?.missing_recommended_evidence || [],
+        latest_upload_at: assistedEvidenceSummary?.latest_upload_at || null,
         payment_status: paymentStatusValue,
         has_any_order: hasAnyOrder,
         fulfillment_status: visibleFulfillmentStatus,

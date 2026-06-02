@@ -47,6 +47,11 @@ const primaryLinks: NavItem[] = [
     desktopClassName: "w-[7.5rem]",
   },
   {
+    href: "/assisted-prep",
+    label: "Assisted Prep",
+    desktopClassName: "w-[6.5rem]",
+  },
+  {
     href: "/rent-increase",
     label: "Increase Rent Section 13",
     desktopClassName: "w-[8.5rem]",

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { Container } from "@/components/ui";
 import { ConfirmationModal } from "@/components/ui/ConfirmationModal";
+import { AssistedAdminActionModal } from "@/components/admin/AssistedAdminActionModal";
 import type {
   AdminCaseRecord,
   AdminCasesPreset,
@@ -15,7 +16,11 @@ import {
   getAdminJurisdictionLabel,
 } from "@/lib/admin/case-manager";
 import { ADMIN_PRODUCT_OPTIONS } from "@/lib/admin/products";
-import { isAssistedPrepSku, type AssistedPrepStatus } from "@/lib/assisted-prep";
+import {
+  isAssistedPrepSku,
+  type AssistedEvidenceFileSummary,
+  type AssistedPrepStatus,
+} from "@/lib/assisted-prep";
 
 interface AdminCasesApiResponse {
   success: boolean;
@@ -49,6 +54,17 @@ interface AdminCasesApiResponse {
 }
 
 type ModalAction = "retry" | "resume" | "regenerate" | "reopen" | "restart" | "delete" | null;
+type AssistedEmailType =
+  | "missing_information"
+  | "blockers_action_summary"
+  | "no_show_reschedule"
+  | "no_response_refund_offer"
+  | "refund_processed"
+  | "pack_ready";
+type AssistedAction =
+  | { kind: "status"; caseItem: AdminCaseRecord; status: AssistedPrepStatus }
+  | { kind: "email"; caseItem: AdminCaseRecord; emailType: AssistedEmailType }
+  | null;
 
 const presetOptions: Array<{ value: AdminCasesPreset; label: string }> = [
   { value: "needs_attention", label: "Needs attention" },
@@ -122,6 +138,8 @@ export default function AdminCasesPage() {
   const [actionLoading, setActionLoading] = useState(false);
   const [selectedCaseIds, setSelectedCaseIds] = useState<string[]>([]);
   const [bulkRestartLoading, setBulkRestartLoading] = useState(false);
+  const [assistedAction, setAssistedAction] = useState<AssistedAction>(null);
+  const [assistedActionLoading, setAssistedActionLoading] = useState(false);
 
   const pageSize = 20;
 
@@ -302,9 +320,8 @@ export default function AdminCasesPage() {
     }
   };
 
-  async function handleAssistedStatus(caseItem: AdminCaseRecord, status: AssistedPrepStatus) {
+  async function submitAssistedStatus(caseItem: AdminCaseRecord, status: AssistedPrepStatus, note: string) {
     if (!caseItem.order_id) return;
-    const note = window.prompt("Optional internal note for this status change:", "") || "";
     try {
       const response = await fetch("/api/admin/orders/assisted-status", {
         method: "POST",
@@ -322,27 +339,12 @@ export default function AdminCasesPage() {
     }
   }
 
-  async function handleAssistedEmail(
+  async function submitAssistedEmail(
     caseItem: AdminCaseRecord,
-    emailType:
-      | "missing_information"
-      | "blockers_action_summary"
-      | "no_show_reschedule"
-      | "no_response_refund_offer"
-      | "refund_processed"
-      | "pack_ready"
+    emailType: AssistedEmailType,
+    note: string
   ) {
     if (!caseItem.order_id) return;
-    const noteRequired = emailType === "missing_information" || emailType === "blockers_action_summary";
-    const note = noteRequired
-      ? window.prompt("Add the missing information or blocker summary to send to the customer:", "")
-      : window.prompt("Optional message to include:", "") || "";
-
-    if (noteRequired && !note?.trim()) {
-      setMessage({ type: "error", text: "Please add a short message before sending this email." });
-      return;
-    }
-
     const url =
       emailType === "pack_ready"
         ? "/api/admin/orders/send-assisted-ready"
@@ -367,6 +369,74 @@ export default function AdminCasesPage() {
     } catch (error: any) {
       setMessage({ type: "error", text: error.message || "Failed to send assisted email" });
     }
+  }
+
+  async function handleAssistedModalSubmit(note: string) {
+    if (!assistedAction) return;
+    setAssistedActionLoading(true);
+    try {
+      if (assistedAction.kind === "status") {
+        await submitAssistedStatus(assistedAction.caseItem, assistedAction.status, note);
+      } else {
+        await submitAssistedEmail(assistedAction.caseItem, assistedAction.emailType, note);
+      }
+      setAssistedAction(null);
+    } finally {
+      setAssistedActionLoading(false);
+    }
+  }
+
+  async function openEvidence(evidence: AssistedEvidenceFileSummary) {
+    const evidenceId = evidence.documentId || evidence.id;
+    try {
+      const response = await fetch(`/api/evidence/download?evidenceId=${evidenceId}`);
+      const payload = await response.json();
+      if (!response.ok || !payload.signedUrl) {
+        throw new Error(payload.error || "Could not open evidence.");
+      }
+      window.open(payload.signedUrl, "_blank", "noopener,noreferrer");
+    } catch (error: any) {
+      setMessage({ type: "error", text: error.message || "Could not open evidence." });
+    }
+  }
+
+  function assistedActionModalCopy(action: AssistedAction) {
+    if (!action) {
+      return {
+        title: "",
+        description: "",
+        noteLabel: "Note",
+        noteRequired: false,
+        sensitive: false,
+        submitLabel: "Submit",
+      };
+    }
+    if (action.kind === "status") {
+      const sensitive = action.status === "blocked_refund_due";
+      return {
+        title: `Update assisted status to ${action.status}`,
+        description: sensitive
+          ? "This marks the case as blocked or refund due. Add a short internal note explaining why."
+          : "Add an optional internal note for the assisted case history.",
+        noteLabel: "Internal note",
+        noteRequired: sensitive,
+        sensitive,
+        submitLabel: "Update status",
+      };
+    }
+
+    const noteRequired = action.emailType === "missing_information" || action.emailType === "blockers_action_summary";
+    const sensitive = action.emailType === "no_response_refund_offer" || action.emailType === "blockers_action_summary";
+    return {
+      title: action.emailType === "pack_ready" ? "Send pack ready email" : "Send assisted prep email",
+      description: noteRequired
+        ? "This message goes to the customer. Add the missing information or blocker summary in plain English."
+        : "Add an optional customer-facing note, or send the standard email without one.",
+      noteLabel: noteRequired ? "Customer message" : "Optional message",
+      noteRequired,
+      sensitive,
+      submitLabel: action.emailType === "pack_ready" ? "Send pack ready" : "Send email",
+    };
   }
 
   const restartableCases = cases.filter((caseItem) => caseItem.can_send_restart_link);
@@ -836,6 +906,27 @@ export default function AdminCasesPage() {
                             {caseItem.assisted_intake.source_case_id ? (
                               <div>Imported from {caseItem.assisted_intake.source_case_id.slice(0, 8)}...</div>
                             ) : null}
+                            <div className="mt-2 border-t border-violet-100 pt-2">
+                              <div className="font-semibold">Uploaded evidence: {caseItem.uploaded_evidence_count || 0}</div>
+                              {caseItem.latest_upload_at ? (
+                                <div>Latest {new Date(caseItem.latest_upload_at).toLocaleDateString("en-GB")}</div>
+                              ) : null}
+                              {(caseItem.uploaded_evidence || []).slice(0, 3).map((evidence) => (
+                                <button
+                                  key={evidence.id}
+                                  type="button"
+                                  onClick={() => openEvidence(evidence)}
+                                  className="block truncate text-left text-primary hover:underline"
+                                >
+                                  {evidence.fileName}
+                                </button>
+                              ))}
+                              {(caseItem.missing_recommended_evidence || []).length > 0 ? (
+                                <div className="mt-1 text-violet-700">
+                                  Missing likely: {(caseItem.missing_recommended_evidence || []).slice(0, 2).map((item) => item.label).join(", ")}
+                                </div>
+                              ) : null}
+                            </div>
                           </div>
                         )}
                       </td>
@@ -955,40 +1046,40 @@ export default function AdminCasesPage() {
                           )}
                           {isAssistedPrepSku(caseItem.product_type) && caseItem.order_id && caseItem.payment_status === "paid" && (
                             <>
-                              <button onClick={() => handleAssistedStatus(caseItem, "callback_booked")} className="text-left font-semibold text-primary hover:underline">
+                              <button onClick={() => setAssistedAction({ kind: "status", caseItem, status: "callback_booked" })} className="text-left font-semibold text-primary hover:underline">
                                 Mark callback booked
                               </button>
-                              <button onClick={() => handleAssistedStatus(caseItem, "in_review")} className="text-left font-semibold text-primary hover:underline">
+                              <button onClick={() => setAssistedAction({ kind: "status", caseItem, status: "in_review" })} className="text-left font-semibold text-primary hover:underline">
                                 Mark in review
                               </button>
-                              <button onClick={() => handleAssistedStatus(caseItem, "blocked_refund_due")} className="text-left font-semibold text-red-700 hover:underline">
+                              <button onClick={() => setAssistedAction({ kind: "status", caseItem, status: "blocked_refund_due" })} className="text-left font-semibold text-red-700 hover:underline">
                                 Mark blocked/refund due
                               </button>
-                              <button onClick={() => handleAssistedStatus(caseItem, "pack_prepared")} className="text-left font-semibold text-primary hover:underline">
+                              <button onClick={() => setAssistedAction({ kind: "status", caseItem, status: "pack_prepared" })} className="text-left font-semibold text-primary hover:underline">
                                 Mark pack prepared
                               </button>
-                              <button onClick={() => handleAssistedEmail(caseItem, "pack_ready")} className="text-left font-semibold text-green-700 hover:underline">
+                              <button onClick={() => setAssistedAction({ kind: "email", caseItem, emailType: "pack_ready" })} className="text-left font-semibold text-green-700 hover:underline">
                                 Send pack ready
                               </button>
-                              <button onClick={() => handleAssistedStatus(caseItem, "completed")} className="text-left font-semibold text-primary hover:underline">
+                              <button onClick={() => setAssistedAction({ kind: "status", caseItem, status: "completed" })} className="text-left font-semibold text-primary hover:underline">
                                 Mark completed
                               </button>
-                              <button onClick={() => handleAssistedEmail(caseItem, "missing_information")} className="text-left font-semibold text-primary hover:underline">
+                              <button onClick={() => setAssistedAction({ kind: "email", caseItem, emailType: "missing_information" })} className="text-left font-semibold text-primary hover:underline">
                                 Missing info email
                               </button>
-                              <button onClick={() => handleAssistedEmail(caseItem, "blockers_action_summary")} className="text-left font-semibold text-red-700 hover:underline">
+                              <button onClick={() => setAssistedAction({ kind: "email", caseItem, emailType: "blockers_action_summary" })} className="text-left font-semibold text-red-700 hover:underline">
                                 Blocker email
                               </button>
-                              <button onClick={() => handleAssistedEmail(caseItem, "no_show_reschedule")} className="text-left font-semibold text-primary hover:underline">
+                              <button onClick={() => setAssistedAction({ kind: "email", caseItem, emailType: "no_show_reschedule" })} className="text-left font-semibold text-primary hover:underline">
                                 No-show email
                               </button>
-                              <button onClick={() => handleAssistedEmail(caseItem, "no_response_refund_offer")} className="text-left font-semibold text-amber-700 hover:underline">
+                              <button onClick={() => setAssistedAction({ kind: "email", caseItem, emailType: "no_response_refund_offer" })} className="text-left font-semibold text-amber-700 hover:underline">
                                 7-day refund offer
                               </button>
                             </>
                           )}
                           {isAssistedPrepSku(caseItem.product_type) && caseItem.order_id && caseItem.payment_status === "refunded" && (
-                            <button onClick={() => handleAssistedEmail(caseItem, "refund_processed")} className="text-left font-semibold text-primary hover:underline">
+                            <button onClick={() => setAssistedAction({ kind: "email", caseItem, emailType: "refund_processed" })} className="text-left font-semibold text-primary hover:underline">
                               Send refund email
                             </button>
                           )}
@@ -1044,6 +1135,14 @@ export default function AdminCasesPage() {
           variant={modalAction === "delete" ? "danger" : modalAction === "regenerate" ? "warning" : "default"}
           isLoading={actionLoading}
           confirmDisabled={modalAction === "delete" && deleteConfirmationText !== "DELETE"}
+        />
+        <AssistedAdminActionModal
+          open={Boolean(assistedAction)}
+          {...assistedActionModalCopy(assistedAction)}
+          loading={assistedActionLoading}
+          confirmLabel="I understand this is a sensitive assisted-prep action."
+          onClose={() => setAssistedAction(null)}
+          onSubmit={handleAssistedModalSubmit}
         />
       </Container>
     </div>

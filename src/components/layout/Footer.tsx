@@ -66,6 +66,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/assisted-prep" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                  Assisted Prep Services
+                </Link>
+              </li>
+              <li>
                 <Link href="/rent-increase" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
                   Rent Increase
                 </Link>

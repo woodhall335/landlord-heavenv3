@@ -17,6 +17,7 @@ import { RiErrorWarningLine, RiEditLine, RiFileTextLine, RiExternalLinkLine, RiB
 import { Section21ActionRequired } from '@/components/dashboard/Section21ActionRequired';
 import { PostPurchaseCrossSell } from '@/components/dashboard/PostPurchaseCrossSell';
 import { TenancySummaryPanel } from '@/components/dashboard/TenancySummaryPanel';
+import { AssistedEvidenceUploadPanel } from '@/components/assisted-prep/AssistedEvidenceUploadPanel';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
 import { trackPurchase, trackPaymentSuccessLanded, trackDocumentDownloadClicked, trackCaseArchived, trackMoneyClaimPurchaseCompleted, type PurchaseAttribution, type MoneyClaimReason } from '@/lib/analytics';
 import { getAttributionForAnalytics } from '@/lib/wizard/wizardAttribution';
@@ -35,6 +36,7 @@ import {
   getEnglandTenancyProductLabel,
 } from '@/lib/tenancy/england-product-model';
 import { isResidentialLettingProductSku } from '@/lib/residential-letting/products';
+import { normalizeAssistedPrepService } from '@/lib/assisted-prep';
 
 interface CaseDetails {
   id: string;
@@ -978,6 +980,14 @@ export default function CaseDetailPage() {
     orderStatus?.product_type === 'complete_pack' &&
     orderStatus?.metadata?.upgrade_kind === 'post_purchase_product_upgrade' &&
     orderStatus?.metadata?.upgrade_from_product === 'notice_only';
+  const assistedIntake = caseDetails?.collected_facts?.assisted_intake || null;
+  const assistedService = assistedIntake
+    ? normalizeAssistedPrepService(
+        assistedIntake.service ||
+        caseDetails?.collected_facts?.selected_assisted_service ||
+        null
+      )
+    : null;
 
   const handleUpgradeToCompletePack = async () => {
     if (!completePackUpgradeAmount) return;
@@ -1422,6 +1432,12 @@ export default function CaseDetailPage() {
             </div>
           </div>
         )}
+
+        {assistedService ? (
+          <div className="mb-6">
+            <AssistedEvidenceUploadPanel caseId={caseId} service={assistedService} />
+          </div>
+        ) : null}
 
         {isCompletePackUpgradeEligible && completePackUpgradeAmount !== null && (
           <div className="mb-6 rounded-xl border border-primary/20 bg-primary/5 p-6">

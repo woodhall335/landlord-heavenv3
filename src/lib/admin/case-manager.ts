@@ -1,4 +1,5 @@
 import { getAdminProductLabel } from '@/lib/admin/products';
+import type { AssistedEvidenceFileSummary, AssistedEvidenceUploadSlot } from '@/lib/assisted-prep';
 
 export type AdminCasesPreset =
   | 'all'
@@ -40,6 +41,10 @@ export interface AdminCaseRecord {
     service_facts?: Record<string, string>;
     source_case_id?: string | null;
   } | null;
+  uploaded_evidence_count?: number;
+  uploaded_evidence?: AssistedEvidenceFileSummary[];
+  missing_recommended_evidence?: AssistedEvidenceUploadSlot[];
+  latest_upload_at?: string | null;
   payment_status: string | null;
   has_any_order: boolean;
   fulfillment_status: string | null;
