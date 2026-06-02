@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
 import type { FAQItem } from '@/components/seo/FAQSection';
@@ -136,21 +137,28 @@ export default function NoticeOnlyPage() {
       />
     ),
     afterPostHeroContent: (
-      <section className="scroll-mt-24 bg-white py-10 md:py-12" aria-label="Notice stage route">
-        <a href={descriptor.wizardHref} className="block w-full">
-          <picture>
-            <source media="(max-width: 767px)" srcSet="/images/notice-stage-mobile.webp" />
-            <Image
-              src="/images/notice-stage-desktop.webp"
-              alt="Choose the notice stage route"
-              width={1672}
-              height={941}
-              className="h-auto w-full"
-              sizes="100vw"
-            />
-          </picture>
-        </a>
-      </section>
+      <>
+        <section className="scroll-mt-24 bg-white py-10 md:py-12" aria-label="Notice stage route">
+          <a href={descriptor.wizardHref} className="block w-full">
+            <picture>
+              <source media="(max-width: 767px)" srcSet="/images/notice-stage-mobile.webp" />
+              <Image
+                src="/images/notice-stage-desktop.webp"
+                alt="Choose the notice stage route"
+                width={1672}
+                height={941}
+                className="h-auto w-full"
+                sizes="100vw"
+              />
+            </picture>
+          </a>
+        </section>
+        <div className="bg-white px-4 pb-10">
+          <div className="mx-auto max-w-5xl">
+            <AssistedPrepCTA service="section8" variant="banner" src="product_notice_only" product="notice_only" />
+          </div>
+        </div>
+      </>
     ),
     earlyProofBand: {
       priceLabel: product.displayPrice,

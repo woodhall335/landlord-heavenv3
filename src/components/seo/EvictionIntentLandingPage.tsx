@@ -12,12 +12,14 @@ import {
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
 import type { IntentPageConfig } from '@/lib/seo/eviction-intent-pages';
 import {
   getPrimaryDestinationAboveFold,
   getSeoPageTaxonomyBySlug,
 } from '@/lib/seo/page-taxonomy';
 import { CommercialSeoNextStep } from '@/components/seo/CommercialSeoNextStep';
+import type { AssistedPrepService } from '@/lib/assisted-prep';
 
 const DEFAULT_UPDATED = 'March 2026';
 const AREA_SERVED_BY_JURISDICTION = {
@@ -36,6 +38,13 @@ const PRODUCT_CTA_LABELS = {
 
 function getProductCtaLabel(route: string) {
   return PRODUCT_CTA_LABELS[route as keyof typeof PRODUCT_CTA_LABELS] ?? 'Start here';
+}
+
+function getAssistedServiceForRoute(route: string): AssistedPrepService | null {
+  if (route.includes('money-claim')) return 'money_claim';
+  if (route.includes('complete-pack')) return 'possession';
+  if (route.includes('notice-only')) return 'section8';
+  return null;
 }
 
 function labelMatchesProduct(label: string, route: string) {
@@ -156,6 +165,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
   const primaryCtaLabel = taxonomyEntry && !labelMatchesProduct(config.heroCta, taxonomyEntry.primaryProduct)
     ? getProductCtaLabel(taxonomyEntry.primaryProduct)
     : config.heroCta;
+  const assistedService = getAssistedServiceForRoute(primaryHref);
   const heroSecondaryLabel = heroSecondaryHref
     ? taxonomyEntry
       ? config.secondaryCta
@@ -314,6 +324,20 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
                 ))}
               </div>
             </div>
+            {assistedService ? (
+              <AssistedPrepCTA
+                service={assistedService}
+                variant="banner"
+                src="eviction_intent_assisted"
+                product={
+                  assistedService === 'money_claim'
+                    ? 'money_claim'
+                    : assistedService === 'possession'
+                      ? 'complete_pack'
+                      : 'notice_only'
+                }
+              />
+            ) : null}
           </div>
         </Container>
       </section>

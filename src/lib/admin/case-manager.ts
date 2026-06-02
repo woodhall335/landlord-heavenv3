@@ -25,6 +25,21 @@ export interface AdminCaseRecord {
   wizard_completed_at: string | null;
   product_type: string | null;
   product_name: string | null;
+  assisted_intake?: {
+    contact?: {
+      name?: string;
+      email?: string;
+      phone?: string;
+    };
+    case_overview?: {
+      property_address?: string;
+      tenant_names?: string;
+      urgency?: string;
+      summary?: string;
+    };
+    service_facts?: Record<string, string>;
+    source_case_id?: string | null;
+  } | null;
   payment_status: string | null;
   has_any_order: boolean;
   fulfillment_status: string | null;

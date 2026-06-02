@@ -43,6 +43,7 @@ import { BlogProse } from '@/components/blog/BlogProse';
 import { BlogCtaProvider } from '@/components/blog/BlogCtaContext';
 import { BlogArticleStickyGuard } from '@/components/blog/BlogArticleStickyGuard';
 import { NextSteps } from '@/components/blog/NextSteps';
+import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
 import { MoneyClaimBridge } from '@/components/marketing/CommercialBridge';
 import { getBlogImagesForPost, getBlogImagesForPostThumb } from '@/lib/blog/image-manifest';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
@@ -58,6 +59,7 @@ import {
 import { getImagePlaceholderBlocks, getIntentRoutedLinks, getTop30QuickAnswer, getTop30Rank, getTop30SupplementalFaqs, getUpgradedPostVariant, isTop30UpgradedPost } from '@/lib/blog/top30-upgrades';
 import type { CSSProperties, ReactNode } from 'react';
 import { isValidElement } from 'react';
+import type { AssistedPrepService } from '@/lib/assisted-prep';
 
 interface BlogPageProps {
   params: Promise<{ slug: string }>;
@@ -141,6 +143,20 @@ const COMPLIANCE_TOPIC_MAP: Record<string, { topic: AskHeavenTopic; prompt: stri
     title: 'Question about electrical safety?',
   },
 };
+
+function getAssistedServiceForBlogPost(post: BlogPost): AssistedPrepService | null {
+  const haystack = [post.slug, post.title, post.category, ...(post.tags || [])].join(' ').toLowerCase();
+  if (haystack.includes('money claim') || haystack.includes('debt') || haystack.includes('arrears after')) {
+    return 'money_claim';
+  }
+  if (haystack.includes('n5') || haystack.includes('n119') || haystack.includes('court') || haystack.includes('possession claim')) {
+    return 'possession';
+  }
+  if (haystack.includes('section 8') || haystack.includes('form 3a') || haystack.includes('eviction') || haystack.includes('ground')) {
+    return 'section8';
+  }
+  return null;
+}
 
 function getComplianceTopicForPost(slug: string): { topic: AskHeavenTopic; prompt: string; title: string } | null {
   return COMPLIANCE_TOPIC_MAP[slug] || null;
@@ -590,6 +606,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
   });
   const heroSrc = manifestImages.hero || post.heroImage;
   const productCta = getBlogProductCta(post);
+  const assistedService = getAssistedServiceForBlogPost(post);
   const extractedFaqs = extractFaqsFromContent(post.content);
   const resolvedFaqs = [
     ...(post.faqs ?? []),
@@ -906,6 +923,23 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                   {post.content}
                 </BlogProse>
               </BlogCtaProvider>
+
+              {assistedService ? (
+                <div className="mt-8">
+                  <AssistedPrepCTA
+                    service={assistedService}
+                    variant="banner"
+                    src="blog_assisted_cta"
+                    product={
+                      assistedService === 'money_claim'
+                        ? 'money_claim'
+                        : assistedService === 'possession'
+                          ? 'complete_pack'
+                          : 'notice_only'
+                    }
+                  />
+                </div>
+              ) : null}
 
               <NextSteps slug={post.slug} category={post.category} tags={post.tags} />
 

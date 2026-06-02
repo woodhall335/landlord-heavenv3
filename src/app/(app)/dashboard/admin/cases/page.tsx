@@ -15,6 +15,7 @@ import {
   getAdminJurisdictionLabel,
 } from "@/lib/admin/case-manager";
 import { ADMIN_PRODUCT_OPTIONS } from "@/lib/admin/products";
+import { isAssistedPrepSku, type AssistedPrepStatus } from "@/lib/assisted-prep";
 
 interface AdminCasesApiResponse {
   success: boolean;
@@ -61,9 +62,19 @@ const presetOptions: Array<{ value: AdminCasesPreset; label: string }> = [
 function statusPillClass(status: string | null) {
   if (!status) return "bg-gray-100 text-gray-600";
   if (status === "paid" || status === "fulfilled") return "bg-green-100 text-green-700";
-  if (status === "requires_action" || status === "pending" || status === "processing" || status === "ready_to_generate") {
+  if (
+    status === "requires_action" ||
+    status === "pending" ||
+    status === "processing" ||
+    status === "ready_to_generate" ||
+    status === "callback_pending" ||
+    status === "callback_booked" ||
+    status === "in_review"
+  ) {
     return "bg-amber-100 text-amber-700";
   }
+  if (status === "pack_prepared" || status === "sent_to_customer" || status === "completed") return "bg-green-100 text-green-700";
+  if (status === "blocked_refund_due") return "bg-red-100 text-red-700";
   if (status === "failed") return "bg-red-100 text-red-700";
   return "bg-gray-100 text-gray-600";
 }
@@ -290,6 +301,73 @@ export default function AdminCasesPage() {
       setActionLoading(false);
     }
   };
+
+  async function handleAssistedStatus(caseItem: AdminCaseRecord, status: AssistedPrepStatus) {
+    if (!caseItem.order_id) return;
+    const note = window.prompt("Optional internal note for this status change:", "") || "";
+    try {
+      const response = await fetch("/api/admin/orders/assisted-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderId: caseItem.order_id, status, note }),
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(payload.error || "Failed to update assisted status");
+      }
+      setMessage({ type: "success", text: `Assisted status updated to ${status}.` });
+      await loadCases();
+    } catch (error: any) {
+      setMessage({ type: "error", text: error.message || "Failed to update assisted status" });
+    }
+  }
+
+  async function handleAssistedEmail(
+    caseItem: AdminCaseRecord,
+    emailType:
+      | "missing_information"
+      | "blockers_action_summary"
+      | "no_show_reschedule"
+      | "no_response_refund_offer"
+      | "refund_processed"
+      | "pack_ready"
+  ) {
+    if (!caseItem.order_id) return;
+    const noteRequired = emailType === "missing_information" || emailType === "blockers_action_summary";
+    const note = noteRequired
+      ? window.prompt("Add the missing information or blocker summary to send to the customer:", "")
+      : window.prompt("Optional message to include:", "") || "";
+
+    if (noteRequired && !note?.trim()) {
+      setMessage({ type: "error", text: "Please add a short message before sending this email." });
+      return;
+    }
+
+    const url =
+      emailType === "pack_ready"
+        ? "/api/admin/orders/send-assisted-ready"
+        : "/api/admin/orders/assisted-email";
+    const body =
+      emailType === "pack_ready"
+        ? { orderId: caseItem.order_id }
+        : { orderId: caseItem.order_id, emailType, note: note || null };
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(payload.error || "Failed to send assisted email");
+      }
+      setMessage({ type: "success", text: "Assisted email sent successfully." });
+      await loadCases();
+    } catch (error: any) {
+      setMessage({ type: "error", text: error.message || "Failed to send assisted email" });
+    }
+  }
 
   const restartableCases = cases.filter((caseItem) => caseItem.can_send_restart_link);
   const selectedRestartableCases = cases.filter(
@@ -592,6 +670,13 @@ export default function AdminCasesPage() {
                 <option value="fulfilled">Fulfilled</option>
                 <option value="pending">Pending</option>
                 <option value="ready_to_generate">Ready to generate</option>
+                <option value="callback_pending">Callback pending</option>
+                <option value="callback_booked">Callback booked</option>
+                <option value="in_review">In review</option>
+                <option value="blocked_refund_due">Blocked refund due</option>
+                <option value="pack_prepared">Pack prepared</option>
+                <option value="sent_to_customer">Sent to customer</option>
+                <option value="completed">Completed</option>
               </select>
             </div>
             <div>
@@ -740,6 +825,19 @@ export default function AdminCasesPage() {
                             Anonymous draft
                           </div>
                         )}
+                        {caseItem.assisted_intake?.case_overview && (
+                          <div className="mt-2 max-w-[16rem] rounded bg-violet-50 p-2 text-xs text-violet-900">
+                            <div className="font-semibold">Assisted intake</div>
+                            <div>{caseItem.assisted_intake.case_overview.property_address || "No property address"}</div>
+                            <div>{caseItem.assisted_intake.case_overview.tenant_names || "No tenant names"}</div>
+                            {caseItem.assisted_intake.contact?.phone ? (
+                              <div>{caseItem.assisted_intake.contact.phone}</div>
+                            ) : null}
+                            {caseItem.assisted_intake.source_case_id ? (
+                              <div>Imported from {caseItem.assisted_intake.source_case_id.slice(0, 8)}...</div>
+                            ) : null}
+                          </div>
+                        )}
                       </td>
                       <td className="p-4">
                         <span className={`inline-block rounded-full px-2 py-1 text-xs font-semibold ${statusPillClass(caseItem.payment_status)}`}>
@@ -853,6 +951,45 @@ export default function AdminCasesPage() {
                           {caseItem.can_regenerate && (
                             <button onClick={() => openModal("regenerate", caseItem)} className="text-left font-semibold text-charcoal hover:text-primary">
                               Regenerate docs
+                            </button>
+                          )}
+                          {isAssistedPrepSku(caseItem.product_type) && caseItem.order_id && caseItem.payment_status === "paid" && (
+                            <>
+                              <button onClick={() => handleAssistedStatus(caseItem, "callback_booked")} className="text-left font-semibold text-primary hover:underline">
+                                Mark callback booked
+                              </button>
+                              <button onClick={() => handleAssistedStatus(caseItem, "in_review")} className="text-left font-semibold text-primary hover:underline">
+                                Mark in review
+                              </button>
+                              <button onClick={() => handleAssistedStatus(caseItem, "blocked_refund_due")} className="text-left font-semibold text-red-700 hover:underline">
+                                Mark blocked/refund due
+                              </button>
+                              <button onClick={() => handleAssistedStatus(caseItem, "pack_prepared")} className="text-left font-semibold text-primary hover:underline">
+                                Mark pack prepared
+                              </button>
+                              <button onClick={() => handleAssistedEmail(caseItem, "pack_ready")} className="text-left font-semibold text-green-700 hover:underline">
+                                Send pack ready
+                              </button>
+                              <button onClick={() => handleAssistedStatus(caseItem, "completed")} className="text-left font-semibold text-primary hover:underline">
+                                Mark completed
+                              </button>
+                              <button onClick={() => handleAssistedEmail(caseItem, "missing_information")} className="text-left font-semibold text-primary hover:underline">
+                                Missing info email
+                              </button>
+                              <button onClick={() => handleAssistedEmail(caseItem, "blockers_action_summary")} className="text-left font-semibold text-red-700 hover:underline">
+                                Blocker email
+                              </button>
+                              <button onClick={() => handleAssistedEmail(caseItem, "no_show_reschedule")} className="text-left font-semibold text-primary hover:underline">
+                                No-show email
+                              </button>
+                              <button onClick={() => handleAssistedEmail(caseItem, "no_response_refund_offer")} className="text-left font-semibold text-amber-700 hover:underline">
+                                7-day refund offer
+                              </button>
+                            </>
+                          )}
+                          {isAssistedPrepSku(caseItem.product_type) && caseItem.order_id && caseItem.payment_status === "refunded" && (
+                            <button onClick={() => handleAssistedEmail(caseItem, "refund_processed")} className="text-left font-semibold text-primary hover:underline">
+                              Send refund email
                             </button>
                           )}
                           {caseItem.can_reopen_edit_window && (

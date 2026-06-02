@@ -51,7 +51,10 @@ export async function GET(request: NextRequest) {
     // Build query
     let query = adminClient
       .from('orders')
-      .select('id, user_id, product_type, total_amount, payment_status, stripe_payment_intent_id, created_at', { count: 'exact' });
+      .select(
+        'id, user_id, case_id, product_type, product_name, total_amount, payment_status, fulfillment_status, stripe_payment_intent_id, created_at, metadata',
+        { count: 'exact' }
+      );
 
     // Apply filters
     if (productType && productType !== 'all') {
@@ -83,25 +86,45 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    const caseIds = Array.from(
+      new Set((orders || []).map((order: any) => order.case_id).filter(Boolean))
+    ) as string[];
+    const { data: casesData } = caseIds.length
+      ? await adminClient
+          .from('cases')
+          .select('id, collected_facts, workflow_status')
+          .in('id', caseIds)
+      : { data: [] };
+    const caseById = new Map(
+      ((casesData || []) as any[]).map((caseItem) => [caseItem.id, caseItem])
+    );
+
     // Fetch user information for each order
     let ordersWithUsers = await Promise.all(
-      (orders || []).map(async (order) => {
+      (orders || []).map(async (order: any) => {
         const { data: userData } = await adminClient
           .from('users')
           .select('email, full_name')
           .eq('id', order.user_id)
           .single();
+        const caseData = order.case_id ? caseById.get(order.case_id) : null;
+        const assistedIntake = caseData?.collected_facts?.assisted_intake || null;
 
         return {
           id: order.id,
           user_id: order.user_id,
+          case_id: order.case_id,
           user_email: userData?.email || 'Unknown',
           user_name: userData?.full_name || null,
-          product_name: getAdminProductLabel(order.product_type),
+          product_name: order.product_name || getAdminProductLabel(order.product_type),
           product_type: order.product_type,
           total_amount: order.total_amount,
           payment_status: order.payment_status,
+          fulfillment_status: order.fulfillment_status,
           stripe_payment_intent_id: order.stripe_payment_intent_id,
+          metadata: order.metadata || null,
+          assisted_intake: assistedIntake,
+          case_workflow_status: caseData?.workflow_status || null,
           created_at: order.created_at,
         };
       })

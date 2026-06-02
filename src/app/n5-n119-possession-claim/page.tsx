@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { CommercialBridge } from '@/components/marketing/CommercialBridge';
 import { Container } from '@/components/ui/Container';
@@ -235,6 +236,9 @@ export default function Page() {
           <div className="mx-auto max-w-5xl">
             <SeoPageContextPanel pathname="/n5-n119-possession-claim" className="border border-[#CAB6FF] bg-[#FBF8FF]" />
             <CourtClaimBridge ctaPosition="top" />
+            <div className="mt-6">
+              <AssistedPrepCTA service="possession" variant="banner" src="n5_n119_assisted" product="complete_pack" />
+            </div>
           </div>
         </Container>
       </section>

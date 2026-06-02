@@ -42,6 +42,11 @@
 import { Resend } from 'resend';
 import { HMO_PRO_FROM_PRICE_PER_MONTH } from '@/lib/pricing';
 import { formatPriceLabel } from '@/lib/pricing/products';
+import {
+  ASSISTED_PREP_CHECKLIST_INTRO,
+  getAssistedPrepConfigBySku,
+  type AssistedPrepSku,
+} from '@/lib/assisted-prep';
 
 let resendClient: Resend | null = null;
 
@@ -499,6 +504,252 @@ The Landlord Heaven Team
   return sendEmail({
     to,
     subject: `Purchase Confirmation - ${productName} (#${orderNumber})`,
+    html,
+    text,
+  });
+}
+
+function renderAssistedChecklistHtml(items: readonly string[], finalNote: string): string {
+  const renderedItems = items
+    .map(
+      (item) =>
+        `<li style="margin: 0 0 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.lightGray}; line-height: 1.5;">${item}</li>`
+    )
+    .join('');
+
+  return `
+    <div style="margin: 20px 0;">
+      <p style="margin: 0 0 12px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: bold; color: ${COLORS.white};">What to have ready</p>
+      <p style="margin: 0 0 14px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.lightGray}; line-height: 1.6;">${ASSISTED_PREP_CHECKLIST_INTRO}</p>
+      <ul style="margin: 0 0 14px 20px; padding: 0;">${renderedItems}</ul>
+      <p style="margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.lightGray}; line-height: 1.6;">${finalNote}</p>
+    </div>
+  `;
+}
+
+function renderAssistedChecklistText(items: readonly string[], finalNote: string): string {
+  return `${ASSISTED_PREP_CHECKLIST_INTRO}\n\n${items.map((item) => `- ${item}`).join('\n')}\n\n${finalNote}`;
+}
+
+export async function sendAssistedPrepPaymentReceived(params: {
+  to: string;
+  customerName: string;
+  productSku: AssistedPrepSku;
+  amount: number;
+  orderNumber: string;
+  bookingUrl: string;
+  uploadUrl: string;
+}): Promise<{ success: boolean; error?: string }> {
+  const { to, customerName, productSku, amount, orderNumber, bookingUrl, uploadUrl } = params;
+  const service = getAssistedPrepConfigBySku(productSku);
+  const productName = service?.label || 'Assisted Prep';
+  const checklistHtml = service
+    ? renderAssistedChecklistHtml(service.checklist, service.finalChecklistNote)
+    : '';
+  const checklistText = service
+    ? renderAssistedChecklistText(service.checklist, service.finalChecklistNote)
+    : '';
+
+  const cardContent = `
+    <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.white}; line-height: 1.6;">Hi ${customerName},</p>
+    <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.lightGray}; line-height: 1.6;">Your assisted preparation order is confirmed. We will prepare the documents with you on the callback, then you approve and send, serve, or file them.</p>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 20px 0;">
+      <tr>
+        <td bgcolor="${COLORS.cardBgAlt}" style="background-color: ${COLORS.cardBgAlt}; padding: 20px; border-radius: 6px; border: 1px solid ${COLORS.border};">
+          <p style="margin: 0 0 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; color: ${COLORS.white};">Order</p>
+          <p style="margin: 0 0 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bold; color: ${COLORS.primary};">${productName}</p>
+          <p style="margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.lightGray};">#${orderNumber} - ${formatPriceLabel(amount / 100)}</p>
+        </td>
+      </tr>
+    </table>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 26px 0;">
+      <tr><td align="center">${getBulletproofButton('Book your callback', bookingUrl)}</td></tr>
+    </table>
+    ${getInfoBox(`Calendly will send the callback reminders. If you miss the slot, use the same booking button to choose another time.`)}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 26px 0;">
+      <tr><td align="center">${getBulletproofButton('Upload documents to your case', uploadUrl)}</td></tr>
+    </table>
+    ${checklistHtml}
+    <p style="margin: 24px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.mutedGray};">If the upload area gives you trouble, reply to this email and we will help.</p>
+  `;
+
+  const html = getEmailWrapper(`
+    ${getLogoRow()}
+    ${getHeaderBanner('Your Assisted Prep Is Booked In')}
+    ${getContentCard(cardContent)}
+    ${getEmailFooter(false)}
+  `);
+
+  const text = `
+Hi ${customerName},
+
+Your assisted preparation order is confirmed.
+
+Order: ${productName}
+Order number: #${orderNumber}
+Amount paid: ${formatPriceLabel(amount / 100)}
+
+Book your callback: ${bookingUrl}
+Upload documents to your case: ${uploadUrl}
+
+Calendly will send the callback reminders. If you miss the slot, use the same booking button to choose another time.
+
+${checklistText}
+
+If the upload area gives you trouble, reply to this email and we will help.
+  `;
+
+  return sendEmail({
+    to,
+    subject: `Book your callback - ${productName} (#${orderNumber})`,
+    html,
+    text,
+  });
+}
+
+export async function sendAssistedPrepPackReady(params: {
+  to: string;
+  customerName: string;
+  productName: string;
+  caseUrl: string;
+}): Promise<{ success: boolean; error?: string }> {
+  const { to, customerName, productName, caseUrl } = params;
+  const reviewLine =
+    'Please review all documents carefully before serving or filing. Landlord Heaven does not represent you or guarantee any court outcome.';
+
+  const html = getEmailWrapper(`
+    ${getLogoRow()}
+    ${getHeaderBanner('Your Assisted Pack Is Ready')}
+    ${getContentCard(`
+      <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.white}; line-height: 1.6;">Hi ${customerName},</p>
+      <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.lightGray}; line-height: 1.6;">Your ${productName} documents are ready in your Landlord Heaven case file.</p>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 26px 0;">
+        <tr><td align="center">${getBulletproofButton('Open my case file', caseUrl)}</td></tr>
+      </table>
+      ${getInfoBox(reviewLine)}
+    `)}
+    ${getEmailFooter(false)}
+  `);
+
+  return sendEmail({
+    to,
+    subject: `${productName} is ready to review`,
+    html,
+    text: `Hi ${customerName},\n\nYour ${productName} documents are ready in your Landlord Heaven case file:\n${caseUrl}\n\n${reviewLine}`,
+  });
+}
+
+export type AssistedPrepLifecycleEmailType =
+  | 'missing_information'
+  | 'blockers_action_summary'
+  | 'no_show_reschedule'
+  | 'no_response_refund_offer'
+  | 'refund_processed';
+
+const assistedLifecycleCopy: Record<
+  AssistedPrepLifecycleEmailType,
+  { subjectPrefix: string; heading: string; body: string; primaryLabel: string }
+> = {
+  missing_information: {
+    subjectPrefix: 'We need a little more information',
+    heading: 'We need a little more information',
+    body:
+      'We have reviewed your assisted prep request and need a few extra details before we can finish preparing the pack. Please open your case file and add the missing information, or reply to this email if you are unsure.',
+    primaryLabel: 'Open my case file',
+  },
+  blockers_action_summary: {
+    subjectPrefix: 'Action needed before we can finish your pack',
+    heading: 'Action needed before we can finish your pack',
+    body:
+      'There are blockers we need to deal with before the assisted pack can be completed. Please review the action summary below and add anything you can to your case file.',
+    primaryLabel: 'Open my case file',
+  },
+  no_show_reschedule: {
+    subjectPrefix: 'Please reschedule your callback',
+    heading: 'Please reschedule your callback',
+    body:
+      'It looks like the callback was missed. That is not a problem - please book another time so we can continue preparing the assisted pack with you.',
+    primaryLabel: 'Book another callback',
+  },
+  no_response_refund_offer: {
+    subjectPrefix: 'Do you still want to continue?',
+    heading: 'Do you still want to continue?',
+    body:
+      'We have not heard back after the missed callback or information request. If you still want to continue, please book another callback or reply to this email. If you prefer not to continue, we can arrange a refund.',
+    primaryLabel: 'Book another callback',
+  },
+  refund_processed: {
+    subjectPrefix: 'Your refund has been processed',
+    heading: 'Your refund has been processed',
+    body:
+      'Your assisted prep refund has been processed. Your payment provider may take a few working days to show the money back on your card or bank statement.',
+    primaryLabel: 'Open my dashboard',
+  },
+};
+
+function escapeEmailHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+export async function sendAssistedPrepLifecycleEmail(params: {
+  to: string;
+  customerName: string;
+  productName: string;
+  emailType: AssistedPrepLifecycleEmailType;
+  caseUrl: string;
+  bookingUrl: string;
+  note?: string | null;
+}): Promise<{ success: boolean; error?: string }> {
+  const { to, customerName, productName, emailType, caseUrl, bookingUrl, note } = params;
+  const copy = assistedLifecycleCopy[emailType];
+  const primaryUrl =
+    emailType === 'no_show_reschedule' || emailType === 'no_response_refund_offer'
+      ? bookingUrl
+      : caseUrl;
+  const safeNote = note?.trim() ? escapeEmailHtml(note.trim()).replace(/\n/g, '<br>') : '';
+
+  const noteHtml = safeNote
+    ? getInfoBox(`<strong style="color: ${COLORS.white};">Admin note:</strong><br>${safeNote}`)
+    : '';
+
+  const cardContent = `
+    <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.white}; line-height: 1.6;">Hi ${escapeEmailHtml(customerName)},</p>
+    <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.lightGray}; line-height: 1.6;">${copy.body}</p>
+    ${noteHtml}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 26px 0;">
+      <tr><td align="center">${getBulletproofButton(copy.primaryLabel, primaryUrl)}</td></tr>
+    </table>
+    <p style="margin: 20px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.lightGray}; line-height: 1.6;">Case file: <a href="${caseUrl}" style="color: ${COLORS.primary};">${caseUrl}</a></p>
+    <p style="margin: 8px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.lightGray}; line-height: 1.6;">Callback booking: <a href="${bookingUrl}" style="color: ${COLORS.primary};">${bookingUrl}</a></p>
+    <p style="margin: 20px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.mutedGray};">If anything is unclear, reply to this email and we will help.</p>
+  `;
+
+  const html = getEmailWrapper(`
+    ${getLogoRow()}
+    ${getHeaderBanner(copy.heading)}
+    ${getContentCard(cardContent)}
+    ${getEmailFooter(false)}
+  `);
+
+  const text = `
+Hi ${customerName},
+
+${copy.body}
+
+${note?.trim() ? `Admin note:\n${note.trim()}\n\n` : ''}Case file: ${caseUrl}
+Callback booking: ${bookingUrl}
+
+If anything is unclear, reply to this email and we will help.
+  `;
+
+  return sendEmail({
+    to,
+    subject: `${copy.subjectPrefix} - ${productName}`,
     html,
     text,
   });

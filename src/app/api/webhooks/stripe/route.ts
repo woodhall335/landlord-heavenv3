@@ -9,10 +9,11 @@
 import { createAdminClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { sendPurchaseConfirmation } from '@/lib/email/resend';
+import { sendAssistedPrepPaymentReceived, sendPurchaseConfirmation } from '@/lib/email/resend';
 import { logger } from '@/lib/logger';
 import { fulfillOrder } from '@/lib/payments/fulfillment';
 import { isValidProductSku } from '@/lib/pricing/products';
+import { getAssistedPrepConfigBySku, isAssistedPrepSku } from '@/lib/assisted-prep';
 import { getOrCreateWizardFacts, updateWizardFacts } from '@/lib/case-facts/store';
 import type { WizardFactsMeta } from '@/lib/case-facts/schema';
 import {
@@ -346,7 +347,63 @@ export async function POST(request: Request) {
           const resolvedCaseId = caseId || (order as any).case_id;
           const resolvedProductType = productType || (order as any).product_type;
 
-          if (resolvedCaseId && resolvedProductType) {
+          if (isAssistedPrepSku(resolvedProductType)) {
+            await supabase
+              .from('orders')
+              .update({ fulfillment_status: 'callback_pending' })
+              .eq('id', (order as any).id);
+
+            if (resolvedCaseId) {
+              await supabase
+                .from('cases')
+                .update({
+                  workflow_status: 'callback_pending',
+                  workflow_status_updated_at: new Date().toISOString(),
+                })
+                .eq('id', resolvedCaseId);
+            }
+
+            try {
+              const { data: orderRow } = await supabase
+                .from('orders')
+                .select('*, user_id')
+                .eq('id', (order as any).id)
+                .single();
+
+              if (orderRow && userId) {
+                const { data: user } = await supabase
+                  .from('users')
+                  .select('email, full_name')
+                  .eq('id', userId)
+                  .single();
+
+                const service = getAssistedPrepConfigBySku(resolvedProductType);
+                const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://landlordheaven.co.uk';
+                const bookingUrl =
+                  process.env.NEXT_PUBLIC_CALENDLY_ASSISTED_PREP_URL ||
+                  `${baseUrl}/assisted-prep/success?service=${service?.service || 'section8'}${resolvedCaseId ? `&case_id=${resolvedCaseId}` : ''}`;
+                const uploadUrl = resolvedCaseId
+                  ? `${baseUrl}/dashboard/cases/${resolvedCaseId}`
+                  : `${baseUrl}/dashboard`;
+
+                if (user?.email) {
+                  await sendAssistedPrepPaymentReceived({
+                    to: user.email,
+                    customerName: user.full_name || 'there',
+                    productSku: resolvedProductType,
+                    amount: Math.round((orderRow as any).total_amount * 100),
+                    orderNumber: (orderRow as any).id.substring(0, 8).toUpperCase(),
+                    bookingUrl,
+                    uploadUrl,
+                  });
+                }
+              }
+            } catch (emailError: any) {
+              console.error('[Email] Failed to send assisted prep payment email:', emailError);
+            }
+
+            processingResult = 'assisted_prep_callback_pending';
+          } else if (resolvedCaseId && resolvedProductType) {
             await updateCaseEntitlements(
               supabase,
               resolvedCaseId,
@@ -441,37 +498,39 @@ export async function POST(request: Request) {
           }
 
           // Send purchase confirmation email
-          try {
-            const { data: orderRow } = await supabase
-              .from('orders')
-              .select('*, user_id')
-              .eq('id', (order as any).id)
-              .single();
-
-            if (orderRow && userId) {
-              const { data: user } = await supabase
-                .from('users')
-                .select('email, full_name')
-                .eq('id', userId)
+          if (!isAssistedPrepSku(resolvedProductType)) {
+            try {
+              const { data: orderRow } = await supabase
+                .from('orders')
+                .select('*, user_id')
+                .eq('id', (order as any).id)
                 .single();
 
-              if (user?.email) {
-                const dashboardUrl = resolvedCaseId
-                  ? `${process.env.NEXT_PUBLIC_APP_URL || 'https://landlordheaven.co.uk'}/dashboard/cases/${resolvedCaseId}`
-                  : `${process.env.NEXT_PUBLIC_APP_URL || 'https://landlordheaven.co.uk'}/dashboard`;
+              if (orderRow && userId) {
+                const { data: user } = await supabase
+                  .from('users')
+                  .select('email, full_name')
+                  .eq('id', userId)
+                  .single();
 
-                await sendPurchaseConfirmation({
-                  to: user.email,
-                  customerName: user.full_name || 'there',
-                  productName: (orderRow as any).product_name,
-                  amount: Math.round((orderRow as any).total_amount * 100),
-                  orderNumber: (orderRow as any).id.substring(0, 8).toUpperCase(),
-                  downloadUrl: dashboardUrl,
-                });
+                if (user?.email) {
+                  const dashboardUrl = resolvedCaseId
+                    ? `${process.env.NEXT_PUBLIC_APP_URL || 'https://landlordheaven.co.uk'}/dashboard/cases/${resolvedCaseId}`
+                    : `${process.env.NEXT_PUBLIC_APP_URL || 'https://landlordheaven.co.uk'}/dashboard`;
+
+                  await sendPurchaseConfirmation({
+                    to: user.email,
+                    customerName: user.full_name || 'there',
+                    productName: (orderRow as any).product_name,
+                    amount: Math.round((orderRow as any).total_amount * 100),
+                    orderNumber: (orderRow as any).id.substring(0, 8).toUpperCase(),
+                    downloadUrl: dashboardUrl,
+                  });
+                }
               }
+            } catch (emailError: any) {
+              console.error('[Email] Failed to send purchase confirmation:', emailError);
             }
-          } catch (emailError: any) {
-            console.error('[Email] Failed to send purchase confirmation:', emailError);
           }
 
           // Send server-side GA4 purchase event (bypasses ad blockers)

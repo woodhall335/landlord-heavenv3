@@ -31,6 +31,9 @@ export const ADMIN_PRODUCT_OPTIONS: AdminProductOption[] = [
   },
   { value: 'england_lodger_agreement', label: PRODUCTS.england_lodger_agreement.label },
   { value: 'residential_tenancy_application', label: PRODUCTS.residential_tenancy_application.label },
+  { value: 'section8_assisted_prep', label: PRODUCTS.section8_assisted_prep.label },
+  { value: 'money_claim_assisted_prep', label: PRODUCTS.money_claim_assisted_prep.label },
+  { value: 'possession_claim_assisted_prep', label: PRODUCTS.possession_claim_assisted_prep.label },
 ];
 
 const ADMIN_PRODUCT_NAME_BY_SKU = new Map(

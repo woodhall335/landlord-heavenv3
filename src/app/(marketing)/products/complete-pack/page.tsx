@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
 import type { FAQItem } from '@/components/seo/FAQSection';
@@ -135,21 +136,28 @@ export default function CompleteEvictionPackPage() {
       />
     ),
     afterPostHeroContent: (
-      <section className="scroll-mt-24 bg-white py-10 md:py-12" aria-label="Complete pack stage route">
-        <a href={descriptor.wizardHref} className="block w-full">
-          <picture>
-            <source media="(max-width: 767px)" srcSet="/images/complete-stage-mobile.webp" />
-            <Image
-              src="/images/complete-stage-desktop.webp"
-              alt="Choose the complete court and possession route"
-              width={1672}
-              height={941}
-              className="h-auto w-full"
-              sizes="100vw"
-            />
-          </picture>
-        </a>
-      </section>
+      <>
+        <section className="scroll-mt-24 bg-white py-10 md:py-12" aria-label="Complete pack stage route">
+          <a href={descriptor.wizardHref} className="block w-full">
+            <picture>
+              <source media="(max-width: 767px)" srcSet="/images/complete-stage-mobile.webp" />
+              <Image
+                src="/images/complete-stage-desktop.webp"
+                alt="Choose the complete court and possession route"
+                width={1672}
+                height={941}
+                className="h-auto w-full"
+                sizes="100vw"
+              />
+            </picture>
+          </a>
+        </section>
+        <div className="bg-white px-4 pb-10">
+          <div className="mx-auto max-w-5xl">
+            <AssistedPrepCTA service="possession" variant="banner" src="product_complete_pack" product="complete_pack" />
+          </div>
+        </div>
+      </>
     ),
     earlyProofBand: {
       priceLabel: product.displayPrice,

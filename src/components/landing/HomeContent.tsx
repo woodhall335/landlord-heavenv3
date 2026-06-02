@@ -13,6 +13,7 @@ import { PremiumImageFrame, Reveal, StaggerReveal, TrustPillRow } from '@/compon
 import { Container } from '@/components/ui';
 import { Hero, TrustBar } from '@/components/landing';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
 import { trackHomepageSelectorView } from '@/lib/analytics';
 import { smoothScrollToHash } from '@/lib/browser/smoothScrollToHash';
 import {
@@ -433,6 +434,12 @@ export default function HomeContent() {
                 <RouteSelectionCard key={card.title} {...card} />
               ))}
             </StaggerReveal>
+
+            <div className="mt-8 grid gap-4 lg:grid-cols-3">
+              <AssistedPrepCTA service="section8" variant="inline" src="homepage_assisted" product="notice_only" />
+              <AssistedPrepCTA service="possession" variant="inline" src="homepage_assisted" product="complete_pack" />
+              <AssistedPrepCTA service="money_claim" variant="inline" src="homepage_assisted" product="money_claim" />
+            </div>
           </div>
         </Container>
       </section>

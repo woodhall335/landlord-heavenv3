@@ -63,6 +63,7 @@ import {
 } from '@/components/ui/ComplianceTimingBlocker';
 import { isComplianceTimingBlock } from '@/lib/documents/compliance-timing-types';
 import { JurisdictionExplainer, ChecksSummaryBox } from '@/components/wizard/ReviewValueComponents';
+import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
 import { AnimatedReviewShell, type AnimatedReviewShellProps } from '@/components/wizard/AnimatedReviewShell';
 import { MoneyClaimAnimatedReview } from '@/components/wizard/money-claim/MoneyClaimAnimatedReview';
 
@@ -100,6 +101,7 @@ import {
 } from '@/lib/wizard-crosssell';
 import { getSelectedRouteBlockingIssues } from '@/lib/decision-engine/routeScopedBlockingIssues';
 import { getWizardFixTargetForIssue } from '@/lib/wizard/notice-only-issue-routing';
+import { assistedServiceForProduct } from '@/lib/assisted-prep';
 
 interface ReviewAddOnRecommendation {
   sku: string;
@@ -847,32 +849,61 @@ function ReviewPageInner() {
     redFlags,
     complianceIssues,
   });
+  const assistedReviewService = assistedServiceForProduct(product);
 
   // Render Money Claim specific content
   if (isMoneyClaimFlow) {
-    return <MoneyClaimAnimatedReview
-      caseId={caseId}
-      analysis={analysis}
-      jurisdiction={jurisdiction}
-      caseStrengthBand={caseStrengthBand}
-      readinessSummary={readinessSummary}
-      redFlags={redFlags}
-      complianceIssues={complianceIssues}
-      evidence={evidence}
-      hasBlockingIssues={hasBlockingIssues}
-      onFixIssues={handleFixIssues}
-      onEdit={handleEdit}
-      onProceed={handleProceed}
-      isPaid={isPaid}
-      isRegenerating={isRegenerating}
-      isLoadingPaymentStatus={isLoadingPaymentStatus}
-    />;
+    return (
+      <>
+        <MoneyClaimAnimatedReview
+          caseId={caseId}
+          analysis={analysis}
+          jurisdiction={jurisdiction}
+          caseStrengthBand={caseStrengthBand}
+          readinessSummary={readinessSummary}
+          redFlags={redFlags}
+          complianceIssues={complianceIssues}
+          evidence={evidence}
+          hasBlockingIssues={hasBlockingIssues}
+          onFixIssues={handleFixIssues}
+          onEdit={handleEdit}
+          onProceed={handleProceed}
+          isPaid={isPaid}
+          isRegenerating={isRegenerating}
+          isLoadingPaymentStatus={isLoadingPaymentStatus}
+        />
+        <div className="mx-auto max-w-5xl px-4 pb-8">
+          <AssistedPrepCTA
+            service="money_claim"
+            variant="review-panel"
+            caseId={caseId}
+            product={product}
+            caseType={caseType}
+            step="review"
+            src="wizard_assisted_cta"
+          />
+        </div>
+      </>
+    );
   }
 
   // Render Notice Only specific content
   if (isNoticeOnlyFlow) {
     return (
       <AnimatedReviewShell {...animatedReviewConfig}>
+        {assistedReviewService ? (
+          <div className="mb-5">
+            <AssistedPrepCTA
+              service={assistedReviewService}
+              variant={hasBlockingIssues ? 'review-panel' : 'banner'}
+              caseId={caseId}
+              product={product}
+              caseType={caseType}
+              step="review"
+              src="wizard_assisted_cta"
+            />
+          </div>
+        ) : null}
         <NoticeOnlyReviewContent
           caseId={caseId}
           analysis={analysis}
@@ -1052,6 +1083,19 @@ function ReviewPageInner() {
   // Render Eviction Complete Pack content
   return (
     <AnimatedReviewShell {...animatedReviewConfig}>
+      {assistedReviewService ? (
+        <div className="mb-5">
+          <AssistedPrepCTA
+            service={assistedReviewService}
+            variant={hasBlockingIssues ? 'review-panel' : 'banner'}
+            caseId={caseId}
+            product={product}
+            caseType={caseType}
+            step="review"
+            src="wizard_assisted_cta"
+          />
+        </div>
+      ) : null}
       <EvictionReviewContent
         caseId={caseId}
         analysis={analysis}

@@ -39,6 +39,9 @@ export const PRICE_IDS = {
   STUDENT_TENANCY: process.env.STRIPE_PRICE_ID_STUDENT_TENANCY!,
   HMO_SHARED_TENANCY: process.env.STRIPE_PRICE_ID_HMO_SHARED_TENANCY!,
   LODGER_AGREEMENT: process.env.STRIPE_PRICE_ID_LODGER_AGREEMENT!,
+  SECTION8_ASSISTED_PREP: process.env.STRIPE_PRICE_ID_SECTION8_ASSISTED_PREP!,
+  MONEY_CLAIM_ASSISTED_PREP: process.env.STRIPE_PRICE_ID_MONEY_CLAIM_ASSISTED_PREP!,
+  POSSESSION_CLAIM_ASSISTED_PREP: process.env.STRIPE_PRICE_ID_POSSESSION_CLAIM_ASSISTED_PREP!,
 } as const;
 
 export const HMO_PRICE_IDS = HMO_PRO_ENABLED
@@ -103,6 +106,21 @@ export const PRODUCT_METADATA: Record<string, { name: string; type: string; cate
     name: 'Room Let / Lodger Agreement & Shared Home Pack',
     type: 'one_time',
     category: 'tenancy_agreement',
+  },
+  [PRICE_IDS.SECTION8_ASSISTED_PREP]: {
+    name: 'Section 8 Notice Assisted Prep',
+    type: 'one_time',
+    category: 'assisted_prep',
+  },
+  [PRICE_IDS.MONEY_CLAIM_ASSISTED_PREP]: {
+    name: 'Money Claim Assisted Prep',
+    type: 'one_time',
+    category: 'assisted_prep',
+  },
+  [PRICE_IDS.POSSESSION_CLAIM_ASSISTED_PREP]: {
+    name: 'Possession Claim Assisted Prep',
+    type: 'one_time',
+    category: 'assisted_prep',
   },
   ...(HMO_PRO_ENABLED
     ? {

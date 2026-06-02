@@ -4,17 +4,31 @@ import { useState, useEffect, useCallback } from "react";
 import { Container } from "@/components/ui";
 import { useRouter } from "next/navigation";
 import { ADMIN_PRODUCT_OPTIONS, getAdminProductLabel } from "@/lib/admin/products";
+import { isAssistedPrepSku, type AssistedPrepStatus } from "@/lib/assisted-prep";
 
 interface Order {
   id: string;
   user_id: string;
   product_type: string;
+  product_name?: string;
+  case_id: string | null;
   total_amount: number;
   payment_status: string;
+  fulfillment_status: string | null;
   stripe_payment_intent_id: string | null;
   created_at: string;
   user_email?: string;
   user_name?: string;
+  assisted_intake?: {
+    case_overview?: {
+      property_address?: string;
+      tenant_names?: string;
+      urgency?: string;
+      summary?: string;
+    };
+    service_facts?: Record<string, string>;
+    source_case_id?: string | null;
+  } | null;
 }
 
 interface OrdersApiResponse {
@@ -171,10 +185,79 @@ export default function AdminOrdersPage() {
     }
   }
 
+  async function handleAssistedStatus(orderId: string, status: AssistedPrepStatus) {
+    const note = window.prompt("Optional internal note for this status change:", "") || "";
+    try {
+      const response = await fetch("/api/admin/orders/assisted-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderId, status, note }),
+      });
+      const payload = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(payload.error || "Failed to update assisted status");
+      }
+
+      setMessage({ type: "success", text: `Assisted status updated to ${status}.` });
+      loadOrders();
+    } catch (error: any) {
+      setMessage({ type: "error", text: error.message || "Failed to update assisted status" });
+    }
+  }
+
+  async function handleAssistedEmail(
+    orderId: string,
+    emailType:
+      | "missing_information"
+      | "blockers_action_summary"
+      | "no_show_reschedule"
+      | "no_response_refund_offer"
+      | "refund_processed"
+      | "pack_ready"
+  ) {
+    const noteRequired = emailType === "missing_information" || emailType === "blockers_action_summary";
+    const note = noteRequired
+      ? window.prompt("Add the missing information or blocker summary to send to the customer:", "")
+      : window.prompt("Optional message to include:", "") || "";
+
+    if (noteRequired && !note?.trim()) {
+      setMessage({ type: "error", text: "Please add a short message before sending this email." });
+      return;
+    }
+
+    const url =
+      emailType === "pack_ready"
+        ? "/api/admin/orders/send-assisted-ready"
+        : "/api/admin/orders/assisted-email";
+    const body =
+      emailType === "pack_ready"
+        ? { orderId }
+        : { orderId, emailType, note: note || null };
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const payload = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(payload.error || "Failed to send assisted email");
+      }
+
+      setMessage({ type: "success", text: "Assisted email sent successfully." });
+      loadOrders();
+    } catch (error: any) {
+      setMessage({ type: "error", text: error.message || "Failed to send assisted email" });
+    }
+  }
+
   async function handleExportCSV() {
     try {
       const csvData = [
-        ["Order ID", "Date", "User Email", "Product", "Amount", "Status"],
+        ["Order ID", "Date", "User Email", "Product", "Amount", "Payment Status", "Fulfillment Status", "Case ID"],
         ...orders.map((order) => [
           order.id,
           new Date(order.created_at).toLocaleDateString(),
@@ -182,6 +265,8 @@ export default function AdminOrdersPage() {
           getProductName(order.product_type),
           Number(order.total_amount || 0).toFixed(2),
           order.payment_status,
+          order.fulfillment_status || "",
+          order.case_id || "",
         ]),
       ];
 
@@ -339,6 +424,7 @@ export default function AdminOrdersPage() {
                   <th className="text-left p-4 text-sm font-semibold text-charcoal">Date</th>
                   <th className="text-left p-4 text-sm font-semibold text-charcoal">Customer</th>
                   <th className="text-left p-4 text-sm font-semibold text-charcoal">Product</th>
+                  <th className="text-left p-4 text-sm font-semibold text-charcoal">Case</th>
                   <th className="text-left p-4 text-sm font-semibold text-charcoal">Amount</th>
                   <th className="text-left p-4 text-sm font-semibold text-charcoal">Status</th>
                   <th className="text-left p-4 text-sm font-semibold text-charcoal">Actions</th>
@@ -367,6 +453,25 @@ export default function AdminOrdersPage() {
                     </td>
                     <td className="p-4">
                       <span className="text-sm text-gray-700">{getProductName(order.product_type)}</span>
+                      {order.assisted_intake?.case_overview ? (
+                        <div className="mt-2 max-w-[16rem] rounded bg-violet-50 p-2 text-xs text-violet-900">
+                          <div className="font-semibold">Assisted intake</div>
+                          <div>{order.assisted_intake.case_overview.property_address || "No property address"}</div>
+                          <div>{order.assisted_intake.case_overview.tenant_names || "No tenant names"}</div>
+                          {order.assisted_intake.source_case_id ? (
+                            <div>Imported from {order.assisted_intake.source_case_id.slice(0, 8)}...</div>
+                          ) : null}
+                        </div>
+                      ) : null}
+                    </td>
+                    <td className="p-4">
+                      {order.case_id ? (
+                        <a href={`/dashboard/cases/${order.case_id}`} className="text-sm font-semibold text-primary hover:underline">
+                          {order.case_id.slice(0, 8)}...
+                        </a>
+                      ) : (
+                        <span className="text-sm text-gray-500">No case</span>
+                      )}
                     </td>
                     <td className="p-4">
                       <span className="text-sm font-semibold text-charcoal">
@@ -387,9 +492,14 @@ export default function AdminOrdersPage() {
                       >
                         {order.payment_status}
                       </span>
+                      <div className="mt-2">
+                        <span className="inline-block rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-700">
+                          {order.fulfillment_status || "none"}
+                        </span>
+                      </div>
                     </td>
                     <td className="p-4">
-                      <div className="flex gap-2">
+                      <div className="flex flex-wrap gap-2">
                         {order.payment_status === "paid" && (
                           <>
                             <button
@@ -405,6 +515,45 @@ export default function AdminOrdersPage() {
                               Resend
                             </button>
                           </>
+                        )}
+                        {isAssistedPrepSku(order.product_type) && order.payment_status === "paid" && (
+                          <>
+                            <button onClick={() => handleAssistedStatus(order.id, "callback_booked")} className="text-primary hover:underline text-sm">
+                              Mark callback booked
+                            </button>
+                            <button onClick={() => handleAssistedStatus(order.id, "in_review")} className="text-primary hover:underline text-sm">
+                              Mark in review
+                            </button>
+                            <button onClick={() => handleAssistedStatus(order.id, "blocked_refund_due")} className="text-error hover:underline text-sm">
+                              Mark blocked/refund due
+                            </button>
+                            <button onClick={() => handleAssistedStatus(order.id, "pack_prepared")} className="text-primary hover:underline text-sm">
+                              Mark pack prepared
+                            </button>
+                            <button onClick={() => handleAssistedEmail(order.id, "pack_ready")} className="text-success hover:underline text-sm">
+                              Send pack ready
+                            </button>
+                            <button onClick={() => handleAssistedStatus(order.id, "completed")} className="text-primary hover:underline text-sm">
+                              Mark completed
+                            </button>
+                            <button onClick={() => handleAssistedEmail(order.id, "missing_information")} className="text-primary hover:underline text-sm">
+                              Missing info email
+                            </button>
+                            <button onClick={() => handleAssistedEmail(order.id, "blockers_action_summary")} className="text-error hover:underline text-sm">
+                              Blocker email
+                            </button>
+                            <button onClick={() => handleAssistedEmail(order.id, "no_show_reschedule")} className="text-primary hover:underline text-sm">
+                              No-show email
+                            </button>
+                            <button onClick={() => handleAssistedEmail(order.id, "no_response_refund_offer")} className="text-warning hover:underline text-sm">
+                              7-day refund offer
+                            </button>
+                          </>
+                        )}
+                        {isAssistedPrepSku(order.product_type) && order.payment_status === "refunded" && (
+                          <button onClick={() => handleAssistedEmail(order.id, "refund_processed")} className="text-primary hover:underline text-sm">
+                            Send refund email
+                          </button>
                         )}
                       </div>
                     </td>

@@ -44,6 +44,9 @@ export const SEO_PRICES = {
   tenancyLodger: { amount: 14.99, display: formatPriceLabel(14.99) },
   residentialLettingStandard: { amount: 9.99, display: formatPriceLabel(9.99) },
   residentialLettingPremium: { amount: 12.99, display: formatPriceLabel(12.99) },
+  section8AssistedPrep: { amount: 149, display: formatPriceLabel(149) },
+  moneyClaimAssistedPrep: { amount: 249, display: formatPriceLabel(249) },
+  possessionClaimAssistedPrep: { amount: 399, display: formatPriceLabel(399) },
 } as const satisfies Record<string, PriceDefinition>;
 
 /**
@@ -63,6 +66,9 @@ export const ALLOWED_SEO_PRICES = new Set([
   SEO_PRICES.tenancyLodger.display,
   SEO_PRICES.residentialLettingStandard.display,
   SEO_PRICES.residentialLettingPremium.display,
+  SEO_PRICES.section8AssistedPrep.display,
+  SEO_PRICES.moneyClaimAssistedPrep.display,
+  SEO_PRICES.possessionClaimAssistedPrep.display,
 ]);
 
 /**
@@ -85,6 +91,9 @@ export const SEO_LANDING_ROUTES = {
   england_hmo_shared_house_tenancy_agreement: '/hmo-shared-house-tenancy-agreement',
   england_lodger_agreement: '/lodger-agreement',
   residential_tenancy_application: '/products/ast',
+  section8_assisted_prep: '/section-8-notice-assisted-prep',
+  money_claim_assisted_prep: '/money-claim-assisted-prep',
+  possession_claim_assisted_prep: '/possession-claim-assisted-prep',
 } as const;
 
 export type ProductSku =
@@ -98,6 +107,9 @@ export type ProductSku =
   | 'ast_premium'
   | EnglandModernTenancyProductSku
   | 'residential_tenancy_application'
+  | 'section8_assisted_prep'
+  | 'money_claim_assisted_prep'
+  | 'possession_claim_assisted_prep'
   ;
 
 export type AskHeavenRecommendation =
@@ -290,6 +302,42 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     wizardHref: '/wizard/flow?type=tenancy_agreement&product=residential_tenancy_application&src=product_page&topic=tenancy',
     productPageHref: SEO_LANDING_ROUTES.residential_tenancy_application,
   },
+  section8_assisted_prep: {
+    sku: 'section8_assisted_prep',
+    label: 'Section 8 Notice Assisted Prep',
+    shortLabel: 'Section 8 Assisted Prep',
+    description:
+      'Prepared for you, checked with you, approved and served by you. A 20-minute callback to prepare or check the England Form 3A notice pack from your facts.',
+    price: SEO_PRICES.section8AssistedPrep.amount,
+    displayPrice: SEO_PRICES.section8AssistedPrep.display,
+    priceNote: 'England assisted preparation',
+    wizardHref: '/assisted-prep/start?service=section8',
+    productPageHref: SEO_LANDING_ROUTES.section8_assisted_prep,
+  },
+  money_claim_assisted_prep: {
+    sku: 'money_claim_assisted_prep',
+    label: 'Money Claim Assisted Prep',
+    shortLabel: 'Money Claim Assisted Prep',
+    description:
+      'Prepared for you, checked with you, approved and filed by you. A 30-minute callback to prepare claim-ready wording, evidence steps, and the claim pack.',
+    price: SEO_PRICES.moneyClaimAssistedPrep.amount,
+    displayPrice: SEO_PRICES.moneyClaimAssistedPrep.display,
+    priceNote: 'England assisted preparation',
+    wizardHref: '/assisted-prep/start?service=money_claim',
+    productPageHref: SEO_LANDING_ROUTES.money_claim_assisted_prep,
+  },
+  possession_claim_assisted_prep: {
+    sku: 'possession_claim_assisted_prep',
+    label: 'Possession Claim Assisted Prep',
+    shortLabel: 'Possession Assisted Prep',
+    description:
+      'Prepared for you, checked with you, approved and filed by you. A 45-minute callback to prepare or check N5, N119, service evidence, and filing steps.',
+    price: SEO_PRICES.possessionClaimAssistedPrep.amount,
+    displayPrice: SEO_PRICES.possessionClaimAssistedPrep.display,
+    priceNote: 'England assisted preparation',
+    wizardHref: '/assisted-prep/start?service=possession',
+    productPageHref: SEO_LANDING_ROUTES.possession_claim_assisted_prep,
+  },
 };
 
 export const PRODUCT_PRICE_LABELS = {
@@ -311,6 +359,9 @@ export const PRODUCT_PRICE_LABELS = {
     PRODUCTS.england_hmo_shared_house_tenancy_agreement.displayPrice,
   england_lodger_agreement: PRODUCTS.england_lodger_agreement.displayPrice,
   residential_tenancy_application: PRODUCTS.residential_tenancy_application.displayPrice,
+  section8_assisted_prep: PRODUCTS.section8_assisted_prep.displayPrice,
+  money_claim_assisted_prep: PRODUCTS.money_claim_assisted_prep.displayPrice,
+  possession_claim_assisted_prep: PRODUCTS.possession_claim_assisted_prep.displayPrice,
 } as const;
 
 export const PRODUCT_PRICE_AMOUNT_STRINGS = {
@@ -340,6 +391,9 @@ export const PRODUCT_PRICE_AMOUNT_STRINGS = {
   residential_tenancy_application: formatPriceAmount(
     PRODUCTS.residential_tenancy_application.price
   ),
+  section8_assisted_prep: formatPriceAmount(PRODUCTS.section8_assisted_prep.price),
+  money_claim_assisted_prep: formatPriceAmount(PRODUCTS.money_claim_assisted_prep.price),
+  possession_claim_assisted_prep: formatPriceAmount(PRODUCTS.possession_claim_assisted_prep.price),
 } as const;
 
 export const TENANCY_AGREEMENT_PRICE_RANGE = formatPriceRangeLabel([
@@ -458,6 +512,18 @@ export const REGIONAL_PRODUCT_AVAILABILITY: Record<
   residential_tenancy_application: {
     available: [],
     badge: 'Legacy only',
+  },
+  section8_assisted_prep: {
+    available: ['england'],
+    badge: 'England assisted',
+  },
+  money_claim_assisted_prep: {
+    available: ['england'],
+    badge: 'England assisted',
+  },
+  possession_claim_assisted_prep: {
+    available: ['england'],
+    badge: 'England assisted',
   },
 };
 

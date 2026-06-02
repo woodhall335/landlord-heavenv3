@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
+import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
 import { NoticeOnlyBridge } from '@/components/marketing/CommercialBridge';
 import { Container } from '@/components/ui/Container';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
@@ -158,7 +159,8 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
 
       <section className="border-b border-[#e6dbff] bg-white py-10">
         <Container>
-          <div className="mx-auto max-w-5xl rounded-3xl border border-[#cab6ff] bg-[#f8f4ff] p-6 md:p-8">
+          <div className="mx-auto max-w-5xl space-y-6">
+          <div className="rounded-3xl border border-[#cab6ff] bg-[#f8f4ff] p-6 md:p-8">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
               Current England position
             </p>
@@ -191,6 +193,10 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
                 {config.secondaryCta.label}
               </TrackedLink>
             </div>
+          </div>
+          {isForm3Section8 ? (
+            <AssistedPrepCTA service="section8" variant="banner" src="current_framework_assisted" product="notice_only" />
+          ) : null}
           </div>
         </Container>
       </section>

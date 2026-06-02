@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
 import type { FAQItem } from '@/components/seo/FAQSection';
@@ -127,21 +128,28 @@ export default function MoneyClaimPage() {
       trustPositioningPreset: 'money_claim',
     },
     afterPostHeroContent: (
-      <section className="scroll-mt-24 bg-white py-10 md:py-12" aria-label="Money claim route">
-        <Link href={descriptor.wizardHref} className="block w-full">
-          <picture>
-            <source media="(max-width: 767px)" srcSet="/images/money-claim-mobile.webp" />
-            <Image
-              src="/images/money-claim-desktop.webp"
-              alt="Choose the money claim route"
-              width={1672}
-              height={941}
-              className="h-auto w-full"
-              sizes="100vw"
-            />
-          </picture>
-        </Link>
-      </section>
+      <>
+        <section className="scroll-mt-24 bg-white py-10 md:py-12" aria-label="Money claim route">
+          <Link href={descriptor.wizardHref} className="block w-full">
+            <picture>
+              <source media="(max-width: 767px)" srcSet="/images/money-claim-mobile.webp" />
+              <Image
+                src="/images/money-claim-desktop.webp"
+                alt="Choose the money claim route"
+                width={1672}
+                height={941}
+                className="h-auto w-full"
+                sizes="100vw"
+              />
+            </picture>
+          </Link>
+        </section>
+        <div className="bg-white px-4 pb-10">
+          <div className="mx-auto max-w-5xl">
+            <AssistedPrepCTA service="money_claim" variant="banner" src="product_money_claim" product="money_claim" />
+          </div>
+        </div>
+      </>
     ),
     earlyProofBand: {
       priceLabel: product.displayPrice,

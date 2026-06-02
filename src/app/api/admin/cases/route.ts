@@ -472,6 +472,7 @@ export async function GET(request: NextRequest) {
       );
       const userRecord = caseItem.user_id ? users.get(caseItem.user_id) : null;
       const productType = deriveCaseProductType(caseItem, relatedOrder || null);
+      const assistedIntake = caseItem.collected_facts?.assisted_intake || null;
       const recoveryContact = deriveCaseRecoveryContact(caseItem, userRecord || null);
       const paymentStatusValue = relatedOrder?.payment_status || null;
       const hasAnyOrder = Boolean(relatedOrder?.id);
@@ -509,6 +510,7 @@ export async function GET(request: NextRequest) {
         wizard_completed_at: caseItem.wizard_completed_at || null,
         product_type: productType,
         product_name: getAdminProductName(productType),
+        assisted_intake: assistedIntake,
         payment_status: paymentStatusValue,
         has_any_order: hasAnyOrder,
         fulfillment_status: visibleFulfillmentStatus,

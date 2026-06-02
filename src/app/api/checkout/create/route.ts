@@ -42,6 +42,10 @@ import {
 import { isMoneyClaimAddOnEligible } from '@/lib/wizard-crosssell';
 import { isEnglandModernTenancyProductSku } from '@/lib/tenancy/england-product-model';
 import { getPublicProductOwnerHref } from '@/lib/public-products';
+import {
+  buildAssistedPrepSuccessHref,
+  getAssistedPrepServiceFromSku,
+} from '@/lib/assisted-prep';
 
 /**
  * Normalize display SKUs to payment SKUs for order storage
@@ -105,6 +109,9 @@ const PRODUCT_TO_PRICE_ID: Record<string, string> = {
   england_student_tenancy_agreement: PRICE_IDS.STUDENT_TENANCY,
   england_hmo_shared_house_tenancy_agreement: PRICE_IDS.HMO_SHARED_TENANCY,
   england_lodger_agreement: PRICE_IDS.LODGER_AGREEMENT,
+  section8_assisted_prep: PRICE_IDS.SECTION8_ASSISTED_PREP,
+  money_claim_assisted_prep: PRICE_IDS.MONEY_CLAIM_ASSISTED_PREP,
+  possession_claim_assisted_prep: PRICE_IDS.POSSESSION_CLAIM_ASSISTED_PREP,
   tenancy_agreement: PRICE_IDS.STANDARD_AST, // Generic tenancy agreement defaults to standard
   // Jurisdiction-specific display SKUs - map to same prices as AST
   prt_standard: PRICE_IDS.STANDARD_AST,      // Scotland
@@ -132,6 +139,9 @@ function validateStripePriceIds(): void {
     { key: 'STRIPE_PRICE_ID_STUDENT_TENANCY', value: PRICE_IDS.STUDENT_TENANCY },
     { key: 'STRIPE_PRICE_ID_HMO_SHARED_TENANCY', value: PRICE_IDS.HMO_SHARED_TENANCY },
     { key: 'STRIPE_PRICE_ID_LODGER_AGREEMENT', value: PRICE_IDS.LODGER_AGREEMENT },
+    { key: 'STRIPE_PRICE_ID_SECTION8_ASSISTED_PREP', value: PRICE_IDS.SECTION8_ASSISTED_PREP },
+    { key: 'STRIPE_PRICE_ID_MONEY_CLAIM_ASSISTED_PREP', value: PRICE_IDS.MONEY_CLAIM_ASSISTED_PREP },
+    { key: 'STRIPE_PRICE_ID_POSSESSION_CLAIM_ASSISTED_PREP', value: PRICE_IDS.POSSESSION_CLAIM_ASSISTED_PREP },
   ];
 
   const missingIds = requiredPriceIds.filter(({ value }) => !value || value === 'undefined');
@@ -157,6 +167,7 @@ const createCheckoutSchema = z.object({
     'notice_only', 'complete_pack', 'money_claim', 'sc_money_claim',
     'section13_standard', 'section13_defensive',
     'ast_standard', 'ast_premium',
+    'section8_assisted_prep', 'money_claim_assisted_prep', 'possession_claim_assisted_prep',
     'tenancy_agreement', // Generic tenancy agreement (defaults to standard tier)
     // Jurisdiction-specific display SKUs
     'prt_standard', 'prt_premium',           // Scotland
@@ -346,6 +357,8 @@ export async function POST(request: Request) {
     const adminSupabase = createAdminClient();
 
     const normalizedProductType = normalizeToPaymentSku(String(product_type));
+    const assistedService = getAssistedPrepServiceFromSku(normalizedProductType);
+    const isAssistedCheckout = Boolean(assistedService);
     const normalizedUpgradeFromProduct = upgrade_from_product
       ? normalizeToPaymentSku(String(upgrade_from_product))
       : null;
@@ -641,6 +654,13 @@ export async function POST(request: Request) {
         }
 
         // Check product jurisdiction restrictions
+        if (isAssistedCheckout && caseData.jurisdiction !== 'england') {
+          return NextResponse.json(
+            { error: 'Assisted preparation is currently available for England cases only.' },
+            { status: 400 }
+          );
+        }
+
         if (product_type === 'complete_pack' && caseData.jurisdiction !== 'england') {
           return NextResponse.json(
             { error: 'Complete Eviction Pack is currently available for England cases only.' },
@@ -1080,12 +1100,16 @@ export async function POST(request: Request) {
         : 'http://localhost:5000');
     const resolvedSuccessUrl =
       success_url ||
-      (case_id
+      (isAssistedCheckout && assistedService
+        ? `${baseUrl}${buildAssistedPrepSuccessHref({ service: assistedService, caseId: case_id, orderId: (order as any).id })}`
+        : case_id
         ? `${baseUrl}/dashboard/cases/${case_id}?payment=success`
         : `${baseUrl}/dashboard?session_id={CHECKOUT_SESSION_ID}`);
     const resolvedCancelUrl =
       cancel_url ||
-      (case_id ? `${baseUrl}/wizard/preview/${case_id}?payment=cancelled&product=${product_type}` : `${baseUrl}/dashboard`);
+      (isAssistedCheckout && assistedService
+        ? `${baseUrl}/assisted-prep/start?service=${assistedService}${case_id ? `&case_id=${case_id}` : ''}&payment=cancelled`
+        : case_id ? `${baseUrl}/wizard/preview/${case_id}?payment=cancelled&product=${product_type}` : `${baseUrl}/dashboard`);
 
     const checkoutSessionPayload: Stripe.Checkout.SessionCreateParams = {
       customer: customerId,
@@ -1121,8 +1145,9 @@ export async function POST(request: Request) {
         user_id: user.id,
         order_id: (order as any).id,
         product_type,
-        add_ons: permittedAddOnSkus.join(','),
-        case_id: case_id || '',
+          add_ons: permittedAddOnSkus.join(','),
+          case_id: case_id || '',
+          assisted_service: assistedService || '',
         upgrade_from_product: isNoticeOnlyToCompletePackUpgrade ? 'notice_only' : '',
         upgrade_amount: isNoticeOnlyToCompletePackUpgrade ? String(primaryChargeAmount) : '',
         // Attribution for webhook processing (Stripe metadata max 500 chars per value)
