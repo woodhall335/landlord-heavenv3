@@ -24,6 +24,7 @@ import { useRouter } from 'next/navigation';
 
 import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
+import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
 import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
 import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
 import { isWizardUiV3Enabled } from '@/components/wizard/shared/flags';
@@ -904,13 +905,26 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
         </div>
       ) : undefined}
       sidebar={(
-        <AskHeavenPanel
-          caseId={caseId}
-          caseType="money_claim"
-          jurisdiction={jurisdiction}
-          product="money_claim"
-          currentQuestionId={currentQuestionId}
-        />
+        <div className="space-y-4">
+          {jurisdiction === 'england' ? (
+            <AssistedPrepCTA
+              service="money_claim"
+              variant="inline"
+              caseId={caseId}
+              product="money_claim"
+              caseType="money_claim"
+              step={currentSection?.id}
+              src="wizard_side_panel"
+            />
+          ) : null}
+          <AskHeavenPanel
+            caseId={caseId}
+            caseType="money_claim"
+            jurisdiction={jurisdiction}
+            product="money_claim"
+            currentQuestionId={currentQuestionId}
+          />
+        </div>
       )}
             navigation={(
         <>

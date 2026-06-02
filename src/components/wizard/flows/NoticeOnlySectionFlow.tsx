@@ -47,6 +47,7 @@ import { useRouter } from 'next/navigation';
 import { RiCheckLine, RiErrorWarningLine, RiArrowRightSLine } from 'react-icons/ri';
 
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
+import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
 import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
 import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
 import { EnglandPossessionWorkspaceShell } from '@/components/wizard/shared/EnglandPossessionWorkspaceShell';
@@ -1725,13 +1726,26 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
         </>
       )}
       sidebar={(
-        <AskHeavenPanel
-          caseId={caseId}
-          caseType="eviction"
-          jurisdiction={jurisdiction}
-          product="notice_only"
-          currentQuestionId={currentQuestionId}
-        />
+        <div className="space-y-4">
+          {jurisdiction === 'england' ? (
+            <AssistedPrepCTA
+              service="section8"
+              variant="inline"
+              caseId={caseId}
+              product="notice_only"
+              caseType="eviction"
+              step={currentSection?.id}
+              src="wizard_side_panel"
+            />
+          ) : null}
+          <AskHeavenPanel
+            caseId={caseId}
+            caseType="eviction"
+            jurisdiction={jurisdiction}
+            product="notice_only"
+            currentQuestionId={currentQuestionId}
+          />
+        </div>
       )}
             navigation={(
         <>

@@ -32,16 +32,6 @@ type EffectiveHeaderState = 'solid' | 'transparent';
 
 const primaryLinks: NavItem[] = [
   {
-    href: "/products/notice-only",
-    label: "Eviction Notice Generator",
-    desktopClassName: "w-[8.75rem]",
-  },
-  {
-    href: "/products/complete-pack",
-    label: "Complete Eviction Pack",
-    desktopClassName: "w-[8.5rem]",
-  },
-  {
     href: "/products/money-claim",
     label: "Money Claim Pack",
     desktopClassName: "w-[7.5rem]",
@@ -56,6 +46,11 @@ const primaryLinks: NavItem[] = [
     label: "Increase Rent Section 13",
     desktopClassName: "w-[8.5rem]",
   },
+];
+
+const evictionNoticeLinks: NavItem[] = [
+  { href: '/products/notice-only', label: 'Eviction Notice Generator' },
+  { href: '/products/complete-pack', label: 'Complete Eviction Pack' },
 ];
 
 const tenancyAgreementLinks: NavItem[] = [
@@ -82,6 +77,7 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
   const isWizardFlowRoute = pathname?.startsWith('/wizard/flow') ?? false;
   const [open, setOpen] = useState(false);
   const [showFreeTools, setShowFreeTools] = useState(false);
+  const [showEvictionNotices, setShowEvictionNotices] = useState(false);
   const [showTenancyAgreements, setShowTenancyAgreements] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [mobileMenuTop, setMobileMenuTop] = useState(88);
@@ -248,6 +244,8 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
     ? 'text-charcoal hover:text-[#692ED4]'
     : 'text-white hover:text-white/80';
   const mobileMenuActiveLinkClassName = mobileMenuUsesLightSurface ? 'text-[#111827]' : 'text-white';
+  const isEvictionNoticeMenuActive =
+    evictionNoticeLinks.some((item) => pathname === item.href);
   const isTenancyMenuActive =
     pathname === '/products/ast' || tenancyAgreementLinks.some((item) => pathname === item.href);
   const textClass = isSolid ? 'text-[#111827]' : 'text-white';
@@ -295,11 +293,11 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
           <Image
             src={isSolid ? "/images/logo.png" : "/images/logo2.png"}
             alt="Landlord Heaven"
-            width={160}
-            height={40}
+            width={215}
+            height={32}
             priority
-            sizes="160px"
-            className="h-8 w-auto"
+            sizes="215px"
+            className="h-8 w-auto max-w-[215px]"
           />
         </Link>
 
@@ -359,6 +357,38 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
                         key={item.href}
                         href={item.href}
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-[#692ED4] transition-colors"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="relative" onMouseEnter={() => setShowEvictionNotices(true)} onMouseLeave={() => setShowEvictionNotices(false)}>
+              <Link
+                href="/products/notice-only"
+                className={clsx(
+                  'relative flex min-h-[2.75rem] w-[8.5rem] items-center justify-center gap-1 px-2 py-2 text-center text-sm font-semibold leading-tight transition-colors',
+                  isEvictionNoticeMenuActive
+                    ? clsx(textClass, 'after:absolute after:bottom-[-4px] after:left-0 after:right-0 after:h-[2px] after:bg-[#7c3aed]')
+                    : clsx(secondaryTextClass, hoverTextClass)
+                )}
+                aria-label="Eviction notices"
+              >
+                Eviction Notices
+                <RiArrowDownSLine className={clsx('h-4 w-4', isSolid ? 'text-[#692ED4]' : 'text-white')} />
+              </Link>
+
+              {showEvictionNotices && (
+                <div className="absolute left-0 top-full z-50 w-72 pt-2">
+                  <div className="max-h-[28rem] overflow-auto rounded-xl border border-gray-200 bg-white py-2 shadow-lg">
+                    {evictionNoticeLinks.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="block px-4 py-2 text-sm text-gray-700 transition-colors hover:bg-primary-50 hover:text-[#692ED4]"
                       >
                         {item.label}
                       </Link>
@@ -481,6 +511,25 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
                       </Link>
                     </>
                   )}
+                </div>
+
+                <div className={clsx('pt-4', mobileMenuSectionBorderClassName)}>
+                  <div className={clsx('mb-2 text-xs font-bold uppercase', mobileMenuHeadingTextClassName)}>Eviction Notices</div>
+                  {evictionNoticeLinks.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={clsx(
+                        'block py-2 text-sm font-semibold relative',
+                        pathname === item.href
+                          ? clsx(mobileMenuActiveLinkClassName, 'after:absolute after:left-0 after:bottom-[-4px] after:h-[2px] after:w-16 after:bg-[#7c3aed]')
+                          : mobileMenuLinkClassName
+                      )}
+                      onClick={() => setOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
                 </div>
 
                 <div className={clsx('pt-4', mobileMenuSectionBorderClassName)}>

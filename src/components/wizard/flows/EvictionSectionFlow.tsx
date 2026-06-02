@@ -52,6 +52,7 @@ import { EnglandPossessionWorkspaceShell } from '@/components/wizard/shared/Engl
 import { isWizardUiV3Enabled } from '@/components/wizard/shared/flags';
 
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
+import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
 import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
 import type { SmartReviewWarningItem, SmartReviewSummary } from '@/components/wizard/SmartReviewPanel';
 
@@ -1226,13 +1227,26 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
         </>
       )}
       sidebar={(
-        <AskHeavenPanel
-          caseId={caseId}
-          caseType="eviction"
-          jurisdiction={jurisdiction}
-          product="complete_pack"
-          currentQuestionId={undefined}
-        />
+        <div className="space-y-4">
+          {jurisdiction === 'england' ? (
+            <AssistedPrepCTA
+              service="possession"
+              variant="inline"
+              caseId={caseId}
+              product="complete_pack"
+              caseType="eviction"
+              step={currentSection?.id}
+              src="wizard_side_panel"
+            />
+          ) : null}
+          <AskHeavenPanel
+            caseId={caseId}
+            caseType="eviction"
+            jurisdiction={jurisdiction}
+            product="complete_pack"
+            currentQuestionId={undefined}
+          />
+        </div>
       )}
             navigation={(
         <>
