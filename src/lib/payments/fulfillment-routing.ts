@@ -1,5 +1,6 @@
 import type { OrderMetadata } from '@/lib/payments/safe-order-metadata';
 import { extractOrderMetadata } from '@/lib/payments/safe-order-metadata';
+import { getAssistedPrepFulfillmentProduct } from '@/lib/assisted-prep';
 import { getEnglandCanonicalTenancyProduct } from '@/lib/tenancy/england-product-model';
 
 type SupportedFulfillmentStatus =
@@ -28,7 +29,8 @@ interface DeriveVisibleFulfillmentStateParams {
 function normalizeText(value: string | null | undefined): string | null {
   if (typeof value !== 'string') return null;
   const trimmed = value.trim();
-  return trimmed.length > 0 ? trimmed : null;
+  if (!trimmed) return null;
+  return getAssistedPrepFulfillmentProduct(trimmed) || trimmed;
 }
 
 function isEnglandTenancyCase(params: ResolveFulfillmentProductParams): boolean {

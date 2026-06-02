@@ -52,6 +52,32 @@ describe('resolveFulfillmentProductForCase', () => {
       })
     ).toBe('ast_standard');
   });
+
+  it('maps assisted prep order SKUs to the document pack product that fulfillment can generate', () => {
+    expect(
+      resolveFulfillmentProductForCase({
+        productType: 'section8_assisted_prep',
+        jurisdiction: 'england',
+        caseType: 'eviction',
+      })
+    ).toBe('notice_only');
+
+    expect(
+      resolveFulfillmentProductForCase({
+        productType: 'money_claim_assisted_prep',
+        jurisdiction: 'england',
+        caseType: 'money_claim',
+      })
+    ).toBe('money_claim');
+
+    expect(
+      resolveFulfillmentProductForCase({
+        productType: 'possession_claim_assisted_prep',
+        jurisdiction: 'england',
+        caseType: 'eviction',
+      })
+    ).toBe('complete_pack');
+  });
 });
 
 describe('getRequestedProductTypeFromOrder', () => {

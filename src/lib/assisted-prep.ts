@@ -158,6 +158,13 @@ export function isAssistedPrepProductSku(sku: ProductSku | string | null | undef
   return isAssistedPrepSku(sku);
 }
 
+export function getAssistedPrepFulfillmentProduct(sku: string | null | undefined): ProductSku | null {
+  if (sku === 'section8_assisted_prep') return 'notice_only';
+  if (sku === 'money_claim_assisted_prep') return 'money_claim';
+  if (sku === 'possession_claim_assisted_prep') return 'complete_pack';
+  return null;
+}
+
 export function normalizeAssistedPrepService(value: string | null | undefined): AssistedPrepService {
   if (value === 'money_claim') return 'money_claim';
   if (value === 'possession') return 'possession';

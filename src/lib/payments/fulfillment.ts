@@ -1,4 +1,5 @@
 import { createAdminClient } from '@/lib/supabase/server';
+import { getAssistedPrepFulfillmentProduct } from '@/lib/assisted-prep';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import { mapCaseFactsToScotlandMoneyClaimCase } from '@/lib/documents/money-claim-wizard-mapper';
 import { mapWizardToASTData } from '@/lib/documents/ast-wizard-mapper';
@@ -902,7 +903,15 @@ export async function fulfillOrder({
   userId,
 }: FulfillOrderInput): Promise<FulfillmentResult> {
   const supabase = createAdminClient();
-  const requestedFulfillmentProducts = Array.from(new Set([productType, ...addOns].filter(Boolean)));
+  const primaryRequestedProductType = getAssistedPrepFulfillmentProduct(productType) || productType;
+  const requestedFulfillmentProducts = Array.from(
+    new Set(
+      [
+        primaryRequestedProductType,
+        ...addOns.map((sku) => getAssistedPrepFulfillmentProduct(sku) || sku),
+      ].filter(Boolean)
+    )
+  );
 
   // First, get case data to determine jurisdiction and route
   const { data: caseData, error: caseError } = await supabase
@@ -917,7 +926,7 @@ export async function fulfillOrder({
 
   const wizardFacts = (caseData as any).collected_facts || {};
   const isGenericClaimsMoneyClaim =
-    productType === 'money_claim' &&
+    primaryRequestedProductType === 'money_claim' &&
     (wizardFacts.claim_flow_mode === 'generic_small_claim' ||
       wizardFacts.__meta?.claim_flow_mode === 'generic_small_claim' ||
       wizardFacts.__meta?.generic_claim_pack === true ||
@@ -979,7 +988,7 @@ export async function fulfillOrder({
         .filter(Boolean)
     )
   );
-  const primaryFulfillmentProduct = fulfillmentProducts[0] || productType;
+  const primaryFulfillmentProduct = fulfillmentProducts[0] || primaryRequestedProductType;
 
   // ==========================================================================
   // SECTION 8 COMPLETE PACK: Auto-normalize signature_date to notice_expiry_date
@@ -987,7 +996,7 @@ export async function fulfillOrder({
   // The signature date MUST be >= notice_expiry_date for Section 8 court forms.
   // ==========================================================================
   const isSection8Route = route === 'section_8' || route === 'section8_notice';
-  const isCompletePack = productType === 'complete_pack';
+  const isCompletePack = primaryFulfillmentProduct === 'complete_pack';
 
   if (isSection8Route && isCompletePack) {
     const noticeExpiryDate = wizardFacts.notice_expiry_date ||
