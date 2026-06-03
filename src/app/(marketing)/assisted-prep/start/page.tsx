@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function AssistedPrepStartPage() {
   return (
     <>
-      <HeaderConfig mode="autoOnScroll" />
+      <HeaderConfig mode="solid" />
       <main className="bg-slate-50 px-4 py-12 md:py-16">
         <Suspense fallback={<div className="mx-auto max-w-3xl rounded-2xl bg-white p-6 shadow-sm">Loading assisted prep...</div>}>
           <AssistedPrepIntakeForm />

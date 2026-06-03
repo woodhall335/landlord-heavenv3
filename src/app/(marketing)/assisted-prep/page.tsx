@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function AssistedPrepHubPage() {
   return (
     <>
-      <HeaderConfig mode="autoOnScroll" />
+      <HeaderConfig mode="solid" />
       <main className="bg-slate-50">
         <section className="mx-auto max-w-6xl px-4 py-16 md:py-24">
           <div className="max-w-3xl">

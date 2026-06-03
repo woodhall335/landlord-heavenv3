@@ -34,7 +34,7 @@ export default async function AssistedPrepSuccessPage({ searchParams }: PageProp
 
   return (
     <>
-      <HeaderConfig mode="autoOnScroll" />
+      <HeaderConfig mode="solid" />
       <main className="bg-slate-50 px-4 py-12 md:py-16">
         <div className="mx-auto max-w-5xl space-y-8">
           <section className="rounded-2xl border border-violet-200 bg-white p-6 shadow-sm md:p-8">
