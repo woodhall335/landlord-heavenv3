@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
-import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
+import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
 import type { FAQItem } from '@/components/seo/FAQSection';
@@ -117,7 +117,7 @@ export default function CompleteEvictionPackPage() {
       children: (
         <div className="mt-6 rounded-2xl border border-white/20 bg-white/10 p-4 text-sm leading-6 text-white/90 backdrop-blur">
           <p className="font-semibold text-white">Choose this if court is likely.</p>
-          <p className="mt-1">
+          <p className="mt-1 text-white">
             It includes the Form 3A notice and service file, then adds the N5,
             N119, evidence, filing, and hearing support for the possession claim.
           </p>
@@ -129,11 +129,18 @@ export default function CompleteEvictionPackPage() {
       trustPositioningPreset: 'complete_pack',
     },
     postHeroContent: (
-      <Section8JourneyTimeline
-        stage="stage2"
-        title="See the notice-to-court path"
-        intro="The Complete Pack carries the same England Section 8 case from notice, through expiry, into claim and hearing preparation."
-      />
+      <>
+        <AssistedPrepServicesShowcase
+          pagePath={descriptor.landingHref}
+          pageType="product_page"
+          src="product_complete_pack"
+        />
+        <Section8JourneyTimeline
+          stage="stage2"
+          title="See the notice-to-court path"
+          intro="The Complete Pack carries the same England Section 8 case from notice, through expiry, into claim and hearing preparation."
+        />
+      </>
     ),
     afterPostHeroContent: (
       <>
@@ -152,11 +159,6 @@ export default function CompleteEvictionPackPage() {
             </picture>
           </a>
         </section>
-        <div className="bg-white px-4 pb-10">
-          <div className="mx-auto max-w-5xl">
-            <AssistedPrepCTA service="possession" variant="banner" src="product_complete_pack" product="complete_pack" />
-          </div>
-        </div>
       </>
     ),
     earlyProofBand: {

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
@@ -215,11 +216,16 @@ export default function Page() {
 
       <section className="border-b border-[#E6DBFF] bg-white py-8">
         <Container>
+          <AssistedPrepServicesShowcase
+            pagePath="/tenant-left-without-paying-rent"
+            pageType="guide"
+            src="tenant_left_without_paying_rent_assisted"
+          />
           <div className="mx-auto mb-6 max-w-5xl">
             <SeoPageContextPanel pathname="/tenant-left-without-paying-rent" />
           </div>
 
-          <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="mx-auto mt-8 grid max-w-5xl gap-6 lg:grid-cols-[1.05fr_0.95fr]">
             <nav
               aria-labelledby="guide-links-heading"
               className="rounded-2xl border border-[#E6DBFF] bg-white p-6"

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
@@ -151,6 +152,14 @@ export default function SamplesPage() {
         showTrustPositioningBar
         trustPositioningHeadline="Inspect the sample, then build a validated landlord document pack around your facts before you pay."
       />
+
+      <Container className="pb-4 pt-10">
+        <AssistedPrepServicesShowcase
+          pagePath="/samples"
+          pageType="entry_page"
+          src="samples_assisted"
+        />
+      </Container>
 
       <Container id="sample-directory" className="py-10 md:py-12">
         <section className="rounded-lg border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)] md:p-8">

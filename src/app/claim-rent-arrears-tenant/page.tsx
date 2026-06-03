@@ -15,6 +15,7 @@ import {
   moneyClaimGuides,
 } from '@/lib/seo/internal-links';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -141,6 +142,11 @@ export default function ClaimRentArrearsTenantPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <SeoPageContextPanel pathname="/claim-rent-arrears-tenant" />
+              <AssistedPrepServicesShowcase
+                pagePath="/claim-rent-arrears-tenant"
+                pageType="guide"
+                src="claim_rent_arrears_assisted"
+              />
             </div>
           </div>
         </section>

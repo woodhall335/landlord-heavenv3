@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
@@ -109,6 +110,16 @@ export default function TenantNotPayingRentPage() {
         <section className="py-6 bg-gray-50 border-y border-gray-100">
           <div className="container mx-auto px-4">
             <SocialProofCounter variant="total" className="justify-center" />
+          </div>
+        </section>
+
+        <section className="bg-white px-4 pb-8">
+          <div className="container mx-auto max-w-6xl">
+            <AssistedPrepServicesShowcase
+              pagePath="/tenant-not-paying-rent"
+              pageType="guide"
+              src="tenant_not_paying_rent_assisted"
+            />
           </div>
         </section>
 

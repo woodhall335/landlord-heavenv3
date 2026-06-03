@@ -473,3 +473,6 @@
 
 ✓ Starting...
 ✓ Ready in 14.3s
+○ Compiling /assisted-prep ...
+ GET /products/notice-only 200 in 3.2s (compile: 16ms, proxy.ts: 2.8s, render: 424ms)
+ GET /assisted-prep 200 in 137ms (compile: 7ms, proxy.ts: 9ms, render: 121ms)

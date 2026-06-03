@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
@@ -192,6 +193,16 @@ export default function Page() {
           and possession.
         </p>
       </UniversalHero>
+
+      <section className="border-b border-[#E6DBFF] bg-white py-8">
+        <Container>
+          <AssistedPrepServicesShowcase
+            pagePath="/rent-arrears-landlord-guide"
+            pageType="guide"
+            src="rent_arrears_landlord_guide_assisted"
+          />
+        </Container>
+      </section>
 
       <section id="quick-answer" className="border-b border-[#E6DBFF] bg-white py-10">
         <Container>

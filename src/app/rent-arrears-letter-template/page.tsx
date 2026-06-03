@@ -10,6 +10,7 @@ import {
   landingPageLinks,
 } from '@/lib/seo/internal-links';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FunnelCta } from '@/components/funnels';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -154,6 +155,11 @@ export default function RentArrearsLetterTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto space-y-6">
               <SeoPageContextPanel pathname="/rent-arrears-letter-template" />
+              <AssistedPrepServicesShowcase
+                pagePath="/rent-arrears-letter-template"
+                pageType="guide"
+                src="rent_arrears_letter_assisted"
+              />
               <p className="text-gray-700">
                 Use this letter-stage guide alongside the wider{' '}
                 <Link href="/tenant-not-paying-rent" className="font-medium text-primary hover:underline">

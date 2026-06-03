@@ -12,7 +12,7 @@ import {
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
-import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
+import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import type { IntentPageConfig } from '@/lib/seo/eviction-intent-pages';
 import {
   getPrimaryDestinationAboveFold,
@@ -325,17 +325,10 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
               </div>
             </div>
             {assistedService ? (
-              <AssistedPrepCTA
-                service={assistedService}
-                variant="banner"
+              <AssistedPrepServicesShowcase
+                pagePath={`/${config.slug}`}
+                pageType="entry_page"
                 src="eviction_intent_assisted"
-                product={
-                  assistedService === 'money_claim'
-                    ? 'money_claim'
-                    : assistedService === 'possession'
-                      ? 'complete_pack'
-                      : 'notice_only'
-                }
               />
             ) : null}
           </div>

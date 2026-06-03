@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
-import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
+import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { NoticeOnlyBridge } from '@/components/marketing/CommercialBridge';
 import { Container } from '@/components/ui/Container';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
@@ -195,7 +195,11 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
             </div>
           </div>
           {isForm3Section8 ? (
-            <AssistedPrepCTA service="section8" variant="banner" src="current_framework_assisted" product="notice_only" />
+            <AssistedPrepServicesShowcase
+              pagePath={pagePath}
+              pageType="entry_page"
+              src="current_framework_assisted"
+            />
           ) : null}
           </div>
         </Container>

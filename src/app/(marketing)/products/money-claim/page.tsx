@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
-import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
+import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
 import type { FAQItem } from '@/components/seo/FAQSection';
@@ -116,7 +116,7 @@ export default function MoneyClaimPage() {
       children: (
         <div className="mt-6 rounded-2xl border border-white/20 bg-white/10 p-4 text-sm leading-6 text-white/90 backdrop-blur">
           <p className="font-semibold text-white">Choose this if the tenant owes money.</p>
-          <p className="mt-1">
+          <p className="mt-1 text-white">
             It is the debt-recovery route for rent arrears, damage, bills, and tenancy debt.
             It does not replace a Section 8 notice or possession claim pack.
           </p>
@@ -129,6 +129,15 @@ export default function MoneyClaimPage() {
     },
     afterPostHeroContent: (
       <>
+        <div className="bg-white px-4 pb-10">
+          <div className="mx-auto max-w-7xl">
+            <AssistedPrepServicesShowcase
+              pagePath={descriptor.landingHref}
+              pageType="product_page"
+              src="product_money_claim"
+            />
+          </div>
+        </div>
         <section className="scroll-mt-24 bg-white py-10 md:py-12" aria-label="Money claim route">
           <Link href={descriptor.wizardHref} className="block w-full">
             <picture>
@@ -144,11 +153,6 @@ export default function MoneyClaimPage() {
             </picture>
           </Link>
         </section>
-        <div className="bg-white px-4 pb-10">
-          <div className="mx-auto max-w-5xl">
-            <AssistedPrepCTA service="money_claim" variant="banner" src="product_money_claim" product="money_claim" />
-          </div>
-        </div>
       </>
     ),
     earlyProofBand: {

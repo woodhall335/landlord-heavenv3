@@ -43,7 +43,7 @@ import { BlogProse } from '@/components/blog/BlogProse';
 import { BlogCtaProvider } from '@/components/blog/BlogCtaContext';
 import { BlogArticleStickyGuard } from '@/components/blog/BlogArticleStickyGuard';
 import { NextSteps } from '@/components/blog/NextSteps';
-import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
+import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { MoneyClaimBridge } from '@/components/marketing/CommercialBridge';
 import { getBlogImagesForPost, getBlogImagesForPostThumb } from '@/lib/blog/image-manifest';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
@@ -925,20 +925,11 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               </BlogCtaProvider>
 
               {assistedService ? (
-                <div className="mt-8">
-                  <AssistedPrepCTA
-                    service={assistedService}
-                    variant="banner"
-                    src="blog_assisted_cta"
-                    product={
-                      assistedService === 'money_claim'
-                        ? 'money_claim'
-                        : assistedService === 'possession'
-                          ? 'complete_pack'
-                          : 'notice_only'
-                    }
-                  />
-                </div>
+                <AssistedPrepServicesShowcase
+                  pagePath={`/blog/${slug}`}
+                  pageType="guide"
+                  src="blog_assisted_cta"
+                />
               ) : null}
 
               <NextSteps slug={post.slug} category={post.category} tags={post.tags} />

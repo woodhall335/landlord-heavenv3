@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
@@ -142,6 +143,11 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
           <Container>
             <div className="mx-auto max-w-5xl">
               <SeoPageContextPanel pathname="/money-claim-small-claims-landlord" />
+              <AssistedPrepServicesShowcase
+                pagePath="/money-claim-small-claims-landlord"
+                pageType="guide"
+                src="small_claims_landlord_assisted"
+              />
             </div>
           </Container>
         </section>

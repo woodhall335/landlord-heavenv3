@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
@@ -199,9 +200,14 @@ export default function Page() {
 
       <section className="border-b border-[#E6DBFF] bg-white py-8">
         <Container>
+          <AssistedPrepServicesShowcase
+            pagePath="/evict-tenant-not-paying-rent"
+            pageType="guide"
+            src="evict_tenant_not_paying_rent_assisted"
+          />
           <nav
             aria-labelledby="guide-links-heading"
-            className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-white p-6"
+            className="mx-auto mt-8 max-w-5xl rounded-2xl border border-[#E6DBFF] bg-white p-6"
           >
             <h2 id="guide-links-heading" className="text-2xl font-semibold text-[#2a2161]">
               In This Guide

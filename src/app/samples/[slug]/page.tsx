@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { Container } from '@/components/ui/Container';
@@ -96,6 +97,7 @@ function ProductSamplePageView({ config }: { config: ProductSamplePageConfig }) 
   const product = PRODUCTS[config.sku];
   const canonicalUrl = getCanonicalUrl(config.samplePath);
   const productUrl = getCanonicalUrl(config.productHref);
+  const showAssistedPrep = ['notice_only', 'complete_pack', 'money_claim'].includes(config.sku);
 
   return (
     <main className="min-h-screen bg-[#FCFBF8]">
@@ -156,6 +158,14 @@ function ProductSamplePageView({ config }: { config: ProductSamplePageConfig }) 
 
       <Container className="py-12 md:py-16">
         <GoldenPackProof data={proof} />
+
+        {showAssistedPrep ? (
+          <AssistedPrepServicesShowcase
+            pagePath={config.samplePath}
+            pageType="entry_page"
+            src="sample_page_assisted"
+          />
+        ) : null}
 
         <section className="mt-8 rounded-lg border border-[#D8C8FF] bg-[#F7F2FF] p-6 shadow-[0_14px_32px_rgba(91,86,232,0.08)] md:p-8">
           <div className="max-w-3xl">

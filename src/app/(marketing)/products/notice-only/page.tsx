@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
-import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
+import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
 import type { FAQItem } from '@/components/seo/FAQSection';
@@ -118,7 +118,7 @@ export default function NoticeOnlyPage() {
       children: (
         <div className="mt-6 rounded-2xl border border-white/20 bg-white/10 p-4 text-sm leading-6 text-white/90 backdrop-blur">
           <p className="font-semibold text-white">Choose this if your next step is serving notice.</p>
-          <p className="mt-1">
+          <p className="mt-1 text-white">
             It is the England-only Form 3A notice and service file. If you want N5 and N119
             possession claim papers as well, use the Complete Pack instead.
           </p>
@@ -130,11 +130,18 @@ export default function NoticeOnlyPage() {
       trustPositioningPreset: 'notice_only',
     },
     postHeroContent: (
-      <Section8JourneyTimeline
-        stage="stage1"
-        title="See where Stage 1 fits"
-        intro="Stage 1 covers preparing and serving the notice, then waiting for the notice period to end before any court claim."
-      />
+      <>
+        <AssistedPrepServicesShowcase
+          pagePath={descriptor.landingHref}
+          pageType="product_page"
+          src="product_notice_only"
+        />
+        <Section8JourneyTimeline
+          stage="stage1"
+          title="See where Stage 1 fits"
+          intro="Stage 1 covers preparing and serving the notice, then waiting for the notice period to end before any court claim."
+        />
+      </>
     ),
     afterPostHeroContent: (
       <>
@@ -153,11 +160,6 @@ export default function NoticeOnlyPage() {
             </picture>
           </a>
         </section>
-        <div className="bg-white px-4 pb-10">
-          <div className="mx-auto max-w-5xl">
-            <AssistedPrepCTA service="section8" variant="banner" src="product_notice_only" product="notice_only" />
-          </div>
-        </div>
       </>
     ),
     earlyProofBand: {

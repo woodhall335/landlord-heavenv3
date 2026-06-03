@@ -32,7 +32,7 @@ import {
   landingPageLinks,
 } from '@/lib/seo/internal-links';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
-import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
+import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { NoticeOnlyBridge } from '@/components/marketing/CommercialBridge';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -185,9 +185,11 @@ export default function Section8NoticeTemplatePage() {
                 ctaPosition="top"
                 headline="Need to serve the notice, not just read a template?"
               />
-              <div className="mt-6">
-                <AssistedPrepCTA service="section8" variant="banner" src="section8_template_assisted" product="notice_only" />
-              </div>
+              <AssistedPrepServicesShowcase
+                pagePath="/section-8-notice-template"
+                pageType="entry_page"
+                src="section8_template_assisted"
+              />
             </div>
             <nav
               aria-labelledby="section-8-links-heading"

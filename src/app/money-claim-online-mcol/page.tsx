@@ -4,6 +4,7 @@ import { getCanonicalUrl } from '@/lib/seo/urls';
 import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import { Container } from '@/components/ui';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { MoneyClaimBridge } from '@/components/marketing/CommercialBridge';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
@@ -180,6 +181,11 @@ export default function MoneyClaimOnlineMCOLPage() {
                 sourcePage="/money-claim-online-mcol"
                 ctaPosition="top"
                 headline="Turn rent arrears into a court-ready claim"
+              />
+              <AssistedPrepServicesShowcase
+                pagePath="/money-claim-online-mcol"
+                pageType="guide"
+                src="mcol_assisted"
               />
             </div>
           </Container>
