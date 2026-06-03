@@ -2,13 +2,32 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { AssistedPrepChecklist } from '@/components/assisted-prep/AssistedPrepChecklist';
+import { AssistedPrepServiceDetails } from '@/components/assisted-prep/AssistedPrepServiceDetails';
 import { getAssistedPrepConfig, ASSISTED_PREP_PROMISE } from '@/lib/assisted-prep';
 
 const service = getAssistedPrepConfig('money_claim');
 
 export const metadata: Metadata = {
   title: 'Money Claim Assisted Prep | Landlord Heaven',
-  description: 'Book assisted preparation for an England landlord money claim pack.',
+  description:
+    'Book money claim assisted prep for landlords. We help organise the debt, evidence, pre-action position, claim wording, and claim-ready pack.',
+  keywords: [
+    'money claim assisted prep',
+    'landlord money claim help',
+    'rent arrears claim preparation',
+    'tenant debt claim help',
+    'letter before claim support',
+    'particulars of claim preparation',
+    'money claim callback service',
+    'claim unpaid rent help',
+    'tenant damage claim preparation',
+    'landlord debt recovery documents',
+    'mcol preparation help',
+    'england landlord money claim',
+  ],
+  alternates: {
+    canonical: '/money-claim-assisted-prep',
+  },
 };
 
 export default function MoneyClaimAssistedPrepPage() {
@@ -27,6 +46,7 @@ export default function MoneyClaimAssistedPrepPage() {
               Start assisted prep
             </Link>
           </section>
+          <AssistedPrepServiceDetails service="money_claim" />
           <AssistedPrepChecklist service="money_claim" />
         </div>
       </main>

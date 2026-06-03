@@ -136,6 +136,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/tenancy-agreement-template', priority: 0.95, changeFrequency: 'weekly' as const },
   ];
 
+  const assistedPrepPages = [
+    { path: '/assisted-prep', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/section-8-notice-assisted-prep', priority: 0.86, changeFrequency: 'weekly' as const },
+    { path: '/money-claim-assisted-prep', priority: 0.86, changeFrequency: 'weekly' as const },
+    { path: '/possession-claim-assisted-prep', priority: 0.86, changeFrequency: 'weekly' as const },
+    { path: '/assisted-prep/start?service=section8', priority: 0.74, changeFrequency: 'weekly' as const },
+    { path: '/assisted-prep/start?service=money_claim', priority: 0.74, changeFrequency: 'weekly' as const },
+    { path: '/assisted-prep/start?service=possession', priority: 0.74, changeFrequency: 'weekly' as const },
+  ];
+
   // Rent increase SEO hub pages
   const rentIncreasePages = [
     { path: '/rent-increase', priority: 0.92, changeFrequency: 'weekly' as const },
@@ -434,6 +444,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const datedPages = [
     ...productPages,
     ...wizardLandingPages,
+    ...assistedPrepPages,
     ...rentIncreasePages,
     ...requestedIndexablePages,
     ...tenancyPages,
@@ -476,6 +487,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const commercialSeoRescuePaths = new Set<string>([
     ...publicOwnerPages.map((product) => product.landingHref),
     '/pricing',
+    '/assisted-prep',
+    '/section-8-notice-assisted-prep',
+    '/money-claim-assisted-prep',
+    '/possession-claim-assisted-prep',
     '/samples',
     '/form-3-section-8',
     '/n5-n119-possession-claim',
@@ -551,9 +566,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...blogPostPages,
     ...askHeavenPages,
   ]) {
-    const pathname = new URL(entry.url).pathname;
-    if (!isIndexablePath(pathname) || dedupedByPath.has(pathname)) continue;
-    dedupedByPath.set(pathname, entry);
+    const url = new URL(entry.url);
+    const pathname = url.pathname;
+    const dedupeKey = pathname === '/assisted-prep/start' ? `${pathname}${url.search}` : pathname;
+    if (!isIndexablePath(pathname) || dedupedByPath.has(dedupeKey)) continue;
+    dedupedByPath.set(dedupeKey, entry);
   }
 
   return [...dedupedByPath.values()];

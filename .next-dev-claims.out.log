@@ -476,3 +476,19 @@
 ○ Compiling /assisted-prep ...
  GET /products/notice-only 200 in 3.2s (compile: 16ms, proxy.ts: 2.8s, render: 424ms)
  GET /assisted-prep 200 in 137ms (compile: 7ms, proxy.ts: 9ms, render: 121ms)
+○ Compiling /pricing ...
+ GET /pricing 200 in 50s (compile: 40s, proxy.ts: 641ms, render: 8.7s)
+ GET /assisted-prep/start?service=section8 200 in 49s (compile: 40s, proxy.ts: 244ms, render: 8.9s)
+ GET /assisted-prep/start?service=money_claim 200 in 49s (compile: 40s, proxy.ts: 244ms, render: 8.9s)
+ GET /assisted-prep/start?service=possession 200 in 50s (compile: 40s, proxy.ts: 710ms, render: 8.9s)
+○ Compiling /sitemap.xml ...
+ GET /sitemap.xml 200 in 18.6s (compile: 17.5s, proxy.ts: 568ms, render: 498ms)
+○ Compiling /assisted-prep ...
+ GET /assisted-prep 200 in 11.9s (compile: 10.1s, proxy.ts: 129ms, render: 1621ms)
+ GET /assisted-prep/start?service=section8 200 in 11.9s (compile: 10.1s, proxy.ts: 129ms, render: 1640ms)
+ GET /assisted-prep/start?service=money_claim 200 in 177ms (compile: 8ms, proxy.ts: 20ms, render: 150ms)
+○ Compiling /section-8-notice-assisted-prep ...
+ GET /section-8-notice-assisted-prep 200 in 7.5s (compile: 5.4s, proxy.ts: 8ms, render: 2.1s)
+ GET /assisted-prep/start?service=possession 200 in 4.4s (compile: 134ms, proxy.ts: 3.7s, render: 549ms)
+○ Compiling /money-claim-assisted-prep ...
+ GET /money-claim-assisted-prep 200 in 5.4s (compile: 3.5s, proxy.ts: 10ms, render: 1880ms)

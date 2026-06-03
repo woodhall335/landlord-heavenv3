@@ -2,13 +2,32 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { AssistedPrepChecklist } from '@/components/assisted-prep/AssistedPrepChecklist';
+import { AssistedPrepServiceDetails } from '@/components/assisted-prep/AssistedPrepServiceDetails';
 import { getAssistedPrepConfig, ASSISTED_PREP_PROMISE } from '@/lib/assisted-prep';
 
 const service = getAssistedPrepConfig('section8');
 
 export const metadata: Metadata = {
   title: 'Section 8 Notice Assisted Prep | Landlord Heaven',
-  description: 'Book assisted preparation for an England Section 8 Form 3A notice pack.',
+  description:
+    'Book Section 8 assisted prep for England landlords. We help prepare or check the Form 3A notice, grounds, dates, service file, and evidence prompts.',
+  keywords: [
+    'section 8 assisted prep',
+    'section 8 notice help',
+    'form 3a assisted preparation',
+    'form 3a notice check',
+    'section 8 notice preparation',
+    'eviction notice preparation help',
+    'landlord section 8 callback',
+    'section 8 grounds check',
+    'notice service evidence',
+    'n215 service support',
+    'rent arrears notice help',
+    'england landlord eviction notice',
+  ],
+  alternates: {
+    canonical: '/section-8-notice-assisted-prep',
+  },
 };
 
 export default function Section8AssistedPrepPage() {
@@ -27,6 +46,7 @@ export default function Section8AssistedPrepPage() {
               Start assisted prep
             </Link>
           </section>
+          <AssistedPrepServiceDetails service="section8" />
           <AssistedPrepChecklist service="section8" />
         </div>
       </main>

@@ -2,13 +2,32 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { AssistedPrepChecklist } from '@/components/assisted-prep/AssistedPrepChecklist';
+import { AssistedPrepServiceDetails } from '@/components/assisted-prep/AssistedPrepServiceDetails';
 import { getAssistedPrepConfig, ASSISTED_PREP_PROMISE } from '@/lib/assisted-prep';
 
 const service = getAssistedPrepConfig('possession');
 
 export const metadata: Metadata = {
   title: 'Possession Claim Assisted Prep | Landlord Heaven',
-  description: 'Book assisted preparation for an England N5 and N119 possession claim pack.',
+  description:
+    'Book possession claim assisted prep for England landlords. We help prepare or check the N5, N119, notice evidence, bundle steps, and filing pack.',
+  keywords: [
+    'possession claim assisted prep',
+    'n5 n119 assisted prep',
+    'possession claim pack help',
+    'landlord court pack preparation',
+    'section 8 court papers help',
+    'n5 possession claim help',
+    'n119 particulars support',
+    'notice service evidence review',
+    'possession bundle checklist',
+    'eviction court filing support',
+    'complete eviction pack help',
+    'england possession claim preparation',
+  ],
+  alternates: {
+    canonical: '/possession-claim-assisted-prep',
+  },
 };
 
 export default function PossessionClaimAssistedPrepPage() {
@@ -27,6 +46,7 @@ export default function PossessionClaimAssistedPrepPage() {
               Start assisted prep
             </Link>
           </section>
+          <AssistedPrepServiceDetails service="possession" />
           <AssistedPrepChecklist service="possession" />
         </div>
       </main>

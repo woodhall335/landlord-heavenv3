@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Container } from '@/components/ui';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
-import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
+import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { StaggerReveal, TrustPillRow } from '@/components/marketing/PremiumMotion';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -140,6 +140,16 @@ const solicitorComparison = [
   },
 ];
 
+const hiddenPricingCardSkus = new Set([
+  'england_student_tenancy_agreement',
+  'england_hmo_shared_house_tenancy_agreement',
+  'england_lodger_agreement',
+]);
+
+const visiblePricingPackageCards = PRICING_PACKAGE_CARDS.filter(
+  (card) => !hiddenPricingCardSkus.has(card.productSku)
+);
+
 export default function PricingPage() {
   const pricingSchema = pricingItemListSchema([...PRICING_SCHEMA_ITEMS]);
 
@@ -174,22 +184,12 @@ export default function PricingPage() {
       </UniversalHero>
 
       <Container size="large" className="py-14">
-        <section className="mb-10 rounded-[2rem] border border-violet-200 bg-white p-6 shadow-sm md:p-8">
-          <div className="mb-6 max-w-3xl">
-            <span className="public-eyebrow">Do it yourself or with us</span>
-            <h2 className="mt-4 text-3xl font-bold tracking-tight text-[#1c1431]">
-              Assisted prep prices
-            </h2>
-            <p className="mt-3 text-base leading-7 text-[#5d5672]">
-              If you do not want to complete the pack alone, choose assisted prep. We prepare it with you, you check it, and you send, serve, or file it.
-            </p>
-          </div>
-          <div className="grid gap-4 lg:grid-cols-3">
-            <AssistedPrepCTA service="section8" variant="inline" src="pricing_assisted" product="notice_only" />
-            <AssistedPrepCTA service="money_claim" variant="inline" src="pricing_assisted" product="money_claim" />
-            <AssistedPrepCTA service="possession" variant="inline" src="pricing_assisted" product="complete_pack" />
-          </div>
-        </section>
+        <AssistedPrepServicesShowcase
+          className="mb-10 mt-0"
+          pagePath="/pricing"
+          pageType="entry_page"
+          src="pricing_assisted"
+        />
 
         <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'px-6 py-8 md:px-10 md:py-10')}>
           <div className="mb-8 max-w-4xl">
@@ -207,7 +207,7 @@ export default function PricingPage() {
           </div>
 
           <StaggerReveal className="grid gap-6 xl:grid-cols-2">
-            {PRICING_PACKAGE_CARDS.map((card) => {
+            {visiblePricingPackageCards.map((card) => {
               const image = packageImages[card.productSku] ?? packageImages.england_standard_tenancy_agreement;
               const accent = getPublicCardAccentClasses(accentByProduct[image.accent]);
 

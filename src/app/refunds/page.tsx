@@ -5,13 +5,17 @@ import Link from "next/link";
 import { FileText, XCircle, CheckCircle2, Mail } from "lucide-react";
 
 export const metadata = generateMetadata({
-  title: "Refund Policy | Landlord Heaven Digital Products",
+  title: "Refund Policy | Landlord Heaven Digital Products and Assisted Prep",
   description:
-    "Read the refund policy for Landlord Heaven digital products, including document delivery, technical errors, duplicate charges, and eligibility limits.",
+    "Read the refund policy for Landlord Heaven digital products and assisted prep services, including document delivery, technical errors, duplicate charges, and assisted prep blockers.",
   path: "/refunds",
   keywords: [
     "refund policy",
     "digital product refunds",
+    "assisted prep refund",
+    "section 8 assisted prep refund",
+    "money claim assisted prep refund",
+    "possession claim assisted prep refund",
     "landlord heaven refunds",
     "duplicate charges",
   ],
@@ -51,9 +55,10 @@ export default function RefundsPage() {
               Digital Products Policy
             </p>
             <p className="text-gray-700">
-              Short answer: all products are instantly delivered digital documents. Please review
-              the refund policy below before purchase, because refunds are limited to technical
-              errors, duplicate charges, and unauthorized transactions.
+              Short answer: self-serve document products are instantly delivered digital
+              documents, so refunds are limited. Assisted prep is different: if we cannot prepare
+              the pack because it is unsuitable or blocked beyond what we can reasonably overcome,
+              we will offer the landlord a full refund.
             </p>
           </div>
 
@@ -62,14 +67,14 @@ export default function RefundsPage() {
             <p className="text-gray-700 text-sm leading-6">
               Use this page as a checklist before you contact support: confirm whether the issue is a
               technical error, duplicate charge, unauthorized transaction, subscription cancellation,
-              or a document-choice problem. If you need the next action, use the report steps below
-              and include your account email, order number, screenshots, and a clear description of
-              what happened.
+              assisted-prep blocker, or a document-choice problem. If you need the next action, use
+              the report steps below and include your account email, order number, screenshots, and
+              a clear description of what happened.
             </p>
           </div>
 
           <div className="prose prose-gray max-w-none">
-            <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">1. Digital Products - No Refunds</h2>
+            <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">1. Self-Serve Digital Products - No Refunds After Delivery</h2>
 
             <div className="bg-warning/10 border-l-4 border-warning p-4 mb-6">
               <p className="text-gray-700">
@@ -114,7 +119,38 @@ export default function RefundsPage() {
               </li>
             </ul>
 
-            <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">2. How to Report Issues</h2>
+            <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">2. Assisted Prep Services - Full Refund If We Cannot Proceed</h2>
+
+            <div className="bg-green-50 border-l-4 border-green-500 p-4 mb-6">
+              <p className="text-gray-700">
+                <strong>Assisted prep has a money-back guarantee.</strong> If you buy Section 8 Notice
+                Assisted Prep, Money Claim Assisted Prep, or Possession Claim Assisted Prep and we
+                decide during the assisted-prep process that the pack is unsuitable for your situation,
+                or we cannot reasonably proceed because of a blocker we cannot overcome, we will offer
+                you a full refund.
+              </p>
+            </div>
+
+            <h3 className="text-xl font-semibold text-charcoal mt-6 mb-3">When the assisted prep guarantee applies:</h3>
+            <ul className="list-disc pl-6 mb-4 text-gray-700 space-y-2">
+              <li>The selected assisted prep service is unsuitable for the landlord's situation.</li>
+              <li>A legal, factual, service, or evidence blocker means we cannot reasonably prepare the pack.</li>
+              <li>The issue cannot sensibly be fixed by collecting extra information or choosing a better route.</li>
+            </ul>
+
+            <h3 className="text-xl font-semibold text-charcoal mt-6 mb-3">When we will usually keep the assisted order open:</h3>
+            <ul className="list-disc pl-6 mb-4 text-gray-700 space-y-2">
+              <li>More information is needed before the pack can be prepared.</li>
+              <li>The landlord needs to upload documents or confirm facts before the callback can continue.</li>
+              <li>The blocker is fixable, for example by correcting dates, confirming service, or choosing the correct product route.</li>
+            </ul>
+
+            <p className="text-gray-700 leading-relaxed mb-4">
+              If a blocker is fixable, we will explain the issue and the next action. If it is not
+              reasonably fixable for the assisted product purchased, we will offer a full refund.
+            </p>
+
+            <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">3. How to Report Issues</h2>
 
             <div className="bg-primary-subtle border border-primary/20 rounded-lg p-6 mb-6">
               <h3 className="text-lg font-semibold text-charcoal mb-4 flex items-center gap-2">
@@ -173,7 +209,7 @@ export default function RefundsPage() {
               </div>
             </div>
 
-            <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">3. Refund Processing Time (For Approved Cases)</h2>
+            <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">4. Refund Processing Time (For Approved Cases)</h2>
             <p className="text-gray-700 mb-4">
               If your refund request is approved based on the exceptions listed above:
             </p>
@@ -192,7 +228,7 @@ export default function RefundsPage() {
               Total time: Usually 7-14 business days from request to funds in your account (for approved refunds only)
             </p>
 
-            <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">4. HMO Pro Subscription Terms</h2>
+            <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">5. HMO Pro Subscription Terms</h2>
             <p className="text-gray-700 leading-relaxed mb-4">
               HMO Pro is a monthly subscription with special cancellation terms:
             </p>
@@ -230,7 +266,7 @@ export default function RefundsPage() {
               </p>
             </div>
 
-            <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">5. What Happens If a Refund is Approved?</h2>
+            <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">6. What Happens If a Refund is Approved?</h2>
             <ul className="list-disc pl-6 mb-4 text-gray-700 space-y-2">
               <li>
                 <strong>Document Access:</strong> You will lose access to generated documents
@@ -246,7 +282,7 @@ export default function RefundsPage() {
               </li>
             </ul>
 
-            <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">6. Special Cases</h2>
+            <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">7. Special Cases</h2>
 
             <h3 className="text-xl font-semibold text-charcoal mt-6 mb-3">Fraudulent Purchases:</h3>
             <p className="text-gray-700 leading-relaxed mb-4">
@@ -265,7 +301,7 @@ export default function RefundsPage() {
               If you were accidentally charged multiple times for the same purchase, contact us immediately and we'll refund the duplicate charge(s).
             </p>
 
-            <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">7. Chargebacks</h2>
+            <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">8. Chargebacks</h2>
             <p className="text-gray-700 leading-relaxed mb-4">
               Please contact us before filing a chargeback. Chargebacks:
             </p>
@@ -279,7 +315,7 @@ export default function RefundsPage() {
               We're committed to fair customer service. Contact us first and we'll work to resolve any legitimate issues!
             </p>
 
-            <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">8. Contact Information</h2>
+            <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">9. Contact Information</h2>
             <div className="bg-primary-subtle border border-primary/20 rounded-lg p-4">
               <p className="text-charcoal font-semibold mb-2">Need Help?</p>
               <p className="text-gray-700 text-sm mb-2">
