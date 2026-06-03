@@ -21,6 +21,20 @@ const checklistPdfText = "Download the ungated Ground 17 PDF checklist.";
 export const metadata: Metadata = {
   title: "Ground 17 Eviction: False Statement by Tenant | LandlordHeaven",
   description: "Evict using Ground 17 for a false tenant statement. Check the 2-week notice, reliance evidence, court discretion, proof, and court-stage next steps.",
+  keywords: [
+    "ground 17 eviction",
+    "section 8 ground 17",
+    "false statement tenant eviction",
+    "tenant lied on application",
+    "form 3a ground 17",
+    "section 8 notice ground 17",
+    "ground 17 notice period",
+    "ground 17 possession claim",
+    "false statement evidence checklist",
+    "section 8 grounds england",
+    "discretionary false statement ground",
+    "ground 17 court discretion",
+  ],
   alternates: { canonical },
   openGraph: {
     title: "Ground 17 Eviction: False Statement by Tenant | LandlordHeaven",

@@ -21,6 +21,20 @@ const checklistPdfText = "Download the ungated Ground 2 PDF checklist.";
 export const metadata: Metadata = {
   title: "Ground 2 Eviction: Mortgage Lender Sale | LandlordHeaven",
   description: "Evict using Ground 2 where a lender needs possession. Check the 4-month notice, mortgage evidence, prior notice, lender documents, and court pack risks.",
+  keywords: [
+    "ground 2 eviction",
+    "section 8 ground 2",
+    "mortgage lender possession ground 2",
+    "lender repossession rental property",
+    "form 3a ground 2",
+    "section 8 notice ground 2",
+    "ground 2 notice period",
+    "ground 2 possession claim",
+    "mortgage evidence eviction",
+    "section 8 grounds england",
+    "landlord mortgage possession",
+    "ground 2 evidence checklist",
+  ],
   alternates: { canonical },
   openGraph: {
     title: "Ground 2 Eviction: Mortgage Lender Sale | LandlordHeaven",

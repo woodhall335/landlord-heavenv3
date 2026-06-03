@@ -21,6 +21,20 @@ const checklistPdfText = "Download the ungated Ground 15 PDF checklist.";
 export const metadata: Metadata = {
   title: "Ground 15 Eviction: Furniture Deterioration | LandlordHeaven",
   description: "Evict using Ground 15 for furniture deterioration. Check the 2-week notice, inventory evidence, fair wear risks, court proof, and next steps.",
+  keywords: [
+    "ground 15 eviction",
+    "section 8 ground 15",
+    "furniture deterioration eviction",
+    "tenant damaged landlord furniture",
+    "form 3a ground 15",
+    "section 8 notice ground 15",
+    "ground 15 notice period",
+    "ground 15 possession claim",
+    "inventory evidence checklist",
+    "section 8 grounds england",
+    "discretionary furniture damage ground",
+    "ground 15 court discretion",
+  ],
   alternates: { canonical },
   openGraph: {
     title: "Ground 15 Eviction: Furniture Deterioration | LandlordHeaven",

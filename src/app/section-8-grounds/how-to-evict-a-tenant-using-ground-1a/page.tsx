@@ -21,6 +21,20 @@ const checklistPdfText = "Download the ungated Ground 1A PDF checklist.";
 export const metadata: Metadata = {
   title: "Ground 1A Eviction: Selling the Property | LandlordHeaven",
   description: "Evict using Ground 1A when you need to sell. Check the 4-month notice, sale evidence, protected period, serving risks, and court next steps first.",
+  keywords: [
+    "ground 1a eviction",
+    "section 8 ground 1a",
+    "sell rental property eviction",
+    "landlord selling property ground 1a",
+    "form 3a ground 1a",
+    "section 8 notice ground 1a",
+    "ground 1a notice period",
+    "ground 1a possession claim",
+    "sale evidence for eviction",
+    "section 8 grounds england",
+    "evict tenant to sell property",
+    "ground 1a evidence checklist",
+  ],
   alternates: { canonical },
   openGraph: {
     title: "Ground 1A Eviction: Selling the Property | LandlordHeaven",

@@ -21,6 +21,20 @@ const checklistPdfText = "Download the ungated Ground 8 PDF checklist.";
 export const metadata: Metadata = {
   title: "Ground 8 Eviction: Serious Rent Arrears | LandlordHeaven",
   description: "Evict using Ground 8 for serious rent arrears. Check the 4-week notice, 3-month threshold, evidence, mistakes, and court risks before serving.",
+  keywords: [
+    "ground 8 eviction",
+    "section 8 ground 8",
+    "serious rent arrears eviction",
+    "tenant rent arrears possession",
+    "form 3a ground 8",
+    "section 8 notice ground 8",
+    "ground 8 notice period",
+    "ground 8 possession claim",
+    "rent arrears evidence checklist",
+    "section 8 grounds england",
+    "mandatory rent arrears ground",
+    "evict tenant for rent arrears",
+  ],
   alternates: { canonical },
   openGraph: {
     title: "Ground 8 Eviction: Serious Rent Arrears | LandlordHeaven",

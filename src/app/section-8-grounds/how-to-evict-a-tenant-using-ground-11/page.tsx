@@ -21,6 +21,20 @@ const checklistPdfText = "Download the ungated Ground 11 PDF checklist.";
 export const metadata: Metadata = {
   title: "Ground 11 Eviction: Persistent Late Rent | LandlordHeaven",
   description: "Evict using Ground 11 for persistent late rent. Check the 4-week notice, payment history evidence, court discretion, and arrears support grounds.",
+  keywords: [
+    "ground 11 eviction",
+    "section 8 ground 11",
+    "persistent late rent eviction",
+    "tenant repeatedly pays rent late",
+    "form 3a ground 11",
+    "section 8 notice ground 11",
+    "ground 11 notice period",
+    "ground 11 possession claim",
+    "late payment evidence checklist",
+    "section 8 grounds england",
+    "discretionary rent arrears ground",
+    "ground 11 court discretion",
+  ],
   alternates: { canonical },
   openGraph: {
     title: "Ground 11 Eviction: Persistent Late Rent | LandlordHeaven",

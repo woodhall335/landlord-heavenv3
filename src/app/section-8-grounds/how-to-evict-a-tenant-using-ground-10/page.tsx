@@ -21,6 +21,20 @@ const checklistPdfText = "Download the ungated Ground 10 PDF checklist.";
 export const metadata: Metadata = {
   title: "Ground 10 Eviction: Any Rent Arrears | LandlordHeaven",
   description: "Evict using Ground 10 for rent arrears below Ground 8. Check the 4-week notice, evidence, court discretion, related arrears grounds, and next steps.",
+  keywords: [
+    "ground 10 eviction",
+    "section 8 ground 10",
+    "rent arrears below ground 8",
+    "tenant rent arrears eviction",
+    "form 3a ground 10",
+    "section 8 notice ground 10",
+    "ground 10 notice period",
+    "ground 10 possession claim",
+    "discretionary rent arrears ground",
+    "section 8 grounds england",
+    "rent arrears evidence checklist",
+    "ground 10 court discretion",
+  ],
   alternates: { canonical },
   openGraph: {
     title: "Ground 10 Eviction: Any Rent Arrears | LandlordHeaven",

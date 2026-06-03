@@ -21,6 +21,20 @@ const checklistPdfText = "Download the ungated Ground 13 PDF checklist.";
 export const metadata: Metadata = {
   title: "Ground 13 Eviction: Property Deterioration | LandlordHeaven",
   description: "Evict using Ground 13 for property deterioration. Check the 2-week notice, inspection evidence, repair records, court risks, and related damage grounds.",
+  keywords: [
+    "ground 13 eviction",
+    "section 8 ground 13",
+    "property deterioration eviction",
+    "tenant damaged rental property",
+    "form 3a ground 13",
+    "section 8 notice ground 13",
+    "ground 13 notice period",
+    "ground 13 possession claim",
+    "property damage evidence checklist",
+    "section 8 grounds england",
+    "discretionary property deterioration ground",
+    "ground 13 court discretion",
+  ],
   alternates: { canonical },
   openGraph: {
     title: "Ground 13 Eviction: Property Deterioration | LandlordHeaven",

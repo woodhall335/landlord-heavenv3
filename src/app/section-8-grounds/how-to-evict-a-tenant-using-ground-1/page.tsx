@@ -21,6 +21,20 @@ const checklistPdfText = "Download the ungated Ground 1 PDF checklist.";
 export const metadata: Metadata = {
   title: "Ground 1 Eviction: Landlord or Family Moving In | LandlordHeaven",
   description: "Evict using Ground 1 when you or close family need the home. Check the 4-month notice, occupation evidence, mistakes, and next steps before serving.",
+  keywords: [
+    "ground 1 eviction",
+    "section 8 ground 1",
+    "landlord moving into property",
+    "family moving into rental property",
+    "form 3a ground 1",
+    "section 8 notice ground 1",
+    "ground 1 notice period",
+    "ground 1 possession claim",
+    "landlord occupation evidence",
+    "section 8 grounds england",
+    "evict tenant landlord moving in",
+    "ground 1 evidence checklist",
+  ],
   alternates: { canonical },
   openGraph: {
     title: "Ground 1 Eviction: Landlord or Family Moving In | LandlordHeaven",

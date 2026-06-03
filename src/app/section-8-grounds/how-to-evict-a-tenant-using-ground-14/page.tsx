@@ -21,6 +21,20 @@ const checklistPdfText = "Download the ungated Ground 14 PDF checklist.";
 export const metadata: Metadata = {
   title: "Ground 14 Eviction: Antisocial Behaviour | LandlordHeaven",
   description: "Evict using Ground 14 for antisocial behaviour. Check immediate action rules, nuisance evidence, court discretion, ASB proof, and Ground 7A differences.",
+  keywords: [
+    "ground 14 eviction",
+    "section 8 ground 14",
+    "antisocial behaviour eviction",
+    "tenant nuisance eviction",
+    "form 3a ground 14",
+    "section 8 notice ground 14",
+    "ground 14 immediate action",
+    "ground 14 possession claim",
+    "asb evidence checklist",
+    "section 8 grounds england",
+    "discretionary antisocial behaviour ground",
+    "ground 14 court discretion",
+  ],
   alternates: { canonical },
   openGraph: {
     title: "Ground 14 Eviction: Antisocial Behaviour | LandlordHeaven",

@@ -21,6 +21,20 @@ const checklistPdfText = "Download the ungated Ground 7A PDF checklist.";
 export const metadata: Metadata = {
   title: "Ground 7A Eviction: Serious ASB or Criminal Behaviour | LandlordHeaven",
   description: "Evict using Ground 7A for serious ASB or criminal behaviour. Check mandatory status, immediate action, trigger evidence, and Ground 14 differences.",
+  keywords: [
+    "ground 7a eviction",
+    "section 8 ground 7a",
+    "serious antisocial behaviour eviction",
+    "criminal behaviour tenant eviction",
+    "form 3a ground 7a",
+    "section 8 notice ground 7a",
+    "ground 7a notice period",
+    "ground 7a possession claim",
+    "mandatory asb eviction ground",
+    "section 8 grounds england",
+    "tenant criminal conviction eviction",
+    "ground 7a evidence checklist",
+  ],
   alternates: { canonical },
   openGraph: {
     title: "Ground 7A Eviction: Serious ASB or Criminal Behaviour | LandlordHeaven",

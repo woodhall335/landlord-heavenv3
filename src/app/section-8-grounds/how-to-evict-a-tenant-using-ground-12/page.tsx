@@ -21,6 +21,20 @@ const checklistPdfText = "Download the ungated Ground 12 PDF checklist.";
 export const metadata: Metadata = {
   title: "Ground 12 Eviction: Breach of Tenancy | LandlordHeaven",
   description: "Evict using Ground 12 for breach of tenancy. Check the 2-week notice, breach evidence, court discretion, mistakes, and court-stage next steps.",
+  keywords: [
+    "ground 12 eviction",
+    "section 8 ground 12",
+    "breach of tenancy eviction",
+    "tenant breached tenancy agreement",
+    "form 3a ground 12",
+    "section 8 notice ground 12",
+    "ground 12 notice period",
+    "ground 12 possession claim",
+    "breach evidence checklist",
+    "section 8 grounds england",
+    "discretionary tenancy breach ground",
+    "ground 12 court discretion",
+  ],
   alternates: { canonical },
   openGraph: {
     title: "Ground 12 Eviction: Breach of Tenancy | LandlordHeaven",
