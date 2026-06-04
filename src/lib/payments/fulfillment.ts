@@ -104,7 +104,7 @@ interface RequiredAction {
  * Get expected document keys for a given product, jurisdiction, and route.
  * Uses pack-contents.ts as the single source of truth.
  */
-function getExpectedDocumentKeys(
+export function getExpectedDocumentKeys(
   productType: string,
   jurisdiction: string,
   route?: string,
@@ -117,7 +117,9 @@ function getExpectedDocumentKeys(
     has_arrears: hasArrears,
   });
 
-  return packContents.map((item) => item.key);
+  return packContents
+    .filter((item) => item.required !== false)
+    .map((item) => item.key);
 }
 
 function getExpectedDocumentKeysForProducts(

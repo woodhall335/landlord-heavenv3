@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { computeMissingDocumentKeys } from '@/lib/payments/fulfillment';
+import { computeMissingDocumentKeys, getExpectedDocumentKeys } from '@/lib/payments/fulfillment';
 
 describe('fulfillment validation canonical matching', () => {
   it('treats section 8 notice-only docs as complete when legacy titles exist', () => {
@@ -34,6 +34,28 @@ describe('fulfillment validation canonical matching', () => {
         { document_type: 'compliance_declaration', document_title: 'Pre-Service Compliance Declaration' },
       ]
     );
+
+    expect(result.missingKeys).toEqual([]);
+  });
+
+  it('does not require optional money-claim interest workings when interest is not generated', () => {
+    const expectedKeys = getExpectedDocumentKeys('money_claim', 'england');
+
+    expect(expectedKeys).toContain('n1_claim');
+    expect(expectedKeys).toContain('particulars_of_claim');
+    expect(expectedKeys).not.toContain('interest_calculation');
+
+    const result = computeMissingDocumentKeys(expectedKeys, [
+      { document_type: 'particulars_of_claim', document_title: 'Particulars of claim' },
+      { document_type: 'letter_before_claim', document_title: 'Letter Before Claim (PAP-DEBT)' },
+      { document_type: 'reply_form', document_title: 'Reply Form' },
+      { document_type: 'court_filing_guide', document_title: 'Money Claims Filing Guide' },
+      { document_type: 'n1_claim', document_title: 'Form N1 (official PDF)' },
+      { document_type: 'arrears_schedule', document_title: 'Schedule of arrears' },
+      { document_type: 'defendant_info_sheet', document_title: 'Information Sheet for Defendants' },
+      { document_type: 'financial_statement_form', document_title: 'Financial Statement Form' },
+      { document_type: 'enforcement_guide', document_title: 'Enforcement Guide' },
+    ]);
 
     expect(result.missingKeys).toEqual([]);
   });
