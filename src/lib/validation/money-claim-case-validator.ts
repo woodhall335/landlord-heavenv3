@@ -52,6 +52,9 @@ export interface MoneyClaimFacts {
   tenancy_end_date?: string;
   rent_amount?: number;
   rent_frequency?: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly';
+  claim_amount_rent?: number;
+  claim_amount_other?: number;
+  total_claim_amount?: number;
 
   // Claim flags
   claiming_rent_arrears?: boolean;
@@ -100,6 +103,11 @@ export interface MoneyClaimFacts {
     charge_interest?: boolean;
     interest_rate?: number;
     interest_start_date?: string;
+    total_claim_amount?: number;
+    other_charges?: Array<{
+      description?: string;
+      amount?: number;
+    }>;
     court_name?: string;
     /** Flag indicating we will generate PAP documents for the user */
     generate_pap_documents?: boolean;
@@ -121,6 +129,11 @@ export interface MoneyClaimFacts {
       other?: number;
       combined_total?: number;
     };
+  };
+  court?: {
+    claim_amount_rent?: number;
+    claim_amount_other?: number;
+    total_claim_amount?: number;
   };
 
   // Issues nested (legacy)
@@ -167,6 +180,37 @@ function calculateTotalArrears(facts: MoneyClaimFacts): number {
 function calculateTotalDamages(facts: MoneyClaimFacts): number {
   const items = facts.money_claim?.damage_items || [];
   return items.reduce((total, item) => total + (item.amount || 0), 0);
+}
+
+function calculateTotalOtherCharges(facts: MoneyClaimFacts): number {
+  const items = facts.money_claim?.other_charges || [];
+  return items.reduce((total, item) => total + (item.amount || 0), 0);
+}
+
+function getExplicitClaimAmount(facts: MoneyClaimFacts): number {
+  const values = [
+    facts.court?.total_claim_amount,
+    facts.money_claim?.total_claim_amount,
+    facts.total_claim_amount,
+    (facts as any).amount_claimed,
+    (facts as any).claim_amount,
+    facts.court?.claim_amount_rent,
+    facts.claim_amount_rent,
+    facts.court?.claim_amount_other,
+    facts.claim_amount_other,
+    (facts.money_claim as any)?.totals?.combined_total,
+  ];
+
+  for (const value of values) {
+    const amount = typeof value === 'number'
+      ? value
+      : typeof value === 'string'
+        ? Number(value.replace(/[£,\s]/g, ''))
+        : 0;
+    if (Number.isFinite(amount) && amount > 0) return amount;
+  }
+
+  return 0;
 }
 
 /**
@@ -615,7 +659,9 @@ export function validateMoneyClaimCase(
     ? calculateTotalArrears(facts)
     : 0;
   const damagesTotal = calculateTotalDamages(facts);
-  const totalClaimAmount = arrearsTotal + damagesTotal;
+  const otherChargesTotal = calculateTotalOtherCharges(facts);
+  const itemizedTotal = arrearsTotal + damagesTotal + otherChargesTotal;
+  const totalClaimAmount = itemizedTotal > 0 ? itemizedTotal : getExplicitClaimAmount(facts);
 
   // Check schedule completeness
   const arrearsItems =

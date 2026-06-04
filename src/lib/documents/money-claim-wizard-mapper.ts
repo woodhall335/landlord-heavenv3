@@ -105,9 +105,128 @@ function getMoneyClaimEvidenceItems(facts: CaseFacts) {
   ).filter((item) => item.available);
 }
 
+function coercePositiveAmount(value: unknown): number | null {
+  if (typeof value === 'number' && Number.isFinite(value) && value > 0) return value;
+  if (typeof value !== 'string') return null;
+
+  const cleaned = value.replace(/[£,\s]/g, '');
+  if (!cleaned) return null;
+
+  const parsed = Number(cleaned);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+}
+
+function sumLineItems(items?: Array<{ amount?: number | string | null }>): number {
+  if (!Array.isArray(items)) return 0;
+  return items.reduce((sum, item) => sum + (coercePositiveAmount(item?.amount) ?? 0), 0);
+}
+
+function selectedMoneyClaimReasons(facts: CaseFacts): Set<string> {
+  const rawFacts = facts as CaseFacts & Record<string, any>;
+  const moneyClaim = facts.money_claim as CaseFacts['money_claim'] & Record<string, any>;
+  const reasons = new Set<string>();
+
+  if (rawFacts.claiming_rent_arrears === true || moneyClaim.primary_issue === 'unpaid_rent_only') {
+    reasons.add('rent_arrears');
+  }
+
+  const otherTypes = Array.isArray(moneyClaim.other_amounts_types)
+    ? (moneyClaim.other_amounts_types as string[])
+    : [];
+
+  for (const type of otherTypes) reasons.add(type);
+
+  if (rawFacts.claiming_damages === true) reasons.add('property_damage');
+  if (rawFacts.claiming_other === true) reasons.add('other_charges');
+  if (moneyClaim.primary_issue === 'unpaid_rent_and_damage') {
+    reasons.add('rent_arrears');
+    reasons.add('property_damage');
+  }
+  if (moneyClaim.primary_issue === 'damage_only') reasons.add('property_damage');
+
+  return reasons;
+}
+
+function addFallbackClaimAmountIfNeeded(
+  facts: CaseFacts,
+  canonicalArrears: ReturnType<typeof buildCanonicalMoneyClaimArrears>,
+  damageItems: MoneyClaimCase['damage_items'],
+  otherCharges: MoneyClaimCase['other_charges']
+): {
+  arrears_total?: number;
+  damage_items: MoneyClaimCase['damage_items'];
+  other_charges: MoneyClaimCase['other_charges'];
+} {
+  const arrearsTotal = canonicalArrears.arrears_total || 0;
+  const damagesTotal = sumLineItems(damageItems);
+  const otherChargesTotal = sumLineItems(otherCharges);
+  const existingPrincipal = arrearsTotal + damagesTotal + otherChargesTotal;
+
+  if (existingPrincipal > 0) {
+    return {
+      arrears_total: canonicalArrears.arrears_total,
+      damage_items: damageItems,
+      other_charges: otherCharges,
+    };
+  }
+
+  const courtRentAmount = coercePositiveAmount(facts.court.claim_amount_rent);
+  const courtOtherAmount = coercePositiveAmount(facts.court.claim_amount_other);
+  const courtTotalAmount = coercePositiveAmount(facts.court.total_claim_amount);
+  const reasons = selectedMoneyClaimReasons(facts);
+
+  if (courtRentAmount) {
+    return {
+      arrears_total: courtRentAmount,
+      damage_items: damageItems,
+      other_charges: courtOtherAmount
+        ? [{ description: 'Other amount claimed from the tenant', amount: courtOtherAmount }]
+        : otherCharges,
+    };
+  }
+
+  if (courtOtherAmount) {
+    return {
+      arrears_total: canonicalArrears.arrears_total,
+      damage_items: damageItems,
+      other_charges: [{ description: 'Other amount claimed from the tenant', amount: courtOtherAmount }],
+    };
+  }
+
+  if (courtTotalAmount) {
+    if (reasons.has('rent_arrears')) {
+      return {
+        arrears_total: courtTotalAmount,
+        damage_items: damageItems,
+        other_charges: otherCharges,
+      };
+    }
+
+    return {
+      arrears_total: canonicalArrears.arrears_total,
+      damage_items: damageItems,
+      other_charges: [{ description: 'Amount claimed from the tenant', amount: courtTotalAmount }],
+    };
+  }
+
+  return {
+    arrears_total: canonicalArrears.arrears_total,
+    damage_items: damageItems,
+    other_charges: otherCharges,
+  };
+}
+
 export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
   const rawFacts = facts as CaseFacts & Record<string, any>;
   const canonicalArrears = buildCanonicalMoneyClaimArrears(facts);
+  const damageItems = (facts.money_claim.damage_items || []) as any;
+  const otherCharges = (facts.money_claim.other_charges || []) as any;
+  const claimBreakdown = addFallbackClaimAmountIfNeeded(
+    facts,
+    canonicalArrears,
+    damageItems,
+    otherCharges
+  );
   const landlordAddress = buildAddress(
     facts.parties.landlord.address_line1,
     facts.parties.landlord.address_line2,
@@ -152,10 +271,10 @@ export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
     tenancy_start_date: facts.tenancy.start_date || undefined,
     tenancy_end_date: facts.tenancy.end_date || undefined,
 
-    arrears_total: canonicalArrears.arrears_total,
+    arrears_total: claimBreakdown.arrears_total,
     arrears_schedule: canonicalArrears.arrears_schedule,
-    damage_items: (facts.money_claim.damage_items || []) as any,
-    other_charges: (facts.money_claim.other_charges || []) as any,
+    damage_items: claimBreakdown.damage_items,
+    other_charges: claimBreakdown.other_charges,
 
     // Interest: only passed if user explicitly opted in via charge_interest === true
     claim_interest: facts.money_claim.charge_interest === true,
@@ -170,11 +289,9 @@ export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
     // =========================================================================
     court_fee: facts.court.claim_amount_costs || (() => {
       // Calculate total claim amount (arrears + damages + other charges)
-      const arrearsTotal = canonicalArrears.arrears_total || 0;
-      const damagesTotal = (facts.money_claim.damage_items || [])
-        .reduce((sum: number, item: any) => sum + (Number(item.amount) || 0), 0);
-      const otherChargesTotal = (facts.money_claim.other_charges || [])
-        .reduce((sum: number, item: any) => sum + (Number(item.amount) || 0), 0);
+      const arrearsTotal = claimBreakdown.arrears_total || 0;
+      const damagesTotal = sumLineItems(claimBreakdown.damage_items);
+      const otherChargesTotal = sumLineItems(claimBreakdown.other_charges);
       const totalClaimAmount = arrearsTotal + damagesTotal + otherChargesTotal;
 
       return totalClaimAmount > 0 ? calculateMoneyClaimFee(totalClaimAmount) : undefined;

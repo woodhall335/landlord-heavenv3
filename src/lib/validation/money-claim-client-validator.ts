@@ -52,6 +52,9 @@ export interface MoneyClaimFacts {
   tenancy_end_date?: string;
   rent_amount?: number;
   rent_frequency?: string;
+  claim_amount_rent?: number;
+  claim_amount_other?: number;
+  total_claim_amount?: number;
   claiming_rent_arrears?: boolean;
   claiming_damages?: boolean;
   claiming_other?: boolean;
@@ -84,6 +87,7 @@ export interface MoneyClaimFacts {
     charge_interest?: boolean;
     interest_rate?: number;
     interest_start_date?: string;
+    total_claim_amount?: number;
     /** Flag indicating we will generate PAP documents for the user */
     generate_pap_documents?: boolean;
     evidence_items?: Array<{
@@ -94,6 +98,11 @@ export interface MoneyClaimFacts {
     }>;
     evidence_types_available?: string[];
     evidence_summary?: string | null;
+  };
+  court?: {
+    claim_amount_rent?: number;
+    claim_amount_other?: number;
+    total_claim_amount?: number;
   };
   issues?: {
     rent_arrears?: {
@@ -164,6 +173,32 @@ function calculateOtherChargesTotal(facts: MoneyClaimFacts): number {
   return items.reduce((total: number, item: any) => total + (item.amount || 0), 0);
 }
 
+function getExplicitClaimAmount(facts: MoneyClaimFacts): number {
+  const values = [
+    facts.court?.total_claim_amount,
+    facts.money_claim?.total_claim_amount,
+    facts.total_claim_amount,
+    (facts as any).amount_claimed,
+    (facts as any).claim_amount,
+    facts.court?.claim_amount_rent,
+    facts.claim_amount_rent,
+    facts.court?.claim_amount_other,
+    facts.claim_amount_other,
+    (facts.money_claim as any)?.totals?.combined_total,
+  ];
+
+  for (const value of values) {
+    const amount = typeof value === 'number'
+      ? value
+      : typeof value === 'string'
+        ? Number(value.replace(/[£,\s]/g, ''))
+        : 0;
+    if (Number.isFinite(amount) && amount > 0) return amount;
+  }
+
+  return 0;
+}
+
 /**
  * Run client-side validation
  */
@@ -177,7 +212,9 @@ export function validateMoneyClaimClient(facts: MoneyClaimFacts): ClientValidati
   const damagesTotal = calculateDamagesTotal(facts);
   const otherChargesTotal = calculateOtherChargesTotal(facts);
   // BUG FIX: grand_total now includes ALL claimable components
-  const grandTotal = arrearsTotal + damagesTotal + otherChargesTotal;
+  const itemizedTotal = arrearsTotal + damagesTotal + otherChargesTotal;
+  const explicitClaimAmount = getExplicitClaimAmount(facts);
+  const grandTotal = itemizedTotal > 0 ? itemizedTotal : explicitClaimAmount;
 
   const arrears_items = facts.arrears_items || facts.issues?.rent_arrears?.arrears_items || [];
   const damage_items = facts.money_claim?.damage_items || [];

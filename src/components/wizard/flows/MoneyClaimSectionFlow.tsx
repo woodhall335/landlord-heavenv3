@@ -764,7 +764,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
     };
   }, [handleJumpToSection, mapToWizardSection]);
 
-  // Handle wizard completion - redirect to review page (same as eviction flow)
+  // Handle wizard completion - redirect to review page
   const handleComplete = useCallback(async () => {
     router.push(`/wizard/review?case_id=${caseId}&product=money_claim`);
   }, [caseId, router]);

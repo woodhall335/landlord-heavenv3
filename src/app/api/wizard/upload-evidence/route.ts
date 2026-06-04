@@ -275,7 +275,7 @@ export async function POST(request: Request) {
 
     const { data: caseRow, error: caseError } = await supabase
       .from('cases')
-      .select('id, user_id, jurisdiction, session_token')
+      .select('id, user_id, jurisdiction, session_token, case_type')
       .eq('id', caseId)
       .maybeSingle();
 
@@ -557,14 +557,17 @@ export async function POST(request: Request) {
       const WRONG_DOC_CONFIDENCE_THRESHOLD = 0.70;
       const classifiedDocType = docClassification.docType?.toLowerCase() ?? '';
       const normalizedValidatorKey = validatorKey?.toLowerCase() ?? '';
+      const isEvictionCase = (caseRow as any).case_type === 'eviction';
 
       // Check for S21 validator receiving S8 notice
       const isS21ValidatorWithS8Doc =
+        isEvictionCase &&
         (normalizedValidatorKey === 'notice_s21' || normalizedValidatorKey.includes('section_21')) &&
         (classifiedDocType === 'notice_s8' || classifiedDocType.includes('section_8') || classifiedDocType.includes('section 8'));
 
       // Check for S8 validator receiving S21 notice
       const isS8ValidatorWithS21Doc =
+        isEvictionCase &&
         (normalizedValidatorKey === 'notice_s8' || normalizedValidatorKey.includes('section_8')) &&
         (classifiedDocType === 'notice_s21' || classifiedDocType.includes('section_21') || classifiedDocType.includes('section 21'));
 

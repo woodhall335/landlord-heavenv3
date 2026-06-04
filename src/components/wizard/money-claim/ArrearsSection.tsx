@@ -6,7 +6,7 @@ import { ArrearsScheduleStep } from '@/components/wizard/ArrearsScheduleStep';
 /**
  * Arrears Section for Money Claim Wizard
  *
- * This section uses the shared ArrearsScheduleStep component (same as Section 8 eviction)
+ * This section uses the shared ArrearsScheduleStep component
  * which provides:
  * - Pro-rata calculations for partial periods
  * - Visually richer table layout

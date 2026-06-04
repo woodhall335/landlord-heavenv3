@@ -198,12 +198,28 @@ function calculateTotalsBreakdown(facts: any): {
 
   const damagesTotal = damageItems.reduce((sum: number, item: any) => sum + (item.amount || 0), 0);
   const otherChargesTotal = otherCharges.reduce((sum: number, item: any) => sum + (item.amount || 0), 0);
+  const itemizedTotal = arrearsTotal + damagesTotal + otherChargesTotal;
+  const explicitTotalCandidates = [
+    facts?.court?.total_claim_amount,
+    facts?.money_claim?.total_claim_amount,
+    facts?.total_claim_amount,
+    facts?.amount_claimed,
+    facts?.claim_amount,
+    facts?.money_claim?.totals?.combined_total,
+  ];
+  const explicitTotal = explicitTotalCandidates
+    .map((value) => {
+      if (typeof value === 'number') return value;
+      if (typeof value === 'string') return Number(value.replace(/[£,\s]/g, ''));
+      return 0;
+    })
+    .find((value) => Number.isFinite(value) && value > 0) || 0;
 
   return {
     arrearsTotal,
     damagesTotal,
     otherChargesTotal,
-    grandTotal: arrearsTotal + damagesTotal + otherChargesTotal,
+    grandTotal: itemizedTotal > 0 ? itemizedTotal : explicitTotal,
   };
 }
 
