@@ -1,5 +1,6 @@
 <h1>Interest Calculation (s.69 County Courts Act 1984)</h1>
 
+{{#if claim_interest}}
 <p><strong>Principal claimed:</strong> {{currency total_principal}}</p>
 <p><strong>Interest rate:</strong> {{interest_rate}}% per annum</p>
 <p><strong>Interest start date:</strong> {{#if interest_start_date}}{{interest_start_date}}{{else}}Not specified{{/if}}</p>
@@ -23,3 +24,18 @@
 <p>
   <em>Note: Update this calculation if you file after the above calculation date. You may claim interest up to and including the date of issue.</em>
 </p>
+{{else}}
+<p><strong>Interest position:</strong> Interest is not claimed in this pack.</p>
+<p><strong>Principal claimed:</strong> {{currency total_principal}}</p>
+<p><strong>Calculation date:</strong> {{generation_date}}</p>
+
+<h2>What this means</h2>
+<p>
+  The N1 claim form, Particulars of Claim, Letter Before Claim, and filing guide have been prepared on the basis
+  that the landlord is claiming the principal debt only, plus the court fee where shown.
+</p>
+<p>
+  No Section 69 County Courts Act 1984 interest has been added to the claim total. If the landlord later decides
+  to claim interest, the claim figures and court forms should be checked and updated before filing.
+</p>
+{{/if}}

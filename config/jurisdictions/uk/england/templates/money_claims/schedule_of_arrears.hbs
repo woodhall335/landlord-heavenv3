@@ -238,7 +238,7 @@
 <div class="case-details">
   <dl class="case-details-grid">
     <dt>Property:</dt>
-    <dd>{{property_address}}</dd>
+    <dd>{{#if property_full_address}}{{property_full_address}}{{else}}{{property_address}}{{#if property_postcode}}, {{property_postcode}}{{/if}}{{/if}}</dd>
     <dt>Defendant:</dt>
     <dd>{{tenant_full_name}}{{#unless tenant_full_name}}{{tenant_name}}{{#unless tenant_name}}{{tenant1_name}}{{/unless}}{{/unless}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
     <dt>Claimant:</dt>
@@ -275,6 +275,12 @@
       <dt>Total Arrears Claimed</dt>
       <dd><strong>{{currency arrears_total}}</strong></dd>
     </div>
+    {{#if arrears_schedule_is_summary}}
+    <div class="summary-item">
+      <dt>Schedule Type</dt>
+      <dd><strong>Summary total</strong></dd>
+    </div>
+    {{/if}}
     {{#if periods_missed}}
     <div class="summary-item">
       <dt>Periods Missed</dt>
@@ -283,6 +289,12 @@
     {{/if}}
   </div>
 </div>
+
+{{#if arrears_schedule_summary_note}}
+<div class="info-box">
+  <strong>Before filing:</strong> {{arrears_schedule_summary_note}}
+</div>
+{{/if}}
 
 <!-- Arrears Schedule Table with Running Balance -->
 <table class="arrears-table">
@@ -328,12 +340,17 @@
 
 <!-- Payment Allocation Note -->
 <div class="info-box">
-  <strong>Payment Allocation Method:</strong> Payments have been allocated using the FIFO (First In, First Out) method, applying payments to the oldest outstanding rent periods first. This is the standard court-accepted method for arrears allocation.
+  <strong>Payment Allocation Method:</strong>
+  {{#if arrears_schedule_is_summary}}
+  The pack records the total arrears figure entered by the landlord. If a full ledger is available, check it against this total and attach it before filing.
+  {{else}}
+  Payments have been allocated using the FIFO (First In, First Out) method, applying payments to the oldest outstanding rent periods first. This is the standard court-accepted method for arrears allocation.
+  {{/if}}
 </div>
 
 <!-- Evidence Note -->
 <div class="info-box">
-  <strong>Evidence Requirements:</strong> Attach proof of payments received, bank statements, and rent ledgers behind this schedule. The County Court expects a clear period-by-period breakdown matching the tenancy rent frequency.
+  <strong>Evidence Requirements:</strong> Attach proof of payments received, bank statements, and rent ledgers behind this schedule. The County Court expects the arrears figure to be supported by clear tenancy and rent-account evidence.
 </div>
 
 <!-- Footer -->
@@ -341,7 +358,7 @@
   <p><strong>Generated:</strong> {{format_date generation_date "long"}}</p>
   {{#unless clean_output}}
   <p><strong>{{#if pack_context_label}}{{pack_context_label}}{{else}}Landlord Heaven Possession Pack{{/if}}</strong> | England</p>
-  <p><em>{{#if schedule_role_note}}{{schedule_role_note}}{{else}}This schedule supports the arrears case and any later possession claim.{{/if}}</em></p>
+  <p><em>{{#if schedule_role_note}}{{schedule_role_note}}{{else}}This schedule supports the money claim for rent arrears.{{/if}}</em></p>
   {{/unless}}
 </div>
 

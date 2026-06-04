@@ -64,7 +64,7 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
           className={`${MONEY_CLAIM_TEXTAREA_CLASS} min-h-[160px]`}
           value={basisOfClaim}
           onChange={(e) => updateMoneyClaim('basis_of_claim', e.target.value)}
-          placeholder="For example: This claim is for rent arrears and related charges under an assured shorthold tenancy of 10 High Street, Manchester..."
+          placeholder="For example: This claim is for rent arrears and related charges under a periodic tenancy agreement for 10 High Street, Manchester..."
         />
 
         {/* Ask Heaven Inline Enhancer */}

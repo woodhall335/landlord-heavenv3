@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { PDFDocument } from 'pdf-lib';
 
 import {
   generateMoneyClaimPack,
@@ -176,6 +177,107 @@ describe('England pack output quality', () => {
     expect(letterHtml).not.toContain('<p><ol>');
     expect(letterHtml).not.toContain('<p><p>');
     expectNoBrokenEncoding(letterHtml!);
+  });
+
+  test('does not let an empty generated ledger wipe an explicit rent arrears total', async () => {
+    const pack = await generateMoneyClaimPack(
+      buildMoneyClaimCase({
+        arrears_total: 3900,
+        total_claim_amount: 3900,
+        claim_interest: false,
+        interest_rate: undefined,
+        interest_start_date: undefined,
+        damage_items: [],
+        other_charges: [],
+        arrears_schedule: [
+          {
+            period: '13 May 2024 to 12 June 2024',
+            due_date: '2024-05-15',
+            amount_due: 1950,
+            amount_paid: 1950,
+            arrears: 0,
+          },
+        ],
+      })
+    );
+
+    const particularsHtml = pack.documents.find((document) => document.document_type === 'particulars_of_claim')?.html;
+    const scheduleHtml = pack.documents.find((document) => document.document_type === 'arrears_schedule')?.html;
+    const interestHtml = pack.documents.find((document) => document.document_type === 'interest_calculation')?.html;
+    const letterHtml = pack.documents.find((document) => document.document_type === 'letter_before_claim')?.html;
+    const filingGuideHtml = pack.documents.find((document) => document.document_type === 'court_filing_guide')?.html;
+    const n1Pdf = pack.documents.find((document) => document.document_type === 'n1_claim')?.pdf;
+
+    expect(particularsHtml).toContain('&#163;3900.00');
+    expect(particularsHtml).toContain('periodic tenancy agreement');
+    expect(scheduleHtml).toContain('Total rent arrears entered by landlord');
+    expect(scheduleHtml).toContain('&#163;3900.00');
+    expect(scheduleHtml).toContain('Summary total');
+    expect(interestHtml).toContain('Interest is not claimed in this pack');
+    expect(interestHtml).toContain('No Section 69 County Courts Act 1984 interest has been added');
+    expect(letterHtml).toContain('&#163;3900.00');
+    expect(letterHtml).toContain('periodic tenancy agreement');
+    expect(filingGuideHtml).toContain('resulting in arrears of &#163;3900.00');
+    expect(particularsHtml).not.toContain('assured shorthold tenancy');
+    expect(letterHtml).not.toContain('assured shorthold tenancy');
+    expect(particularsHtml).not.toContain('the arrears total is\n  £0.00');
+    expect(scheduleHtml).not.toContain('Total Arrears Outstanding</strong></td>\n      <td class="amount"><strong>£0.00');
+  });
+
+  test('renders an interest calculation sheet when interest is claimed', async () => {
+    const pack = await generateMoneyClaimPack(buildMoneyClaimCase());
+
+    const interestDoc = pack.documents.find((document) => document.document_type === 'interest_calculation');
+
+    expect(interestDoc).toBeTruthy();
+    expect(interestDoc?.file_name).toBe('03-interest-calculation.pdf');
+    expect(interestDoc?.title).toBe('Interest calculation');
+    expect(interestDoc?.html).toContain('Interest rate:');
+    expect(interestDoc?.html).toContain('Daily rate:');
+    expect(interestDoc?.html).toContain('Interest continues to accrue');
+    expect(interestDoc?.pdf).toBeTruthy();
+  });
+
+  test('fills the N1 money claim fields with current tenancy wording and useful particulars', async () => {
+    const pack = await generateMoneyClaimPack(
+      buildMoneyClaimCase({
+        arrears_total: 3900,
+        total_claim_amount: 3900,
+        claim_interest: false,
+        interest_rate: undefined,
+        interest_start_date: undefined,
+        damage_items: [],
+        other_charges: [],
+        arrears_schedule: [
+          {
+            period: 'Total entered by landlord',
+            due_date: '2026-03-01',
+            amount_due: 3900,
+            amount_paid: 0,
+            arrears: 3900,
+          },
+        ],
+      })
+    );
+
+    const n1Pdf = pack.documents.find((document) => document.document_type === 'n1_claim')?.pdf;
+    expect(n1Pdf).toBeTruthy();
+
+    const n1 = await PDFDocument.load(n1Pdf!);
+    const form = n1.getForm();
+    const briefDetails = form.getTextField('Text23').getText() || '';
+    const particulars = form.getTextField('Text30').getText() || '';
+
+    expect(briefDetails).toContain('periodic tenancy agreement');
+    expect(briefDetails).toContain('Particulars of Claim attached');
+    expect(briefDetails).not.toContain('assured shorthold tenancy');
+    expect(particulars).toContain('Full Particulars of Claim are attached');
+    expect(particulars).toContain('periodic tenancy agreement');
+    expect(particulars).toContain('2 High Street');
+    expect(particulars).toContain('E1 2BB');
+    expect(particulars).toContain('£3900.00');
+    expect(particulars).toContain('A schedule of arrears is attached');
+    expect(particulars).not.toContain('See attached Particulars of Claim document for full details');
   });
 
   test('renders England deposit support documents with complete, readable wording', async () => {

@@ -8,16 +8,16 @@
 <strong>To:</strong><br>
 {{tenant_full_name}}<br>
 {{#if tenant_2_name}}{{tenant_2_name}}<br>{{/if}}
-{{property_address}}<br>
-{{property_postcode}}
+{{#if property_full_address}}{{property_full_address}}{{else}}{{property_address}}<br>
+{{property_postcode}}{{/if}}
 </p>
 
 <p>
 <strong>From:</strong><br>
 {{landlord_full_name}}<br>
 {{#if landlord_2_name}}{{landlord_2_name}}<br>{{/if}}
-{{landlord_address}}<br>
-{{landlord_postcode}}
+{{#if claimant_full_address}}{{claimant_full_address}}{{else}}{{landlord_address}}<br>
+{{landlord_postcode}}{{/if}}
 </p>
 
 {{#if solicitor_firm}}
@@ -35,7 +35,7 @@ Reference: {{claimant_reference}}
 
 <p>Dear {{tenant_full_name}},</p>
 
-<h3>Re: Property at {{property_address}}</h3>
+<h3>Re: Property at {{#if property_full_address}}{{property_full_address}}{{else}}{{property_address}}{{#if property_postcode}}, {{property_postcode}}{{/if}}{{/if}}</h3>
 
 <p>
 I am writing to you about the money I say you owe in connection with the above property. This letter
@@ -89,12 +89,23 @@ is sent in accordance with the <strong>Pre-Action Protocol for Debt Claims</stro
 
 <h4>Rent Arrears</h4>
 <p>
-You occupy the property under an assured shorthold tenancy that commenced on {{tenancy_start_date}}. The agreed rent is {{currency rent_amount}} {{rent_frequency}}, payable in advance.
+You occupy the property under a periodic tenancy agreement that commenced on {{tenancy_start_date}}. The agreed rent is {{currency rent_amount}} {{rent_frequency}}, payable in advance.
 </p>
 
 <p>
-You have failed to pay rent as it fell due. The arrears have accumulated over multiple rent periods. A detailed schedule showing each period, the amount due, what you paid, and the balance is attached as <strong>Appendix 1</strong>.
+You have failed to pay rent as it fell due. The arrears have accumulated over multiple rent periods.
+{{#if arrears_schedule_is_summary}}
+The schedule attached as <strong>Appendix 1</strong> records the total arrears figure currently claimed.
+{{else}}
+A detailed schedule showing each period, the amount due, what you paid, and the balance is attached as <strong>Appendix 1</strong>.
+{{/if}}
 </p>
+{{#if arrears_schedule_is_summary}}
+<p>
+I will rely on the rent ledger, rent statement,
+bank records, or other payment records showing how this figure is made up.
+</p>
+{{/if}}
 
 {{#if damage_items.length}}
 <h4>Property Damage and Other Costs</h4>

@@ -21,7 +21,7 @@
  * - N119: 17 text fields, 0 checkboxes
  */
 
-import { PDFDocument, PDFForm, PDFTextField, PDFCheckBox } from 'pdf-lib';
+import { PDFDocument, PDFForm, PDFTextField, PDFCheckBox, StandardFonts } from 'pdf-lib';
 import fs from 'fs/promises';
 import path from 'path';
 import { generateArrearsBreakdownForCourt } from './arrears-schedule-mapper';
@@ -1051,7 +1051,13 @@ function getTextFieldStrict(form: PDFForm, fieldName: string, context: string): 
 /**
  * Set a required text field - throws if value missing or field not found
  */
-function setTextRequired(form: PDFForm, fieldName: string, value: string | undefined, context: string): void {
+function setTextRequired(
+  form: PDFForm,
+  fieldName: string,
+  value: string | undefined,
+  context: string,
+  fontSize?: number
+): void {
   if (!value || value.trim() === '') {
     throw new Error(
       `[${context}] Required field "${fieldName}" has no value. ` +
@@ -1060,17 +1066,25 @@ function setTextRequired(form: PDFForm, fieldName: string, value: string | undef
   }
   const field = getTextFieldStrict(form, fieldName, context);
   field.setText(value);
+  if (fontSize) field.setFontSize(fontSize);
 }
 
 /**
  * Set an optional text field - silently skips if value missing, throws if field missing
  */
-function setTextOptional(form: PDFForm, fieldName: string, value: string | undefined, context: string): void {
+function setTextOptional(
+  form: PDFForm,
+  fieldName: string,
+  value: string | undefined,
+  context: string,
+  fontSize?: number
+): void {
   if (!value || value.trim() === '') return;
 
   try {
     const field = form.getTextField(fieldName);
     field.setText(value);
+    if (fontSize) field.setFontSize(fontSize);
   } catch {
     // Field doesn't exist - this is acceptable for optional fields, but log it
     console.debug(`[${context}] Optional field "${fieldName}" not found, skipping`);
@@ -2900,7 +2914,7 @@ export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}
   const claimantPostcode = data.landlord_postcode || extractPostcodeFromAddress(data.landlord_address) || '';
   const claimantFormattedAddress = formatAddressForPdf(data.landlord_address, claimantPostcode);
   const claimantDetails = `${data.landlord_full_name}\n${claimantFormattedAddress}`;
-  setTextRequired(form, 'Text21', claimantDetails, ctx);
+  setTextRequired(form, 'Text21', claimantDetails, ctx, 10);
 
   // Defendant details (large text box) - REQUIRED
   // CRITICAL: Include postcode explicitly - court requires full address with postcode
@@ -2918,7 +2932,7 @@ export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}
     const defendant2FormattedAddress = formatAddressForPdf(defendant2RawAddress, defendant2Postcode);
     defendantDetails += `\n\n${data.tenant_2_name}\n${defendant2FormattedAddress}`;
   }
-  setTextRequired(form, 'Text22', defendantDetails, ctx);
+  setTextRequired(form, 'Text22', defendantDetails, ctx, 10);
 
   // Brief details of claim - REQUIRED
   // For money claims with attached PoC, use a standardised brief summary
@@ -2928,43 +2942,46 @@ export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}
   if (isMoneyClaimWithPoC) {
     // Standard brief details with clear reference to attached PoC
     const claimTypes: string[] = [];
-    if (data.total_claim_amount && data.total_claim_amount > 0) {
+    if (data.total_arrears && data.total_arrears > 0) {
       claimTypes.push('rent arrears');
     }
     if (data.damage_items && data.damage_items.length > 0) {
       claimTypes.push('property damage');
     }
-    const claimDescription = claimTypes.length > 0 ? claimTypes.join(' and ') : 'rent arrears';
-    briefDetails = `Claim for ${claimDescription} under assured shorthold tenancy. Particulars of Claim attached.`;
+    if (data.other_charges && data.other_charges.length > 0) {
+      claimTypes.push('other tenancy debt');
+    }
+    const claimDescription = claimTypes.length > 0 ? claimTypes.join(' and ') : 'tenancy debt';
+    briefDetails = `Claim for ${claimDescription} under a periodic tenancy agreement. Particulars of Claim attached.`;
   } else if (data.particulars_of_claim) {
     briefDetails = data.particulars_of_claim.substring(0, 200) + (data.particulars_of_claim.length > 200 ? '...' : '');
   } else {
     briefDetails = 'Claim for unpaid rent arrears and/or damages. Particulars of Claim attached.';
   }
-  setTextRequired(form, 'Text23', briefDetails, ctx);
+  setTextRequired(form, 'Text23', briefDetails, ctx, 10);
 
   // Value box (Text24 exists in Dec 2024 N1 template - corrected from earlier comment)
-  setTextOptional(form, 'Text24', `£${data.total_claim_amount.toFixed(2)}`, ctx);
+  setTextOptional(form, 'Text24', `£${data.total_claim_amount.toFixed(2)}`, ctx, 11);
 
   // Defendant's name and address for service including postcode
   // CRITICAL: This field (lower-left on page 1) must contain the full defendant
   // details matching Text22. Use the same defendantDetails string to ensure consistency.
-  setTextOptional(form, 'Text Field 48', defendantDetails, ctx);
+  setTextOptional(form, 'Text Field 48', defendantDetails, ctx, 9);
 
   // Financial details - REQUIRED
-  setTextRequired(form, 'Text25', data.total_claim_amount.toFixed(2), ctx);
+  setTextRequired(form, 'Text25', data.total_claim_amount.toFixed(2), ctx, 11);
 
   // Court fee - defaults to 0 if not specified
   const courtFee = data.court_fee || 0;
-  setTextRequired(form, 'Text26', courtFee.toFixed(2), ctx);
+  setTextRequired(form, 'Text26', courtFee.toFixed(2), ctx, 11);
 
   if (data.solicitor_costs) {
-    setTextOptional(form, 'Text27', data.solicitor_costs.toFixed(2), ctx);
+    setTextOptional(form, 'Text27', data.solicitor_costs.toFixed(2), ctx, 11);
   }
 
   // Total amount - REQUIRED
   const totalAmount = data.total_claim_amount + courtFee + (data.solicitor_costs || 0);
-  setTextRequired(form, 'Text28', totalAmount.toFixed(2), ctx);
+  setTextRequired(form, 'Text28', totalAmount.toFixed(2), ctx, 11);
 
   // === PAGE 2 ===
   // Preferred County Court Hearing Centre (required field on page 2)
@@ -2982,9 +2999,37 @@ export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}
   if (isMoneyClaimWithPoC) {
     // Always check "attached" checkbox for money claims with separate PoC document
     setCheckbox(form, 'Check Box43', true, ctx);
-    // Brief summary in Text30 referencing the attached PoC
-    const pocSummary = `See attached Particulars of Claim document for full details.\n\nClaim summary:\n- Property: ${data.property_address || 'See above'}\n- Total claimed: £${data.total_claim_amount?.toFixed(2) || '0.00'}\n- Schedule of arrears attached`;
-    setTextOptional(form, 'Text30', pocSummary, ctx);
+    // Concise particulars in Text30, with the full PoC attached separately.
+    const propertySummary = [data.property_address, data.property_postcode].filter(Boolean).join(', ');
+    const rentSummary = data.rent_amount
+      ? `The agreed rent was £${Number(data.rent_amount).toFixed(2)} ${data.rent_frequency || ''}.`
+      : '';
+    const tenancyStartSummary = data.tenancy_start_date
+      ? `The tenancy began on ${data.tenancy_start_date}.`
+      : '';
+    const arrearsSummary = data.total_arrears && data.total_arrears > 0
+      ? `The rent arrears claimed are £${data.total_arrears.toFixed(2)}.`
+      : '';
+    const damageSummary = data.damage_items && data.damage_items.length > 0
+      ? `The claim also includes property damage beyond fair wear and tear.`
+      : '';
+    const otherDebtSummary = data.other_charges && data.other_charges.length > 0
+      ? `The claim also includes other tenancy-related sums set out in the attached particulars.`
+      : '';
+    const pocSummary = [
+      'Full Particulars of Claim are attached.',
+      `The claim arises from a periodic tenancy agreement for ${propertySummary || 'the rental property'}.`,
+      tenancyStartSummary,
+      rentSummary,
+      `The defendant failed to pay the sums due under the tenancy. The total claim is £${data.total_claim_amount?.toFixed(2) || '0.00'}, plus the court fee shown on this form.`,
+      arrearsSummary,
+      damageSummary,
+      otherDebtSummary,
+      data.total_arrears && data.total_arrears > 0
+        ? 'A schedule of arrears is attached and forms part of the claim.'
+        : 'The attached particulars explain how the amount claimed is calculated.',
+    ].filter(Boolean).join('\n');
+    setTextOptional(form, 'Text30', pocSummary, ctx, 8);
   } else if (data.particulars_of_claim) {
     // For other claim types, use the provided particulars directly
     setCheckbox(form, 'Check Box43', true, ctx);
@@ -3001,8 +3046,8 @@ export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}
   }
 
   // Signatory name - REQUIRED for Statement of Truth
-  setTextRequired(form, 'Text Field 47', data.signatory_name, ctx);
-  setTextOptional(form, 'Text Field 46', data.signatory_name, ctx); // Second signature box
+  setTextRequired(form, 'Text Field 47', data.signatory_name, ctx, 10);
+  setTextOptional(form, 'Text Field 46', data.signatory_name, ctx, 10); // Second signature box
 
   if (data.signature_date) {
     const dateparts = splitDate(data.signature_date);
@@ -3045,6 +3090,8 @@ export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}
   setTextOptional(form, 'Text Field 3', data.claimant_reference, ctx);
   setTextOptional(form, 'Text Field 2', serviceEmail, ctx);
 
+  const n1AppearanceFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+  form.updateFieldAppearances(n1AppearanceFont);
   const pdfBytes = await pdfDoc.save();
   console.log(`✅ N1 form filled successfully`);
   console.log('📄 N1 form preserved as editable (AcroForm fields retained)');

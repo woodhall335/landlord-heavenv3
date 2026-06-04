@@ -263,6 +263,66 @@ function buildScheduleCalculationNotes(schedule: ArrearsEntry[]): string[] {
     .filter(Boolean);
 }
 
+function buildSummaryArrearsEntry(total: number): ArrearsEntry {
+  return {
+    period: 'Total rent arrears entered by landlord',
+    due_date: 'See rent ledger',
+    amount_due: total,
+    amount_paid: 0,
+    arrears: total,
+    running_balance: total,
+    notes:
+      'The landlord entered a total arrears figure without a full period-by-period ledger. ' +
+      'Attach the rent statement, bank ledger, or rent account before issuing the claim.',
+  };
+}
+
+function reconcileArrearsScheduleForDocuments(claim: MoneyClaimCase): {
+  claim: MoneyClaimCase;
+  hasDetailedArrearsSchedule: boolean;
+  arrearsScheduleIsSummary: boolean;
+} {
+  const explicitArrearsTotal = roundMoney(Math.max(0, claim.arrears_total || 0));
+  const normalizedArrearsSchedule = normalizeArrearsEntryRunningBalances(claim.arrears_schedule || []);
+  const scheduleBalance = normalizedArrearsSchedule.length > 0
+    ? getFinalRunningBalance(normalizedArrearsSchedule)
+    : 0;
+
+  if (scheduleBalance > 0) {
+    return {
+      claim: {
+        ...claim,
+        arrears_schedule: normalizedArrearsSchedule,
+        arrears_total: scheduleBalance,
+      },
+      hasDetailedArrearsSchedule: true,
+      arrearsScheduleIsSummary: false,
+    };
+  }
+
+  if (explicitArrearsTotal > 0) {
+    return {
+      claim: {
+        ...claim,
+        arrears_schedule: [buildSummaryArrearsEntry(explicitArrearsTotal)],
+        arrears_total: explicitArrearsTotal,
+      },
+      hasDetailedArrearsSchedule: false,
+      arrearsScheduleIsSummary: true,
+    };
+  }
+
+  return {
+    claim: {
+      ...claim,
+      arrears_schedule: normalizedArrearsSchedule,
+      arrears_total: 0,
+    },
+    hasDetailedArrearsSchedule: normalizedArrearsSchedule.length > 0,
+    arrearsScheduleIsSummary: false,
+  };
+}
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function calculateTotals(claim: MoneyClaimCase): CalculatedTotals {
   const normalizedArrearsSchedule = normalizeArrearsEntryRunningBalances(claim.arrears_schedule || []);
@@ -425,6 +485,7 @@ function buildN1Payload(claim: MoneyClaimCase, totals: MoneyClaimFinancials): Ca
     claim_type: 'money_claim',
     particulars_of_claim: claim.particulars_of_claim,
     total_claim_amount: totals.total_claim_amount,
+    total_arrears: totals.arrears_total,
     court_fee: totals.court_fee,
     solicitor_costs: totals.solicitor_costs,
     claimant_reference: claimantReference,
@@ -460,14 +521,8 @@ async function generateEnglandMoneyClaimPack(
   claim: MoneyClaimCase,
   caseFacts?: CaseFacts
 ): Promise<MoneyClaimPack> {
-  const normalizedArrearsSchedule = normalizeArrearsEntryRunningBalances(claim.arrears_schedule || []);
-  if (normalizedArrearsSchedule.length > 0) {
-    claim = {
-      ...claim,
-      arrears_schedule: normalizedArrearsSchedule,
-      arrears_total: getFinalRunningBalance(normalizedArrearsSchedule),
-    };
-  }
+  const arrearsReconciliation = reconcileArrearsScheduleForDocuments(claim);
+  claim = arrearsReconciliation.claim;
 
   // =========================================================================
   // PRE-GENERATION VALIDATION
@@ -530,6 +585,15 @@ async function generateEnglandMoneyClaimPack(
     tenancy_start_date: formattedTenancyStartDate,
     interest_start_date: formattedInterestStartDate,
     arrears_schedule: formattedArrearsSchedule,
+    has_detailed_arrears_schedule: arrearsReconciliation.hasDetailedArrearsSchedule,
+    arrears_schedule_is_summary: arrearsReconciliation.arrearsScheduleIsSummary,
+    arrears_schedule_summary_note: arrearsReconciliation.arrearsScheduleIsSummary
+      ? 'This schedule uses the total rent arrears figure entered by the landlord. Before filing, attach or check the rent ledger so the court can see how the figure is made up.'
+      : '',
+    pack_context_label: 'Money Claim Pack',
+    schedule_role_note: 'This schedule supports the money claim for rent arrears.',
+    property_full_address: [claim.property_address, claim.property_postcode].filter(Boolean).join(', '),
+    claimant_full_address: [claim.landlord_address, claim.landlord_postcode].filter(Boolean).join(', '),
     schedule_calculation_notes: scheduleCalculationNotes,
     damage_items: claim.damage_items || [],
     other_charges: claim.other_charges || [],
@@ -582,25 +646,27 @@ async function generateEnglandMoneyClaimPack(
     file_name: '02-schedule-of-arrears.pdf',
   });
 
-  // INTEREST CALCULATION (optional - only if user opted in)
-  if (totals.claim_interest === true) {
-    const interest = await generateDocument({
-      templatePath: `${templateBase}/templates/money_claims/interest_workings.hbs`,
-      data: baseTemplateData,
-      isPreview: false,
-      outputFormat: 'both',
-    });
+  // INTEREST CALCULATION / POSITION
+  // Always include this so the pack has a stable document 03. If interest is not
+  // claimed, the sheet records that position instead of silently omitting it.
+  const interest = await generateDocument({
+    templatePath: `${templateBase}/templates/money_claims/interest_workings.hbs`,
+    data: baseTemplateData,
+    isPreview: false,
+    outputFormat: 'both',
+  });
 
-    documents.push({
-      title: 'Interest calculation',
-      description: 'Section 69 County Courts Act interest workings and daily rate.',
-      category: 'guidance',
-      document_type: 'interest_calculation',
-      html: interest.html,
-      pdf: interest.pdf,
-      file_name: '03-interest-calculation.pdf',
-    });
-  }
+  documents.push({
+    title: totals.claim_interest === true ? 'Interest calculation' : 'Interest not claimed',
+    description: totals.claim_interest === true
+      ? 'Section 69 County Courts Act interest workings and daily rate.'
+      : 'Records that statutory interest has not been added to this claim.',
+    category: 'guidance',
+    document_type: 'interest_calculation',
+    html: interest.html,
+    pdf: interest.pdf,
+    file_name: '03-interest-calculation.pdf',
+  });
 
   // EVIDENCE INDEX - Removed as of Jan 2026 pack restructure
   // COURT HEARING PREPARATION SHEET - Removed as of Jan 2026 pack restructure
