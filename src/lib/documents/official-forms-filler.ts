@@ -3005,7 +3005,7 @@ export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}
       ? `The agreed rent was £${Number(data.rent_amount).toFixed(2)} ${data.rent_frequency || ''}.`
       : '';
     const tenancyStartSummary = data.tenancy_start_date
-      ? `The tenancy began on ${data.tenancy_start_date}.`
+      ? `The tenancy began on ${formatUKLegalDate(data.tenancy_start_date)}.`
       : '';
     const arrearsSummary = data.total_arrears && data.total_arrears > 0
       ? `The rent arrears claimed are £${data.total_arrears.toFixed(2)}.`

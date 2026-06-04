@@ -427,6 +427,12 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({
     return getGround8Threshold(rentAmount, rentFrequency);
   }, [jurisdiction, rentAmount, rentFrequency]);
 
+  const shouldShowThresholdGuidance =
+    showThresholdGuidance === true &&
+    facts?.product !== 'money_claim' &&
+    facts?.pack_type !== 'money_claim' &&
+    facts?.__meta?.product !== 'money_claim';
+
   return (
     <div className="space-y-6">
       <div>
@@ -591,7 +597,7 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({
 
           {/* Threshold eligibility indicator - jurisdiction-aware */}
           {/* Scotland uses Ground 18. England uses the post-1 May 2026 Ground 8 threshold. */}
-          {showThresholdGuidance && jurisdiction === 'scotland' ? (
+          {shouldShowThresholdGuidance && jurisdiction === 'scotland' ? (
             // Scotland Ground 18 threshold (3 months)
             computed.arrears_in_months >= 3 ? (
               <div className="rounded-lg border border-green-200 bg-green-50 p-4">
@@ -614,7 +620,7 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({
                 </p>
               </div>
             ) : null
-          ) : showThresholdGuidance && jurisdiction === 'england' && englandGround8Threshold ? (
+          ) : shouldShowThresholdGuidance && jurisdiction === 'england' && englandGround8Threshold ? (
             computed.total_arrears >= englandGround8Threshold.amount ? (
               <div className="rounded-lg border border-green-200 bg-green-50 p-4">
                 <p className="text-sm font-medium text-green-800">
@@ -638,7 +644,7 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({
                 </p>
               </div>
             ) : null
-          ) : showThresholdGuidance && computed.arrears_in_months >= 2 ? (
+          ) : shouldShowThresholdGuidance && computed.arrears_in_months >= 2 ? (
               <div className="rounded-lg border border-green-200 bg-green-50 p-4">
                 <p className="text-sm font-medium text-green-800">
                   {jurisdiction === 'wales' ? 'Section 157' : 'Ground 8'} Threshold Met

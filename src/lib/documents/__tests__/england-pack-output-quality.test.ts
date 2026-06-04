@@ -238,6 +238,53 @@ describe('England pack output quality', () => {
     expect(interestDoc?.pdf).toBeTruthy();
   });
 
+  test('renders detailed money-claim arrears rows instead of a summary fallback when rows exist', async () => {
+    const pack = await generateMoneyClaimPack(
+      buildMoneyClaimCase({
+        rent_amount: 1950,
+        arrears_total: 3900,
+        total_claim_amount: 3900,
+        claim_interest: false,
+        interest_rate: undefined,
+        interest_start_date: undefined,
+        damage_items: [],
+        other_charges: [],
+        arrears_schedule: [
+          {
+            period: '13 March 2026 to 12 April 2026',
+            due_date: '13 March 2026',
+            amount_due: 1950,
+            amount_paid: 1950,
+            arrears: 0,
+          },
+          {
+            period: '13 April 2026 to 12 May 2026',
+            due_date: '13 April 2026',
+            amount_due: 1950,
+            amount_paid: 0,
+            arrears: 1950,
+          },
+          {
+            period: '13 May 2026 to 12 June 2026',
+            due_date: '13 May 2026',
+            amount_due: 1950,
+            amount_paid: 0,
+            arrears: 1950,
+          },
+        ],
+      })
+    );
+
+    const scheduleHtml = pack.documents.find((document) => document.document_type === 'arrears_schedule')?.html;
+
+    expect(scheduleHtml).toContain('13 March 2026 to 12 April 2026');
+    expect(scheduleHtml).toContain('13 April 2026 to 12 May 2026');
+    expect(scheduleHtml).toContain('13 May 2026 to 12 June 2026');
+    expect(scheduleHtml).toContain('&#163;3900.00');
+    expect(scheduleHtml).not.toContain('Total rent arrears entered by landlord');
+    expect(scheduleHtml).not.toContain('Summary total');
+  });
+
   test('fills the N1 money claim fields with current tenancy wording and useful particulars', async () => {
     const pack = await generateMoneyClaimPack(
       buildMoneyClaimCase({
@@ -273,6 +320,8 @@ describe('England pack output quality', () => {
     expect(briefDetails).not.toContain('assured shorthold tenancy');
     expect(particulars).toContain('Full Particulars of Claim are attached');
     expect(particulars).toContain('periodic tenancy agreement');
+    expect(particulars).toContain('The tenancy began on 1 January 2024');
+    expect(particulars).not.toContain('The tenancy began on 2024-01-01');
     expect(particulars).toContain('2 High Street');
     expect(particulars).toContain('E1 2BB');
     expect(particulars).toContain('£3900.00');

@@ -237,6 +237,79 @@ export interface MoneyClaimPack {
 
 type CalculatedTotals = MoneyClaimFinancials;
 
+const MONEY_CLAIM_DOC_CSS = `
+@page { size: A4; margin: 15mm; }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.55;
+  color: #1c1431;
+  margin: 0;
+}
+h1 {
+  margin: 0 0 12px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: #241447;
+  color: #ffffff;
+  font-size: 18pt;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+h2 {
+  margin: 22px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #ded4f7;
+  color: #241447;
+  font-size: 13pt;
+}
+h3 {
+  margin: 16px 0 8px;
+  color: #3b246b;
+  font-size: 11.5pt;
+}
+h4 {
+  margin: 14px 0 6px;
+  color: #3b246b;
+  font-size: 10.5pt;
+}
+p { margin: 8px 0; }
+hr {
+  border: 0;
+  border-top: 1px solid #ded4f7;
+  margin: 16px 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+}
+th, td {
+  border: 1px solid #d8ccef;
+  padding: 8px 9px;
+  vertical-align: top;
+}
+th {
+  background: #f3effc;
+  color: #241447;
+  font-weight: 700;
+}
+tr:nth-child(even) td { background: #fcfbff; }
+ul, ol { margin: 10px 0 10px 22px; padding: 0; }
+li { margin: 5px 0; }
+em { color: #5d5672; }
+.amount, td[align="right"] {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.doc-note {
+  margin: 14px 0;
+  padding: 12px 14px;
+  border-left: 4px solid #6d28d9;
+  background: #f7f3ff;
+}
+`;
+
 function sumLineItems(items?: ClaimLineItem[]): number {
   return (items || []).reduce((total, item) => total + (item.amount || 0), 0);
 }
@@ -578,6 +651,7 @@ async function generateEnglandMoneyClaimPack(
     payment_account_number: paymentAccountNumber,
     payment_reference: resolvePaymentReference(claim),
     has_bank_transfer_details: hasBankTransferDetails,
+    money_claim_doc_css: MONEY_CLAIM_DOC_CSS,
     ...buildMoneyClaimFinancialTemplateData(claim, totals),
     // All dates pre-formatted as UK legal format (DD Month YYYY)
     generation_date: formattedGenerationDate,

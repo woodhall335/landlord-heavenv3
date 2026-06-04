@@ -120,4 +120,64 @@ describe('money claim generation facts', () => {
     expect(moneyClaimCase.total_claim_amount).toBe(3900);
     expect(() => assertValidMoneyClaimData(moneyClaimCase)).not.toThrow();
   });
+
+  it('preserves the detailed money claim arrears schedule rows entered in the wizard', () => {
+    const { moneyClaimCase } = buildMoneyClaimGenerationInput({
+      facts: {
+        ...baseMoneyClaimWizardFacts,
+        claiming_rent_arrears: true,
+        rent_amount: 1950,
+        rent_frequency: 'monthly',
+        rent_due_day: 13,
+        arrears_items: [
+          {
+            period_start: '2026-03-13',
+            period_end: '2026-04-12',
+            rent_due: 1950,
+            rent_paid: 1950,
+            amount_owed: 0,
+          },
+          {
+            period_start: '2026-04-13',
+            period_end: '2026-05-12',
+            rent_due: 1950,
+            rent_paid: 0,
+            amount_owed: 1950,
+          },
+          {
+            period_start: '2026-05-13',
+            period_end: '2026-06-12',
+            rent_due: 1950,
+            rent_paid: 0,
+            amount_owed: 1950,
+          },
+        ],
+      },
+      caseId: 'case-money-claim-arrears-rows',
+      jurisdiction: 'england',
+    });
+
+    expect(moneyClaimCase.arrears_total).toBe(3900);
+    expect(moneyClaimCase.total_claim_amount).toBe(3900);
+    expect(moneyClaimCase.arrears_schedule).toHaveLength(3);
+    expect(moneyClaimCase.arrears_schedule[0]).toMatchObject({
+      amount_due: 1950,
+      amount_paid: 1950,
+      arrears: 0,
+      running_balance: 0,
+    });
+    expect(moneyClaimCase.arrears_schedule[1]).toMatchObject({
+      amount_due: 1950,
+      amount_paid: 0,
+      arrears: 1950,
+      running_balance: 1950,
+    });
+    expect(moneyClaimCase.arrears_schedule[2]).toMatchObject({
+      amount_due: 1950,
+      amount_paid: 0,
+      arrears: 1950,
+      running_balance: 3900,
+    });
+    expect(() => assertValidMoneyClaimData(moneyClaimCase)).not.toThrow();
+  });
 });
