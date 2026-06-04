@@ -45,6 +45,8 @@ export interface MoneyClaimFacts {
   landlord_is_company?: boolean;
   company_name?: string;
   tenant_full_name?: string;
+  has_joint_defendants?: boolean;
+  tenant_2_name?: string;
   defendant_address_line1?: string;
   property_address_line1?: string;
   property_address_postcode?: string;
@@ -114,6 +116,11 @@ export interface MoneyClaimFacts {
       }>;
       total_arrears?: number;
     };
+  };
+  parties?: {
+    tenants?: Array<{
+      name?: string | null;
+    }>;
   };
 }
 
@@ -197,6 +204,14 @@ function getExplicitClaimAmount(facts: MoneyClaimFacts): number {
   }
 
   return 0;
+}
+
+function getSecondDefendantName(facts: MoneyClaimFacts): string {
+  return (
+    facts.tenant_2_name ||
+    facts.parties?.tenants?.[1]?.name ||
+    ''
+  ).trim();
 }
 
 /**
@@ -510,6 +525,16 @@ export function validateMoneyClaimClient(facts: MoneyClaimFacts): ClientValidati
       section: 'evidence',
       field: 'money_claim.evidence_items',
       evidenceHint: 'Use the evidence checklist. Uploads are optional for new claims.',
+    });
+  }
+
+  if (facts.has_joint_defendants === true && !getSecondDefendantName(facts)) {
+    blockers.push({
+      id: 'joint_defendant_name_required',
+      severity: 'blocker',
+      message: 'Second defendant name is required because you added a joint tenant.',
+      section: 'defendant',
+      field: 'tenant_2_name',
     });
   }
 

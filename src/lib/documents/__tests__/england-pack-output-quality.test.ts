@@ -135,6 +135,10 @@ function expectNoBrokenEncoding(content: string) {
   expect(content).not.toContain('[INSERT');
 }
 
+function expectNoVisibleMojibake(content: string) {
+  expect(content).not.toMatch(/[Ââ]/);
+}
+
 describe('England pack output quality', () => {
   test('renders money-claim particulars and PAP letter without mojibake or placeholder bank fields', async () => {
     const pack = await generateMoneyClaimPack(buildMoneyClaimCase());
@@ -155,6 +159,81 @@ describe('England pack output quality', () => {
 
     expectNoBrokenEncoding(particularsHtml!);
     expectNoBrokenEncoding(letterHtml!);
+  });
+
+  test('renders active money-claim support documents with plain court-pack headings', async () => {
+    const pack = await generateMoneyClaimPack(buildMoneyClaimCase());
+    const supportTypes = [
+      'particulars_of_claim',
+      'arrears_schedule',
+      'interest_calculation',
+      'letter_before_claim',
+      'defendant_info_sheet',
+      'court_filing_guide',
+      'enforcement_guide',
+    ];
+
+    for (const documentType of supportTypes) {
+      const html = pack.documents.find((document) => document.document_type === documentType)?.html;
+
+      expect(html, `${documentType} should render HTML`).toBeTruthy();
+      expectNoBrokenEncoding(html!);
+      expectNoVisibleMojibake(html!);
+      expect(html).not.toContain('background: #241447');
+      expect(html).not.toContain('background-color: #241447');
+      expect(html).not.toContain('color: #ffffff');
+      expect(html).not.toContain('ded4f7');
+      expect(html).not.toContain('d8ccef');
+      expect(html).not.toContain('f7f3ff');
+      expect(html).not.toContain('fcfbff');
+      expect(html).not.toContain('3b246b');
+      expect(html).not.toContain('6d28d9');
+    }
+
+    const particularsHtml = pack.documents.find((document) => document.document_type === 'particulars_of_claim')?.html;
+    expect(particularsHtml).toContain('font-size: 11pt;');
+    expect(particularsHtml).toContain('text-align: center;');
+    expect(particularsHtml).toContain('border-bottom: 2px solid #1a1a1a;');
+  });
+
+  test('keeps joint claimants and defendants consistent across money-claim documents and N1', async () => {
+    const pack = await generateMoneyClaimPack(
+      buildMoneyClaimCase({
+        landlord_full_name: 'Irfan Mansur',
+        landlord_2_name: 'Najla Mansur Huasain',
+        tenant_full_name: 'Dmitry Ivakin',
+        tenant_2_name: 'Galina Ivaaina',
+        has_joint_defendants: true,
+      })
+    );
+
+    const particularsHtml = pack.documents.find((document) => document.document_type === 'particulars_of_claim')?.html;
+    const scheduleHtml = pack.documents.find((document) => document.document_type === 'arrears_schedule')?.html;
+    const filingGuideHtml = pack.documents.find((document) => document.document_type === 'court_filing_guide')?.html;
+    const enforcementGuideHtml = pack.documents.find((document) => document.document_type === 'enforcement_guide')?.html;
+    const n1Pdf = pack.documents.find((document) => document.document_type === 'n1_claim')?.pdf;
+
+    for (const html of [particularsHtml, scheduleHtml, filingGuideHtml, enforcementGuideHtml]) {
+      expect(html).toBeTruthy();
+      expect(html).toContain('Irfan Mansur');
+      expect(html).toContain('Najla Mansur Huasain');
+      expect(html).toContain('Dmitry Ivakin');
+      expect(html).toContain('Galina Ivaaina');
+    }
+
+    expect(n1Pdf).toBeTruthy();
+    const n1 = await PDFDocument.load(n1Pdf!);
+    const form = n1.getForm();
+    const claimantDetails = form.getTextField('Text21').getText() || '';
+    const defendantDetails = form.getTextField('Text22').getText() || '';
+    const defendantServiceDetails = form.getTextField('Text Field 48').getText() || '';
+
+    expect(claimantDetails).toContain('Irfan Mansur');
+    expect(claimantDetails).toContain('Najla Mansur Huasain');
+    expect(defendantDetails).toContain('Dmitry Ivakin');
+    expect(defendantDetails).toContain('Galina Ivaaina');
+    expect(defendantServiceDetails).toContain('Dmitry Ivakin');
+    expect(defendantServiceDetails).toContain('Galina Ivaaina');
   });
 
   test('falls back to contact wording when money-claim bank details are missing', async () => {

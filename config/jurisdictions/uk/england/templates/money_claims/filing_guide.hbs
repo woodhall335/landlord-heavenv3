@@ -1,4 +1,4 @@
-<style>{{{money_claim_doc_css}}}</style>
+﻿<style>{{{money_claim_doc_css}}}</style>
 <h1>Money Claim Filing Guide</h1>
 <p><em>Practical steps for issuing your England money claim for rent arrears and related losses.</em></p>
 
@@ -96,7 +96,7 @@
 <table border="1" cellpadding="6" cellspacing="0" width="100%">
   <tr>
     <td width="40%"><strong>Claimant name:</strong></td>
-    <td width="60%">{{landlord_full_name}}</td>
+    <td width="60%">{{claimant_display_name}}</td>
   </tr>
   <tr>
     <td><strong>Address:</strong></td>
@@ -122,7 +122,7 @@
 <table border="1" cellpadding="6" cellspacing="0" width="100%">
   <tr>
     <td width="40%"><strong>Defendant name:</strong></td>
-    <td width="60%">{{tenant_full_name}}</td>
+    <td width="60%">{{defendant_display_name}}</td>
   </tr>
   <tr>
     <td><strong>Address:</strong></td>
@@ -351,3 +351,5 @@ This guide is practical support for issuing the claim. If the matter becomes def
 <p><em>
 Generated on {{generation_date}} • Document reference: {{#if claimant_reference}}{{claimant_reference}}{{else}}{{case_id}}{{/if}}
 </em></p>
+
+

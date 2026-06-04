@@ -2913,7 +2913,10 @@ export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}
   // Use formatAddressForPdf to ensure proper line breaks and postcode display
   const claimantPostcode = data.landlord_postcode || extractPostcodeFromAddress(data.landlord_address) || '';
   const claimantFormattedAddress = formatAddressForPdf(data.landlord_address, claimantPostcode);
-  const claimantDetails = `${data.landlord_full_name}\n${claimantFormattedAddress}`;
+  const claimantNames = [data.landlord_full_name, data.landlord_2_name]
+    .filter((name): name is string => typeof name === 'string' && name.trim().length > 0)
+    .join('\n');
+  const claimantDetails = `${claimantNames}\n${claimantFormattedAddress}`;
   setTextRequired(form, 'Text21', claimantDetails, ctx, 10);
 
   // Defendant details (large text box) - REQUIRED

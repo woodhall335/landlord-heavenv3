@@ -2,6 +2,55 @@ import { describe, expect, it } from 'vitest';
 import { validateMoneyClaimClient } from '@/lib/validation/money-claim-client-validator';
 
 describe('money claim evidence checklist validation', () => {
+  it('blocks a joint defendant selection when the second defendant name is missing', () => {
+    const result = validateMoneyClaimClient({
+      landlord_full_name: 'Alex Landlord',
+      landlord_address_line1: '1 High Street',
+      landlord_address_postcode: 'SW1A 1AA',
+      tenant_full_name: 'Sam Tenant',
+      has_joint_defendants: true,
+      defendant_address_line1: '2 Rental Road',
+      tenancy_start_date: '2025-01-01',
+      rent_amount: 1200,
+      rent_frequency: 'monthly',
+      claiming_rent_arrears: true,
+      total_arrears: 1200,
+      letter_before_claim_sent: true,
+      pap_letter_date: '2026-01-01',
+      money_claim: {
+        charge_interest: false,
+      },
+    });
+
+    expect(result.blockers.map((blocker) => blocker.id)).toContain('joint_defendant_name_required');
+  });
+
+  it('accepts a joint defendant name saved in nested party facts', () => {
+    const result = validateMoneyClaimClient({
+      landlord_full_name: 'Alex Landlord',
+      landlord_address_line1: '1 High Street',
+      landlord_address_postcode: 'SW1A 1AA',
+      tenant_full_name: 'Sam Tenant',
+      has_joint_defendants: true,
+      parties: {
+        tenants: [{ name: 'Sam Tenant' }, { name: 'Jane Tenant' }],
+      },
+      defendant_address_line1: '2 Rental Road',
+      tenancy_start_date: '2025-01-01',
+      rent_amount: 1200,
+      rent_frequency: 'monthly',
+      claiming_rent_arrears: true,
+      total_arrears: 1200,
+      letter_before_claim_sent: true,
+      pap_letter_date: '2026-01-01',
+      money_claim: {
+        charge_interest: false,
+      },
+    });
+
+    expect(result.blockers.map((blocker) => blocker.id)).not.toContain('joint_defendant_name_required');
+  });
+
   it('treats selected checklist evidence as evidence without requiring uploads', () => {
     const result = validateMoneyClaimClient({
       landlord_full_name: 'Alex Landlord',

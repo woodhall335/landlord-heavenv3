@@ -273,6 +273,7 @@ export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
 
     tenant_full_name: facts.parties.tenants[0]?.name || '',
     tenant_2_name: facts.parties.tenants[1]?.name || undefined,
+    has_joint_defendants: rawFacts.has_joint_defendants === true || Boolean(facts.parties.tenants[1]?.name),
     property_address: propertyAddress,
     property_postcode: facts.property.postcode || undefined,
 

@@ -93,7 +93,7 @@
 <table border="1" cellpadding="8" cellspacing="0" width="100%">
   <tr>
     <td width="40%"><strong>Claimant's name:</strong></td>
-    <td width="60%">{{landlord_full_name}}</td>
+    <td width="60%">{{claimant_display_name}}</td>
   </tr>
   <tr>
     <td><strong>Amount claimed:</strong></td>
@@ -256,6 +256,7 @@ I confirm that the information I have given on this form is true and complete to
 
 <p>
 {{landlord_full_name}}<br>
+{{#if landlord_2_name}}{{landlord_2_name}}<br>{{/if}}
 {{landlord_address}}<br>
 {{landlord_postcode}}<br>
 {{#if landlord_email}}Email: {{landlord_email}}{{/if}}

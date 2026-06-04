@@ -180,4 +180,23 @@ describe('money claim generation facts', () => {
     });
     expect(() => assertValidMoneyClaimData(moneyClaimCase)).not.toThrow();
   });
+
+  it('preserves a joint defendant selection so missing second names block generation', () => {
+    const { moneyClaimCase } = buildMoneyClaimGenerationInput({
+      facts: {
+        ...baseMoneyClaimWizardFacts,
+        has_joint_defendants: true,
+        claiming_rent_arrears: true,
+        claim_amount_rent: '1200',
+      },
+      caseId: 'case-joint-defendant-missing-name',
+      jurisdiction: 'england',
+    });
+
+    expect(moneyClaimCase.has_joint_defendants).toBe(true);
+    expect(moneyClaimCase.tenant_2_name).toBeUndefined();
+    expect(() => assertValidMoneyClaimData(moneyClaimCase)).toThrow(
+      'Second defendant name is required when you add a joint tenant'
+    );
+  });
 });

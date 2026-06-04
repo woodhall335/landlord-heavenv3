@@ -93,6 +93,7 @@ function getWizardSectionForField(field: string | null | undefined): string | nu
     'landlord_address_line1': 'claimant',
     'landlord_address_postcode': 'claimant',
     'tenant_full_name': 'defendant',
+    'tenant_2_name': 'defendant',
     'defendant_address_line1': 'defendant',
     'tenancy_start_date': 'tenancy',
     'tenancy_end_date': 'tenancy',

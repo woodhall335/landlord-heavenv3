@@ -68,6 +68,10 @@ function positiveAmount(value: unknown): number {
   return 0;
 }
 
+function hasText(value: unknown): value is string {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
 /**
  * Calculate arrears outstanding from the schedule ledger.
  */
@@ -186,13 +190,25 @@ export function validateMoneyClaimData(claim: MoneyClaimCase): ValidationResult 
   // =========================================================================
   // 5. NAME CONSISTENCY CHECK
   // =========================================================================
+  if (claim.has_joint_defendants === true && !hasText(claim.tenant_2_name)) {
+    errors.push({
+      code: 'MISSING_JOINT_DEFENDANT_NAME',
+      severity: 'error',
+      field: 'tenant_2_name',
+      message: 'Second defendant name is required when you add a joint tenant',
+      details: 'If the claim is against joint tenants, each defendant must be named consistently on the claim form and supporting documents.',
+    });
+  }
+
   // Ensure signatory name matches landlord name or is explicitly provided
   if (claim.signatory_name) {
-    const landlordNameLower = (claim.landlord_full_name || '').toLowerCase().trim();
+    const claimantNames = [claim.landlord_full_name, claim.landlord_2_name]
+      .filter(hasText)
+      .map((name) => name.toLowerCase().trim());
     const signatoryNameLower = claim.signatory_name.toLowerCase().trim();
 
-    // Check if signatory appears to be landlord or a representative
-    if (landlordNameLower && signatoryNameLower !== landlordNameLower) {
+    // Check if signatory appears to be a claimant or a representative.
+    if (claimantNames.length > 0 && !claimantNames.includes(signatoryNameLower)) {
       // Could be a solicitor signing - that's fine
       if (!claim.solicitor_firm) {
         warnings.push({

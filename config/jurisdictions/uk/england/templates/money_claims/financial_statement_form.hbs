@@ -524,8 +524,9 @@
   <p><strong>Send to:</strong></p>
 
   <p>
-  {{landlord_full_name}}<br>
-  {{landlord_address}}<br>
+{{landlord_full_name}}<br>
+{{#if landlord_2_name}}{{landlord_2_name}}<br>{{/if}}
+{{landlord_address}}<br>
   {{landlord_postcode}}<br>
   {{#if landlord_email}}Email: {{landlord_email}}{{/if}}
   </p>

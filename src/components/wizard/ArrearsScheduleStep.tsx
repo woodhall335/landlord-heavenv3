@@ -663,7 +663,7 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({
 
               </p>
             </div>
-          ) : computed.arrears_in_months > 0 ? (
+          ) : shouldShowThresholdGuidance && computed.arrears_in_months > 0 ? (
               <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
                 <p className="text-sm font-medium text-amber-800">
                   {jurisdiction === 'wales' ? 'Section 157' : 'Ground 8'} Threshold Not Met

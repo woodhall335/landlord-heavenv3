@@ -59,6 +59,10 @@ export function buildMoneyClaimGenerationInput(
     caseFacts,
     moneyClaimCase: {
       ...mappedCase,
+      has_joint_defendants:
+        generationFacts.has_joint_defendants === true ||
+        mappedCase.has_joint_defendants === true ||
+        Boolean(mappedCase.tenant_2_name),
       case_id: input.caseId,
       claimant_reference: mappedCase.claimant_reference?.trim() || input.caseId,
     },

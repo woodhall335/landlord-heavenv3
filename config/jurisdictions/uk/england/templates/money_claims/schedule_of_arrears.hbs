@@ -21,16 +21,16 @@
     /* ===== @PAGE OVERRIDE ===== */
     @page {
       size: A4;
-      margin: 10mm;
+      margin: 15mm;
     }
 
     body {
       padding: 0;
       margin: 0 auto;
       font-family: Arial, sans-serif;
-      font-size: 10.5pt;
-      line-height: 1.55;
-      color: #1c1431;
+      font-size: 11pt;
+      line-height: 1.4;
+      color: #1a1a1a;
     }
 
     /* Document Header */
@@ -38,24 +38,24 @@
       text-align: center;
       margin-bottom: 1.5em;
       padding-bottom: 1em;
-      border-bottom: 2px solid #ded4f7;
+      border-bottom: 2px solid #1a1a1a;
     }
 
     .doc-header h1 {
-      font-size: 18pt;
-      font-weight: 600;
+      font-size: 16pt;
+      font-weight: 700;
       margin: 0 0 0.5em 0;
-      padding: 14px 16px;
-      line-height: 1.3;
-      color: #ffffff;
-      background: #241447;
-      border-radius: 10px;
+      padding-top: 10px;
+      line-height: 1.2;
+      color: #1a1a1a;
+      background: transparent;
+      border-radius: 0;
     }
 
     .doc-badge {
       display: inline-block;
-      background: #f1eaff;
-      color: #3b246b;
+      background: #f0f0f0;
+      color: #1a1a1a;
       padding: 0.3em 0.8em;
       font-size: 10pt;
       font-weight: 600;
@@ -64,10 +64,10 @@
 
     /* Case Details Box */
     .case-details {
-      border: 1px solid #d8ccef;
+      border: 1px solid #666;
       padding: 1em;
       margin: 1.5em 0;
-      background: #fcfbff;
+      background: #f8f8f8;
     }
 
     .case-details-grid {
@@ -84,15 +84,15 @@
 
     .case-details-grid dd {
       margin: 0;
-      color: #1c1431;
+      color: #1a1a1a;
     }
 
     /* Summary Box */
     .summary-box {
-      border: 1px solid #d8ccef;
+      border: 1px solid #666;
       padding: 1em;
       margin: 1.5em 0;
-      background: #f7f3ff;
+      background: #f8f8f8;
     }
 
     .summary-box h3 {
@@ -110,7 +110,7 @@
     .summary-item {
       padding: 0.6em;
       background: white;
-      border: 1px solid #d8ccef;
+      border: 1px solid #999;
     }
 
     .summary-item dt {
@@ -137,14 +137,14 @@
     .arrears-table th,
     .arrears-table td {
       padding: 5px 6px;
-      border: 1px solid #d8ccef;
+      border: 1px solid #666;
       text-align: left;
       vertical-align: top;
     }
 
     .arrears-table th {
-      background: #241447;
-      color: white;
+      background: #f0f0f0;
+      color: #1a1a1a;
       font-weight: 600;
       white-space: nowrap;
     }
@@ -154,7 +154,7 @@
     }
 
     .arrears-table tr:nth-child(even) td {
-      background: #f9fafb;
+      background: #fff;
     }
 
     .arrears-table .amount {
@@ -189,21 +189,21 @@
 
     /* Total Row */
     .total-row {
-      background: #241447 !important;
-      color: white;
+      background: #e8e8e8 !important;
+      color: #1a1a1a;
       font-weight: 700;
     }
 
     .total-row td {
-      background: #241447 !important;
-      color: white !important;
-      border-color: #241447;
+      background: #e8e8e8 !important;
+      color: #1a1a1a !important;
+      border-color: #666;
     }
 
     /* Info Box */
     .info-box {
-      background: #f7f3ff;
-      border-left: 4px solid #6d28d9;
+      background: #f8f8f8;
+      border-left: 4px solid #666;
       padding: 1em;
       margin: 1.5em 0;
       font-size: 10pt;
@@ -243,9 +243,9 @@
     <dt>Property:</dt>
     <dd>{{#if property_full_address}}{{property_full_address}}{{else}}{{property_address}}{{#if property_postcode}}, {{property_postcode}}{{/if}}{{/if}}</dd>
     <dt>Defendant:</dt>
-    <dd>{{tenant_full_name}}{{#unless tenant_full_name}}{{tenant_name}}{{#unless tenant_name}}{{tenant1_name}}{{/unless}}{{/unless}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
+    <dd>{{#if defendant_display_name}}{{defendant_display_name}}{{else}}{{tenant_full_name}}{{#unless tenant_full_name}}{{tenant_name}}{{#unless tenant_name}}{{tenant1_name}}{{/unless}}{{/unless}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}{{/if}}</dd>
     <dt>Claimant:</dt>
-    <dd>{{landlord_full_name}}{{#unless landlord_full_name}}{{landlord_name}}{{#unless landlord_name}}{{claimant_name}}{{/unless}}{{/unless}}{{#if landlord_2_name}}, {{landlord_2_name}}{{/if}}</dd>
+    <dd>{{#if claimant_display_name}}{{claimant_display_name}}{{else}}{{landlord_full_name}}{{#unless landlord_full_name}}{{landlord_name}}{{#unless landlord_name}}{{claimant_name}}{{/unless}}{{/unless}}{{#if landlord_2_name}}, {{landlord_2_name}}{{/if}}{{/if}}</dd>
     {{#if claimant_reference}}
     <dt>Claim Reference:</dt>
     <dd>{{claimant_reference}}</dd>

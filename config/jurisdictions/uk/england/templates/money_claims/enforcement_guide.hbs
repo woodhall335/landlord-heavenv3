@@ -209,17 +209,13 @@
 
     {{{money_claim_doc_css}}}
 
-    .doc-header {
-      border-bottom-color: #ded4f7;
-    }
-
     .doc-header h1 {
-      margin: 0 0 0.45em 0;
-      padding: 14px 16px;
-      border-radius: 10px;
-      background: #241447;
-      color: #ffffff;
-      font-size: 18pt;
+      margin: 0 0 10px 0;
+      padding-top: 10px;
+      border-radius: 0;
+      background: transparent;
+      color: #1a1a1a !important;
+      font-size: 16pt;
       font-weight: 700;
       letter-spacing: 0;
     }
@@ -230,25 +226,24 @@
     }
 
     .doc-badge {
-      border-radius: 999px;
-      background: #f1eaff;
-      color: #3b246b;
+      background: #f0f0f0;
+      color: #1a1a1a;
       letter-spacing: 0.04em;
     }
 
     .case-details,
     .preferences-box {
-      border-color: #d8ccef;
+      border-color: #666666;
       border-radius: 10px;
-      background: #fcfbff;
+      background: #f8f8f8;
     }
 
     .case-details-grid dt {
-      color: #3b246b;
+      color: #444444;
     }
 
     .case-details-grid dd {
-      color: #1c1431;
+      color: #1a1a1a;
     }
 
     .notice-box {
@@ -259,24 +254,24 @@
     }
 
     .info-box {
-      border-left-color: #6d28d9;
+      border-left-color: #666666;
       border-radius: 8px;
-      background: #f7f3ff;
-      color: #2d2344;
+      background: #f8f8f8;
+      color: #1a1a1a;
     }
 
     .fees-table th,
     .fees-table td {
-      border-color: #d8ccef;
+      border-color: #666666;
     }
 
     .fees-table th {
-      background: #241447;
-      color: #ffffff;
+      background: #f0f0f0;
+      color: #1a1a1a;
     }
 
     .fees-table tr:nth-child(even) td {
-      background: #fcfbff;
+      background: #ffffff;
     }
 
     @media print {
@@ -300,9 +295,9 @@
 <div class="case-details">
   <dl class="case-details-grid">
     <dt>Claimant:</dt>
-    <dd>{{landlord_full_name}}</dd>
+    <dd>{{claimant_display_name}}</dd>
     <dt>Defendant:</dt>
-    <dd>{{tenant_full_name}}</dd>
+    <dd>{{defendant_display_name}}</dd>
     <dt>Claim amount:</dt>
     <dd>{{currency total_claim_amount}}</dd>
     {{#if claim_number}}
@@ -587,7 +582,7 @@ This guide explains the main enforcement methods available in England, what each
 
 <h2>Practical next steps</h2>
 
-<p>Based on your claim for <strong>{{currency total_claim_amount}}</strong> against {{tenant_full_name}}, the usual order is:</p>
+<p>Based on your claim for <strong>{{currency total_claim_amount}}</strong> against {{defendant_display_name}}, the usual order is:</p>
 
 <ol>
   <li><strong>Wait 14 days</strong> to see whether the judgment is paid voluntarily</li>

@@ -241,63 +241,69 @@ const MONEY_CLAIM_DOC_CSS = `
 @page { size: A4; margin: 15mm; }
 body {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 10.5pt;
-  line-height: 1.55;
-  color: #1c1431;
+  font-size: 11pt;
+  line-height: 1.4;
+  color: #1a1a1a;
   margin: 0;
+  padding: 0;
 }
 h1 {
-  margin: 0 0 12px;
-  padding: 14px 16px;
-  border-radius: 10px;
-  background: #241447;
-  color: #ffffff;
-  font-size: 18pt;
+  margin: 0 0 10px 0;
+  padding-top: 10px;
+  background: transparent;
+  color: #1a1a1a !important;
+  font-size: 16pt;
+  font-weight: 700;
   line-height: 1.2;
+  text-align: center;
   letter-spacing: 0;
 }
 h2 {
-  margin: 22px 0 10px;
-  padding-bottom: 6px;
-  border-bottom: 2px solid #ded4f7;
-  color: #241447;
+  margin: 20px 0 10px 0;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #1a1a1a;
+  color: #1a1a1a !important;
   font-size: 13pt;
+  font-weight: 700;
+  text-align: left !important;
 }
 h3 {
-  margin: 16px 0 8px;
-  color: #3b246b;
-  font-size: 11.5pt;
+  margin: 15px 0 8px 0;
+  color: #1a1a1a !important;
+  font-size: 11pt;
+  font-weight: 700;
 }
 h4 {
-  margin: 14px 0 6px;
-  color: #3b246b;
+  margin: 14px 0 6px 0;
+  color: #1a1a1a !important;
   font-size: 10.5pt;
+  font-weight: 700;
 }
 p { margin: 8px 0; }
 hr {
   border: 0;
-  border-top: 1px solid #ded4f7;
-  margin: 16px 0;
+  border-top: 1px solid #cccccc;
+  margin: 15px 0;
 }
 table {
   width: 100%;
   border-collapse: collapse;
-  margin: 12px 0;
+  margin: 10px 0;
 }
 th, td {
-  border: 1px solid #d8ccef;
-  padding: 8px 9px;
+  border: 1px solid #666666;
+  padding: 6px 8px;
   vertical-align: top;
 }
 th {
-  background: #f3effc;
-  color: #241447;
+  background: #f0f0f0;
+  color: #1a1a1a;
   font-weight: 700;
 }
-tr:nth-child(even) td { background: #fcfbff; }
-ul, ol { margin: 10px 0 10px 22px; padding: 0; }
+tr:nth-child(even) td { background: #ffffff; }
+ul, ol { margin: 10px 0; padding-left: 25px; }
 li { margin: 5px 0; }
-em { color: #5d5672; }
+em { color: #555555; }
 .amount, td[align="right"] {
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -305,8 +311,8 @@ em { color: #5d5672; }
 .doc-note {
   margin: 14px 0;
   padding: 12px 14px;
-  border-left: 4px solid #6d28d9;
-  background: #f7f3ff;
+  border-left: 4px solid #666666;
+  background: #f8f8f8;
 }
 `;
 
@@ -524,6 +530,16 @@ function resolveClaimantReference(claim: MoneyClaimCase): string {
   return claim.claimant_reference?.trim() || claim.case_id?.trim() || 'LANDLORD-HEAVEN-MC';
 }
 
+function moneyClaimPartyNames(...names: Array<string | null | undefined>): string[] {
+  return names
+    .map((name) => (typeof name === 'string' ? name.trim() : ''))
+    .filter((name): name is string => name.length > 0);
+}
+
+function formatMoneyClaimPartyList(...names: Array<string | null | undefined>): string {
+  return moneyClaimPartyNames(...names).join(', ');
+}
+
 function buildN1Payload(claim: MoneyClaimCase, totals: MoneyClaimFinancials): CaseData {
   const service = buildServiceContact(claim);
   const claimantReference = resolveClaimantReference(claim);
@@ -543,7 +559,7 @@ function buildN1Payload(claim: MoneyClaimCase, totals: MoneyClaimFinancials): Ca
     property_postcode: claim.property_postcode,
 
     // Joint Defendant (Defendant 2)
-    has_joint_defendants: claim.has_joint_defendants,
+    has_joint_defendants: Boolean(claim.has_joint_defendants || claim.tenant_2_name),
     tenant_2_name: claim.tenant_2_name,
     tenant_2_address_line1: claim.tenant_2_address_line1,
     tenant_2_address_line2: claim.tenant_2_address_line2,
@@ -642,9 +658,15 @@ async function generateEnglandMoneyClaimPack(
   const paymentSortCode = claim.payment_sort_code?.trim() || '';
   const paymentAccountNumber = claim.payment_account_number?.trim() || '';
   const hasBankTransferDetails = paymentSortCode.length > 0 && paymentAccountNumber.length > 0;
+  const claimantDisplayName = formatMoneyClaimPartyList(claim.landlord_full_name, claim.landlord_2_name);
+  const defendantDisplayName = formatMoneyClaimPartyList(claim.tenant_full_name, claim.tenant_2_name);
 
   const baseTemplateData = {
     ...claim,
+    claimant_display_name: claimantDisplayName || claim.landlord_full_name,
+    defendant_display_name: defendantDisplayName || claim.tenant_full_name,
+    has_joint_claimants: Boolean(claim.landlord_2_name),
+    has_joint_defendants: Boolean(claim.has_joint_defendants || claim.tenant_2_name),
     claimant_reference: claimantReference,
     payment_account_name: paymentAccountName,
     payment_sort_code: paymentSortCode,

@@ -1,8 +1,8 @@
 <style>{{{money_claim_doc_css}}}</style>
 <h1>Particulars of Claim</h1>
 
-<p><strong>Claimant:</strong> {{landlord_full_name}}</p>
-<p><strong>Defendant:</strong> {{tenant_full_name}}</p>
+<p><strong>Claimant:</strong> {{claimant_display_name}}</p>
+<p><strong>Defendant:</strong> {{defendant_display_name}}</p>
 <p><strong>Property:</strong> {{#if property_full_address}}{{property_full_address}}{{else}}{{property_address}}{{#if property_postcode}}, {{property_postcode}}{{/if}}{{/if}}</p>
 
 <h2>Tenancy background</h2>
