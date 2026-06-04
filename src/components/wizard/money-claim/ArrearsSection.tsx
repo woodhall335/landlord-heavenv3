@@ -121,6 +121,7 @@ export const ArrearsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
         facts={facts}
         onUpdate={handleUpdate}
         jurisdiction="england"
+        showThresholdGuidance={false}
       />
 
       {/* Arrears summary for money claim context */}

@@ -79,6 +79,7 @@ describe('money claim generation facts', () => {
     expect(moneyClaimCase.other_charges).toEqual([
       { description: 'Amount claimed from the tenant', amount: 1450 },
     ]);
+    expect(moneyClaimCase.total_claim_amount).toBe(1450);
     expect(() => assertValidMoneyClaimData(moneyClaimCase)).not.toThrow();
   });
 
@@ -94,6 +95,29 @@ describe('money claim generation facts', () => {
     });
 
     expect(moneyClaimCase.arrears_total).toBe(900.5);
+    expect(moneyClaimCase.total_claim_amount).toBe(900.5);
+    expect(() => assertValidMoneyClaimData(moneyClaimCase)).not.toThrow();
+  });
+
+  it('uses the money claim rent arrears total saved by the review wizard', () => {
+    const { moneyClaimCase } = buildMoneyClaimGenerationInput({
+      facts: {
+        ...baseMoneyClaimWizardFacts,
+        claiming_rent_arrears: true,
+        money_claim: {
+          totals: {
+            rent_arrears: 3900,
+            combined_total: 3900,
+          },
+          charge_interest: false,
+        },
+      },
+      caseId: 'e98e4ab8-5da7-479b-a843-7aa8c07fd5e2',
+      jurisdiction: 'england',
+    });
+
+    expect(moneyClaimCase.arrears_total).toBe(3900);
+    expect(moneyClaimCase.total_claim_amount).toBe(3900);
     expect(() => assertValidMoneyClaimData(moneyClaimCase)).not.toThrow();
   });
 });

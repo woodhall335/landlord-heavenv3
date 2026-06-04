@@ -59,6 +59,15 @@ function sumLineItems(items?: ClaimLineItem[]): number {
   return items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
 }
 
+function positiveAmount(value: unknown): number {
+  if (typeof value === 'number' && Number.isFinite(value) && value > 0) return value;
+  if (typeof value === 'string') {
+    const parsed = Number(value.replace(/[£,\s]/g, ''));
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
+  }
+  return 0;
+}
+
 /**
  * Calculate arrears outstanding from the schedule ledger.
  */
@@ -100,7 +109,9 @@ export function validateMoneyClaimData(claim: MoneyClaimCase): ValidationResult 
   const arrearsTotal = arrearsFromSchedule > 0 ? arrearsFromSchedule : claim.arrears_total || 0;
   const damagesTotal = sumLineItems(claim.damage_items);
   const otherChargesTotal = sumLineItems(claim.other_charges);
-  const principalTotal = arrearsTotal + damagesTotal + otherChargesTotal;
+  const itemizedPrincipalTotal = arrearsTotal + damagesTotal + otherChargesTotal;
+  const explicitTotal = positiveAmount(claim.total_claim_amount);
+  const principalTotal = itemizedPrincipalTotal > 0 ? itemizedPrincipalTotal : explicitTotal;
 
   // Must have some claim amount
   if (principalTotal <= 0) {
@@ -232,7 +243,7 @@ export function validateMoneyClaimData(claim: MoneyClaimCase): ValidationResult 
     errors,
     warnings,
     computedTotals: {
-      arrears_total: arrearsTotal,
+      arrears_total: itemizedPrincipalTotal > 0 ? arrearsTotal : explicitTotal,
       damages_total: damagesTotal,
       other_charges_total: otherChargesTotal,
       principal_total: principalTotal,

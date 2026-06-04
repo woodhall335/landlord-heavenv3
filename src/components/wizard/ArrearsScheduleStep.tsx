@@ -17,6 +17,8 @@ interface ArrearsScheduleStepProps {
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
   /** Jurisdiction determines threshold terminology (England=Ground 8, Wales=Section 157, Scotland=Ground 18) */
   jurisdiction?: 'england' | 'wales' | 'scotland';
+  /** Threshold guidance is for possession notices, not standalone money claims. */
+  showThresholdGuidance?: boolean;
 }
 
 type PaymentStatus = 'paid' | 'partial' | 'unpaid';
@@ -99,7 +101,12 @@ const PeriodRow: React.FC<PeriodRowProps> = ({ item, index, onStatusChange }) =>
   );
 };
 
-export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts, onUpdate, jurisdiction = 'england' }) => {
+export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({
+  facts,
+  onUpdate,
+  jurisdiction = 'england',
+  showThresholdGuidance = true,
+}) => {
   // Extract tenancy and arrears data
   const tenancy = facts.tenancy || {};
   const issues = facts.issues || {};
@@ -584,7 +591,7 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
 
           {/* Threshold eligibility indicator - jurisdiction-aware */}
           {/* Scotland uses Ground 18. England uses the post-1 May 2026 Ground 8 threshold. */}
-          {jurisdiction === 'scotland' ? (
+          {showThresholdGuidance && jurisdiction === 'scotland' ? (
             // Scotland Ground 18 threshold (3 months)
             computed.arrears_in_months >= 3 ? (
               <div className="rounded-lg border border-green-200 bg-green-50 p-4">
@@ -607,7 +614,7 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
                 </p>
               </div>
             ) : null
-          ) : jurisdiction === 'england' && englandGround8Threshold ? (
+          ) : showThresholdGuidance && jurisdiction === 'england' && englandGround8Threshold ? (
             computed.total_arrears >= englandGround8Threshold.amount ? (
               <div className="rounded-lg border border-green-200 bg-green-50 p-4">
                 <p className="text-sm font-medium text-green-800">
@@ -631,7 +638,7 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
                 </p>
               </div>
             ) : null
-          ) : computed.arrears_in_months >= 2 ? (
+          ) : showThresholdGuidance && computed.arrears_in_months >= 2 ? (
               <div className="rounded-lg border border-green-200 bg-green-50 p-4">
                 <p className="text-sm font-medium text-green-800">
                   {jurisdiction === 'wales' ? 'Section 157' : 'Ground 8'} Threshold Met

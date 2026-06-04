@@ -137,6 +137,7 @@ export interface MoneyClaimCase {
   arrears_schedule?: ArrearsEntry[];
   damage_items?: ClaimLineItem[];
   other_charges?: ClaimLineItem[];
+  total_claim_amount?: number;
 
   // Additional narrative fields for AI drafting
   other_charges_notes?: string;
@@ -265,11 +266,10 @@ function buildScheduleCalculationNotes(schedule: ArrearsEntry[]): string[] {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function calculateTotals(claim: MoneyClaimCase): CalculatedTotals {
   const normalizedArrearsSchedule = normalizeArrearsEntryRunningBalances(claim.arrears_schedule || []);
-  const arrears_total = roundMoney(
-    normalizedArrearsSchedule.length > 0
-      ? getFinalRunningBalance(normalizedArrearsSchedule)
-      : claim.arrears_total || 0
-  );
+  const scheduleBalance = normalizedArrearsSchedule.length > 0
+    ? getFinalRunningBalance(normalizedArrearsSchedule)
+    : 0;
+  const arrears_total = roundMoney(scheduleBalance > 0 ? scheduleBalance : claim.arrears_total || 0);
 
   const damages_total = roundMoney(sumLineItems(claim.damage_items));
   const other_total = roundMoney(sumLineItems(claim.other_charges));

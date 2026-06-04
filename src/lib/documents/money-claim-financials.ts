@@ -29,6 +29,15 @@ function sumLineItems(items?: ClaimLineItem[]): number {
   return (items || []).reduce((total, item) => total + (Number(item.amount) || 0), 0);
 }
 
+function positiveAmount(value: unknown): number {
+  if (typeof value === 'number' && Number.isFinite(value) && value > 0) return value;
+  if (typeof value === 'string') {
+    const parsed = Number(value.replace(/[£,\s]/g, ''));
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
+  }
+  return 0;
+}
+
 function calculateInterestDays(startDate?: string): number {
   if (!startDate) return 90;
 
@@ -42,14 +51,15 @@ function calculateInterestDays(startDate?: string): number {
 
 export function calculateMoneyClaimFinancials(claim: MoneyClaimCase): MoneyClaimFinancials {
   const normalizedArrearsSchedule = normalizeArrearsEntryRunningBalances(claim.arrears_schedule || []);
-  const arrears_total = roundMoney(
-    normalizedArrearsSchedule.length > 0
-      ? getFinalRunningBalance(normalizedArrearsSchedule)
-      : claim.arrears_total || 0
-  );
+  const scheduleBalance = normalizedArrearsSchedule.length > 0
+    ? getFinalRunningBalance(normalizedArrearsSchedule)
+    : 0;
+  const arrears_total = roundMoney(scheduleBalance > 0 ? scheduleBalance : claim.arrears_total || 0);
   const damages_total = roundMoney(sumLineItems(claim.damage_items));
   const other_total = roundMoney(sumLineItems(claim.other_charges));
-  const total_principal = roundMoney(arrears_total + damages_total + other_total);
+  const itemized_principal = roundMoney(arrears_total + damages_total + other_total);
+  const explicit_total = roundMoney(positiveAmount(claim.total_claim_amount));
+  const total_principal = itemized_principal > 0 ? itemized_principal : explicit_total;
   const claimInterest = claim.claim_interest === true;
 
   let interest_rate: number | null = null;

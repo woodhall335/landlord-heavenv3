@@ -216,6 +216,29 @@ function addFallbackClaimAmountIfNeeded(
   };
 }
 
+function calculateExplicitMoneyClaimTotal(
+  claimBreakdown: {
+    arrears_total?: number;
+    damage_items: MoneyClaimCase['damage_items'];
+    other_charges: MoneyClaimCase['other_charges'];
+  },
+  facts: CaseFacts
+): number | undefined {
+  const itemizedTotal =
+    (claimBreakdown.arrears_total || 0) +
+    sumLineItems(claimBreakdown.damage_items) +
+    sumLineItems(claimBreakdown.other_charges);
+
+  if (itemizedTotal > 0) return itemizedTotal;
+
+  return (
+    coercePositiveAmount(facts.court.total_claim_amount) ||
+    coercePositiveAmount(facts.court.claim_amount_rent) ||
+    coercePositiveAmount(facts.court.claim_amount_other) ||
+    undefined
+  );
+}
+
 export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
   const rawFacts = facts as CaseFacts & Record<string, any>;
   const canonicalArrears = buildCanonicalMoneyClaimArrears(facts);
@@ -244,6 +267,7 @@ export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
   const evidenceItems = getMoneyClaimEvidenceItems(facts);
   const evidenceSummary =
     facts.money_claim.evidence_summary || buildMoneyClaimEvidenceSummary(evidenceItems) || undefined;
+  const totalClaimAmount = calculateExplicitMoneyClaimTotal(claimBreakdown, facts);
 
   return {
     jurisdiction,
@@ -275,6 +299,7 @@ export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
     arrears_schedule: canonicalArrears.arrears_schedule,
     damage_items: claimBreakdown.damage_items,
     other_charges: claimBreakdown.other_charges,
+    total_claim_amount: totalClaimAmount,
 
     // Interest: only passed if user explicitly opted in via charge_interest === true
     claim_interest: facts.money_claim.charge_interest === true,
