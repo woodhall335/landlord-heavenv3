@@ -43,6 +43,7 @@ import {
   makeFinancialStatementFillable,
   makeReplyFormFillable,
 } from './money-claim-fillable-pap';
+import { getMoneyClaimEvidenceLabel } from '@/lib/money-claim/evidence-checklist';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 
 /**
@@ -93,6 +94,11 @@ export interface MoneyClaimEvidenceItem {
   label: string;
   available: boolean;
   description?: string | null;
+}
+
+interface MoneyClaimEvidenceRelianceItem {
+  label: string;
+  detail: string;
 }
 
 export interface MoneyClaimCase {
@@ -478,15 +484,18 @@ function calculateTotals(claim: MoneyClaimCase): CalculatedTotals {
 
 function buildPreActionSummary(claim: MoneyClaimCase): string {
   const segments: string[] = [];
+  const formatMethods = (methods: string[] = []) =>
+    methods.map((method) => method.replace(/_/g, ' ')).join(', ');
 
   if (claim.lba_date) {
-    const methods =
-      (claim.lba_method || []).length ? ` via ${(claim.lba_method || []).join(', ')}` : '';
-    segments.push(`Initial demand sent on ${claim.lba_date}${methods}.`);
+    const methods = (claim.lba_method || []).length ? ` by ${formatMethods(claim.lba_method)}` : '';
+    segments.push(`Initial demand sent on ${formatUKLegalDate(claim.lba_date) || claim.lba_date}${methods}.`);
   }
 
   if (claim.lba_response_deadline) {
-    segments.push(`Response deadline given: ${claim.lba_response_deadline}.`);
+    segments.push(
+      `Response deadline given: ${formatUKLegalDate(claim.lba_response_deadline) || claim.lba_response_deadline}.`
+    );
   }
 
   if (claim.pap_documents_sent && claim.pap_documents_sent.length) {
@@ -496,13 +505,17 @@ function buildPreActionSummary(claim: MoneyClaimCase): string {
   if (claim.lba_second_date) {
     const followUpMethods =
       (claim.lba_second_method || []).length
-        ? ` via ${(claim.lba_second_method || []).join(', ')}`
+        ? ` by ${formatMethods(claim.lba_second_method)}`
         : '';
-    segments.push(`Follow-up demand sent on ${claim.lba_second_date}${followUpMethods}.`);
+    segments.push(`Follow-up demand sent on ${formatUKLegalDate(claim.lba_second_date) || claim.lba_second_date}${followUpMethods}.`);
   }
 
   if (claim.lba_second_response_deadline) {
-    segments.push(`Follow-up response deadline: ${claim.lba_second_response_deadline}.`);
+    segments.push(
+      `Follow-up response deadline: ${
+        formatUKLegalDate(claim.lba_second_response_deadline) || claim.lba_second_response_deadline
+      }.`
+    );
   }
 
   if (claim.tenant_responded !== undefined && claim.tenant_responded !== null) {
@@ -515,7 +528,7 @@ function buildPreActionSummary(claim: MoneyClaimCase): string {
 
   if (claim.pap_documents_served) {
     const methodsArray = claim.pap_service_method ?? [];
-    const methods = methodsArray.length ? methodsArray.join(', ') : 'unspecified method';
+    const methods = methodsArray.length ? formatMethods(methodsArray) : 'unspecified method';
     segments.push(`Pre-action pack served (${methods}).`);
   }
 
@@ -524,6 +537,91 @@ function buildPreActionSummary(claim: MoneyClaimCase): string {
   }
 
   return segments.join(' ');
+}
+
+function sentenceWithFullStop(text: string): string {
+  const trimmed = text.trim();
+  if (!trimmed) return '';
+  return /[.!?]$/.test(trimmed) ? trimmed : `${trimmed}.`;
+}
+
+function buildEvidenceRelianceItems(
+  claim: MoneyClaimCase,
+  availableEvidenceItems: MoneyClaimEvidenceItem[],
+  arrearsReconciliation: {
+    hasDetailedArrearsSchedule: boolean;
+    arrearsScheduleIsSummary: boolean;
+  }
+): MoneyClaimEvidenceRelianceItem[] {
+  const items: MoneyClaimEvidenceRelianceItem[] = [];
+  const seen = new Set<string>();
+
+  const addItem = (type: string, label: string, detail: string) => {
+    const key = type.trim().toLowerCase();
+    if (!key || seen.has(key)) return;
+    seen.add(key);
+    items.push({
+      label: label.trim() || getMoneyClaimEvidenceLabel(type),
+      detail: sentenceWithFullStop(detail),
+    });
+  };
+
+  for (const item of availableEvidenceItems) {
+    const label = item.label || getMoneyClaimEvidenceLabel(item.type);
+    const detail =
+      item.description ||
+      (() => {
+        switch (item.type) {
+          case 'tenancy_agreement':
+            return 'Shows the parties, the rental property, the agreed rent and the rent payment terms relied on in this claim.';
+          case 'rent_schedule':
+          case 'arrears_schedule':
+            return 'Shows the rent due, payments received, unpaid periods and the balance claimed.';
+          case 'bank_statements':
+            return 'Shows the rent payments received and the missing, late or part payments relied on.';
+          case 'demand_letters':
+            return 'Shows that the tenant was chased for the debt before court action was prepared.';
+          case 'letter_before_claim':
+            return 'Shows the pre-action demand and the documents sent before issuing the claim.';
+          case 'property_photos_before':
+          case 'property_photos_after':
+            return 'Shows the condition evidence relied on for any damage or cleaning element of the claim.';
+          case 'repair_quotes':
+          case 'cleaning_invoice':
+          case 'utility_bills':
+          case 'council_tax_bills':
+            return 'Shows the amount claimed and why the claimant says the defendant is liable for it.';
+          default:
+            return 'Supports the debt, the amount claimed or the attempts made to resolve the matter.';
+        }
+      })();
+
+    addItem(item.type, label, detail);
+  }
+
+  if (arrearsReconciliation.hasDetailedArrearsSchedule) {
+    addItem(
+      'arrears_schedule',
+      'Schedule of Rent Arrears',
+      'Sets out each rent period, the rent due, the amount paid and the running balance now claimed.'
+    );
+  } else if (arrearsReconciliation.arrearsScheduleIsSummary) {
+    addItem(
+      'rent_ledger',
+      'Rent ledger or rent account',
+      'Should be attached or checked before filing so the court can see how the arrears total is made up.'
+    );
+  }
+
+  if (claim.lba_date || claim.pap_documents_served || (claim.pap_documents_sent || []).length > 0) {
+    addItem(
+      'letter_before_claim',
+      'Letter Before Claim and PAP documents',
+      'Shows the pre-action steps taken and the opportunity given to respond before the claim is issued.'
+    );
+  }
+
+  return items;
 }
 
 function resolveClaimantReference(claim: MoneyClaimCase): string {
@@ -660,6 +758,12 @@ async function generateEnglandMoneyClaimPack(
   const hasBankTransferDetails = paymentSortCode.length > 0 && paymentAccountNumber.length > 0;
   const claimantDisplayName = formatMoneyClaimPartyList(claim.landlord_full_name, claim.landlord_2_name);
   const defendantDisplayName = formatMoneyClaimPartyList(claim.tenant_full_name, claim.tenant_2_name);
+  const availableEvidenceItems = (claim.evidence_items || []).filter((item) => item.available);
+  const evidenceRelianceItems = buildEvidenceRelianceItems(
+    claim,
+    availableEvidenceItems,
+    arrearsReconciliation
+  );
 
   const baseTemplateData = {
     ...claim,
@@ -697,7 +801,9 @@ async function generateEnglandMoneyClaimPack(
     enforcement_preferences: claim.enforcement_preferences || [],
     enforcement_notes: claim.enforcement_notes,
     evidence_types_available: claim.evidence_types_available || [],
-    evidence_items: (claim.evidence_items || []).filter((item) => item.available),
+    evidence_items: availableEvidenceItems,
+    evidence_reliance_items: evidenceRelianceItems,
+    has_evidence_reliance_items: evidenceRelianceItems.length > 0,
     evidence_summary: claim.evidence_summary,
     arrears_schedule_confirmed: claim.arrears_schedule_confirmed,
     ask_heaven: askHeavenDrafts,

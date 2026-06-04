@@ -5,32 +5,45 @@
 <p><strong>Defendant:</strong> {{defendant_display_name}}</p>
 <p><strong>Property:</strong> {{#if property_full_address}}{{property_full_address}}{{else}}{{property_address}}{{#if property_postcode}}, {{property_postcode}}{{/if}}{{/if}}</p>
 
-<h2>Tenancy background</h2>
+<h2>Parties and tenancy</h2>
 <p>
-  The Defendant occupies the above property under a periodic tenancy agreement that commenced on
-  {{tenancy_start_date}}. Rent is {{currency rent_amount}} {{rent_frequency}}, payable in advance on
-  the {{payment_day}}{{ordinal_suffix payment_day}} day of each period.
+  The Claimant is the landlord of the property. The Defendant is, or was, the tenant of the property under a
+  periodic tenancy agreement that commenced on {{tenancy_start_date}}.
 </p>
 <p>
-  The Claimant seeks judgment for the unpaid rent{{#if damage_items.length}}, damage{{/if}}{{#if other_charges.length}},
-  other recoverable charges{{/if}}{{#if claim_interest}}, interest{{/if}} and the court fee set out below.
+  Under the tenancy agreement the Defendant was required to pay rent of {{currency rent_amount}} {{rent_frequency}}{{#if payment_day}},
+  in advance on the {{payment_day}}{{ordinal_suffix payment_day}} day of each rent period{{/if}}. The Claimant relies on those
+  tenancy terms as the contractual basis for the sums claimed.
 </p>
+{{#if particulars_of_claim}}
+<p>
+  The Claimant has also recorded the following case summary: {{particulars_of_claim}}
+</p>
+{{/if}}
 
-<h2>Rent arrears</h2>
+<h2>Breach and rent arrears</h2>
 <p>
-  The Defendant has failed to pay rent as it fell due. As at {{generation_date}}, the arrears total is
+  The Defendant failed to pay rent as it fell due. As at {{generation_date}}, the rent arrears claimed total
   {{currency arrears_total}}.
+</p>
+<p>
   {{#if arrears_schedule_is_summary}}
-  The attached schedule records the total arrears figure entered by the Claimant. The Claimant should attach
-  the rent ledger, rent statement, bank records, or other documents showing how the figure is made up.
+  The attached schedule records the total arrears figure entered by the Claimant. Before filing, the Claimant
+  should attach or check the rent ledger, rent statement, bank records, or other documents showing how the
+  figure is made up.
   {{else}}
-  A detailed schedule is attached and marked "Schedule of arrears".
+  A detailed schedule is attached and marked "Schedule of Rent Arrears". It sets out the rent periods, the
+  rent due, the amount paid, and the running balance relied on for the claim.
   {{/if}}
+</p>
+<p>
+  The Claimant says the Defendant has had the benefit of the tenancy but has not paid the outstanding sums.
+  The non-payment is relied on as a breach of the rent payment terms of the tenancy agreement.
 </p>
 
 {{#if damage_items.length}}
 <h2>Property damage and other sums</h2>
-<p>The Defendant caused damage beyond fair wear and tear. The Claimant seeks:</p>
+<p>The Claimant also says the Defendant is liable for damage beyond fair wear and tear. The amounts claimed are:</p>
 <ul>
   {{#each damage_items}}
   <li>{{description}} - {{currency amount}}</li>
@@ -40,7 +53,7 @@
 
 {{#if other_charges.length}}
 {{#unless damage_items.length}}<h2>Property damage and other sums</h2>{{/unless}}
-<p>The Claimant also seeks the following recoverable sums:</p>
+<p>The Claimant also seeks the following recoverable sums arising from the tenancy:</p>
 <ul>
   {{#each other_charges}}
   <li>{{description}} - {{currency amount}}</li>
@@ -48,9 +61,32 @@
 </ul>
 {{/if}}
 
+{{#if pre_action_summary}}
+<h2>Pre-action position</h2>
+<p>
+  Before preparing the claim, the Claimant recorded the following pre-action steps: {{pre_action_summary}}
+</p>
+<p>
+  The Claimant says the debt remains unpaid and that court action is now required unless the Defendant pays
+  the sum claimed or raises a properly evidenced dispute.
+</p>
+{{/if}}
+
+{{#if has_evidence_reliance_items}}
+<h2>Evidence relied on</h2>
+<p>
+  The Claimant says the following evidence is available or should be attached to support the claim:
+</p>
+<ol>
+  {{#each evidence_reliance_items}}
+  <li><strong>{{label}}:</strong> {{detail}}</li>
+  {{/each}}
+</ol>
+{{else}}
 {{#if evidence_summary}}
-<h2>Evidence the claimant says they will rely on</h2>
+<h2>Evidence relied on</h2>
 <p>{{evidence_summary}}</p>
+{{/if}}
 {{/if}}
 
 {{#if claim_interest}}
@@ -64,7 +100,7 @@
 
 <h2>Relief sought</h2>
 <ol>
-  <li>Arrears, damages and other sums totalling {{currency total_claim_amount}}</li>
+  <li>Principal debt claimed totalling {{currency total_claim_amount}}</li>
   <li>Court fee of {{currency court_fee}}</li>
   {{#if solicitor_costs}}
   <li>Fixed legal costs of {{currency solicitor_costs}}</li>

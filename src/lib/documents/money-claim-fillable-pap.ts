@@ -55,6 +55,10 @@ function firstText(...values: unknown[]): string {
   return '';
 }
 
+function partyList(...values: unknown[]): string {
+  return values.map(textValue).filter(Boolean).join(', ');
+}
+
 function tenantAddress(data: Record<string, any>): string {
   return firstText(
     data.tenant_address,
@@ -65,8 +69,19 @@ function tenantAddress(data: Record<string, any>): string {
 }
 
 function tenantName(data: Record<string, any>): string {
-  return firstText(data.tenant_full_name, data.defendant_name, data.debtor_name);
+  return partyList(data.tenant_full_name, data.tenant_2_name) ||
+    firstText(data.defendant_display_name, data.defendant_name, data.debtor_name);
 }
+
+function claimantName(data: Record<string, any>): string {
+  return partyList(data.landlord_full_name, data.landlord_2_name) ||
+    firstText(data.claimant_display_name, data.claimant_name);
+}
+
+export const __moneyClaimFillablePapTestUtils = {
+  tenantName,
+  claimantName,
+};
 
 function tenantPostcode(data: Record<string, any>): string {
   return firstText(data.tenant_postcode, data.defendant_postcode, data.property_postcode);
@@ -367,7 +382,7 @@ function responseDeadline(templateData: Record<string, any>): string {
 function drawReturnDetails(page: PDFPage, templateData: Record<string, any>, fonts: Fonts, top: number) {
   drawHeading(page, 'Where to send this form', top, fonts);
   let cursor = top + 28;
-  const returnName = firstText(templateData.solicitor_firm, templateData.landlord_full_name);
+  const returnName = firstText(templateData.solicitor_firm, claimantName(templateData));
   const postalAddress = [
     firstText(templateData.solicitor_address, templateData.landlord_address),
     firstText(templateData.solicitor_postcode, templateData.landlord_postcode),
@@ -463,7 +478,7 @@ export async function makeReplyFormFillable(
 
   drawHeading(page1, "Claimant's details", top + 22, fonts);
   top += 50;
-  top = drawInfoRow(pdf, page1, "Claimant's name", firstText(templateData.landlord_full_name), undefined, top, fonts);
+  top = drawInfoRow(pdf, page1, "Claimant's name", claimantName(templateData), undefined, top, fonts);
   top = drawInfoRow(pdf, page1, 'Amount claimed', money(templateData.total_claim_amount), undefined, top, fonts);
   top = drawInfoRow(pdf, page1, 'Letter date', firstText(templateData.generation_date), undefined, top, fonts);
   top = drawInfoRow(pdf, page1, 'Reply deadline', responseDeadline(templateData), undefined, top, fonts);
@@ -597,7 +612,7 @@ export async function makeFinancialStatementFillable(
     height: 48,
     multiline: true,
   });
-  top = drawInfoRow({} as PDFDocument, cover, 'Claimant', firstText(templateData.landlord_full_name), undefined, top, fonts);
+  top = drawInfoRow({} as PDFDocument, cover, 'Claimant', claimantName(templateData), undefined, top, fonts);
   top = drawInfoRow({} as PDFDocument, cover, 'Amount claimed', money(templateData.total_claim_amount), undefined, top, fonts);
   top = drawInfoRow({} as PDFDocument, cover, 'Reference', reference(templateData), undefined, top, fonts);
   drawWrapped(

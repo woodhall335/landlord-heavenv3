@@ -5,6 +5,7 @@ import {
   generateMoneyClaimPack,
   type MoneyClaimCase,
 } from '../money-claim-pack-generator';
+import { __moneyClaimFillablePapTestUtils } from '../money-claim-fillable-pap';
 import { generateResidentialLettingDocuments } from '../residential-letting-generator';
 
 function buildMoneyClaimCase(overrides: Partial<MoneyClaimCase> = {}): MoneyClaimCase {
@@ -55,6 +56,26 @@ function buildMoneyClaimCase(overrides: Partial<MoneyClaimCase> = {}): MoneyClai
     claim_value_band: 'up_to_5000',
     enforcement_preferences: ['attachment_of_earnings'],
     evidence_types_available: ['tenancy_agreement', 'arrears_schedule'],
+    evidence_items: [
+      {
+        type: 'tenancy_agreement',
+        label: 'Tenancy agreement',
+        available: true,
+        description: 'Signed agreement showing the parties, rent and payment terms.',
+      },
+      {
+        type: 'rent_schedule',
+        label: 'Rent schedule / arrears ledger',
+        available: true,
+        description: 'Period-by-period record of rent due, payments made and arrears outstanding.',
+      },
+      {
+        type: 'demand_letters',
+        label: 'Rent demand letters',
+        available: true,
+        description: 'Messages and letters chasing payment before the claim was prepared.',
+      },
+    ],
     arrears_schedule_confirmed: true,
     particulars_of_claim:
       'The claimant seeks rent arrears, damage, and related charges arising from the tenancy, together with interest and court fees.',
@@ -149,7 +170,15 @@ describe('England pack output quality', () => {
     expect(particularsHtml).toBeTruthy();
     expect(letterHtml).toBeTruthy();
 
-    expect(particularsHtml).toContain('"Schedule of arrears"');
+    expect(particularsHtml).toContain('Parties and tenancy');
+    expect(particularsHtml).toContain('Breach and rent arrears');
+    expect(particularsHtml).toContain('"Schedule of Rent Arrears"');
+    expect(particularsHtml).toContain('Pre-action position');
+    expect(particularsHtml).toContain('Evidence relied on');
+    expect(particularsHtml).toContain('Tenancy agreement');
+    expect(particularsHtml).toContain('Signed agreement showing the parties, rent and payment terms.');
+    expect(particularsHtml).toContain('Rent schedule / arrears ledger');
+    expect(particularsHtml).toContain('Period-by-period record of rent due, payments made and arrears outstanding.');
     expect(letterHtml).toContain('Sort code: 10-20-30');
     expect(letterHtml).toContain('Account number: 12345678');
     expect(letterHtml).toContain('Payment reference: E1 2BB arrears');
@@ -234,6 +263,15 @@ describe('England pack output quality', () => {
     expect(defendantDetails).toContain('Galina Ivaaina');
     expect(defendantServiceDetails).toContain('Dmitry Ivakin');
     expect(defendantServiceDetails).toContain('Galina Ivaaina');
+
+    expect(__moneyClaimFillablePapTestUtils.claimantName({
+      landlord_full_name: 'Irfan Mansur',
+      landlord_2_name: 'Najla Mansur Huasain',
+    })).toBe('Irfan Mansur, Najla Mansur Huasain');
+    expect(__moneyClaimFillablePapTestUtils.tenantName({
+      tenant_full_name: 'Dmitry Ivakin',
+      tenant_2_name: 'Galina Ivaaina',
+    })).toBe('Dmitry Ivakin, Galina Ivaaina');
   });
 
   test('falls back to contact wording when money-claim bank details are missing', async () => {
