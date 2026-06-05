@@ -235,6 +235,59 @@ describe('GA4 analytics dispatch', () => {
     );
   });
 
+  it('emits wizard step view events and a sanitized virtual page view', async () => {
+    const { trackWizardStepViewWithAttribution } = await import('../../analytics');
+
+    trackWizardStepViewWithAttribution({
+      product: 'notice_only',
+      jurisdiction: 'england',
+      step: 'property',
+      stepIndex: 1,
+      totalSteps: 6,
+      caseId: 'case-view-1',
+      src: 'direct',
+      topic: 'eviction',
+    });
+
+    expect(gtag).toHaveBeenCalledTimes(3);
+    expect(gtag).toHaveBeenNthCalledWith(
+      1,
+      'event',
+      'wizard_step_view',
+      expect.objectContaining({
+        product: 'notice_only',
+        step_name: 'property',
+        step_group: 'property',
+        event_family: 'wizard_step_view',
+        event_variant: 'canonical',
+      })
+    );
+    expect(gtag).toHaveBeenNthCalledWith(
+      2,
+      'event',
+      'wizard_step_property_view',
+      expect.objectContaining({
+        product: 'notice_only',
+        step_name: 'property',
+        step_group: 'property',
+        event_family: 'wizard_step_view',
+        event_variant: 'derived',
+      })
+    );
+    expect(gtag).toHaveBeenNthCalledWith(
+      3,
+      'event',
+      'page_view',
+      expect.objectContaining({
+        page_path: '/wizard/flow/notice_only/property',
+        page_type: 'wizard_step',
+        product: 'notice_only',
+        step_name: 'property',
+        step_group: 'property',
+      })
+    );
+  });
+
   it('normalizes Section 13 preview checkout as a review step event', async () => {
     const { trackWizardStepCompleteWithAttribution } = await import('../../analytics');
 

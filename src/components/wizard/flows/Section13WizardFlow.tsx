@@ -16,6 +16,7 @@ import {
 import { Button } from '@/components/ui/Button';
 import { RentJustificationBuilder } from '@/components/section13/RentJustificationBuilder';
 import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
+import { useWizardStepViewTracking } from '@/components/wizard/shared/useWizardStepViewTracking';
 import { getCaseFacts } from '@/lib/wizard/facts-client';
 import { getSessionTokenHeaders } from '@/lib/session-token';
 import {
@@ -1160,6 +1161,15 @@ export function Section13WizardFlow({
   });
 
   const currentStep = STEP_CONFIG[currentStepIndex];
+  useWizardStepViewTracking({
+    product: effectiveState.selectedPlan || product,
+    jurisdiction: 'england',
+    stepId: currentStep?.id,
+    stepIndex: currentStepIndex,
+    totalSteps: STEP_CONFIG.length,
+    caseId,
+    enabled: !loading,
+  });
   const currentStepState = getStepCompleteState(currentStep.id, effectiveState, comparables);
   const mustCompleteCurrentStep =
     currentStep.id === 'tenancy' || currentStep.id === 'proposal' || currentStep.id === 'landlord';

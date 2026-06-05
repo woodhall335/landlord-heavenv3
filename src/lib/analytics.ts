@@ -146,6 +146,10 @@ export interface PageViewTrackingContext {
   source?: string;
   topic?: string;
   caseId?: string;
+  stepName?: string;
+  stepGroup?: string;
+  stepIndex?: number;
+  totalSteps?: number;
   paymentStatus?: string;
 }
 
@@ -183,6 +187,10 @@ export function trackPageView(path: string, context: PageViewTrackingContext = {
       source: context.source,
       topic: context.topic,
       case_id: context.caseId,
+      step_name: context.stepName,
+      step_group: context.stepGroup,
+      step_index: context.stepIndex,
+      total_steps: context.totalSteps,
       payment_status: context.paymentStatus,
     }));
   }
@@ -685,6 +693,96 @@ export function trackWizardStepComplete(params: {
   });
 }
 
+function buildWizardStepVirtualPagePath(product: string, stepGroup: string): string {
+  const safeProduct = product
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9_]+/g, '_')
+    .replace(/^_+|_+$/g, '') || 'unknown_product';
+  const safeStepGroup = stepGroup
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9_]+/g, '_')
+    .replace(/^_+|_+$/g, '') || 'unknown_step';
+
+  return `/wizard/flow/${safeProduct}/${safeStepGroup}`;
+}
+
+/**
+ * Track when a user views a wizard step/section.
+ */
+export function trackWizardStepView(params: {
+  product: string;
+  jurisdiction: string;
+  step: string;
+  stepIndex?: number;
+  totalSteps?: number;
+  caseId?: string;
+  src?: string;
+  topic?: string;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  landing_url?: string;
+  first_seen_at?: string;
+}): void {
+  const normalizedStep = normalizeWizardStep(params.step);
+  const basePayload = {
+    event_category: 'wizard',
+    product: params.product,
+    jurisdiction: params.jurisdiction,
+    step_name: params.step,
+    step_group: normalizedStep.stepGroup,
+    step_index: params.stepIndex ?? 0,
+    total_steps: params.totalSteps ?? 0,
+    source: params.src || 'direct',
+    topic: params.topic || 'general',
+    utm_source: params.utm_source,
+    utm_medium: params.utm_medium,
+    utm_campaign: params.utm_campaign,
+    landing_url: params.landing_url,
+    first_seen_at: params.first_seen_at,
+  };
+  const dedupeKey = `${params.caseId || 'session'}:${normalizedStep.stepGroup}`;
+
+  trackEvent('wizard_step_view', {
+    ...basePayload,
+  }, {
+    family: 'wizard_step_view',
+    variant: 'canonical',
+    dedupeScope: params.caseId ? 'case' : 'session',
+    dedupeKey,
+  });
+
+  trackEvent(normalizedStep.normalizedViewEventName, {
+    ...basePayload,
+  }, {
+    family: 'wizard_step_view',
+    variant: 'derived',
+    dedupeScope: params.caseId ? 'case' : 'session',
+    dedupeKey,
+  });
+
+  const virtualPageViewDedupeKey = `wizard_step_page_view::${dedupeKey}`;
+  if (!hasTrackedAnalyticsEvent(virtualPageViewDedupeKey)) {
+    markTrackedAnalyticsEvent(virtualPageViewDedupeKey);
+    trackPageView(buildWizardStepVirtualPagePath(params.product, normalizedStep.stepGroup), {
+      title: `Wizard - ${params.product} - ${normalizedStep.stepGroup}`,
+      pageType: 'wizard_step',
+      product: params.product,
+      jurisdiction: params.jurisdiction,
+      route: normalizedStep.stepGroup,
+      source: params.src || 'direct',
+      topic: params.topic || 'general',
+      caseId: params.caseId,
+      stepName: params.step,
+      stepGroup: normalizedStep.stepGroup,
+      stepIndex: params.stepIndex ?? 0,
+      totalSteps: params.totalSteps ?? 0,
+    });
+  }
+}
+
 export type MarketingPageType = 'homepage' | 'entry_page' | 'guide' | 'product_page';
 
 export type MarketingCtaPosition =
@@ -988,6 +1086,27 @@ export function trackWizardStartWithAttribution(params: WizardFullAttributionPar
       content_type: 'product',
     });
   }
+}
+
+/**
+ * Track wizard step view with full attribution
+ */
+export function trackWizardStepViewWithAttribution(params: {
+  product: string;
+  jurisdiction: string;
+  step: string;
+  stepIndex?: number;
+  totalSteps?: number;
+  caseId?: string;
+  src: string;
+  topic: string;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  landing_url?: string;
+  first_seen_at?: string;
+}): void {
+  trackWizardStepView(params);
 }
 
 /**

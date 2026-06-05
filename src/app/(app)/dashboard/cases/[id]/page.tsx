@@ -556,15 +556,18 @@ export default function CaseDetailPage() {
   // Track purchase conversion when payment is confirmed via DB
   useEffect(() => {
     if (orderStatus?.paid && caseDetails) {
+      const paidProductType = orderStatus.product_type || caseDetails.case_type;
+      const transactionId = orderStatus.order_id || caseId;
+
       // Prevent duplicate tracking by checking sessionStorage
-      const purchaseKey = `purchase_tracked_${caseId}`;
+      const purchaseKey = `purchase_tracked_${transactionId}`;
       if (sessionStorage.getItem(purchaseKey)) return;
 
-      // Get product info from case type
-      const productName = getCaseTypeLabel(caseDetails.case_type);
+      // Get product info from the paid order first; case type is only a fallback for older orders.
+      const productName = getCaseTypeLabel(paidProductType);
       const fallbackProduct =
-        caseDetails.case_type in PRODUCTS
-          ? PRODUCTS[caseDetails.case_type as keyof typeof PRODUCTS]
+        paidProductType in PRODUCTS
+          ? PRODUCTS[paidProductType as keyof typeof PRODUCTS]
           : null;
       const amount = orderStatus.total_amount || fallbackProduct?.price || 0;
       const currency = orderStatus.currency || 'GBP';
@@ -580,13 +583,13 @@ export default function CaseDetailPage() {
         utm_content: attributionData.utm_content,
         referrer: attributionData.referrer,
         jurisdiction: caseDetails.jurisdiction,
-        product_type: caseDetails.case_type,
+        product_type: paidProductType,
       };
 
       // Track purchase in analytics (GA4 + FB Pixel) with attribution
-      trackPurchase(caseId, amount, currency, [
+      trackPurchase(transactionId, amount, currency, [
         {
-          item_id: caseDetails.case_type,
+          item_id: paidProductType,
           item_name: productName,
           item_category: 'legal_document',
           price: amount,
@@ -622,7 +625,7 @@ export default function CaseDetailPage() {
         trackMoneyClaimPurchaseCompleted({
           reasons,
           jurisdiction: caseDetails.jurisdiction,
-          order_id: caseId,
+          order_id: transactionId,
           revenue: amount,
           arrears_amount: arrearsAmount,
           damages_amount: damagesAmount,
@@ -632,7 +635,15 @@ export default function CaseDetailPage() {
 
       sessionStorage.setItem(purchaseKey, 'true');
     }
-  }, [orderStatus?.paid, orderStatus?.total_amount, orderStatus?.currency, caseDetails, caseId]);
+  }, [
+    orderStatus?.paid,
+    orderStatus?.order_id,
+    orderStatus?.product_type,
+    orderStatus?.total_amount,
+    orderStatus?.currency,
+    caseDetails,
+    caseId,
+  ]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-GB', {

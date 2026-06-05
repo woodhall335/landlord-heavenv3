@@ -7,6 +7,7 @@ describe('wizard step taxonomy', () => {
     expect(normalizeWizardStep('section21_compliance')).toMatchObject({
       normalizedStepKey: 'compliance',
       normalizedEventName: 'wizard_step_compliance_complete',
+      normalizedViewEventName: 'wizard_step_compliance_view',
       stepGroup: 'compliance',
     });
 
@@ -61,6 +62,7 @@ describe('wizard step taxonomy', () => {
     expect(normalizeWizardStep('Custom Step!')).toMatchObject({
       normalizedStepKey: 'custom_step',
       normalizedEventName: 'wizard_step_custom_step_complete',
+      normalizedViewEventName: 'wizard_step_custom_step_view',
       stepGroup: 'custom_step',
     });
   });

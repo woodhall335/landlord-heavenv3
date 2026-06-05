@@ -20,6 +20,7 @@ import {
 import { clsx } from 'clsx';
 
 import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
+import { useWizardStepViewTracking } from '@/components/wizard/shared/useWizardStepViewTracking';
 import { CLAIM_CONFIGS_BY_SLUG, CLAIM_PACK_DISPLAY_PRICE, CLAIM_TYPE_CONFIGS } from '@/lib/claims/config';
 import type { ClaimQuestionConfig, ClaimTypeConfig, ClaimWizardAnswers, ClaimWizardAnswerValue } from '@/lib/claims/types';
 import {
@@ -507,6 +508,14 @@ export function ClaimsWizard() {
   const isResultsStep = stepIndex === 5;
   const currentStepProgress = Math.round(((stepIndex + 1) / steps.length) * 100);
   const activeTypingText = activeQuestion?.typingText ?? config.stepFlow[stepIndex]?.aiIntro ?? '';
+  useWizardStepViewTracking({
+    product: 'money_claim',
+    jurisdiction: 'england',
+    stepId: `claims_${steps[stepIndex] || 'unknown'}`,
+    stepIndex,
+    totalSteps: steps.length,
+    enabled: true,
+  });
 
   function selectConfig(nextConfig: ClaimTypeConfig) {
     setConfig(nextConfig);

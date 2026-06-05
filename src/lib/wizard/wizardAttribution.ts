@@ -52,6 +52,7 @@ export interface WizardFlowTrackingContext {
 const ATTRIBUTION_KEY = 'wizard_attribution';
 const ATTRIBUTION_KEY_LOCAL = 'lh_attribution'; // localStorage for cross-session persistence
 const COMPLETED_STEPS_KEY = 'wizard_completed_steps';
+const VIEWED_STEPS_KEY = 'wizard_viewed_steps';
 const WIZARD_STARTED_KEY = 'wizard_started';
 const ABANDON_SENT_KEY = 'wizard_abandon_sent';
 const PURCHASE_COMPLETE_KEY = 'wizard_purchase_complete';
@@ -404,7 +405,7 @@ export function getOrCreateWizardFlowSession(
 }
 
 function buildWizardTrackedEventKey(
-  eventName: 'wizard_start' | 'wizard_step_complete' | 'wizard_review_view',
+  eventName: 'wizard_start' | 'wizard_step_complete' | 'wizard_step_view' | 'wizard_review_view',
   context: WizardFlowTrackingContext = {}
 ): string {
   const { sessionId } = getOrCreateWizardFlowSession(context);
@@ -415,6 +416,10 @@ function buildWizardTrackedEventKey(
 
   if (eventName === 'wizard_review_view') {
     return `wizard_review_view::${context.caseId || sessionId}`;
+  }
+
+  if (eventName === 'wizard_step_view') {
+    return `wizard_step_view::${context.caseId || sessionId}::${context.stepGroup || 'unknown_step'}`;
   }
 
   return `wizard_step_complete::${context.caseId || sessionId}::${context.stepGroup || 'unknown_step'}`;
@@ -442,6 +447,7 @@ export function resetWizardFlowTracking(): void {
     window.sessionStorage.removeItem(FLOW_SIGNATURE_KEY);
     window.sessionStorage.removeItem(FLOW_TRACKED_EVENTS_KEY);
     window.sessionStorage.removeItem(COMPLETED_STEPS_KEY);
+    window.sessionStorage.removeItem(VIEWED_STEPS_KEY);
     window.sessionStorage.removeItem(WIZARD_STARTED_KEY);
   } catch {
     // Ignore storage errors
@@ -554,6 +560,57 @@ export function markStepCompleted(
     return true; // First completion, fire event
   } catch {
     return true; // On error, assume first completion
+  }
+}
+
+function getViewedSteps(): string[] {
+  if (!isSessionStorageAvailable()) return [];
+
+  try {
+    const stored = window.sessionStorage.getItem(VIEWED_STEPS_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed)) {
+        return parsed;
+      }
+    }
+  } catch {
+    // Ignore parse errors
+  }
+
+  return [];
+}
+
+export function markStepViewed(
+  stepId: string,
+  context: WizardFlowTrackingContext = {}
+): boolean {
+  const scopedStepKey = context.stepGroup || stepId;
+  const viewedStepStorageKey = context.caseId
+    ? `${context.caseId}:${scopedStepKey}`
+    : scopedStepKey;
+  const trackedEventKey = buildWizardTrackedEventKey('wizard_step_view', {
+    ...context,
+    stepGroup: scopedStepKey,
+  });
+
+  if (
+    hasWizardEventTracked(trackedEventKey) ||
+    getViewedSteps().includes(viewedStepStorageKey)
+  ) {
+    return false;
+  }
+
+  if (!isSessionStorageAvailable()) return true;
+
+  try {
+    const viewed = getViewedSteps();
+    viewed.push(viewedStepStorageKey);
+    window.sessionStorage.setItem(VIEWED_STEPS_KEY, JSON.stringify(viewed));
+    markWizardEventTracked(trackedEventKey);
+    return true;
+  } catch {
+    return true;
   }
 }
 

@@ -29,6 +29,7 @@ import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
 import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
 import { isWizardUiV3Enabled } from '@/components/wizard/shared/flags';
 import { scrollWizardViewportToTop } from '@/components/wizard/shared/scrollWizardViewportToTop';
+import { useWizardStepViewTracking } from '@/components/wizard/shared/useWizardStepViewTracking';
 import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
 import type { SmartReviewWarningItem, SmartReviewSummary } from '@/components/wizard/SmartReviewPanel';
 
@@ -520,6 +521,15 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
   }, [facts]);
 
   const currentSection = visibleSections[currentSectionIndex];
+  useWizardStepViewTracking({
+    product: 'money_claim',
+    jurisdiction,
+    stepId: currentSection?.id,
+    stepIndex: currentSectionIndex,
+    totalSteps: visibleSections.length,
+    caseId,
+    enabled: !loading && visibleSections.length > 0,
+  });
 
   // Save facts to backend (actual save)
   const saveFactsToServer = useCallback(

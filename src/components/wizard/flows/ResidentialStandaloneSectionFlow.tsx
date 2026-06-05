@@ -8,6 +8,7 @@ import { clsx } from 'clsx';
 import { Input } from '@/components/ui';
 import { UploadField, type EvidenceFileSummary } from '@/components/wizard/fields/UploadField';
 import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
+import { useWizardStepViewTracking } from '@/components/wizard/shared/useWizardStepViewTracking';
 import { trackWizardStepCompleteWithAttribution } from '@/lib/analytics';
 import { normalizeWizardStep } from '@/lib/analytics/wizard-step-taxonomy';
 import { getResidentialStandaloneProfile } from '@/lib/residential-letting/standalone-profiles';
@@ -563,6 +564,15 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
       description: '',
       fields: [],
     };
+  useWizardStepViewTracking({
+    product,
+    jurisdiction,
+    stepId: step.id,
+    stepIndex: activeStep,
+    totalSteps: visibleSteps.length,
+    caseId,
+    enabled: !loading && visibleSteps.length > 0,
+  });
   const visibleFields = useMemo(() => getVisibleFields(step, facts), [facts, step]);
   const stepCompletion = useMemo(
     () => visibleSteps.map((configStep) => getStepCompletion(configStep, facts)),

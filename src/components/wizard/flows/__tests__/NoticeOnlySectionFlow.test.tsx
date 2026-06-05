@@ -43,12 +43,14 @@ vi.mock('@/lib/wizard/facts-client', () => ({
 // Mock analytics
 vi.mock('@/lib/analytics', () => ({
   trackWizardStepCompleteWithAttribution: vi.fn(),
+  trackWizardStepViewWithAttribution: vi.fn(),
 }));
 
 // Mock attribution
 vi.mock('@/lib/wizard/wizardAttribution', () => ({
   getWizardAttribution: () => ({}),
   markStepCompleted: () => true,
+  markStepViewed: () => true,
 }));
 
 // Mock arrears engine

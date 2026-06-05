@@ -2,6 +2,7 @@ export interface NormalizedWizardStep {
   rawStep: string;
   normalizedStepKey: string;
   normalizedEventName: string;
+  normalizedViewEventName: string;
   stepGroup: string;
 }
 
@@ -66,6 +67,7 @@ export function normalizeWizardStep(rawStep: string): NormalizedWizardStep {
     rawStep,
     normalizedStepKey,
     normalizedEventName: `wizard_step_${normalizedStepKey}_complete`,
+    normalizedViewEventName: `wizard_step_${normalizedStepKey}_view`,
     stepGroup: normalizedStepKey,
   };
 }

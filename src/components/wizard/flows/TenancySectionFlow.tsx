@@ -35,6 +35,7 @@ import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
 import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
 import { isWizardUiV3Enabled } from '@/components/wizard/shared/flags';
+import { useWizardStepViewTracking } from '@/components/wizard/shared/useWizardStepViewTracking';
 import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
 import { InlineSectionHeaderV3 } from '@/components/wizard/shared/InlineSectionHeaderV3';
 
@@ -657,6 +658,15 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
   }, [facts, isProductLocked]);
 
   const currentSection = visibleSections[currentSectionIndex];
+  useWizardStepViewTracking({
+    product,
+    jurisdiction,
+    stepId: currentSection?.id,
+    stepIndex: currentSectionIndex,
+    totalSteps: visibleSections.length,
+    caseId,
+    enabled: !loading && visibleSections.length > 0,
+  });
   const saveProduct = isResidentialLettingProductSku(product) ? 'tenancy_agreement' : product;
 
   const highlightedSectionSet = useMemo(

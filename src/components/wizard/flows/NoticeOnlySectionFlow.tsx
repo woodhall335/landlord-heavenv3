@@ -53,6 +53,7 @@ import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
 import { EnglandPossessionWorkspaceShell } from '@/components/wizard/shared/EnglandPossessionWorkspaceShell';
 import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
 import { isWizardUiV3Enabled } from '@/components/wizard/shared/flags';
+import { useWizardStepViewTracking } from '@/components/wizard/shared/useWizardStepViewTracking';
 
 // Reuse section components from eviction flow
 import { CaseBasicsSection } from '../sections/eviction/CaseBasicsSection';
@@ -1106,6 +1107,15 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
   }, [jurisdiction, facts.eviction_route, facts.section8_grounds]);
 
   const currentSection = visibleSections[currentSectionIndex];
+  useWizardStepViewTracking({
+    product: 'notice_only',
+    jurisdiction,
+    stepId: currentSection?.id,
+    stepIndex: currentSectionIndex,
+    totalSteps: visibleSections.length,
+    caseId,
+    enabled: !loading && visibleSections.length > 0,
+  });
 
   useEffect(() => {
     if (currentSectionIndex >= visibleSections.length) {

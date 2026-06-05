@@ -50,6 +50,7 @@ import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
 import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
 import { EnglandPossessionWorkspaceShell } from '@/components/wizard/shared/EnglandPossessionWorkspaceShell';
 import { isWizardUiV3Enabled } from '@/components/wizard/shared/flags';
+import { useWizardStepViewTracking } from '@/components/wizard/shared/useWizardStepViewTracking';
 
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
@@ -771,6 +772,15 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
   }, [jurisdiction, facts.eviction_route, facts.section8_grounds]);
 
   const currentSection = visibleSections[currentSectionIndex];
+  useWizardStepViewTracking({
+    product: 'complete_pack',
+    jurisdiction,
+    stepId: currentSection?.id,
+    stepIndex: currentSectionIndex,
+    totalSteps: visibleSections.length,
+    caseId,
+    enabled: !loading && visibleSections.length > 0,
+  });
 
   useEffect(() => {
     if (currentSectionIndex >= visibleSections.length) {

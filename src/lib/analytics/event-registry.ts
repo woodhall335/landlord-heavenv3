@@ -78,13 +78,14 @@ const EVENT_DEFINITIONS: AnalyticsEventDefinition[] = [
   { name: 'wizard_preview_viewed', family: 'wizard_preview_viewed', class: 'milestone', dedupeScope: 'case' },
   { name: 'wizard_start', family: 'wizard_start', class: 'milestone', dedupeScope: 'session' },
   { name: 'wizard_step_complete', family: 'wizard_step_complete', class: 'milestone', dedupeScope: 'case', variant: 'canonical' },
+  { name: 'wizard_step_view', family: 'wizard_step_view', class: 'view', dedupeScope: 'case', variant: 'canonical' },
 ];
 
 const REGISTRY = new Map<string, AnalyticsEventDefinition>(
   EVENT_DEFINITIONS.map((definition) => [definition.name, definition])
 );
 
-const DERIVED_WIZARD_STEP_EVENT_PATTERN = /^wizard_step_(.+)_complete$/;
+const DERIVED_WIZARD_STEP_EVENT_PATTERN = /^wizard_step_(.+)_(complete|view)$/;
 
 export const ANALYTICS_EVENT_DEFINITIONS = EVENT_DEFINITIONS;
 
@@ -97,10 +98,11 @@ export function getAnalyticsEventDefinition(
   }
 
   const derivedMatch = DERIVED_WIZARD_STEP_EVENT_PATTERN.exec(eventName);
-  if (derivedMatch && eventName !== 'wizard_step_complete') {
+  if (derivedMatch && eventName !== 'wizard_step_complete' && eventName !== 'wizard_step_view') {
+    const family = derivedMatch[2] === 'view' ? 'wizard_step_view' : 'wizard_step_complete';
     return {
       name: eventName,
-      family: 'wizard_step_complete',
+      family,
       class: 'derived',
       dedupeScope: 'case',
       variant: 'derived',

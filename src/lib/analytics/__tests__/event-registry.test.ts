@@ -16,11 +16,25 @@ describe('analytics event registry', () => {
       dedupeScope: 'case',
       variant: 'canonical',
     });
+
+    expect(getAnalyticsEventDefinition('wizard_step_view')).toMatchObject({
+      family: 'wizard_step_view',
+      class: 'view',
+      dedupeScope: 'case',
+      variant: 'canonical',
+    });
   });
 
   it('treats normalized wizard step events as intentional derived mirrors', () => {
     expect(getAnalyticsEventDefinition('wizard_step_property_complete')).toMatchObject({
       family: 'wizard_step_complete',
+      class: 'derived',
+      dedupeScope: 'case',
+      variant: 'derived',
+    });
+
+    expect(getAnalyticsEventDefinition('wizard_step_property_view')).toMatchObject({
+      family: 'wizard_step_view',
       class: 'derived',
       dedupeScope: 'case',
       variant: 'derived',
