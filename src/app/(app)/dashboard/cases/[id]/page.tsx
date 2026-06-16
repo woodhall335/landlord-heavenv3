@@ -39,6 +39,7 @@ import { isResidentialLettingProductSku } from '@/lib/residential-letting/produc
 import {
   buildAssistedPrepSuccessHref,
   getAssistedPrepConfigBySku,
+  getAssistedPrepServiceFromSku,
   isAssistedPrepSku,
   normalizeAssistedPrepService,
 } from '@/lib/assisted-prep';
@@ -1024,14 +1025,15 @@ export default function CaseDetailPage() {
     orderStatus?.metadata?.upgrade_kind === 'post_purchase_product_upgrade' &&
     orderStatus?.metadata?.upgrade_from_product === 'notice_only';
   const assistedIntake = caseDetails?.collected_facts?.assisted_intake || null;
-  const assistedService = assistedIntake
+  const isAssistedOrder = Boolean(orderStatus?.product_type && isAssistedPrepSku(orderStatus.product_type));
+  const assistedService = assistedIntake || isAssistedOrder
     ? normalizeAssistedPrepService(
-        assistedIntake.service ||
+        assistedIntake?.service ||
         caseDetails?.collected_facts?.selected_assisted_service ||
+        getAssistedPrepServiceFromSku(orderStatus?.product_type) ||
         null
       )
     : null;
-  const isAssistedOrder = Boolean(orderStatus?.product_type && isAssistedPrepSku(orderStatus.product_type));
   const assistedOrderConfig = isAssistedPrepSku(orderStatus?.product_type)
     ? getAssistedPrepConfigBySku(orderStatus.product_type)
     : null;

@@ -567,10 +567,11 @@ export async function sendAssistedPrepPaymentReceived(params: {
     </table>
     ${getInfoBox(`Calendly will send the callback reminders. If you miss the slot, use the same booking button to choose another time.`)}
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 26px 0;">
-      <tr><td align="center">${getBulletproofButton('Upload documents to your case', uploadUrl)}</td></tr>
+      <tr><td align="center">${getBulletproofButton('Upload documents in your dashboard', uploadUrl)}</td></tr>
     </table>
+    <p style="margin: 0 0 18px 0; font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: ${COLORS.lightGray}; line-height: 1.6;">You can upload tenancy agreements, notices, rent records, proof of service, and other evidence from your dashboard case page.</p>
     ${checklistHtml}
-    <p style="margin: 24px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.mutedGray};">If the upload area gives you trouble, reply to this email and we will help.</p>
+    <p style="margin: 24px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.mutedGray};">If uploading is difficult, reply to this email and we will help.</p>
   `;
 
   const html = getEmailWrapper(`
@@ -590,13 +591,15 @@ Order number: #${orderNumber}
 Amount paid: ${formatPriceLabel(amount / 100)}
 
 Book your callback: ${bookingUrl}
-Upload documents to your case: ${uploadUrl}
+Upload documents in your dashboard: ${uploadUrl}
+
+You can upload tenancy agreements, notices, rent records, proof of service, and other evidence from your dashboard case page.
 
 Calendly will send the callback reminders. If you miss the slot, use the same booking button to choose another time.
 
 ${checklistText}
 
-If the upload area gives you trouble, reply to this email and we will help.
+If uploading is difficult, reply to this email and we will help.
   `;
 
   return sendEmail({

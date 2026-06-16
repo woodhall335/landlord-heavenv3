@@ -26,8 +26,11 @@ import {
 import {
   buildAssistedEvidenceSummary,
   isAssistedPrepSku,
+  getAssistedPrepServiceFromSku,
+  type AssistedEvidenceFileSummary,
   normalizeAssistedPrepService,
 } from '@/lib/assisted-prep';
+import { isEvidenceUploadDocument, isGeneratedPackDocument } from '@/lib/documents/document-origin';
 
 type RawCase = {
   id: string;
@@ -66,6 +69,16 @@ type RawOrder = {
   paid_at: string | null;
   created_at: string;
   metadata?: Record<string, unknown> | null;
+};
+
+type RawDocument = {
+  id: string;
+  case_id: string;
+  document_title: string | null;
+  document_type: string | null;
+  is_preview: boolean | null;
+  created_at: string | null;
+  metadata?: Record<string, any> | null;
 };
 
 type RawEmailEvent = {
@@ -267,30 +280,47 @@ async function fetchFinalDocumentCounts(
   caseIds: string[]
 ) {
   const documentCounts = new Map<string, { final: number; preview: number }>();
+  const evidenceByCase = new Map<string, AssistedEvidenceFileSummary[]>();
 
   for (const chunk of chunkValues(caseIds)) {
     const { data, error } = await adminClient
       .from('documents')
-      .select('case_id, is_preview')
+      .select('id, case_id, document_title, document_type, is_preview, created_at, metadata')
       .in('case_id', chunk);
 
     if (error) {
-      return { data: documentCounts, error };
+      return { data: { documentCounts, evidenceByCase }, error };
     }
 
     for (const document of data || []) {
-      const typedDocument = document as { case_id: string; is_preview: boolean | null };
+      const typedDocument = document as RawDocument;
       const current = documentCounts.get(typedDocument.case_id) || { final: 0, preview: 0 };
       if (typedDocument.is_preview) {
         current.preview += 1;
-      } else {
+      } else if (isGeneratedPackDocument(typedDocument)) {
         current.final += 1;
       }
       documentCounts.set(typedDocument.case_id, current);
+
+      if (isEvidenceUploadDocument(typedDocument)) {
+        const evidenceItems = evidenceByCase.get(typedDocument.case_id) || [];
+        evidenceItems.push({
+          id: typedDocument.id,
+          documentId: typedDocument.id,
+          fileName:
+            typedDocument.metadata?.file_name ||
+            typedDocument.metadata?.filename ||
+            typedDocument.document_title ||
+            'Uploaded document',
+          category: typedDocument.metadata?.category || typedDocument.document_type || null,
+          uploadedAt: typedDocument.created_at,
+        });
+        evidenceByCase.set(typedDocument.case_id, evidenceItems);
+      }
     }
   }
 
-  return { data: documentCounts, error: null };
+  return { data: { documentCounts, evidenceByCase }, error: null };
 }
 
 function daysAgoIso(days: number): string {
@@ -435,9 +465,15 @@ export async function GET(request: NextRequest) {
       orderByCase.set(order.case_id, pickBestOrder(orderByCase.get(order.case_id), order));
     }
 
-    const { data: documentCounts, error: documentsError } = caseIds.length
+    const { data: documentSummary, error: documentsError } = caseIds.length
       ? await fetchFinalDocumentCounts(adminClient, caseIds)
-      : { data: new Map<string, { final: number; preview: number }>(), error: null };
+      : {
+          data: {
+            documentCounts: new Map<string, { final: number; preview: number }>(),
+            evidenceByCase: new Map<string, AssistedEvidenceFileSummary[]>(),
+          },
+          error: null,
+        };
 
     if (documentsError) {
       console.error('Failed to fetch admin case documents:', documentsError);
@@ -461,7 +497,7 @@ export async function GET(request: NextRequest) {
     const normalizedCases: AdminCaseRecord[] = cases.map((caseItem) => {
       const relatedOrder = orderByCase.get(caseItem.id);
       const orderMetadata = extractOrderMetadata(relatedOrder);
-      const caseDocumentCounts = documentCounts.get(caseItem.id) || { final: 0, preview: 0 };
+      const caseDocumentCounts = documentSummary.documentCounts.get(caseItem.id) || { final: 0, preview: 0 };
       const finalDocumentCount = caseDocumentCounts.final;
       const previewDocumentCount = caseDocumentCounts.preview;
       const hasFinalDocuments = finalDocumentCount > 0;
@@ -479,16 +515,36 @@ export async function GET(request: NextRequest) {
       const productType = deriveCaseProductType(caseItem, relatedOrder || null);
       const isAssistedPrepOrder = isAssistedPrepSku(productType);
       const assistedIntake = caseItem.collected_facts?.assisted_intake || null;
-      const assistedEvidenceSummary = assistedIntake
-        ? buildAssistedEvidenceSummary({
-            service: normalizeAssistedPrepService(
-              assistedIntake.service ||
+      const assistedService =
+        assistedIntake || isAssistedPrepOrder
+          ? normalizeAssistedPrepService(
+              assistedIntake?.service ||
               caseItem.collected_facts?.selected_assisted_service ||
+              getAssistedPrepServiceFromSku(productType) ||
               null
-            ),
+            )
+          : null;
+      const factsEvidenceSummary = assistedService
+        ? buildAssistedEvidenceSummary({
+            service: assistedService,
             evidence: caseItem.collected_facts?.evidence || null,
           })
         : null;
+      const documentEvidence = documentSummary.evidenceByCase.get(caseItem.id) || [];
+      const existingEvidenceIds = new Set(
+        (factsEvidenceSummary?.uploaded_evidence || []).flatMap((evidence) =>
+          [evidence.id, evidence.documentId].filter(Boolean) as string[]
+        )
+      );
+      const uploadedEvidence = [
+        ...(factsEvidenceSummary?.uploaded_evidence || []),
+        ...documentEvidence.filter((evidence) => !existingEvidenceIds.has(evidence.id)),
+      ];
+      const latestEvidenceUpload =
+        uploadedEvidence
+          .map((evidence) => evidence.uploadedAt)
+          .filter((value): value is string => Boolean(value))
+          .sort((left, right) => new Date(right).getTime() - new Date(left).getTime())[0] || null;
       const recoveryContact = deriveCaseRecoveryContact(caseItem, userRecord || null);
       const paymentStatusValue = relatedOrder?.payment_status || null;
       const hasAnyOrder = Boolean(relatedOrder?.id);
@@ -527,10 +583,10 @@ export async function GET(request: NextRequest) {
         product_type: productType,
         product_name: getAdminProductName(productType),
         assisted_intake: assistedIntake,
-        uploaded_evidence_count: assistedEvidenceSummary?.uploaded_evidence_count || 0,
-        uploaded_evidence: assistedEvidenceSummary?.uploaded_evidence || [],
-        missing_recommended_evidence: assistedEvidenceSummary?.missing_recommended_evidence || [],
-        latest_upload_at: assistedEvidenceSummary?.latest_upload_at || null,
+        uploaded_evidence_count: uploadedEvidence.length,
+        uploaded_evidence: uploadedEvidence,
+        missing_recommended_evidence: factsEvidenceSummary?.missing_recommended_evidence || [],
+        latest_upload_at: latestEvidenceUpload,
         payment_status: paymentStatusValue,
         has_any_order: hasAnyOrder,
         fulfillment_status: visibleFulfillmentStatus,

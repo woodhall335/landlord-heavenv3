@@ -906,27 +906,37 @@ export default function AdminCasesPage() {
                             {caseItem.assisted_intake.source_case_id ? (
                               <div>Imported from {caseItem.assisted_intake.source_case_id.slice(0, 8)}...</div>
                             ) : null}
-                            <div className="mt-2 border-t border-violet-100 pt-2">
-                              <div className="font-semibold">Uploaded evidence: {caseItem.uploaded_evidence_count || 0}</div>
-                              {caseItem.latest_upload_at ? (
-                                <div>Latest {new Date(caseItem.latest_upload_at).toLocaleDateString("en-GB")}</div>
-                              ) : null}
-                              {(caseItem.uploaded_evidence || []).slice(0, 3).map((evidence) => (
-                                <button
-                                  key={evidence.id}
-                                  type="button"
-                                  onClick={() => openEvidence(evidence)}
-                                  className="block truncate text-left text-primary hover:underline"
-                                >
-                                  {evidence.fileName}
-                                </button>
-                              ))}
-                              {(caseItem.missing_recommended_evidence || []).length > 0 ? (
-                                <div className="mt-1 text-violet-700">
-                                  Missing likely: {(caseItem.missing_recommended_evidence || []).slice(0, 2).map((item) => item.label).join(", ")}
-                                </div>
-                              ) : null}
-                            </div>
+                          </div>
+                        )}
+                        {isAssistedPrepSku(caseItem.product_type) && (
+                          <div className="mt-2 max-w-[16rem] rounded border border-violet-100 bg-white p-2 text-xs text-violet-950">
+                            <div className="font-semibold">Uploaded documents: {caseItem.uploaded_evidence_count || 0}</div>
+                            {caseItem.latest_upload_at ? (
+                              <div className="text-violet-700">Latest {new Date(caseItem.latest_upload_at).toLocaleDateString("en-GB")}</div>
+                            ) : (
+                              <div className="text-gray-500">No uploads yet</div>
+                            )}
+                            {(caseItem.uploaded_evidence || []).slice(0, 5).map((evidence) => (
+                              <button
+                                key={evidence.id}
+                                type="button"
+                                onClick={() => openEvidence(evidence)}
+                                className="mt-1 block max-w-full truncate text-left font-semibold text-primary hover:underline"
+                                title={evidence.fileName}
+                              >
+                                {evidence.fileName}
+                              </button>
+                            ))}
+                            {(caseItem.uploaded_evidence || []).length > 5 ? (
+                              <div className="mt-1 text-gray-500">
+                                +{(caseItem.uploaded_evidence || []).length - 5} more on the case page
+                              </div>
+                            ) : null}
+                            {(caseItem.missing_recommended_evidence || []).length > 0 ? (
+                              <div className="mt-2 border-t border-violet-100 pt-2 text-violet-700">
+                                Missing likely: {(caseItem.missing_recommended_evidence || []).slice(0, 2).map((item) => item.label).join(", ")}
+                              </div>
+                            ) : null}
                           </div>
                         )}
                       </td>
