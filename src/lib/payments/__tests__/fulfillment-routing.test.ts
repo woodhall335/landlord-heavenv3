@@ -130,4 +130,20 @@ describe('deriveVisibleFulfillmentState', () => {
       fulfillmentError: 'Waiting for bundle assets',
     });
   });
+
+  it('shows assisted prep orders as callback pending when an old instant-generation retry marked them failed', () => {
+    expect(
+      deriveVisibleFulfillmentState({
+        fulfillmentStatus: 'failed',
+        hasFinalDocuments: false,
+        productType: 'section8_assisted_prep',
+        metadata: {
+          error: 'Document generation failed',
+        },
+      })
+    ).toEqual({
+      fulfillmentStatus: 'callback_pending',
+      fulfillmentError: null,
+    });
+  });
 });

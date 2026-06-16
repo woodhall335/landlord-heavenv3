@@ -84,6 +84,24 @@ describe('Fulfill Endpoint Business Logic', () => {
     expect(shouldAllowRetry).toBe(true);
   });
 
+  it('assisted prep orders should stay in callback workflow instead of instant fulfillment', () => {
+    const orderState = {
+      paid: true,
+      product_type: 'section8_assisted_prep',
+      fulfillment_status: 'callback_pending',
+      has_final_documents: false,
+    };
+
+    const isAssistedPrep = orderState.product_type.endsWith('_assisted_prep');
+    const shouldTriggerInstantFulfillment =
+      orderState.paid &&
+      !orderState.has_final_documents &&
+      !isAssistedPrep &&
+      orderState.fulfillment_status !== 'processing';
+
+    expect(shouldTriggerInstantFulfillment).toBe(false);
+  });
+
   it('already has final docs should return no-op success', () => {
     // Scenario: Order has final documents
     const orderState = {

@@ -36,7 +36,12 @@ import {
   getEnglandTenancyProductLabel,
 } from '@/lib/tenancy/england-product-model';
 import { isResidentialLettingProductSku } from '@/lib/residential-letting/products';
-import { normalizeAssistedPrepService } from '@/lib/assisted-prep';
+import {
+  buildAssistedPrepSuccessHref,
+  getAssistedPrepConfigBySku,
+  isAssistedPrepSku,
+  normalizeAssistedPrepService,
+} from '@/lib/assisted-prep';
 
 interface CaseDetails {
   id: string;
@@ -139,6 +144,14 @@ function isPremiumTenancyDisplay(
     facts.__meta?.product_tier?.includes('premium') ||
     facts.is_hmo === true
   );
+}
+
+function formatAssistedStatus(status: string | null | undefined): string {
+  if (!status) return 'Callback pending';
+  return status
+    .split('_')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
 }
 
 export default function CaseDetailPage() {
@@ -340,6 +353,9 @@ export default function CaseDetailPage() {
       if (status?.paid) {
         console.log('[CaseDetailPage] Payment confirmed via polling');
         stopPaymentPolling();
+        if (status.product_type && isAssistedPrepSku(status.product_type)) {
+          return;
+        }
         // If paid but no final docs, start document polling
         if (!status.has_final_documents) {
           startPolling();
@@ -350,6 +366,15 @@ export default function CaseDetailPage() {
 
   // Retry fulfillment - derives product from case details
   const retryFulfillment = useCallback(async (): Promise<boolean> => {
+    if (orderStatus?.product_type && isAssistedPrepSku(orderStatus.product_type)) {
+      await fetchOrderStatus();
+      setMessage({
+        type: 'success',
+        text: 'This assisted prep order is handled by callback. Upload any evidence you have and we will prepare the pack with you.',
+      });
+      return false;
+    }
+
     setIsRetrying(true);
     setRetryError(null);
     setRetryErrorFatal(false);
@@ -399,7 +424,7 @@ export default function CaseDetailPage() {
       setIsRetrying(false);
       return false;
     }
-  }, [caseId, caseDetails, fetchOrderStatus, fetchCaseDocuments]);
+  }, [caseId, caseDetails, fetchOrderStatus, fetchCaseDocuments, orderStatus?.product_type]);
 
   // Cleanup polling on unmount or navigation
   useEffect(() => {
@@ -524,6 +549,13 @@ export default function CaseDetailPage() {
 
       // Case 2: Not paid and not from checkout - nothing to poll for
       if (!status?.paid) return;
+
+      if (status.product_type && isAssistedPrepSku(status.product_type)) {
+        setPollingTimedOut(false);
+        setRetryError(null);
+        setRetryErrorFatal(false);
+        return;
+      }
 
       // Case 3: Already has documents - nothing to do
       if (status.has_final_documents) return;
@@ -999,6 +1031,17 @@ export default function CaseDetailPage() {
         null
       )
     : null;
+  const isAssistedOrder = Boolean(orderStatus?.product_type && isAssistedPrepSku(orderStatus.product_type));
+  const assistedOrderConfig = isAssistedPrepSku(orderStatus?.product_type)
+    ? getAssistedPrepConfigBySku(orderStatus.product_type)
+    : null;
+  const assistedSuccessHref = assistedOrderConfig
+    ? buildAssistedPrepSuccessHref({
+        service: assistedOrderConfig.service,
+        caseId,
+        orderId: orderStatus?.order_id || null,
+      })
+    : null;
 
   const handleUpgradeToCompletePack = async () => {
     if (!completePackUpgradeAmount) return;
@@ -1450,6 +1493,48 @@ export default function CaseDetailPage() {
           </div>
         ) : null}
 
+        {orderStatus?.paid && isAssistedOrder && !orderStatus.has_final_documents && (
+          <div className="mb-6 rounded-2xl border border-purple-200 bg-purple-50 p-6">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+              <div>
+                <Badge variant="info" className="mb-3">
+                  {formatAssistedStatus(orderStatus.fulfillment_status)}
+                </Badge>
+                <h3 className="text-xl font-semibold text-charcoal">
+                  Assisted prep is in progress
+                </h3>
+                <p className="mt-2 text-gray-700">
+                  Your payment is confirmed. This service is prepared with you on a callback, so
+                  documents are not generated instantly from this page.
+                </p>
+                <p className="mt-2 text-sm text-gray-600">
+                  Upload anything you already have above. We will use your intake answers and any
+                  uploaded evidence when preparing the pack with you.
+                </p>
+                {orderStatus.order_id && (
+                  <p className="mt-2 text-xs text-gray-600">
+                    Order ID: <code className="rounded bg-white px-2 py-1">{orderStatus.order_id}</code>
+                  </p>
+                )}
+              </div>
+              <div className="flex flex-col gap-3 lg:min-w-[260px]">
+                {assistedSuccessHref && (
+                  <Link href={assistedSuccessHref}>
+                    <Button variant="primary" className="w-full hover:text-white">
+                      View callback checklist
+                    </Button>
+                  </Link>
+                )}
+                <Link href="mailto:support@landlordheaven.co.uk">
+                  <Button variant="outline" className="w-full hover:text-white">
+                    Contact support
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+
         {isCompletePackUpgradeEligible && completePackUpgradeAmount !== null && (
           <div className="mb-6 rounded-xl border border-primary/20 bg-primary/5 p-6">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -1491,7 +1576,7 @@ export default function CaseDetailPage() {
         )}
 
         {/* Fatal Error State - Cannot retry */}
-        {orderStatus?.paid && retryErrorFatal && !orderStatus.has_final_documents && (
+        {orderStatus?.paid && !isAssistedOrder && retryErrorFatal && !orderStatus.has_final_documents && (
           <div className="mb-6 p-6 rounded-lg border border-error/20 bg-error/5">
             <div className="flex items-start gap-3">
               <RiErrorWarningLine className="w-6 h-6 text-error flex-shrink-0" />
@@ -1517,7 +1602,7 @@ export default function CaseDetailPage() {
         )}
 
         {/* Retryable Error State */}
-        {orderStatus?.paid && !retryErrorFatal && retryError && !orderStatus.has_final_documents && !isRetrying && (
+        {orderStatus?.paid && !isAssistedOrder && !retryErrorFatal && retryError && !orderStatus.has_final_documents && !isRetrying && (
           <div className="mb-6 p-6 rounded-lg border border-error/20 bg-error/5">
             <div className="flex items-start gap-3">
               <RiErrorWarningLine className="w-6 h-6 text-error flex-shrink-0" />
@@ -1547,7 +1632,7 @@ export default function CaseDetailPage() {
 
         {/* Section 21 Requires Action - user needs to confirm statutory requirements */}
         {/* Only show for Section 21 cases, not Section 8 or other routes */}
-        {orderStatus?.paid && orderStatus.fulfillment_status === 'requires_action' && !orderStatus.has_final_documents && (() => {
+        {orderStatus?.paid && !isAssistedOrder && orderStatus.fulfillment_status === 'requires_action' && !orderStatus.has_final_documents && (() => {
           // Determine if this is a Section 21 case based on collected_facts
           const route = caseDetails?.collected_facts?.selected_notice_route ||
             caseDetails?.collected_facts?.eviction_route ||
@@ -1587,7 +1672,7 @@ export default function CaseDetailPage() {
         )}
 
         {/* Fulfillment Failed State (from order status) */}
-        {orderStatus?.paid && !retryErrorFatal && !retryError && orderStatus.fulfillment_status === 'failed' && !orderStatus.has_final_documents && !isRetrying && (
+        {orderStatus?.paid && !isAssistedOrder && !retryErrorFatal && !retryError && orderStatus.fulfillment_status === 'failed' && !orderStatus.has_final_documents && !isRetrying && (
           <div className="mb-6 p-6 rounded-lg border border-error/20 bg-error/5">
             <div className="flex items-start gap-3">
               <RiErrorWarningLine className="w-6 h-6 text-error flex-shrink-0" />
@@ -1616,7 +1701,7 @@ export default function CaseDetailPage() {
         )}
 
         {/* Finalizing Documents - shown when paid but documents still generating */}
-        {orderStatus?.paid && !orderStatus.has_final_documents && !pollingTimedOut && !retryErrorFatal && !retryError && orderStatus.fulfillment_status !== 'failed' && orderStatus.fulfillment_status !== 'requires_action' && (
+        {orderStatus?.paid && !isAssistedOrder && !orderStatus.has_final_documents && !pollingTimedOut && !retryErrorFatal && !retryError && orderStatus.fulfillment_status !== 'failed' && orderStatus.fulfillment_status !== 'requires_action' && (
           <div className="mb-6 p-6 rounded-lg border border-primary/20 bg-primary/5">
             <div className="flex items-start gap-3">
               <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
@@ -1633,7 +1718,7 @@ export default function CaseDetailPage() {
         )}
 
         {/* Polling Timeout - shown when documents didn't arrive in time */}
-        {orderStatus?.paid && !orderStatus.has_final_documents && pollingTimedOut && !retryErrorFatal && (
+        {orderStatus?.paid && !isAssistedOrder && !orderStatus.has_final_documents && pollingTimedOut && !retryErrorFatal && (
           <div className="mb-6 p-6 rounded-lg border border-warning/20 bg-warning/5">
             <div className="flex items-start gap-3">
               <div className="text-warning text-2xl">⏳</div>

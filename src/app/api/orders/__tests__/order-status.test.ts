@@ -172,6 +172,13 @@ describe('OrderStatusResponse type', () => {
       'fulfilled',
       'failed',
       'requires_action',
+      'callback_pending',
+      'callback_booked',
+      'in_review',
+      'blocked_refund_due',
+      'pack_prepared',
+      'sent_to_customer',
+      'completed',
       null,
     ];
 

@@ -1,6 +1,11 @@
 import type { OrderMetadata } from '@/lib/payments/safe-order-metadata';
 import { extractOrderMetadata } from '@/lib/payments/safe-order-metadata';
-import { getAssistedPrepFulfillmentProduct } from '@/lib/assisted-prep';
+import {
+  getAssistedPrepFulfillmentProduct,
+  isAssistedPrepSku,
+  isAssistedPrepStatus,
+  type AssistedPrepStatus,
+} from '@/lib/assisted-prep';
 import { getEnglandCanonicalTenancyProduct } from '@/lib/tenancy/england-product-model';
 
 type SupportedFulfillmentStatus =
@@ -10,6 +15,7 @@ type SupportedFulfillmentStatus =
   | 'fulfilled'
   | 'failed'
   | 'requires_action'
+  | AssistedPrepStatus
   | null;
 
 interface ResolveFulfillmentProductParams {
@@ -90,6 +96,15 @@ export function deriveVisibleFulfillmentState(
 
   const isSection13Product =
     params.productType === 'section13_standard' || params.productType === 'section13_defensive';
+
+  if (
+    isAssistedPrepSku(params.productType) &&
+    !params.hasFinalDocuments &&
+    !isAssistedPrepStatus(fulfillmentStatus)
+  ) {
+    fulfillmentStatus = 'callback_pending';
+    fulfillmentError = null;
+  }
 
   if (
     !params.hasFinalDocuments &&

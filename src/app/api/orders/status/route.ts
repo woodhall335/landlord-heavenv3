@@ -23,6 +23,7 @@ import {
 import { isAdmin } from '@/lib/auth';
 import { isGeneratedPackDocument } from '@/lib/documents/document-origin';
 import { selectActiveCaseOrder } from '@/lib/payments/active-order';
+import type { AssistedPrepStatus } from '@/lib/assisted-prep';
 
 type OrderRow = {
   id: string;
@@ -34,6 +35,7 @@ type OrderRow = {
     | 'fulfilled'
     | 'failed'
     | 'requires_action'
+    | AssistedPrepStatus
     | null;
   paid_at: string | null;
   created_at: string | null;
@@ -47,7 +49,7 @@ type OrderRow = {
 export interface OrderStatusResponse {
   paid: boolean;
   payment_status: 'pending' | 'paid' | 'failed' | 'refunded' | 'partially_refunded';
-  fulfillment_status: 'pending' | 'ready_to_generate' | 'processing' | 'fulfilled' | 'failed' | 'requires_action' | null;
+  fulfillment_status: 'pending' | 'ready_to_generate' | 'processing' | 'fulfilled' | 'failed' | 'requires_action' | AssistedPrepStatus | null;
   /** Human-readable error message if fulfillment failed */
   fulfillment_error: string | null;
   paid_at: string | null;

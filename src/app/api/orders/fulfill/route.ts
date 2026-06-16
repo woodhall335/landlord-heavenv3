@@ -27,6 +27,12 @@ import {
   type ComplianceTimingBlockResponse,
   type FulfillOrderResponse,
 } from '@/lib/documents/compliance-timing-types';
+import {
+  getAssistedPrepConfigBySku,
+  isAssistedPrepSku,
+  isAssistedPrepStatus,
+  type AssistedPrepStatus,
+} from '@/lib/assisted-prep';
 
 type PaidOrderRow = {
   id: string;
@@ -38,6 +44,7 @@ type PaidOrderRow = {
     | 'fulfilled'
     | 'failed'
     | 'requires_action'
+    | AssistedPrepStatus
     | null;
   product_type: string;
   user_id: string | null;
@@ -158,6 +165,32 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { success: false, error: 'Order is not paid' },
         { status: 402 }
+      );
+    }
+
+    if (isAssistedPrepSku(order.product_type)) {
+      const assistedStatus = isAssistedPrepStatus(order.fulfillment_status)
+        ? order.fulfillment_status
+        : 'callback_pending';
+      const assistedConfig = getAssistedPrepConfigBySku(order.product_type);
+
+      if (order.fulfillment_status !== assistedStatus) {
+        await adminClient
+          .from('orders')
+          .update({ fulfillment_status: assistedStatus })
+          .eq('id', order.id);
+      }
+
+      return NextResponse.json(
+        {
+          success: true,
+          status: assistedStatus,
+          assisted_prep: true,
+          documents: 0,
+          message:
+            `${assistedConfig?.label || 'Assisted prep'} is handled by callback and does not generate instant documents.`,
+        },
+        { status: 200 }
       );
     }
 
