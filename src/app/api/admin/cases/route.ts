@@ -25,6 +25,7 @@ import {
 } from '@/lib/cases/recovery';
 import {
   buildAssistedEvidenceSummary,
+  isAssistedPrepSku,
   normalizeAssistedPrepService,
 } from '@/lib/assisted-prep';
 
@@ -476,6 +477,7 @@ export async function GET(request: NextRequest) {
       );
       const userRecord = caseItem.user_id ? users.get(caseItem.user_id) : null;
       const productType = deriveCaseProductType(caseItem, relatedOrder || null);
+      const isAssistedPrepOrder = isAssistedPrepSku(productType);
       const assistedIntake = caseItem.collected_facts?.assisted_intake || null;
       const assistedEvidenceSummary = assistedIntake
         ? buildAssistedEvidenceSummary({
@@ -555,12 +557,14 @@ export async function GET(request: NextRequest) {
         recovery_day_7_sent_at: recoveryEventSummary?.day7SentAt || null,
         can_send_restart_link: previewAbandoned && Boolean(recoveryContact.email),
         can_retry_fulfillment:
+          !isAssistedPrepOrder &&
           paymentStatusValue === 'paid' &&
           !hasFinalDocuments &&
           ['requires_action', 'failed', 'pending', 'ready_to_generate', 'processing'].includes(
             visibleFulfillmentStatus || ''
           ),
         can_resume_fulfillment:
+          !isAssistedPrepOrder &&
           paymentStatusValue === 'paid' &&
           ['requires_action', 'failed', 'processing'].includes(visibleFulfillmentStatus || ''),
         can_regenerate: paymentStatusValue === 'paid',

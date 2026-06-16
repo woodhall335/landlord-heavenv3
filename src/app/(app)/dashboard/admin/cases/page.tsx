@@ -1016,14 +1016,16 @@ export default function AdminCasesPage() {
                       <td className="p-4">
                         <div className="flex flex-col gap-2 text-sm">
                           <Link href={`/dashboard/cases/${caseItem.case_id}`} className="font-semibold text-primary hover:underline">
-                            Open case
+                            {isAssistedPrepSku(caseItem.product_type) ? "Open case / uploads" : "Open case"}
                           </Link>
                           <Link href={buildAdminCaseEditHref(caseItem)} className="font-semibold text-primary hover:underline">
-                            Open edit flow
+                            {isAssistedPrepSku(caseItem.product_type) ? "Commence assisted case" : "Open edit flow"}
                           </Link>
-                          <Link href={`/dashboard/cases/${caseItem.case_id}#documents`} className="font-semibold text-primary hover:underline">
-                            View documents
-                          </Link>
+                          {isAssistedPrepSku(caseItem.product_type) ? null : (
+                            <Link href={`/dashboard/cases/${caseItem.case_id}#documents`} className="font-semibold text-primary hover:underline">
+                              View documents
+                            </Link>
+                          )}
                           {caseItem.can_send_restart_link && (
                             <button onClick={() => openModal("restart", caseItem)} className="text-left font-semibold text-purple-700 hover:text-primary">
                               Send restart link

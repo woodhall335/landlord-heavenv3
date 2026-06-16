@@ -1,5 +1,9 @@
 import { getAdminProductLabel } from '@/lib/admin/products';
-import type { AssistedEvidenceFileSummary, AssistedEvidenceUploadSlot } from '@/lib/assisted-prep';
+import {
+  getAssistedPrepFulfillmentProduct,
+  type AssistedEvidenceFileSummary,
+  type AssistedEvidenceUploadSlot,
+} from '@/lib/assisted-prep';
 
 export type AdminCasesPreset =
   | 'all'
@@ -142,8 +146,10 @@ export function buildAdminCaseEditHref(caseItem: Pick<AdminCaseRecord, 'case_id'
     mode: 'edit',
   });
 
-  if (caseItem.product_type) {
-    params.set('product', caseItem.product_type);
+  const editProduct = getAssistedPrepFulfillmentProduct(caseItem.product_type) || caseItem.product_type;
+
+  if (editProduct) {
+    params.set('product', editProduct);
   }
 
   return `/wizard/flow?${params.toString()}`;
