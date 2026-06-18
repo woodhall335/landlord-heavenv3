@@ -69,6 +69,14 @@ function getBlankFieldNames(fields: Map<string, string | boolean>) {
     .map(([name]) => name);
 }
 
+function getFieldByNamePart(fields: Map<string, string | boolean>, ...parts: string[]) {
+  const normalizedParts = parts.map((part) => part.toLowerCase());
+  return [...fields.entries()].find(([name]) => {
+    const normalizedName = name.toLowerCase();
+    return normalizedParts.every((part) => normalizedName.includes(part));
+  })?.[1];
+}
+
 function expectAutoFieldsPopulated(fields: Map<string, string | boolean>, fieldNames: string[], label: string) {
   for (const fieldName of fieldNames) {
     const value = fields.get(fieldName);
@@ -156,6 +164,80 @@ describe('England eviction official forms', () => {
     expectAutoFieldsPopulated(fields, N215_FIELD_MATRIX.autoFields, 'N215');
   });
 
+  it('keeps legal representative fields blank when the claimant signs in person', async () => {
+    const n215Pdf = await generateEnglandN215PDF({
+      court_name: 'York County Court and Family Court',
+      claimant_name: 'Daniel Mercer',
+      defendant_name: 'Ivy Carleton',
+      signatory_name: 'Daniel Mercer',
+      signatory_capacity: 'claimant',
+      signatory_firm: 'LS8 2PF',
+      signatory_position: 'Solicitor',
+      document_served: 'Form 3A notice',
+      service_date: '2026-04-25',
+      signature_date: '2026-07-06',
+      service_method: 'first_class_post',
+      service_address_line1: '16 Willow Mews',
+      service_address_town: 'York',
+      service_address_postcode: 'YO24 3HX',
+      recipient_name: 'Ivy Carleton',
+    });
+    const n5Pdf = await fillN5Form({
+      ...BASE_CASE_DATA,
+      signatory_capacity: 'claimant',
+      solicitor_firm: 'LS8 2PF',
+      signature_date: '2026-07-06',
+    });
+    const n119Pdf = await fillN119Form({
+      ...BASE_CASE_DATA,
+      signatory_capacity: 'claimant',
+      solicitor_firm: 'LS8 2PF',
+      signature_date: '2026-07-06',
+    });
+
+    const n215Fields = await getFieldMap(n215Pdf);
+    const n5Fields = await getFieldMap(n5Pdf);
+    const n119Fields = await getFieldMap(n119Pdf);
+
+    expect(n215Fields.get('Text Field 86')).toBe('');
+    expect(n215Fields.get('Text Field 85')).toBe('');
+    expect(n215Fields.get('Check Box40')).toBe(true);
+    expect(n215Fields.get('Check Box43')).toBe(false);
+
+    expect(getFieldByNamePart(n5Fields, 'legal representative', 'firm')).toBe('');
+    expect(n5Fields.get('If signing on behalf of firm or company give position or office held')).toBe('');
+    expect(n5Fields.get('Statement of Truth is signed by the Claimant')).toBe(true);
+    expect(getFieldByNamePart(n5Fields, 'statement of truth', 'legal representative')).toBe(false);
+
+    expect(n119Fields.get("Name of claimant’s legal representative’s firm")).toBe('');
+    expect(n119Fields.get('If signing on behalf of firm or company give position or office held')).toBe('');
+    expect(n119Fields.get('Statement of Truth signed by Claimant')).toBe(true);
+    expect(n119Fields.get("Statement of Truth signed by Claimant’s legal representative (as defined by CPR 2.3(1))")).toBe(false);
+  });
+
+  it('rejects non-date Statement of Truth signing values before exporting forms', async () => {
+    await expect(generateEnglandN215PDF({
+      claimant_name: 'Daniel Mercer',
+      defendant_name: 'Ivy Carleton',
+      signatory_name: 'Daniel Mercer',
+      signatory_capacity: 'claimant',
+      signature_date: '39 Boundary Close',
+      service_method: 'first_class_post',
+      service_address_line1: '16 Willow Mews',
+      recipient_name: 'Ivy Carleton',
+    })).rejects.toThrow('Statement of Truth signing date');
+
+    await expect(fillN5Form({
+      ...BASE_CASE_DATA,
+      signature_date: '39 Boundary Close',
+    })).rejects.toThrow('Statement of Truth signing date');
+
+    await expect(fillN119Form({
+      ...BASE_CASE_DATA,
+      signature_date: '39 Boundary Close',
+    })).rejects.toThrow('Statement of Truth signing date');
+  });
+
   it('leaves only explicitly classified non-auto blanks on the generated N215 sample', async () => {
     const pdfBytes = await generateEnglandN215PDF({
       court_name: 'York County Court and Family Court',
@@ -217,15 +299,16 @@ describe('England eviction official forms', () => {
     expect(fields.get('name of defendant')).toBe('Ivy Carleton');
     expect(fields.get('3(b) The current rent is')).toBe('£1200.00');
     expect(fields.get('3(b) The current rent is payable each month')).toBe('X');
-    expect(fields.get('6. Other type of notice')).toBe('Notice seeking possession (Form 3A)');
+    expect(String(fields.get('6. Other type of notice'))).toContain('Form 3A notice served on 25 April 2026');
     expect(fields.get('6. Day and month notice served')).toBe('25 April');
     expect(fields.get('6. Year notice served')).toBe('26');
     expect(fields.get('Statement of Truth signed by Claimant')).toBe(true);
     expect(fields.get('Full name of person signing the Statement of Truth')).toBe('Daniel Mercer');
 
     const reasonA = String(fields.get('4. (a) The reason the claimant is asking for possession is:') || '');
-    expect(reasonA).toContain('Ground 8');
-    expect(reasonA).toContain('£3,600.00');
+    const reasonC = String(fields.get('4. (c) The reason the claimant is asking for possession is:') || '');
+    expect(reasonA).toContain('£3600.00');
+    expect(reasonC).toContain('Ground 8');
 
     expectAutoFieldsPopulated(fields, N119_FIELD_MATRIX.autoFields, 'N119');
   });

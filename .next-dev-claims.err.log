@@ -114,3 +114,100 @@ Start wizard error: Error: Missing SUPABASE_URL
   61 |
   62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
 ⚠ Server is approaching the used memory threshold, restarting...
+Supabase not configured, continuing in anonymous mode
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\wizard\case\[id]\route.ts:24:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\wizard\case\[id]\route.ts:24:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\wizard\case\[id]\route.ts:24:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\wizard\case\[id]\route.ts:24:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\wizard\case\[id]\route.ts:24:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\wizard\case\[id]\route.ts:24:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\wizard\case\[id]\route.ts:24:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+Get case error: Error: Missing SUPABASE_URL
+    at assertAdminRuntime (src\lib\supabase\admin.ts:59:11)
+    at createSupabaseAdminClient (src\lib\supabase\admin.ts:96:3)
+    at createAdminClient (src\lib\supabase\server.ts:40:35)
+    at GET (src\app\api\wizard\case\[id]\route.ts:24:44)
+  57 |
+  58 |   if (!process.env.SUPABASE_URL) {
+> 59 |     throw new Error('Missing SUPABASE_URL');
+     |           ^
+  60 |   }
+  61 |
+  62 |   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {

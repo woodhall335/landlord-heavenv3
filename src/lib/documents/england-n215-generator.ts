@@ -166,6 +166,17 @@ function getDatePartsForN215(value: unknown): { day: string; month: string; year
   };
 }
 
+function getStatementDatePartsForN215(value: unknown): { day: string; month: string; year: string } | null {
+  if (!value) return null;
+
+  const parts = getDatePartsForN215(value);
+  if (!parts || !/^\d{2}$/.test(parts.day) || !/^\d{2}$/.test(parts.month) || !/^\d{4}$/.test(parts.year)) {
+    throw new Error('[N215] Statement of Truth signing date must be a valid date.');
+  }
+
+  return parts;
+}
+
 function formatPostcodeForN215(value: unknown): string {
   return sanitizeFormText(value).replace(/\s+/g, '').toUpperCase();
 }
@@ -383,15 +394,23 @@ function fillSignatoryCapacity(form: PDFForm, capacity: EnglandN215Data['signato
   }
 }
 
+function isLegalRepresentativeCapacity(capacity: EnglandN215Data['signatory_capacity']): boolean {
+  return capacity === 'claimant_legal_representative' || capacity === 'defendant_legal_representative';
+}
+
 function fillSignatureBlock(form: PDFForm, data: EnglandN215Data): void {
   const signatoryName = sanitizeFormText(data.signatory_name || data.claimant_name);
-  const signatureDate = getDatePartsForN215(data.signature_date || data.service_date);
+  const signatureDate = getStatementDatePartsForN215(data.signature_date || data.service_date);
+  const capacity = data.signatory_capacity || 'claimant';
+  const isLegalRepresentative = isLegalRepresentativeCapacity(capacity);
 
   setTextField(form, 'Text Field 91', signatoryName);
   setTextField(form, 'Text Field 87', signatoryName);
-  setTextField(form, 'Text Field 86', data.signatory_firm);
-  setTextField(form, 'Text Field 85', data.signatory_position);
-  fillSignatoryCapacity(form, data.signatory_capacity || 'claimant');
+  if (isLegalRepresentative) {
+    setTextField(form, 'Text Field 86', data.signatory_firm);
+    setTextField(form, 'Text Field 85', data.signatory_position || 'Solicitor');
+  }
+  fillSignatoryCapacity(form, capacity);
 
   if (signatureDate) {
     setTextField(form, 'Text Field 90', signatureDate.day);

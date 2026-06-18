@@ -1230,6 +1230,34 @@ function splitDate(dateString: string | undefined): { day: string; month: string
   return null;
 }
 
+function getStatementDateParts(context: string, dateString: string | undefined): { day: string; month: string; year: string } | null {
+  if (!dateString) return null;
+
+  const parts = splitDate(dateString);
+  if (!parts || !/^\d{2}$/.test(parts.day) || !/^\d{2}$/.test(parts.month) || !/^\d{4}$/.test(parts.year)) {
+    throw new Error(`[${context}] Statement of Truth signing date must be a valid YYYY-MM-DD date.`);
+  }
+
+  return parts;
+}
+
+function isLegalRepresentativeSigner(data: CaseData): boolean {
+  const rawCapacity = String(
+    data.signatory_capacity ||
+      data.representationType ||
+      data.representation_type ||
+      '',
+  )
+    .trim()
+    .toLowerCase();
+
+  if (rawCapacity) {
+    return rawCapacity.includes('solicitor') || rawCapacity.includes('legal_representative');
+  }
+
+  return Boolean(data.solicitor_firm && data.solicitor_firm.trim());
+}
+
 /**
  * Split address into lines
  */
@@ -1561,17 +1589,15 @@ export async function fillN5Form(data: CaseData, options: FormFillerOptions = {}
   setTextOptional(form, N5_FIELDS.STATEMENT_SIGNATURE, data.signatory_name, ctx);
   setTextRequired(form, N5_FIELDS.SIGNATORY_NAME, data.signatory_name, ctx);
 
-  if (data.signature_date) {
-    const sigDate = splitDate(data.signature_date);
-    if (sigDate) {
-      setTextOptional(form, N5_FIELDS.STATEMENT_DATE_DD, sigDate.day, ctx);
-      setTextOptional(form, N5_FIELDS.STATEMENT_DATE_MM, sigDate.month, ctx);
-      setTextOptional(form, N5_FIELDS.STATEMENT_DATE_YYYY, sigDate.year, ctx);
-    }
+  const n5StatementDate = getStatementDateParts(ctx, data.signature_date);
+  if (n5StatementDate) {
+    setTextOptional(form, N5_FIELDS.STATEMENT_DATE_DD, n5StatementDate.day, ctx);
+    setTextOptional(form, N5_FIELDS.STATEMENT_DATE_MM, n5StatementDate.month, ctx);
+    setTextOptional(form, N5_FIELDS.STATEMENT_DATE_YYYY, n5StatementDate.year, ctx);
   }
 
   // Statement of Truth checkbox
-  if (data.solicitor_firm) {
+  if (isLegalRepresentativeSigner(data)) {
     setTextOptional(form, N5_FIELDS.SOLICITOR_FIRM, data.solicitor_firm, ctx);
     setTextOptional(form, N5_FIELDS.POSITION_HELD, 'Solicitor', ctx);
     setCheckbox(form, N5_CHECKBOXES.SOT_LEGAL_REP, true, ctx);
@@ -2340,16 +2366,14 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
   setTextOptional(form, N5B_FIELDS.STATEMENT_SIGNATURE, data.signatory_name, ctx);
   setTextOptional(form, N5B_FIELDS.STATEMENT_SIGNATORY_NAME, data.signatory_name, ctx);
 
-  if (data.signature_date) {
-    const sigDate = splitDate(data.signature_date);
-    if (sigDate) {
-      setTextOptional(form, N5B_FIELDS.STATEMENT_DATE_DAY, sigDate.day, ctx);
-      setTextOptional(form, N5B_FIELDS.STATEMENT_DATE_MONTH, sigDate.month, ctx);
-      setTextOptional(form, N5B_FIELDS.STATEMENT_DATE_YEAR, sigDate.year, ctx);
-    }
+  const n5bStatementDate = getStatementDateParts(ctx, data.signature_date);
+  if (n5bStatementDate) {
+    setTextOptional(form, N5B_FIELDS.STATEMENT_DATE_DAY, n5bStatementDate.day, ctx);
+    setTextOptional(form, N5B_FIELDS.STATEMENT_DATE_MONTH, n5bStatementDate.month, ctx);
+    setTextOptional(form, N5B_FIELDS.STATEMENT_DATE_YEAR, n5bStatementDate.year, ctx);
   }
 
-  if (data.solicitor_firm) {
+  if (isLegalRepresentativeSigner(data)) {
     setTextOptional(form, N5B_FIELDS.SOLICITOR_FIRM, data.solicitor_firm, ctx);
     setCheckbox(form, N5B_CHECKBOXES.SOT_LEGAL_REP, true, ctx);
     setCheckbox(form, N5B_CHECKBOXES.SOT_AUTHORISED, true, ctx);
@@ -2669,6 +2693,15 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
         : workingData.rent_frequency === 'quarterly' ? normalizedRentAmount / 91
         : normalizedRentAmount / 30);
     setTextOptional(form, N119_FIELDS.RENT, `${String.fromCharCode(163)}${normalizedRentAmount.toFixed(2)}`, ctx);
+    if (workingData.rent_frequency === 'weekly') {
+      setTextOptional(form, N119_FIELDS.RENT_WEEKLY, 'X', ctx);
+    } else if (workingData.rent_frequency === 'fortnightly') {
+      setTextOptional(form, N119_FIELDS.RENT_FORTNIGHTLY, 'X', ctx);
+    } else if (workingData.rent_frequency === 'monthly') {
+      setTextOptional(form, N119_FIELDS.RENT_MONTHLY, 'X', ctx);
+    } else if (workingData.rent_frequency) {
+      setTextOptional(form, N119_FIELDS.RENT_OTHER_PERIOD, String(workingData.rent_frequency), ctx);
+    }
     setTextOptional(form, N119_FIELDS.DAILY_RATE, correctedDailyRate.toFixed(2), ctx);
   }
 
@@ -2822,17 +2855,15 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
   setTextOptional(form, N119_FIELDS.STATEMENT_SIGNATURE, workingData.signatory_name, ctx);
   setTextOptional(form, N119_FIELDS.SIGNATORY_NAME, workingData.signatory_name, ctx);
 
-  if (workingData.signature_date) {
-    const sigDate = splitDate(workingData.signature_date);
-    if (sigDate) {
-      setTextOptional(form, N119_FIELDS.STATEMENT_DATE_DD, sigDate.day, ctx);
-      setTextOptional(form, N119_FIELDS.STATEMENT_DATE_MM, sigDate.month, ctx);
-      setTextOptional(form, N119_FIELDS.STATEMENT_DATE_YYYY, sigDate.year, ctx);
-    }
+  const n119StatementDate = getStatementDateParts(ctx, workingData.signature_date);
+  if (n119StatementDate) {
+    setTextOptional(form, N119_FIELDS.STATEMENT_DATE_DD, n119StatementDate.day, ctx);
+    setTextOptional(form, N119_FIELDS.STATEMENT_DATE_MM, n119StatementDate.month, ctx);
+    setTextOptional(form, N119_FIELDS.STATEMENT_DATE_YYYY, n119StatementDate.year, ctx);
   }
 
   // Statement of Truth checkboxes
-  if (workingData.solicitor_firm) {
+  if (isLegalRepresentativeSigner(workingData)) {
     setTextOptional(form, N119_FIELDS.SOLICITOR_FIRM, workingData.solicitor_firm, ctx);
     setTextOptional(form, N119_FIELDS.POSITION_HELD, 'Solicitor', ctx);
     setCheckbox(form, N119_CHECKBOXES.SOT_LEGAL_REP, true, ctx);
@@ -3040,7 +3071,7 @@ export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}
   }
 
   // === PAGE 4 - Statement of Truth ===
-  if (data.solicitor_firm) {
+  if (isLegalRepresentativeSigner(data)) {
     setCheckbox(form, 'Check Box46', true, ctx);
     setCheckbox(form, 'Check Box49', true, ctx);
   } else {
@@ -3052,16 +3083,14 @@ export async function fillN1Form(data: CaseData, options: FormFillerOptions = {}
   setTextRequired(form, 'Text Field 47', data.signatory_name, ctx, 10);
   setTextOptional(form, 'Text Field 46', data.signatory_name, ctx, 10); // Second signature box
 
-  if (data.signature_date) {
-    const dateparts = splitDate(data.signature_date);
-    if (dateparts) {
-      setTextOptional(form, 'Text31', dateparts.day, ctx);
-      setTextOptional(form, 'Text32', dateparts.month, ctx);
-      setTextOptional(form, 'Text33', dateparts.year, ctx);
-    }
+  const n1StatementDate = getStatementDateParts(ctx, data.signature_date);
+  if (n1StatementDate) {
+    setTextOptional(form, 'Text31', n1StatementDate.day, ctx);
+    setTextOptional(form, 'Text32', n1StatementDate.month, ctx);
+    setTextOptional(form, 'Text33', n1StatementDate.year, ctx);
   }
 
-  if (data.solicitor_firm) {
+  if (isLegalRepresentativeSigner(data)) {
     setTextOptional(form, 'Text Field 45', data.solicitor_firm, ctx);
   }
 
