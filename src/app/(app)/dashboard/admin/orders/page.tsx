@@ -537,16 +537,26 @@ export default function AdminOrdersPage() {
                           <div className="mt-2 border-t border-violet-100 pt-2">
                             <div className="font-semibold">Uploaded evidence: {order.uploaded_evidence_count || 0}</div>
                             {order.latest_upload_at ? <div>Latest {new Date(order.latest_upload_at).toLocaleDateString("en-GB")}</div> : null}
-                            {(order.uploaded_evidence || []).slice(0, 3).map((evidence) => (
-                              <button
-                                key={evidence.id}
-                                type="button"
-                                onClick={() => openEvidence(evidence)}
-                                className="block truncate text-left text-primary hover:underline"
-                              >
-                                {evidence.fileName}
-                              </button>
-                            ))}
+                            {(order.uploaded_evidence || []).length > 0 ? (
+                              <div className="mt-2 max-h-44 space-y-1 overflow-y-auto pr-1">
+                                {(order.uploaded_evidence || []).map((evidence, index) => (
+                                  <button
+                                    key={evidence.id}
+                                    type="button"
+                                    onClick={() => openEvidence(evidence)}
+                                    className="block w-full rounded border border-violet-100 bg-white px-2 py-1.5 text-left text-primary hover:bg-violet-100"
+                                    title={evidence.fileName}
+                                  >
+                                    <span className="block truncate">{index + 1}. {evidence.fileName}</span>
+                                    {evidence.category ? (
+                                      <span className="block truncate text-[11px] text-violet-700">
+                                        {evidence.category}
+                                      </span>
+                                    ) : null}
+                                  </button>
+                                ))}
+                              </div>
+                            ) : null}
                             {(order.missing_recommended_evidence || []).length > 0 ? (
                               <div className="mt-1 text-violet-700">
                                 Missing likely: {(order.missing_recommended_evidence || []).slice(0, 2).map((item) => item.label).join(", ")}

@@ -916,20 +916,24 @@ export default function AdminCasesPage() {
                             ) : (
                               <div className="text-gray-500">No uploads yet</div>
                             )}
-                            {(caseItem.uploaded_evidence || []).slice(0, 5).map((evidence) => (
-                              <button
-                                key={evidence.id}
-                                type="button"
-                                onClick={() => openEvidence(evidence)}
-                                className="mt-1 block max-w-full truncate text-left font-semibold text-primary hover:underline"
-                                title={evidence.fileName}
-                              >
-                                {evidence.fileName}
-                              </button>
-                            ))}
-                            {(caseItem.uploaded_evidence || []).length > 5 ? (
-                              <div className="mt-1 text-gray-500">
-                                +{(caseItem.uploaded_evidence || []).length - 5} more on the case page
+                            {(caseItem.uploaded_evidence || []).length > 0 ? (
+                              <div className="mt-2 max-h-44 space-y-1 overflow-y-auto pr-1">
+                                {(caseItem.uploaded_evidence || []).map((evidence, index) => (
+                                  <button
+                                    key={evidence.id}
+                                    type="button"
+                                    onClick={() => openEvidence(evidence)}
+                                    className="block w-full rounded border border-violet-100 bg-violet-50 px-2 py-1.5 text-left font-semibold text-primary hover:bg-violet-100"
+                                    title={evidence.fileName}
+                                  >
+                                    <span className="block truncate">{index + 1}. {evidence.fileName}</span>
+                                    {evidence.category ? (
+                                      <span className="block truncate text-[11px] font-normal text-violet-700">
+                                        {evidence.category}
+                                      </span>
+                                    ) : null}
+                                  </button>
+                                ))}
                               </div>
                             ) : null}
                             {(caseItem.missing_recommended_evidence || []).length > 0 ? (
