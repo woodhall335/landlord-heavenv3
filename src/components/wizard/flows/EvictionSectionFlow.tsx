@@ -80,6 +80,7 @@ import { ScotlandTribunalSection } from '../sections/eviction/ScotlandTribunalSe
 
 // Scotland utilities
 import { validateSixMonthRule } from '@/lib/scotland/grounds';
+import { getSelectedGrounds } from '@/lib/grounds';
 import {
   getEnglandGroundDefinition,
   normalizeEnglandGroundCode,
@@ -154,7 +155,7 @@ function hasCompleteCollectibleN215Facts(facts: WizardFacts): boolean {
 }
 
 function requiresPriorGroundNoticeConfirmation(facts: WizardFacts): boolean {
-  const selectedGrounds = (facts.section8_grounds as string[]) || [];
+  const selectedGrounds = getSelectedGrounds(facts as Record<string, any>);
   return selectedGrounds.some((ground) => {
     const normalized = normalizeEnglandGroundCode(ground);
     return normalized ? getEnglandGroundDefinition(normalized)?.requiresPriorNotice === true : false;
@@ -227,7 +228,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
     label: 'Your notice',
     description: 'Confirm Form 3A grounds or any notice that has already been served',
     isComplete: (facts) => {
-      const selectedGrounds = (facts.section8_grounds as string[]) || [];
+      const selectedGrounds = getSelectedGrounds(facts as Record<string, any>);
 
       // Must answer the gating question first
       if (facts.notice_already_served === undefined) return false;
@@ -250,7 +251,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
     description: 'The facts and evidence behind any specialist grounds you selected',
     routes: ['section_8'],
     isComplete: (facts) => {
-      const selectedGrounds = (facts.section8_grounds as string[]) || [];
+      const selectedGrounds = getSelectedGrounds(facts as Record<string, any>);
       const hasSpecialistGrounds = hasSelectedGroundDetailPanels(selectedGrounds);
       if (!hasSpecialistGrounds) return true;
 
@@ -266,7 +267,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
     description: 'Arrears details and supporting facts for Section 8 where needed',
     routes: ['section_8'],
     isComplete: (facts) => {
-      const selectedGrounds = (facts.section8_grounds as string[]) || [];
+      const selectedGrounds = getSelectedGrounds(facts as Record<string, any>);
       const hasSelectedGrounds = selectedGrounds.length > 0;
       const hasArrearsGround = hasSelectedArrearsGrounds(selectedGrounds);
       const hasParticulars = Boolean(String(facts.section8_details || '').trim());
@@ -283,7 +284,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
     },
     hasBlockers: (facts) => {
       const blockers: string[] = [];
-      const selectedGrounds = (facts.section8_grounds as string[]) || [];
+      const selectedGrounds = getSelectedGrounds(facts as Record<string, any>);
       const hasGround8 = selectedGrounds.some((g) => normalizeEnglandGroundCode(g) === '8');
 
       if (hasGround8) {
@@ -317,7 +318,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
     label: 'Evidence summary',
     description: 'Service proof, chronology, supporting records, and final checks before court',
     isComplete: (facts) => {
-      const selectedGrounds = (facts.section8_grounds as string[]) || [];
+      const selectedGrounds = getSelectedGrounds(facts as Record<string, any>);
       const requiresPriorNoticeConfirmation = selectedGrounds.some((ground) => {
         const normalized = normalizeEnglandGroundCode(ground);
         return normalized ? getEnglandGroundDefinition(normalized)?.requiresPriorNotice === true : false;
@@ -716,7 +717,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
 
     // For England/Wales, filter by eviction route
     const route = facts.eviction_route as string | undefined;
-    const selectedGrounds = (facts.section8_grounds as string[]) || [];
+    const selectedGrounds = getSelectedGrounds(facts as Record<string, any>);
     const hasSpecialistGrounds = hasSelectedGroundDetailPanels(selectedGrounds);
     const hasArrearsGround = hasSelectedArrearsGrounds(selectedGrounds);
 

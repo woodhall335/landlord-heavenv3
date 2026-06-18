@@ -15,6 +15,7 @@
 import React, { useMemo } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import { validateGround8Eligibility } from '@/lib/arrears-engine';
+import { getSelectedGrounds } from '@/lib/grounds';
 import {
   RiArrowDownCircleLine,
   RiCalendarLine,
@@ -91,7 +92,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
     });
 
     if (evictionRoute === 'section_8') {
-      const selectedGrounds = (facts.section8_grounds as string[]) || [];
+      const selectedGrounds = getSelectedGrounds(facts as Record<string, any>);
       const hasGround8 = selectedGrounds.some((ground) => ground.includes('Ground 8'));
 
       if (hasGround8) {

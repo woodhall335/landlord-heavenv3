@@ -31,6 +31,7 @@ import { AskHeavenInlineEnhancer } from '../../AskHeavenInlineEnhancer';
 import AskHeavenStepAutofill from '@/components/wizard/AskHeavenStepAutofill';
 import { useValidationContextSafe } from '@/components/wizard/ValidationContext';
 import { RiErrorWarningLine } from 'react-icons/ri';
+import { getSelectedGrounds } from '@/lib/grounds';
 import { getGround8Threshold } from '@/lib/grounds/ground8-threshold';
 import {
   EVICTION_CARD_CLASS,
@@ -109,7 +110,7 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
   onUpdate,
   onImmediateUpdate,
 }) => {
-  const selectedGrounds = (facts.section8_grounds as string[]) || [];
+  const selectedGrounds = getSelectedGrounds(facts as Record<string, any>);
   const selectedGroundCodes = useMemo(
     () => selectedGrounds.map((ground) => normalizeEnglandGroundCode(ground)).filter(Boolean),
     [selectedGrounds],

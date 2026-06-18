@@ -14,6 +14,7 @@
 
 import { NextResponse } from 'next/server';
 import { createAdminClient, getServerUser } from '@/lib/supabase/server';
+import { isAdmin } from '@/lib/auth';
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { getSessionTokenFromRequest } from '@/lib/session-token';
 
@@ -34,6 +35,7 @@ export async function GET(request: Request) {
   try {
     const supabase = createAdminClient();
     const user = await getServerUser();
+    const userIsAdmin = user ? isAdmin(user.id) : false;
 
     // Parse query parameters
     const url = new URL(request.url);
@@ -90,7 +92,7 @@ export async function GET(request: Request) {
     // =========================================================================
     // OWNERSHIP VALIDATION
     // =========================================================================
-    // If the case has an owner, only that user can download evidence.
+    // If the case has an owner, only that user or an admin can download evidence.
     // For anonymous cases (user_id is null), we require:
     //   1. A matching session token from the x-session-token header
     //   2. OR the user is now authenticated (migration case - anonymous to signed up)
@@ -98,13 +100,14 @@ export async function GET(request: Request) {
 
     if (caseRow.user_id) {
       // Case is owned - require the owner
-      if (!user || caseRow.user_id !== user.id) {
+      if (!user || (caseRow.user_id !== user.id && !userIsAdmin)) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
       }
     } else {
       // Anonymous case - validate session token
-      // If user is now authenticated, allow access (they signed up after starting anonymously)
-      if (!user) {
+      // If user is now authenticated, allow access (they signed up after starting anonymously).
+      // Admins may also download anonymous assisted evidence from the admin dashboard.
+      if (!user && !userIsAdmin) {
         // Anonymous user - must have matching session token
         const requestSessionToken = getSessionTokenFromRequest(request);
         const caseSessionToken = (caseRow as any).session_token;

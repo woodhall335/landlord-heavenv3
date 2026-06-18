@@ -5,6 +5,7 @@ import type { WizardFacts } from '@/lib/case-facts/schema';
 import { RiCheckboxCircleLine, RiFileTextLine } from 'react-icons/ri';
 import { buildEnglandEvictionChronology } from '@/lib/england-possession/chronology';
 import AskHeavenStepAutofill, { type AskHeavenStepDraftTarget } from '@/components/wizard/AskHeavenStepAutofill';
+import { getSelectedGrounds } from '@/lib/grounds';
 import {
   getDefenceRiskValue,
   mergeDefenceRiskUpdate,
@@ -166,7 +167,7 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
   const howToRentProvided = facts.how_to_rent_served ?? facts.how_to_rent_provided;
   const hasGasAppliances = facts.has_gas_appliances;
   const gasSafetyProvided = facts.gas_safety_cert_served ?? facts.gas_safety_cert_provided;
-  const selectedGrounds = (facts.section8_grounds as string[]) || [];
+  const selectedGrounds = getSelectedGrounds(facts as Record<string, any>);
   const hasArrearsGround = selectedGrounds.some((ground) =>
     ['Ground 8', 'Ground 10', 'Ground 11'].some((arrearsGround) => ground.includes(arrearsGround))
   );
