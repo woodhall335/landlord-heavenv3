@@ -229,6 +229,18 @@ export default function EnglandTenancyHubPage() {
             </p>
           </article>
         </div>
+        <p className="mt-5 max-w-4xl text-sm leading-7 text-[#4B5565]">
+          If you run a letting agency or property business with staff, keep tenancy paperwork
+          separate from employment documents. For the staffing side of the operation, HRHeaven
+          has{' '}
+          <a
+            href="https://hrheaven.co.uk/industry/real-estate"
+            className="font-semibold text-[#6D28D9] underline-offset-4 hover:underline"
+          >
+            HR documents for property businesses
+          </a>
+          .
+        </p>
       </div>
     ),
     decisionBlock: {

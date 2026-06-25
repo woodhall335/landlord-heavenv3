@@ -246,6 +246,20 @@ export default function HmoSharedHouseTenancyAgreementPage() {
         ]}
         finalCtaBody="Use the HMO / Shared House workflow when the real complexity is shared occupation, communal areas, and day-to-day house management. If the occupiers are sharers and you want the agreement to reflect how the house is actually going to be lived in, this validated pack is usually a better fit than the Standard or Premium packs."
       />
+      <section className="bg-white px-4 pb-14">
+        <div className="mx-auto max-w-4xl rounded-2xl border border-[#E8E1F8] bg-[#FCFAFF] p-5 text-sm leading-7 text-[#4B5565]">
+          If you employ a regular cleaner for communal areas, keep the house rules in the
+          tenancy pack separate from employment paperwork. HRHeaven has a dedicated{' '}
+          <a
+            href="https://hrheaven.co.uk/industry/cleaning"
+            className="font-semibold text-[#6D28D9] underline-offset-4 hover:underline"
+          >
+            employment documents for cleaning staff
+          </a>{' '}
+          for cleaners who work as employees rather than independent contractors.
+        </div>
+      </section>
     </div>
   );
 }
+

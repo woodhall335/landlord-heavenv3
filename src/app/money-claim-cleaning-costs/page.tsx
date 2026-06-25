@@ -452,6 +452,15 @@ export default function MoneyClaimCleaningCostsPage() {
                   Get 2-3 quotes to show courts your chosen contractor is reasonably priced.
                   Itemised invoices are stronger than lump sum quotes. If your costs seem
                   high, be prepared to explain why (e.g., hazardous waste, large property).
+                  If you use cleaning staff regularly rather than a one-off contractor, keep
+                  the court evidence separate from{' '}
+                  <a
+                    href="https://hrheaven.co.uk/industry/cleaning"
+                    className="font-semibold underline underline-offset-4 hover:text-amber-950"
+                  >
+                    employment documents for cleaning staff
+                  </a>
+                  .
                 </p>
               </div>
             </div>
@@ -633,5 +642,6 @@ export default function MoneyClaimCleaningCostsPage() {
     </>
   );
 }
+
 
 
