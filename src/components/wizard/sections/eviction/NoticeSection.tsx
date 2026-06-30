@@ -46,6 +46,7 @@ import {
   EVICTION_LABEL_CLASS,
 } from '@/components/wizard/sections/eviction/ui';
 import { hasSelectedArrearsGrounds, hasSelectedGroundDetailPanels } from './ground-detail-config';
+import { getSelectedGrounds } from '@/lib/grounds';
 
 interface NoticeSectionProps {
   facts: WizardFacts;
@@ -315,7 +316,28 @@ function getTodayIsoDate(): string {
 }
 
 function getSelectedSection8Grounds(facts: WizardFacts): string[] {
-  return Array.isArray(facts.section8_grounds) ? (facts.section8_grounds as string[]) : [];
+  return getSelectedGrounds(facts as Record<string, any>);
+}
+
+function isGroundSelectionMatch(selectedGround: string, targetGround: string): boolean {
+  const selectedCode = normalizeEnglandGroundCode(selectedGround);
+  const targetCode = normalizeEnglandGroundCode(targetGround);
+
+  if (selectedCode && targetCode) {
+    return selectedCode === targetCode;
+  }
+
+  return selectedGround === targetGround;
+}
+
+function hasGroundSelection(selectedGrounds: string[], targetGround: string): boolean {
+  return selectedGrounds.some((ground) => isGroundSelectionMatch(ground, targetGround));
+}
+
+function toggleGroundSelection(selectedGrounds: string[], targetGround: string): string[] {
+  return hasGroundSelection(selectedGrounds, targetGround)
+    ? selectedGrounds.filter((ground) => !isGroundSelectionMatch(ground, targetGround))
+    : [...selectedGrounds, targetGround];
 }
 
 function formatNoticePeriodLabel(label: string): string {
@@ -670,8 +692,15 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
 
   // Section 8 grounds selection (reuses same keys as notice-only schema)
   const selectedGrounds = useMemo(
-    () => (Array.isArray(facts.section8_grounds) ? (facts.section8_grounds as string[]) : []),
-    [facts.section8_grounds]
+    () => getSelectedSection8Grounds(facts),
+    [
+      facts.section8_grounds,
+      facts.section8_grounds_selection,
+      facts.selected_grounds,
+      facts.ground_codes,
+      facts.eviction_grounds,
+      facts.issues?.section8_grounds?.selected_grounds,
+    ]
   );
   const hasArrearsGround = hasSelectedArrearsGrounds(selectedGrounds);
   const hasSpecialistGroundDetails = hasSelectedGroundDetailPanels(selectedGrounds);
@@ -742,9 +771,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
 
   // Handle ground toggle
   const handleGroundToggle = (ground: string) => {
-    const newGrounds = selectedGrounds.includes(ground)
-      ? selectedGrounds.filter((g) => g !== ground)
-      : [...selectedGrounds, ground];
+    const newGrounds = toggleGroundSelection(selectedGrounds, ground);
     onUpdate({
       section8_grounds: newGrounds,
       section8_grounds_touched: true,
@@ -1083,14 +1110,14 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
                 key={ground.value}
                 className={`
                   flex items-start p-3 border rounded-lg cursor-pointer transition-all
-                  ${selectedGrounds.includes(ground.value)
+                  ${hasGroundSelection(selectedGrounds, ground.value)
                     ? 'border-[#7C3AED] bg-purple-50'
                     : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}
                 `}
               >
                 <input
                   type="checkbox"
-                  checked={selectedGrounds.includes(ground.value)}
+                  checked={hasGroundSelection(selectedGrounds, ground.value)}
                   onChange={() => handleGroundToggle(ground.value)}
                   className="mt-0.5 mr-2"
                 />
@@ -1313,10 +1340,17 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
     ? 'Form 3A notice'
     : 'fault-based notice';
   const selectedGrounds = useMemo(
-    () => (Array.isArray(facts.section8_grounds) ? (facts.section8_grounds as string[]) : []),
-    [facts.section8_grounds]
+    () => getSelectedSection8Grounds(facts),
+    [
+      facts.section8_grounds,
+      facts.section8_grounds_selection,
+      facts.selected_grounds,
+      facts.ground_codes,
+      facts.eviction_grounds,
+      facts.issues?.section8_grounds?.selected_grounds,
+    ]
   );
-  const hasArrearsGround = selectedGrounds.some((ground) => ARREARS_LED_GROUND_LABELS.has(ground));
+  const hasArrearsGround = hasSelectedArrearsGrounds(selectedGrounds);
   const hasSpecialistGroundDetails = hasSelectedGroundDetailPanels(selectedGrounds);
   const groundsRequiringPriorNotice = useMemo(() => {
     const definitions = new Map<EnglandGroundCode, (typeof ENGLAND_GROUND_DEFINITIONS)[number]>();
@@ -1400,9 +1434,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
 
   // Handle ground selection
   const handleGroundToggle = (ground: string) => {
-    const newGrounds = selectedGrounds.includes(ground)
-      ? selectedGrounds.filter((g) => g !== ground)
-      : [...selectedGrounds, ground];
+    const newGrounds = toggleGroundSelection(selectedGrounds, ground);
     onUpdate({
       section8_grounds: newGrounds,
       section8_grounds_touched: true,
@@ -1650,14 +1682,14 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
                     key={ground.value}
                     className={`
                       flex items-start p-3 border rounded-lg cursor-pointer transition-all
-                      ${selectedGrounds.includes(ground.value)
+                      ${hasGroundSelection(selectedGrounds, ground.value)
                         ? 'border-[#7C3AED] bg-purple-50'
                         : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}
                     `}
                   >
                     <input
                       type="checkbox"
-                      checked={selectedGrounds.includes(ground.value)}
+                      checked={hasGroundSelection(selectedGrounds, ground.value)}
                       onChange={() => handleGroundToggle(ground.value)}
                       className="mt-0.5 mr-2"
                     />

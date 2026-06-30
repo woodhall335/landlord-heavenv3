@@ -11,6 +11,7 @@ import {
   type GroundDetailPanelConfig,
   type GroundDetailFieldConfig,
 } from './ground-detail-config';
+import { getSelectedGrounds } from '@/lib/grounds';
 
 interface GroundDetailsSectionProps {
   facts: WizardFacts;
@@ -293,8 +294,15 @@ export const GroundDetailsSection: React.FC<GroundDetailsSectionProps> = ({
 }) => {
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const selectedGrounds = useMemo(
-    () => (Array.isArray(facts.section8_grounds) ? (facts.section8_grounds as string[]) : []),
-    [facts.section8_grounds],
+    () => getSelectedGrounds(facts as Record<string, any>),
+    [
+      facts.section8_grounds,
+      facts.section8_grounds_selection,
+      facts.selected_grounds,
+      facts.ground_codes,
+      facts.eviction_grounds,
+      facts.issues?.section8_grounds?.selected_grounds,
+    ],
   );
   const panels = useMemo(() => getSelectedGroundDetailPanels(selectedGrounds), [selectedGrounds]);
   const hasArrearsGround = hasSelectedArrearsGrounds(selectedGrounds);

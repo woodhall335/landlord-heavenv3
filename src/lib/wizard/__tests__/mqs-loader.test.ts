@@ -207,6 +207,47 @@ describe('MQS Route Filtering', () => {
   });
 
   describe('questionIsApplicable - Route Filtering', () => {
+    it('shows a dependent question when a multiselect answer contains the configured value', () => {
+      const mqs: MasterQuestionSet = {
+        ...mockMQS,
+        questions: [
+          ...mockMQS.questions,
+          {
+            id: 'section8_grounds',
+            question: 'Which grounds?',
+            inputType: 'multiselect',
+            maps_to: ['section8_grounds'],
+          },
+          {
+            id: 'arrears_schedule',
+            question: 'Arrears schedule',
+            inputType: 'arrears_schedule',
+            dependsOn: {
+              questionId: 'section8_grounds',
+              contains: 'Ground 8',
+            },
+            maps_to: ['arrears_items'],
+          },
+        ] as ExtendedWizardQuestion[],
+      };
+
+      const arrearsQuestion = mqs.questions.find((q) => q.id === 'arrears_schedule');
+
+      expect(
+        questionIsApplicable(mqs, arrearsQuestion!, {
+          selected_notice_route: 'section_8',
+          section8_grounds: ['Ground 1A', 'Ground 8 - Rent arrears'],
+        })
+      ).toBe(true);
+
+      expect(
+        questionIsApplicable(mqs, arrearsQuestion!, {
+          selected_notice_route: 'section_8',
+          section8_grounds: ['Ground 1A'],
+        })
+      ).toBe(false);
+    });
+
     it('should hide S21-only questions when route=section_8', () => {
       const epcQuestion = mockMQS.questions.find((q) => q.id === 'epc_provided');
 

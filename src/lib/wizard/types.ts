@@ -5,7 +5,7 @@ export interface WizardField {
   input_type?: string;
   placeholder?: string;
   options?: string[];
-  dependsOn?: { questionId: string; value: any };
+  dependsOn?: { questionId: string; value?: any; contains?: any; valueContains?: any };
   validation?: {
     required?: boolean;
     min?: number;
@@ -36,7 +36,9 @@ export interface ExtendedWizardQuestion {
   };
   dependsOn?: {
     questionId: string;
-    value: any;
+    value?: any;
+    contains?: any;
+    valueContains?: any;
   };
   routes?: string[];
   skip_if_evidence?: string[];

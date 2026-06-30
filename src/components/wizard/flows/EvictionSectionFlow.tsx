@@ -770,7 +770,16 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
     return filteredSections
       .sort((left, right) => englandOrder.indexOf(left.id) - englandOrder.indexOf(right.id))
       .map((section) => (isWales ? section : relabelEnglandSection(section)));
-  }, [jurisdiction, facts.eviction_route, facts.section8_grounds]);
+  }, [
+    jurisdiction,
+    facts.eviction_route,
+    facts.section8_grounds,
+    facts.section8_grounds_selection,
+    facts.selected_grounds,
+    facts.ground_codes,
+    facts.eviction_grounds,
+    facts.issues?.section8_grounds?.selected_grounds,
+  ]);
 
   const currentSection = visibleSections[currentSectionIndex];
   useWizardStepViewTracking({

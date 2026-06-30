@@ -57,6 +57,21 @@ function isTruthyValue(value: unknown): boolean {
   return true;
 }
 
+function valuesMatch(actual: unknown, expected: unknown): boolean {
+  const actualText = String(actual).toLowerCase().trim();
+  const expectedText = String(expected).toLowerCase().trim();
+
+  return actualText === expectedText || actualText.includes(expectedText);
+}
+
+function valueContainsMatch(depValue: unknown, expectedValues: unknown[]): boolean {
+  if (Array.isArray(depValue)) {
+    return depValue.some((value) => expectedValues.some((expected) => valuesMatch(value, expected)));
+  }
+
+  return expectedValues.some((expected) => valuesMatch(depValue, expected));
+}
+
 function deriveRoutesFromFacts(
   facts: WizardFacts | Record<string, any>,
   jurisdiction: MasterQuestionSet['jurisdiction']
@@ -158,13 +173,21 @@ function evaluateSingleDependency(
   }
 
   // Handle different condition types
+  if (condition.contains !== undefined) {
+    const expectedValues = Array.isArray(condition.contains)
+      ? condition.contains
+      : [condition.contains];
+
+    return valueContainsMatch(depValue, expectedValues);
+  }
+
   if (condition.valueContains !== undefined) {
-    // valueContains: check if depValue is IN the array
+    // valueContains: check whether the dependency contains any expected value
     const allowedValues = Array.isArray(condition.valueContains)
       ? condition.valueContains
       : [condition.valueContains];
 
-    return allowedValues.includes(depValue);
+    return valueContainsMatch(depValue, allowedValues);
   }
 
   if (condition.value !== undefined) {
