@@ -56,11 +56,15 @@ section_8_grounds:
       statute: "Housing Act 1988, Schedule 2, Ground 1"
 
     ground_2:
-      title: "Mortgage lender requires possession"
-      notice_period_days: 60  # 2 months - Housing Act 1988, Schedule 2, Part IV
+      title: "Sale by mortgagee"
+      notice_period_days: 122  # 4 months - Renters' Rights Act 2025 reforms
       court_type: "mandatory"
-      description: "Property is mortgaged and lender requires possession for default"
+      description: "Mortgage lender requires possession to sell the property"
       required_facts:
+        - ground_2.factual_basis
+        - ground_2.notice_or_status_details
+        - ground_2.supporting_evidence
+      optional_facts:
         - mortgage_exists
         - lender_demands_possession
         - notice_given_before_tenancy
@@ -89,11 +93,15 @@ section_8_grounds:
       statute: "Housing Act 1988, Schedule 2, Ground 3"
 
     ground_4:
-      title: "Out of season student letting"
+      title: "Student accommodation"
       notice_period_days: 14
       court_type: "mandatory"
-      description: "Property normally let to students, now in vacation period"
+      description: "Property is student accommodation and the ground-specific student accommodation facts apply"
       required_facts:
+        - ground_4.factual_basis
+        - ground_4.qualifying_occupier
+        - ground_4.supporting_evidence
+      optional_facts:
         - property_type_student
         - educational_institution
         - notice_given_before_tenancy
@@ -105,11 +113,15 @@ section_8_grounds:
       statute: "Housing Act 1988, Schedule 2, Ground 4"
 
     ground_5:
-      title: "Property required for minister of religion"
-      notice_period_days: 60  # 2 months - Housing Act 1988, Schedule 2, Part IV
+      title: "Ministers of religion"
+      notice_period_days: 61  # 2 months
       court_type: "mandatory"
       description: "Property is held for occupation by minister of religion"
       required_facts:
+        - ground_5.factual_basis
+        - ground_5.qualifying_occupier
+        - ground_5.supporting_evidence
+      optional_facts:
         - property_purpose_religious
         - minister_requires_residence
         - notice_given_before_tenancy
@@ -121,11 +133,15 @@ section_8_grounds:
       statute: "Housing Act 1988, Schedule 2, Ground 5"
 
     ground_6:
-      title: "Intention to demolish or reconstruct"
-      notice_period_days: 60  # 2 months - Housing Act 1988, Schedule 2, Part IV
+      title: "Redevelopment"
+      notice_period_days: 122  # 4 months - Renters' Rights Act 2025 reforms
       court_type: "mandatory"
       description: "Landlord intends to demolish, reconstruct or carry out substantial works"
       required_facts:
+        - ground_6.works_description
+        - ground_6.possession_requirement_reason
+        - ground_6.supporting_evidence
+      optional_facts:
         - demolition_or_reconstruction_planned
         - works_description
         - works_cannot_be_done_with_tenant
@@ -139,11 +155,15 @@ section_8_grounds:
       statute: "Housing Act 1988, Schedule 2, Ground 6"
 
     ground_7:
-      title: "Death of periodic tenant (within 12 months)"
-      notice_period_days: 60  # 2 months - Housing Act 1988, Schedule 2, Part IV
+      title: "Death of tenant"
+      notice_period_days: 61  # 2 months
       court_type: "mandatory"
       description: "Tenant has died and proceedings begun within 12 months"
       required_facts:
+        - ground_7.factual_basis
+        - ground_7.trigger_date
+        - ground_7.supporting_evidence
+      optional_facts:
         - tenant_deceased
         - death_date
         - proceedings_date
@@ -204,10 +224,12 @@ section_8_grounds:
       court_type: "discretionary"
       description: "Tenant has broken term of tenancy (other than rent)"
       required_facts:
-        # Using MQS canonical facts - details documented in ground_particulars
-        - ground_particulars
+        - ground_12.tenancy_clause
+        - ground_12.breach_type
+        - ground_12.breach_evidence
       optional_facts:
         # These can be captured in ground_particulars free text
+        - ground_particulars
         - breach_type
         - breach_description
         - breach_evidence
@@ -224,10 +246,11 @@ section_8_grounds:
       court_type: "discretionary"
       description: "Condition of dwelling has deteriorated due to waste, neglect or default"
       required_facts:
-        # Using MQS canonical facts - details documented in ground_particulars
-        - ground_particulars
+        - ground_13.damage_description
+        - ground_13.evidence_available
       optional_facts:
         # These can be captured in ground_particulars free text
+        - ground_particulars
         - property_condition
         - deterioration_description
         - tenant_responsibility
@@ -242,14 +265,15 @@ section_8_grounds:
 
     ground_14:
       title: "Nuisance or annoyance to neighbors"
-      notice_period_days: 14
+      notice_period_days: 0
       court_type: "discretionary"
       description: "Tenant or person residing causing nuisance or convicted of illegal/immoral use"
       required_facts:
-        # Using MQS canonical facts - details documented in ground_particulars
-        - ground_particulars
+        - ground_14.incidents_description
+        - ground_14.affected_parties
       optional_facts:
         # These can be captured in ground_particulars free text
+        - ground_particulars
         - nuisance_type
         - nuisance_description
         - affected_parties
@@ -268,10 +292,11 @@ section_8_grounds:
       court_type: "discretionary"
       description: "Dwelling occupied by married couple/civil partners and one partner has left due to violence"
       required_facts:
-        # Using MQS canonical facts - details documented in ground_particulars
-        - ground_particulars
+        - ground_14a.incidents_description
+        - ground_14a.affected_parties
       optional_facts:
         # These can be captured in ground_particulars free text
+        - ground_particulars
         - relationship_type
         - violence_occurred
         - partner_left_property
@@ -289,10 +314,11 @@ section_8_grounds:
       court_type: "discretionary"
       description: "Condition of furniture has deteriorated due to ill-treatment"
       required_facts:
-        # Using MQS canonical facts - details documented in ground_particulars
-        - ground_particulars
+        - ground_15.damage_description
+        - ground_15.evidence_available
       optional_facts:
         # These can be captured in ground_particulars free text
+        - ground_particulars
         - furniture_condition
         - deterioration_description
         - tenant_responsibility
@@ -309,10 +335,12 @@ section_8_grounds:
       court_type: "discretionary"
       description: "Tenancy obtained by false statement made knowingly or recklessly by tenant"
       required_facts:
-        # Using MQS canonical facts - details documented in ground_particulars
-        - ground_particulars
+        - ground_17.statement_made
+        - ground_17.true_facts
+        - ground_17.supporting_evidence
       optional_facts:
         # These can be captured in ground_particulars free text
+        - ground_particulars
         - false_statement_description
         - statement_made_by
         - material_influence
