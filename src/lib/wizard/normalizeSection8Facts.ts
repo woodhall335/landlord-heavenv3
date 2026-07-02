@@ -62,6 +62,14 @@ function isArrearsGround(groundCode: number | string): boolean {
 }
 
 /**
+ * Check if a selected grounds list includes a specific code.
+ */
+function hasGroundCode(groundCodes: Array<number | string>, targetCode: number | string): boolean {
+  const normalizedTarget = String(targetCode).toUpperCase();
+  return groundCodes.some((code) => String(code).toUpperCase() === normalizedTarget);
+}
+
+/**
  * Safely set a nested path on an object
  */
 function setNestedPath(obj: Record<string, any>, path: string, value: any): void {
@@ -270,7 +278,25 @@ export function normalizeSection8Facts(facts: Record<string, any>): Record<strin
   }
 
   // ============================================================================
-  // BACKFILL 2: ground_particulars.ground_X.summary from section8_details
+  // BACKFILL 2: Ground 1 current wizard fields into legacy template aliases
+  // ============================================================================
+  if (hasGroundCode(groundCodes, 1)) {
+    const occupationReason =
+      resolveFactValue(facts, 'ground_1.occupation_reason') ||
+      resolveFactValue(facts, 'ground_1.reason_for_needing_property');
+    const intendedOccupier = resolveFactValue(facts, 'ground_1.intended_occupier');
+
+    if (facts.reason_for_needing_property === undefined && occupationReason) {
+      facts.reason_for_needing_property = occupationReason;
+    }
+
+    if (facts.landlord_now_needs_property === undefined && (occupationReason || intendedOccupier)) {
+      facts.landlord_now_needs_property = true;
+    }
+  }
+
+  // ============================================================================
+  // BACKFILL 3: ground_particulars.ground_X.summary from section8_details
   // ============================================================================
   for (const groundCode of groundCodes) {
     const groundKey = `ground_${String(groundCode).toLowerCase()}`;

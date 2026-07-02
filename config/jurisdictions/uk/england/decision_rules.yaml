@@ -35,16 +35,23 @@ section_8_grounds:
       statute: "Housing Act 1988, Schedule 2, Ground 8"
 
     ground_1:
-      title: "Landlord previously occupied as only or principal home"
-      notice_period_days: 60  # 2 months - Housing Act 1988, Schedule 2, Part IV
+      title: "Occupation by landlord or family"
+      notice_period_days: 122  # 4 months - Renters' Rights Act 2025 reforms
       court_type: "mandatory"
-      description: "Property was landlord's home before letting"
+      description: "Landlord or close family member needs to occupy the property"
       required_facts:
+        # Current wizard fields for Ground 1. Legacy pre-2026 fields are no
+        # longer hard blockers because the form does not collect them.
+        - ground_1.intended_occupier
+        - ground_1.occupier_relationship
+        - ground_1.occupation_reason
+        - ground_1.supporting_evidence
+      optional_facts:
         - landlord_previous_residence
         - notice_given_before_tenancy
       eligibility_rules:
-        - "landlord lived in property before tenancy"
-        - "written notice given to tenant before/at start of tenancy"
+        - "landlord or close family member needs to move into the property"
+        - "notice cannot expire before the 12 month protected period has ended"
       success_probability: 90
       statute: "Housing Act 1988, Schedule 2, Ground 1"
 

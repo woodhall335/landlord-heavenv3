@@ -13,6 +13,7 @@ import {
   normalizeSection8Facts,
   validateSection8FactsPresent,
 } from '@/lib/wizard/normalizeSection8Facts';
+import { validateNoticeOnlyBeforeRender } from '@/lib/documents/noticeOnly';
 
 describe('normalizeSection8Facts', () => {
   describe('arrears_total backfill', () => {
@@ -477,6 +478,54 @@ describe('Regression: notice_only + section_8 + ground_8 document generation', (
     const validation = validateSection8FactsPresent(realCaseFacts);
     expect(validation.valid).toBe(true);
     expect(validation.missingFields).toHaveLength(0);
+  });
+
+  it('should not block Ground 1 generation on hidden legacy required facts', () => {
+    const ground1Facts: Record<string, any> = {
+      selected_notice_route: 'section_8',
+      section8_grounds: ['Ground 1 - Occupation by landlord or family'],
+      landlord_full_name: 'Akintunde Christopher Orisawayi',
+      tenant_full_name: 'Manasses Maciel Manasses Manasses',
+      property_address_line1: '144 Thursday Street',
+      property_city: 'Swindon',
+      property_postcode: 'SN25 1SR',
+      rent_amount: 1200,
+      rent_frequency: 'monthly',
+      tenancy_start_date: '2025-01-01',
+      notice_served_date: '2026-07-02',
+      ground_1: {
+        intended_occupier: 'Akintunde Christopher Orisawayi',
+        occupier_relationship: 'Landlord',
+        occupation_reason:
+          'The landlord is currently living in London, intends to rent out that property, and plans to move back to Swindon.',
+        decision_date: '2026-06-08',
+        intended_start_date: '2026-11-06',
+        supporting_evidence:
+          'Utility bill and council tax statement for the current London residence, plus correspondence with the managing agent and a letting advert.',
+      },
+      section8_details:
+        'Ground 1 is relied upon because the landlord intends to occupy the property as their home after moving from London to Swindon.',
+    };
+
+    normalizeSection8Facts(ground1Facts);
+
+    expect(ground1Facts.reason_for_needing_property).toBe(
+      ground1Facts.ground_1.occupation_reason
+    );
+    expect(ground1Facts.landlord_now_needs_property).toBe(true);
+    expect(ground1Facts.notice_given_before_tenancy).toBeUndefined();
+
+    const validation = validateNoticeOnlyBeforeRender({
+      jurisdiction: 'england',
+      facts: ground1Facts,
+      selectedGroundCodes: [1],
+      selectedRoute: 'section_8',
+      stage: 'generate',
+    });
+
+    const hiddenLegacyFields = validation.blocking.flatMap((issue) => issue.fields ?? []);
+    expect(hiddenLegacyFields).not.toContain('landlord_previous_residence');
+    expect(hiddenLegacyFields).not.toContain('notice_given_before_tenancy');
   });
 
   it('should generate summary from arrears_items when section8_details is missing', () => {
