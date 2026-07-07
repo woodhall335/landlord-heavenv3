@@ -98,6 +98,73 @@ describe('jurisdiction gating enforcement', () => {
     expect(englandCodes).toContain('GROUND_REQUIRED_FACT_MISSING');
   });
 
+  it('accepts Ground 1 supporting evidence stored under ground particulars evidence aliases', () => {
+    const facts = {
+      ...baseDepositFacts,
+      selected_notice_route: 'section_8',
+      section8_grounds: ['ground_1'],
+      ground_1: {
+        intended_occupier: 'John Smith',
+        occupier_relationship: 'Landlord',
+        occupation_reason: 'The landlord intends to occupy the property as their home.',
+      },
+      ground_particulars: {
+        ground_1: {
+          summary: 'The landlord intends to occupy the property as their home.',
+          evidence: 'Utility bills, council tax statement, and correspondence with the managing agent.',
+        },
+      },
+    };
+
+    const validation = validateNoticeOnlyBeforeRender({
+      jurisdiction: 'england',
+      facts,
+      selectedGroundCodes: [1],
+      selectedRoute: 'section_8',
+      stage: 'generate',
+    });
+
+    const missingFields = validation.blocking
+      .filter((issue) => issue.code === 'GROUND_REQUIRED_FACT_MISSING')
+      .flatMap((issue) => issue.fields ?? []);
+
+    expect(missingFields).not.toContain('ground_1.supporting_evidence');
+  });
+
+  it.each([1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, '14A', 15, 17])(
+    'does not fail Section 8 Ground %s on legacy required facts when a ground summary is present',
+    (groundCode) => {
+      const groundKey = `ground_${String(groundCode).toLowerCase()}`;
+      const facts = {
+        ...baseDepositFacts,
+        selected_notice_route: 'section_8',
+        section8_grounds: [groundKey],
+        rent_amount: 1200,
+        rent_frequency: 'monthly',
+        arrears_total: 4200,
+        ground_particulars: {
+          [groundKey]: {
+            summary: `Ground ${groundCode} particulars have been captured in the wizard summary.`,
+          },
+        },
+      };
+
+      const validation = validateNoticeOnlyBeforeRender({
+        jurisdiction: 'england',
+        facts,
+        selectedGroundCodes: [groundCode],
+        selectedRoute: 'section_8',
+        stage: 'generate',
+      });
+
+      const missingRequiredFactIssues = validation.blocking.filter(
+        (issue) => issue.code === 'GROUND_REQUIRED_FACT_MISSING',
+      );
+
+      expect(missingRequiredFactIssues).toEqual([]);
+    },
+  );
+
   it('blocks deposit non-compliance when scheme/dates/prescribed info are missing', () => {
     const facts = {
       deposit_taken: true,

@@ -285,6 +285,13 @@ export function normalizeSection8Facts(facts: Record<string, any>): Record<strin
       resolveFactValue(facts, 'ground_1.occupation_reason') ||
       resolveFactValue(facts, 'ground_1.reason_for_needing_property');
     const intendedOccupier = resolveFactValue(facts, 'ground_1.intended_occupier');
+    const supportingEvidence =
+      resolveFactValue(facts, 'ground_1.supporting_evidence') ||
+      resolveFactValue(facts, 'ground_1.evidence') ||
+      resolveFactValue(facts, 'ground_particulars.ground_1.supporting_evidence') ||
+      resolveFactValue(facts, 'ground_particulars.ground_1.evidence') ||
+      resolveFactValue(facts, 'ground_particulars.ground_1.evidence_available') ||
+      resolveFactValue(facts, 'supporting_evidence');
 
     if (facts.reason_for_needing_property === undefined && occupationReason) {
       facts.reason_for_needing_property = occupationReason;
@@ -292,6 +299,13 @@ export function normalizeSection8Facts(facts: Record<string, any>): Record<strin
 
     if (facts.landlord_now_needs_property === undefined && (occupationReason || intendedOccupier)) {
       facts.landlord_now_needs_property = true;
+    }
+
+    if (supportingEvidence && !resolveFactValue(facts, 'ground_1.supporting_evidence')) {
+      if (!facts.ground_1 || typeof facts.ground_1 !== 'object') {
+        facts.ground_1 = {};
+      }
+      facts.ground_1.supporting_evidence = supportingEvidence;
     }
   }
 

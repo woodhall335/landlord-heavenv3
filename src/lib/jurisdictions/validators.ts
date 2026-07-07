@@ -98,6 +98,67 @@ function normalizeSelectedGroundCode(code: number | string): string {
   return String(code).toUpperCase().replace(/^GROUND[\s_]*/i, '').trim();
 }
 
+function resolveGroundSummaryValue(facts: Record<string, any>, groundKey: string, groundCode: string): any {
+  const summaryPaths = [
+    `ground_particulars.${groundKey}.summary`,
+    `ground_particulars.${groundKey}.factual_summary`,
+    `ground_particulars.${groundKey}.details`,
+    `ground_particulars.${groundKey}.particulars`,
+    `ground_particulars.${groundKey}.narrative`,
+    `ground_particulars.${groundKey}.text`,
+    `section_8_particulars.${groundKey}`,
+  ];
+
+  for (const summaryPath of summaryPaths) {
+    const summaryValue = resolveFactValue(facts, summaryPath);
+    if (!isMissing(summaryValue)) {
+      return summaryValue;
+    }
+  }
+
+  const flatParticulars = resolveFactValue(facts, 'ground_particulars');
+  if (typeof flatParticulars === 'string' && flatParticulars.trim()) {
+    const groundRegex = new RegExp(`Ground\\s+${groundCode}\\b`, 'i');
+    if (groundRegex.test(flatParticulars)) {
+      return flatParticulars;
+    }
+  }
+
+  return undefined;
+}
+
+function resolveRequiredGroundFactValue(facts: Record<string, any>, factName: string, groundCode: string): any {
+  const value = resolveFactValue(facts, factName);
+  if (!isMissing(value)) {
+    return value;
+  }
+
+  const normalizedGroundCode = normalizeSelectedGroundCode(groundCode);
+  const groundKey = `ground_${normalizedGroundCode.toLowerCase()}`;
+  const summaryValue = resolveGroundSummaryValue(facts, groundKey, normalizedGroundCode);
+  if (!isMissing(summaryValue)) {
+    return summaryValue;
+  }
+
+  if (factName === `${groundKey}.supporting_evidence`) {
+    const aliasPaths = [
+      `${groundKey}.evidence`,
+      `ground_particulars.${groundKey}.supporting_evidence`,
+      `ground_particulars.${groundKey}.evidence`,
+      `ground_particulars.${groundKey}.evidence_available`,
+    ];
+
+    for (const aliasPath of aliasPaths) {
+      const aliasValue = resolveFactValue(facts, aliasPath);
+      if (!isMissing(aliasValue)) {
+        return aliasValue;
+      }
+    }
+  }
+
+  return value;
+}
+
 function buildGroundIndex(decisionRules: DecisionRules): Record<string, any> {
   const index: Record<string, any> = {};
   const mandatory = decisionRules.section_8_grounds?.mandatory || {};
@@ -163,7 +224,7 @@ export function validateGroundsFromConfig(params: {
     const requiredFacts: string[] = cfg.required_facts || [];
 
     for (const factName of requiredFacts) {
-      const value = resolveFactValue(facts, factName);
+      const value = resolveRequiredGroundFactValue(facts, factName, normalizedCode);
       if (isMissing(value)) {
         blocking.push({
           code: 'GROUND_REQUIRED_FACT_MISSING',

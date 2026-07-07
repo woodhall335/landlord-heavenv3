@@ -528,6 +528,50 @@ describe('Regression: notice_only + section_8 + ground_8 document generation', (
     expect(hiddenLegacyFields).not.toContain('notice_given_before_tenancy');
   });
 
+  it('should backfill Ground 1 supporting evidence from alternate evidence fields before generation validation', () => {
+    const ground1Facts: Record<string, any> = {
+      selected_notice_route: 'section_8',
+      section8_grounds: ['Ground 1 - Occupation by landlord or family'],
+      landlord_full_name: 'Akintunde Christopher Orisawayi',
+      tenant_full_name: 'Manasses Maciel Manasses Manasses',
+      property_address_line1: '144 Thursday Street',
+      property_city: 'Swindon',
+      property_postcode: 'SN25 1SR',
+      rent_amount: 1200,
+      rent_frequency: 'monthly',
+      tenancy_start_date: '2025-01-01',
+      notice_served_date: '2026-07-02',
+      ground_1: {
+        intended_occupier: 'Akintunde Christopher Orisawayi',
+        occupier_relationship: 'Landlord',
+        occupation_reason:
+          'The landlord is currently living in London, intends to rent out that property, and plans to move back to Swindon.',
+      },
+      ground_particulars: {
+        ground_1: {
+          summary:
+            'Ground 1 is relied upon because the landlord intends to occupy the property as their home.',
+          evidence:
+            'Utility bill and council tax statement for the current London residence, plus correspondence with the managing agent.',
+        },
+      },
+    };
+
+    normalizeSection8Facts(ground1Facts);
+
+    expect(ground1Facts.ground_1.supporting_evidence).toContain('Utility bill');
+
+    const validation = validateNoticeOnlyBeforeRender({
+      jurisdiction: 'england',
+      facts: ground1Facts,
+      selectedGroundCodes: [1],
+      selectedRoute: 'section_8',
+      stage: 'generate',
+    });
+
+    expect(validation.blocking).toEqual([]);
+  });
+
   it('should generate summary from arrears_items when section8_details is missing', () => {
     const factsWithoutDetails = {
       selected_notice_route: 'section_8',
