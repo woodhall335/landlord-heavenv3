@@ -147,6 +147,19 @@ export function AnimatedReviewShell({
   const visibleWarnings = complete ? warnings : warnings.slice(0, Math.min(warnings.length, 2));
   const visiblePositives = progress >= 80 ? positives : positives.slice(0, 1);
 
+  useEffect(() => {
+    if (!complete) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: reducedMotion ? 'auto' : 'smooth',
+      });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [complete, reducedMotion]);
+
   return (
     <main className="min-h-screen w-full bg-[linear-gradient(135deg,#fbf8ff_0%,#f6f0ff_46%,#ffffff_100%)] px-3 py-4 text-charcoal sm:px-5 lg:px-8 lg:py-7">
       <section className="mx-auto flex min-h-[calc(100vh-2rem)] w-full max-w-[1600px] flex-col">

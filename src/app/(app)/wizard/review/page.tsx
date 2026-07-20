@@ -63,7 +63,6 @@ import {
 } from '@/components/ui/ComplianceTimingBlocker';
 import { isComplianceTimingBlock } from '@/lib/documents/compliance-timing-types';
 import { JurisdictionExplainer, ChecksSummaryBox } from '@/components/wizard/ReviewValueComponents';
-import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
 import { AnimatedReviewShell, type AnimatedReviewShellProps } from '@/components/wizard/AnimatedReviewShell';
 import { MoneyClaimAnimatedReview } from '@/components/wizard/money-claim/MoneyClaimAnimatedReview';
 
@@ -95,21 +94,8 @@ import {
 import { getResidentialStandaloneProfile } from '@/lib/residential-letting/standalone-profiles';
 import { getResidentialStandaloneThemeVars } from '@/lib/residential-letting/standalone-theme';
 import { getResidentialDocumentList } from '@/lib/residential-letting/document-config';
-import {
-  buildMoneyClaimAddOnRecommendation,
-  isMoneyClaimAddOnEligible,
-} from '@/lib/wizard-crosssell';
 import { getSelectedRouteBlockingIssues } from '@/lib/decision-engine/routeScopedBlockingIssues';
 import { getWizardFixTargetForIssue } from '@/lib/wizard/notice-only-issue-routing';
-import { assistedServiceForProduct } from '@/lib/assisted-prep';
-
-interface ReviewAddOnRecommendation {
-  sku: string;
-  label: string;
-  description: string;
-  displayPrice: string;
-  reason: string;
-}
 
 const gbpFormatter = new Intl.NumberFormat('en-GB', {
   style: 'currency',
@@ -453,7 +439,6 @@ function ReviewPageInner() {
   const [editWindowOpen, setEditWindowOpen] = useState(false);
   const [isLoadingPaymentStatus, setIsLoadingPaymentStatus] = useState(true); // Start true to prevent UI flash
   const [regenerationError, setRegenerationError] = useState<string | null>(null);
-  const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
 
   // Compliance timing block error state (structured error from API)
   const [complianceTimingError, setComplianceTimingError] = useState<{
@@ -488,19 +473,6 @@ function ReviewPageInner() {
     caseType === 'rent_increase';
   const isTenancyFlow = product === 'tenancy_agreement' || product === 'ast_standard' || product === 'ast_premium' || caseType === 'tenancy_agreement';
   const isResidentialStandaloneFlow = isResidentialLettingProductSku(product);
-  const evictionAddOnRecommendations: ReviewAddOnRecommendation[] =
-    !isTenancyFlow &&
-    isMoneyClaimAddOnEligible({
-      productFlow: product,
-      jurisdiction,
-      caseType,
-      collectedFacts: tenancyFacts,
-    })
-      ? [buildMoneyClaimAddOnRecommendation()]
-      : [];
-  const reviewRecommendations = isTenancyFlow
-    ? []
-    : evictionAddOnRecommendations;
   const evictionBlockingIssues =
     analysis && !isMoneyClaimFlow
       ? getSelectedRouteBlockingIssues(analysis.decision_engine, analysis.recommended_route)
@@ -802,17 +774,8 @@ function ReviewPageInner() {
     if (jurisdiction) {
       previewParams.set('jurisdiction', jurisdiction);
     }
-    if (selectedAddOns.length > 0) {
-      previewParams.set('add_ons', selectedAddOns.join(','));
-    }
     const queryString = previewParams.toString();
     router.push(`/wizard/preview/${caseId}${queryString ? `?${queryString}` : ''}`);
-  };
-
-  const toggleAddOn = (sku: string) => {
-    setSelectedAddOns((current) =>
-      current.includes(sku) ? current.filter((item) => item !== sku) : [...current, sku]
-    );
   };
 
   const readinessBadge = (() => {
@@ -849,8 +812,6 @@ function ReviewPageInner() {
     redFlags,
     complianceIssues,
   });
-  const assistedReviewService = assistedServiceForProduct(product);
-
   // Render Money Claim specific content
   if (isMoneyClaimFlow) {
     return (
@@ -872,17 +833,6 @@ function ReviewPageInner() {
           isRegenerating={isRegenerating}
           isLoadingPaymentStatus={isLoadingPaymentStatus}
         />
-        <div className="mx-auto max-w-5xl px-4 pb-8">
-          <AssistedPrepCTA
-            service="money_claim"
-            variant="review-panel"
-            caseId={caseId}
-            product={product}
-            caseType={caseType}
-            step="review"
-            src="wizard_assisted_cta"
-          />
-        </div>
       </>
     );
   }
@@ -891,19 +841,6 @@ function ReviewPageInner() {
   if (isNoticeOnlyFlow) {
     return (
       <AnimatedReviewShell {...animatedReviewConfig}>
-        {assistedReviewService ? (
-          <div className="mb-5">
-            <AssistedPrepCTA
-              service={assistedReviewService}
-              variant={hasBlockingIssues ? 'review-panel' : 'banner'}
-              caseId={caseId}
-              product={product}
-              caseType={caseType}
-              step="review"
-              src="wizard_assisted_cta"
-            />
-          </div>
-        ) : null}
         <NoticeOnlyReviewContent
           caseId={caseId}
           analysis={analysis}
@@ -917,9 +854,6 @@ function ReviewPageInner() {
           onAcknowledgeBlockers={setHasAcknowledgedBlockers}
           onFixIssues={handleFixIssues}
           onFixIssue={handleFixIssue}
-          recommendations={reviewRecommendations}
-          selectedAddOns={selectedAddOns}
-          onToggleAddOn={toggleAddOn}
           onEdit={handleEdit}
           onProceed={handleProceed}
           isPaid={isPaid}
@@ -1047,9 +981,6 @@ function ReviewPageInner() {
             analysis={analysis}
             jurisdiction={jurisdiction}
             product={product}
-            recommendations={reviewRecommendations}
-            selectedAddOns={selectedAddOns}
-            onToggleAddOn={toggleAddOn}
             onEdit={handleEdit}
             onProceed={handleProceed}
             isPaid={isPaid}
@@ -1067,9 +998,6 @@ function ReviewPageInner() {
           analysis={analysis}
           jurisdiction={jurisdiction}
           product={product}
-          recommendations={reviewRecommendations}
-          selectedAddOns={selectedAddOns}
-          onToggleAddOn={toggleAddOn}
           onEdit={handleEdit}
           onProceed={handleProceed}
           isPaid={isPaid}
@@ -1083,19 +1011,6 @@ function ReviewPageInner() {
   // Render Eviction Complete Pack content
   return (
     <AnimatedReviewShell {...animatedReviewConfig}>
-      {assistedReviewService ? (
-        <div className="mb-5">
-          <AssistedPrepCTA
-            service={assistedReviewService}
-            variant={hasBlockingIssues ? 'review-panel' : 'banner'}
-            caseId={caseId}
-            product={product}
-            caseType={caseType}
-            step="review"
-            src="wizard_assisted_cta"
-          />
-        </div>
-      ) : null}
       <EvictionReviewContent
         caseId={caseId}
         analysis={analysis}
@@ -1113,9 +1028,6 @@ function ReviewPageInner() {
         onAcknowledgeBlockers={setHasAcknowledgedBlockers}
         onFixIssues={handleFixIssues}
         onFixIssue={handleFixIssue}
-        recommendations={reviewRecommendations}
-        selectedAddOns={selectedAddOns}
-        onToggleAddOn={toggleAddOn}
         onEdit={handleEdit}
         onProceed={handleProceed}
         isPaid={isPaid}
@@ -1666,9 +1578,6 @@ interface EvictionReviewContentProps {
   onAcknowledgeBlockers: (acknowledged: boolean) => void;
   onFixIssues: () => void;
   onFixIssue?: (issue: any) => void;
-  recommendations: ReviewAddOnRecommendation[];
-  selectedAddOns: string[];
-  onToggleAddOn: (sku: string) => void;
   onEdit: () => void;
   onProceed: () => void;
   isPaid?: boolean;
@@ -1701,9 +1610,6 @@ function EvictionReviewContent({
   onAcknowledgeBlockers,
   onFixIssues,
   onFixIssue,
-  recommendations,
-  selectedAddOns,
-  onToggleAddOn,
   onEdit,
   onProceed,
   isPaid,
@@ -2252,14 +2158,6 @@ function EvictionReviewContent({
         </Card>
       )}
 
-      {recommendations.length > 0 && !isPaid && (
-        <RecommendationBasketCard
-          recommendations={recommendations}
-          selectedAddOns={selectedAddOns}
-          onToggleAddOn={onToggleAddOn}
-        />
-      )}
-
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-4 mt-4">
         <Button onClick={onEdit} variant="outline" className="flex-1">
@@ -2312,9 +2210,6 @@ interface NoticeOnlyReviewContentProps {
   onAcknowledgeBlockers: (acknowledged: boolean) => void;
   onFixIssues: () => void;
   onFixIssue?: (issue: any) => void;
-  recommendations: ReviewAddOnRecommendation[];
-  selectedAddOns: string[];
-  onToggleAddOn: (sku: string) => void;
   onEdit: () => void;
   onProceed: () => void;
   isPaid?: boolean;
@@ -2335,9 +2230,6 @@ function NoticeOnlyReviewContent({
   onAcknowledgeBlockers,
   onFixIssues,
   onFixIssue,
-  recommendations,
-  selectedAddOns,
-  onToggleAddOn,
   onEdit,
   onProceed,
   isPaid,
@@ -2997,14 +2889,6 @@ function NoticeOnlyReviewContent({
         </Card>
       )}
 
-      {recommendations.length > 0 && !isPaid && (
-        <RecommendationBasketCard
-          recommendations={recommendations}
-          selectedAddOns={selectedAddOns}
-          onToggleAddOn={onToggleAddOn}
-        />
-      )}
-
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-4 mt-4">
         <Button onClick={onEdit} variant="outline" className="flex-1">
@@ -3058,9 +2942,6 @@ interface TenancyReviewContentProps {
   analysis: any;
   jurisdiction: string;
   product: string;
-  recommendations: ReviewAddOnRecommendation[];
-  selectedAddOns: string[];
-  onToggleAddOn: (sku: string) => void;
   onEdit: () => void;
   onProceed: () => void;
   isPaid?: boolean;
@@ -3361,9 +3242,6 @@ function TenancyReviewContent({
   analysis,
   jurisdiction,
   product,
-  recommendations,
-  selectedAddOns,
-  onToggleAddOn,
   onEdit,
   onProceed,
   isPaid,
@@ -3716,14 +3594,6 @@ function TenancyReviewContent({
         </p>
       </Card>
 
-      {recommendations.length > 0 && !isPaid && (
-        <RecommendationBasketCard
-          recommendations={recommendations}
-          selectedAddOns={selectedAddOns}
-          onToggleAddOn={onToggleAddOn}
-        />
-      )}
-
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-4 mt-4">
         <Button onClick={onEdit} variant="outline" className="flex-1">
@@ -3756,55 +3626,11 @@ function TenancyReviewContent({
   );
 }
 
-function RecommendationBasketCard({
-  recommendations,
-  selectedAddOns,
-  onToggleAddOn,
-}: {
-  recommendations: ReviewAddOnRecommendation[];
-  selectedAddOns: string[];
-  onToggleAddOn: (sku: string) => void;
-}) {
-  return (
-    <Card className="p-6 border-blue-200 bg-blue-50">
-      <h2 className="text-lg font-semibold mb-4">Recommended add-ons</h2>
-      <div className="space-y-3">
-        {recommendations.map((recommendation) => {
-          const checked = selectedAddOns.includes(recommendation.sku);
-          return (
-            <label
-              key={recommendation.sku}
-              className="flex items-start gap-3 rounded-lg border border-blue-100 bg-white p-4 cursor-pointer"
-            >
-              <input
-                type="checkbox"
-                className="mt-1"
-                checked={checked}
-                onChange={() => onToggleAddOn(recommendation.sku)}
-              />
-              <div className="flex-1">
-                <div className="flex items-center justify-between gap-4">
-                  <p className="font-medium text-gray-900">{recommendation.label}</p>
-                  <span className="text-sm font-semibold text-primary">{recommendation.displayPrice}</span>
-                </div>
-                <p className="text-sm text-gray-600 mt-1">{recommendation.reason}</p>
-              </div>
-            </label>
-          );
-        })}
-      </div>
-    </Card>
-  );
-}
-
 interface ResidentialLettingReviewContentProps {
   caseId: string;
   analysis: any;
   jurisdiction: string;
   product: string;
-  recommendations: ReviewAddOnRecommendation[];
-  selectedAddOns: string[];
-  onToggleAddOn: (sku: string) => void;
   onEdit: () => void;
   onProceed: () => void;
   isPaid?: boolean;
@@ -3816,9 +3642,6 @@ function ResidentialLettingReviewContent({
   analysis,
   jurisdiction,
   product,
-  recommendations,
-  selectedAddOns,
-  onToggleAddOn,
   onEdit,
   onProceed,
   isPaid,
@@ -3884,14 +3707,6 @@ function ResidentialLettingReviewContent({
         </div>
       </Card>
 
-      {recommendations.length > 0 && !isPaid && (
-        <RecommendationBasketCard
-          recommendations={recommendations}
-          selectedAddOns={selectedAddOns}
-          onToggleAddOn={onToggleAddOn}
-        />
-      )}
-
       <div className="flex flex-col sm:flex-row gap-4 mt-4">
         <Button onClick={onEdit} variant="outline" className="flex-1">
           Go back &amp; edit answers
@@ -3914,9 +3729,6 @@ function ResidentialStandaloneReviewContent({
   analysis,
   jurisdiction,
   product,
-  recommendations,
-  selectedAddOns,
-  onToggleAddOn,
   onEdit,
   onProceed,
   isPaid,
@@ -4262,14 +4074,6 @@ function ResidentialStandaloneReviewContent({
             ) : null}
           </div>
         </Card>
-      )}
-
-      {recommendations.length > 0 && !isPaid && (
-        <RecommendationBasketCard
-          recommendations={recommendations}
-          selectedAddOns={selectedAddOns}
-          onToggleAddOn={onToggleAddOn}
-        />
       )}
 
       <div className="flex flex-col sm:flex-row gap-4 mt-4">

@@ -268,6 +268,19 @@ export function MoneyClaimAnimatedReview({
   const actionDisabled =
     !complete || hasBlockingIssues || isRegenerating === true || isLoadingPaymentStatus === true;
 
+  useEffect(() => {
+    if (!complete) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: reducedMotion ? 'auto' : 'smooth',
+      });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [complete, reducedMotion]);
+
   return (
     <section
       className="relative min-h-screen w-full overflow-x-hidden bg-[linear-gradient(135deg,#fbf8ff_0%,#ffffff_44%,#f6f0ff_100%)] px-3 py-4 text-charcoal sm:px-5 lg:px-7"
