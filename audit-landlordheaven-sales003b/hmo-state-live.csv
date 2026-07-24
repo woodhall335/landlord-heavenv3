@@ -1,0 +1,5 @@
+scenario,checker_top_mobile_px,pre_result_offer_count,free_result_visible,paid_offer_count,offer_tracking_id,result_event_count,offer_event_count,analytics_contains_personal_information,edit_restart_result,result
+initial_page,912,0,no,0,,0,0,no,PASS,PASS
+no_apparent_licensing_trigger,912,0,yes,0,,1,0,no,PASS,PASS
+potential_licensing_trigger_no_shared_house_offer,912,0,yes,0,,1,0,no,PASS,PASS
+shared_house_relevant_recommendation,912,0,yes,1,hmo_checker_result_hmo_pack,1,1,no,PASS,PASS

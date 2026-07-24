@@ -1,0 +1,7 @@
+qa_marker,synthetic_event,event_name,request_count,http_statuses,persisted_responses,real_event_store_result,admin_aggregate_result,admin_aggregate_evidence,result
+qa-sales003b-2026-07-24T21-19-05-853Z-ingestion,contextual offer view,contextual_offer_view,1,202,false,FAIL,FAIL,GET /api/admin/growth?days=7 returned HTTP 401; QA marker requires authenticated aggregate confirmation.,FAIL
+qa-sales003b-2026-07-24T21-19-05-853Z-ingestion,contextual offer click,contextual_offer_click,1,202,false,FAIL,FAIL,GET /api/admin/growth?days=7 returned HTTP 401; QA marker requires authenticated aggregate confirmation.,FAIL
+qa-sales003b-2026-07-24T21-19-05-853Z-ingestion,product view,product_view,1,202,false,FAIL,FAIL,GET /api/admin/growth?days=7 returned HTTP 401; QA marker requires authenticated aggregate confirmation.,FAIL
+qa-sales003b-2026-07-24T21-19-05-853Z-ingestion,product CTA click,product_primary_cta_click,1,202,false,FAIL,FAIL,GET /api/admin/growth?days=7 returned HTTP 401; QA marker requires authenticated aggregate confirmation.,FAIL
+qa-sales003b-2026-07-24T21-19-05-853Z-ingestion,HMO result,result_viewed,1,200,true,PASS,FAIL,GET /api/admin/growth?days=7 returned HTTP 401; QA marker requires authenticated aggregate confirmation.,FAIL
+qa-sales003b-2026-07-24T21-19-05-853Z-ingestion,arrears result,result_viewed,1,200,true,PASS,FAIL,GET /api/admin/growth?days=7 returned HTTP 401; QA marker requires authenticated aggregate confirmation.,FAIL

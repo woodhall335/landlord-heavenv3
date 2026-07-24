@@ -1,0 +1,14 @@
+route,http_status,canonical,expected_canonical,meta_robots,x_robots_tag,sitemap_present,robots_txt_blocked,result
+/products/notice-only,200,https://landlordheaven.co.uk/products/notice-only,https://landlordheaven.co.uk/products/notice-only,"index, follow",,yes,no,PASS
+/products/complete-pack,200,https://landlordheaven.co.uk/products/complete-pack,https://landlordheaven.co.uk/products/complete-pack,"index, follow",,yes,no,PASS
+/products/money-claim,200,https://landlordheaven.co.uk/products/money-claim,https://landlordheaven.co.uk/products/money-claim,"index, follow",,yes,no,PASS
+/products/ast,200,https://landlordheaven.co.uk/products/ast,https://landlordheaven.co.uk/products/ast,"index, follow",,yes,no,PASS
+/products/section-13-standard,200,https://landlordheaven.co.uk/products/section-13-standard,https://landlordheaven.co.uk/products/section-13-standard,"index, follow",,yes,no,PASS
+/tools/hmo-license-checker,200,https://landlordheaven.co.uk/tools/hmo-license-checker,https://landlordheaven.co.uk/tools/hmo-license-checker,"index, follow",,yes,no,PASS
+/tools/rent-arrears-calculator,200,https://landlordheaven.co.uk/tools/rent-arrears-calculator,https://landlordheaven.co.uk/tools/rent-arrears-calculator,"index, follow",,yes,no,PASS
+/blog/how-to-write-letter-before-action-unpaid-rent,200,https://landlordheaven.co.uk/blog/how-to-write-letter-before-action-unpaid-rent,https://landlordheaven.co.uk/blog/how-to-write-letter-before-action-unpaid-rent,"index,follow",,yes,no,PASS
+/blog/bailiff-eviction-day-what-to-expect,200,https://landlordheaven.co.uk/blog/bailiff-eviction-day-what-to-expect,https://landlordheaven.co.uk/blog/bailiff-eviction-day-what-to-expect,"index,follow",,yes,no,PASS
+/eviction-cost-uk,200,https://landlordheaven.co.uk/eviction-cost-uk,https://landlordheaven.co.uk/eviction-cost-uk,"index, follow",,yes,no,PASS
+/how-to-rent-guide,200,https://landlordheaven.co.uk/how-to-rent-guide,https://landlordheaven.co.uk/how-to-rent-guide,"index, follow",,yes,no,PASS
+/n5-n119-possession-claim,200,https://landlordheaven.co.uk/n5-n119-possession-claim,https://landlordheaven.co.uk/n5-n119-possession-claim,"index, follow",,yes,no,PASS
+/section-8-grounds/how-to-evict-a-tenant-using-ground-1a,200,https://landlordheaven.co.uk/section-8-grounds/how-to-evict-a-tenant-using-ground-1a,https://landlordheaven.co.uk/section-8-grounds/how-to-evict-a-tenant-using-ground-1a,"index, follow",,yes,no,PASS

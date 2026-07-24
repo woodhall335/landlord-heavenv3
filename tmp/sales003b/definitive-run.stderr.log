@@ -1,0 +1,9 @@
+TimeoutError: Waiting failed: 60000ms exceeded
+    at new WaitTask (file:///C:/Users/t_moh/Documents/GitHub/landlord-heavenv3/node_modules/.pnpm/puppeteer-core@24.34.0/node_modules/puppeteer-core/lib/esm/puppeteer/common/WaitTask.js:46:34)
+    at IsolatedWorld.waitForFunction (file:///C:/Users/t_moh/Documents/GitHub/landlord-heavenv3/node_modules/.pnpm/puppeteer-core@24.34.0/node_modules/puppeteer-core/lib/esm/puppeteer/api/Realm.js:22:26)
+    at CdpFrame.waitForFunction (file:///C:/Users/t_moh/Documents/GitHub/landlord-heavenv3/node_modules/.pnpm/puppeteer-core@24.34.0/node_modules/puppeteer-core/lib/esm/puppeteer/api/Frame.js:580:43)
+    at CdpFrame.<anonymous> (file:///C:/Users/t_moh/Documents/GitHub/landlord-heavenv3/node_modules/.pnpm/puppeteer-core@24.34.0/node_modules/puppeteer-core/lib/esm/puppeteer/util/decorators.js:101:27)
+    at CdpPage.waitForFunction (file:///C:/Users/t_moh/Documents/GitHub/landlord-heavenv3/node_modules/.pnpm/puppeteer-core@24.34.0/node_modules/puppeteer-core/lib/esm/puppeteer/api/Page.js:1433:37)
+    at auditHmo (file:///C:/Users/t_moh/Documents/GitHub/landlord-heavenv3/scripts/sales003b-live-certification.mjs:623:18)
+    at async runCheckpoint (file:///C:/Users/t_moh/Documents/GitHub/landlord-heavenv3/scripts/sales003b-live-certification.mjs:107:17)
+    at async main (file:///C:/Users/t_moh/Documents/GitHub/landlord-heavenv3/scripts/sales003b-live-certification.mjs:902:21)

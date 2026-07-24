@@ -1,0 +1,14 @@
+route,largest_vertical_gap_px,gap_location,gap_over_120px,hidden_or_empty_media_height_count,result
+/products/notice-only,198,dd->p,yes,0,FAIL
+/products/complete-pack,198,dd->p,yes,0,FAIL
+/products/money-claim,156,iframe->p,yes,0,FAIL
+/products/ast,179,a->p,yes,0,FAIL
+/products/section-13-standard,172,iframe->h2,yes,0,FAIL
+/tools/hmo-license-checker,153,p->h2,yes,0,FAIL
+/tools/rent-arrears-calculator,156,a->h2,yes,0,FAIL
+/blog/how-to-write-letter-before-action-unpaid-rent,185,a->h2,yes,0,FAIL
+/blog/bailiff-eviction-day-what-to-expect,185,a->h2,yes,0,FAIL
+/eviction-cost-uk,234,a->svg,yes,0,FAIL
+/how-to-rent-guide,172,a->h2,yes,0,FAIL
+/n5-n119-possession-claim,145,a->h2,yes,0,FAIL
+/section-8-grounds/how-to-evict-a-tenant-using-ground-1a,170,a->p,yes,0,FAIL

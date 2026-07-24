@@ -1,0 +1,8 @@
+scenario,outstanding_result,offer_count,tracking_id,continuation_href,field_count,fields_missing_id_name_or_label,stable_initial_identifier_present,cumulative_result_event_count,analytics_contains_raw_arrears_or_case_data,result
+zero_arrears,Outstanding arrears£0.00,0,,,6,0,yes,1,no,PASS
+non_zero_arrears,Outstanding arrears£750.00,1,arrears_calculator_money_claim,/products/money-claim,6,0,yes,2,no,PASS
+schedule_edit,Outstanding arrears£800.00,1,arrears_calculator_money_claim,/products/money-claim,6,0,yes,2,no,PASS
+added_period,Outstanding arrears£1550.00,1,arrears_calculator_money_claim,/products/money-claim,10,0,yes,2,no,PASS
+deleted_period,Outstanding arrears£800.00,1,arrears_calculator_money_claim,/products/money-claim,6,0,yes,2,no,PASS
+repeat_calculation,Outstanding arrears£800.00,1,arrears_calculator_money_claim,/products/money-claim,6,0,yes,3,no,PASS
+money_claim_continuation,,1,arrears_calculator_money_claim,/products/money-claim,,,yes,3,no,PASS

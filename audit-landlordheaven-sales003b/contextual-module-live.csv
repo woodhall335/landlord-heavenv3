@@ -1,0 +1,25 @@
+route,viewport,product_offered,module_count,tracking_ids,visual_treatment,positions_px,duplicate_tracking_ids,result
+/tools/hmo-license-checker,mobile,,0,,,,,PASS
+/tools/hmo-license-checker,tablet,,0,,,,,PASS
+/tools/hmo-license-checker,desktop,,0,,,,,PASS
+/tools/rent-arrears-calculator,mobile,/products/money-claim,1,arrears_calculator_money_claim,"rgb(255, 255, 255)|rgb(230, 219, 255)",2662,,PASS
+/tools/rent-arrears-calculator,tablet,/products/money-claim,1,arrears_calculator_money_claim,"rgb(255, 255, 255)|rgb(230, 219, 255)",1741,,PASS
+/tools/rent-arrears-calculator,desktop,/products/money-claim,1,arrears_calculator_money_claim,"rgb(255, 255, 255)|rgb(230, 219, 255)",1697,,PASS
+/blog/how-to-write-letter-before-action-unpaid-rent,mobile,,0,,,,,PASS
+/blog/how-to-write-letter-before-action-unpaid-rent,tablet,,0,,,,,PASS
+/blog/how-to-write-letter-before-action-unpaid-rent,desktop,,0,,,,,PASS
+/blog/bailiff-eviction-day-what-to-expect,mobile,,0,,,,,PASS
+/blog/bailiff-eviction-day-what-to-expect,tablet,,0,,,,,PASS
+/blog/bailiff-eviction-day-what-to-expect,desktop,,0,,,,,PASS
+/eviction-cost-uk,mobile,/products/complete-pack,1,eviction_cost_complete_pack,"rgb(255, 255, 255)|rgb(230, 219, 255)",2505,,PASS
+/eviction-cost-uk,tablet,/products/complete-pack,1,eviction_cost_complete_pack,"rgb(255, 255, 255)|rgb(230, 219, 255)",1983,,PASS
+/eviction-cost-uk,desktop,/products/complete-pack,1,eviction_cost_complete_pack,"rgb(255, 255, 255)|rgb(230, 219, 255)",1916,,PASS
+/how-to-rent-guide,mobile,/products/ast,1,how_to_rent_tenancy,"rgb(255, 255, 255)|rgb(230, 219, 255)",1611,,PASS
+/how-to-rent-guide,tablet,/products/ast,1,how_to_rent_tenancy,"rgb(255, 255, 255)|rgb(230, 219, 255)",1329,,PASS
+/how-to-rent-guide,desktop,/products/ast,1,how_to_rent_tenancy,"rgb(255, 255, 255)|rgb(230, 219, 255)",1339,,PASS
+/n5-n119-possession-claim,mobile,,0,,,,,PASS
+/n5-n119-possession-claim,tablet,,0,,,,,PASS
+/n5-n119-possession-claim,desktop,,0,,,,,PASS
+/section-8-grounds/how-to-evict-a-tenant-using-ground-1a,mobile,/products/notice-only,1,ground_1a_notice,"rgb(255, 255, 255)|rgb(230, 219, 255)",1157,,PASS
+/section-8-grounds/how-to-evict-a-tenant-using-ground-1a,tablet,/products/notice-only,1,ground_1a_notice,"rgb(255, 255, 255)|rgb(230, 219, 255)",857,,PASS
+/section-8-grounds/how-to-evict-a-tenant-using-ground-1a,desktop,/products/notice-only,1,ground_1a_notice,"rgb(255, 255, 255)|rgb(230, 219, 255)",757,,PASS

@@ -84,3 +84,4 @@ audit-output/**
 playwright-report/**
 test-results/**
 .lighthouseci/**
+tmp/sales003b/screenshots-pre-final.zip

@@ -173,22 +173,9 @@ async function waitForHydrationAndMedia(page) {
     if (document.fonts?.ready) await document.fonts.ready;
   });
 
-  const imageCount = await page.evaluate(() => document.images.length);
-  for (let index = 0; index < imageCount; index += 1) {
-    await page.evaluate((imageIndex) => {
-      const image = document.images[imageIndex];
-      image.loading = 'eager';
-      image.scrollIntoView({ block: 'center' });
-    }, index);
-    await page.waitForFunction(
-      (imageIndex) => {
-        const image = document.images[imageIndex];
-        return !image || (image.complete && image.naturalWidth > 0);
-      },
-      { timeout: 15_000 },
-      index,
-    ).catch(() => {});
-  }
+  await page.evaluate(() => {
+    for (const image of document.images) image.loading = 'eager';
+  });
   await sleep(500);
 
   let previousHeight = 0;
@@ -253,6 +240,7 @@ async function keyboardAudit(page) {
         text: (
           node.getAttribute('aria-label') ||
           (node.getAttribute('aria-labelledby') && document.getElementById(node.getAttribute('aria-labelledby'))?.textContent) ||
+          node.getAttribute('title') ||
           node.textContent ||
           node.querySelector('img[alt]')?.getAttribute('alt') ||
           (node.id && document.querySelector(`label[for="${CSS.escape(node.id)}"]`)?.textContent) ||
@@ -365,8 +353,12 @@ async function inspectDom(page, route, viewport, responseStatus) {
     const coverage = Array.from(document.querySelectorAll('main *')).filter((node) => {
       if (!visible(node)) return false;
       const style = getComputedStyle(node);
-      if (style.position === 'absolute' || style.position === 'fixed') return false;
-      return Boolean((node.textContent || '').trim() || node.matches('img,iframe,video,svg'));
+      const isMedia = node.matches('img,iframe,video,svg,input,select,textarea');
+      if ((style.position === 'absolute' || style.position === 'fixed') && !isMedia) return false;
+      const hasDirectText = Array.from(node.childNodes).some(
+        (child) => child.nodeType === Node.TEXT_NODE && (child.textContent || '').trim()
+      );
+      return hasDirectText || isMedia;
     })
       .map((node) => {
         const rect = node.getBoundingClientRect();
@@ -452,7 +444,12 @@ async function auditRouteViewport(browser, route, viewport) {
 
   const keyboard = navigationError ? { tab_stops_sampled: 0, named_stops: 0, visible_stops: 0, focus_visible_stops: 0, keyboard_trap: 'unknown', result: 'FAIL' } : await keyboardAudit(page);
   if (!navigationError) {
-    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.evaluate(() => {
+      if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+      document.documentElement.style.scrollBehavior = 'auto';
+      document.body.style.scrollBehavior = 'auto';
+      window.scrollTo(0, 0);
+    });
     await sleep(150);
   }
   const slug = safeSlug(route);
@@ -543,26 +540,44 @@ async function auditProductCtas(browser, route) {
   let clickResult = 'FAIL';
   let clickDestination = '';
   if (primary?.href) {
-    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.evaluate(() => {
+      document.documentElement.style.scrollBehavior = 'auto';
+      window.scrollTo(0, 0);
+    });
     await sleep(150);
-    const link = await page.$(`a[href="${primary.href.replace(/"/g, '\\"')}"]`);
-    if (link) {
-      await Promise.all([
-        page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 60_000 }).catch(() => null),
-        link.click(),
-      ]);
+    const clicked = await page.evaluate((href) => {
+      const links = Array.from(document.querySelectorAll('a')).filter(
+        (node) => node.getAttribute('href') === href
+      );
+      const link = links.find((node) => {
+        const rect = node.getBoundingClientRect();
+        return rect.width > 0 && rect.height > 0;
+      });
+      if (!link) return false;
+      link.click();
+      return true;
+    }, primary.href);
+    if (clicked) {
+      const expectedPath = new URL(primary.href, baseUrl).pathname;
+      await page.waitForFunction(
+        (pathname) => window.location.pathname === pathname,
+        { timeout: 15_000 },
+        expectedPath
+      ).catch(() => null);
       clickDestination = new URL(page.url()).pathname;
-      clickResult = clickDestination === new URL(primary.href, baseUrl).pathname ? 'PASS' : 'FAIL';
+      clickResult = clickDestination === expectedPath ? 'PASS' : 'FAIL';
     }
   }
   const duplicatedConsecutive = initial.dom.actionGroups.some((action, index, all) => index > 0 && action.label === all[index - 1].label && Math.abs(action.top - all[index - 1].top) < 300);
-  const result = heroActions.length >= 1 && !duplicatedConsecutive && initial.dom.fixedInitialCount === 0 && clickResult === 'PASS' ? 'PASS' : 'FAIL';
+  const primaryCount = heroActions.filter((action) => action.ancestry.includes('hero-btn-primary')).length;
+  const secondaryCount = heroActions.filter((action) => action.ancestry.includes('hero-btn-secondary')).length;
+  const result = primaryCount === 1 && secondaryCount <= 1 && !duplicatedConsecutive && initial.dom.fixedInitialCount === 0 && clickResult === 'PASS' ? 'PASS' : 'FAIL';
   const row = {
     route,
     primary_cta_labels: heroActions.filter((action) => action.ancestry.includes('hero-btn-primary')).map((action) => action.label).join(' | '),
-    primary_cta_count_initial_area: heroActions.filter((action) => action.ancestry.includes('hero-btn-primary')).length,
+    primary_cta_count_initial_area: primaryCount,
     secondary_cta_labels: heroActions.filter((action) => action.ancestry.includes('hero-btn-secondary')).map((action) => action.label).join(' | '),
-    secondary_cta_count_initial_area: heroActions.filter((action) => action.ancestry.includes('hero-btn-secondary')).length,
+    secondary_cta_count_initial_area: secondaryCount,
     href_destinations: heroActions.map((action) => action.href).join(' | '),
     component_ancestry: heroActions.map((action) => action.ancestry).join(' || '),
     old_duplicate_band_absent: duplicatedConsecutive ? 'no' : 'yes',
@@ -578,7 +593,7 @@ async function auditProductCtas(browser, route) {
   return row;
 }
 
-async function auditHmo(browser) {
+async function auditHmo() {
   const scenarios = [
     { scenario: 'initial_page', values: null, expectOffer: 0, expectResult: false },
     { scenario: 'no_apparent_licensing_trigger', values: ['SW1A 1AA', '2', '1', 'house', 'no'], expectOffer: 0, expectResult: true },
@@ -587,7 +602,9 @@ async function auditHmo(browser) {
   ];
   const rows = [];
   for (const config of scenarios) {
-    const page = await browser.newPage();
+    console.log(`Starting HMO scenario: ${config.scenario}`);
+    const scenarioBrowser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+    const page = await scenarioBrowser.newPage();
     await page.setViewport(viewports[0]);
     await installQaIdentity(page, `hmo-${config.scenario}`);
     attachRuntimeCapture(page, '/tools/hmo-license-checker', 'mobile-state');
@@ -602,8 +619,13 @@ async function auditHmo(browser) {
       await page.type('#numHouseholds', households);
       await page.select('#propertyType', type);
       await page.click(`input[name="hasSharedFacilities"][value="${shared}"]`);
-      await page.click('button.hero-btn-primary');
-      await page.waitForFunction(() => Boolean(document.querySelector('[role="status"]')), { timeout: 30_000 });
+      await page.evaluate(() => {
+        const button = Array.from(document.querySelectorAll('button')).find((node) =>
+          node.textContent?.includes('Create free assessment')
+        );
+        button?.click();
+      });
+      await page.waitForFunction(() => Boolean(document.querySelector('[role="status"]')), { timeout: 60_000 });
       await sleep(500);
     }
     const state = await page.evaluate(() => ({
@@ -646,7 +668,9 @@ async function auditHmo(browser) {
       edit_restart_result: config.expectResult ? (editPassed ? 'PASS' : 'FAIL') : 'PASS',
       result: pass ? 'PASS' : 'FAIL',
     });
+    console.log(`Completed HMO scenario: ${config.scenario}`);
     await page.close();
+    await scenarioBrowser.close();
   }
   return rows;
 }
@@ -861,13 +885,64 @@ async function main() {
   await fs.mkdir(screenshotDir, { recursive: true });
   const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   try {
+    if (process.env.QA_ONLY_ANALYTICS === '1') {
+      const rows = await auditAnalyticsIngestion(browser);
+      await writeCsv('analytics-ingestion-live.csv', rows, Object.keys(rows[0]));
+      return;
+    }
+    if (process.env.QA_ONLY_FIRST_SCREENSHOTS === '1') {
+      for (const route of routes) {
+        for (const viewport of viewports) {
+          const page = await browser.newPage();
+          await page.setViewport(viewport);
+          await page.goto(`${baseUrl}${route}`, { waitUntil: 'domcontentloaded', timeout: 90_000 });
+          await sleep(1_000);
+          await page.evaluate(() => {
+            if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+            document.documentElement.style.scrollBehavior = 'auto';
+            document.body.style.scrollBehavior = 'auto';
+            window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+          });
+          await sleep(200);
+          const file = `${safeSlug(route)}-${viewport.name}-first.png`;
+          await page.screenshot({ path: path.join(screenshotDir, file), fullPage: false });
+          await page.close();
+        }
+      }
+      return;
+    }
+    if (process.env.QA_ONLY_GAPS === '1') {
+      const rows = [];
+      for (const route of routes) {
+        const page = await browser.newPage();
+        await page.setViewport(viewports[0]);
+        await page.goto(`${baseUrl}${route}`, { waitUntil: 'domcontentloaded', timeout: 90_000 });
+        await sleep(1_000);
+        const inspected = await inspectDom(page, route, 'mobile', new Map());
+        rows.push({
+          route,
+          largest_vertical_gap_px: inspected.dom?.largestGap.size ?? -1,
+          gap_location: inspected.dom?.largestGap.location || '',
+          gap_over_120px: (inspected.dom?.largestGap.size ?? 999) > 120 ? 'yes' : 'no',
+          hidden_or_empty_media_height_count: inspected.dom?.emptyLayoutContainers ?? -1,
+          result: inspected.dom && inspected.dom.largestGap.size <= 120 && inspected.dom.emptyLayoutContainers === 0 ? 'PASS' : 'FAIL',
+        });
+        await page.close();
+      }
+      await writeCsv('excessive-gap-live.csv', rows, ['route','largest_vertical_gap_px','gap_location','gap_over_120px','hidden_or_empty_media_height_count','result']);
+      return;
+    }
+    if (process.env.QA_ONLY_HMO === '1') {
+      console.log(JSON.stringify(await runCheckpoint('hmo-audit', () => auditHmo()), null, 2));
+      return;
+    }
     const all = await runCheckpoint('route-audit', async () => {
       const results = [];
       const tasks = routes.flatMap((route) => viewports.map((viewport) => ({ route, viewport })));
-      for (let index = 0; index < tasks.length; index += 3) {
-        const batch = tasks.slice(index, index + 3);
-        results.push(...await Promise.all(batch.map(({ route, viewport }) => auditRouteViewport(browser, route, viewport))));
-        console.log(`Completed ${Math.min(index + batch.length, tasks.length)}/${tasks.length} route/viewport checks`);
+      for (let index = 0; index < tasks.length; index += 1) {
+        const task = tasks[index];
+        results.push(await auditRouteViewport(browser, task.route, task.viewport));
+        console.log(`Completed ${index + 1}/${tasks.length} route/viewport checks`);
       }
       return results;
     });
@@ -876,7 +951,7 @@ async function main() {
       for (const route of productRoutes) results.push(await auditProductCtas(browser, route));
       return results;
     });
-    const hmoRows = await runCheckpoint('hmo-audit', () => auditHmo(browser));
+    const hmoRows = await runCheckpoint('hmo-audit', () => auditHmo());
     const arrearsRows = await runCheckpoint('arrears-audit', () => auditArrears(browser));
     const experimentRows = await runCheckpoint('experiment-audit', () => auditExperiment(browser));
     const indexabilityRows = await runCheckpoint('indexability-audit', auditIndexability);

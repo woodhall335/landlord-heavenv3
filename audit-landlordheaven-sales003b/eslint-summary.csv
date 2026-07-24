@@ -1,0 +1,2 @@
+scope,files,error_count,warning_count,fixable_error_count,fixable_warning_count,command,result
+full_repository,2045,0,764,0,6,"pnpm exec eslint . -f json -o audit-landlordheaven-sales003b/eslint-results.json",PASS
