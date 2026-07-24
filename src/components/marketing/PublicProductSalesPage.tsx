@@ -454,6 +454,12 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
         {...content.hero}
         primaryCta={analytics?.pageType === 'product_page' ? undefined : content.hero.primaryCta}
         secondaryCta={analytics?.pageType === 'product_page' ? undefined : content.hero.secondaryCta}
+        showTrustPositioningBar={
+          analytics?.pageType === 'product_page' ? false : content.hero.showTrustPositioningBar
+        }
+        showUsageCounter={
+          analytics?.pageType === 'product_page' ? false : content.hero.showUsageCounter
+        }
         actionsSlot={
           analytics?.pageType === 'product_page' && content.hero.primaryCta ? (
             <ProductPrimaryActions
@@ -466,9 +472,21 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
           ) : content.hero.actionsSlot
         }
       >
-        {content.hero.children}
-        {analytics?.pageType === 'product_page' ? (
-          <div className="mt-5 rounded-xl border border-white/20 bg-white/10 p-4 text-left text-sm text-white backdrop-blur">
+        {analytics?.pageType === 'product_page' ? null : content.hero.children}
+      </UniversalHero>
+
+      {analytics?.pageType === 'product_page' ? (
+        <section
+          className="border-b border-[#E8E1F8] bg-white px-4 py-5 sm:px-6 sm:py-7"
+          data-product-decision-details
+        >
+          <div className="mx-auto grid max-w-6xl gap-4 lg:grid-cols-2">
+            {content.hero.children ? (
+              <div className="rounded-2xl bg-[#2B174B] p-4 [&>div]:mt-0">
+                {content.hero.children}
+              </div>
+            ) : null}
+            <div className="rounded-2xl border border-[#E8E1F8] bg-[#FCFAFF] p-4 text-left text-sm text-[#34245D]">
             <p className="font-semibold">
               Fixed price {priceLabel || 'shown before you start'}.
               {' '}Preview {content.earlyProofBand ? 'available before payment where shown.' : 'details are shown before payment.'}
@@ -480,13 +498,14 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
                 ))}
               </ul>
             ) : null}
-            <p className="mt-2 text-white/85">
+            <p className="mt-2 text-[#5E498E]">
               Start the guided builder, answer the suitability questions, review the generated output,
               then continue to payment.
             </p>
+            </div>
           </div>
-        ) : null}
-      </UniversalHero>
+        </section>
+      ) : null}
 
       {content.earlyProofBand ? <EarlyProofBand proof={content.earlyProofBand} /> : null}
       {content.decisionBlock ? <DecisionBlock block={content.decisionBlock} /> : null}

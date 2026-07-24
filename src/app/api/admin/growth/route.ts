@@ -57,6 +57,7 @@ export async function GET(request: NextRequest) {
           trafficSource: request.nextUrl.searchParams.get('traffic_source') || undefined,
           experiment: request.nextUrl.searchParams.get('experiment') || undefined,
           authenticatedState: request.nextUrl.searchParams.get('authenticated') || undefined,
+          qaMarker: request.nextUrl.searchParams.get('qa_marker') || undefined,
         },
       })
     );

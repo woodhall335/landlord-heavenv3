@@ -150,4 +150,62 @@ describe('growth report builder', () => {
       rate: 100,
     });
   });
+
+  it('counts canonical funnel stages when a legacy database event name is used', () => {
+    const report = buildGrowthReport({
+      days: 7,
+      now: new Date('2026-05-05T12:00:00.000Z'),
+      orders: [],
+      events: [
+        {
+          event_name: 'commercial_bridge_viewed',
+          marketing_session_id: 'qa_alias',
+          event_payload: { canonicalEventName: 'contextual_offer_view' },
+          created_at: '2026-05-05T09:00:00.000Z',
+        },
+        {
+          event_name: 'product_cta_clicked',
+          marketing_session_id: 'qa_alias',
+          event_payload: { canonicalEventName: 'product_primary_cta_click' },
+          created_at: '2026-05-05T09:01:00.000Z',
+        },
+      ],
+    });
+
+    expect(report.funnelStages).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ event: 'contextual_offer_view', count: 1 }),
+        expect.objectContaining({ event: 'product_primary_cta_click', count: 1 }),
+      ])
+    );
+  });
+
+  it('excludes QA campaigns by default and includes an exact marker when requested', () => {
+    const event = {
+      event_name: 'product_page_viewed',
+      marketing_session_id: 'qa_filtered',
+      event_payload: {
+        campaign: 'qa-sales003c-marker',
+        canonicalEventName: 'product_view',
+      },
+      created_at: '2026-05-05T09:00:00.000Z',
+    };
+    const base = {
+      days: 7 as const,
+      now: new Date('2026-05-05T12:00:00.000Z'),
+      orders: [],
+      events: [event],
+    };
+
+    const commercialReport = buildGrowthReport(base);
+    const qaReport = buildGrowthReport({
+      ...base,
+      filters: { qaMarker: 'qa-sales003c-marker' },
+    });
+
+    expect(
+      commercialReport.funnelStages.find((stage) => stage.event === 'product_view')?.count
+    ).toBe(0);
+    expect(qaReport.funnelStages.find((stage) => stage.event === 'product_view')?.count).toBe(1);
+  });
 });

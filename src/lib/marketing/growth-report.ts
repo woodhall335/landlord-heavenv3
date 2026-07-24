@@ -242,6 +242,7 @@ export function buildGrowthReport(params: {
     trafficSource?: string;
     experiment?: string;
     authenticatedState?: string;
+    qaMarker?: string;
   };
 }): GrowthReportResponse {
   const now = params.now || new Date();
@@ -294,6 +295,12 @@ export function buildGrowthReport(params: {
     const eventDate = parseDate(event.created_at);
     if (!eventDate || eventDate < rangeStart) return false;
     const payload = event.event_payload || {};
+    const campaign = String(payload.campaign || '');
+    if (params.filters?.qaMarker) {
+      if (campaign !== params.filters.qaMarker) return false;
+    } else if (campaign.startsWith('qa-sales')) {
+      return false;
+    }
     if (params.filters?.sourceRoute && (event.source_page || event.page_path) !== params.filters.sourceRoute) return false;
     if (params.filters?.product && (event.product_clicked || event.recommended_product || payload.productSlug) !== params.filters.product) return false;
     if (params.filters?.device && payload.deviceCategory !== params.filters.device) return false;
@@ -329,7 +336,12 @@ export function buildGrowthReport(params: {
     ['payment_succeeded', 'Payments'],
     ['document_delivered', 'Documents delivered'],
   ] as const;
-  const stageCount = (name: string) => eventsInRange.filter((event) => event.event_name === name).length;
+  const canonicalEventName = (event: GrowthMarketingEventRow) => {
+    const payloadName = event.event_payload?.canonicalEventName;
+    return typeof payloadName === 'string' && payloadName ? payloadName : event.event_name;
+  };
+  const stageCount = (name: string) =>
+    eventsInRange.filter((event) => canonicalEventName(event) === name).length;
   const stageRate = (key: string, label: string, numeratorEvent: string, denominatorEvent: string) => {
     const numerator = stageCount(numeratorEvent);
     const denominator = stageCount(denominatorEvent);

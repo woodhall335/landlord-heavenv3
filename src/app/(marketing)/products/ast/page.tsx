@@ -181,7 +181,7 @@ export default function EnglandTenancyHubPage() {
       title: 'Create the right England',
       highlightTitle: 'tenancy agreement for the let',
       subtitle:
-        "From 1 May 2026, new England lets use assured periodic tenancy agreements. Choose the Renters' Rights Act compliant agreement that matches how the property will actually be occupied: ordinary let, fuller management terms, student house, HMO / shared house, or lodger.",
+        "Choose the current England agreement for an ordinary let, fuller management terms, student house, HMO / shared house, or lodger.",
       showTrustPositioningBar: true,
       primaryCta: {
         label: 'Choose Standard agreement',

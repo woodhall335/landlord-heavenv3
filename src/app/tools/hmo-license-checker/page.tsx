@@ -419,12 +419,8 @@ export default function HMOLicenseChecker() {
         align="center"
         hideMedia
         showReviewPill={false}
-        showTrustPositioningBar
         showUsageCounter={false}
-        primaryCta={{ label: 'Check my HMO licence position', href: '#checker' }}
-      >
-        <p className="mt-4 text-sm text-white/90">Instant assessment • HMO guidance • Built to help landlords avoid licensing mistakes</p>
-      </UniversalHero>
+      />
 
       <section className="hidden border-b border-gray-100 bg-white py-6 lg:block">
         <Container>

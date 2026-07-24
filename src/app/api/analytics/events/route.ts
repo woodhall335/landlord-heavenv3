@@ -5,6 +5,13 @@ import { normalizeMarketingGrowthEvent } from '@/lib/analytics/growth-events';
 
 export const runtime = 'nodejs';
 
+const LEGACY_STORAGE_EVENT_NAMES: Record<string, string> = {
+  contextual_offer_view: 'commercial_bridge_viewed',
+  contextual_offer_click: 'commercial_bridge_clicked',
+  product_view: 'product_page_viewed',
+  product_primary_cta_click: 'product_cta_clicked',
+};
+
 const marketingEventRequestSchema = z.object({
   eventName: z.string(),
   marketingSessionId: z.string().max(200),
@@ -31,7 +38,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const adminClient = createAdminClient();
-    const { error } = await adminClient.from('marketing_events').insert({
+    const eventRow = {
       event_name: event.eventName,
       marketing_session_id: event.marketingSessionId,
       source_page: event.sourcePage,
@@ -45,7 +52,24 @@ export async function POST(request: NextRequest) {
       user_type: event.userType,
       tool_name: event.toolName,
       event_payload: event.eventPayload,
-    });
+    };
+    let { error } = await adminClient.from('marketing_events').insert(eventRow);
+    let persistedEventName: string = event.eventName;
+
+    const fallbackEventName = LEGACY_STORAGE_EVENT_NAMES[event.eventName];
+    if (error?.code === '23514' && fallbackEventName) {
+      const fallbackResult = await adminClient.from('marketing_events').insert({
+        ...eventRow,
+        event_name: fallbackEventName,
+        event_payload: {
+          ...event.eventPayload,
+          canonicalEventName: event.eventName,
+          storageEventName: fallbackEventName,
+        },
+      });
+      error = fallbackResult.error;
+      persistedEventName = fallbackEventName;
+    }
 
     if (error) {
       console.warn('[analytics/events] Failed to persist marketing event', {
@@ -57,7 +81,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true, persisted: false }, { status: 202 });
     }
 
-    return NextResponse.json({ success: true, persisted: true }, { status: 200 });
+    return NextResponse.json(
+      {
+        success: true,
+        persisted: true,
+        canonicalEventName: event.eventName,
+        persistedEventName,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.warn('[analytics/events] Analytics event ignored', error);
     return NextResponse.json({ success: true, persisted: false }, { status: 202 });
