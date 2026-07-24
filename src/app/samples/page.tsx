@@ -58,7 +58,7 @@ const samplePositioningCards = [
   {
     title: 'Compared with a solicitor',
     body:
-      'A solicitor is still the right choice for bespoke dispute work, but routine landlord document setup can be slower and more expensive than a fixed-price workflow. Landlord Heaven gives you solicitor-approved document preparation built around the facts you enter.',
+      'A solicitor is still the right choice for bespoke dispute work, but routine landlord document setup can be slower and more expensive than a fixed-price workflow. Landlord Heaven gives you review-ready document preparation built around the facts you enter.',
   },
   {
     title: 'Compared with a wording-only download',
@@ -80,7 +80,7 @@ const samplePositioningCards = [
 export const metadata: Metadata = {
   title: 'Free Landlord Document Samples | Section 8, Tenancy & Rent Packs',
   description:
-    'View free landlord document samples from solicitor-approved workflows that build notices, claims, rent increase files, and tenancy packs around landlord facts.',
+    'View free landlord document samples from review-ready workflows that build notices, claims, rent increase files, and tenancy packs around landlord facts.',
   keywords: [
     'landlord document samples',
     'section 8 notice sample',
@@ -141,7 +141,7 @@ export default function SamplesPage() {
 
       <UniversalHero
         badge="Free Samples"
-        preTitleLabel="Solicitor-approved sample packs"
+        preTitleLabel="Review-ready sample packs"
         title="Free Landlord Document Samples"
         subtitle="Browse real sample documents, then move into the fixed-price workflow that builds the notice, claim, rent increase file, or tenancy setup pack around your facts. This is not a static form library."
         primaryCta={{ label: 'Browse sample hub', href: '#sample-directory' }}
@@ -314,7 +314,7 @@ export default function SamplesPage() {
               A sample is useful only if the paid product builds the right pack
             </h2>
             <p className="mt-4 text-base leading-8 text-[#546075] md:text-lg">
-              Use the PDFs to inspect the output, then use Landlord Heaven to build a fixed-price, solicitor-approved document workflow around the facts of the tenancy, notice, claim, or rent increase.
+              Use the PDFs to inspect the output, then use Landlord Heaven to build a fixed-price, review-ready document workflow around the facts of the tenancy, notice, claim, or rent increase.
             </p>
           </div>
           <div className="mt-8 grid gap-5 md:grid-cols-2">

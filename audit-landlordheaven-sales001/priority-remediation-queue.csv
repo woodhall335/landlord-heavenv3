@@ -1,0 +1,12 @@
+priority,item,status,evidence
+P0,Remove internal SEO wording,completed,public-copy regression test
+P0,Remove public production placeholder,completed,public-copy regression test
+P0,Verify malformed LBA title,pending,rendered browser check required
+P0,Verify mojibake on key routes,pending,rendered browser check required
+P1,Central contextual mapping registry,completed,src/lib/conversion/registry.ts
+P1,Top-20 commercially relevant blog mappings,completed,registry consumed by blog CTA map
+P1,HMO tool result offer,pending,registry exists but component integration requires QA
+P2,Canonical funnel vocabulary,completed,growth-events.ts
+P2,Full transition instrumentation,in progress,contextual blog view and click complete
+P3,Product first-view simplification,pending,rendered audit required
+P4,Three deterministic experiments,pending,do not activate before baseline instrumentation

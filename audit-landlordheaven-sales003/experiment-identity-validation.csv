@@ -1,0 +1,2 @@
+experiment,allocation,kill_switch,source_file,result
+sales002_contextual_offer_copy,Stable FNV-style hash bucket from identity string.,NEXT_PUBLIC_SALES002_CONTEXTUAL_OFFER=off returns control.,src/lib/experiments/sales002.ts,PASS SOURCE

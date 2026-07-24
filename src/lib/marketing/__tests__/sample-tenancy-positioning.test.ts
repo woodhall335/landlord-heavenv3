@@ -16,18 +16,18 @@ describe('sample and tenancy commercial positioning', () => {
     expect(source).toContain('Compared with a wording-only download');
     expect(source).toContain('What Landlord Heaven validates before checkout');
     expect(source).toContain('Preview the pack before you pay');
-    expect(source).toContain('solicitor-approved document workflow around the facts');
+    expect(source).toContain('review-ready document workflow around the facts');
     expect(source).toContain('This is not a static form library');
   });
 
   it('keeps every generated sample detail page commercially tied to preview-before-pay workflow copy', () => {
     const source = readSource('src/app/samples/[slug]/page.tsx');
 
-    expect(source).toContain('Solicitor-approved sample workflow');
+    expect(source).toContain('Review-ready sample workflow');
     expect(source).toContain('Why this is not just another sample PDF');
     expect(source).toContain('Inspect the sample, then build the pack around your facts');
     expect(source).toContain('What Landlord Heaven validates before checkout');
-    expect(source).toContain('solicitor-approved procedural workflow');
+    expect(source).toContain('review-ready procedural workflow');
     expect(source).toContain('Build my {config.productName}');
   });
 
@@ -80,6 +80,6 @@ describe('sample and tenancy commercial positioning', () => {
     expect(sources).toContain('Build my validated HMO pack');
     expect(sources).toContain('Build my validated Lodger pack');
     expect(sources).toContain('wording-only');
-    expect(sources).toContain('solicitor-approved document preparation');
+    expect(sources).toContain('review-ready document preparation');
   });
 });

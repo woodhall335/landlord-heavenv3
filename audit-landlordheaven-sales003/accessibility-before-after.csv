@@ -1,0 +1,3 @@
+route,issue,correction,result
+/tools/rent-arrears-calculator,Form field without stable id/name; dynamic fields hard to autofill.,"Added explicit id/name to rent amount, frequency and schedule fields.",PASS SOURCE / RENDER QA NOT RUN
+/tools/hmo-license-checker,Key form controls lacked name attributes.,"Added names to postcode, occupant, household and property-type fields.",PASS SOURCE / RENDER QA NOT RUN

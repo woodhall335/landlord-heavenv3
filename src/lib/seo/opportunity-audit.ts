@@ -95,7 +95,7 @@ const CLUSTER_KEYWORDS: Record<SeoOpportunityCluster, string[]> = {
     'section 8 notice generator',
     'section 8 notice builder',
     'validated section 8 notice',
-    'solicitor-approved form 3a',
+    'review-ready form 3a',
     'section 8 notice service pack',
     'post-May 2026',
     "Renters' Rights Act Section 8 form",
@@ -114,14 +114,14 @@ const CLUSTER_KEYWORDS: Record<SeoOpportunityCluster, string[]> = {
     'rent arrears money claim',
     'particulars of claim template',
     'letter before claim template',
-    'solicitor-approved MCOL pack',
+    'review-ready MCOL pack',
   ],
   'section-13': [
     'Form 4A generator',
     'Section 13 notice template',
     'Section 13 rent increase pack',
     'validated Section 13 notice',
-    'solicitor-approved tribunal pack',
+    'review-ready tribunal pack',
     'tribunal evidence checklist',
   ],
   'tenancy-agreements': [
@@ -136,7 +136,7 @@ const CLUSTER_KEYWORDS: Record<SeoOpportunityCluster, string[]> = {
     'validated',
     'builder',
     'generator',
-    'solicitor-approved',
+    'review-ready',
     'court-ready',
     'post-May 2026',
   ],
@@ -150,11 +150,11 @@ const CLUSTER_PRODUCT_LINKS: Record<SeoOpportunityCluster, SeoOpportunityLinkSug
     { href: '/products/complete-pack', anchor: 'prepare a court-ready possession pack' },
   ],
   'money-claim': [
-    { href: '/products/money-claim', anchor: 'download the solicitor-approved MCOL pack for landlords' },
+    { href: '/products/money-claim', anchor: 'download the review-ready MCOL pack for landlords' },
   ],
   'section-13': [
     { href: '/products/section-13-standard', anchor: 'generate a validated Section 13 notice' },
-    { href: '/products/section-13-defence', anchor: 'prepare a solicitor-approved tribunal evidence pack' },
+    { href: '/products/section-13-defence', anchor: 'prepare a review-ready tribunal evidence pack' },
   ],
   'tenancy-agreements': [
     { href: '/standard-tenancy-agreement', anchor: "create a Renters' Rights Act compliant tenancy agreement" },
@@ -500,7 +500,7 @@ const commercialAuditTextForLinks = (
   if (cluster === 'section-8-notice') {
     return [
       'Use a validated Section 8 notice builder before you serve.',
-      "Create a section 8 notice generator pack with a solicitor-approved Form 3A, validated section 8 notice, section 8 notice service pack, post-May 2026 checks, and Renters' Rights Act Section 8 form wording.",
+      "Create a section 8 notice generator pack with a review-ready Form 3A, validated section 8 notice, section 8 notice service pack, post-May 2026 checks, and Renters' Rights Act Section 8 form wording.",
       'Use our validated Section 8 notice builder at /products/notice-only.',
     ].join(' ');
   }
@@ -525,37 +525,37 @@ const commercialAuditTextForLinks = (
     return [
       'Use a Form 4A generator for a Section 13 rent increase pack.',
       'Create a validated Section 13 notice with a Section 13 notice template, market evidence, and tribunal evidence checklist.',
-      'Prepare a solicitor-approved tribunal pack at /products/section-13-defence when the tenant challenges the increase.',
+      'Prepare a review-ready tribunal pack at /products/section-13-defence when the tenant challenges the increase.',
     ].join(' ');
   }
 
   if (cluster === 'money-claim') {
     return [
-      'Use a solicitor-approved MCOL pack for landlords.',
+      'Use a review-ready MCOL pack for landlords.',
       'Build a money claim online pack for a rent arrears money claim with a letter before claim template and particulars of claim template.',
-      'Download the solicitor-approved MCOL pack for landlords from /products/money-claim after validation checks.',
+      'Download the review-ready MCOL pack for landlords from /products/money-claim after validation checks.',
     ].join(' ');
   }
 
   if (primary === '/products/money-claim') {
     return [
-      'Use a validated, solicitor-approved MCOL pack for landlords.',
+      'Use a validated, review-ready MCOL pack for landlords.',
       'Build a court-ready money claim online pack with a claim-file builder, claim generator, letter before claim template, and particulars of claim template.',
-      'Download the solicitor-approved MCOL pack for landlords from /products/money-claim after post-May 2026 validation checks.',
+      'Download the review-ready MCOL pack for landlords from /products/money-claim after post-May 2026 validation checks.',
     ].join(' ');
   }
 
   if (primary === '/products/complete-pack') {
     return [
       'Use a validated possession claim pack builder before you file.',
-      'Create a court-ready possession pack and possession claim generator pack with solicitor-approved Form 3A, N5, N119, witness statement, and evidence chronology checks.',
+      'Create a court-ready possession pack and possession claim generator pack with review-ready Form 3A, N5, N119, witness statement, and evidence chronology checks.',
       'Prepare the post-May 2026 court-ready possession pack at /products/complete-pack.',
     ].join(' ');
   }
 
   return [
     'Use a validated, court-ready Section 8 notice builder before you serve.',
-    "Create a section 8 notice generator pack with a solicitor-approved Form 3A, validated section 8 notice, section 8 notice service pack, post-May 2026 checks, and Renters' Rights Act Section 8 form wording.",
+    "Create a section 8 notice generator pack with a review-ready Form 3A, validated section 8 notice, section 8 notice service pack, post-May 2026 checks, and Renters' Rights Act Section 8 form wording.",
     'Use our validated Section 8 notice builder at /products/notice-only.',
   ].join(' ');
 };

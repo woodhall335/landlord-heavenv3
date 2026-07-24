@@ -96,7 +96,7 @@ export default function StandardTenancyAgreementPage() {
           "Renters' Rights Act compliant tenancy agreement with current wording",
           'Keeps the wording and pack paperwork practical and proportionate',
           'Separate from the Premium, Student, HMO / Shared House, and Lodger routes',
-          'Solicitor-approved guided agreement pack with validation checks and a preview before payment',
+          'Review-ready guided agreement pack with validation checks and a preview before payment',
         ]}
         compliancePoints={[
           'Built around the current England periodic tenancy route from 1 May 2026.',
@@ -363,7 +363,7 @@ export default function StandardTenancyAgreementPage() {
           },
           ctaTitle: 'Build the validated Standard tenancy pack',
           ctaBody:
-            'Use this option when the let is straightforward and you want solicitor-approved document preparation with validation checks instead of a wording-only form for an ordinary whole-property home in England.',
+            'Use this option when the let is straightforward and you want review-ready document preparation with validation checks instead of a wording-only form for an ordinary whole-property home in England.',
         }}
         faqs={[
           {

@@ -691,17 +691,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
   );
 
   // Section 8 grounds selection (reuses same keys as notice-only schema)
-  const selectedGrounds = useMemo(
-    () => getSelectedSection8Grounds(facts),
-    [
-      facts.section8_grounds,
-      facts.section8_grounds_selection,
-      facts.selected_grounds,
-      facts.ground_codes,
-      facts.eviction_grounds,
-      facts.issues?.section8_grounds?.selected_grounds,
-    ]
-  );
+  const selectedGrounds = useMemo(() => getSelectedSection8Grounds(facts), [facts]);
   const hasArrearsGround = hasSelectedArrearsGrounds(selectedGrounds);
   const hasSpecialistGroundDetails = hasSelectedGroundDetailPanels(selectedGrounds);
   const calculatedNoticePeriod = useMemo(
@@ -1339,17 +1329,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
     : isSection8
     ? 'Form 3A notice'
     : 'fault-based notice';
-  const selectedGrounds = useMemo(
-    () => getSelectedSection8Grounds(facts),
-    [
-      facts.section8_grounds,
-      facts.section8_grounds_selection,
-      facts.selected_grounds,
-      facts.ground_codes,
-      facts.eviction_grounds,
-      facts.issues?.section8_grounds?.selected_grounds,
-    ]
-  );
+  const selectedGrounds = useMemo(() => getSelectedSection8Grounds(facts), [facts]);
   const hasArrearsGround = hasSelectedArrearsGrounds(selectedGrounds);
   const hasSpecialistGroundDetails = hasSelectedGroundDetailPanels(selectedGrounds);
   const groundsRequiringPriorNotice = useMemo(() => {

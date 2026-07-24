@@ -1,0 +1,2 @@
+route,before,after,result
+/tools/rent-arrears-calculator,Potential React #418 from non-deterministic initial schedule id.,Stable initial id and named controls.,PASS SOURCE / RENDER QA NOT RUN

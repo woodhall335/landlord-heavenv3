@@ -1,0 +1,14 @@
+route,expected,controlling_file,result
+/products/notice-only,One clear primary product action set,src/components/marketing/PublicProductSalesPage.tsx,PASS SOURCE
+/products/complete-pack,One clear primary product action set,src/components/marketing/PublicProductSalesPage.tsx,PASS SOURCE
+/products/money-claim,One clear primary product action set,src/components/marketing/PublicProductSalesPage.tsx,PASS SOURCE
+/products/ast,One clear primary product action set,src/components/marketing/PublicProductSalesPage.tsx,PASS SOURCE
+/products/section-13-standard,One clear primary product action set,src/components/marketing/PublicProductSalesPage.tsx,PASS SOURCE
+/tools/hmo-license-checker,Contextual offers only where relevant to completed content/tool state,src/components/conversion and route component,NOT RUN
+/tools/rent-arrears-calculator,Contextual offers only where relevant to completed content/tool state,src/components/conversion and route component,NOT RUN
+/blog/how-to-write-letter-before-action-unpaid-rent,Contextual offers only where relevant to completed content/tool state,src/components/conversion and route component,NOT RUN
+/blog/bailiff-eviction-day-what-to-expect,Contextual offers only where relevant to completed content/tool state,src/components/conversion and route component,NOT RUN
+/eviction-cost-uk,Contextual offers only where relevant to completed content/tool state,src/components/conversion and route component,NOT RUN
+/how-to-rent-guide,Contextual offers only where relevant to completed content/tool state,src/components/conversion and route component,NOT RUN
+/n5-n119-possession-claim,Contextual offers only where relevant to completed content/tool state,src/components/conversion and route component,NOT RUN
+/section-8-grounds/how-to-evict-a-tenant-using-ground-1a,Contextual offers only where relevant to completed content/tool state,src/components/conversion and route component,NOT RUN

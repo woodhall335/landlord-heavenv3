@@ -56,7 +56,7 @@ import {
   getValidTopicHubs,
   isPublicTopicHub,
 } from '@/lib/blog/topic-hubs';
-import { getImagePlaceholderBlocks, getIntentRoutedLinks, getTop30QuickAnswer, getTop30Rank, getTop30SupplementalFaqs, getUpgradedPostVariant, isTop30UpgradedPost } from '@/lib/blog/top30-upgrades';
+import { getIntentRoutedLinks, getTop30QuickAnswer, getTop30Rank, getTop30SupplementalFaqs, getUpgradedPostVariant, isTop30UpgradedPost } from '@/lib/blog/top30-upgrades';
 import type { CSSProperties, ReactNode } from 'react';
 import { isValidElement } from 'react';
 import type { AssistedPrepService } from '@/lib/assisted-prep';
@@ -619,7 +619,6 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
   const quickAnswer = getTop30QuickAnswer(post);
   const intentLinks = getIntentRoutedLinks(post.slug);
-  const imagePlaceholders = getImagePlaceholderBlocks(post.slug);
 
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -886,10 +885,6 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                   the evidence or compliance points that matter, and decide whether the next step is a guide,
                   free tool, notice pack, court pack, tenancy agreement, rent increase pack, or money claim route.
                 </p>
-                <p className="mt-3 text-sm leading-7 text-gray-700">
-                  The useful SEO value here is the visible explanation, examples, FAQs, and internal links,
-                  not the hidden meta keywords.
-                </p>
               </Reveal>
 
               {isTop30UpgradedPost(post.slug) && (
@@ -949,20 +944,6 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                   ))}
                 </ul>
               </Reveal>
-
-              {imagePlaceholders.length > 0 && (
-                <section className="mt-12 rounded-2xl border border-dashed border-[#bba0ee] bg-white p-5 md:p-6" aria-label="Image and diagram placeholders">
-                  <h2 className="text-2xl font-bold text-gray-900">Visuals to insert in next content sprint</h2>
-                  <div className="mt-4 grid gap-4 md:grid-cols-3">
-                    {imagePlaceholders.map((block) => (
-                      <div key={block.title} className="rounded-xl border border-[#e9dcff] bg-[#faf7ff] p-4">
-                        <h3 className="font-semibold text-gray-900">{block.title}</h3>
-                        <p className="mt-2 text-sm text-gray-700">{block.description}</p>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              )}
 
               {sanitizedFaqs.length > 0 && (
                 <Reveal as="section" className="mt-12 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-5 shadow-[0_14px_34px_rgba(105,46,212,0.08)] md:p-6" aria-label="FAQs for landlords">

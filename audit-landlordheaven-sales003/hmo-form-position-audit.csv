@@ -1,0 +1,2 @@
+route,before,correction,expected_mobile,result
+/tools/hmo-license-checker,"Checker form sat below hero, explanatory content and an early product offer.",Usage counter and paid secondary CTA removed; explanatory section hidden on mobile/tablet; checker padding reduced.,"Form appears near top of post-hero journey, with no paid offer before enough answers.",PASS SOURCE / RENDER QA NOT RUN

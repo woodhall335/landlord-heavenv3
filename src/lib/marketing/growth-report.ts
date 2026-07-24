@@ -44,6 +44,7 @@ export interface GrowthMarketingEventRow {
   user_type?: string | null;
   tool_name?: string | null;
   created_at?: string | null;
+  event_payload?: Record<string, string | number | boolean | null> | null;
 }
 
 export interface GrowthMetricGroup {
@@ -94,6 +95,8 @@ export interface GrowthReportResponse {
   revenueByProduct: GrowthMetricGroup[];
   revenueByLandingPath: GrowthMetricGroup[];
   revenueBySourceMedium: GrowthMetricGroup[];
+  funnelStages: Array<{ event: string; label: string; count: number }>;
+  journeyRates: Array<{ key: string; label: string; numerator: number; denominator: number; rate: number | null }>;
   funnelRates: {
     ctaClickRateByPage: GrowthRateMetric[];
     toolStartRate: GrowthRateMetric[];
@@ -232,6 +235,14 @@ export function buildGrowthReport(params: {
   events: GrowthMarketingEventRow[];
   days: 7 | 30;
   now?: Date;
+  filters?: {
+    sourceRoute?: string;
+    product?: string;
+    device?: string;
+    trafficSource?: string;
+    experiment?: string;
+    authenticatedState?: string;
+  };
 }): GrowthReportResponse {
   const now = params.now || new Date();
   const todayStart = startOfUtcDay(now);
@@ -281,7 +292,15 @@ export function buildGrowthReport(params: {
 
   const eventsInRange = params.events.filter((event) => {
     const eventDate = parseDate(event.created_at);
-    return eventDate ? eventDate >= rangeStart : false;
+    if (!eventDate || eventDate < rangeStart) return false;
+    const payload = event.event_payload || {};
+    if (params.filters?.sourceRoute && (event.source_page || event.page_path) !== params.filters.sourceRoute) return false;
+    if (params.filters?.product && (event.product_clicked || event.recommended_product || payload.productSlug) !== params.filters.product) return false;
+    if (params.filters?.device && payload.deviceCategory !== params.filters.device) return false;
+    if (params.filters?.trafficSource && payload.trafficSource !== params.filters.trafficSource) return false;
+    if (params.filters?.experiment && !String(payload.experimentId || '').startsWith(params.filters.experiment)) return false;
+    if (params.filters?.authenticatedState && String(payload.authenticatedState) !== params.filters.authenticatedState) return false;
+    return true;
   });
 
   const eventPage = (event: GrowthMarketingEventRow) =>
@@ -291,12 +310,31 @@ export function buildGrowthReport(params: {
   const eventProduct = (event: GrowthMarketingEventRow) =>
     groupLabel(event.product_clicked || event.recommended_product, 'unknown');
 
-  const bridgeViews = eventsInRange.filter((event) => event.event_name === 'commercial_bridge_viewed');
-  const bridgeClicks = eventsInRange.filter((event) => event.event_name === 'commercial_bridge_clicked');
+  const bridgeViews = eventsInRange.filter((event) => ['commercial_bridge_viewed', 'contextual_offer_view'].includes(event.event_name));
+  const bridgeClicks = eventsInRange.filter((event) => ['commercial_bridge_clicked', 'contextual_offer_click'].includes(event.event_name));
   const toolStarts = eventsInRange.filter((event) => event.event_name === 'tool_started');
   const toolCompletions = eventsInRange.filter((event) => event.event_name === 'tool_completed');
   const productClicks = eventsInRange.filter((event) => event.event_name === 'product_cta_clicked');
-  const checkoutStarts = eventsInRange.filter((event) => event.event_name === 'checkout_started');
+  const checkoutStarts = eventsInRange.filter((event) => ['checkout_started', 'checkout_opened'].includes(event.event_name));
+  const funnelStageDefinitions = [
+    ['organic_landing_view', 'Landing views'],
+    ['contextual_offer_view', 'Offer views'],
+    ['contextual_offer_click', 'Offer clicks'],
+    ['product_view', 'Product views'],
+    ['product_primary_cta_click', 'Primary CTA clicks'],
+    ['builder_started', 'Builder starts'],
+    ['builder_step_completed', 'Step completions'],
+    ['preview_generated', 'Previews generated'],
+    ['checkout_opened', 'Checkout opens'],
+    ['payment_succeeded', 'Payments'],
+    ['document_delivered', 'Documents delivered'],
+  ] as const;
+  const stageCount = (name: string) => eventsInRange.filter((event) => event.event_name === name).length;
+  const stageRate = (key: string, label: string, numeratorEvent: string, denominatorEvent: string) => {
+    const numerator = stageCount(numeratorEvent);
+    const denominator = stageCount(denominatorEvent);
+    return { key, label, numerator, denominator, rate: pct(numerator, denominator) };
+  };
 
   const rolling7DayTargetRevenue = DAILY_REVENUE_TARGET_GBP * 7;
 
@@ -321,6 +359,16 @@ export function buildGrowthReport(params: {
     ),
     revenueByLandingPath: buildGroup(paidOrders, (order) => groupLabel(order.landing_path, 'unknown')),
     revenueBySourceMedium: buildGroup(paidOrders, getSourceMedium),
+    funnelStages: funnelStageDefinitions.map(([event, label]) => ({ event, label, count: stageCount(event) })),
+    journeyRates: [
+      stageRate('offer_ctr', 'Offer CTR', 'contextual_offer_click', 'contextual_offer_view'),
+      stageRate('landing_to_product', 'Landing to product', 'product_view', 'organic_landing_view'),
+      stageRate('product_to_builder', 'Product to builder', 'builder_started', 'product_view'),
+      stageRate('builder_to_preview', 'Builder to preview', 'preview_generated', 'builder_started'),
+      stageRate('preview_to_checkout', 'Preview to checkout', 'checkout_opened', 'preview_generated'),
+      stageRate('checkout_to_payment', 'Checkout to payment', 'payment_succeeded', 'checkout_opened'),
+      stageRate('landing_to_sale', 'Landing to sale', 'payment_succeeded', 'organic_landing_view'),
+    ],
     funnelRates: {
       ctaClickRateByPage: buildRateRows(
         countBy(bridgeViews, eventPage),

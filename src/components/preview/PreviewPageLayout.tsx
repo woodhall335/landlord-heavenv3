@@ -7,6 +7,7 @@ import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { CheckCircle, Shield, Clock, Download, Scale, AlertTriangle, XCircle } from 'lucide-react';
 import { getCheckoutRedirectUrls, type CheckoutProduct } from '@/lib/payments/redirects';
 import { trackBeginCheckout, trackCheckoutStarted } from '@/lib/analytics';
+import { recordMarketingGrowthEvent } from '@/lib/analytics/growth-events';
 import { getCheckoutAttribution } from '@/lib/wizard/wizardAttribution';
 import type { SanitizedComplianceIssue } from '@/lib/documents/compliance-timing-types';
 import {
@@ -205,6 +206,12 @@ export function PreviewPageLayout({
       }
     } catch (err) {
       console.error('Checkout failed:', err);
+      recordMarketingGrowthEvent('checkout_failed', {
+        pagePath: typeof window !== 'undefined' ? window.location.pathname : '/wizard/preview',
+        productSlug: product,
+        recommendedProduct: product,
+        errorCategory: err instanceof Error ? err.name : 'unknown_checkout_error',
+      });
       setError(err instanceof Error ? err.message : 'Something went wrong');
       setIsLoading(false);
     }

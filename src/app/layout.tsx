@@ -14,6 +14,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { HeaderModeProvider } from "@/components/layout/HeaderModeContext";
 import { JourneyProvider } from "@/components/journey/JourneyProvider";
 import { SmoothAnchorScroll } from "@/components/browser/SmoothAnchorScroll";
+import { OrganicLandingTracker } from "@/components/analytics/OrganicLandingTracker";
 
 
 export const metadata: Metadata = {
@@ -80,6 +81,7 @@ export default async function RootLayout({
           </PopupProvider>
         </HeaderModeProvider>
         <TrackingPixels />
+        <OrganicLandingTracker authenticated={Boolean(user)} />
         <SmoothAnchorScroll />
         <JourneyProvider />
         <Analytics />

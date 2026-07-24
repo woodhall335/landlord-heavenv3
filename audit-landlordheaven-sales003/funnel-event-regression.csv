@@ -1,0 +1,3 @@
+area,expected,correction,result
+product pages,ProductPageTracker and existing analytics event names preserved.,CTA display hierarchy changed without removing analytics components.,PASS SOURCE / EXISTING ANALYTICS TESTS REQUIRED
+tools,Tool tracking remains intact after moving/de-emphasising offers.,HMO form position changed; ToolEmailGate and tracker imports preserved.,PASS SOURCE / EXISTING ANALYTICS TESTS REQUIRED

@@ -36,7 +36,7 @@ export const POSITIONING_CONTENT: Record<PositioningPreset, PositioningContent> 
   notice_only: {
     headline: 'Need to serve an eviction notice fast? Build the Section 8 notice and service file around the landlord facts.',
     bullets: [
-      'Generate a solicitor-approved Form 3A notice with the service steps kept beside it.',
+      'Generate a review-ready Form 3A notice with the service steps kept beside it.',
       'Check route, dates, arrears, and service details before anything goes to the tenant.',
       'Preview your notice pack before you pay, then update and regenerate if the facts change.',
       'Use fixed-price notice preparation without implying solicitor representation or court approval.',
@@ -48,7 +48,7 @@ export const POSITIONING_CONTENT: Record<PositioningPreset, PositioningContent> 
       'Keep Form 3A, N215, N5, N119, evidence, and hearing material aligned.',
       'Use facts from the case once so the notice, claim forms, and court pack stay consistent.',
       'Preview before payment and regenerate when the possession facts change.',
-      'Fixed-price, solicitor-approved document preparation, not a guarantee of the court outcome.',
+      'Fixed-price, review-ready document preparation, not a guarantee of the court outcome.',
     ],
   },
   money_claim: {

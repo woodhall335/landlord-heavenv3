@@ -32,6 +32,7 @@ import {
   trackCheckoutStarted,
   trackBeginCheckout,
 } from '@/lib/analytics';
+import { recordMarketingGrowthEvent } from '@/lib/analytics/growth-events';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { getCheckoutRedirectUrls, type CheckoutProduct } from '@/lib/payments/redirects';
 import { getSessionTokenHeaders } from '@/lib/session-token';
@@ -247,6 +248,12 @@ function ASTCheckoutButton({
       }
     } catch (err) {
       console.error('Checkout failed:', err);
+      recordMarketingGrowthEvent('checkout_failed', {
+        pagePath: '/wizard/preview',
+        productSlug: product,
+        recommendedProduct: product,
+        errorCategory: err instanceof Error ? err.name : 'unknown_checkout_error',
+      });
       setError(err instanceof Error ? err.message : 'Something went wrong');
       setIsLoading(false);
     }
@@ -465,6 +472,11 @@ export default function WizardPreviewPage() {
   // Fetch case data
   useEffect(() => {
     const fetchCase = async () => {
+      recordMarketingGrowthEvent('preview_requested', {
+        pagePath: '/wizard/preview',
+        productSlug: searchParams.get('product') || 'unknown',
+        recommendedProduct: searchParams.get('product') || 'unknown',
+      });
       try {
         setLoading(true);
         setError(null);
@@ -741,6 +753,13 @@ export default function WizardPreviewPage() {
                     warnings: normalizeValidationIssues(validateData.warnings),
                   });
                   setError('VALIDATION_ERROR');
+                  recordMarketingGrowthEvent('builder_validation_error', {
+                    pagePath: '/wizard/preview',
+                    productSlug: resolvedPreviewProduct,
+                    recommendedProduct: resolvedPreviewProduct,
+                    builderStep: 'preview',
+                    errorCategory: 'blocking_validation',
+                  });
                 }
               } else if (validateResponse.ok) {
                 console.log('[Preview] Notice Only validation passed');
@@ -913,6 +932,12 @@ export default function WizardPreviewPage() {
         }
       } catch (err: any) {
         console.error('Error loading case:', err);
+        recordMarketingGrowthEvent('preview_failed', {
+          pagePath: '/wizard/preview',
+          productSlug: searchParams.get('product') || 'unknown',
+          recommendedProduct: searchParams.get('product') || 'unknown',
+          errorCategory: err instanceof Error ? err.name : 'preview_load_error',
+        });
         setError(err.message || 'Failed to load case');
       } finally {
         setLoading(false);

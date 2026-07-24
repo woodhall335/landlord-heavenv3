@@ -1,0 +1,22 @@
+event,status,privacy,implementation_note
+organic_landing_view,vocabulary added,no PII,Call on organic entry with route and page type
+contextual_offer_view,implemented for blog inline cards,no PII,Recorded once per card mount
+contextual_offer_click,implemented for blog inline cards,no PII,Includes source destination product key and experiment ID
+product_view,vocabulary added,no PII,Legacy product_page_viewed remains for compatibility
+product_primary_cta_click,vocabulary added,no PII,Wire to shared product CTA
+builder_started,vocabulary added,no PII,Wire to builder entry
+builder_step_viewed,vocabulary added,no PII,Step identifier only
+builder_step_completed,vocabulary added,no PII,Step identifier only
+builder_validation_error,vocabulary added,no PII,Error category only
+builder_abandoned,vocabulary added,no PII,Use lifecycle-safe abandonment inference
+preview_requested,vocabulary added,no PII,Case content excluded
+preview_generated,vocabulary added,no PII,Case content excluded
+preview_failed,vocabulary added,no PII,Error category only
+account_creation_started,vocabulary added,no PII,Authenticated state only
+account_created,vocabulary added,no PII,Authenticated state only
+checkout_opened,vocabulary added,no PII,Product and price only
+checkout_failed,vocabulary added,no PII,Error category only
+payment_succeeded,vocabulary added,no PII,Product and price only
+document_delivered,vocabulary added,no PII,Product only
+cross_sell_viewed,vocabulary added,no PII,Product keys only
+cross_sell_clicked,vocabulary added,no PII,Product keys only

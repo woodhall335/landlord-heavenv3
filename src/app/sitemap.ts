@@ -92,6 +92,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/n5b-form-guide',
     '/n5b-possession-claim-form',
     '/mcol-money-claim-online',
+    '/products/money-claim-pack',
     '/wales-eviction-notice-template',
     '/scotland-notice-to-leave-template',
     '/occupation-contract-template-wales',
@@ -141,9 +142,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/section-8-notice-assisted-prep', priority: 0.86, changeFrequency: 'weekly' as const },
     { path: '/money-claim-assisted-prep', priority: 0.86, changeFrequency: 'weekly' as const },
     { path: '/possession-claim-assisted-prep', priority: 0.86, changeFrequency: 'weekly' as const },
-    { path: '/assisted-prep/start?service=section8', priority: 0.74, changeFrequency: 'weekly' as const },
-    { path: '/assisted-prep/start?service=money_claim', priority: 0.74, changeFrequency: 'weekly' as const },
-    { path: '/assisted-prep/start?service=possession', priority: 0.74, changeFrequency: 'weekly' as const },
   ];
 
   // Rent increase SEO hub pages
@@ -173,6 +171,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly' as const,
     })),
     { path: '/tenancy-agreements/england', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/blog/scotland-first-tier-tribunal', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/compare/section-8-stage-1-vs-stage-2', priority: 0.82, changeFrequency: 'weekly' as const },
     { path: '/compare/section-13-standard-vs-defence', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/compare/tenancy-agreement-options-england', priority: 0.84, changeFrequency: 'weekly' as const },
@@ -573,7 +572,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]) {
     const url = new URL(entry.url);
     const pathname = url.pathname;
-    const dedupeKey = pathname === '/assisted-prep/start' ? `${pathname}${url.search}` : pathname;
+    const dedupeKey = pathname;
     if (!isIndexablePath(pathname) || dedupedByPath.has(dedupeKey)) continue;
     dedupedByPath.set(dedupeKey, entry);
   }

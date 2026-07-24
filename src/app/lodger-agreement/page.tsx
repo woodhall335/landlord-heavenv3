@@ -87,7 +87,7 @@ export default function LodgerAgreementEnglandPage() {
           'Lodger room rental agreement template with clear notice wording',
           'Clearer wording on house rules, shared spaces, and notice',
           'Separate from standard tenancy, student, and HMO packs',
-          'Solicitor-approved guided agreement pack with validation checks and a preview before payment',
+          'Review-ready guided agreement pack with validation checks and a preview before payment',
         ]}
         compliancePoints={[
           'Keeps the resident-landlord option separate from the main England tenancy products from 1 May 2026.',
@@ -193,7 +193,7 @@ export default function LodgerAgreementEnglandPage() {
           },
           ctaTitle: 'Build the validated Lodger pack',
           ctaBody:
-            "Use this option when you live at the property and want solicitor-approved document preparation for the room-let agreement, shared-home rules, and extra paperwork together.",
+            "Use this option when you live at the property and want review-ready document preparation for the room-let agreement, shared-home rules, and extra paperwork together.",
         }}
         faqs={[
           {

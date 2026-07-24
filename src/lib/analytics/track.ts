@@ -6,6 +6,7 @@
  */
 
 import { track as vercelTrack } from '@vercel/analytics';
+import { recordMarketingGrowthEvent } from './growth-events';
 
 /**
  * Type-safe event names for funnel tracking
@@ -150,6 +151,11 @@ export function trackWizardPreviewViewed(props: WizardPreviewViewedProps): void 
       jurisdiction: props.jurisdiction || 'unknown',
       ...(props.caseId ? { case_id: props.caseId } : {}),
     });
+    recordMarketingGrowthEvent('preview_generated', {
+      pagePath: window.location.pathname,
+      productSlug: props.product,
+      recommendedProduct: props.product,
+    });
   } catch (error) {
     console.warn('[analytics] Failed to track wizard_preview_viewed:', error);
   }
@@ -166,6 +172,11 @@ export function trackCheckoutStarted(props: CheckoutStartedProps): void {
     vercelTrack('checkout_started', {
       product: props.product,
       ...(props.caseId ? { case_id: props.caseId } : {}),
+    });
+    recordMarketingGrowthEvent('checkout_opened', {
+      pagePath: window.location.pathname,
+      productSlug: props.product,
+      recommendedProduct: props.product,
     });
   } catch (error) {
     console.warn('[analytics] Failed to track checkout_started:', error);
@@ -184,6 +195,11 @@ export function trackPaymentSuccessLanded(props: PaymentSuccessLandedProps): voi
       product: props.product || 'unknown',
       caseId_present: props.caseId_present,
     });
+    recordMarketingGrowthEvent('payment_succeeded', {
+      pagePath: window.location.pathname,
+      productSlug: props.product,
+      recommendedProduct: props.product,
+    });
   } catch (error) {
     console.warn('[analytics] Failed to track payment_success_landed:', error);
   }
@@ -200,6 +216,11 @@ export function trackDocumentDownloadClicked(props: DocumentDownloadClickedProps
     vercelTrack('document_download_clicked', {
       document_type: props.document_type,
       product: props.product || 'unknown',
+    });
+    recordMarketingGrowthEvent('document_delivered', {
+      pagePath: window.location.pathname,
+      productSlug: props.product,
+      recommendedProduct: props.product,
     });
   } catch (error) {
     console.warn('[analytics] Failed to track document_download_clicked:', error);

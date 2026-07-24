@@ -1,0 +1,10 @@
+route,routePattern,routeType,reason,controllingSourceFile,securityOrSeoJustification
+/dashboard,/dashboard,authenticated customer dashboard,authenticated customer data,"src/app/(app)/dashboard/layout.tsx, src/app/robots.ts",authenticated customer data
+/auth/sign-in,/auth/sign-in,authentication,account access page,"src/app/(app)/auth/layout.tsx, src/app/robots.ts",account access page
+/wizard,/wizard,builder state,authenticated/transactional builder workflow,"src/app/(app)/wizard/layout.tsx, src/app/robots.ts",authenticated/transactional builder workflow
+/checkout/success,/checkout/success,payment confirmation,transactional success route,"src/app/robots.ts, checkout route handlers",transactional success route
+/checkout/download,/checkout/download,document download,paid document delivery endpoint,"src/app/robots.ts, checkout route handlers",paid document delivery endpoint
+/assisted-prep/start?service=section8,/assisted-prep/start?service=section8,assisted-prep intake state,duplicate query-state conversion form,src/app/(marketing)/assisted-prep/start/page.tsx,duplicate query-state conversion form
+/assisted-prep/start?service=money_claim,/assisted-prep/start?service=money_claim,assisted-prep intake state,duplicate query-state conversion form,src/app/(marketing)/assisted-prep/start/page.tsx,duplicate query-state conversion form
+/assisted-prep/start?service=possession,/assisted-prep/start?service=possession,assisted-prep intake state,duplicate query-state conversion form,src/app/(marketing)/assisted-prep/start/page.tsx,duplicate query-state conversion form
+/official-forms/n325-eng.pdf,/official-forms/n325-eng.pdf,official form asset,source PDF asset intentionally excluded by X-Robots-Tag,next.config.mjs,source PDF asset intentionally excluded by X-Robots-Tag

@@ -1,0 +1,5 @@
+route,defect,severity,status,change
+/blog/[slug],"Visible internal phrase: useful SEO value",P0,fixed,Removed from generated output
+/blog/[slug],"Visible production placeholder: Visuals to insert in next content sprint",P0,fixed,Removed placeholder section from generated output
+/tools/rent-arrears-calculator,Potential mojibake currency and symbols,P0,needs rendered verification,Do not mass-rewrite until output encoding is verified
+/blog/how-to-write-letter-before-action-unpaid-rent,Reported malformed title,P0,needs rendered verification,Inspect rendered metadata and H1

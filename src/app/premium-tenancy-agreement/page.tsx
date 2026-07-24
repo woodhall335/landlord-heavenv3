@@ -85,7 +85,7 @@ export default function PremiumTenancyAgreementPage() {
           'Enhanced AST template wording for post-May 2026 England rules',
           'Adds fuller wording around management and handover',
           'Separate from Student, HMO / Shared House, and Lodger routes',
-          'Solicitor-approved guided agreement pack with validation checks and a preview before payment',
+          'Review-ready guided agreement pack with validation checks and a preview before payment',
         ]}
         compliancePoints={[
           'Built on the same current England periodic route as Standard from 1 May 2026.',
@@ -198,7 +198,7 @@ export default function PremiumTenancyAgreementPage() {
           },
           ctaTitle: 'Build the validated Premium tenancy pack',
           ctaBody:
-            'Use this option when the tenancy is still an ordinary residential let, but the paperwork needs solicitor-approved drafting depth, validation checks, and stronger day-to-day management support than Standard provides.',
+            'Use this option when the tenancy is still an ordinary residential let, but the paperwork needs review-ready drafting depth, validation checks, and stronger day-to-day management support than Standard provides.',
         }}
         faqs={[
           {

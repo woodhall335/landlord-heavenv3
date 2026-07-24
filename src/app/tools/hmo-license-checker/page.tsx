@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import Link from 'next/link';
+import { useState, useCallback, useEffect } from 'react';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout';
 import { Container } from '@/components/ui/Container';
@@ -13,6 +12,8 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { productLinks, toolLinks } from '@/lib/seo/internal-links';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
+import { ContextualOffer } from '@/components/conversion/ContextualOffer';
+import { recordMarketingGrowthEvent } from '@/lib/analytics/growth-events';
 
 // Function to lookup council by postcode
 function getCouncilByPostcode(postcode: string): { name: string; website: string } | null {
@@ -53,7 +54,7 @@ export default function HMOLicenseChecker() {
     {
       question: 'What happens if I operate an unlicensed HMO?',
       answer:
-        "Operating an unlicensed HMO is a criminal offence. You can face unlimited fines (commonly GBP 30,000+), rent repayment orders forcing you to repay up to 12 months' rent to your tenants, and you cannot serve Section 21 notices to end tenancies. You may also be prosecuted and end up with a criminal record.",
+        "Operating a licensable HMO without the required licence is an offence. The council may prosecute or impose a financial penalty, and a rent repayment order or possession-route restriction may apply where the statutory conditions are met. Check the current rules and local scheme with the council.",
     },
     {
       question: 'How much does an HMO license cost?',
@@ -319,10 +320,10 @@ export default function HMOLicenseChecker() {
       yPosition -= 20;
 
       const penalties = [
-        '- Unlimited fines (up to GBP 30,000+)',
-        '- Rent repayment orders (up to 12 months rent)',
-        '- Cannot serve Section 21 notices',
-        '- Criminal prosecution possible',
+        '- Prosecution or a local-authority financial penalty',
+        '- A rent repayment order where the legal conditions are met',
+        '- Possession-route restrictions while a required licence is missing',
+        '- Other enforcement action depending on the offence',
       ];
 
       penalties.forEach((line) => {
@@ -387,6 +388,21 @@ export default function HMOLicenseChecker() {
     formData.numHouseholds &&
     formData.propertyType &&
     formData.hasSharedFacilities;
+  const sharedHouseRelevant =
+    Number(formData.numOccupants) >= 3 &&
+    Number(formData.numHouseholds) >= 2 &&
+    formData.hasSharedFacilities === 'yes';
+
+  useEffect(() => {
+    if (!generated) return;
+    recordMarketingGrowthEvent('result_viewed', {
+      sourcePage: '/tools/hmo-license-checker',
+      pagePath: '/tools/hmo-license-checker',
+      pageType: 'hmo_compliance',
+      toolName: 'HMO License Checker',
+      resultState: sharedHouseRelevant ? 'shared_house_relevant' : 'licensing_check_only',
+    });
+  }, [generated, sharedHouseRelevant]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -404,24 +420,21 @@ export default function HMOLicenseChecker() {
         hideMedia
         showReviewPill={false}
         showTrustPositioningBar
-        showUsageCounter
+        showUsageCounter={false}
         primaryCta={{ label: 'Check my HMO licence position', href: '#checker' }}
-        secondaryCta={{ label: 'Choose my tenancy agreement', href: '/products/ast' }}
       >
         <p className="mt-4 text-sm text-white/90">Instant assessment • HMO guidance • Built to help landlords avoid licensing mistakes</p>
       </UniversalHero>
 
-      <section className="border-b border-gray-100 bg-white py-6">
+      <section className="hidden border-b border-gray-100 bg-white py-6 lg:block">
         <Container>
           <div className="mx-auto max-w-5xl">
             <p className="text-base leading-7 text-gray-700">
               Use this checker when you need a quick landlord view on whether a property may be an HMO,
               whether local licensing checks matter, and what evidence to confirm before letting to
-              multiple occupiers. If the check points to shared occupation or multiple households,{' '}
-              <Link href="/hmo-shared-house-tenancy-agreement" className="font-semibold text-primary hover:underline">
-                create an HMO tenancy agreement and house rules pack
-              </Link>{' '}
-              before you issue terms to the occupiers.
+              multiple occupiers. If the check points to shared occupation or multiple households,
+              the result will explain the next documents to consider before you issue terms to the
+              occupiers.
             </p>
             <div className="mt-5 grid gap-4 md:grid-cols-3">
               <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
@@ -479,7 +492,7 @@ export default function HMOLicenseChecker() {
       </div>
 
       {/* Main Content */}
-      <div className="py-20 md:py-24">
+      <div className="py-8 md:py-10 lg:py-20">
         <Container>
           <div className="max-w-4xl mx-auto">
             <div id="checker" className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
@@ -499,6 +512,7 @@ export default function HMOLicenseChecker() {
           <input
             type="text"
             id="postcode"
+            name="postcode"
             value={formData.postcode}
             onChange={(e) =>
               setFormData({ ...formData, postcode: e.target.value })
@@ -522,6 +536,7 @@ export default function HMOLicenseChecker() {
           <input
             type="number"
             id="numOccupants"
+            name="numOccupants"
             value={formData.numOccupants}
             onChange={(e) =>
               setFormData({ ...formData, numOccupants: e.target.value })
@@ -546,6 +561,7 @@ export default function HMOLicenseChecker() {
           <input
             type="number"
             id="numHouseholds"
+            name="numHouseholds"
             value={formData.numHouseholds}
             onChange={(e) =>
               setFormData({ ...formData, numHouseholds: e.target.value })
@@ -569,6 +585,7 @@ export default function HMOLicenseChecker() {
           </label>
           <select
             id="propertyType"
+            name="propertyType"
             value={formData.propertyType}
             onChange={(e) =>
               setFormData({ ...formData, propertyType: e.target.value })
@@ -632,13 +649,36 @@ export default function HMOLicenseChecker() {
         </button>
 
         {generated && (
-          <div className="rounded-lg bg-success-50 border border-success-200 p-4">
+          <div className="space-y-4 rounded-lg border border-success-200 bg-success-50 p-4" role="status">
             <p className="text-sm text-success-800 font-medium">
               Your assessment has been created and downloaded successfully.
             </p>
+            <p className="text-sm leading-6 text-gray-700">
+              This checker helps you investigate the licensing position. It does not create a tenancy
+              agreement, house rules or other occupier paperwork, and you should confirm the final
+              licensing position with the local council.
+            </p>
+            <button
+              type="button"
+              className="text-sm font-semibold text-[#5922bc] underline underline-offset-4"
+              onClick={() => {
+                setGenerated(false);
+                document.getElementById('checker')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              Edit or restart this check
+            </button>
           </div>
         )}
       </form>
+
+      {generated && sharedHouseRelevant ? (
+        <ContextualOffer
+          sourceRoute="/tools/hmo-license-checker"
+          placement="tool_result"
+          className="mt-6 overflow-hidden rounded-2xl"
+        />
+      ) : null}
 
       {/* Educational Content */}
       <div className="mt-12 space-y-8">
@@ -662,12 +702,16 @@ export default function HMOLicenseChecker() {
               Penalties for unlicensed HMOs can include:
             </p>
             <ul className="list-disc list-inside space-y-1 ml-4">
-              <li>Unlimited fines (commonly GBP 30,000 or more)</li>
-              <li>Rent repayment orders forcing you to repay up to 12 months' rent</li>
-              <li>Inability to serve Section 21 notices (no-fault evictions)</li>
-              <li>Criminal prosecution and record</li>
+              <li>Prosecution or a financial penalty imposed by the local authority</li>
+              <li>A rent repayment order where the statutory conditions are met</li>
+              <li>Restrictions on using possession routes while a required licence is missing</li>
+              <li>Other enforcement action depending on the offence and local scheme</li>
             </ul>
           </div>
+          <p className="mt-4 text-xs leading-5 text-gray-600">
+            Penalties and repayment rules can change. Check the current position with the council and
+            the official GOV.UK HMO licensing guidance before relying on this summary.
+          </p>
         </div>
 
         {/* Section 2: Do I Need an HMO License? */}

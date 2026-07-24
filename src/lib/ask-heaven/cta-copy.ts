@@ -30,7 +30,7 @@ const ASK_HEAVEN_CTA_COPY: Partial<Record<AskHeavenCtaKey, AskHeavenCtaCopy>> = 
   'notice_only:england:eviction': {
     product: 'notice_only',
     title: 'Need the Stage 1 notice and service file?',
-    description: `Prepare a solicitor-approved Section 8 notice and service file with Form 3A, N215, arrears schedule, and checks (${NOTICE_PRICE}).`,
+    description: `Prepare a review-ready Section 8 notice and service file with Form 3A, N215, arrears schedule, and checks (${NOTICE_PRICE}).`,
     buttonText: 'Create my Section 8 notice',
     displayPrice: NOTICE_PRICE,
   },
@@ -93,7 +93,7 @@ const ASK_HEAVEN_CTA_COPY: Partial<Record<AskHeavenCtaKey, AskHeavenCtaCopy>> = 
   'complete_pack:england:court_process': {
     product: 'complete_pack',
     title: 'Case moving toward court?',
-    description: `Prepare the full solicitor-approved Section 8 court and possession file, not just the court forms (${COMPLETE_PACK_PRICE}).`,
+    description: `Prepare the full review-ready Section 8 court and possession file, not just the court forms (${COMPLETE_PACK_PRICE}).`,
     buttonText: 'Prepare my court pack',
     displayPrice: COMPLETE_PACK_PRICE,
     priceNote: 'For landlords in England',

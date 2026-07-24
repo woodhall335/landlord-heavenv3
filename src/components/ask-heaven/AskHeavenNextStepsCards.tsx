@@ -39,7 +39,7 @@ const cards: CardDefinition[] = [
     title: 'Stage 1 Notice & Service File',
     price: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.priceLabel,
     description:
-      'For landlords in England who need a solicitor-approved Section 8 notice and service file with Form 3A, N215, arrears, and checks.',
+      'For landlords in England who need a review-ready Section 8 notice and service file with Form 3A, N215, arrears, and checks.',
     ctaText: 'Create my Section 8 notice',
     href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.landingHref,
     ariaLabel: 'Create my Section 8 notice',

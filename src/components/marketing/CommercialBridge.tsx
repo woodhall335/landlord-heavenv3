@@ -11,6 +11,8 @@ import type {
   MarketingGrowthEventName,
   MarketingGrowthEventPayload,
 } from '@/lib/analytics/growth-events';
+import { recordMarketingGrowthEvent } from '@/lib/analytics/growth-events';
+import { getConversionMapping } from '@/lib/conversion/registry';
 
 type BridgeIntent = 'rent_increase' | 'section8' | 'money_claim' | 'tenancy_agreement' | string;
 
@@ -90,6 +92,13 @@ export function CommercialBridge({
   body,
   className,
 }: CommercialBridgeProps) {
+  const mapping = getConversionMapping(sourcePage);
+  const resolvedHeadline = mapping?.headline ?? headline;
+  const resolvedBody = mapping?.supportingCopy ?? body;
+  const resolvedPrimaryProduct = mapping?.primaryProduct ?? primaryProduct;
+  const resolvedPrimaryHref = mapping?.destinationRoute ?? primaryHref;
+  const resolvedPrimaryLabel = mapping?.ctaLabel ?? primaryLabel;
+
   useEffect(() => {
     trackEvent(
       'commercial_bridge_viewed',
@@ -104,7 +113,18 @@ export function CommercialBridge({
         dedupeKey: `${sourcePage}:${intent}:${ctaPosition}:commercial_bridge_viewed`,
       }
     );
-  }, [ctaPosition, intent, primaryProduct, sourcePage]);
+    recordMarketingGrowthEvent('contextual_offer_view', {
+      sourcePage,
+      pagePath: sourcePage,
+      pageType: 'guide',
+      intent,
+      ctaPosition,
+      destination: resolvedPrimaryHref,
+      recommendedProduct: resolvedPrimaryProduct,
+      price: mapping?.price,
+      experimentId: mapping?.trackingId,
+    });
+  }, [ctaPosition, intent, mapping?.price, mapping?.trackingId, resolvedPrimaryHref, resolvedPrimaryProduct, sourcePage]);
 
   const trackClick = (destination: string, productClicked?: string, toolName?: string) => {
     trackEvent(
@@ -132,6 +152,20 @@ export function CommercialBridge({
         productClicked,
         userType: 'landlord',
       });
+      if (destination === resolvedPrimaryHref) {
+        recordMarketingGrowthEvent('contextual_offer_click', {
+          sourcePage,
+          pagePath: sourcePage,
+          pageType: 'guide',
+          intent,
+          ctaPosition,
+          destination,
+          recommendedProduct: resolvedPrimaryProduct,
+          productClicked,
+          price: mapping?.price,
+          experimentId: mapping?.trackingId,
+        });
+      }
     }
   };
 
@@ -152,9 +186,14 @@ export function CommercialBridge({
             {riskMessage}
           </div>
           <h2 className="max-w-3xl text-xl font-bold tracking-normal text-slate-950 sm:text-2xl">
-            {headline}
+            {resolvedHeadline}
           </h2>
-          {body ? <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-700">{body}</p> : null}
+          {resolvedBody ? <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-700">{resolvedBody}</p> : null}
+          {mapping ? (
+            <p className="mt-3 text-sm font-semibold text-slate-950">
+              Fixed price {mapping.price}.{mapping.previewAvailable ? ' Preview available before payment.' : ''}
+            </p>
+          ) : null}
 
           <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             {primaryToolHref ? (
@@ -170,8 +209,8 @@ export function CommercialBridge({
             ) : null}
 
             <Link
-              href={primaryHref}
-              onClick={() => trackClick(primaryHref, primaryProduct)}
+              href={resolvedPrimaryHref}
+              onClick={() => trackClick(resolvedPrimaryHref, resolvedPrimaryProduct)}
               className={clsx(
                 'inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2',
                 primaryToolHref
@@ -180,7 +219,7 @@ export function CommercialBridge({
               )}
             >
               <ShieldCheck className="h-4 w-4" aria-hidden="true" />
-              {primaryLabel || labelFromProduct(primaryProduct)}
+              {resolvedPrimaryLabel || labelFromProduct(resolvedPrimaryProduct)}
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
 

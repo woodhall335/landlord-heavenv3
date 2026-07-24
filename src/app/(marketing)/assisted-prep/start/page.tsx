@@ -88,8 +88,12 @@ export async function generateMetadata({ searchParams }: StartPageProps): Promis
     title: seo.title,
     description: seo.description,
     keywords: seo.keywords,
+    robots: {
+      index: false,
+      follow: true,
+    },
     alternates: {
-      canonical: `/assisted-prep/start?service=${service}`,
+      canonical: `/assisted-prep`,
     },
   };
 }

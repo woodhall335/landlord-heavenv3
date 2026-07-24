@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export function AssistedAdminActionModal({
   open,
@@ -27,17 +27,49 @@ export function AssistedAdminActionModal({
   onClose: () => void;
   onSubmit: (note: string) => void | Promise<void>;
 }) {
+  if (!open) return null;
+
+  return (
+    <AssistedAdminActionModalContent
+      title={title}
+      description={description}
+      noteLabel={noteLabel}
+      noteRequired={noteRequired}
+      sensitive={sensitive}
+      confirmLabel={confirmLabel}
+      submitLabel={submitLabel}
+      loading={loading}
+      onClose={onClose}
+      onSubmit={onSubmit}
+    />
+  );
+}
+
+function AssistedAdminActionModalContent({
+  title,
+  description,
+  noteLabel,
+  noteRequired,
+  sensitive,
+  confirmLabel,
+  submitLabel,
+  loading,
+  onClose,
+  onSubmit,
+}: {
+  title: string;
+  description: string;
+  noteLabel: string;
+  noteRequired: boolean;
+  sensitive: boolean;
+  confirmLabel: string;
+  submitLabel: string;
+  loading: boolean;
+  onClose: () => void;
+  onSubmit: (note: string) => void | Promise<void>;
+}) {
   const [note, setNote] = useState('');
   const [confirmed, setConfirmed] = useState(false);
-
-  useEffect(() => {
-    if (open) {
-      setNote('');
-      setConfirmed(false);
-    }
-  }, [open]);
-
-  if (!open) return null;
 
   const canSubmit = !loading && (!noteRequired || note.trim().length > 0) && (!sensitive || confirmed);
 

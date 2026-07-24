@@ -1,0 +1,6 @@
+route,visitor_problem,paid_continuation,current_match,visibility,paid_value,clear_on_mobile,preconfiguration,generic_mismatch,status
+/tools/hmo-license-checker,HMO licensing,HMO shared-house agreement,partial,after result,shared-house-specific terms,to verify,none previously,yes,remediated mapping
+/tools/rent-arrears-calculator,Quantify arrears,Money Claim,strong,after result,claim documents and narrative,yes,secure state recommended,no,existing strong handoff
+/blog/how-to-write-letter-before-action-unpaid-rent,Pre-action debt recovery,Money Claim,strong,inline,claim preparation,yes,money-claim context,no,registry applied
+/blog/england-bailiff-eviction,Enforce possession order,Complete Pack,strong,inline and sticky,coherent court file,yes,court-stage context,no,registry applied
+/blog/england-section-8-ground-1,Ground 1 notice,Notice Only,strong,inline and sticky,validated notice and service steps,yes,ground=1 editable,no,registry applied

@@ -1,0 +1,4 @@
+experiment_id,hypothesis,control,treatment,status,kill_switch,conflicts
+sales001_cta_copy,problem-specific wording improves CTA CTR,current contextual wording,task-continuation wording with fixed price,not activated,configuration flag,none
+sales001_result_offer,immediate post-result offer improves product visits,current result placement,offer directly after result,not activated,configuration flag,cta_copy
+sales001_product_preview,preview emphasis improves builder starts,current hero,preview reassurance beside primary CTA,not activated,configuration flag,none

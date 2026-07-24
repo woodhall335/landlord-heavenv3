@@ -86,7 +86,7 @@ export default function EnglandTenancyAgreementsPage() {
         introBody={[
           'Landlords do not always arrive with clean template-first intent. Some want the document example immediately, while others want context on the wording shift from older AST terminology or reassurance that they are still on the right England route.',
           'That is why this page remains live as support content. Its job is to explain the route landscape, keep England-specific terminology straight, and move users to the England agreement example or comparison page instead of leaving them with a vague overview or a static wording-only form.',
-          'Once the example page has satisfied the broad template question, landlords can branch into Standard, Premium, the specialist routes, or the full comparison page and build a fixed-price, solicitor-approved document preparation workflow around their property, occupiers, rent, deposit, and management facts.',
+          'Once the example page has satisfied the broad template question, landlords can branch into Standard, Premium, the specialist routes, or the full comparison page and build a fixed-price, review-ready document preparation workflow around their property, occupiers, rent, deposit, and management facts.',
         ]}
         highlights={[
           'Keeps the England agreement pages discoverable without trying to replace the main example page',

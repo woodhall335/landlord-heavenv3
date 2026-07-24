@@ -9,6 +9,10 @@ function toPathSet(entries: Awaited<ReturnType<typeof sitemap>>): Set<string> {
   return new Set(entries.map((entry) => new URL(entry.url).pathname));
 }
 
+function toUrlSet(entries: Awaited<ReturnType<typeof sitemap>>): Set<string> {
+  return new Set(entries.map((entry) => entry.url));
+}
+
 function entryByPath(entries: Awaited<ReturnType<typeof sitemap>>, path: string) {
   return entries.find((entry) => new URL(entry.url).pathname === path);
 }
@@ -57,6 +61,26 @@ describe('sitemap indexability regression', () => {
     ].forEach((path) => {
       expect(paths).toContain(path);
     });
+  });
+
+  it('keeps assisted-prep discovery pages indexed but excludes intake query states', async () => {
+    const entries = await sitemap();
+    const paths = toPathSet(entries);
+    const urls = toUrlSet(entries);
+
+    [
+      '/assisted-prep',
+      '/section-8-notice-assisted-prep',
+      '/money-claim-assisted-prep',
+      '/possession-claim-assisted-prep',
+    ].forEach((path) => {
+      expect(paths).toContain(path);
+    });
+
+    for (const url of urls) {
+      expect(url).not.toContain('/assisted-prep/start?');
+      expect(url).not.toContain('?service=');
+    }
   });
 
   it('uses the SEO rescue release date for product and high-intent bridge pages', async () => {

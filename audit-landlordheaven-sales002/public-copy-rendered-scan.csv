@@ -1,0 +1,6 @@
+check,source_and_build_status,rendered_browser_status
+Letter Before Action metadata and H1,regression guarded,blocked
+internal production language,regression test passed,blocked
+unsupported HMO penalty wording,removed,blocked
+malformed brackets and mojibake,targeted source review completed,blocked
+currency apostrophes and dashes,targeted source review completed,blocked

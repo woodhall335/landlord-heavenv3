@@ -1,0 +1,14 @@
+route,failed_requests,result
+/products/notice-only,NOT RUN,NOT RUN
+/products/complete-pack,NOT RUN,NOT RUN
+/products/money-claim,NOT RUN,NOT RUN
+/products/ast,NOT RUN,NOT RUN
+/products/section-13-standard,NOT RUN,NOT RUN
+/tools/hmo-license-checker,NOT RUN,NOT RUN
+/tools/rent-arrears-calculator,NOT RUN,NOT RUN
+/blog/how-to-write-letter-before-action-unpaid-rent,NOT RUN,NOT RUN
+/blog/bailiff-eviction-day-what-to-expect,NOT RUN,NOT RUN
+/eviction-cost-uk,NOT RUN,NOT RUN
+/how-to-rent-guide,NOT RUN,NOT RUN
+/n5-n119-possession-claim,NOT RUN,NOT RUN
+/section-8-grounds/how-to-evict-a-tenant-using-ground-1a,NOT RUN,NOT RUN

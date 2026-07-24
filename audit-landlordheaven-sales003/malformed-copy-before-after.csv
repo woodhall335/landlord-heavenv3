@@ -1,0 +1,3 @@
+route,before,correction,controlling_file,after,result
+/blog/how-to-write-letter-before-action-unpaid-rent,"Title risk: ""How to Write a Letter Before Action for Unpaid Rent (""",Blog card descriptions and titles are no longer visually clamped by BlogCard.,src/components/blog/BlogCard.tsx,Rendered-card clipping source removed; route title still needs rendered browser confirmation.,PASS SOURCE / RENDER QA NOT RUN
+/blog/bailiff-eviction-day-what-to-expect,"Title risk: ""Bailiff Eviction Day - What to Expect (England Guide )""",Blog card descriptions and titles are no longer visually clamped by BlogCard.,src/components/blog/BlogCard.tsx,Rendered-card clipping source removed; route title still needs rendered browser confirmation.,PASS SOURCE / RENDER QA NOT RUN

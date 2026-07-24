@@ -1,0 +1,63 @@
+route,expectedIndexability,metaRobots,xRobotsTag,actualIndexability,defect,finalStatus
+/,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/pricing,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/products/notice-only,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/products/complete-pack,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/products/money-claim,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/products/ast,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/products/section-13-standard,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/products/section-13-defence,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/standard-tenancy-agreement,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/premium-tenancy-agreement,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/student-tenancy-agreement,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/hmo-shared-house-tenancy-agreement,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/lodger-agreement,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/tools,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/tools/hmo-license-checker,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/tools/rent-arrears-calculator,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/tools/rent-increase-challenge-checker,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/assisted-prep,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/section-8-notice-assisted-prep,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/money-claim-assisted-prep,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/possession-claim-assisted-prep,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/landlord-documents-england,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/samples,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/compare/section-8-stage-1-vs-stage-2,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/compare/section-13-standard-vs-defence,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/compare/tenancy-agreement-options-england,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/form-3-section-8,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/n5-n119-possession-claim,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/money-claim-carpet-damage,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/eviction-cost-uk,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/how-to-rent-guide,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/rent-increase,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/rent-increase/section-13-notice,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/rent-increase/form-4a-guide,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/rent-increase/how-to-increase-rent,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/rent-increase/section-13-tribunal,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/rent-increase/market-rent-calculation,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/rent-increase/rent-increase-challenge,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/blog/how-to-write-letter-before-action-unpaid-rent,INDEXABLE,"index,follow",,INDEXABLE,,PASS
+/blog/england-bailiff-eviction,INDEXABLE,"index,follow",,INDEXABLE,,PASS
+/blog/england-section-8-ground-1,INDEXABLE,"index,follow",,INDEXABLE,,PASS
+/blog/england-county-court-forms,INDEXABLE,"index,follow",,INDEXABLE,,PASS
+/blog/how-long-does-eviction-take-uk,INDEXABLE,"index,follow",,INDEXABLE,,PASS
+/blog/england-section-8-ground-10-11,INDEXABLE,"index,follow",,INDEXABLE,,PASS
+/blog/england-money-claim-online,INDEXABLE,"index,follow",,INDEXABLE,,PASS
+/blog/england-section-8-ground-14,INDEXABLE,"index,follow",,INDEXABLE,,PASS
+/blog/england-section-8-ground-12,INDEXABLE,"index,follow",,INDEXABLE,,PASS
+/blog/uk-guarantor-agreements-guide,INDEXABLE,"index,follow",,INDEXABLE,,PASS
+/blog/scotland-first-tier-tribunal,INDEXABLE,"index,follow",,INDEXABLE,,PASS
+/section-8-grounds/how-to-evict-a-tenant-using-ground-1a,INDEXABLE,"index, follow",,INDEXABLE,,PASS
+/blog/how-to-serve-eviction-notice,INDEXABLE,"index,follow",,INDEXABLE,,PASS
+/dashboard,INTENTIONALLY NOINDEX,"noindex, nofollow",,INTENTIONALLY NOINDEX,,PASS
+/auth/sign-in,INTENTIONALLY NOINDEX,noindex,,INTENTIONALLY NOINDEX,,PASS
+/wizard,INTENTIONALLY NOINDEX,"noindex, follow",,INTENTIONALLY NOINDEX,,PASS
+/checkout/success,INTENTIONALLY NOINDEX,noindex,,INTENTIONALLY NOINDEX,,PASS
+/checkout/download,INTENTIONALLY NOINDEX,noindex,,INTENTIONALLY NOINDEX,,PASS
+/assisted-prep/start?service=section8,INTENTIONALLY NOINDEX,"noindex, follow",,INTENTIONALLY NOINDEX,,PASS
+/assisted-prep/start?service=money_claim,INTENTIONALLY NOINDEX,"noindex, follow",,INTENTIONALLY NOINDEX,,PASS
+/assisted-prep/start?service=possession,INTENTIONALLY NOINDEX,"noindex, follow",,INTENTIONALLY NOINDEX,,PASS
+/official-forms/n325-eng.pdf,INTENTIONALLY NOINDEX,,"noindex, nofollow, noarchive",INTENTIONALLY NOINDEX,,PASS
+/products/money-claim-pack,INDEXABLE BUT CANONICALISED,"index, follow",,INDEXABLE BUT CANONICALISED,,PASS
+/hmo-tenancy-agreement-template,INDEXABLE BUT CANONICALISED,"index, follow",,INDEXABLE BUT CANONICALISED,,PASS

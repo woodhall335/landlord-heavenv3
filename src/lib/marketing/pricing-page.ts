@@ -22,7 +22,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
     productSku: 'notice_only',
     price: PRODUCTS.notice_only.displayPrice,
     coverage: 'For landlords in England',
-    bestFor: 'You need a solicitor-approved Section 8 notice and service file before anything goes to the tenant.',
+    bestFor: 'You need a review-ready Section 8 notice and service file before anything goes to the tenant.',
     points: [
       'Prepare the notice file properly before anything goes to the tenant',
       'Includes Form 3A, N215, rent arrears schedule, service instructions, and validity checks',
@@ -36,7 +36,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
     productSku: 'complete_pack',
     price: PRODUCTS.complete_pack.displayPrice,
     coverage: 'For landlords in England',
-    bestFor: 'You want a solicitor-approved Section 8 court and possession file prepared together.',
+    bestFor: 'You want a review-ready Section 8 court and possession file prepared together.',
     points: [
       'Prepare the full possession file, not just the court forms',
       'Includes Stage 1 plus N5, N119, witness statement, evidence checklist, court bundle index, and hearing support',

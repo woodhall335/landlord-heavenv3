@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     'Section 8 court pack',
     'Section 8 possession pack',
     'Section 8 possession claim pack',
-    'solicitor approved Section 8 court file',
+    'review-ready Section 8 court file',
     'N5 N119 forms',
     'N5 possession claim form',
     'N119 particulars of claim',
@@ -51,7 +51,7 @@ const faqs: FAQItem[] = [
   {
     question: 'What does the Stage 2 Court & Possession Pack include?',
     answer:
-      'It is the full Solicitor-approved Section 8 court and possession file for England landlords. It includes everything in Stage 1 plus N5, N119, witness statement, court readiness status, court bundle index, evidence collection checklist, court filing guide, hearing checklist, eviction case summary, and arrears engagement letter.',
+      'It is the full Review-ready Section 8 court and possession file for England landlords. It includes everything in Stage 1 plus N5, N119, witness statement, court readiness status, court bundle index, evidence collection checklist, court filing guide, hearing checklist, eviction case summary, and arrears engagement letter.',
   },
   {
     question: 'Who is this built for?',
@@ -401,7 +401,7 @@ export default function CompleteEvictionPackPage() {
     howThisHelps: {
       title: 'How the full pack improves the landlord outcome',
       intro:
-        'The solicitor-approved Section 8 court and possession claim file keeps the route clear from notice through issue, evidence, and hearing preparation.',
+        'The review-ready Section 8 court and possession claim file keeps the route clear from notice through issue, evidence, and hearing preparation.',
       cards: [
         {
           title: 'It keeps the notice and court paperwork aligned',

@@ -1,0 +1,9 @@
+stage,event,source_route,product_slug,builder_step,device,traffic,campaign,experiment,auth,price,error_category,pii
+landing,organic_landing_view,yes,no,no,yes,yes,yes,yes,yes,no,no,none
+offer,contextual_offer_view,yes,yes,no,yes,yes,yes,yes,yes,yes,no,none
+offer,contextual_offer_click,yes,yes,no,yes,yes,yes,yes,yes,yes,no,none
+product,product_view,yes,yes,no,yes,yes,yes,yes,yes,yes,no,none
+builder,builder_started,yes,yes,no,yes,yes,yes,yes,yes,yes,no,none
+builder,builder_step_completed,yes,yes,yes,yes,yes,yes,yes,yes,yes,no,none
+checkout,checkout_opened,yes,yes,no,yes,yes,yes,yes,yes,yes,no,none
+payment,payment_succeeded,yes,yes,no,yes,yes,yes,yes,yes,yes,no,none

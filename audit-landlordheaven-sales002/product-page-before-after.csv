@@ -1,0 +1,6 @@
+route,before,after,production_validated,rendered_qa
+/products/notice-only,decision detail dispersed,"title,outcome,price,outputs,preview,next step,primary CTA and help action in first decision block",yes,blocked
+/products/complete-pack,decision detail dispersed,"title,outcome,price,outputs,preview,next step,primary CTA and help action in first decision block",yes,blocked
+/products/money-claim,decision detail dispersed,"title,outcome,price,outputs,preview,next step,primary CTA and help action in first decision block",yes,blocked
+/products/ast,decision detail dispersed,"title,outcome,price,outputs,preview,next step,primary CTA and help action in first decision block",yes,blocked
+/products/section-13-standard,decision detail dispersed,"title,outcome,price,outputs,preview,next step,primary CTA and help action in first decision block",yes,blocked

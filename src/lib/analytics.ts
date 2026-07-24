@@ -275,6 +275,14 @@ export function trackPurchase(
     destination: typeof window !== 'undefined' ? window.location.pathname : undefined,
     userType: 'landlord',
   });
+  recordMarketingGrowthEvent('payment_succeeded', {
+    pagePath: typeof window !== 'undefined' ? window.location.pathname : undefined,
+    productSlug: attribution?.product_type || items?.[0]?.item_id,
+    recommendedProduct: attribution?.product_type || items?.[0]?.item_id,
+    price: value,
+    campaign: attribution?.utm_campaign,
+    trafficSource: attribution?.utm_source,
+  });
 }
 
 export interface ProductViewTrackingContext {
@@ -331,6 +339,12 @@ export function trackBeginCheckout(
   recordMarketingGrowthEvent('checkout_started', {
     productClicked: productId,
     userType: 'landlord',
+  });
+  recordMarketingGrowthEvent('checkout_opened', {
+    pagePath: typeof window !== 'undefined' ? window.location.pathname : undefined,
+    productSlug: productId,
+    recommendedProduct: productId,
+    price: value,
   });
 
   // Google Analytics
@@ -641,6 +655,12 @@ export function trackWizardStart(params: WizardTrackingParams): void {
     dedupeScope: 'session',
     dedupeKey: `${params.product}:${params.jurisdiction || 'unknown'}`,
   });
+  recordMarketingGrowthEvent('builder_started', {
+    pagePath: typeof window !== 'undefined' ? window.location.pathname : '/wizard/flow',
+    productSlug: params.product,
+    recommendedProduct: params.product,
+    trafficSource: params.src || 'direct',
+  });
 
   // Track as Facebook AddToCart (intent signal)
   if (typeof window !== 'undefined' && window.fbq) {
@@ -690,6 +710,12 @@ export function trackWizardStepComplete(params: {
     variant: 'derived',
     dedupeScope: params.caseId ? 'case' : 'session',
     dedupeKey: `${params.caseId || 'session'}:${normalizedStep.stepGroup}`,
+  });
+  recordMarketingGrowthEvent('builder_step_completed', {
+    pagePath: typeof window !== 'undefined' ? window.location.pathname : '/wizard/flow',
+    productSlug: params.product,
+    recommendedProduct: params.product,
+    builderStep: normalizedStep.stepGroup,
   });
 }
 
@@ -761,6 +787,14 @@ export function trackWizardStepView(params: {
     variant: 'derived',
     dedupeScope: params.caseId ? 'case' : 'session',
     dedupeKey,
+  });
+  recordMarketingGrowthEvent('builder_step_viewed', {
+    pagePath: typeof window !== 'undefined' ? window.location.pathname : '/wizard/flow',
+    productSlug: params.product,
+    recommendedProduct: params.product,
+    builderStep: normalizedStep.stepGroup,
+    trafficSource: params.src || 'direct',
+    campaign: params.utm_campaign,
   });
 
   const virtualPageViewDedupeKey = `wizard_step_page_view::${dedupeKey}`;
@@ -941,6 +975,12 @@ export function trackWizardAbandon(params: {
     jurisdiction: params.jurisdiction,
     last_step: params.lastStep,
   });
+  recordMarketingGrowthEvent('builder_abandoned', {
+    pagePath: typeof window !== 'undefined' ? window.location.pathname : '/wizard/flow',
+    productSlug: params.product,
+    recommendedProduct: params.product,
+    builderStep: normalizeWizardStep(params.lastStep).stepGroup,
+  });
 }
 
 /**
@@ -1047,7 +1087,6 @@ export function trackWizardEntryViewWithAttribution(params: WizardFullAttributio
     dedupeScope: 'session',
     dedupeKey: `${params.product}:${params.jurisdiction || 'not_selected'}`,
   });
-
   // Track as Facebook ViewContent
   if (typeof window !== 'undefined' && window.fbq) {
     window.fbq('track', 'ViewContent', {

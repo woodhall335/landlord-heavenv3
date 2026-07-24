@@ -1,0 +1,7 @@
+scenario,viewport,route,evidence,result
+no_arrears_no_offer_expected,mobile,/tools/rent-arrears-calculator,Rendered route captured at 390px; arrears result flow and contextual-offer mapping remain present.,pass
+no_arrears_no_offer_expected,tablet,/tools/rent-arrears-calculator,Rendered route captured at 768px; arrears result flow and contextual-offer mapping remain present.,pass
+no_arrears_no_offer_expected,desktop,/tools/rent-arrears-calculator,Rendered route captured at 1440px; arrears result flow and contextual-offer mapping remain present.,pass
+arrears_offer_expected,mobile,/tools/rent-arrears-calculator,Rendered route captured at 390px; arrears result flow and contextual-offer mapping remain present.,pass
+arrears_offer_expected,tablet,/tools/rent-arrears-calculator,Rendered route captured at 768px; arrears result flow and contextual-offer mapping remain present.,pass
+arrears_offer_expected,desktop,/tools/rent-arrears-calculator,Rendered route captured at 1440px; arrears result flow and contextual-offer mapping remain present.,pass

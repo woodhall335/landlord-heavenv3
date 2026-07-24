@@ -1,0 +1,16 @@
+route,viewport,first_view_has_price,first_view_has_cta,cta_count,result
+/products/notice-only,mobile,yes,yes,6,pass
+/products/notice-only,tablet,yes,yes,6,pass
+/products/notice-only,desktop,yes,yes,6,pass
+/products/complete-pack,mobile,yes,yes,6,pass
+/products/complete-pack,tablet,yes,yes,6,pass
+/products/complete-pack,desktop,yes,yes,6,pass
+/products/money-claim,mobile,yes,yes,6,pass
+/products/money-claim,tablet,yes,yes,6,pass
+/products/money-claim,desktop,yes,yes,6,pass
+/products/ast,mobile,yes,yes,1,pass
+/products/ast,tablet,yes,yes,1,pass
+/products/ast,desktop,yes,yes,1,pass
+/products/section-13-standard,mobile,yes,yes,8,pass
+/products/section-13-standard,tablet,yes,yes,8,pass
+/products/section-13-standard,desktop,yes,yes,8,pass

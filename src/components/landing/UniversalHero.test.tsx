@@ -54,7 +54,7 @@ describe('UniversalHero review pill', () => {
     expect(screen.getByTestId('hero-review-pill-trust')).toHaveTextContent(
       'Clear England landlord guidance'
     );
-    expect(desktopPill).toHaveTextContent('4.8/5 | 1061 reviews');
+    expect(desktopPill).toHaveTextContent('Built for England landlords');
   });
 
   it('uses the stacked desktop pill for longer trust text and keeps the review row visible', () => {
@@ -72,7 +72,7 @@ describe('UniversalHero review pill', () => {
       'England tenancy agreements | Standard and Premium updated for 1 May 2026'
     );
     expect(screen.getByTestId('hero-review-pill-meta')).toHaveTextContent(
-      '4.8/5 | 1061 reviews'
+      'Built for England landlords'
     );
   });
 });

@@ -290,13 +290,13 @@ export default function AboutPage() {
 
             <div className="grid md:grid-cols-3 gap-8 mb-12">
               <div className="bg-white rounded-lg border border-gray-200 p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">2,000+</div>
-                <p className="text-gray-700 font-semibold">Documents Generated</p>
+                <div className="text-4xl font-bold text-primary mb-2">Clear</div>
+                <p className="text-gray-700 font-semibold">Document Workflows</p>
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">4.8/5</div>
-                <p className="text-gray-700 font-semibold">Average Rating</p>
+                <div className="text-4xl font-bold text-primary mb-2">Practical</div>
+                <p className="text-gray-700 font-semibold">Landlord Guidance</p>
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-6 text-center">
@@ -306,21 +306,19 @@ export default function AboutPage() {
             </div>
 
             <div className="bg-success/10 border-l-4 border-success p-6 rounded-r-lg mb-8">
-              <h3 className="font-semibold text-charcoal mb-2">Eviction Notice Testimonial</h3>
-              <blockquote className="text-gray-700 italic">
-                "Saved me £350 vs my solicitor. The notice was accepted by court first time. Took 10 minutes
-                to generate. Absolutely brilliant service."
-              </blockquote>
-              <p className="text-sm text-gray-600 mt-2">- Manchester Landlord, 3 properties</p>
+              <h3 className="font-semibold text-charcoal mb-2">Eviction Notice Workflow</h3>
+              <p className="text-gray-700">
+                Generate a structured notice file, review the prescribed information carefully, and keep the service
+                record together for the next step.
+              </p>
             </div>
 
             <div className="bg-success/10 border-l-4 border-success p-6 rounded-r-lg">
-              <h3 className="font-semibold text-charcoal mb-2">HMO Compliance Testimonial</h3>
-              <blockquote className="text-gray-700 italic">
-                "I manage 12 HMOs. HMO Pro has saved me from missing two license renewals (£30k+ fines avoided). Best
-                £30/month I spend."
-              </blockquote>
-              <p className="text-sm text-gray-600 mt-2">- Leeds Portfolio Landlord, 12 HMOs</p>
+              <h3 className="font-semibold text-charcoal mb-2">HMO Compliance Workflow</h3>
+              <p className="text-gray-700">
+                Check whether a property may need mandatory, additional or selective licensing, then move into the
+                right tenancy or compliance workflow when the facts are clear.
+              </p>
             </div>
           </div>
         </Container>
@@ -335,7 +333,7 @@ export default function AboutPage() {
             <div className="prose prose-lg max-w-none text-gray-700 mb-8">
               <p className="text-lg">
                 We're not just another template service. We use advanced technology to truly understand your case and
-                generate legally accurate documents.
+                generate structured, case-specific documents.
               </p>
             </div>
 

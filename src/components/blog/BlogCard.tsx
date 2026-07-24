@@ -52,8 +52,8 @@ export function BlogCard({
                   {readTime}
                 </span>
               </div>
-              <h2 className="mb-3 line-clamp-2 text-2xl font-bold text-slate-900 transition-colors group-hover:text-[#692ed4]">{title}</h2>
-              <p className="mb-4 line-clamp-3 text-slate-600">{description}</p>
+              <h2 className="mb-3 text-2xl font-bold text-slate-900 transition-colors group-hover:text-[#692ed4]">{title}</h2>
+              <p className="mb-4 text-slate-600">{description}</p>
               <div className="inline-flex items-center font-semibold text-[#692ed4]">
                 Read Guide
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -92,8 +92,8 @@ export function BlogCard({
               {readTime}
             </span>
           </div>
-          <h2 className="mb-2 line-clamp-2 text-lg font-semibold text-slate-900 transition-colors group-hover:text-[#692ed4]">{title}</h2>
-          <p className="line-clamp-3 text-sm leading-6 text-slate-600">{description}</p>
+          <h2 className="mb-2 text-lg font-semibold text-slate-900 transition-colors group-hover:text-[#692ed4]">{title}</h2>
+          <p className="text-sm leading-6 text-slate-600">{description}</p>
           <div className="mt-4 inline-flex items-center text-sm font-semibold text-[#692ed4]">
             Read guide
             <ArrowRight className="ml-1.5 h-4 w-4 transition-transform group-hover:translate-x-1" />

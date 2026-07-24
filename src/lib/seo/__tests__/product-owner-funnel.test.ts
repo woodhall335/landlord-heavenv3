@@ -152,12 +152,12 @@ const expectedProductMetaDescriptions = {
 const pageCommercialPhraseExpectations = [
   {
     source: 'src/app/(marketing)/products/notice-only/page.tsx',
-    phrases: ['solicitor approved section 8 notice file', 'N215 certificate of service'],
+    phrases: ['review-ready section 8 notice file', 'N215 certificate of service'],
     faq: 'Does this use court approved Section 8 documents?',
   },
   {
     source: 'src/app/(marketing)/products/complete-pack/page.tsx',
-    phrases: ['solicitor approved Section 8 court file', 'N5 N119 forms'],
+    phrases: ['review-ready Section 8 court file', 'N5 N119 forms'],
     faq: 'Does this use court approved possession claim forms?',
   },
   {

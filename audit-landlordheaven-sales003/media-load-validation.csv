@@ -1,0 +1,14 @@
+route,wait_strategy,screenshot,console_result,media_result
+/products/notice-only,domcontentloaded + networkidle + document.fonts.ready + image complete/naturalWidth checks,,NOT RUN,NOT RUN
+/products/complete-pack,domcontentloaded + networkidle + document.fonts.ready + image complete/naturalWidth checks,,NOT RUN,NOT RUN
+/products/money-claim,domcontentloaded + networkidle + document.fonts.ready + image complete/naturalWidth checks,,NOT RUN,NOT RUN
+/products/ast,domcontentloaded + networkidle + document.fonts.ready + image complete/naturalWidth checks,,NOT RUN,NOT RUN
+/products/section-13-standard,domcontentloaded + networkidle + document.fonts.ready + image complete/naturalWidth checks,,NOT RUN,NOT RUN
+/tools/hmo-license-checker,domcontentloaded + networkidle + document.fonts.ready + image complete/naturalWidth checks,,NOT RUN,NOT RUN
+/tools/rent-arrears-calculator,domcontentloaded + networkidle + document.fonts.ready + image complete/naturalWidth checks,,NOT RUN,NOT RUN
+/blog/how-to-write-letter-before-action-unpaid-rent,domcontentloaded + networkidle + document.fonts.ready + image complete/naturalWidth checks,,NOT RUN,NOT RUN
+/blog/bailiff-eviction-day-what-to-expect,domcontentloaded + networkidle + document.fonts.ready + image complete/naturalWidth checks,,NOT RUN,NOT RUN
+/eviction-cost-uk,domcontentloaded + networkidle + document.fonts.ready + image complete/naturalWidth checks,,NOT RUN,NOT RUN
+/how-to-rent-guide,domcontentloaded + networkidle + document.fonts.ready + image complete/naturalWidth checks,,NOT RUN,NOT RUN
+/n5-n119-possession-claim,domcontentloaded + networkidle + document.fonts.ready + image complete/naturalWidth checks,,NOT RUN,NOT RUN
+/section-8-grounds/how-to-evict-a-tenant-using-ground-1a,domcontentloaded + networkidle + document.fonts.ready + image complete/naturalWidth checks,,NOT RUN,NOT RUN

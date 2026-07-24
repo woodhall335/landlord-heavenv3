@@ -101,7 +101,6 @@ describe('Sitemap Route Existence', () => {
   it('includes the requested live self-canonical pages from the sitemap audit', () => {
     expect(sitemapPaths).toEqual(
       expect.arrayContaining([
-        '/common-prt-tenancy-mistakes-scotland',
         '/eviction-cost-uk',
         '/eviction-process-uk',
         '/eviction-timeline-uk',
@@ -127,9 +126,7 @@ describe('Sitemap Route Existence', () => {
     expect(sitemapPaths).toEqual(
       expect.arrayContaining([
         '/blog',
-        '/blog/scotland',
-        '/blog/wales',
-        '/blog/northern-ireland',
+        '/blog/england',
         '/blog/uk',
         '/blog/eviction-guides',
         '/blog/rent-arrears',
@@ -148,10 +145,8 @@ describe('Sitemap Route Existence', () => {
         '/blog/england-student-tenancy-agreement-after-renters-rights-act',
         '/blog/england-hmo-shared-house-tenancy-agreement-after-renters-rights-act',
         '/blog/england-lodger-agreement-after-renters-rights-act',
-        '/blog/scotland-eviction-ground-1',
-        '/blog/wales-deposit-protection',
-        '/blog/northern-ireland-eviction-process',
         '/blog/uk-fire-safety-landlords',
+        '/blog/scotland-first-tier-tribunal',
       ])
     );
   });

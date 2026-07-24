@@ -1,0 +1,3 @@
+defect,severity,route_or_area,status,recommended_action
+Trust/social-proof claims were softened where evidence was not source-bound,Resolved,"review counts, rating, legal-team/solicitor-approved/court-accepted claims",PASS LIVE COPY CHANGE,Do not reintroduce quantified or authority claims unless connected to approved evidence.
+Rendered browser screenshot capture not run in this source remediation pass,P1,"product pages, tools and high-intent articles",NOT RUN,Run production-style browser QA after build/deploy and attach screenshots.

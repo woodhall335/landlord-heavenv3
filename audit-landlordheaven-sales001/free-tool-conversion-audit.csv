@@ -1,0 +1,3 @@
+route,free_result,preserved,next_paid_action,offer_position,paid_addition,data_retention,edit_restart,analytics,status
+/tools/hmo-license-checker,HMO likelihood and council direction,yes,HMO / Shared House agreement,after result,shared-house-specific agreement,no sensitive URL transfer,to verify,tool events plus registry mapping,mapping remediated
+/tools/rent-arrears-calculator,arrears total and schedule,yes,Money Claim,immediately after result,pre-action and claim documents,secure client-state handoff recommended,add/remove and edit supported,result and upsell events,existing strong flow

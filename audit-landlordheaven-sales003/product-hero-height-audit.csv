@@ -1,0 +1,6 @@
+route,viewport,expected,result,correction
+/products/notice-only,390px mobile,Primary CTA and product purpose visible without excessive scrolling.,NOT RUN,Duplicate mid-page CTA suppressed; hero height must be confirmed in rendered browser QA.
+/products/complete-pack,390px mobile,Primary CTA and product purpose visible without excessive scrolling.,NOT RUN,Duplicate mid-page CTA suppressed; hero height must be confirmed in rendered browser QA.
+/products/money-claim,390px mobile,Primary CTA and product purpose visible without excessive scrolling.,NOT RUN,Duplicate mid-page CTA suppressed; hero height must be confirmed in rendered browser QA.
+/products/ast,390px mobile,Primary CTA and product purpose visible without excessive scrolling.,NOT RUN,Duplicate mid-page CTA suppressed; hero height must be confirmed in rendered browser QA.
+/products/section-13-standard,390px mobile,Primary CTA and product purpose visible without excessive scrolling.,NOT RUN,Duplicate mid-page CTA suppressed; hero height must be confirmed in rendered browser QA.

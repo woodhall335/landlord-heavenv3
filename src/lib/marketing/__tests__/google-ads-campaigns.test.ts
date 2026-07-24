@@ -19,7 +19,7 @@ describe('complete pack Google Ads campaign', () => {
         'Includes Form 3A, N5, N119',
         'Prepare the full possession file',
         'Check before paying',
-        'Solicitor-approved court file',
+        'Review-ready court file',
         'For England landlords',
       ])
     );
@@ -37,7 +37,7 @@ describe('complete pack Google Ads campaign', () => {
         'Includes Form 3A and N215',
         'Prepare the notice file properly',
         'Check before paying',
-        'Solicitor-approved notice file',
+        'Review-ready notice file',
         'For England landlords',
       ])
     );
@@ -50,7 +50,7 @@ describe('complete pack Google Ads campaign', () => {
       expect.arrayContaining([
         { text: 'section 8 court pack', matchType: 'exact' },
         { text: 'section 8 court pack', matchType: 'phrase' },
-        { text: 'solicitor approved section 8 court file', matchType: 'phrase' },
+        { text: 'review-ready section 8 court file', matchType: 'phrase' },
         { text: 'n5 n119 forms', matchType: 'exact' },
         { text: 'n119 particulars of claim', matchType: 'phrase' },
         { text: 'rent arrears possession claim', matchType: 'phrase' },
@@ -114,7 +114,7 @@ describe('complete pack Google Ads campaign', () => {
     ].join(' ');
 
     expect(adText.toLowerCase()).not.toContain('court approved');
-    expect(adText.toLowerCase()).toContain('solicitor-approved');
+    expect(adText.toLowerCase()).toContain('review-ready');
     expect(adText.toLowerCase()).not.toContain('solicitor reviewed');
   });
 });

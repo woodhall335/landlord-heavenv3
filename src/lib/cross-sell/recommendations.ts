@@ -84,7 +84,7 @@ const MONEY_CLAIM_FOR_EVICTION: CrossSellRecommendation = {
 const NOTICE_ONLY_FOR_MONEY_CLAIM: CrossSellRecommendation = {
   product: 'notice_only',
   title: 'Stage 1 Notice & Service File',
-  description: 'Tenant still in the property? Prepare the solicitor-approved Section 8 notice and service file alongside your money claim.',
+  description: 'Tenant still in the property? Prepare the review-ready Section 8 notice and service file alongside your money claim.',
   price: PRODUCTS.notice_only.displayPrice,
   ctaText: 'Get Eviction Notice',
   angle: 'tenant_still_in_property',
@@ -110,7 +110,7 @@ const COMPLETE_PACK_FOR_MONEY_CLAIM: CrossSellRecommendation = {
 const NOTICE_ONLY_FOR_TENANCY: CrossSellRecommendation = {
   product: 'notice_only',
   title: 'Stage 1 Notice & Service File',
-  description: 'Problems with your tenant? Prepare the solicitor-approved Section 8 notice and service file before anything goes to the tenant.',
+  description: 'Problems with your tenant? Prepare the review-ready Section 8 notice and service file before anything goes to the tenant.',
   price: PRODUCTS.notice_only.displayPrice,
   ctaText: 'View Eviction Notices',
   angle: 'future_proofing',
@@ -123,7 +123,7 @@ const NOTICE_ONLY_FOR_TENANCY: CrossSellRecommendation = {
 const COMPLETE_PACK_FOR_TENANCY: CrossSellRecommendation = {
   product: 'complete_pack',
   title: 'Stage 2 Court & Possession File',
-  description: 'Get the solicitor-approved notice, court, evidence, and hearing file together if a tenancy later becomes contested.',
+  description: 'Get the review-ready notice, court, evidence, and hearing file together if a tenancy later becomes contested.',
   price: PRODUCTS.complete_pack.displayPrice,
   ctaText: 'View Complete Pack',
   angle: 'full_eviction',

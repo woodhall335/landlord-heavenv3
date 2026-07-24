@@ -234,7 +234,7 @@ export default function Page() {
       <section className="bg-white py-8">
         <Container>
           <div className="mx-auto max-w-5xl">
-            <SeoPageContextPanel pathname="/n5-n119-possession-claim" className="border border-[#CAB6FF] bg-[#FBF8FF]" />
+            <SeoPageContextPanel pathname="/n5-n119-possession-claim" commercialOffer={false} className="border border-[#CAB6FF] bg-[#FBF8FF]" />
             <CourtClaimBridge ctaPosition="top" />
             <AssistedPrepServicesShowcase
               pagePath="/n5-n119-possession-claim"

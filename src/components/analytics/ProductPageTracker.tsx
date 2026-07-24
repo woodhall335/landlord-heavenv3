@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 
 import { trackProductView } from '@/lib/analytics';
 import { initializeAttribution } from '@/lib/wizard/wizardAttribution';
+import { recordMarketingGrowthEvent } from '@/lib/analytics/growth-events';
 
 function parsePriceLabel(label?: string): number | undefined {
   if (!label) return undefined;
@@ -41,6 +42,15 @@ export function ProductPageTracker({
       pageType: 'product_page',
       intent: routeIntent || productId,
       userType: 'landlord',
+    });
+    recordMarketingGrowthEvent('product_view', {
+      sourcePage: pagePath,
+      pagePath,
+      pageType: 'product_page',
+      intent: routeIntent || productId,
+      recommendedProduct: productId,
+      productSlug: productId,
+      price: parsePriceLabel(priceLabel),
     });
   }, [pagePath, priceLabel, productId, productName, routeIntent]);
 

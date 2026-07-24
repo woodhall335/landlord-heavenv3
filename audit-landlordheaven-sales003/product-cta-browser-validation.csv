@@ -1,0 +1,6 @@
+route,expected,source_result,browser_result
+/products/notice-only,One clear primary action set; no duplicate mid-page CTA band competing above the decision path.,PASS,NOT RUN
+/products/complete-pack,One clear primary action set; no duplicate mid-page CTA band competing above the decision path.,PASS,NOT RUN
+/products/money-claim,One clear primary action set; no duplicate mid-page CTA band competing above the decision path.,PASS,NOT RUN
+/products/ast,One clear primary action set; no duplicate mid-page CTA band competing above the decision path.,PASS,NOT RUN
+/products/section-13-standard,One clear primary action set; no duplicate mid-page CTA band competing above the decision path.,PASS,NOT RUN

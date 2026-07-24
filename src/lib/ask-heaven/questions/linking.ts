@@ -66,7 +66,7 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
       product: 'notice_only',
       name: 'Stage 1 Notice & Service File',
       href: 'https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=eviction',
-      description: 'Prepare the solicitor-approved Section 8 notice and service file before anything goes to the tenant',
+      description: 'Prepare the review-ready Section 8 notice and service file before anything goes to the tenant',
       ctaText: 'Create my notice',
     },
     {
@@ -143,7 +143,7 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
       product: 'complete_pack',
       name: 'Stage 2 Court & Possession File',
       href: 'https://landlordheaven.co.uk/products/complete-pack',
-      description: 'Solicitor-approved possession file covering notice, issue, evidence, and hearing preparation',
+      description: 'Review-ready possession file covering notice, issue, evidence, and hearing preparation',
       ctaText: 'Prepare my court pack',
     },
     {

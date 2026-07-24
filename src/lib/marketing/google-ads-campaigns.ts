@@ -42,7 +42,7 @@ export const COMPLETE_PACK_GOOGLE_ADS_CAMPAIGN: GoogleAdsCampaignPlan = {
     'Includes Form 3A, N5, N119',
     'Prepare the full possession file',
     'Check before paying',
-    'Solicitor-approved court file',
+    'Review-ready court file',
     'For England landlords',
   ],
   keywordGroups: [
@@ -57,7 +57,7 @@ export const COMPLETE_PACK_GOOGLE_ADS_CAMPAIGN: GoogleAdsCampaignPlan = {
         keyword('section 8 eviction pack', 'exact'),
         keyword('section 8 eviction documents', 'phrase'),
         keyword('section 8 court papers', 'phrase'),
-        keyword('solicitor approved section 8 court file', 'phrase'),
+        keyword('review-ready section 8 court file', 'phrase'),
       ],
     },
     {
@@ -127,7 +127,7 @@ export const COMPLETE_PACK_GOOGLE_ADS_CAMPAIGN: GoogleAdsCampaignPlan = {
     descriptions: [
       'Prepare the full possession file with Form 3A, N5, N119, arrears support, evidence, and hearing documents.',
       'Built for England landlords who expect court action and want the notice, issue, evidence, and hearing file kept together.',
-      'Preview the solicitor-approved court file before paying and keep your possession file aligned from notice to hearing.',
+      'Preview the review-ready court file before paying and keep your possession file aligned from notice to hearing.',
     ],
   },
 };
@@ -143,7 +143,7 @@ export const NOTICE_ONLY_GOOGLE_ADS_CAMPAIGN: GoogleAdsCampaignPlan = {
     'Includes Form 3A and N215',
     'Prepare the notice file properly',
     'Check before paying',
-    'Solicitor-approved notice file',
+    'Review-ready notice file',
     'For England landlords',
   ],
   keywordGroups: [
@@ -155,7 +155,7 @@ export const NOTICE_ONLY_GOOGLE_ADS_CAMPAIGN: GoogleAdsCampaignPlan = {
         keyword('section 8 notice pack', 'phrase'),
         keyword('section 8 notice and service pack', 'phrase'),
         keyword('section 8 notice file', 'phrase'),
-        keyword('solicitor approved section 8 notice file', 'phrase'),
+        keyword('review-ready section 8 notice file', 'phrase'),
       ],
     },
     {
@@ -191,7 +191,7 @@ export const NOTICE_ONLY_GOOGLE_ADS_CAMPAIGN: GoogleAdsCampaignPlan = {
     descriptions: [
       'Prepare the notice file properly before anything goes to the tenant, with Form 3A, N215, arrears, and checks.',
       'Built for England landlords who need Stage 1: serve correctly before deciding whether court is needed.',
-      'Preview the solicitor-approved notice and service file before paying.',
+      'Preview the review-ready notice and service file before paying.',
     ],
   },
 };

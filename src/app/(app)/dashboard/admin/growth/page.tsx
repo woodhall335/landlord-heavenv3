@@ -136,13 +136,28 @@ export default function AdminGrowthPage() {
   const [report, setReport] = useState<GrowthReportResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [filters, setFilters] = useState({
+    sourceRoute: '',
+    product: '',
+    device: '',
+    trafficSource: '',
+    experiment: '',
+    authenticated: '',
+  });
 
   const loadReport = async (nextDays = days) => {
     setIsLoading(true);
     setError('');
 
     try {
-      const response = await fetch(`/api/admin/growth?days=${nextDays}`, {
+      const params = new URLSearchParams({ days: String(nextDays) });
+      if (filters.sourceRoute) params.set('source_route', filters.sourceRoute);
+      if (filters.product) params.set('product', filters.product);
+      if (filters.device) params.set('device', filters.device);
+      if (filters.trafficSource) params.set('traffic_source', filters.trafficSource);
+      if (filters.experiment) params.set('experiment', filters.experiment);
+      if (filters.authenticated) params.set('authenticated', filters.authenticated);
+      const response = await fetch(`/api/admin/growth?${params.toString()}`, {
         credentials: 'same-origin',
       });
 
@@ -247,11 +262,47 @@ export default function AdminGrowthPage() {
           </Card>
         ) : report ? (
           <div className="space-y-8">
+            <Card padding="medium" className="rounded-lg">
+              <h2 className="text-lg font-semibold text-charcoal">Funnel filters</h2>
+              <div className="mt-4 grid gap-3 md:grid-cols-3">
+                <input aria-label="Source route" placeholder="/source-route" value={filters.sourceRoute} onChange={(event) => setFilters({ ...filters, sourceRoute: event.target.value })} className="rounded-md border border-gray-300 px-3 py-2" />
+                <input aria-label="Product" placeholder="product slug" value={filters.product} onChange={(event) => setFilters({ ...filters, product: event.target.value })} className="rounded-md border border-gray-300 px-3 py-2" />
+                <select aria-label="Device" value={filters.device} onChange={(event) => setFilters({ ...filters, device: event.target.value })} className="rounded-md border border-gray-300 px-3 py-2">
+                  <option value="">All devices</option><option value="mobile">Mobile</option><option value="desktop">Desktop</option>
+                </select>
+                <input aria-label="Traffic source" placeholder="traffic source" value={filters.trafficSource} onChange={(event) => setFilters({ ...filters, trafficSource: event.target.value })} className="rounded-md border border-gray-300 px-3 py-2" />
+                <input aria-label="Experiment" placeholder="experiment ID" value={filters.experiment} onChange={(event) => setFilters({ ...filters, experiment: event.target.value })} className="rounded-md border border-gray-300 px-3 py-2" />
+                <select aria-label="Authenticated state" value={filters.authenticated} onChange={(event) => setFilters({ ...filters, authenticated: event.target.value })} className="rounded-md border border-gray-300 px-3 py-2">
+                  <option value="">All users</option><option value="true">Authenticated</option><option value="false">Guest</option>
+                </select>
+              </div>
+              <button type="button" onClick={() => void loadReport(days)} className="mt-4 rounded-md bg-[#692ed4] px-4 py-2 text-sm font-semibold text-white">Apply filters</button>
+            </Card>
+
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
               {summaryCards.map((card) => (
                 <MetricCard key={card.label} {...card} />
               ))}
             </div>
+
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              {report.funnelStages.map((stage) => (
+                <MetricCard key={stage.event} label={stage.label} value={String(stage.count)} note={stage.event} />
+              ))}
+            </div>
+
+            <Card padding="medium" className="rounded-lg">
+              <h2 className="text-lg font-semibold text-charcoal">Organic-to-sale conversion</h2>
+              <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+                {report.journeyRates.map((rate) => (
+                  <div key={rate.key} className="rounded-lg border border-gray-200 p-4">
+                    <p className="text-sm font-medium text-gray-600">{rate.label}</p>
+                    <p className="mt-1 text-xl font-bold text-charcoal">{formatPercent(rate.rate)}</p>
+                    <p className="text-xs text-gray-500">{rate.numerator} / {rate.denominator}</p>
+                  </div>
+                ))}
+              </div>
+            </Card>
 
             <Card padding="medium" className="rounded-lg">
               <h2 className="text-lg font-semibold text-charcoal">Revenue by day</h2>

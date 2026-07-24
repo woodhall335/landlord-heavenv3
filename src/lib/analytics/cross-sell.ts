@@ -12,6 +12,7 @@
 import { trackEvent, trackEventOnce } from '@/lib/analytics';
 import type { WizardProduct } from '@/lib/wizard/buildWizardLink';
 import type { CrossSellSource } from '@/lib/cross-sell/recommendations';
+import { recordMarketingGrowthEvent } from '@/lib/analytics/growth-events';
 
 // =============================================================================
 // CROSS-SELL TRACKING
@@ -36,6 +37,12 @@ export function trackCrossSellImpression(
   }, {
     dedupeScope: 'page',
     dedupeKey: `${page}:${targetProduct}`,
+  });
+  recordMarketingGrowthEvent('cross_sell_viewed', {
+    sourcePage: page,
+    pagePath: page,
+    recommendedProduct: targetProduct,
+    productSlug: targetProduct,
   });
 
   // Also track to FB for retargeting
@@ -66,6 +73,13 @@ export function trackCrossSellClick(
     target_product: targetProduct,
     src,
     timestamp: new Date().toISOString(),
+  });
+  recordMarketingGrowthEvent('cross_sell_clicked', {
+    sourcePage: page,
+    pagePath: page,
+    recommendedProduct: targetProduct,
+    productSlug: targetProduct,
+    trafficSource: src,
   });
 
   // Track as AddToCart intent for FB

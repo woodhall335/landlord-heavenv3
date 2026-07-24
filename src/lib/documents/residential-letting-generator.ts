@@ -3084,7 +3084,7 @@ function buildEnglandAssuredSections(
         { label: 'Tenancy start date', value: shared.tenancy_start_date },
       ],
       paragraphs: [
-        'The tenancy is intended to continue on a periodic basis unless lawfully brought to an end. No separate fixed-term drafting is created by this document unless a solicitor-approved route is expressly used outside this product.',
+        'The tenancy is intended to continue on a periodic basis unless lawfully brought to an end. No separate fixed-term drafting is created by this document unless a review-ready route is expressly used outside this product.',
         product === 'england_standard_tenancy_agreement'
           ? 'Treat the pack as the baseline landlord file for the rent terms, notice position, safety record, and handover evidence so later issues do not have to be rebuilt from scattered notes.'
           : product === 'england_premium_tenancy_agreement'

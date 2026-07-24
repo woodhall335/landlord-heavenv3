@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { Container } from '@/components/ui/Container';
 import { UniversalHero } from '@/components/landing/UniversalHero';
-import { CommercialBridge } from '@/components/marketing/CommercialBridge';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { getCanonicalUrl } from '@/lib/seo';
@@ -104,25 +103,6 @@ export default function HowToRentGuidePage() {
           <Container>
             <div className="mx-auto max-w-4xl">
               <SeoPageContextPanel pathname="/how-to-rent-guide" />
-              <CommercialBridge
-                sourcePage="/how-to-rent-guide"
-                intent="tenancy_agreement"
-                headline="Checking How to Rent before a new tenancy or notice?"
-                primaryProduct="ast_standard"
-                primaryHref={tenancyProductHref}
-                primaryLabel="Create the right tenancy agreement"
-                secondaryProduct="notice_only"
-                secondaryHref={noticeOnlyHref}
-                secondaryLabel="Checking before notice? Start Notice Only"
-                ctaPosition="top"
-                riskMessage="Missing compliance evidence can delay the next step"
-                proofPoints={[
-                  'Create an England tenancy pack for the property setup',
-                  'Keep How to Rent evidence with the tenancy file',
-                  'Use Notice Only if you are checking compliance before serving notice',
-                ]}
-                body="If you are setting up a new tenancy, start with the tenancy agreement. If you are checking How to Rent because you may serve notice, use Notice Only so the compliance record and notice file are checked together."
-              />
             </div>
           </Container>
         </section>

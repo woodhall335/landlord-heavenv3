@@ -1,0 +1,4 @@
+experiment,status,assignment,allocation,kill_switch,price_or_product_difference
+sales002_contextual_offer_copy,active,deterministic stable session hash,50/50,NEXT_PUBLIC_SALES002_CONTEXTUAL_OFFER=off,none
+sales002_result_placement,inactive,none,0,n/a,n/a
+sales002_product_preview,inactive,none,0,n/a,n/a

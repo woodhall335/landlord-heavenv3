@@ -1,0 +1,2 @@
+route,root_cause,correction,controlling_file,result
+/tools/rent-arrears-calculator,"Initial React state used crypto.randomUUID(), causing server/client HTML identity mismatch risk.",Initial schedule row now uses stable id initial-rent-period; random ids remain only for client event-created rows.,src/app/tools/rent-arrears-calculator/page.tsx,PASS SOURCE / RENDER QA NOT RUN

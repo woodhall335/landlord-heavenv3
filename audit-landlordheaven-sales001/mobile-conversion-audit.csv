@@ -1,0 +1,7 @@
+route,width,cta_visible,obstruction,keyboard,overflow,status
+/blog/[slug],390,sticky after hero,dismissible,n/a,to verify,pending browser capture
+/tools/hmo-license-checker,390,to verify,to verify,postcode and selects,to verify,pending browser capture
+/tools/rent-arrears-calculator,390,hero and result,to verify,numeric and date inputs,to verify,pending browser capture
+/products/notice-only,390,to verify,to verify,n/a,to verify,pending browser capture
+/products/complete-pack,390,to verify,to verify,n/a,to verify,pending browser capture
+/products/money-claim,390,to verify,to verify,n/a,to verify,pending browser capture

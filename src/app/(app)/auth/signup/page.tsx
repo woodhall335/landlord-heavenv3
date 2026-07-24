@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { AuthHeroShell } from '@/components/auth/AuthHeroShell';
 import { safeInternalRedirect } from '@/lib/security/redirects';
+import { recordMarketingGrowthEvent } from '@/lib/analytics/growth-events';
 
 function SignupContent() {
   const router = useRouter();
@@ -72,6 +73,11 @@ function SignupContent() {
     }
 
     setIsLoading(true);
+    recordMarketingGrowthEvent('account_creation_started', {
+      pagePath: '/auth/signup',
+      authenticatedState: false,
+      trafficSource: safeRedirectUrl ? 'funnel_redirect' : 'direct',
+    });
 
     try {
       const response = await fetch('/api/auth/signup', {
@@ -88,6 +94,11 @@ function SignupContent() {
       const data = await response.json();
 
       if (response.ok && data.success) {
+        recordMarketingGrowthEvent('account_created', {
+          pagePath: '/auth/signup',
+          authenticatedState: true,
+          trafficSource: safeRedirectUrl ? 'funnel_redirect' : 'direct',
+        });
         if (safeRedirectUrl) {
           router.push(safeRedirectUrl);
         } else {

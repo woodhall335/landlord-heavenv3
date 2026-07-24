@@ -361,7 +361,7 @@ export default function TenancyAgreementTemplatePage() {
             label: 'View full premium sample',
             href: premiumSamplePage?.samplePath ?? '/premium-tenancy-agreement',
           }}
-          feature="Preview the Premium pack first, then move into the fixed-price, solicitor-approved workflow with the same richer management wording."
+          feature="Preview the Premium pack first, then move into the fixed-price, review-ready workflow with the same richer management wording."
         />
 
         <section className="py-12 md:py-16">

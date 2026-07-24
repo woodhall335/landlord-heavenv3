@@ -10,12 +10,12 @@ describe('Section 8 eviction product pages', () => {
   it('keeps Notice Only positioned as the notice-first Stage 1 route', () => {
     const source = readSource('src/app/(marketing)/products/notice-only/page.tsx');
 
-    expect(source).toContain('Solicitor-approved Section 8 notice and service file');
+    expect(source).toContain('Review-ready Section 8 notice and service file');
     expect(source).toContain('Prepare the notice file properly before anything goes to the tenant');
     expect(source).toContain('/images/notice-stage-desktop.webp');
     expect(source).toContain('/images/notice-stage-mobile.webp');
     expect(source).toContain('descriptor.wizardHref');
-    expect(source).toContain('8-document Solicitor-approved Section 8 notice and service file');
+    expect(source).toContain('8-document Review-ready Section 8 notice and service file');
     expect(source).toContain('Form 3A Section 8 notice, N215 certificate of service, rent arrears schedule, service instructions, validity checklist, compliance declaration, case summary, and what-happens-next guide');
     expect(source).toContain('Stage 1 covers preparing and serving the notice');
     expect(source).toContain("imageSrc: '/images/notice-only-pack.webp'");
@@ -33,7 +33,7 @@ describe('Section 8 eviction product pages', () => {
   it('keeps Complete Pack positioned as the combined Stage 1 plus Stage 2 route', () => {
     const source = readSource('src/app/(marketing)/products/complete-pack/page.tsx');
 
-    expect(source).toContain('Solicitor-approved Section 8 court and possession file');
+    expect(source).toContain('Review-ready Section 8 court and possession file');
     expect(source).toContain('Prepare the full possession file, not just the court forms');
     expect(source).toContain('/images/complete-stage-desktop.webp');
     expect(source).toContain('/images/complete-stage-mobile.webp');
@@ -59,13 +59,13 @@ describe('Section 8 eviction product pages', () => {
   it('keeps the shared public descriptors aligned with the combined-pack positioning', () => {
     const source = readSource('src/lib/public-products.ts');
 
-    expect(source).toContain("proofLabel: 'Solicitor-approved notice and service file'");
+    expect(source).toContain("proofLabel: 'Review-ready notice and service file'");
     expect(source).toContain(
-      "proofLabel: 'Solicitor-approved court and possession file'"
+      "proofLabel: 'Review-ready court and possession file'"
     );
   });
 
-  it('keeps solicitor-approved wording on the eviction sales surfaces', () => {
+  it('keeps review-ready wording on the eviction sales surfaces', () => {
     const sources = [
       readSource('src/app/(marketing)/products/notice-only/page.tsx'),
       readSource('src/app/(marketing)/products/complete-pack/page.tsx'),
@@ -73,8 +73,8 @@ describe('Section 8 eviction product pages', () => {
       readSource('src/lib/marketing/google-ads-campaigns.ts'),
     ].join('\n').toLowerCase();
 
-    expect(sources).toContain('solicitor-approved');
-    expect(sources).toContain('solicitor approved');
+    expect(sources).toContain('review-ready');
+    expect(sources).toContain('review-ready');
     expect(sources).not.toContain('solicitor reviewed');
     expect(sources).not.toContain('solicitor-reviewed');
   });

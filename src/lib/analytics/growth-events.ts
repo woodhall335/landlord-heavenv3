@@ -12,6 +12,27 @@ export const MARKETING_GROWTH_EVENT_NAMES = [
   'checkout_started',
   'purchase_completed',
   'product_page_viewed',
+  'organic_landing_view',
+  'contextual_offer_view',
+  'contextual_offer_click',
+  'product_view',
+  'product_primary_cta_click',
+  'builder_started',
+  'builder_step_viewed',
+  'builder_step_completed',
+  'builder_validation_error',
+  'builder_abandoned',
+  'preview_requested',
+  'preview_generated',
+  'preview_failed',
+  'account_creation_started',
+  'account_created',
+  'checkout_opened',
+  'checkout_failed',
+  'payment_succeeded',
+  'document_delivered',
+  'cross_sell_viewed',
+  'cross_sell_clicked',
 ] as const;
 
 export type MarketingGrowthEventName = (typeof MARKETING_GROWTH_EVENT_NAMES)[number];
@@ -45,6 +66,15 @@ export interface MarketingGrowthEventPayload {
   resultState?: string | null;
   challengeRisk?: string | number | null;
   evidenceStrength?: string | null;
+  productSlug?: string | null;
+  builderStep?: string | null;
+  deviceCategory?: string | null;
+  trafficSource?: string | null;
+  campaign?: string | null;
+  experimentId?: string | null;
+  authenticatedState?: string | boolean | null;
+  price?: number | string | null;
+  errorCategory?: string | null;
 }
 
 export interface NormalizedMarketingGrowthEvent {
@@ -79,6 +109,15 @@ const PAYLOAD_KEYS = [
   'resultState',
   'challengeRisk',
   'evidenceStrength',
+  'productSlug',
+  'builderStep',
+  'deviceCategory',
+  'trafficSource',
+  'campaign',
+  'experimentId',
+  'authenticatedState',
+  'price',
+  'errorCategory',
 ] as const;
 
 const MAX_STRING_LENGTH = 500;

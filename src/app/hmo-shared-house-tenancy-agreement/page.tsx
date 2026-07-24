@@ -88,7 +88,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
           'HMO room rental agreement support with clear house rules clause wording',
           'House rules and communal-area expectations kept clear from the outset',
           'Separate from Standard, Premium, Student, and Lodger routes',
-          'Solicitor-approved guided agreement pack with validation checks and a preview before payment',
+          'Review-ready guided agreement pack with validation checks and a preview before payment',
         ]}
         compliancePoints={[
           'Built around the current England position from 1 May 2026 for the main tenancy wording.',
@@ -195,7 +195,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
           },
           ctaTitle: 'Build the validated HMO / Shared House pack',
           ctaBody:
-            'Use this option when the property is being shared and you want solicitor-approved document preparation for the agreement, communal rules, and supporting records from the start.',
+            'Use this option when the property is being shared and you want review-ready document preparation for the agreement, communal rules, and supporting records from the start.',
         }}
         faqs={[
           {

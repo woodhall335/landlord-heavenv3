@@ -1,0 +1,2 @@
+route,screenshot_dir,captured,reason
+all audited routes,audit-landlordheaven-sales003/screenshots,NO,Run a production browser QA pass with SALES003_BASE_URL to attach rendered screenshots.

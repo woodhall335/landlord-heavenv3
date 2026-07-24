@@ -1,0 +1,4 @@
+route,element,before,after,reason
+/blog/[slug],internal production paragraph,"The useful SEO value here is...","Removed",Internal production language damages trust
+/blog/[slug],production placeholder,"Visuals to insert in next content sprint","Removed",Unfinished developer instruction must not be public
+/blog/how-to-write-letter-before-action-unpaid-rent,offer reassurance,No central price/preview fields,"Fixed price from registry; preview availability stated",Reduce purchase uncertainty without changing price

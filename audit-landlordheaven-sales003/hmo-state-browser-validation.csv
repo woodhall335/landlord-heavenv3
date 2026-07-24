@@ -1,0 +1,3 @@
+route,state,expected,source_result,browser_result
+/tools/hmo-license-checker,initial,No paid product offer before enough answers; form visible quickly on mobile/tablet.,PASS,NOT RUN
+/tools/hmo-license-checker,after_valid_answers,Result-first output; contextual product guidance allowed only after generated answer.,NOT RUN,NOT RUN

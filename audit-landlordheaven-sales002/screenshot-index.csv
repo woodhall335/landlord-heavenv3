@@ -1,0 +1,4 @@
+route,width,path,status
+all,390,,blocked-browser-runtime
+all,768,,blocked-browser-runtime
+all,1440,,blocked-browser-runtime

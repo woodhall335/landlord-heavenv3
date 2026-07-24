@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
         .gte('created_at', since.toISOString()),
       adminClient
         .from('marketing_events')
-        .select('event_name, marketing_session_id, source_page, page_path, page_type, intent, cta_position, destination, recommended_product, product_clicked, user_type, tool_name, created_at')
+        .select('event_name, marketing_session_id, source_page, page_path, page_type, intent, cta_position, destination, recommended_product, product_clicked, user_type, tool_name, event_payload, created_at')
         .gte('created_at', since.toISOString()),
     ]);
 
@@ -50,6 +50,14 @@ export async function GET(request: NextRequest) {
         orders: ordersResult.data || [],
         events: eventsResult.data || [],
         days,
+        filters: {
+          sourceRoute: request.nextUrl.searchParams.get('source_route') || undefined,
+          product: request.nextUrl.searchParams.get('product') || undefined,
+          device: request.nextUrl.searchParams.get('device') || undefined,
+          trafficSource: request.nextUrl.searchParams.get('traffic_source') || undefined,
+          experiment: request.nextUrl.searchParams.get('experiment') || undefined,
+          authenticatedState: request.nextUrl.searchParams.get('authenticated') || undefined,
+        },
       })
     );
   } catch (error: any) {

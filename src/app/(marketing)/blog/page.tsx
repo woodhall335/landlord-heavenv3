@@ -164,7 +164,7 @@ export default function BlogPage() {
                   </p>
                 </div>
                 <div className="rounded-xl border border-[#e3d3ff] bg-white p-4">
-                  <h3 className="font-semibold text-slate-900">Product route</h3>
+                  <h3 className="font-semibold text-slate-900">Relevant next step</h3>
                   <p className="mt-2 leading-6">
                     Move into Notice Only, Complete Pack, Money Claim, rent increase, or tenancy agreement support when the guide shows a clear fit.
                   </p>

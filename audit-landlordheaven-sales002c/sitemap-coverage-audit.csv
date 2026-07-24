@@ -1,0 +1,63 @@
+route,expectedIndexability,sitemapState,canonical,canonicalStatus,defect,finalStatus
+/,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk,SELF_CANONICAL,,PASS
+/pricing,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/pricing,SELF_CANONICAL,,PASS
+/products/notice-only,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/products/notice-only,SELF_CANONICAL,,PASS
+/products/complete-pack,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/products/complete-pack,SELF_CANONICAL,,PASS
+/products/money-claim,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/products/money-claim,SELF_CANONICAL,,PASS
+/products/ast,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/products/ast,SELF_CANONICAL,,PASS
+/products/section-13-standard,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/products/section-13-standard,SELF_CANONICAL,,PASS
+/products/section-13-defence,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/products/section-13-defence,SELF_CANONICAL,,PASS
+/standard-tenancy-agreement,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/standard-tenancy-agreement,SELF_CANONICAL,,PASS
+/premium-tenancy-agreement,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/premium-tenancy-agreement,SELF_CANONICAL,,PASS
+/student-tenancy-agreement,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/student-tenancy-agreement,SELF_CANONICAL,,PASS
+/hmo-shared-house-tenancy-agreement,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/hmo-shared-house-tenancy-agreement,SELF_CANONICAL,,PASS
+/lodger-agreement,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/lodger-agreement,SELF_CANONICAL,,PASS
+/tools,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/tools,SELF_CANONICAL,,PASS
+/tools/hmo-license-checker,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/tools/hmo-license-checker,SELF_CANONICAL,,PASS
+/tools/rent-arrears-calculator,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/tools/rent-arrears-calculator,SELF_CANONICAL,,PASS
+/tools/rent-increase-challenge-checker,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/tools/rent-increase-challenge-checker,SELF_CANONICAL,,PASS
+/assisted-prep,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/assisted-prep,SELF_CANONICAL,,PASS
+/section-8-notice-assisted-prep,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/section-8-notice-assisted-prep,SELF_CANONICAL,,PASS
+/money-claim-assisted-prep,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/money-claim-assisted-prep,SELF_CANONICAL,,PASS
+/possession-claim-assisted-prep,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/possession-claim-assisted-prep,SELF_CANONICAL,,PASS
+/landlord-documents-england,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/landlord-documents-england,SELF_CANONICAL,,PASS
+/samples,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/samples,SELF_CANONICAL,,PASS
+/compare/section-8-stage-1-vs-stage-2,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/compare/section-8-stage-1-vs-stage-2,SELF_CANONICAL,,PASS
+/compare/section-13-standard-vs-defence,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/compare/section-13-standard-vs-defence,SELF_CANONICAL,,PASS
+/compare/tenancy-agreement-options-england,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/compare/tenancy-agreement-options-england,SELF_CANONICAL,,PASS
+/form-3-section-8,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/form-3-section-8,SELF_CANONICAL,,PASS
+/n5-n119-possession-claim,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/n5-n119-possession-claim,SELF_CANONICAL,,PASS
+/money-claim-carpet-damage,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/money-claim-carpet-damage,SELF_CANONICAL,,PASS
+/eviction-cost-uk,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/eviction-cost-uk,SELF_CANONICAL,,PASS
+/how-to-rent-guide,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/how-to-rent-guide,SELF_CANONICAL,,PASS
+/rent-increase,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/rent-increase,SELF_CANONICAL,,PASS
+/rent-increase/section-13-notice,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/rent-increase/section-13-notice,SELF_CANONICAL,,PASS
+/rent-increase/form-4a-guide,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/rent-increase/form-4a-guide,SELF_CANONICAL,,PASS
+/rent-increase/how-to-increase-rent,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/rent-increase/how-to-increase-rent,SELF_CANONICAL,,PASS
+/rent-increase/section-13-tribunal,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/rent-increase/section-13-tribunal,SELF_CANONICAL,,PASS
+/rent-increase/market-rent-calculation,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/rent-increase/market-rent-calculation,SELF_CANONICAL,,PASS
+/rent-increase/rent-increase-challenge,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/rent-increase/rent-increase-challenge,SELF_CANONICAL,,PASS
+/blog/how-to-write-letter-before-action-unpaid-rent,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/blog/how-to-write-letter-before-action-unpaid-rent,SELF_CANONICAL,,PASS
+/blog/england-bailiff-eviction,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/blog/england-bailiff-eviction,SELF_CANONICAL,,PASS
+/blog/england-section-8-ground-1,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/blog/england-section-8-ground-1,SELF_CANONICAL,,PASS
+/blog/england-county-court-forms,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/blog/england-county-court-forms,SELF_CANONICAL,,PASS
+/blog/how-long-does-eviction-take-uk,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/blog/how-long-does-eviction-take-uk,SELF_CANONICAL,,PASS
+/blog/england-section-8-ground-10-11,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/blog/england-section-8-ground-10-11,SELF_CANONICAL,,PASS
+/blog/england-money-claim-online,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/blog/england-money-claim-online,SELF_CANONICAL,,PASS
+/blog/england-section-8-ground-14,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/blog/england-section-8-ground-14,SELF_CANONICAL,,PASS
+/blog/england-section-8-ground-12,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/blog/england-section-8-ground-12,SELF_CANONICAL,,PASS
+/blog/uk-guarantor-agreements-guide,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/blog/uk-guarantor-agreements-guide,SELF_CANONICAL,,PASS
+/blog/scotland-first-tier-tribunal,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/blog/scotland-first-tier-tribunal,SELF_CANONICAL,,PASS
+/section-8-grounds/how-to-evict-a-tenant-using-ground-1a,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/section-8-grounds/how-to-evict-a-tenant-using-ground-1a,SELF_CANONICAL,,PASS
+/blog/how-to-serve-eviction-notice,INDEXABLE,IN_SITEMAP,https://landlordheaven.co.uk/blog/how-to-serve-eviction-notice,SELF_CANONICAL,,PASS
+/dashboard,INTENTIONALLY NOINDEX,NOT_IN_SITEMAP,,NO_CANONICAL_REQUIRED,,PASS
+/auth/sign-in,INTENTIONALLY NOINDEX,NOT_IN_SITEMAP,,NO_CANONICAL_REQUIRED,,PASS
+/wizard,INTENTIONALLY NOINDEX,NOT_IN_SITEMAP,https://landlordheaven.co.uk/wizard,CANONICAL_PRESENT,,PASS
+/checkout/success,INTENTIONALLY NOINDEX,NOT_IN_SITEMAP,,NO_CANONICAL_REQUIRED,,PASS
+/checkout/download,INTENTIONALLY NOINDEX,NOT_IN_SITEMAP,,NO_CANONICAL_REQUIRED,,PASS
+/assisted-prep/start?service=section8,INTENTIONALLY NOINDEX,NOT_IN_SITEMAP,https://landlordheaven.co.uk/assisted-prep,SELF_CANONICAL,,PASS
+/assisted-prep/start?service=money_claim,INTENTIONALLY NOINDEX,NOT_IN_SITEMAP,https://landlordheaven.co.uk/assisted-prep,SELF_CANONICAL,,PASS
+/assisted-prep/start?service=possession,INTENTIONALLY NOINDEX,NOT_IN_SITEMAP,https://landlordheaven.co.uk/assisted-prep,SELF_CANONICAL,,PASS
+/official-forms/n325-eng.pdf,INTENTIONALLY NOINDEX,NOT_IN_SITEMAP,,NO_CANONICAL_REQUIRED,,PASS
+/products/money-claim-pack,INDEXABLE BUT CANONICALISED,NOT_IN_SITEMAP,https://landlordheaven.co.uk/products/money-claim,CANONICAL_TO_PREFERRED,,PASS
+/hmo-tenancy-agreement-template,INDEXABLE BUT CANONICALISED,NOT_IN_SITEMAP,https://landlordheaven.co.uk/hmo-shared-house-tenancy-agreement,CANONICAL_TO_PREFERRED,,PASS

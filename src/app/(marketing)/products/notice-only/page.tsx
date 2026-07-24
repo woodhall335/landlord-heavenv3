@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     'evict a tenant for rent arrears',
     'form 3a section 8 notice',
     'section 8 notice pack',
-    'solicitor approved section 8 notice file',
+    'review-ready section 8 notice file',
     'N215 certificate of service',
     'rent arrears schedule',
     'serve section 8 notice',
@@ -52,7 +52,7 @@ const faqs: FAQItem[] = [
   {
     question: 'What does this product generate?',
     answer:
-      'It generates an 8-document Solicitor-approved Section 8 notice and service file for England landlords: Form 3A Section 8 notice, N215 certificate of service, rent arrears schedule, service instructions, validity checklist, compliance declaration, case summary, and what-happens-next guide.',
+      'It generates an 8-document Review-ready Section 8 notice and service file for England landlords: Form 3A Section 8 notice, N215 certificate of service, rent arrears schedule, service instructions, validity checklist, compliance declaration, case summary, and what-happens-next guide.',
   },
   {
     question: 'Why is the arrears schedule included?',
@@ -402,7 +402,7 @@ export default function NoticeOnlyPage() {
     howThisHelps: {
       title: 'How this puts you in a stronger position',
       intro:
-        "The pack reduces notice-stage risk and makes the case easier to carry into Stage 2 if the tenant does not leave. The solicitor-approved Section 8 notice and service file keeps the post-May 2026 Renters' Rights Act Section 8 form, dates, N215, arrears schedule, compliance declaration, and service record together.",
+        "The pack reduces notice-stage risk and makes the case easier to carry into Stage 2 if the tenant does not leave. The review-ready Section 8 notice and service file keeps the post-May 2026 Renters' Rights Act Section 8 form, dates, N215, arrears schedule, compliance declaration, and service record together.",
       cards: [
         {
           title: 'It makes the notice file easier to trust',

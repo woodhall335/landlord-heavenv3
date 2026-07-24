@@ -1,0 +1,22 @@
+event,live_origin,persisted_destination,pii_review,status
+organic_landing_view,OrganicLandingTracker,/api/analytics/events,pass,live
+contextual_offer_view,ContextualOffer and CommercialBridge,/api/analytics/events,pass,live
+contextual_offer_click,ContextualOffer and CommercialBridge,/api/analytics/events,pass,live
+product_view,ProductPageTracker,/api/analytics/events,pass,live
+product_primary_cta_click,ProductPrimaryActions,/api/analytics/events,pass,live
+builder_started,analytics trackWizardStart,/api/analytics/events,pass,live
+builder_step_viewed,analytics trackWizardStepView,/api/analytics/events,pass,live
+builder_step_completed,analytics trackWizardStepComplete,/api/analytics/events,pass,live
+builder_validation_error,wizard preview,/api/analytics/events,pass,live
+builder_abandoned,analytics trackWizardAbandon,/api/analytics/events,pass,live
+preview_requested,wizard preview,/api/analytics/events,pass,live
+preview_generated,analytics trackWizardPreviewViewed,/api/analytics/events,pass,live
+preview_failed,wizard preview and PreviewPageLayout,/api/analytics/events,pass,live
+account_creation_started,signup,/api/analytics/events,pass,live
+account_created,signup,/api/analytics/events,pass,live
+checkout_opened,checkout tracking,/api/analytics/events,pass,live
+checkout_failed,preview checkout handlers,/api/analytics/events,pass,live
+payment_succeeded,purchase and payment landing tracking,/api/analytics/events,pass,live
+document_delivered,download tracking,/api/analytics/events,pass,live
+cross_sell_viewed,cross-sell tracking,/api/analytics/events,pass,live
+cross_sell_clicked,cross-sell tracking,/api/analytics/events,pass,live

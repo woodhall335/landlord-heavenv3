@@ -1,0 +1,63 @@
+route,httpStatus,renderedH1,renderedContentResult,defect,finalStatus
+/,200,England landlord documents without the solicitor bill.,MEANINGFUL,,PASS
+/pricing,200,Compare landlord document prices and choose the right next step,MEANINGFUL,,PASS
+/products/notice-only,200,Create a Section 8 eviction notice and service file,MEANINGFUL,,PASS
+/products/complete-pack,200,Section 8 possession claim pack with N5 and N119,MEANINGFUL,,PASS
+/products/money-claim,200,Recover unpaid rent with a landlord money claim pack,MEANINGFUL,,PASS
+/products/ast,200,Create the right England tenancy agreement for the let,MEANINGFUL,,PASS
+/products/section-13-standard,200,Create a Form 4A rent increase pack with market evidence.,MEANINGFUL,,PASS
+/products/section-13-defence,200,Prepare for a Section 13 rent challenge before it lands.,MEANINGFUL,,PASS
+/standard-tenancy-agreement,200,Create a standard England tenancy agreement pack,MEANINGFUL,,PASS
+/premium-tenancy-agreement,200,Create a premium England tenancy agreement pack,MEANINGFUL,,PASS
+/student-tenancy-agreement,200,Create a student tenancy agreement pack,MEANINGFUL,,PASS
+/hmo-shared-house-tenancy-agreement,200,Create an HMO or shared-house tenancy agreement pack,MEANINGFUL,,PASS
+/lodger-agreement,200,Create a lodger agreement pack for a resident landlord,MEANINGFUL,,PASS
+/tools,200,Free Tools for UK Landlords,MEANINGFUL,,PASS
+/tools/hmo-license-checker,200,HMO License Checker,MEANINGFUL,,PASS
+/tools/rent-arrears-calculator,200,Rent Arrears Calculator,MEANINGFUL,,PASS
+/tools/rent-increase-challenge-checker,200,Section 13 Rent Increase Checker for England Landlords,MEANINGFUL,,PASS
+/assisted-prep,200,Prepared for you. Checked with you. Approved and sent by you.,MEANINGFUL,,PASS
+/section-8-notice-assisted-prep,200,Section 8 Notice Assisted Prep,MEANINGFUL,,PASS
+/money-claim-assisted-prep,200,Money Claim Assisted Prep,MEANINGFUL,,PASS
+/possession-claim-assisted-prep,200,Possession Claim Assisted Prep,MEANINGFUL,,PASS
+/landlord-documents-england,200,England landlord documents,MEANINGFUL,,PASS
+/samples,200,Free Landlord Document Samples,MEANINGFUL,,PASS
+/compare/section-8-stage-1-vs-stage-2,200,Section 8 Notice or Court Pack? Compare Landlord Options,MEANINGFUL,,PASS
+/compare/section-13-standard-vs-defence,200,Supported vs Tribunal-Ready,MEANINGFUL,,PASS
+/compare/tenancy-agreement-options-england,200,Which Tenancy Agreement Do I Need?,MEANINGFUL,,PASS
+/form-3-section-8,200,Serve Form 3A correctly before the case loses time,MEANINGFUL,,PASS
+/n5-n119-possession-claim,200,Prepare N5 and N119 court papers after notice,MEANINGFUL,,PASS
+/money-claim-carpet-damage,200,Money Claim for Carpet Damage Costs,MEANINGFUL,,PASS
+/eviction-cost-uk,200,Eviction Cost UK Guide,MEANINGFUL,,PASS
+/how-to-rent-guide,200,How to Rent compliance check before notice or tenancy,MEANINGFUL,,PASS
+/rent-increase,200,Increase rent in England with the right Section 13 route,MEANINGFUL,,PASS
+/rent-increase/section-13-notice,200,Section 13 Notice for Landlords in England,MEANINGFUL,,PASS
+/rent-increase/form-4a-guide,200,Serve a Form 4A rent increase with evidence,MEANINGFUL,,PASS
+/rent-increase/how-to-increase-rent,200,How to Increase Rent: Practical Landlord Workflow,MEANINGFUL,,PASS
+/rent-increase/section-13-tribunal,200,Section 13 Tribunal Process: Landlord Preparation Guide,MEANINGFUL,,PASS
+/rent-increase/market-rent-calculation,200,Market Rent Calculation for Section 13 Proposals,MEANINGFUL,,PASS
+/rent-increase/rent-increase-challenge,200,Tenant Challenge to Rent Increase: Landlord Response Guide,MEANINGFUL,,PASS
+/blog/how-to-write-letter-before-action-unpaid-rent,200,How to Write a Letter Before Action for Unpaid Rent (,MEANINGFUL,,PASS
+/blog/england-bailiff-eviction,200,Bailiff Eviction Day - What to Expect (England Guide ),MEANINGFUL,,PASS
+/blog/england-section-8-ground-1,200,Section 8 Ground 1 Explained: Landlord Returning to,MEANINGFUL,,PASS
+/blog/england-county-court-forms,200,"County Court Eviction Forms Explained - N5, N5B, N119",MEANINGFUL,,PASS
+/blog/how-long-does-eviction-take-uk,200,How Long Does Eviction Take in the UK? Complete Timeline,MEANINGFUL,,PASS
+/blog/england-section-8-ground-10-11,200,Section 8 Grounds 10 and 11 | Rent Arrears Guide (England),MEANINGFUL,,PASS
+/blog/england-money-claim-online,200,Money Claim Online (MCOL) for Landlords: Rent Arrears Guide,MEANINGFUL,,PASS
+/blog/england-section-8-ground-14,200,Section 8 Ground 14 Explained: Antisocial Behaviour,MEANINGFUL,,PASS
+/blog/england-section-8-ground-12,200,Section 8 Ground 12 Explained: Breach of Tenancy Terms,MEANINGFUL,,PASS
+/blog/uk-guarantor-agreements-guide,200,UK Guarantor Agreements - Complete Landlord Guide,MEANINGFUL,,PASS
+/blog/scotland-first-tier-tribunal,200,Scotland First-tier Tribunal - Landlord Guide,MEANINGFUL,,PASS
+/section-8-grounds/how-to-evict-a-tenant-using-ground-1a,200,How to Evict a Tenant Using Ground 1A - Selling the Property,MEANINGFUL,,PASS
+/blog/how-to-serve-eviction-notice,200,How to Serve an Eviction Notice in England After May Guide,MEANINGFUL,,PASS
+/dashboard,200,,WEAK_OR_EMPTY,,PASS
+/auth/sign-in,404,Page not found,WEAK_OR_EMPTY,,PASS
+/wizard,200,Choose the landlord product you need,MEANINGFUL,,PASS
+/checkout/success,404,Page not found,WEAK_OR_EMPTY,,PASS
+/checkout/download,404,Page not found,WEAK_OR_EMPTY,,PASS
+/assisted-prep/start?service=section8,200,Section 8 Notice Assisted Prep,MEANINGFUL,,PASS
+/assisted-prep/start?service=money_claim,200,Money Claim Assisted Prep,MEANINGFUL,,PASS
+/assisted-prep/start?service=possession,200,Possession Claim Assisted Prep,MEANINGFUL,,PASS
+/official-forms/n325-eng.pdf,200,,WEAK_OR_EMPTY,,PASS
+/products/money-claim-pack,200,Recover unpaid rent with a landlord money claim pack,MEANINGFUL,,PASS
+/hmo-tenancy-agreement-template,200,Create an HMO or shared-house tenancy agreement pack,MEANINGFUL,,PASS

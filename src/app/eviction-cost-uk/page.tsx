@@ -134,6 +134,7 @@ export default function EvictionCostUkPage() {
         <StandardHero
           badge="2026 Prices"
           badgeIcon={<PoundSterling className="w-4 h-4" />}
+          titleAs="h2"
           title="How Much Does Eviction Cost UK?"
           subtitle={<>Budget between <strong>£500 and £3,000+</strong> depending on the route you take. This guide breaks down the real costs landlords usually face from notice through to enforcement.</>}
           primaryCTA={{ label: 'Start Complete Eviction Pack', href: completePackProductHref }}

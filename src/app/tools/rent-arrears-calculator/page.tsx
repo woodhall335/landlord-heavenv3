@@ -12,16 +12,12 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, blogLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
-import { ToolUpsellCard } from '@/components/tools/ToolUpsellCard';
 import { StructuredData, softwareApplicationSchema } from '@/lib/seo/structured-data';
-import { NextStepWidget } from '@/components/journey/NextStepWidget';
+import { ContextualOffer } from '@/components/conversion/ContextualOffer';
 import { trackToolComplete } from '@/lib/journey/events';
 import { setJourneyState, type StageEstimate } from '@/lib/journey/state';
 import { bucketArrears, bucketMonthsInArrears } from '@/lib/journey/stage';
-import { PRODUCTS } from '@/lib/pricing/products';
-import { getRentArrearsResultCtas } from '@/lib/tools/result-ctas';
-
-const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
+import { recordMarketingGrowthEvent } from '@/lib/analytics/growth-events';
 
 type ScheduleItem = {
   id: string;
@@ -33,7 +29,7 @@ type ScheduleItem = {
 
 const defaultSchedule: ScheduleItem[] = [
   {
-    id: crypto.randomUUID(),
+    id: 'initial-rent-period',
     dueDate: new Date().toISOString().split('T')[0],
     dueAmount: 750,
     paidAmount: 0,
@@ -73,27 +69,6 @@ export default function RentArrearsCalculator() {
   const [rentAmount, setRentAmount] = useState(750);
   const [frequency, setFrequency] = useState<'month' | 'week'>('month');
   const [schedule, setSchedule] = useState<ScheduleItem[]>(defaultSchedule);
-
-  const upsellConfig = {
-    toolName: 'Rent Arrears Calculator',
-    toolType: 'calculator' as const,
-    productName: 'Money Claim Pack',
-    ctaLabel: `Prepare my money claim - ${noticeOnlyPrice}`,
-    ctaHref: '/products/money-claim',
-    jurisdiction: 'uk',
-    freeIncludes: [
-      'Arrears and interest totals',
-      'Basic schedule PDF export',
-      'No court filing pack',
-    ],
-    paidIncludes: [
-      'Pre-filled claim forms',
-      'PAP/Pre-action letters bundle',
-      'Evidence-ready arrears schedule',
-    ],
-    description:
-      'Move from a rough arrears calculation to the full money claim bundle with the forms and evidence templates you need if the debt is still unpaid.',
-  };
 
   const totals = useMemo(() => {
     const today = new Date();
@@ -138,11 +113,6 @@ export default function RentArrearsCalculator() {
     const months = rentAmount > 0 ? totals.totalOutstanding / rentAmount : 0;
     return months >= 2 ? 'notice_ready' : 'early_arrears';
   }, [rentAmount, totals.totalOutstanding]);
-  const resultCtas = useMemo(
-    () => getRentArrearsResultCtas(totals.totalOutstanding, rentAmount),
-    [rentAmount, totals.totalOutstanding],
-  );
-
   useEffect(() => {
     if (totals.totalOutstanding <= 0) {
       completionTrackedRef.current = false;
@@ -174,6 +144,13 @@ export default function RentArrearsCalculator() {
             stage_estimate: stageHint,
           },
         },
+      });
+      recordMarketingGrowthEvent('result_viewed', {
+        sourcePage: '/tools/rent-arrears-calculator',
+        pagePath: '/tools/rent-arrears-calculator',
+        pageType: 'rent_arrears',
+        toolName: 'Rent Arrears Calculator',
+        resultState: arrearsBand,
       });
     }
   }, [arrearsBand, monthsInArrearsBand, stageHint, totals.totalOutstanding]);
@@ -441,9 +418,9 @@ export default function RentArrearsCalculator() {
       <StructuredData data={softwareApplicationSchema()} />
       <HeaderConfig mode="autoOnScroll" />
       <ToolFunnelTracker
-        toolName={upsellConfig.toolName}
-        toolType={upsellConfig.toolType}
-        jurisdiction={upsellConfig.jurisdiction}
+        toolName="Rent Arrears Calculator"
+        toolType="calculator"
+        jurisdiction="uk"
       />
       <UniversalHero
         badge="Free Tool"
@@ -485,8 +462,10 @@ export default function RentArrearsCalculator() {
             </div>
             <div className="flex gap-3">
               <div>
-                <label className="text-sm text-gray-600 font-medium">Rent amount</label>
+                <label htmlFor="rent-arrears-rent-amount" className="text-sm text-gray-600 font-medium">Rent amount</label>
                 <Input
+                  id="rent-arrears-rent-amount"
+                  name="rentAmount"
                   type="number"
                   value={rentAmount}
                   onChange={(e) => setRentAmount(Number(e.target.value) || 0)}
@@ -496,8 +475,10 @@ export default function RentArrearsCalculator() {
                 />
               </div>
               <div>
-                <label className="text-sm text-gray-600 font-medium">Frequency</label>
+                <label htmlFor="rent-arrears-frequency" className="text-sm text-gray-600 font-medium">Frequency</label>
                 <select
+                  id="rent-arrears-frequency"
+                  name="frequency"
                   className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg"
                   value={frequency}
                   onChange={(e) => setFrequency(e.target.value as 'month' | 'week')}
@@ -516,8 +497,10 @@ export default function RentArrearsCalculator() {
                 className="grid grid-cols-1 md:grid-cols-5 gap-3 items-end bg-gray-50 p-4 rounded-lg border border-gray-200"
               >
                 <div>
-                  <label className="text-sm text-gray-600 font-medium">Due date</label>
+                  <label htmlFor={`arrears-${item.id}-due-date`} className="text-sm text-gray-600 font-medium">Due date</label>
                   <Input
+                    id={`arrears-${item.id}-due-date`}
+                    name={`schedule[${item.id}].dueDate`}
                     type="date"
                     value={item.dueDate}
                     onChange={(e) => handleScheduleChange(item.id, 'dueDate', e.target.value)}
@@ -525,8 +508,10 @@ export default function RentArrearsCalculator() {
                   />
                 </div>
                 <div>
-                  <label className="text-sm text-gray-600 font-medium">Rent due (£)</label>
+                  <label htmlFor={`arrears-${item.id}-due-amount`} className="text-sm text-gray-600 font-medium">Rent due (£)</label>
                   <Input
+                    id={`arrears-${item.id}-due-amount`}
+                    name={`schedule[${item.id}].dueAmount`}
                     type="number"
                     value={item.dueAmount}
                     onChange={(e) => handleScheduleChange(item.id, 'dueAmount', e.target.value)}
@@ -536,8 +521,10 @@ export default function RentArrearsCalculator() {
                   />
                 </div>
                 <div>
-                  <label className="text-sm text-gray-600 font-medium">Paid (£)</label>
+                  <label htmlFor={`arrears-${item.id}-paid-amount`} className="text-sm text-gray-600 font-medium">Paid (£)</label>
                   <Input
+                    id={`arrears-${item.id}-paid-amount`}
+                    name={`schedule[${item.id}].paidAmount`}
                     type="number"
                     value={item.paidAmount}
                     onChange={(e) => handleScheduleChange(item.id, 'paidAmount', e.target.value)}
@@ -547,8 +534,10 @@ export default function RentArrearsCalculator() {
                   />
                 </div>
                 <div>
-                  <label className="text-sm text-gray-600 font-medium">Payment date</label>
+                  <label htmlFor={`arrears-${item.id}-payment-date`} className="text-sm text-gray-600 font-medium">Payment date</label>
                   <Input
+                    id={`arrears-${item.id}-payment-date`}
+                    name={`schedule[${item.id}].paymentDate`}
                     type="date"
                     value={item.paymentDate}
                     onChange={(e) => handleScheduleChange(item.id, 'paymentDate', e.target.value)}
@@ -647,20 +636,13 @@ export default function RentArrearsCalculator() {
               </div>
             </div>
 
-            {totals.totalOutstanding > 0 && (
-              <NextStepWidget
-                stageHint={stageHint}
-                location="tool_result"
-                primaryAction={resultCtas?.primaryAction}
-                secondaryAction={resultCtas?.secondaryAction}
-                heading={resultCtas?.heading}
-                description={resultCtas?.description}
+            {totals.totalOutstanding > 0 ? (
+              <ContextualOffer
+                sourceRoute="/tools/rent-arrears-calculator"
+                placement="tool_result"
+                className="mt-8 overflow-hidden rounded-2xl"
               />
-            )}
-
-            <div className="mt-8">
-              <ToolUpsellCard {...upsellConfig} />
-            </div>
+            ) : null}
           </div>
         </Card>
 

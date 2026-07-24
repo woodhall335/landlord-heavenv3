@@ -1,0 +1,6 @@
+scope,result,evidence
+Commercially relevant top-20 routes,implemented,Central registry drives ContextualOffer CommercialBridge and BlogInlineProductCard
+Scotland tribunal route,informational,No applicable Scotland product was introduced
+Fixed prices,preserved,Registry product prices are unchanged
+Offer impression and click,live,Canonical events persist through /api/analytics/events
+Responsive rendered inspection,blocked,In-app browser runtime initialization error

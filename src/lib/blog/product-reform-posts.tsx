@@ -85,8 +85,8 @@ const buildProductReformBlogPost = (spec: ProductReformBlogSpec): BlogPost => ({
   category: spec.category,
   tags: spec.tags,
   author: {
-    name: 'Landlord Heaven Legal Team',
-    role: 'Property Law Specialists',
+    name: 'Landlord Heaven Editorial Team',
+    role: 'Housing document specialists',
   },
   reviewer: {
     name: 'Landlord Heaven Legal Review',

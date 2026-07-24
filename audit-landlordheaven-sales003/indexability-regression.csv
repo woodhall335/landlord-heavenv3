@@ -1,0 +1,14 @@
+route,expected,correction,result
+/products/notice-only,Preserve SALES-002C status,"No indexability metadata, robots, sitemap or canonical changes made by SALES-003 source fixes.",PASS SOURCE
+/products/complete-pack,Preserve SALES-002C status,"No indexability metadata, robots, sitemap or canonical changes made by SALES-003 source fixes.",PASS SOURCE
+/products/money-claim,Preserve SALES-002C status,"No indexability metadata, robots, sitemap or canonical changes made by SALES-003 source fixes.",PASS SOURCE
+/products/ast,Preserve SALES-002C status,"No indexability metadata, robots, sitemap or canonical changes made by SALES-003 source fixes.",PASS SOURCE
+/products/section-13-standard,Preserve SALES-002C status,"No indexability metadata, robots, sitemap or canonical changes made by SALES-003 source fixes.",PASS SOURCE
+/tools/hmo-license-checker,Preserve SALES-002C status,"No indexability metadata, robots, sitemap or canonical changes made by SALES-003 source fixes.",PASS SOURCE
+/tools/rent-arrears-calculator,Preserve SALES-002C status,"No indexability metadata, robots, sitemap or canonical changes made by SALES-003 source fixes.",PASS SOURCE
+/blog/how-to-write-letter-before-action-unpaid-rent,Preserve SALES-002C status,"No indexability metadata, robots, sitemap or canonical changes made by SALES-003 source fixes.",PASS SOURCE
+/blog/bailiff-eviction-day-what-to-expect,Preserve SALES-002C status,"No indexability metadata, robots, sitemap or canonical changes made by SALES-003 source fixes.",PASS SOURCE
+/eviction-cost-uk,Preserve SALES-002C status,"No indexability metadata, robots, sitemap or canonical changes made by SALES-003 source fixes.",PASS SOURCE
+/how-to-rent-guide,Preserve SALES-002C status,"No indexability metadata, robots, sitemap or canonical changes made by SALES-003 source fixes.",PASS SOURCE
+/n5-n119-possession-claim,Preserve SALES-002C status,"No indexability metadata, robots, sitemap or canonical changes made by SALES-003 source fixes.",PASS SOURCE
+/section-8-grounds/how-to-evict-a-tenant-using-ground-1a,Preserve SALES-002C status,"No indexability metadata, robots, sitemap or canonical changes made by SALES-003 source fixes.",PASS SOURCE

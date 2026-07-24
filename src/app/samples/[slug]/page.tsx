@@ -30,7 +30,7 @@ const comparisonCards = [
   {
     title: 'Compared with a solicitor',
     body:
-      'Use a solicitor for bespoke dispute work or complex negotiation. Use Landlord Heaven when you want fixed-price, solicitor-approved document preparation for a routine landlord workflow.',
+      'Use a solicitor for bespoke dispute work or complex negotiation. Use Landlord Heaven when you want fixed-price, review-ready document preparation for a routine landlord workflow.',
   },
   {
     title: 'Compared with a wording-only download',
@@ -140,7 +140,7 @@ function ProductSamplePageView({ config }: { config: ProductSamplePageConfig }) 
 
           <div className="mt-10 max-w-4xl">
             <p className="inline-flex rounded-full border border-[#D8C8FF] bg-[#F7F1FF] px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5E3E9A]">
-              Solicitor-approved sample workflow
+              Review-ready sample workflow
             </p>
             <p className="mt-3 text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
               {config.targetKeyword}
@@ -176,7 +176,7 @@ function ProductSamplePageView({ config }: { config: ProductSamplePageConfig }) 
               Inspect the sample, then build the pack around your facts
             </h2>
             <p className="mt-4 text-base leading-8 text-[#546075]">
-              A free sample is useful for checking the output. The paid {config.productName} is the next step when you want a solicitor-approved procedural workflow that turns your answers into a previewable landlord document pack.
+              A free sample is useful for checking the output. The paid {config.productName} is the next step when you want a review-ready procedural workflow that turns your answers into a previewable landlord document pack.
             </p>
           </div>
           <div className="mt-8 grid gap-5 md:grid-cols-2">

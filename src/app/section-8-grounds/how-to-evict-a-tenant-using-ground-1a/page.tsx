@@ -6,6 +6,7 @@ import { Container } from '@/components/ui/Container';
 import { ChecklistPreview } from '@/components/seo/ChecklistPreview';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
 import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
+import { ContextualOffer } from '@/components/conversion/ContextualOffer';
 import { StructuredData, articleSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
 
 const canonical = "https://landlordheaven.co.uk/section-8-grounds/how-to-evict-a-tenant-using-ground-1a";
@@ -147,7 +148,7 @@ export default function Page() {
       </header>
       <main>
         <section className="border-b border-[#E6DBFF] bg-white py-6"><Container><div className="grid gap-4 md:grid-cols-3"><div className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-4"><p className="text-sm font-semibold text-primary">Ground meaning</p><p className="mt-2 text-sm text-gray-700">Ground 1A is the landlord sale ground. It is used where the landlord intends to sell the property and needs possession so the sale can proceed with vacant possession.</p></div><div className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-4"><p className="text-sm font-semibold text-primary">Mandatory or discretionary status</p><p className="mt-2 text-sm text-gray-700">{groundLabel} is <strong>mandatory</strong>.</p></div><div className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-4"><p className="text-sm font-semibold text-primary">Current notice period</p><p className="mt-2 text-sm text-gray-700">The current post-May 2026 notice period is <strong>4 months</strong>.</p></div></div></Container></section>
-        <section className="border-b border-[#E6DBFF] bg-[#FCFAFF] py-8"><Container><AssistedPrepServicesShowcase pagePath={new URL(canonical).pathname} pageType="entry_page" src="seo_ground_assisted_cta" /></Container></section>
+        <ContextualOffer sourceRoute="/section-8-grounds/how-to-evict-a-tenant-using-ground-1a" placement="after_answer" />
         <section className="py-12"><Container size="medium"><div className="space-y-8">
           <SectionCard title="What Ground 1A means for landlords"><p>Ground 1A is the landlord sale ground. It is used where the landlord intends to sell the property and needs possession so the sale can proceed with vacant possession.</p><p>Ground 1A is mandatory, but mandatory does not mean automatic. The court still checks the sale intention, the timing rules, service, and whether the notice explains the facts relied on.</p><p><Link href="/samples/notice-only" className="font-semibold text-primary hover:underline">See a real Form 3A notice with sample Ground {groundCode} evidence</Link>.</p></SectionCard>
           <SectionCard title="When this ground fits and when it does not"><div className="grid gap-6 md:grid-cols-2"><div><h3 className="font-semibold text-[#2a2161]">Use this ground when</h3><div className="mt-3"><BulletList items={fitCases} /></div></div><div><h3 className="font-semibold text-[#2a2161]">Do not rely on it when</h3><div className="mt-3"><BulletList items={notFitCases} /></div></div></div></SectionCard>
@@ -159,6 +160,7 @@ export default function Page() {
           <SectionCard title="Court progression and Complete Pack next step"><p>If the tenant does not leave after the notice, the court stage needs a claim form, particulars of claim, a copy of the notice, proof of service, and evidence proving the ground.</p><BulletList items={courtPoints} /><div className="mt-5 flex flex-wrap gap-3"><Link href={noticeOnlyHref} className="rounded-lg bg-primary px-5 py-3 font-semibold text-white hover:bg-[#5424aa]">Create my Section 8 notice</Link><Link href={completePackHref} className="rounded-lg border border-primary px-5 py-3 font-semibold text-primary hover:bg-[#F8F4FF]">Prepare my court pack</Link></div></SectionCard>
           {relatedGrounds.length > 0 ? (<SectionCard title="Related grounds"><div className="grid gap-3 sm:grid-cols-2">{relatedGrounds.map((ground) => (<Link key={ground.href} href={ground.href} className="rounded-lg border border-[#E6DBFF] bg-[#FCFAFF] p-4 font-semibold text-primary hover:bg-[#F8F4FF]">Ground {ground.code}: {ground.label}</Link>))}</div></SectionCard>) : null}
         </div></Container></section>
+        <section className="border-b border-[#E6DBFF] bg-[#FCFAFF] py-8"><Container><AssistedPrepServicesShowcase pagePath={new URL(canonical).pathname} pageType="entry_page" src="seo_ground_assisted_cta" /></Container></section>
         <FAQSection id="faqs" title={"Ground 1A FAQs"} intro={"Answers to common landlord questions about using Ground 1A in England."} faqs={faqs} variant="white" showContactCTA={false} />
       </main>
     </div>

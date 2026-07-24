@@ -226,7 +226,7 @@ export const HMOProUpsellModal: React.FC<HMOProUpsellModalProps> = ({
         <div className="mt-6 pt-6 border-t border-gray-200">
           <div className="text-center">
             <p className="text-sm text-gray-600 mb-2">
-              <strong>Join 2,000+ landlords</strong> who trust HMO Pro for compliance
+              <strong>Join landlords</strong> who trust HMO Pro for compliance
             </p>
             <div className="flex justify-center items-center space-x-4 text-xs text-gray-500">
               <div className="flex items-center">

@@ -1,0 +1,14 @@
+route,viewport,threshold_px,source_correction,final_status
+/products/notice-only,390px mobile,120,No source-level spacing defect identified in this pass; browser measurement not run.,NOT RUN
+/products/complete-pack,390px mobile,120,No source-level spacing defect identified in this pass; browser measurement not run.,NOT RUN
+/products/money-claim,390px mobile,120,No source-level spacing defect identified in this pass; browser measurement not run.,NOT RUN
+/products/ast,390px mobile,120,No source-level spacing defect identified in this pass; browser measurement not run.,NOT RUN
+/products/section-13-standard,390px mobile,120,No source-level spacing defect identified in this pass; browser measurement not run.,NOT RUN
+/tools/hmo-license-checker,390px mobile,120,Mobile pre-form marketing block hidden and checker padding reduced.,PASS SOURCE / RENDER QA NOT RUN
+/tools/rent-arrears-calculator,390px mobile,120,No source-level spacing defect identified in this pass; browser measurement not run.,NOT RUN
+/blog/how-to-write-letter-before-action-unpaid-rent,390px mobile,120,No source-level spacing defect identified in this pass; browser measurement not run.,NOT RUN
+/blog/bailiff-eviction-day-what-to-expect,390px mobile,120,No source-level spacing defect identified in this pass; browser measurement not run.,NOT RUN
+/eviction-cost-uk,390px mobile,120,No source-level spacing defect identified in this pass; browser measurement not run.,NOT RUN
+/how-to-rent-guide,390px mobile,120,No source-level spacing defect identified in this pass; browser measurement not run.,NOT RUN
+/n5-n119-possession-claim,390px mobile,120,No source-level spacing defect identified in this pass; browser measurement not run.,NOT RUN
+/section-8-grounds/how-to-evict-a-tenant-using-ground-1a,390px mobile,120,No source-level spacing defect identified in this pass; browser measurement not run.,NOT RUN

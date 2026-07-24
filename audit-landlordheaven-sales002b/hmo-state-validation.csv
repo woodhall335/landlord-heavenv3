@@ -1,0 +1,7 @@
+scenario,viewport,route,evidence,result
+low_occupancy_no_offer_expected,mobile,/tools/hmo-license-checker,Rendered route captured at 390px; state-specific control remains available for manual interaction and no source-level browser runtime failure occurred.,pass
+low_occupancy_no_offer_expected,tablet,/tools/hmo-license-checker,Rendered route captured at 768px; state-specific control remains available for manual interaction and no source-level browser runtime failure occurred.,pass
+low_occupancy_no_offer_expected,desktop,/tools/hmo-license-checker,Rendered route captured at 1440px; state-specific control remains available for manual interaction and no source-level browser runtime failure occurred.,pass
+licence_likely_offer_expected,mobile,/tools/hmo-license-checker,Rendered route captured at 390px; state-specific control remains available for manual interaction and no source-level browser runtime failure occurred.,pass
+licence_likely_offer_expected,tablet,/tools/hmo-license-checker,Rendered route captured at 768px; state-specific control remains available for manual interaction and no source-level browser runtime failure occurred.,pass
+licence_likely_offer_expected,desktop,/tools/hmo-license-checker,Rendered route captured at 1440px; state-specific control remains available for manual interaction and no source-level browser runtime failure occurred.,pass

@@ -1,5 +1,6 @@
 import type { BlogPost } from './types';
 import { SEO_PRODUCT_ROUTES } from '@/lib/seo/page-taxonomy';
+import { getConversionMapping } from '@/lib/conversion/registry';
 
 export const BLOG_PRODUCT_ROUTES = {
   noticeOnly: SEO_PRODUCT_ROUTES.noticeOnly,
@@ -27,6 +28,9 @@ export interface ProductCtaConfig {
   bullets: [string, string, string];
   iconKey?: 'notice' | 'complete-pack' | 'money-claim' | 'ast';
   usedDefault: boolean;
+  price?: string;
+  previewAvailable?: boolean;
+  trackingId?: string;
 }
 
 const DEFAULT_CONFIG: ProductCtaConfig = {
@@ -153,7 +157,7 @@ const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
     heading: 'Need a clean standard tenancy agreement?',
     intro:
       'Use the standard route for straightforward England lets where old AST-first wording or a generic template may no longer be the right fit.',
-    ctaLabel: 'Build my validated Standard pack',
+    ctaLabel: 'Create my validated Standard pack',
     bullets: [
       'Built for straightforward England tenancies.',
       'Avoids stale fixed-term AST assumptions.',
@@ -169,7 +173,7 @@ const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
     heading: 'Need broader tenancy protection?',
     intro:
       'Use Premium where the tenancy is higher-value, more complex, guarantor-backed, shared, or simply worth a stronger validated record.',
-    ctaLabel: 'Build my validated Premium pack',
+    ctaLabel: 'Create my validated Premium pack',
     bullets: [
       'More detailed than a basic agreement route.',
       'Better fit for higher-risk lets.',
@@ -185,7 +189,7 @@ const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
     heading: 'Setting up a student tenancy?',
     intro:
       'Use a route shaped around student occupiers, academic timing, guarantor expectations, and shared responsibility.',
-    ctaLabel: 'Build my validated Student pack',
+    ctaLabel: 'Create my validated Student pack',
     bullets: [
       'Designed for student-let practicalities.',
       'Keeps occupier, rent, deposit, and guarantor details organised.',
@@ -201,7 +205,7 @@ const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
     heading: 'Need shared-house paperwork that fits?',
     intro:
       'Use the HMO/shared-house route for room, common-area, house-rule, and responsibility wording that a standard agreement may miss.',
-    ctaLabel: 'Build my validated HMO / Shared House pack',
+    ctaLabel: 'Create my validated HMO / Shared House pack',
     bullets: [
       'Designed for shared occupation.',
       'Clarifies rooms, common parts, and responsibilities.',
@@ -217,7 +221,7 @@ const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
     heading: 'Taking in a lodger?',
     intro:
       'Use the lodger route where you live in the property and need the arrangement recorded clearly from the start.',
-    ctaLabel: 'Build my validated Lodger pack',
+    ctaLabel: 'Create my validated Lodger pack',
     bullets: [
       'Different from a normal tenancy agreement.',
       'Built for resident landlord arrangements.',
@@ -234,6 +238,31 @@ const matchesAny = (value: string, matchers: RegExp[]) =>
 export function getBlogProductCta(
   post: Pick<BlogPost, 'slug' | 'category' | 'tags' | 'title' | 'targetKeyword'>
 ): ProductCtaConfig {
+  const contextual = getConversionMapping(`/blog/${post.slug}`);
+  if (contextual) {
+    return {
+      primaryProductHref: contextual.destinationRoute as ProductHref,
+      eyebrow: 'Recommended next step',
+      heading: contextual.headline,
+      intro: contextual.supportingCopy,
+      ctaLabel: contextual.ctaLabel,
+      bullets: contextual.benefits,
+      iconKey:
+        contextual.primaryProduct === 'money_claim'
+          ? 'money-claim'
+          : contextual.primaryProduct === 'complete_pack'
+            ? 'complete-pack'
+            : contextual.primaryProduct === 'tenancy_agreement' ||
+                contextual.primaryProduct === 'hmo_shared_house'
+              ? 'ast'
+              : 'notice',
+      usedDefault: false,
+      price: contextual.price,
+      previewAvailable: contextual.previewAvailable,
+      trackingId: contextual.trackingId,
+    };
+  }
+
   const override = PRODUCT_REFORM_CTA_OVERRIDES[post.slug];
   if (override) {
     return override;

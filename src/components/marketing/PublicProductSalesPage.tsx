@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { RiArrowRightLine, RiCheckLine } from 'react-icons/ri';
 
 import { ProductPageTracker } from '@/components/analytics/ProductPageTracker';
+import { ProductPrimaryActions } from '@/components/analytics/ProductPrimaryActions';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FAQSection } from '@/components/seo/FAQSection';
 import type {
@@ -435,6 +436,7 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
   );
   const productId = analytics?.routeIntent || analytics?.pagePath?.split('/').filter(Boolean).at(-1) || productName;
   const priceLabel = content.earlyProofBand?.priceLabel;
+  const shouldShowMidPageCta = analytics?.pageType !== 'product_page' && Boolean(content.midPageCta);
 
   return (
     <>
@@ -448,18 +450,52 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
         />
       ) : null}
 
-      <UniversalHero {...content.hero} />
+      <UniversalHero
+        {...content.hero}
+        actionsSlot={
+          analytics?.pageType === 'product_page' && content.hero.primaryCta ? (
+            <ProductPrimaryActions
+              pagePath={analytics.pagePath}
+              productSlug={productId}
+              price={priceLabel}
+              primary={content.hero.primaryCta}
+              secondary={content.hero.secondaryCta}
+            />
+          ) : content.hero.actionsSlot
+        }
+      >
+        {content.hero.children}
+        {analytics?.pageType === 'product_page' ? (
+          <div className="mt-5 rounded-xl border border-white/20 bg-white/10 p-4 text-left text-sm text-white backdrop-blur">
+            <p className="font-semibold">
+              Fixed price {priceLabel || 'shown before you start'}.
+              {' '}Preview {content.earlyProofBand ? 'available before payment where shown.' : 'details are shown before payment.'}
+            </p>
+            {content.earlyProofBand?.includedBullets?.length ? (
+              <ul className="mt-2 grid gap-1 sm:grid-cols-2">
+                {content.earlyProofBand.includedBullets.slice(0, 3).map((item) => (
+                  <li key={item}>• {item}</li>
+                ))}
+              </ul>
+            ) : null}
+            <p className="mt-2 text-white/85">
+              Start the guided builder, answer the suitability questions, review the generated output,
+              then continue to payment.
+            </p>
+          </div>
+        ) : null}
+      </UniversalHero>
 
+      {content.earlyProofBand ? <EarlyProofBand proof={content.earlyProofBand} /> : null}
+      {content.decisionBlock ? <DecisionBlock block={content.decisionBlock} /> : null}
+      <BreakdownList whatYouGet={content.whatYouGet} />
       {content.postHeroContent ? (
         <SectionShell className="bg-white">{content.postHeroContent}</SectionShell>
       ) : null}
       {content.afterPostHeroContent ? <div>{content.afterPostHeroContent}</div> : null}
-      {content.earlyProofBand ? <EarlyProofBand proof={content.earlyProofBand} /> : null}
-      {content.decisionBlock ? <DecisionBlock block={content.decisionBlock} /> : null}
-      <BreakdownList whatYouGet={content.whatYouGet} />
       {content.comparisonBlock ? <ComparisonBlock block={content.comparisonBlock} /> : null}
       {content.objectionBlock ? <ObjectionBlock block={content.objectionBlock} /> : null}
-      {content.midPageCta ? <CtaBand cta={content.midPageCta} /> : null}
+      {shouldShowMidPageCta && content.midPageCta ? <CtaBand cta={content.midPageCta} /> : null}
       {content.beforeWhyYouNeedThis ? <div>{content.beforeWhyYouNeedThis}</div> : null}
       <CardGrid
         title={content.whyYouNeedThis.title}

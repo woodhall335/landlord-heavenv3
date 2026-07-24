@@ -7,17 +7,21 @@ import {
   type SeoScenario,
 } from '@/lib/seo/page-taxonomy';
 import { getCommercialSeoCopy } from '@/components/seo/CommercialSeoNextStep';
+import { ContextualOffer } from '@/components/conversion/ContextualOffer';
+import { getConversionMapping } from '@/lib/conversion/registry';
 
 interface SeoPageContextPanelProps {
   pathname: string;
   scenario?: SeoScenario;
   className?: string;
+  commercialOffer?: boolean;
 }
 
 export function SeoPageContextPanel({
   pathname,
   scenario = 'default',
   className = '',
+  commercialOffer = true,
 }: SeoPageContextPanelProps) {
   const entry = getSeoPageTaxonomy(pathname);
 
@@ -34,8 +38,10 @@ export function SeoPageContextPanel({
     entry.jurisdiction === 'england' || entry.jurisdiction === 'uk'
       ? getCommercialSeoCopy(productHref, entry.secondaryProduct)
       : null;
+  const mapping = commercialOffer ? getConversionMapping(pathname) : undefined;
 
   return (
+    <>
     <div
       className={`rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8 ${className}`}
       data-testid="seo-page-context"
@@ -85,14 +91,14 @@ export function SeoPageContextPanel({
           </Link>
           .
         </p>
-        <p>
+        {!mapping ? <p>
           Ready to act? The quickest next step from here is{' '}
           <Link href={productHref} className="font-medium text-primary hover:underline">
             {productAnchor}
           </Link>
           .
-        </p>
-        {commercialCopy ? (
+        </p> : null}
+        {commercialCopy && !mapping ? (
           <p>
             For England cases, {commercialCopy.body}{' '}
             <Link
@@ -106,6 +112,8 @@ export function SeoPageContextPanel({
         ) : null}
       </div>
     </div>
+    {mapping ? <ContextualOffer sourceRoute={pathname} placement="after_answer" className="mt-6" /> : null}
+    </>
   );
 }
 

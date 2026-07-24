@@ -88,7 +88,7 @@ export default function StudentTenancyAgreementPage() {
           'Student AST template wording with guarantor agreement and sharer replacement controls',
           'Clearer treatment of guarantors, joint tenants, and replacement requests',
           'Better end-of-term and move-out wording than a generic residential agreement',
-          'Solicitor-approved guided agreement pack with validation checks and a preview before payment',
+          'Review-ready guided agreement pack with validation checks and a preview before payment',
         ]}
         compliancePoints={[
           'Built around the current England position from 1 May 2026 for the main tenancy wording.',
@@ -194,7 +194,7 @@ export default function StudentTenancyAgreementPage() {
           },
           ctaTitle: 'Build the validated Student tenancy pack',
           ctaBody:
-            'Use this option when the occupiers are students and you want solicitor-approved document preparation for the agreement, student hand-back wording, guarantor support, and extra paperwork as one coherent pack.',
+            'Use this option when the occupiers are students and you want review-ready document preparation for the agreement, student hand-back wording, guarantor support, and extra paperwork as one coherent pack.',
         }}
         faqs={[
           {
