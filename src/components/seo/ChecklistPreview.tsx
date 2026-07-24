@@ -49,7 +49,11 @@ export function ChecklistPreview({ imageSrc, pdfHref, pdfText, alt }: ChecklistP
           Click to expand checklist
         </span>
       </button>
-      <Link href={pdfHref} className="mt-4 block text-sm font-semibold text-primary hover:underline">
+      <Link
+        href={pdfHref}
+        prefetch={false}
+        className="mt-4 block text-sm font-semibold text-primary hover:underline"
+      >
         {pdfText}
       </Link>
 

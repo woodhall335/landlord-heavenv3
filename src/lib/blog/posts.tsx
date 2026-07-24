@@ -8096,7 +8096,7 @@ const allBlogPosts: BlogPost[] = [
   {
     slug: 'bailiff-eviction-day-what-to-expect',
     title: 'Bailiff Eviction Day - What to Expect (England Guide 2026)',
-    description: 'The final step in eviction: bailiff enforcement. Learn what happens on eviction day, your rights and responsibilities, what bailiffs can and cannot do, and how to prepare.',
+    description: 'The final step in eviction: bailiff enforcement. Learn what happens on eviction day, your responsibilities, what bailiffs can and cannot do, and how to prepare.',
     metaDescription: 'Bailiff eviction day explained. What happens when bailiffs enforce possession, your responsibilities as landlord, changing locks, tenant belongings. England guide.',
     date: '2026-01-03',
     updatedDate: '2026-01-03',

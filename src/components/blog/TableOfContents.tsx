@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useId, useState, useSyncExternalStore } from 'react';
 
 interface TOCItem {
   id: string;
@@ -34,9 +34,26 @@ function toPx(cssLength: string): number {
   return Number.isFinite(fallback) ? fallback : 112;
 }
 
+const DESKTOP_QUERY = '(min-width: 1024px)';
+
+function subscribeToDesktopQuery(onStoreChange: () => void) {
+  const mediaQuery = window.matchMedia(DESKTOP_QUERY);
+  mediaQuery.addEventListener('change', onStoreChange);
+  return () => mediaQuery.removeEventListener('change', onStoreChange);
+}
+
+const getDesktopSnapshot = () => window.matchMedia(DESKTOP_QUERY).matches;
+const getDesktopServerSnapshot = () => false;
+
 export function TableOfContents({ items }: TableOfContentsProps) {
   const [activeId, setActiveId] = useState<string>('');
-  const [isOpen, setIsOpen] = useState(() => (typeof window !== 'undefined' ? window.matchMedia('(min-width: 1024px)').matches : false));
+  const [isOpen, setIsOpen] = useState(false);
+  const isDesktop = useSyncExternalStore(
+    subscribeToDesktopQuery,
+    getDesktopSnapshot,
+    getDesktopServerSnapshot
+  );
+  const isExpanded = isDesktop || isOpen;
   const panelId = useId();
 
   useEffect(() => {
@@ -88,28 +105,28 @@ export function TableOfContents({ items }: TableOfContentsProps) {
     <nav aria-label="In this article" className="rounded-2xl border border-[#e4d4ff] bg-[#f8f1ff] p-4 shadow-sm md:p-5" data-blog-sidebar-toc>
       <button
         type="button"
-        aria-expanded={isOpen}
+        aria-expanded={isExpanded}
         aria-controls={panelId}
         onClick={() => setIsOpen((prev) => !prev)}
         className="mb-3 flex w-full items-center justify-between gap-2 rounded-xl border border-[#e4d4ff] bg-white/85 px-3 py-2 text-left text-sm font-semibold text-slate-900 transition hover:border-[#ccb0fa] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2 lg:cursor-default lg:border-transparent lg:bg-transparent lg:px-0"
       >
         <span className="text-base font-semibold text-slate-900">In this article</span>
         <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 lg:hidden">
-          <span>{isOpen ? 'Hide' : 'Show'}</span>
+          <span>{isExpanded ? 'Hide' : 'Show'}</span>
           <Image
             src="/images/wizard-icons/07-review-finish.png"
             alt=""
             aria-hidden
             width={14}
             height={14}
-            className={`h-3.5 w-3.5 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+            className={`h-3.5 w-3.5 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
           />
         </span>
       </button>
 
       <ul
         id={panelId}
-        className={`space-y-1 overflow-hidden transition-all ${isOpen ? 'block' : 'hidden lg:block'}`}
+        className={`space-y-1 overflow-hidden transition-all ${isExpanded ? 'block' : 'hidden lg:block'}`}
         data-blog-toc-panel
       >
         {items.map((item) => (
