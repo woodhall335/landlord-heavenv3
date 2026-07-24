@@ -452,6 +452,8 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
 
       <UniversalHero
         {...content.hero}
+        primaryCta={analytics?.pageType === 'product_page' ? undefined : content.hero.primaryCta}
+        secondaryCta={analytics?.pageType === 'product_page' ? undefined : content.hero.secondaryCta}
         actionsSlot={
           analytics?.pageType === 'product_page' && content.hero.primaryCta ? (
             <ProductPrimaryActions
