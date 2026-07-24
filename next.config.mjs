@@ -184,6 +184,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/blog/england-bailiff-eviction',
+        destination: '/blog/bailiff-eviction-day-what-to-expect',
+        permanent: true,
+      },
+      {
         source: '/lodger-agreement-template',
         destination: '/lodger-agreement',
         permanent: true,

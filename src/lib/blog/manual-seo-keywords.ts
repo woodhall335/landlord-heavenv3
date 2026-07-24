@@ -161,7 +161,7 @@ const BLOG_POST_KEYWORD_TOP_UPS: Record<string, string[]> = {
     'section 8 hearing preparation',
     'possession order hearing guide',
   ],
-  'england-bailiff-eviction': [
+  'bailiff-eviction-day-what-to-expect': [
     'bailiff eviction day',
     'county court bailiff eviction',
     'warrant of possession landlord',

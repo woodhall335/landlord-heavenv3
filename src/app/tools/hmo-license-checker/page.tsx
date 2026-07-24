@@ -610,6 +610,7 @@ export default function HMOLicenseChecker() {
             <label className="flex items-center">
               <input
                 type="radio"
+                id="hasSharedFacilities-yes"
                 name="hasSharedFacilities"
                 value="yes"
                 checked={formData.hasSharedFacilities === 'yes'}
@@ -623,6 +624,7 @@ export default function HMOLicenseChecker() {
             <label className="flex items-center">
               <input
                 type="radio"
+                id="hasSharedFacilities-no"
                 name="hasSharedFacilities"
                 value="no"
                 checked={formData.hasSharedFacilities === 'no'}

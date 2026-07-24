@@ -4855,7 +4855,7 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           For more on the bailiff process, see our{' '}
-          <Link href="/blog/england-bailiff-eviction" className="text-primary hover:underline font-medium">
+          <Link href="/blog/bailiff-eviction-day-what-to-expect" className="text-primary hover:underline font-medium">
             Bailiff Eviction Day guide
           </Link>.
         </p>
@@ -7714,7 +7714,7 @@ const allBlogPosts: BlogPost[] = [
       { id: 'after-hearing', title: 'After the Hearing', level: 2 },
       { id: 'hearing-faq', title: 'FAQ', level: 2 },
     ],
-    relatedPosts: ['england-section-21-process', 'england-section-8-process', 'england-bailiff-eviction'],
+    relatedPosts: ['england-section-21-process', 'england-section-8-process', 'bailiff-eviction-day-what-to-expect'],
     content: (
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
@@ -8094,7 +8094,7 @@ const allBlogPosts: BlogPost[] = [
   // Target: 1,500+ words
   // ============================================
   {
-    slug: 'england-bailiff-eviction',
+    slug: 'bailiff-eviction-day-what-to-expect',
     title: 'Bailiff Eviction Day - What to Expect (England Guide 2026)',
     description: 'The final step in eviction: bailiff enforcement. Learn what happens on eviction day, your rights and responsibilities, what bailiffs can and cannot do, and how to prepare.',
     metaDescription: 'Bailiff eviction day explained. What happens when bailiffs enforce possession, your responsibilities as landlord, changing locks, tenant belongings. England guide.',
@@ -37522,25 +37522,25 @@ const allBlogPosts: BlogPost[] = [
 
         <div className="grid md:grid-cols-2 gap-6 my-6">
           <div className="bg-green-50 rounded-lg p-4 border border-green-200">
-            <h4 className="font-semibold text-green-900 mb-2">Best Case: They Pay</h4>
+            <h3 className="font-semibold text-green-900 mb-2">Best Case: They Pay</h3>
             <p className="text-green-800 text-sm">
               The tenant pays in full. Matter resolved—no court needed.
             </p>
           </div>
           <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-            <h4 className="font-semibold text-blue-900 mb-2">They Propose Payment Plan</h4>
+            <h3 className="font-semibold text-blue-900 mb-2">They Propose Payment Plan</h3>
             <p className="text-blue-800 text-sm">
               Consider if it&apos;s reasonable. You can negotiate or reject and proceed to court.
             </p>
           </div>
           <div className="bg-amber-50 rounded-lg p-4 border border-amber-200">
-            <h4 className="font-semibold text-amber-900 mb-2">They Dispute the Debt</h4>
+            <h3 className="font-semibold text-amber-900 mb-2">They Dispute the Debt</h3>
             <p className="text-amber-800 text-sm">
               Review their reasons. If you still have a valid claim, proceed to court.
             </p>
           </div>
           <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-            <h4 className="font-semibold text-gray-900 mb-2">No Response</h4>
+            <h3 className="font-semibold text-gray-900 mb-2">No Response</h3>
             <p className="text-gray-700 text-sm">
               After 30 days, you can issue your court claim via MCOL or N1 form.
             </p>

@@ -88,7 +88,7 @@ function wrapScrollableContent(node: ReactNode, usedHrefs: Set<string>, inAnchor
 
   const element = node as ReactElement<{ children?: ReactNode }>;
   const tagName = typeof element.type === 'string' ? element.type : null;
-  const nextInAnchor = inAnchor || tagName === 'a';
+  const nextInAnchor = inAnchor || tagName === 'a' || element.type === Link;
   const wrappedChildren = element.props.children
     ? Children.map(element.props.children, (child) =>
         wrapScrollableContent(child, usedHrefs, nextInAnchor),

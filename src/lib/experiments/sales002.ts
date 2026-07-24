@@ -12,9 +12,11 @@ function stableBucket(value: string): number {
 }
 
 export function assignSales002OfferVariant(identity: string): Sales002OfferVariant {
-  if (process.env.NEXT_PUBLIC_SALES002_CONTEXTUAL_OFFER === 'off') return 'control';
-  return stableBucket(`${SALES002_CONTEXTUAL_OFFER_EXPERIMENT}:${identity}`) < 50
-    ? 'control'
-    : 'treatment';
+  // SALES-003B baseline: keep the certified control experience deterministic.
+  // The previous localStorage identity was unavailable during SSR, so treatment
+  // identities could render different text during hydration. Preserve the
+  // bucketing implementation for a future explicitly re-enabled experiment.
+  void identity;
+  void stableBucket;
+  return 'control';
 }
-

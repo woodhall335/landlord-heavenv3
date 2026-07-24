@@ -139,6 +139,7 @@ const stripYearsAndPrices = (value: string) =>
     value
       .replace(YEAR_PATTERN, '')
       .replace(PRICE_PATTERN, '')
+      .replace(/\s+\)/g, ')')
       .replace(/\(\s*\)/g, '')
       .replace(EXTRA_SEPARATORS, '')
   );
@@ -172,9 +173,9 @@ const enforceTitleLength = (value: string) => {
   const truncated = value.slice(0, 60);
   const lastSpace = truncated.lastIndexOf(' ');
   if (lastSpace <= 0) {
-    return truncated.trim();
+    return truncated.trim().replace(/\s*[\(\[\{:-]+$/, '');
   }
-  return truncated.slice(0, lastSpace).trim();
+  return truncated.slice(0, lastSpace).trim().replace(/\s*[\(\[\{:-]+$/, '');
 };
 
 const normalizeMetaDescription = (value: string, jurisdictionLabel: string) => {
@@ -425,6 +426,11 @@ export const getBlogSeoConfig = (post: BlogPost, region: BlogRegion | null): Blo
     metaTitleBase = removeCommercialTitleWords(metaTitleBase);
     metaTitleBase = ensureInformationalTitle(metaTitleBase);
   }
+  metaTitleBase = normalizeWhitespace(
+    normalizeWhitespace(metaTitleBase)
+      .replace(/\(\s*\)/g, '')
+      .replace(/\s+\)/g, ')')
+  );
   const metaTitle = enforceTitleLength(metaTitleBase);
 
   const heroIntro = normalizeMetaDescription(post.description, jurisdictionLabel);

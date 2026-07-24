@@ -80,7 +80,7 @@ export const CONVERSION_REGISTRY: readonly ConversionMapping[] = [
     price: PRODUCTS.ast_standard.displayPrice, previewAvailable: true, trackingId: 'how_to_rent_tenancy',
   },
   moneyClaim('/blog/how-to-write-letter-before-action-unpaid-rent', 'Send compliant pre-action correspondence and recover unpaid rent.', 'lba_unpaid_rent_money_claim'),
-  courtPack('/blog/england-bailiff-eviction', 'Move from a possession order to lawful enforcement.', 'bailiff_guide_complete_pack'),
+  courtPack('/blog/bailiff-eviction-day-what-to-expect', 'Move from a possession order to lawful enforcement.', 'bailiff_guide_complete_pack'),
   notice('/blog/england-section-8-ground-1', 'Use Ground 1 correctly and evidence the landlord occupation case.', 'ground_1_notice', '1'),
   courtPack('/blog/england-county-court-forms', 'Choose and prepare the correct possession court forms.', 'court_forms_complete_pack'),
   moneyClaim('/tools/rent-arrears-calculator', 'Use the calculated arrears in pre-action and claim documents.', 'arrears_calculator_money_claim'),

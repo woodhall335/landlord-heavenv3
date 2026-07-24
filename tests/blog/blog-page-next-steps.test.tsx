@@ -121,7 +121,7 @@ describe('Blog page next steps rollout', () => {
       ],
     ],
     [
-      'england-bailiff-eviction',
+      'bailiff-eviction-day-what-to-expect',
       [
         { label: 'Warrant of Possession Guide', href: '/warrant-of-possession-guide' },
         { label: 'Court Bailiff Eviction Guide', href: '/court-bailiff-eviction-guide' },

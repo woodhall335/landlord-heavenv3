@@ -40,9 +40,9 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
               <p className="text-xs font-semibold tracking-[0.08em] text-[#CFC4FF]">
                 Golden pack sample preview
               </p>
-              <h4 className="mt-2 text-xl font-semibold text-white md:text-2xl">
+              <h3 className="mt-2 text-xl font-semibold text-white md:text-2xl">
                 Inspect the real sample PDFs before you pay
-              </h4>
+              </h3>
               <p className="mt-2 text-sm leading-7 text-[#ECE8FF] md:text-base">
                 Open each sample document directly on this page, switch between files, and check
                 the wording, layout, and supporting materials without downloading anything.
@@ -97,7 +97,7 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
                     >
                       {entry.categoryLabel}
                     </p>
-                    <h6 className="mt-2 text-base font-semibold leading-6">{entry.title}</h6>
+                    <h4 className="mt-2 text-base font-semibold leading-6">{entry.title}</h4>
                     <p
                       className={
                         isSelected ? 'mt-2 text-sm text-[#5E498E]' : 'mt-2 text-sm text-[#E7E0FF]'
@@ -128,9 +128,9 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6F54C8]">
                   Selected sample
                 </p>
-                <h5 className="mt-1 text-lg font-semibold tracking-tight text-[#261544] md:text-xl">
+                <h4 className="mt-1 text-lg font-semibold tracking-tight text-[#261544] md:text-xl">
                   {selectedEntry.title}
-                </h5>
+                </h4>
                 {selectedEntry.description ? (
                   <p className="mt-2 max-w-2xl text-sm leading-6 text-[#5E498E] md:text-base">
                     {selectedEntry.description}

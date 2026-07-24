@@ -39,7 +39,7 @@ const CURATED_NEXT_STEPS_OVERRIDES: Record<string, NextStepsCTA[]> = {
       priority: 3,
     },
   ],
-  'england-bailiff-eviction': [
+  'bailiff-eviction-day-what-to-expect': [
     {
       href: '/warrant-of-possession-guide',
       label: 'Warrant of Possession Guide',

@@ -32,9 +32,10 @@ describe('SALES-002 live funnel', () => {
     }
   });
 
-  it('keeps the experiment stable and preserves control when killed', () => {
+  it('keeps the certified SALES-003B baseline in control', () => {
     expect(assignSales002OfferVariant('same-user')).toBe(assignSales002OfferVariant('same-user'));
-    expect(['control', 'treatment']).toContain(assignSales002OfferVariant('another-user'));
+    expect(assignSales002OfferVariant('same-user')).toBe('control');
+    expect(assignSales002OfferVariant('another-user')).toBe('control');
   });
 
   it('does not put HMO or arrears case inputs into product URLs', () => {

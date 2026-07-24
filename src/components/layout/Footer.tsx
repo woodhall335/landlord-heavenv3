@@ -46,9 +46,9 @@ export function Footer() {
           </div>
 
           <div>
-            <h5 className="mb-4 text-sm font-bold text-[#bdbdbd]">
+            <h2 className="mb-4 text-sm font-bold text-[#bdbdbd]">
               <u>Products</u>
-            </h5>
+            </h2>
             <ul className="space-y-2.5">
               <li>
                 <Link href="/products/notice-only" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
@@ -84,9 +84,9 @@ export function Footer() {
           </div>
 
           <div>
-            <h5 className="mb-4 text-sm font-bold text-[#bdbdbd]">
+            <h2 className="mb-4 text-sm font-bold text-[#bdbdbd]">
               <u>Tenancy Agreements</u>
-            </h5>
+            </h2>
             <ul className="space-y-2.5">
               <li>
                 <Link href="/products/ast" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
@@ -122,9 +122,9 @@ export function Footer() {
           </div>
 
           <div>
-            <h5 className="mb-4 text-sm font-bold text-[#bdbdbd]">
+            <h2 className="mb-4 text-sm font-bold text-[#bdbdbd]">
               <u>Guides & Tools</u>
-            </h5>
+            </h2>
             <ul className="space-y-2.5">
               <li>
                 <Link href="/blog" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
@@ -160,9 +160,9 @@ export function Footer() {
           </div>
 
           <div>
-            <h5 className="mb-4 text-sm font-bold text-[#bdbdbd]">
+            <h2 className="mb-4 text-sm font-bold text-[#bdbdbd]">
               <u>Company</u>
-            </h5>
+            </h2>
             <ul className="space-y-2.5">
               <li>
                 <Link href="/about" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">

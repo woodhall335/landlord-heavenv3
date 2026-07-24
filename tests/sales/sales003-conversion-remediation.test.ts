@@ -46,11 +46,11 @@ describe('SALES-003 conversion remediation', () => {
     expect(source).not.toContain('line-clamp-3');
   });
 
-  it('keeps experiment allocation deterministic and kill-switchable', () => {
+  it('keeps the contextual-offer experiment disabled for the SALES-003B baseline', () => {
     const source = read('src', 'lib', 'experiments', 'sales002.ts');
 
     expect(source).toContain('stableBucket');
-    expect(source).toContain("NEXT_PUBLIC_SALES002_CONTEXTUAL_OFFER === 'off'");
+    expect(source).toContain("return 'control'");
     expect(source).not.toContain('Math.random');
     expect(source).not.toContain('crypto.randomUUID');
   });

@@ -70,4 +70,30 @@ describe('getBlogSeoConfig', () => {
     expect(seoConfig.supportingLinks.some((link) => link.href === '/products/money-claim')).toBe(false);
     expect(seoConfig.pillarLink.label.toLowerCase()).not.toContain('wales rent arrears');
   });
+
+  it('does not truncate a long title on an opening parenthesis', () => {
+    const seoConfig = getBlogSeoConfig(
+      {
+        ...basePost,
+        slug: 'how-to-write-letter-before-action-unpaid-rent',
+        title: 'How to Write a Letter Before Action for Unpaid Rent (2026 Template)',
+      },
+      null,
+    );
+
+    expect(seoConfig.metaTitle).toBe('How to Write a Letter Before Action for Unpaid Rent Guide');
+  });
+
+  it('normalizes whitespace before a closing parenthesis', () => {
+    const seoConfig = getBlogSeoConfig(
+      {
+        ...basePost,
+        slug: 'bailiff-eviction-day-what-to-expect',
+        title: 'Bailiff Eviction Day - What to Expect (England Guide 2026)',
+      },
+      'england',
+    );
+
+    expect(seoConfig.metaTitle).toBe('Bailiff Eviction Day - What to Expect (England Guide)');
+  });
 });
