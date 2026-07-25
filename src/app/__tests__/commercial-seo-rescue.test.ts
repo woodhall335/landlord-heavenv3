@@ -10,8 +10,11 @@ describe('commercial SEO rescue pages', () => {
   it('positions Form 3A and Section 8 template searches around serving the notice', () => {
     const form3 = CURRENT_ENGLAND_FRAMEWORK_PAGES['form-3-section-8'];
 
-    expect(form3.title).toContain('Serve Form 3A');
-    expect(form3.description).toContain('right grounds, dates, service proof');
+    expect(form3.title).toContain('Section 8 Eviction Notice (Form 3A)');
+    expect(form3.description).toContain('N215 service record');
+    expect(form3.heroTitle).toContain('Section 8 eviction notice');
+    expect(form3.primaryCta.label).toContain('Create my eviction notice');
+    expect(form3.primaryCta.href).toContain('/wizard/flow?');
     expect(section8TemplateMetadata.title).toContain('Without Date or Service Mistakes');
 
     const currentFrameworkRenderer = readFileSync('src/components/seo/CurrentFrameworkGuidePage.tsx', 'utf8');

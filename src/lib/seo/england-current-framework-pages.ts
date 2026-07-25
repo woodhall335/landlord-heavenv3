@@ -69,13 +69,17 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
 > = {
   'form-3-section-8': {
     slug: 'form-3-section-8',
-    title: 'Serve Form 3A Section 8 Notice Correctly | England 2026',
+    title: 'Create a Section 8 Eviction Notice (Form 3A) | England 2026',
     description:
-      'Serve the current England Form 3A Section 8 notice with the right grounds, dates, service proof, and next step before avoidable mistakes cost time.',
+      'Create the current England Section 8 eviction notice (Form 3A), N215 service record, arrears schedule, and service checks. Preview before paying £39.99.',
     keywords: [
       'form 3a',
       'form 3a section 8',
       'form 3a section 8 notice',
+      'section 8 eviction notice',
+      'eviction notice england',
+      'landlord eviction notice',
+      'create eviction notice',
       'section 8 notice form',
       'form 3a notice england',
       'section 8 form 3a',
@@ -84,18 +88,21 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
     ],
     ownerQueryTheme: 'form 3a section 8',
     supportingQueryThemes: [
+      'section 8 eviction notice',
+      'eviction notice england',
+      'landlord eviction notice',
       'form 3a notice england',
       'section 8 form 3a',
       'england possession notice',
       'renters rights act form 3a',
     ],
-    heroTitle: 'Serve Form 3A correctly before the case loses time',
+    heroTitle: 'Create your Section 8 eviction notice (Form 3A)',
     heroSubtitle:
-      'Use this page when you need the current England Form 3A notice, clear ground selection, correct notice dates, and a service record you can rely on if the case later goes to court.',
+      'Prepare the current England Form 3A notice, N215 service record, arrears schedule, and service checks. Preview everything before paying £39.99.',
     heroBullets: [
-      'Focused on the current England Form 3A route.',
-      'Explains grounds, evidence, timing, and service in plain English.',
-      'Routes you into current notice, court, and claim support only.',
+      'Create the current England Section 8 eviction notice around your facts.',
+      'Check grounds, dates, evidence, and service in plain English.',
+      'Preview the Form 3A and service file before payment.',
     ],
     pageType: 'notice',
     currentFrameworkNote: buildCurrentFrameworkNote(
@@ -240,7 +247,10 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         type: 'guide',
       },
     ],
-    primaryCta: { label: noticeOnlyCtaLabel, href: '/products/notice-only' },
+    primaryCta: {
+      label: `Create my eviction notice — ${PRODUCTS.notice_only.displayPrice}`,
+      href: '/wizard/flow?type=eviction&product=notice_only&src=form3_paid_landing&topic=eviction',
+    },
     secondaryCta: { label: 'Prepare my court pack', href: '/products/complete-pack' },
   },
   'section-8-notice': {

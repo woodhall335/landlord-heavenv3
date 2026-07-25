@@ -53,7 +53,7 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
   const pagePath = `/${config.slug}`;
   const isForm3Section8 = config.slug === 'form-3-section-8';
   const inferProduct = (href: string) => {
-    if (href.includes('notice-only')) return 'notice_only';
+    if (href.includes('notice-only') || href.includes('notice_only')) return 'notice_only';
     if (href.includes('complete-pack')) return 'complete_pack';
     return undefined;
   };
