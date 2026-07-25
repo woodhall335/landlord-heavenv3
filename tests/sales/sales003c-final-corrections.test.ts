@@ -47,6 +47,13 @@ describe('SALES-003C final corrections', () => {
     expect(checkerIndex).toBeGreaterThan(disclaimerIndex);
   });
 
+  it('keeps the rent arrears initial server render independent of the build date', () => {
+    const source = read('src/app/tools/rent-arrears-calculator/page.tsx');
+
+    expect(source).toMatch(/id: 'initial-rent-period',[\s\S]*?dueDate: '',/);
+    expect(source).toContain("item.id === 'initial-rent-period' && !item.dueDate");
+  });
+
   it('uses constraint-scoped legacy storage aliases without losing canonical event identity', () => {
     const route = read('src/app/api/analytics/events/route.ts');
 

@@ -30,7 +30,10 @@ type ScheduleItem = {
 const defaultSchedule: ScheduleItem[] = [
   {
     id: 'initial-rent-period',
-    dueDate: new Date().toISOString().split('T')[0],
+    // Keep the server render deterministic. The current date is applied after
+    // hydration so a static build produced before midnight cannot disagree
+    // with a browser opened after midnight.
+    dueDate: '',
     dueAmount: 750,
     paidAmount: 0,
     paymentDate: '',
@@ -69,6 +72,15 @@ export default function RentArrearsCalculator() {
   const [rentAmount, setRentAmount] = useState(750);
   const [frequency, setFrequency] = useState<'month' | 'week'>('month');
   const [schedule, setSchedule] = useState<ScheduleItem[]>(defaultSchedule);
+
+  useEffect(() => {
+    const today = new Date().toISOString().split('T')[0];
+    setSchedule((current) =>
+      current.map((item) =>
+        item.id === 'initial-rent-period' && !item.dueDate ? { ...item, dueDate: today } : item,
+      ),
+    );
+  }, []);
 
   const totals = useMemo(() => {
     const today = new Date();

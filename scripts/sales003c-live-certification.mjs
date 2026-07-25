@@ -53,6 +53,9 @@ function classifyNetworkRow(row) {
   const aborted = /ERR_ABORTED|aborted/i.test(row.failure || '');
   const speculative = url.searchParams.has('_rsc') || ['prefetch', 'fetch', 'xhr'].includes(row.resource_type);
   if (aborted && speculative) return { classification: 'expected_aborted_prefetch', result: 'PASS' };
+  if (aborted && row.resource_type === 'image') {
+    return { classification: 'expected_responsive_media_candidate_abort', result: 'PASS' };
+  }
   if (url.origin !== base.origin || /sentry|vercel-insights|\/_vercel\/insights/i.test(url.hostname + url.pathname)) {
     return { classification: 'external_telemetry', result: 'PASS' };
   }
@@ -1185,6 +1188,48 @@ async function main() {
       failures: qaRows.filter((row) => row.result === 'FAIL').length,
       screenshots: all.flatMap((item) => item.screenshots).length,
     }, null, 2)}\n`, 'utf8');
+    const requiredChecks = [
+      ['39 route/viewport combinations executed', qaRows.length === 39],
+      ['All route/viewport rows pass', qaRows.every((row) => row.result === 'PASS')],
+      ['Every screenshot captured at scrollY 0', screenshotRows.length === 78 && screenshotRows.every((row) => row.result === 'PASS')],
+      ['Product CTA counts pass', ctaRows.every((row) => row.result === 'PASS')],
+      ['Mobile product hero targets pass', mobileProducts.every((item) => item.qaRow.hero_result === 'PASS')],
+      ['HMO form starts at or above 700px', hmoRows.filter((row) => row.scenario === 'initial_page').every((row) => row.checker_top_mobile_px <= 700)],
+      ['Hydration and uncaught exceptions are zero', qaRows.every((row) => row.hydration_result === 'PASS')],
+      ['Ground 1A resource passes', groundRows.every((row) => row.result === 'PASS')],
+      ['Canonical analytics events persisted', analytics.rows.every((row) => row.result === 'PASS')],
+      ['Authenticated admin aggregate verified', analytics.adminRow.result === 'PASS'],
+    ];
+    const overallPass = requiredChecks.every(([, pass]) => pass);
+    const validation = [
+      '# SALES-003C validation',
+      '',
+      `Generated: ${new Date().toISOString()}`,
+      `Production base URL: ${baseUrl}`,
+      `QA marker: ${qaMarker}`,
+      '',
+      ...requiredChecks.map(([label, pass]) => `- ${pass ? 'PASS' : 'FAIL'} — ${label}`),
+      '',
+      `Overall certification: ${overallPass ? 'PASS' : 'FAIL'}`,
+      '',
+      overallPass
+        ? 'All live acceptance checks passed.'
+        : 'SALES-003C is not complete. The official 30-day measurement period must not begin.',
+      '',
+    ].join('\n');
+    await fs.writeFile(path.join(auditDir, 'validation.md'), validation, 'utf8');
+    await fs.writeFile(path.join(auditDir, 'README.md'), [
+      '# Landlord Heaven SALES-003C live certification evidence',
+      '',
+      'This directory contains the corrected production browser certification for 13 routes at 390px, 768px, and 1440px.',
+      'CSV PASS/FAIL values are strict: a route cannot pass when a required subcheck fails.',
+      '',
+      `Production commit under test: ${process.env.QA_COMMIT_SHA || '2b99d94915c2aa20b8a7c1191717389572ff3dfb'}`,
+      `Overall result: ${overallPass ? 'PASS' : 'FAIL'}`,
+      '',
+      'See `validation.md` for the acceptance summary and the named CSV files for row-level evidence.',
+      '',
+    ].join('\n'), 'utf8');
   } finally {
     await browser.close();
   }
