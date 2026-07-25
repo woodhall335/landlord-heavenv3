@@ -108,6 +108,20 @@ export interface GrowthReportResponse {
     dailyRevenue: number;
     rolling7DayRevenue: number;
   };
+  certificationDiagnostics?: {
+    persistentStore: 'marketing_events';
+    qaMarker: string;
+    eventCount: number;
+    sourcePageCounts: Array<{ key: string; count: number }>;
+    productCounts: Array<{ key: string; count: number }>;
+    eventStageCounts: Array<{ key: string; count: number }>;
+    experimentControlDimensions: Array<{
+      experimentId: string;
+      variantId: string;
+      count: number;
+    }>;
+    sensitivePayloadDetected: boolean;
+  };
 }
 
 function toDateKey(date: Date): string {
@@ -342,6 +356,30 @@ export function buildGrowthReport(params: {
   };
   const stageCount = (name: string) =>
     eventsInRange.filter((event) => canonicalEventName(event) === name).length;
+  const countRows = (counts: Map<string, number>) =>
+    [...counts.entries()]
+      .map(([key, count]) => ({ key, count }))
+      .sort((left, right) => right.count - left.count || left.key.localeCompare(right.key));
+  const sensitivePayloadDetected = eventsInRange.some((event) => {
+    const payload = event.event_payload || {};
+    const sensitiveKey = Object.keys(payload).some((key) =>
+      /(?:postcode|email|tenant|landlord|address|case(?:id|data)?|dueamount|paidamount|rentamount|arrearsamount)/i.test(key)
+    );
+    const sensitiveValue = Object.values(payload).some(
+      (value) =>
+        typeof value === 'string' &&
+        (/\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b/i.test(value) ||
+          /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i.test(value))
+    );
+    return sensitiveKey || sensitiveValue;
+  });
+  const experimentDimensions = new Map<string, number>();
+  eventsInRange.forEach((event) => {
+    const experimentId = String(event.event_payload?.experimentId || 'unknown');
+    const variantId = String(event.event_payload?.variantId || 'unknown');
+    const key = `${experimentId}\u0000${variantId}`;
+    experimentDimensions.set(key, (experimentDimensions.get(key) || 0) + 1);
+  });
   const stageRate = (key: string, label: string, numeratorEvent: string, denominatorEvent: string) => {
     const numerator = stageCount(numeratorEvent);
     const denominator = stageCount(denominatorEvent);
@@ -350,7 +388,7 @@ export function buildGrowthReport(params: {
 
   const rolling7DayTargetRevenue = DAILY_REVENUE_TARGET_GBP * 7;
 
-  return {
+  const report: GrowthReportResponse = {
     success: true,
     days: params.days,
     summary: {
@@ -418,4 +456,31 @@ export function buildGrowthReport(params: {
       rolling7DayRevenue: rolling7DayTargetRevenue,
     },
   };
+  if (params.filters?.qaMarker) {
+    report.certificationDiagnostics = {
+      persistentStore: 'marketing_events',
+      qaMarker: params.filters.qaMarker,
+      eventCount: eventsInRange.length,
+      sourcePageCounts: countRows(countBy(eventsInRange, eventPage)),
+      productCounts: countRows(
+        countBy(eventsInRange, (event) =>
+          groupLabel(
+            event.product_clicked ||
+              event.recommended_product ||
+              String(event.event_payload?.productSlug || ''),
+            'unknown'
+          )
+        )
+      ),
+      eventStageCounts: countRows(countBy(eventsInRange, canonicalEventName)),
+      experimentControlDimensions: [...experimentDimensions.entries()]
+        .map(([key, count]) => {
+          const [experimentId, variantId] = key.split('\u0000');
+          return { experimentId, variantId, count };
+        })
+        .sort((left, right) => right.count - left.count),
+      sensitivePayloadDetected,
+    };
+  }
+  return report;
 }

@@ -98,6 +98,23 @@ describe('UniversalHero', () => {
     expect(desktopMascot).toHaveAttribute('alt', baseProps.mascotAlt);
   });
 
+  it('preserves a word boundary between the plain and highlighted H1 text', () => {
+    render(
+      <UniversalHero
+        {...baseProps}
+        title="Create the right England"
+        highlightTitle="tenancy agreement for the let"
+      />,
+    );
+
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'Create the right England tenancy agreement for the let',
+    );
+    expect(screen.getByRole('heading', { level: 1 })).not.toHaveTextContent(
+      'Englandtenancy',
+    );
+  });
+
   it('overrides the default aria-label when ariaLabel is provided', () => {
     render(<UniversalHero {...baseProps} ariaLabel="Custom hero label" />);
     expect(screen.getByLabelText('Custom hero label')).toBeInTheDocument();

@@ -7,6 +7,9 @@ const baseUrl = (process.env.QA_BASE_URL || 'https://landlordheaven.co.uk').repl
 const auditDir = path.join(root, 'audit-landlordheaven-sales003c');
 const screenshotDir = path.join(auditDir, 'screenshots');
 const qaMarker = `qa-sales003c-${new Date().toISOString().replace(/[:.]/g, '-')}`;
+const adminCookie = (process.env.SALES003C_ADMIN_COOKIE || '').trim();
+const adminPollTimeoutMs = Number(process.env.SALES003C_ADMIN_POLL_TIMEOUT_MS || 60_000);
+const adminPollIntervalMs = Number(process.env.SALES003C_ADMIN_POLL_INTERVAL_MS || 2_000);
 
 const routes = [
   '/products/notice-only',
@@ -891,13 +894,15 @@ async function auditIndexability() {
 }
 
 async function auditAnalyticsIngestion(browser) {
+  if (!adminCookie) {
+    throw new Error(
+      'Missing SALES003C_ADMIN_COOKIE. Supply an approved authenticated production admin session cookie through the environment or run the aggregate validation through an already-authenticated approved browser session. Never commit the cookie value.'
+    );
+  }
   const page = await browser.newPage();
   await page.setViewport(viewports[0]);
   const marker = `${qaMarker}-ingestion`;
-  const bearer = process.env.SALES003C_ADMIN_BEARER || '';
-  const cookie = process.env.SALES003C_ADMIN_COOKIE || '';
-  if (bearer) await page.setExtraHTTPHeaders({ Authorization: `Bearer ${bearer}` });
-  if (cookie) await page.setExtraHTTPHeaders({ ...(bearer ? { Authorization: `Bearer ${bearer}` } : {}), Cookie: cookie });
+  await page.setExtraHTTPHeaders({ Cookie: adminCookie });
   const expected = [
     ['contextual offer view', 'contextual_offer_view', null],
     ['contextual offer click', 'contextual_offer_click', null],
@@ -930,10 +935,7 @@ async function auditAnalyticsIngestion(browser) {
       try { responseBody = await response.json(); } catch {}
       results.push({ label, eventName, toolName, status: response.status, responseBody });
     }
-    const adminResponse = await fetch(`/api/admin/growth?days=7&qa_marker=${encodeURIComponent(identity)}`, { credentials: 'same-origin' });
-    let adminBody = null;
-    try { adminBody = await adminResponse.json(); } catch {}
-    return { results, adminStatus: adminResponse.status, adminBody };
+    return { results };
   }, { identity: marker, events: expected });
   const rows = expected.map(([label, eventName, toolName]) => {
     const matches = requests.results.filter((item) => item.label === label && item.eventName === eventName && (!toolName || item.toolName === toolName));
@@ -951,22 +953,84 @@ async function auditAnalyticsIngestion(browser) {
       result: persisted ? 'PASS' : 'FAIL',
     };
   });
-  const aggregateText = JSON.stringify(requests.adminBody || {});
-  const aggregateChecks = {
-    source_page_counts: requests.adminStatus === 200 && aggregateText.includes('/products/notice-only'),
-    product_counts: requests.adminStatus === 200 && aggregateText.includes('notice-only'),
-    event_stage_counts: requests.adminStatus === 200 && ['contextual_offer_view', 'contextual_offer_click', 'product_view', 'product_primary_cta_click'].every((name) => aggregateText.includes(name)),
-    experiment_control_dimensions: requests.adminStatus === 200 && aggregateText.includes('sales003c-certification') && aggregateText.includes('control'),
-  };
+  const pollStartedAt = Date.now();
+  let pollAttempts = 0;
+  let adminStatus = 0;
+  let adminBody = null;
+  let aggregateChecks = {};
+  do {
+    pollAttempts += 1;
+    const observed = await page.evaluate(async (identity) => {
+      const response = await fetch(
+        `/api/admin/growth?days=7&qa_marker=${encodeURIComponent(identity)}`,
+        { credentials: 'same-origin', cache: 'no-store' }
+      );
+      let body = null;
+      try { body = await response.json(); } catch {}
+      return { status: response.status, body };
+    }, marker);
+    adminStatus = observed.status;
+    adminBody = observed.body;
+    const diagnostics = adminBody?.certificationDiagnostics;
+    const sourceCount = diagnostics?.sourcePageCounts?.find(
+      (row) => row.key === '/products/notice-only'
+    )?.count || 0;
+    const productCount = diagnostics?.productCounts?.find(
+      (row) => row.key === 'notice-only'
+    )?.count || 0;
+    const stageCounts = new Map(
+      (diagnostics?.eventStageCounts || []).map((row) => [row.key, row.count])
+    );
+    const controlCount = diagnostics?.experimentControlDimensions?.find(
+      (row) =>
+        row.experimentId === 'sales003c-certification' && row.variantId === 'control'
+    )?.count || 0;
+    aggregateChecks = {
+      persistent_store:
+        adminStatus === 200 &&
+        diagnostics?.persistentStore === 'marketing_events' &&
+        diagnostics?.qaMarker === marker,
+      source_page_counts: sourceCount >= 4,
+      product_counts: productCount >= 4,
+      event_stage_counts:
+        ['contextual_offer_view', 'contextual_offer_click', 'product_view', 'product_primary_cta_click']
+          .every((name) => (stageCounts.get(name) || 0) >= 1),
+      experiment_control_dimensions: controlCount >= 4,
+      privacy: diagnostics?.sensitivePayloadDetected === false,
+    };
+    if (adminStatus === 401 || adminStatus === 403) break;
+    if (Object.values(aggregateChecks).every(Boolean)) break;
+    if (Date.now() - pollStartedAt < adminPollTimeoutMs) {
+      await sleep(adminPollIntervalMs);
+    }
+  } while (Date.now() - pollStartedAt < adminPollTimeoutMs);
+  const diagnostics = adminBody?.certificationDiagnostics || null;
   const adminRow = {
     qa_marker: marker,
-    auth_method: bearer ? 'bearer' : cookie ? 'cookie' : 'none',
-    http_status: requests.adminStatus,
+    auth_method: 'authenticated_admin_cookie',
+    http_status: adminStatus,
+    persistent_store_result: aggregateChecks.persistent_store ? 'PASS' : 'FAIL',
     source_page_counts_result: aggregateChecks.source_page_counts ? 'PASS' : 'FAIL',
     product_counts_result: aggregateChecks.product_counts ? 'PASS' : 'FAIL',
     event_stage_counts_result: aggregateChecks.event_stage_counts ? 'PASS' : 'FAIL',
     experiment_control_dimensions_result: aggregateChecks.experiment_control_dimensions ? 'PASS' : 'FAIL',
-    limitation: requests.adminStatus === 401 ? 'No approved authenticated production admin session or service credential was available; authentication was not weakened.' : '',
+    privacy_result: aggregateChecks.privacy ? 'PASS' : 'FAIL',
+    poll_attempts: pollAttempts,
+    poll_timeout_ms: adminPollTimeoutMs,
+    poll_interval_ms: adminPollIntervalMs,
+    elapsed_ms: Date.now() - pollStartedAt,
+    final_observed_event_count: diagnostics?.eventCount ?? 0,
+    final_source_page_counts: JSON.stringify(diagnostics?.sourcePageCounts || []),
+    final_product_counts: JSON.stringify(diagnostics?.productCounts || []),
+    final_event_stage_counts: JSON.stringify(diagnostics?.eventStageCounts || []),
+    final_experiment_dimensions: JSON.stringify(
+      diagnostics?.experimentControlDimensions || []
+    ),
+    sensitive_payload_detected: String(diagnostics?.sensitivePayloadDetected ?? 'unknown'),
+    limitation:
+      adminStatus === 401 || adminStatus === 403
+        ? 'The supplied session did not authenticate as a production admin; authentication was not weakened.'
+        : '',
     result: Object.values(aggregateChecks).every(Boolean) ? 'PASS' : 'FAIL',
   };
   await page.close();
@@ -1161,21 +1225,47 @@ async function main() {
     await writeCsv('admin-aggregate-authenticated-validation.csv', [analytics.adminRow], Object.keys(analytics.adminRow));
     await writeCsv('ground-1a-resource-validation.csv', groundRows, Object.keys(groundRows[0]));
 
-    const malformedRows = all.filter((item) => item.qaRow.viewport === 'desktop' && [
+    const malformedCopyRoutes = new Set([
+      ...productRoutes,
       '/blog/how-to-write-letter-before-action-unpaid-rent',
       '/blog/bailiff-eviction-day-what-to-expect',
-    ].includes(item.qaRow.route)).map((item) => {
-      const malformed = /Unpaid Rent \($|England Guide \)/.test(item.dom?.title || '') || /Unpaid Rent \($|England Guide \)/.test(item.dom?.h1 || '') || /Unpaid Rent \($|England Guide \)/.test(item.dom?.jsonLd || '') || /Unpaid Rent \($|England Guide \)/.test(item.dom?.breadcrumbs || '');
+    ]);
+    const malformedRows = all.filter(
+      (item) =>
+        item.qaRow.viewport === 'desktop' && malformedCopyRoutes.has(item.qaRow.route)
+    ).map((item) => {
+      const checkedCopy = [
+        item.dom?.title || '',
+        item.dom?.h1 || '',
+        item.dom?.jsonLd || '',
+        item.dom?.breadcrumbs || '',
+      ].join(' ');
+      const joinedWordRegression = /Englandtenancy/i.test(checkedCopy);
+      const malformed =
+        /Unpaid Rent \($|England Guide \)/.test(checkedCopy) || joinedWordRegression;
+      const astH1Pass =
+        item.qaRow.route !== '/products/ast' ||
+        (item.dom?.h1 || '').includes(
+          'Create the right England tenancy agreement for the let'
+        );
       return {
         route: item.qaRow.route,
         metadata_title: item.dom?.title || '',
         h1: item.dom?.h1 || '',
-        card_title: 'canonical BlogPost.title checked through rendered title/H1',
-        social_metadata: item.dom?.jsonLd.includes(item.dom?.title || '') ? 'aligned via canonical title' : 'rendered metadata inspected',
+        canonical_source_scope: productRoutes.has(item.qaRow.route)
+          ? 'product source, metadata, structured data, rendered H1'
+          : 'canonical BlogPost source, metadata, structured data, rendered H1',
+        joined_word_regression: joinedWordRegression ? 'yes' : 'no',
+        ast_expected_h1_result: astH1Pass ? 'PASS' : 'FAIL',
         structured_data_contains_malformed_copy: malformed ? 'yes' : 'no',
         breadcrumb_contains_malformed_copy: /Unpaid Rent \($|England Guide \)/.test(item.dom?.breadcrumbs || '') ? 'yes' : 'no',
         broken_description_fragments: (item.dom?.descriptionFragments || []).join('|'),
-        result: !malformed && (item.dom?.descriptionFragments || []).length === 0 ? 'PASS' : 'FAIL',
+        result:
+          !malformed &&
+          astH1Pass &&
+          (item.dom?.descriptionFragments || []).length === 0
+            ? 'PASS'
+            : 'FAIL',
       };
     });
     await writeCsv('malformed-copy-final.csv', malformedRows, Object.keys(malformedRows[0]));
@@ -1197,6 +1287,7 @@ async function main() {
       ['HMO form starts at or above 700px', hmoRows.filter((row) => row.scenario === 'initial_page').every((row) => row.checker_top_mobile_px <= 700)],
       ['Hydration and uncaught exceptions are zero', qaRows.every((row) => row.hydration_result === 'PASS')],
       ['Ground 1A resource passes', groundRows.every((row) => row.result === 'PASS')],
+      ['Malformed-copy checks pass across all five product routes and two article routes', malformedRows.length === 7 && malformedRows.every((row) => row.result === 'PASS')],
       ['Canonical analytics events persisted', analytics.rows.every((row) => row.result === 'PASS')],
       ['Authenticated admin aggregate verified', analytics.adminRow.result === 'PASS'],
     ];
@@ -1218,6 +1309,22 @@ async function main() {
       '',
     ].join('\n');
     await fs.writeFile(path.join(auditDir, 'validation.md'), validation, 'utf8');
+    await fs.writeFile(path.join(auditDir, 'root-cause-report.md'), [
+      '# SALES-003C root-cause report',
+      '',
+      '## Authentication/configuration failure',
+      '',
+      `The production aggregate remained protected by normal Supabase cookie authentication and the ADMIN_USER_IDS allowlist. The certification used ${analytics.adminRow.auth_method}; the final aggregate response was HTTP ${analytics.adminRow.http_status}. No public bypass, QA-marker authentication, fixture, or hard-coded credential was introduced.`,
+      '',
+      '## Aggregate-data correctness',
+      '',
+      `The authenticated endpoint reads the real marketing_events store and filters to the exact QA marker. Final observed event count: ${analytics.adminRow.final_observed_event_count}. Persistence, source/page, product, stage, experiment/control, and privacy checks are recorded in admin-aggregate-authenticated-validation.csv. Bounded polling used ${analytics.adminRow.poll_attempts} attempt(s), a ${analytics.adminRow.poll_interval_ms}ms interval, and a ${analytics.adminRow.poll_timeout_ms}ms timeout.`,
+      '',
+      '## Copy regression',
+      '',
+      'UniversalHero rendered the plain title and block-level highlighted title without an intervening text-space node, joining “England” and “tenancy” in H1 textContent. The shared heading renderer now preserves the word boundary, with canonical-source and rendered-H1 regression checks across all five certified product routes.',
+      '',
+    ].join('\n'), 'utf8');
     await fs.writeFile(path.join(auditDir, 'README.md'), [
       '# Landlord Heaven SALES-003C live certification evidence',
       '',

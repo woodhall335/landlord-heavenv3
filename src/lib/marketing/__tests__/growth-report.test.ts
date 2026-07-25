@@ -208,4 +208,61 @@ describe('growth report builder', () => {
     ).toBe(0);
     expect(qaReport.funnelStages.find((stage) => stage.event === 'product_view')?.count).toBe(1);
   });
+
+  it('returns privacy-safe real-store certification diagnostics for an exact QA marker', () => {
+    const marker = 'qa-sales003c-secure-marker';
+    const report = buildGrowthReport({
+      days: 7,
+      now: new Date('2026-05-05T12:00:00.000Z'),
+      orders: [],
+      filters: { qaMarker: marker },
+      events: [
+        {
+          event_name: 'commercial_bridge_viewed',
+          source_page: '/products/notice-only',
+          product_clicked: 'notice-only',
+          event_payload: {
+            campaign: marker,
+            canonicalEventName: 'contextual_offer_view',
+            productSlug: 'notice-only',
+            experimentId: 'sales003c-certification',
+            variantId: 'control',
+          },
+          created_at: '2026-05-05T09:00:00.000Z',
+        },
+        {
+          event_name: 'commercial_bridge_clicked',
+          source_page: '/products/notice-only',
+          product_clicked: 'notice-only',
+          event_payload: {
+            campaign: marker,
+            canonicalEventName: 'contextual_offer_click',
+            productSlug: 'notice-only',
+            experimentId: 'sales003c-certification',
+            variantId: 'control',
+          },
+          created_at: '2026-05-05T09:01:00.000Z',
+        },
+      ],
+    });
+
+    expect(report.certificationDiagnostics).toMatchObject({
+      persistentStore: 'marketing_events',
+      qaMarker: marker,
+      eventCount: 2,
+      sourcePageCounts: [{ key: '/products/notice-only', count: 2 }],
+      productCounts: [{ key: 'notice-only', count: 2 }],
+      experimentControlDimensions: [
+        { experimentId: 'sales003c-certification', variantId: 'control', count: 2 },
+      ],
+      sensitivePayloadDetected: false,
+    });
+    expect(report.certificationDiagnostics?.eventStageCounts).toEqual(
+      expect.arrayContaining([
+        { key: 'contextual_offer_view', count: 1 },
+        { key: 'contextual_offer_click', count: 1 },
+      ])
+    );
+    expect(JSON.stringify(report.certificationDiagnostics)).not.toContain('event_payload');
+  });
 });

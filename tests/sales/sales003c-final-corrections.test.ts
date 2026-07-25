@@ -34,6 +34,24 @@ describe('SALES-003C final corrections', () => {
     );
   });
 
+  it('keeps canonical product copy free of joined-word regressions across all certified routes', () => {
+    const productSources = [
+      'src/app/(marketing)/products/notice-only/page.tsx',
+      'src/app/(marketing)/products/complete-pack/page.tsx',
+      'src/app/(marketing)/products/money-claim/page.tsx',
+      'src/app/(marketing)/products/ast/page.tsx',
+      'src/app/(marketing)/products/section-13-standard/page.tsx',
+    ].map(read);
+    const heroSource = read('src/components/landing/UniversalHero.tsx');
+
+    for (const source of productSources) {
+      expect(source).not.toMatch(/Englandtenancy/);
+    }
+    expect(productSources[3]).toContain("title: 'Create the right England'");
+    expect(productSources[3]).toContain("highlightTitle: 'tenancy agreement for the let'");
+    expect(heroSource).toContain("{' '}");
+  });
+
   it('places the HMO form immediately after the concise hero and disclaimer on mobile', () => {
     const source = read('src/app/tools/hmo-license-checker/page.tsx');
     const heroStart = source.indexOf('<UniversalHero');
@@ -62,5 +80,17 @@ describe('SALES-003C final corrections', () => {
     expect(route).toContain("product_primary_cta_click: 'product_cta_clicked'");
     expect(route).toContain('canonicalEventName: event.eventName');
     expect(route).toContain('persistedEventName');
+  });
+
+  it('requires approved cookie authentication and bounded aggregate polling in the runner', () => {
+    const runner = read('scripts/sales003c-live-certification.mjs');
+
+    expect(runner).toContain('Missing SALES003C_ADMIN_COOKIE');
+    expect(runner).toContain("auth_method: 'authenticated_admin_cookie'");
+    expect(runner).not.toContain('SALES003C_ADMIN_BEARER');
+    expect(runner).toContain('SALES003C_ADMIN_POLL_TIMEOUT_MS');
+    expect(runner).toContain('SALES003C_ADMIN_POLL_INTERVAL_MS');
+    expect(runner).toContain("persistentStore === 'marketing_events'");
+    expect(runner).toContain('sensitivePayloadDetected === false');
   });
 });

@@ -72,6 +72,7 @@ export interface MarketingGrowthEventPayload {
   trafficSource?: string | null;
   campaign?: string | null;
   experimentId?: string | null;
+  variantId?: string | null;
   authenticatedState?: string | boolean | null;
   price?: number | string | null;
   errorCategory?: string | null;
@@ -115,6 +116,7 @@ const PAYLOAD_KEYS = [
   'trafficSource',
   'campaign',
   'experimentId',
+  'variantId',
   'authenticatedState',
   'price',
   'errorCategory',

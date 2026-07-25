@@ -304,7 +304,10 @@ export function UniversalHero({
               >
                 {title}
                 {highlightTitle && (
-                  <span className="block text-white">{highlightTitle}</span>
+                  <>
+                    {' '}
+                    <span className="block text-white">{highlightTitle}</span>
+                  </>
                 )}
               </HeadingTag>
             )}

@@ -15,6 +15,8 @@ describe('growth event normalization', () => {
         recommendedProduct: 'section13_standard',
         productClicked: 'section13_standard',
         userType: 'landlord',
+        experimentId: 'sales003c-certification',
+        variantId: 'control',
         email: 'landlord@example.com',
         postcode: 'SW1A 1AA',
       },
@@ -34,6 +36,10 @@ describe('growth event normalization', () => {
     });
     expect(event?.eventPayload).not.toHaveProperty('email');
     expect(event?.eventPayload).not.toHaveProperty('postcode');
+    expect(event?.eventPayload).toMatchObject({
+      experimentId: 'sales003c-certification',
+      variantId: 'control',
+    });
   });
 
   it('rejects unsupported event names and empty session ids', () => {
