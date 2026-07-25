@@ -6,12 +6,15 @@ import { RiArrowLeftLine, RiBarChart2Line, RiRefreshLine } from 'react-icons/ri'
 
 import { Card } from '@/components/ui/Card';
 import { Container } from '@/components/ui/Container';
+import { NOTICE_ONLY_GOOGLE_ADS_CAMPAIGN } from '@/lib/marketing/google-ads-campaigns';
 import type { GrowthMetricGroup, GrowthRateMetric, GrowthReportResponse } from '@/lib/marketing/growth-report';
 
 const currencyFormatter = new Intl.NumberFormat('en-GB', {
   style: 'currency',
   currency: 'GBP',
 });
+
+const possessionGroundAdGroups = NOTICE_ONLY_GOOGLE_ADS_CAMPAIGN.adGroups || [];
 
 function formatCurrency(value: number) {
   return currencyFormatter.format(Number(value || 0));
@@ -320,6 +323,50 @@ export default function AdminGrowthPage() {
                 </pre>
               </Card>
             ) : null}
+
+            <Card padding="medium" className="rounded-lg">
+              <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+                <div>
+                  <h2 className="text-lg font-semibold text-charcoal">
+                    Live notice campaign: possession grounds
+                  </h2>
+                  <p className="mt-1 text-sm text-gray-600">
+                    Four intent-specific search ad groups send landlords to the matching Form 3A page section.
+                  </p>
+                </div>
+                <div className="text-sm text-gray-600 md:text-right">
+                  <p className="font-semibold text-emerald-700">
+                    {NOTICE_ONLY_GOOGLE_ADS_CAMPAIGN.status === 'enabled' ? 'Enabled' : 'Paused'}
+                  </p>
+                  <p>
+                    {formatCurrency(NOTICE_ONLY_GOOGLE_ADS_CAMPAIGN.settings?.dailyBudgetGbp || 0)}/day ·{' '}
+                    {formatCurrency(NOTICE_ONLY_GOOGLE_ADS_CAMPAIGN.settings?.maxCpcGbp || 0)} max CPC
+                  </p>
+                </div>
+              </div>
+              <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+                {possessionGroundAdGroups.map((adGroup) => (
+                  <div key={adGroup.key} className="rounded-lg border border-gray-200 bg-white p-4">
+                    <p className="text-sm font-semibold text-charcoal">
+                      {adGroup.key === 'rent_arrears'
+                        ? 'Rent arrears · Grounds 8, 10, 11'
+                        : adGroup.key === 'sale_or_occupation'
+                          ? 'Sell or move in · Grounds 1, 1A'
+                          : adGroup.key === 'antisocial_behaviour'
+                            ? 'Anti-social behaviour · Grounds 7A, 14'
+                            : 'Breach or damage · Grounds 12, 13'}
+                    </p>
+                    <p className="mt-2 text-xs text-gray-500">{adGroup.name}</p>
+                    <p className="mt-2 break-all text-xs font-medium text-[#692ed4]">
+                      {adGroup.landingPath}
+                    </p>
+                    <p className="mt-2 text-xs text-gray-600">
+                      {adGroup.keywords.length} keywords · {adGroup.headlines.length} headlines
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </Card>
 
             <Card padding="medium" className="rounded-lg">
               <h2 className="text-lg font-semibold text-charcoal">Funnel filters</h2>

@@ -8,6 +8,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { isAdmin } from '@/lib/auth';
+import { deriveCheckoutRecoveryContact } from '@/lib/cases/recovery';
 import { sendAbandonedCheckoutRecoveryEmail } from '@/lib/email/resend';
 import { logger } from '@/lib/logger';
 import { PRODUCTS, isValidProductSku, type ProductSku } from '@/lib/pricing/products';
@@ -28,6 +29,7 @@ interface OrderRow {
   payment_status: string;
   stripe_checkout_url: string | null;
   stripe_session_id: string | null;
+  metadata: Record<string, unknown> | null;
 }
 
 interface UserRow {
@@ -46,10 +48,10 @@ function normalizeGbpAmount(value: number | string | null): number {
   return amount > 999 ? Number((amount / 100).toFixed(2)) : amount;
 }
 
-function getCustomerName(user: UserRow): string {
-  const fullName = user.full_name?.trim();
+function getCustomerName(name: string | null, email: string): string {
+  const fullName = name?.trim();
   if (fullName) return fullName;
-  return user.email?.split('@')[0]?.trim() || 'there';
+  return email.split('@')[0]?.trim() || 'there';
 }
 
 function getProductName(order: OrderRow): string {
@@ -87,7 +89,7 @@ export async function POST(request: NextRequest) {
     const { data: orderData, error: orderError } = await adminClient
       .from('orders')
       .select(
-        'id, user_id, case_id, product_type, product_name, total_amount, payment_status, stripe_checkout_url, stripe_session_id'
+        'id, user_id, case_id, product_type, product_name, total_amount, payment_status, stripe_checkout_url, stripe_session_id, metadata'
       )
       .eq('id', orderId)
       .single();
@@ -129,14 +131,36 @@ export async function POST(request: NextRequest) {
     }
 
     const orderUser = userData as UserRow;
-    if (!orderUser.email) {
-      return NextResponse.json({ error: 'User has no email address' }, { status: 400 });
+    const { data: caseData, error: caseError } = order.case_id
+      ? await adminClient
+          .from('cases')
+          .select('id, case_type, jurisdiction, collected_facts')
+          .eq('id', order.case_id)
+          .maybeSingle()
+      : { data: null, error: null };
+
+    if (caseError) {
+      logger.warn('Failed to load case contact for checkout recovery', {
+        orderId,
+        caseId: order.case_id,
+        error: caseError.message,
+      });
     }
+
+    const contact = deriveCheckoutRecoveryContact({
+      order,
+      caseItem: caseData as any,
+      user: orderUser,
+    });
+    if (!contact.email) {
+      return NextResponse.json({ error: 'No customer email address was found' }, { status: 400 });
+    }
+    const recoveryEmail = contact.email;
 
     const { data: unsubscribeEvents, error: unsubscribeError } = await adminClient
       .from('email_events')
       .select('id')
-      .eq('email', orderUser.email)
+      .eq('email', recoveryEmail)
       .eq('event_type', RECOVERY_UNSUBSCRIBED_EVENT)
       .limit(1);
 
@@ -152,7 +176,7 @@ export async function POST(request: NextRequest) {
         success: true,
         status: 'suppressed',
         message: 'This email address has unsubscribed from recovery emails.',
-        email: orderUser.email,
+        email: recoveryEmail,
       });
     }
 
@@ -160,7 +184,7 @@ export async function POST(request: NextRequest) {
     const { data: recentEvents, error: recentEventsError } = await adminClient
       .from('email_events')
       .select('id, event_data, created_at')
-      .eq('email', orderUser.email)
+      .eq('email', recoveryEmail)
       .eq('event_type', RECOVERY_EVENT_TYPE)
       .gte('created_at', dedupeCutoff);
 
@@ -180,22 +204,22 @@ export async function POST(request: NextRequest) {
         success: true,
         status: 'already_sent',
         message: 'Recovery email was already sent for this order in the last 24 hours.',
-        email: orderUser.email,
+        email: recoveryEmail,
       });
     }
 
     const emailResult = await sendAbandonedCheckoutRecoveryEmail({
-      to: orderUser.email,
-      customerName: getCustomerName(orderUser),
+      to: recoveryEmail,
+      customerName: getCustomerName(contact.name, recoveryEmail),
       productName: getProductName(order),
       amount: normalizeGbpAmount(order.total_amount),
       checkoutUrl: order.stripe_checkout_url,
-      unsubscribeUrl: buildRecoveryUnsubscribeUrl(orderUser.email, 'manual'),
+      unsubscribeUrl: buildRecoveryUnsubscribeUrl(recoveryEmail, 'manual'),
     });
 
     const eventType = emailResult.success ? RECOVERY_EVENT_TYPE : RECOVERY_FAILED_EVENT_TYPE;
     await adminClient.from('email_events').insert({
-      email: orderUser.email,
+      email: recoveryEmail,
       event_type: eventType,
       event_data: {
         order_id: order.id,
@@ -221,7 +245,7 @@ export async function POST(request: NextRequest) {
       success: true,
       status: 'sent',
       message: 'Recovery email sent.',
-      email: orderUser.email,
+      email: recoveryEmail,
     });
   } catch (error: any) {
     if (error.message === 'Unauthorized - Please log in') {

@@ -58,6 +58,10 @@ type UserLike = {
   full_name?: string | null;
 } | null;
 
+type CheckoutOrderLike = {
+  metadata?: Record<string, any> | null;
+} | null;
+
 function firstString(...values: unknown[]): string | null {
   for (const value of values) {
     if (typeof value === 'string' && value.trim()) {
@@ -104,18 +108,17 @@ export function deriveCaseRecoveryContact(caseItem: CaseLike, user?: UserLike): 
   const partiesLandlord = facts.parties?.landlord || {};
 
   const email = firstString(
-    user?.email,
     facts.landlord_email,
     facts.customer_email,
     facts.email,
     facts.contact_email,
     landlord.landlordEmail,
     landlord.email,
-    partiesLandlord.email
+    partiesLandlord.email,
+    user?.email
   );
 
   const name = firstString(
-    user?.full_name,
     facts.landlord_full_name,
     facts.landlord_name,
     facts.customer_name,
@@ -123,10 +126,40 @@ export function deriveCaseRecoveryContact(caseItem: CaseLike, user?: UserLike): 
     landlord.landlordName,
     landlord.name,
     partiesLandlord.name,
-    partiesLandlord.full_name
+    partiesLandlord.full_name,
+    user?.full_name
   );
 
   return { email, name };
+}
+
+export function deriveCheckoutRecoveryContact(params: {
+  order?: CheckoutOrderLike;
+  caseItem?: CaseLike | null;
+  user?: UserLike;
+}): {
+  email: string | null;
+  name: string | null;
+} {
+  const metadata = params.order?.metadata || {};
+  const caseContact = params.caseItem
+    ? deriveCaseRecoveryContact(params.caseItem, params.user)
+    : { email: null, name: null };
+
+  return {
+    email: firstString(
+      metadata.customer_email,
+      metadata.checkout_email,
+      caseContact.email,
+      params.user?.email
+    ),
+    name: firstString(
+      metadata.customer_name,
+      metadata.checkout_name,
+      caseContact.name,
+      params.user?.full_name
+    ),
+  };
 }
 
 export function isCasePreviewReached(caseItem: CaseLike): boolean {

@@ -923,6 +923,12 @@ export interface OrderRow {
   /** First-party no-PII marketing session ID for joining events to orders */
   marketing_session_id: string | null;
 
+  /** Fulfilment and checkout metadata */
+  metadata: Json | null;
+
+  /** Saved Stripe Checkout URL for recovery and session reuse */
+  stripe_checkout_url: string | null;
+
   /** Row creation timestamp */
   created_at: string | null;
 
@@ -960,6 +966,8 @@ export interface OrderInsert {
   first_touch_at?: string | null;
   ga_client_id?: string | null;
   marketing_session_id?: string | null;
+  metadata?: Json | null;
+  stripe_checkout_url?: string | null;
   created_at?: string | null;
   updated_at?: string | null;
 }
@@ -993,6 +1001,8 @@ export interface OrderUpdate {
   first_touch_at?: string | null;
   ga_client_id?: string | null;
   marketing_session_id?: string | null;
+  metadata?: Json | null;
+  stripe_checkout_url?: string | null;
   updated_at?: string | null;
 }
 

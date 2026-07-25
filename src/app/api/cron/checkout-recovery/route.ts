@@ -7,6 +7,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { deriveCheckoutRecoveryContact } from '@/lib/cases/recovery';
 import { sendAbandonedCheckoutRecoveryEmail } from '@/lib/email/resend';
 import { PRODUCTS, isValidProductSku, type ProductSku } from '@/lib/pricing/products';
 import {
@@ -41,6 +42,7 @@ interface PendingCheckoutOrder {
   payment_status: string;
   stripe_checkout_url: string | null;
   stripe_session_id: string | null;
+  metadata: Record<string, unknown> | null;
   created_at: string;
 }
 
@@ -48,6 +50,13 @@ interface UserContact {
   id: string;
   email: string | null;
   full_name: string | null;
+}
+
+interface CaseContact {
+  id: string;
+  case_type: string;
+  jurisdiction: string;
+  collected_facts: Record<string, unknown> | null;
 }
 
 interface EmailEventRow {
@@ -107,11 +116,11 @@ function hoursAgoIso(hours: number): string {
   return new Date(Date.now() - hours * 60 * 60 * 1000).toISOString();
 }
 
-function getCustomerName(user: UserContact): string {
-  const fullName = user.full_name?.trim();
+function getCustomerName(name: string | null, email: string): string {
+  const fullName = name?.trim();
   if (fullName) return fullName;
 
-  const emailPrefix = user.email?.split('@')[0]?.trim();
+  const emailPrefix = email.split('@')[0]?.trim();
   return emailPrefix || 'there';
 }
 
@@ -163,7 +172,7 @@ async function executeCheckoutRecovery(request: NextRequest) {
     const { data: orderRows, error: ordersError } = await supabase
       .from('orders')
       .select(
-        'id, user_id, case_id, product_type, product_name, total_amount, payment_status, stripe_checkout_url, stripe_session_id, created_at'
+        'id, user_id, case_id, product_type, product_name, total_amount, payment_status, stripe_checkout_url, stripe_session_id, metadata, created_at'
       )
       .eq('payment_status', 'pending')
       .not('user_id', 'is', null)
@@ -210,10 +219,35 @@ async function executeCheckoutRecovery(request: NextRequest) {
     const userMap = new Map(
       ((userRows || []) as UserContact[]).map((user) => [user.id, user])
     );
+    const caseIds = Array.from(new Set(orders.map((order) => order.case_id).filter(Boolean))) as string[];
+    const { data: caseRows, error: casesError } = caseIds.length
+      ? await supabase
+          .from('cases')
+          .select('id, case_type, jurisdiction, collected_facts')
+          .in('id', caseIds)
+      : { data: [], error: null };
+
+    if (casesError) {
+      throw new Error(`Failed to fetch checkout cases: ${casesError.message}`);
+    }
+
+    const caseMap = new Map(
+      ((caseRows || []) as CaseContact[]).map((caseItem) => [caseItem.id, caseItem])
+    );
+    const contactByOrderId = new Map(
+      orders.map((order) => {
+        const user = order.user_id ? userMap.get(order.user_id) || null : null;
+        const caseItem = order.case_id ? caseMap.get(order.case_id) || null : null;
+        return [
+          order.id,
+          deriveCheckoutRecoveryContact({ order, caseItem: caseItem as any, user }),
+        ];
+      })
+    );
     const emails = Array.from(
       new Set(
-        Array.from(userMap.values())
-          .map((user) => user.email)
+        Array.from(contactByOrderId.values())
+          .map((contact) => contact.email)
           .filter((email): email is string => Boolean(email))
       )
     );
@@ -250,11 +284,10 @@ async function executeCheckoutRecovery(request: NextRequest) {
     const failedOrderIds: string[] = [];
 
     for (const order of orders) {
-      const user = order.user_id ? userMap.get(order.user_id) : null;
-      const email = user?.email;
+      const contact = contactByOrderId.get(order.id);
+      const email = contact?.email;
 
       if (
-        !user ||
         !email ||
         isRecoveryUnsubscribedFromEvents(recoveryEvents, email) ||
         alreadyRecoveredOrderIds.has(order.id) ||
@@ -273,7 +306,7 @@ async function executeCheckoutRecovery(request: NextRequest) {
 
       const emailResult = await sendAbandonedCheckoutRecoveryEmail({
         to: email,
-        customerName: getCustomerName(user),
+        customerName: getCustomerName(contact?.name || null, email),
         productName: getProductName(order),
         amount: normalizeGbpAmount(order.total_amount),
         checkoutUrl: order.stripe_checkout_url,

@@ -7,6 +7,7 @@ import {
   CASE_WIZARD_RECOVERY_FAILED_EVENT_TYPES,
   CASE_WIZARD_RECOVERY_SENT_EVENT_TYPES,
   deriveCaseProductType,
+  deriveCheckoutRecoveryContact,
   deriveCaseRecoveryContact,
   isPreviewAbandonedCase,
   isStartedButIncompleteCase,
@@ -63,6 +64,7 @@ type OrderRow = {
   payment_status: string;
   stripe_checkout_url?: string | null;
   stripe_session_id?: string | null;
+  metadata?: Record<string, any> | null;
   created_at: string;
 };
 
@@ -116,8 +118,8 @@ function getAgeHours(iso: string): number {
   return (Date.now() - new Date(iso).getTime()) / (60 * 60 * 1000);
 }
 
-function getCustomerName(user: UserRow | null, fallbackEmail: string | null): string {
-  const fullName = user?.full_name?.trim();
+function getCustomerName(name: string | null | undefined, fallbackEmail: string | null): string {
+  const fullName = name?.trim();
   if (fullName) return fullName;
 
   return fallbackEmail?.split('@')[0]?.trim() || 'there';
@@ -258,7 +260,7 @@ export async function runRecoveryOrchestrator(options: RecoveryOptions = {}): Pr
     const { data: orderRows, error: ordersError } = await supabase
       .from('orders')
       .select(
-        'id, user_id, case_id, product_type, product_name, total_amount, payment_status, stripe_checkout_url, stripe_session_id, created_at'
+        'id, user_id, case_id, product_type, product_name, total_amount, payment_status, stripe_checkout_url, stripe_session_id, metadata, created_at'
       )
       .eq('payment_status', 'pending')
       .not('user_id', 'is', null)
@@ -285,10 +287,39 @@ export async function runRecoveryOrchestrator(options: RecoveryOptions = {}): Pr
     if (checkoutUsersError) throw new Error(`Failed to fetch checkout users: ${checkoutUsersError.message}`);
 
     const checkoutUserById = new Map(((checkoutUsers || []) as UserRow[]).map((user) => [user.id, user]));
+    const checkoutCaseIds = Array.from(
+      new Set(checkoutOrders.map((order) => order.case_id).filter(Boolean))
+    ) as string[];
+    const { data: checkoutCases, error: checkoutCasesError } = checkoutCaseIds.length
+      ? await supabase
+          .from('cases')
+          .select('id, case_type, jurisdiction, collected_facts')
+          .in('id', checkoutCaseIds)
+      : { data: [], error: null };
+
+    if (checkoutCasesError) {
+      throw new Error(`Failed to fetch checkout cases: ${checkoutCasesError.message}`);
+    }
+
+    const checkoutCaseById = new Map(
+      ((checkoutCases || []) as Array<{
+        id: string;
+        case_type: string;
+        jurisdiction: string;
+        collected_facts: Record<string, any> | null;
+      }>).map((caseItem) => [caseItem.id, caseItem])
+    );
+    const checkoutContactByOrderId = new Map(
+      checkoutOrders.map((order) => {
+        const user = order.user_id ? checkoutUserById.get(order.user_id) ?? null : null;
+        const caseItem = order.case_id ? checkoutCaseById.get(order.case_id) ?? null : null;
+        return [order.id, deriveCheckoutRecoveryContact({ order, caseItem, user })];
+      })
+    );
     const checkoutEmails = Array.from(
       new Set(
-        Array.from(checkoutUserById.values())
-          .map((user) => normalizeEmail(user.email))
+        Array.from(checkoutContactByOrderId.values())
+          .map((contact) => normalizeEmail(contact.email))
           .filter((email): email is string => Boolean(email))
       )
     );
@@ -308,7 +339,8 @@ export async function runRecoveryOrchestrator(options: RecoveryOptions = {}): Pr
 
     for (const order of checkoutOrders) {
       const user = order.user_id ? checkoutUserById.get(order.user_id) ?? null : null;
-      const email = normalizeEmail(user?.email);
+      const contact = checkoutContactByOrderId.get(order.id);
+      const email = normalizeEmail(contact?.email);
       result.candidates_checked += 1;
 
       if (
@@ -334,7 +366,7 @@ export async function runRecoveryOrchestrator(options: RecoveryOptions = {}): Pr
 
       const emailResult = await sendAbandonedCheckoutRecoveryEmail({
         to: email,
-        customerName: getCustomerName(user, email),
+        customerName: getCustomerName(contact?.name || user?.full_name, email),
         productName: getCheckoutProductName(order),
         amount: normalizeGbpAmount(order.total_amount),
         checkoutUrl: order.stripe_checkout_url,
@@ -541,7 +573,7 @@ export async function runRecoveryOrchestrator(options: RecoveryOptions = {}): Pr
           recoveryKind === 'preview'
             ? await sendCasePreviewRecoveryEmail({
                 to: email,
-                customerName: contact.name || getCustomerName(user, email),
+                customerName: contact.name || getCustomerName(user?.full_name, email),
                 productName: recovery.productName || getAdminProductLabel(productType),
                 resumeUrl: recovery.resumeUrl,
                 stage: dueStage as 'day_1' | 'day_7',
@@ -549,7 +581,7 @@ export async function runRecoveryOrchestrator(options: RecoveryOptions = {}): Pr
               })
             : await sendWizardAbandonmentRecoveryEmail({
                 to: email,
-                customerName: contact.name || getCustomerName(user, email),
+                customerName: contact.name || getCustomerName(user?.full_name, email),
                 productName: recovery.productName || getAdminProductLabel(productType),
                 resumeUrl: recovery.resumeUrl,
                 stage: dueStage as 'day_1' | 'day_3',

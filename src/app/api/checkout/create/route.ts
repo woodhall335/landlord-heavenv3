@@ -46,6 +46,7 @@ import {
   buildAssistedPrepSuccessHref,
   getAssistedPrepServiceFromSku,
 } from '@/lib/assisted-prep';
+import { deriveCaseRecoveryContact } from '@/lib/cases/recovery';
 
 /**
  * Normalize display SKUs to payment SKUs for order storage
@@ -449,13 +450,19 @@ export async function POST(request: Request) {
     );
     let addOnProducts = permittedAddOnSkus.map((sku) => PRODUCTS[sku]);
     let totalAmount = primaryChargeAmount + addOnProducts.reduce((sum, item) => sum + item.price, 0);
+    let checkoutCaseData: {
+      id: string;
+      case_type: string;
+      jurisdiction: string;
+      collected_facts: Record<string, any> | null;
+    } | null = null;
 
     // If case_id provided, validate jurisdiction match and ownership
     if (case_id) {
       // Use admin client for case lookup - case might have just been linked
       const { data: caseData, error: caseError } = await adminSupabase
         .from('cases')
-        .select('jurisdiction, case_type, user_id, collected_facts, workflow_status')
+        .select('id, jurisdiction, case_type, user_id, collected_facts, workflow_status')
         .eq('id', case_id)
         .single();
 
@@ -479,6 +486,13 @@ export async function POST(request: Request) {
           { status: 404 }
         );
       }
+
+      checkoutCaseData = {
+        id: caseData.id,
+        case_type: caseData.case_type,
+        jurisdiction: caseData.jurisdiction,
+        collected_facts: (caseData.collected_facts || {}) as Record<string, any>,
+      };
 
       if (isNoticeOnlyToCompletePackUpgrade) {
         if (requestedAddOnSkus.length > 0) {
@@ -987,6 +1001,15 @@ export async function POST(request: Request) {
     // Create order record using admin client to avoid RLS issues
     // Amount comes from products.ts (source of truth) - already in GBP (for example 24.99)
     // Attribution fields are stored for revenue reporting (Migration 012)
+    const recoveryContact = checkoutCaseData
+      ? deriveCaseRecoveryContact(checkoutCaseData, {
+          email: userData?.email || user.email,
+          full_name: user.user_metadata?.full_name || null,
+        })
+      : {
+          email: userData?.email || user.email || null,
+          name: user.user_metadata?.full_name || null,
+        };
     const orderPayload = {
         user_id: user.id,
         case_id: case_id || null,
@@ -1012,6 +1035,8 @@ export async function POST(request: Request) {
           add_ons: permittedAddOnSkus,
           requested_product_type: product_type,
           checkout_abandoned: checkout_abandoned || null,
+          customer_email: recoveryContact.email,
+          customer_name: recoveryContact.name,
           ...(isNoticeOnlyToCompletePackUpgrade
             ? {
                 upgrade_from_product: 'notice_only',
