@@ -1,0 +1,28 @@
+▲ Next.js 16.1.1 (webpack)
+- Local:         http://localhost:3010
+- Network:       http://10.80.1.186:3010
+- Experiments (use with caution):
+  · serverActions
+
+✓ Starting...
+✓ Ready in 8s
+○ Compiling proxy ...
+○ Compiling /tools/rent-arrears-calculator ...
+ GET /tools/rent-arrears-calculator 200 in 548ms (compile: 41ms, proxy.ts: 165ms, render: 343ms)
+ GET /tools/rent-arrears-calculator 200 in 246ms (compile: 12ms, proxy.ts: 18ms, render: 217ms)
+○ Compiling /manifest.webmanifest ...
+ GET /manifest.webmanifest 200 in 13.0s (compile: 12.8s, proxy.ts: 25ms, render: 93ms)
+ GET /tools/rent-arrears-calculator 200 in 1713ms (compile: 1283ms, proxy.ts: 40ms, render: 390ms)
+○ Compiling /api/analytics/events ...
+[supabase-admin-env] { hasUrl: false, hasServiceRoleKey: false }
+ POST /api/analytics/events 202 in 10.5s (compile: 9.5s, proxy.ts: 387ms, render: 627ms)
+ POST /api/analytics/events 202 in 10.5s (compile: 9.5s, proxy.ts: 387ms, render: 632ms)
+ GET /manifest.webmanifest 200 in 874ms (compile: 13ms, proxy.ts: 847ms, render: 14ms)
+ GET /tools/rent-arrears-calculator 200 in 1801ms (compile: 130ms, proxy.ts: 19ms, render: 1652ms)
+ GET /manifest.webmanifest 200 in 27ms (compile: 7ms, proxy.ts: 14ms, render: 6ms)
+ POST /api/analytics/events 202 in 519ms (compile: 13ms, proxy.ts: 24ms, render: 481ms)
+ POST /api/analytics/events 202 in 1265ms (compile: 749ms, proxy.ts: 26ms, render: 490ms)
+ GET /tools/rent-arrears-calculator 200 in 245ms (compile: 9ms, proxy.ts: 13ms, render: 223ms)
+ GET /manifest.webmanifest 200 in 24ms (compile: 4ms, proxy.ts: 13ms, render: 8ms)
+ POST /api/analytics/events 202 in 453ms (compile: 4ms, proxy.ts: 13ms, render: 436ms)
+ POST /api/analytics/events 202 in 287ms (compile: 5ms, proxy.ts: 20ms, render: 262ms)

@@ -1,0 +1,3 @@
+127.0.0.1 - - [25/Jul/2026 13:28:29] "GET /audit-landlordheaven-sales003c/browser-auth-event-harness.html HTTP/1.1" 200 -
+127.0.0.1 - - [25/Jul/2026 13:28:29] code 404, message File not found
+127.0.0.1 - - [25/Jul/2026 13:28:29] "GET /favicon.ico HTTP/1.1" 404 -
