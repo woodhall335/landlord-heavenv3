@@ -1,9 +1,14 @@
 {
-  "generatedAt": "2026-07-25T00:44:38.698Z",
+  "generatedAt": "2026-07-25T12:55:43.923Z",
   "baseUrl": "https://landlordheaven.co.uk",
-  "qaMarker": "qa-sales003c-2026-07-25T00-31-23-633Z",
+  "qaMarker": "qa-sales003c-2026-07-25T12-54-28-501Z",
+  "aggregateQaMarker": "qa-sales003c-2026-07-25T12-26-43-566Z-authenticated-ingestion",
+  "productionCommit": "ad0a150a580b268df950eb8e3adee099a7b2507a",
   "routeViewportChecks": 39,
   "passes": 39,
   "failures": 0,
-  "screenshots": 78
+  "screenshots": 78,
+  "authenticatedAggregate": "PASS",
+  "overallCertification": "PASS",
+  "measurementPeriodStart": "2026-07-25T12:55:43.923Z"
 }

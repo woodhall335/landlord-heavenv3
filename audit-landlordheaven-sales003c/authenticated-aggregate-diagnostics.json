@@ -1,0 +1,40 @@
+{
+  "observedAt": "2026-07-25T12:55:43.923Z",
+  "qaMarker": "qa-sales003c-2026-07-25T12-26-43-566Z-authenticated-ingestion",
+  "authMethod": "authenticated_in_app_browser_session",
+  "httpStatus": 200,
+  "persistentStore": "marketing_events",
+  "eventCount": 6,
+  "sourcePageCounts": [
+    { "key": "/products/ast", "count": 1 },
+    { "key": "/products/complete-pack", "count": 1 },
+    { "key": "/products/money-claim", "count": 1 },
+    { "key": "/products/notice-only", "count": 1 },
+    { "key": "/tools/hmo-license-checker", "count": 1 },
+    { "key": "/tools/rent-arrears-calculator", "count": 1 }
+  ],
+  "productCounts": [
+    { "key": "ast", "count": 1 },
+    { "key": "complete-pack", "count": 1 },
+    { "key": "hmo-license-checker", "count": 1 },
+    { "key": "money-claim", "count": 1 },
+    { "key": "notice-only", "count": 1 },
+    { "key": "rent-arrears-calculator", "count": 1 }
+  ],
+  "eventStageCounts": [
+    { "key": "result_viewed", "count": 2 },
+    { "key": "contextual_offer_click", "count": 1 },
+    { "key": "contextual_offer_view", "count": 1 },
+    { "key": "product_primary_cta_click", "count": 1 },
+    { "key": "product_view", "count": 1 }
+  ],
+  "experimentControlDimensions": [
+    {
+      "experimentId": "sales003c-certification",
+      "variantId": "control",
+      "count": 6
+    }
+  ],
+  "sensitivePayloadDetected": false,
+  "result": "PASS"
+}

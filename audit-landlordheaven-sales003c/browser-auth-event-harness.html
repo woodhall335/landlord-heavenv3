@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>SALES-003C authenticated-browser event harness</title>
+  </head>
+  <body>
+    <main>
+      <h1>SALES-003C event harness</h1>
+      <p id="marker">qa-sales003c-2026-07-25T12-26-43-566Z-authenticated-ingestion</p>
+      <button id="send" type="button">Send six privacy-safe QA events</button>
+      <output id="result" aria-live="polite">Not sent</output>
+    </main>
+    <script>
+      const marker = document.querySelector('#marker').textContent;
+      const events = [
+        ['contextual_offer_view', '/products/notice-only', null],
+        ['contextual_offer_click', '/products/complete-pack', null],
+        ['product_view', '/products/money-claim', null],
+        ['product_primary_cta_click', '/products/ast', null],
+        ['result_viewed', '/tools/hmo-license-checker', 'HMO License Checker'],
+        ['result_viewed', '/tools/rent-arrears-calculator', 'Rent Arrears Calculator'],
+      ];
+
+      document.querySelector('#send').addEventListener('click', () => {
+        const queued = events.filter(([eventName, sourcePage, toolName]) => {
+          const productSlug = sourcePage.split('/').filter(Boolean).at(-1);
+          const body = JSON.stringify({
+            eventName,
+            marketingSessionId: marker,
+            payload: {
+              sourcePage,
+              pagePath: sourcePage,
+              pageType: 'sales003c_qa',
+              campaign: marker,
+              productSlug,
+              productClicked: productSlug,
+              experimentId: 'sales003c-certification',
+              variantId: 'control',
+              ...(toolName ? { toolName, resultState: 'qa_synthetic' } : {}),
+            },
+          });
+          return navigator.sendBeacon(
+            'https://landlordheaven.co.uk/api/analytics/events',
+            new Blob([body], { type: 'text/plain;charset=UTF-8' }),
+          );
+        }).length;
+
+        document.querySelector('#result').textContent = `Queued ${queued} of ${events.length} events`;
+        document.querySelector('#send').disabled = true;
+      });
+    </script>
+  </body>
+</html>
