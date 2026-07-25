@@ -133,6 +133,11 @@ function RateTable({
 
 export default function AdminGrowthPage() {
   const [days, setDays] = useState<7 | 30>(7);
+  const [qaMarker] = useState(() =>
+    typeof window === 'undefined'
+      ? ''
+      : new URLSearchParams(window.location.search).get('qa_marker') || ''
+  );
   const [report, setReport] = useState<GrowthReportResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -157,6 +162,7 @@ export default function AdminGrowthPage() {
       if (filters.trafficSource) params.set('traffic_source', filters.trafficSource);
       if (filters.experiment) params.set('experiment', filters.experiment);
       if (filters.authenticated) params.set('authenticated', filters.authenticated);
+      if (qaMarker) params.set('qa_marker', qaMarker);
       const response = await fetch(`/api/admin/growth?${params.toString()}`, {
         credentials: 'same-origin',
       });
@@ -262,6 +268,59 @@ export default function AdminGrowthPage() {
           </Card>
         ) : report ? (
           <div className="space-y-8">
+            {qaMarker && report.certificationDiagnostics ? (
+              <Card
+                padding="medium"
+                className="rounded-lg border border-emerald-200 bg-emerald-50"
+              >
+                <h2 className="text-lg font-semibold text-charcoal">
+                  Certification diagnostics
+                </h2>
+                <dl
+                  className="mt-4 grid gap-3 text-sm md:grid-cols-2"
+                  data-testid="certification-diagnostics"
+                >
+                  <div>
+                    <dt className="font-medium text-gray-600">QA marker</dt>
+                    <dd className="break-all text-charcoal">
+                      {report.certificationDiagnostics.qaMarker}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="font-medium text-gray-600">Persistent store</dt>
+                    <dd className="text-charcoal">
+                      {report.certificationDiagnostics.persistentStore}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="font-medium text-gray-600">Persisted events</dt>
+                    <dd className="text-charcoal">
+                      {report.certificationDiagnostics.eventCount}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="font-medium text-gray-600">Sensitive payload detected</dt>
+                    <dd className="text-charcoal">
+                      {String(report.certificationDiagnostics.sensitivePayloadDetected)}
+                    </dd>
+                  </div>
+                </dl>
+                <pre className="mt-4 overflow-x-auto rounded-md bg-white p-4 text-xs text-gray-700">
+                  {JSON.stringify(
+                    {
+                      sourcePageCounts: report.certificationDiagnostics.sourcePageCounts,
+                      productCounts: report.certificationDiagnostics.productCounts,
+                      eventStageCounts: report.certificationDiagnostics.eventStageCounts,
+                      experimentControlDimensions:
+                        report.certificationDiagnostics.experimentControlDimensions,
+                    },
+                    null,
+                    2
+                  )}
+                </pre>
+              </Card>
+            ) : null}
+
             <Card padding="medium" className="rounded-lg">
               <h2 className="text-lg font-semibold text-charcoal">Funnel filters</h2>
               <div className="mt-4 grid gap-3 md:grid-cols-3">

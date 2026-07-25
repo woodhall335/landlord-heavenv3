@@ -93,4 +93,14 @@ describe('SALES-003C final corrections', () => {
     expect(runner).toContain("persistentStore === 'marketing_events'");
     expect(runner).toContain('sensitivePayloadDetected === false');
   });
+
+  it('exposes aggregate-only certification diagnostics inside the protected admin UI', () => {
+    const page = read('src/app/(app)/dashboard/admin/growth/page.tsx');
+
+    expect(page).toContain("get('qa_marker')");
+    expect(page).toContain("params.set('qa_marker', qaMarker)");
+    expect(page).toContain('data-testid="certification-diagnostics"');
+    expect(page).toContain('report.certificationDiagnostics.persistentStore');
+    expect(page).toContain('report.certificationDiagnostics.sensitivePayloadDetected');
+  });
 });
