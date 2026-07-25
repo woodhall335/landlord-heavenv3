@@ -317,7 +317,7 @@ function generateFallbackRiskAssessment(
   // Analyze grounds
   if (context.has_arrears && context.arrears_amount) {
     const rentAmount = caseFacts.tenancy?.rent_amount || 0;
-    if (context.arrears_amount >= rentAmount * 2) {
+    if (context.arrears_amount >= rentAmount * 3) {
       strengths.push('Significant rent arrears - may qualify for mandatory Ground 8');
       successScore += 15;
     } else {

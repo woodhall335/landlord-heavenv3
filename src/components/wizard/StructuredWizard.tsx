@@ -1397,7 +1397,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           setError('Please provide the arrears end date (usually today or notice service date)');
           return false;
         }
-        // Validate dates for 2-month arrears threshold (Ground 8 requirement)
+        // Validate dates for the post-1 May 2026 Ground 8 arrears threshold.
         const start = new Date(startDate);
         const end = new Date(endDate);
         if (start > end) {

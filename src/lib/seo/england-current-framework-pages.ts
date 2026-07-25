@@ -47,6 +47,15 @@ export interface CurrentFrameworkPageConfig {
       href: string;
     }>;
   };
+  groundIntents?: Array<{
+    id: string;
+    title: string;
+    grounds: string;
+    summary: string;
+    checks: string[];
+    ctaLabel: string;
+    ctaHref: string;
+  }>;
   deferFrameworkLinks?: boolean;
   sections: CurrentFrameworkSection[];
   faqTitle: string;
@@ -108,6 +117,68 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
     currentFrameworkNote: buildCurrentFrameworkNote(
       'For current England possession notices, you should work from Form 3A, the grounds that fit your facts, and the current court path if the tenant does not leave.'
     ),
+    groundIntents: [
+      {
+        id: 'rent-arrears',
+        title: 'The tenant owes rent',
+        grounds: 'Grounds 8, 10 and 11',
+        summary:
+          'Build the notice around the rent ledger and current arrears position. Ground 8 uses the higher post-1 May 2026 threshold, while Grounds 10 and 11 may apply to lower or persistent arrears.',
+        checks: [
+          '3 months’ rent for monthly rents, or 13 weeks for weekly or fortnightly rents, for Ground 8',
+          'Threshold checked at service and again at the hearing',
+          'Period-by-period arrears schedule included',
+        ],
+        ctaLabel: 'Create my rent arrears notice',
+        ctaHref:
+          '/wizard/flow?type=eviction&product=notice_only&src=form3_ground_rent_arrears&topic=eviction&ground=rent_arrears',
+      },
+      {
+        id: 'sell-or-move-in',
+        title: 'You need to sell or move in',
+        grounds: 'Grounds 1 and 1A',
+        summary:
+          'Prepare the current occupation or sale route without presenting it as a no-fault notice. The facts, timing restrictions and evidence of genuine intention still matter.',
+        checks: [
+          'First 12 months of the tenancy checked',
+          'Current four-month notice period checked',
+          'Sale or occupation evidence kept with the notice file',
+        ],
+        ctaLabel: 'Create my sale or move-in notice',
+        ctaHref:
+          '/wizard/flow?type=eviction&product=notice_only&src=form3_ground_sale_occupation&topic=eviction&ground=sale_or_occupation',
+      },
+      {
+        id: 'antisocial-behaviour',
+        title: 'There is anti-social behaviour',
+        grounds: 'Grounds 7A and 14',
+        summary:
+          'Describe the conduct calmly and match it to evidence such as incident records, witness accounts, police material or relevant orders. The two grounds have different tests.',
+        checks: [
+          'Conduct described with dates and specific examples',
+          'Evidence matched to the ground actually selected',
+          'Notice and court timing checked for that ground',
+        ],
+        ctaLabel: 'Create my anti-social behaviour notice',
+        ctaHref:
+          '/wizard/flow?type=eviction&product=notice_only&src=form3_ground_asb&topic=eviction&ground=antisocial_behaviour',
+      },
+      {
+        id: 'breach-or-damage',
+        title: 'The tenant breached the agreement or caused damage',
+        grounds: 'Grounds 12 and 13',
+        summary:
+          'Connect the tenancy obligation or deterioration to clear particulars and supporting evidence. These discretionary grounds need a coherent, reasonable case rather than generic allegations.',
+        checks: [
+          'Relevant tenancy term identified',
+          'Damage or breach recorded with dates and evidence',
+          'Particulars explain why possession is reasonable',
+        ],
+        ctaLabel: 'Create my breach or damage notice',
+        ctaHref:
+          '/wizard/flow?type=eviction&product=notice_only&src=form3_ground_breach_damage&topic=eviction&ground=breach_or_damage',
+      },
+    ],
     introduction: [
       'If you need to regain possession in England after 1 May 2026, the starting point is no longer a broad menu of older notice routes. You now need to identify the live basis for possession, confirm the facts you can prove, and use the current notice that matches that case theory. For most breach-based cases in England, that means understanding Form 3A carefully before you serve anything.',
       'This page is designed to help you do that without over-promising certainty. A notice is not just a document to fill in. It is part of a chain that starts with tenancy facts, moves through service, and can end in an N5 and N119 possession claim. If the front end is weak, the court stage is usually weaker. Calm preparation at the notice stage gives you a much better chance of running a coherent case later.',

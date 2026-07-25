@@ -199,6 +199,59 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
               </p>
             ) : null}
           </div>
+          {config.groundIntents?.length ? (
+            <article className="rounded-3xl border border-[#cab6ff] bg-[#f8f4ff] p-6 md:p-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+                Match the notice to your reason
+              </p>
+              <h2 className="mt-3 text-3xl font-bold text-[#2a2161]">
+                Choose why you need possession
+              </h2>
+              <p className="mt-4 max-w-3xl leading-8 text-gray-700">
+                Start with the facts you can prove. Each route below uses the same current
+                Form 3A builder, but focuses the questions, evidence and checks on the
+                grounds most likely to fit that situation.
+              </p>
+              <div className="mt-7 grid gap-5 md:grid-cols-2">
+                {config.groundIntents.map((intent) => (
+                  <section
+                    id={intent.id}
+                    key={intent.id}
+                    className="scroll-mt-28 rounded-2xl border border-[#d8caff] bg-white p-5 shadow-[0_14px_34px_rgba(24,11,49,0.05)]"
+                  >
+                    <p className="text-sm font-semibold uppercase tracking-[0.12em] text-primary">
+                      {intent.grounds}
+                    </p>
+                    <h3 className="mt-2 text-xl font-bold text-[#2a2161]">{intent.title}</h3>
+                    <p className="mt-3 leading-7 text-gray-700">{intent.summary}</p>
+                    <ul className="mt-4 space-y-2 text-sm leading-6 text-gray-700">
+                      {intent.checks.map((check) => (
+                        <li key={check} className="flex gap-2">
+                          <span aria-hidden="true" className="font-bold text-primary">
+                            ✓
+                          </span>
+                          <span>{check}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <TrackedLink
+                      href={intent.ctaHref}
+                      pagePath={pagePath}
+                      pageType="entry_page"
+                      ctaLabel={intent.ctaLabel}
+                      ctaPosition="route_card"
+                      eventName="entry_page_primary_cta_click"
+                      routeIntent={`${config.slug}:${intent.id}`}
+                      product="notice_only"
+                      className="mt-5 inline-flex rounded-lg bg-primary px-5 py-3 font-semibold text-white hover:opacity-95"
+                    >
+                      {intent.ctaLabel}
+                    </TrackedLink>
+                  </section>
+                ))}
+              </div>
+            </article>
+          ) : null}
           {isForm3Section8 ? (
             <NoticeOnlyBridge
               sourcePage={pagePath}

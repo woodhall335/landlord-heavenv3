@@ -274,13 +274,18 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
           code: 'GROUND_8_THRESHOLD_NOT_MET',
           message: ground8Result.explanation,
           fields: ['arrears_items', 'section8_grounds'],
-          legal_basis: 'Housing Act 1988, Schedule 2, Ground 8: "at least two months\' rent is unpaid" at both notice date and hearing date',
-          user_fix_hint: 'Remove Ground 8 from your selection, or use discretionary grounds (Ground 10, 11) instead. Ground 8 can only be used when arrears are 2+ months.',
+          legal_basis:
+            'Housing Act 1988, Schedule 2, Ground 8 (post-1 May 2026): at least 3 months\' rent for monthly rents, or 13 weeks\' rent for weekly or fortnightly rents, at both notice date and hearing date',
+          user_fix_hint:
+            'Remove Ground 8 from your selection, or use discretionary Grounds 10 and 11 instead. Ground 8 can only be used when the current 3-month or 13-week threshold is met.',
         });
-      } else if (ground8Result.arrears_in_months < 3) {
+      } else if (
+        ground8Result.arrears_in_months <
+        ground8Result.threshold_months + 0.5
+      ) {
         warnings.push({
           code: 'GROUND_8_BORDERLINE',
-          message: `Ground 8 arrears (${ground8Result.arrears_in_months.toFixed(2)} months) are close to the threshold. Ensure arrears still meet 2+ months at both notice service AND hearing date.`,
+          message: `Ground 8 arrears (${ground8Result.arrears_in_months.toFixed(2)} months) are close to the ${ground8Result.threshold_label} threshold. Ensure the current threshold is still met at both notice service and the hearing date.`,
           fields: ['arrears_items'],
         });
       }

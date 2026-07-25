@@ -15,6 +15,16 @@ describe('commercial SEO rescue pages', () => {
     expect(form3.heroTitle).toContain('Section 8 eviction notice');
     expect(form3.primaryCta.label).toContain('Create my eviction notice');
     expect(form3.primaryCta.href).toContain('/wizard/flow?');
+    expect(form3.groundIntents?.map((intent) => intent.id)).toEqual([
+      'rent-arrears',
+      'sell-or-move-in',
+      'antisocial-behaviour',
+      'breach-or-damage',
+    ]);
+    expect(form3.groundIntents?.[0]?.summary).toContain('post-1 May 2026 threshold');
+    expect(form3.groundIntents?.every((intent) => intent.ctaHref.includes('/wizard/flow?'))).toBe(
+      true
+    );
     expect(section8TemplateMetadata.title).toContain('Without Date or Service Mistakes');
 
     const currentFrameworkRenderer = readFileSync('src/components/seo/CurrentFrameworkGuidePage.tsx', 'utf8');

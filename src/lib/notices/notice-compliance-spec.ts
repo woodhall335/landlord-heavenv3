@@ -68,9 +68,11 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
     ],
     inline_validation_rules: [
       {
-        code: 'S8-GROUND8-TWO-MONTHS',
-        legal_reason: 'Ground 8 requires at least two months’ arrears at service date',
-        user_fix_hint: 'Update arrears to confirm at least two months unpaid rent on service date',
+        code: 'S8-GROUND8-CURRENT-THRESHOLD',
+        legal_reason:
+          'For post-1 May 2026 England cases, Ground 8 requires at least 3 months’ rent for monthly rents, or 13 weeks’ rent for weekly or fortnightly rents, at service and hearing',
+        user_fix_hint:
+          'Update the arrears schedule and confirm the current Ground 8 threshold is met at service and remains met at the hearing',
         affected_question_id: 'ground_particulars',
       },
       {

@@ -25,11 +25,11 @@ describe('complete pack Google Ads campaign', () => {
     );
   });
 
-  it('targets the certified Form 3A page with a paused, England-only sales launch', () => {
+  it('targets the certified Form 3A page with an enabled, England-only sales launch', () => {
     expect(NOTICE_ONLY_GOOGLE_ADS_CAMPAIGN).toMatchObject({
       key: 'form3a_notice_sales_2026',
       objective: 'sales',
-      status: 'paused',
+      status: 'enabled',
       landingPath: '/form-3-section-8',
       productKey: 'notice_only',
       displayPaths: ['form-3a', 'notice-pack'],
@@ -37,7 +37,7 @@ describe('complete pack Google Ads campaign', () => {
         channel: 'search',
         dailyBudgetGbp: 20,
         biddingStrategy: 'maximize_clicks',
-        maxCpcGbp: 2.5,
+        maxCpcGbp: 0.5,
         location: 'England',
         locationPresenceOnly: true,
         language: 'English',
@@ -132,6 +132,31 @@ describe('complete pack Google Ads campaign', () => {
       expect(variant.descriptions).toHaveLength(4);
       expect(variant.headlines.every((headline) => headline.length <= 30)).toBe(true);
       expect(variant.descriptions.every((description) => description.length <= 90)).toBe(true);
+    }
+  });
+
+  it('defines four ground-specific ad groups inside Google asset limits', () => {
+    const adGroups = NOTICE_ONLY_GOOGLE_ADS_CAMPAIGN.adGroups ?? [];
+
+    expect(adGroups.map((group) => group.key)).toEqual([
+      'rent_arrears',
+      'sale_or_occupation',
+      'antisocial_behaviour',
+      'breach_or_damage',
+    ]);
+    for (const group of adGroups) {
+      expect(group.landingPath).toMatch(/^\/form-3-section-8#/);
+      expect(group.displayPaths.every((path) => path.length <= 15)).toBe(true);
+      expect(group.keywords.length).toBeGreaterThanOrEqual(7);
+      expect(
+        group.keywords.every(
+          (item) => item.matchType === 'exact' || item.matchType === 'phrase'
+        )
+      ).toBe(true);
+      expect(group.headlines).toHaveLength(15);
+      expect(group.descriptions).toHaveLength(4);
+      expect(group.headlines.every((headline) => headline.length <= 30)).toBe(true);
+      expect(group.descriptions.every((description) => description.length <= 90)).toBe(true);
     }
   });
 

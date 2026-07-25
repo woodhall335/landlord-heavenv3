@@ -545,7 +545,7 @@ function generateFallbackComplianceAudit(
   // Section 8 Grounds
   const s8_grounds: string[] = [];
   if (context.arrears_amount && context.arrears_amount > 0) {
-    if (context.arrears_amount >= (context.legalFramework === 'ew_shared_framework' ? 2 : 3) * (caseFacts.tenancy.rent_amount || 0)) {
+    if (context.arrears_amount >= 3 * (caseFacts.tenancy.rent_amount || 0)) {
       s8_grounds.push('Ground 8 - Serious rent arrears (mandatory)');
     }
     s8_grounds.push('Ground 10 - Some rent arrears (discretionary)');

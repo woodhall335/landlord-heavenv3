@@ -343,7 +343,7 @@ function getJurisdictionGuidance(jurisdiction: string, caseType: string): string
       return `
 JURISDICTION-SPECIFIC CONTEXT (England):
 - Section 21 (no-fault evictions) requires strict compliance: deposit protection, prescribed information, gas safety certificate, EPC, "How to Rent" guide provided at start, and valid HMO/selective license if required.
-- Section 8 (fault-based evictions) uses numbered grounds: Ground 8 (serious arrears, 2+ months) is mandatory if threshold met at notice AND hearing; Grounds 10/11 (lesser arrears, persistent late payment) are discretionary; Ground 14 (ASB/nuisance); Ground 12 (tenancy breach).
+- For England cases from 1 May 2026, Section 8 uses numbered grounds: Ground 8 is mandatory only if the current serious-arrears threshold is met at notice AND hearing (3 months' rent for monthly rents, or 13 weeks' rent for weekly or fortnightly rents); Grounds 10/11 (lesser arrears, persistent late payment) are discretionary; Ground 14 covers ASB/nuisance; Ground 12 covers tenancy breach.
 - Courts require clear evidence: dated records, payment histories, witness statements, photographs, correspondence logs.
 - Notice periods: Section 21 requires 2 months; Section 8 can be 2 weeks (serious grounds) or 2 months.
 - Terminology: tenant, assured shorthold tenancy (AST), Housing Act 1988.
