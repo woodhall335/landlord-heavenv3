@@ -1,0 +1,7 @@
+qa_marker,synthetic_event,event_name,request_count,http_statuses,persisted_responses,canonical_event_names,persisted_event_names,real_event_store_result,result
+qa-sales003c-2026-07-25T00-31-23-633Z-ingestion,contextual offer view,contextual_offer_view,1,200,true,contextual_offer_view,commercial_bridge_viewed,PASS,PASS
+qa-sales003c-2026-07-25T00-31-23-633Z-ingestion,contextual offer click,contextual_offer_click,1,200,true,contextual_offer_click,commercial_bridge_clicked,PASS,PASS
+qa-sales003c-2026-07-25T00-31-23-633Z-ingestion,product view,product_view,1,200,true,product_view,product_page_viewed,PASS,PASS
+qa-sales003c-2026-07-25T00-31-23-633Z-ingestion,product CTA click,product_primary_cta_click,1,200,true,product_primary_cta_click,product_cta_clicked,PASS,PASS
+qa-sales003c-2026-07-25T00-31-23-633Z-ingestion,HMO result,result_viewed,1,200,true,result_viewed,result_viewed,PASS,PASS
+qa-sales003c-2026-07-25T00-31-23-633Z-ingestion,arrears result,result_viewed,1,200,true,result_viewed,result_viewed,PASS,PASS

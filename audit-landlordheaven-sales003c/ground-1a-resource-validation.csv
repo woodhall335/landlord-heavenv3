@@ -1,0 +1,2 @@
+resource_url,http_status,mime_type,byte_count,pdf_signature,meaningful_content_threshold,linked_from_ground_1a_page,accessible_label_accurate,error,result
+https://landlordheaven.co.uk/checklists/ground-1a.pdf,200,application/pdf,1420002,%PDF-,PASS,yes,yes,,PASS

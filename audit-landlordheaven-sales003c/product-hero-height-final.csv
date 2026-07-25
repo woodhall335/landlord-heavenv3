@@ -1,0 +1,6 @@
+route,viewport_width,content_top_to_primary_cta_px,hero_height_px,viewport_heights_before_preview,primary_cta_at_or_above_650px,decision_section_at_or_below_1150px,exception,result
+/products/notice-only,390,597,915,0,yes,yes,,PASS
+/products/complete-pack,390,626,920,0,yes,yes,,PASS
+/products/money-claim,390,597,915,0,yes,yes,,PASS
+/products/ast,390,576,822,0,yes,yes,,PASS
+/products/section-13-standard,390,626,947,0,yes,yes,,PASS

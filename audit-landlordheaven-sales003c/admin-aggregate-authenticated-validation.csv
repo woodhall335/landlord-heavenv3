@@ -1,0 +1,2 @@
+qa_marker,auth_method,http_status,source_page_counts_result,product_counts_result,event_stage_counts_result,experiment_control_dimensions_result,limitation,result
+qa-sales003c-2026-07-25T00-31-23-633Z-ingestion,none,401,FAIL,FAIL,FAIL,FAIL,No approved authenticated production admin session or service credential was available; authentication was not weakened.,FAIL
