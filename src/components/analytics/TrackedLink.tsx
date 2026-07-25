@@ -1,10 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import type { MouseEvent, ReactNode } from 'react';
+import { useEffect, useRef, type MouseEvent, type ReactNode } from 'react';
 import {
   trackAddToCart,
   trackMarketingCtaClick,
+  trackMarketingCtaImpression,
   type MarketingCtaPosition,
   type MarketingPageType,
 } from '@/lib/analytics';
@@ -64,6 +65,31 @@ export function TrackedLink({
   product?: string;
   onClick?: (event: MouseEvent<HTMLAnchorElement>) => void;
 }) {
+  const impressionTracked = useRef(false);
+  const destinationPath = resolveDestinationPath(href);
+
+  useEffect(() => {
+    if (impressionTracked.current) return;
+    impressionTracked.current = true;
+    trackMarketingCtaImpression({
+      pagePath,
+      pageType,
+      ctaLabel,
+      ctaPosition,
+      destinationPath,
+      routeIntent,
+      product,
+    });
+  }, [
+    ctaLabel,
+    ctaPosition,
+    destinationPath,
+    pagePath,
+    pageType,
+    product,
+    routeIntent,
+  ]);
+
   return (
     <Link
       href={href}
@@ -80,7 +106,7 @@ export function TrackedLink({
           pageType,
           ctaLabel,
           ctaPosition,
-          destinationPath: resolveDestinationPath(href),
+          destinationPath,
           routeIntent,
           product,
         });

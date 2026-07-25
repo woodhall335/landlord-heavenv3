@@ -76,7 +76,7 @@ const earlyInternalLinks = [
   {
     source: 'src/lib/seo/england-current-framework-pages.ts',
     href: '/products/notice-only',
-    anchor: 'Create my Section 8 notice',
+    anchor: 'noticeOnlyCtaLabel',
   },
   {
     source: 'src/app/how-to-rent-guide/page.tsx',

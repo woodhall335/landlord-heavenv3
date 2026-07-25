@@ -915,17 +915,37 @@ export function trackMarketingCtaClick(params: {
     first_seen_at: attribution.first_seen_at,
   });
 
-  if (params.product || params.destinationPath.startsWith('/products/')) {
-    recordMarketingGrowthEvent('product_cta_clicked', {
-      sourcePage: params.pagePath,
-      pageType: params.pageType,
-      intent: params.routeIntent,
-      ctaPosition: params.ctaPosition,
-      destination: params.destinationPath,
-      productClicked: params.product,
-      userType: 'landlord',
-    });
-  }
+  trackEvent('journey_cta_click', {
+    sourcePage: params.pagePath,
+    pagePath: params.pagePath,
+    pageType: params.pageType,
+    intent: params.routeIntent,
+    ctaPosition: params.ctaPosition,
+    destination: params.destinationPath,
+    productClicked: params.product,
+    userType: 'landlord',
+  });
+}
+
+export function trackMarketingCtaImpression(params: {
+  pagePath: string;
+  pageType: MarketingPageType;
+  ctaLabel: string;
+  destinationPath: string;
+  ctaPosition: MarketingCtaPosition;
+  routeIntent?: string;
+  product?: string;
+}): void {
+  trackEvent('journey_cta_impression', {
+    sourcePage: params.pagePath,
+    pagePath: params.pagePath,
+    pageType: params.pageType,
+    intent: params.routeIntent,
+    ctaPosition: params.ctaPosition,
+    destination: params.destinationPath,
+    productClicked: params.product,
+    userType: 'landlord',
+  });
 }
 
 /**
@@ -1116,6 +1136,13 @@ export function trackWizardStartWithAttribution(params: WizardFullAttributionPar
     dedupeScope: 'session',
     dedupeKey: params.flowSessionId || `${params.product}:${params.jurisdiction || 'unknown'}`,
   });
+  recordMarketingGrowthEvent('builder_started', {
+    pagePath: typeof window !== 'undefined' ? window.location.pathname : '/wizard/flow',
+    productSlug: params.product,
+    recommendedProduct: params.product,
+    trafficSource: params.src || 'direct',
+    campaign: params.utm_campaign,
+  });
 
   // Track as Facebook AddToCart (intent signal)
   if (typeof window !== 'undefined' && window.fbq) {
@@ -1200,6 +1227,14 @@ export function trackWizardStepCompleteWithAttribution(params: {
     variant: 'derived',
     dedupeScope: params.caseId ? 'case' : 'session',
     dedupeKey: `${params.caseId || 'session'}:${normalizedStep.stepGroup}`,
+  });
+  recordMarketingGrowthEvent('builder_step_completed', {
+    pagePath: typeof window !== 'undefined' ? window.location.pathname : '/wizard/flow',
+    productSlug: params.product,
+    recommendedProduct: params.product,
+    builderStep: normalizedStep.stepGroup,
+    trafficSource: params.src || 'direct',
+    campaign: params.utm_campaign,
   });
 }
 

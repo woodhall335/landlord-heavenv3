@@ -44,7 +44,7 @@ export const OWNER_PAGE_CONTRACTS: OwnerPageContract[] = [
     secondaryThemes: ['eviction notice', 'Section 8 notice', 'notice pack for landlords'],
     userProblem: 'A landlord needs to serve the right notice before court.',
     productPromise: 'Create the right eviction notice pack for the route being served.',
-    primaryCtaLabel: 'Create my Section 8 notice',
+    primaryCtaLabel: 'Create and preview my Form 3A — £39.99',
     mustMention: ['evict a tenant legally', 'eviction notice', 'landlord'],
     forbiddenHeroPhrases: ['cluster', 'hub'],
   },

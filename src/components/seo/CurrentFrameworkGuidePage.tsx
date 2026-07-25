@@ -97,7 +97,7 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
           description: config.description,
           url: canonical,
           datePublished: '2026-04-05',
-          dateModified: '2026-04-05',
+          dateModified: '2026-07-13',
         })}
       />
       <StructuredData data={faqPageSchema(config.faqs)} />
@@ -193,7 +193,19 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
                 {config.secondaryCta.label}
               </TrackedLink>
             </div>
+            {isForm3Section8 ? (
+              <p className="mt-4 text-sm font-medium text-[#514785]">
+                Fixed price £39.99. Generate and preview the Form 3A pack before paying.
+              </p>
+            ) : null}
           </div>
+          {isForm3Section8 ? (
+            <NoticeOnlyBridge
+              sourcePage={pagePath}
+              ctaPosition="top"
+              headline="Serve Form 3A with the right dates and service record"
+            />
+          ) : null}
           {isForm3Section8 ? (
             <AssistedPrepServicesShowcase
               pagePath={pagePath}
@@ -208,14 +220,6 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
       <section className="bg-white py-12">
         <Container>
           <div className="mx-auto max-w-5xl space-y-8">
-            {isForm3Section8 ? (
-              <NoticeOnlyBridge
-                sourcePage={pagePath}
-                ctaPosition="top"
-                headline="Serve Form 3A with the right dates and service record"
-              />
-            ) : null}
-
             {config.decisionBlock ? (
               <article className="rounded-3xl border border-[#cab6ff] bg-[#f8f4ff] p-6 md:p-8">
                 <h2 className="text-3xl font-bold text-[#2a2161]">{config.decisionBlock.title}</h2>

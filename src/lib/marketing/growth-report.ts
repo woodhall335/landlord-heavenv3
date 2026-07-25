@@ -269,6 +269,17 @@ export function buildGrowthReport(params: {
     .filter((order) => {
       const orderDate = getOrderDate(order);
       return orderDate ? orderDate >= rangeStart : false;
+    })
+    .filter((order) => {
+      if (params.filters?.product && order.product_type !== params.filters.product) return false;
+      if (params.filters?.sourceRoute && order.landing_path !== params.filters.sourceRoute) return false;
+      if (
+        params.filters?.trafficSource &&
+        !getSourceMedium(order).toLowerCase().startsWith(params.filters.trafficSource.toLowerCase())
+      ) {
+        return false;
+      }
+      return true;
     });
 
   const rolling7Orders = paidOrders.filter((order) => {
@@ -329,16 +340,39 @@ export function buildGrowthReport(params: {
   const eventTool = (event: GrowthMarketingEventRow) =>
     groupLabel(event.tool_name || event.intent, 'unknown');
   const eventProduct = (event: GrowthMarketingEventRow) =>
-    groupLabel(event.product_clicked || event.recommended_product, 'unknown');
+    groupLabel(
+      event.product_clicked ||
+        event.recommended_product ||
+        String(event.event_payload?.productSlug || ''),
+      'unknown'
+    );
+  const canonicalEventName = (event: GrowthMarketingEventRow) => {
+    const payloadName = event.event_payload?.canonicalEventName;
+    return typeof payloadName === 'string' && payloadName ? payloadName : event.event_name;
+  };
 
-  const bridgeViews = eventsInRange.filter((event) => ['commercial_bridge_viewed', 'contextual_offer_view'].includes(event.event_name));
-  const bridgeClicks = eventsInRange.filter((event) => ['commercial_bridge_clicked', 'contextual_offer_click'].includes(event.event_name));
+  const bridgeViews = eventsInRange.filter((event) =>
+    ['commercial_bridge_viewed', 'contextual_offer_view', 'journey_cta_impression'].includes(
+      canonicalEventName(event)
+    )
+  );
+  const bridgeClicks = eventsInRange.filter((event) =>
+    ['commercial_bridge_clicked', 'contextual_offer_click', 'journey_cta_click'].includes(
+      canonicalEventName(event)
+    )
+  );
   const toolStarts = eventsInRange.filter((event) => event.event_name === 'tool_started');
   const toolCompletions = eventsInRange.filter((event) => event.event_name === 'tool_completed');
-  const productClicks = eventsInRange.filter((event) => event.event_name === 'product_cta_clicked');
-  const checkoutStarts = eventsInRange.filter((event) => ['checkout_started', 'checkout_opened'].includes(event.event_name));
+  const productClicks = eventsInRange.filter(
+    (event) => canonicalEventName(event) === 'product_primary_cta_click'
+  );
+  const checkoutStarts = eventsInRange.filter((event) =>
+    ['checkout_started', 'checkout_opened'].includes(canonicalEventName(event))
+  );
   const funnelStageDefinitions = [
     ['organic_landing_view', 'Landing views'],
+    ['journey_cta_impression', 'Journey CTA impressions'],
+    ['journey_cta_click', 'Journey CTA clicks'],
     ['contextual_offer_view', 'Offer views'],
     ['contextual_offer_click', 'Offer clicks'],
     ['product_view', 'Product views'],
@@ -350,10 +384,6 @@ export function buildGrowthReport(params: {
     ['payment_succeeded', 'Payments'],
     ['document_delivered', 'Documents delivered'],
   ] as const;
-  const canonicalEventName = (event: GrowthMarketingEventRow) => {
-    const payloadName = event.event_payload?.canonicalEventName;
-    return typeof payloadName === 'string' && payloadName ? payloadName : event.event_name;
-  };
   const stageCount = (name: string) =>
     eventsInRange.filter((event) => canonicalEventName(event) === name).length;
   const countRows = (counts: Map<string, number>) =>
@@ -411,7 +441,13 @@ export function buildGrowthReport(params: {
     revenueBySourceMedium: buildGroup(paidOrders, getSourceMedium),
     funnelStages: funnelStageDefinitions.map(([event, label]) => ({ event, label, count: stageCount(event) })),
     journeyRates: [
-      stageRate('offer_ctr', 'Offer CTR', 'contextual_offer_click', 'contextual_offer_view'),
+      {
+        key: 'offer_ctr',
+        label: 'Offer / entry CTA CTR',
+        numerator: bridgeClicks.length,
+        denominator: bridgeViews.length,
+        rate: pct(bridgeClicks.length, bridgeViews.length),
+      },
       stageRate('landing_to_product', 'Landing to product', 'product_view', 'organic_landing_view'),
       stageRate('product_to_builder', 'Product to builder', 'builder_started', 'product_view'),
       stageRate('builder_to_preview', 'Builder to preview', 'preview_generated', 'builder_started'),

@@ -267,6 +267,8 @@ export function recordMarketingGrowthEvent(
       body,
       keepalive: true,
       credentials: 'same-origin',
+    }).catch(() => {
+      // Analytics must remain best-effort when the browser rejects or loses the request.
     });
   } catch {
     // Analytics must never block the user's path through the funnel.

@@ -13,6 +13,7 @@ import type {
 } from '@/lib/analytics/growth-events';
 import { recordMarketingGrowthEvent } from '@/lib/analytics/growth-events';
 import { getConversionMapping } from '@/lib/conversion/registry';
+import { PRODUCTS } from '@/lib/pricing/products';
 
 type BridgeIntent = 'rent_increase' | 'section8' | 'money_claim' | 'tenancy_agreement' | string;
 
@@ -309,7 +310,7 @@ export function Section8Bridge({
       primaryLabel="Prepare my court papers"
       secondaryProduct="notice_only"
       secondaryHref="/products/notice-only"
-      secondaryLabel="Create my Section 8 notice"
+      secondaryLabel={`Create and preview my Form 3A — ${PRODUCTS.notice_only.displayPrice}`}
       ctaPosition={ctaPosition}
       riskMessage="The wrong next step can delay possession"
       proofPoints={[
@@ -341,7 +342,7 @@ export function NoticeOnlyBridge({
       headline={headline}
       primaryProduct="notice_only"
       primaryHref="/products/notice-only"
-      primaryLabel="Create my Section 8 notice"
+      primaryLabel={`Create and preview my Form 3A — ${PRODUCTS.notice_only.displayPrice}`}
       secondaryProduct="complete_pack"
       secondaryHref="/products/complete-pack"
       secondaryLabel="Need court papers too? Complete Pack"

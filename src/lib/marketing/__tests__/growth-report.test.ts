@@ -113,6 +113,7 @@ describe('growth report builder', () => {
           marketing_session_id: 'mkt_1',
           product_clicked: 'section13_standard',
           intent: 'rent_increase',
+          event_payload: { canonicalEventName: 'product_primary_cta_click' },
           created_at: '2026-05-05T09:04:00.000Z',
         },
         {
@@ -147,6 +148,76 @@ describe('growth report builder', () => {
       key: 'section13_standard',
       productClicks: 1,
       checkoutStarts: 1,
+      rate: 100,
+    });
+  });
+
+  it('applies the product filter to revenue as well as funnel events', () => {
+    const report = buildGrowthReport({
+      days: 7,
+      now: new Date('2026-05-05T12:00:00.000Z'),
+      filters: { product: 'notice_only' },
+      orders: [
+        {
+          id: 'notice-order',
+          payment_status: 'paid',
+          product_type: 'notice_only',
+          total_amount: 39.99,
+          paid_at: '2026-05-05T09:00:00.000Z',
+          landing_path: '/form-3-section-8',
+        },
+        {
+          id: 'other-order',
+          payment_status: 'paid',
+          product_type: 'complete_pack',
+          total_amount: 179,
+          paid_at: '2026-05-05T10:00:00.000Z',
+          landing_path: '/products/complete-pack',
+        },
+      ],
+      events: [],
+    });
+
+    expect(report.summary).toMatchObject({ revenue: 39.99, orders: 1, aov: 39.99 });
+    expect(report.revenueByProduct).toEqual([
+      expect.objectContaining({ key: 'notice_only', revenue: 39.99, orders: 1 }),
+    ]);
+    expect(report.revenueByLandingPath).toEqual([
+      expect.objectContaining({ key: '/form-3-section-8', revenue: 39.99, orders: 1 }),
+    ]);
+  });
+
+  it('includes journey CTA impressions and clicks in entry-page CTR', () => {
+    const report = buildGrowthReport({
+      days: 7,
+      now: new Date('2026-05-05T12:00:00.000Z'),
+      orders: [],
+      events: [
+        {
+          event_name: 'journey_cta_impression',
+          source_page: '/form-3-section-8',
+          created_at: '2026-05-05T09:00:00.000Z',
+        },
+        {
+          event_name: 'journey_cta_click',
+          source_page: '/form-3-section-8',
+          created_at: '2026-05-05T09:01:00.000Z',
+        },
+      ],
+    });
+
+    expect(report.funnelRates.ctaClickRateByPage).toContainEqual(
+      expect.objectContaining({
+        key: '/form-3-section-8',
+        views: 1,
+        clicks: 1,
+        rate: 100,
+      })
+    );
+    expect(report.journeyRates.find((rate) => rate.key === 'offer_ctr')).toMatchObject({
+      label: 'Offer / entry CTA CTR',
+      numerator: 1,
+      denominator: 1,
       rate: 100,
     });
   });

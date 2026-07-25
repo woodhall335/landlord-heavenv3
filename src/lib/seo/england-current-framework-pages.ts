@@ -1,5 +1,6 @@
 import type { FAQItem } from '@/components/seo/FAQSection';
 import { isValidElement, type ReactNode } from 'react';
+import { PRODUCTS } from '@/lib/pricing/products';
 
 export interface CurrentFrameworkLink {
   href: string;
@@ -55,7 +56,8 @@ export interface CurrentFrameworkPageConfig {
   secondaryCta: { label: string; href: string };
 }
 
-const reviewedDate = '5 April 2026';
+const reviewedDate = '13 July 2026';
+const noticeOnlyCtaLabel = `Create and preview my Form 3A — ${PRODUCTS.notice_only.displayPrice}`;
 
 function buildCurrentFrameworkNote(summary: string) {
   return `England update reviewed ${reviewedDate}. We are aligned with the Renters' Rights Act. ${summary}`;
@@ -238,7 +240,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         type: 'guide',
       },
     ],
-    primaryCta: { label: 'Create my Section 8 notice', href: '/products/notice-only' },
+    primaryCta: { label: noticeOnlyCtaLabel, href: '/products/notice-only' },
     secondaryCta: { label: 'Prepare my court pack', href: '/products/complete-pack' },
   },
   'section-8-notice': {
@@ -300,7 +302,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
           title: 'Need to serve notice correctly first',
           body:
             'Start with the Section 8 notice generator when the main job is getting Form 3A, the grounds, dates, evidence prompts, and service record right before anything goes to court.',
-          ctaLabel: 'Create my Section 8 notice',
+          ctaLabel: noticeOnlyCtaLabel,
           href: '/products/notice-only',
         },
         {
@@ -493,7 +495,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         type: 'guide',
       },
     ],
-    primaryCta: { label: 'Create my Section 8 notice', href: '/products/notice-only' },
+    primaryCta: { label: noticeOnlyCtaLabel, href: '/products/notice-only' },
     secondaryCta: { label: 'Prepare my court pack', href: '/products/complete-pack' },
   },
   'renters-rights-act-eviction-rules': {
@@ -779,7 +781,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
       },
       {
         href: '/products/notice-only',
-        title: 'Create my Section 8 notice',
+        title: 'Create and preview my Form 3A',
         description: "Create a Form 3A and service record for the current Renters' Rights Act Section 8 route.",
         icon: 'document',
         type: 'product',
@@ -792,7 +794,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         type: 'guide',
       },
     ],
-    primaryCta: { label: 'Create my Section 8 notice', href: '/products/notice-only' },
+    primaryCta: { label: noticeOnlyCtaLabel, href: '/products/notice-only' },
     secondaryCta: { label: 'See the full England process', href: '/eviction-process-england' },
   },
   'how-to-evict-a-tenant-england': {
@@ -954,7 +956,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         type: 'product',
       },
     ],
-    primaryCta: { label: 'Create my Section 8 notice', href: '/products/notice-only' },
+    primaryCta: { label: noticeOnlyCtaLabel, href: '/products/notice-only' },
     secondaryCta: { label: 'Read Section 8 notice guide', href: '/section-8-notice' },
   },
   'eviction-process-england': {
@@ -1243,7 +1245,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         type: 'product',
       },
     ],
-    primaryCta: { label: 'Create my Section 8 notice', href: '/products/notice-only' },
+    primaryCta: { label: noticeOnlyCtaLabel, href: '/products/notice-only' },
     secondaryCta: { label: 'Prepare my court pack', href: '/products/complete-pack' },
   },
 };

@@ -442,7 +442,7 @@ const SECTIONS: WizardSection[] = [
     id: 'section21_compliance',
     label: 'Quick checks',
     description: 'Compliance requirements for Section 21',
-    // Only for England Section 21 - Wales has different requirements
+    // Retained only for historical saved-case compatibility. No current public route can reach it.
     routes: [] as EvictionRoute[],
     isComplete: (facts) => {
       const hasDeposit = facts.deposit_taken === true;

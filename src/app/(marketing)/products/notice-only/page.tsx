@@ -101,7 +101,7 @@ export default function NoticeOnlyPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'England-only Form 3A eviction notice | N215, arrears, service checks, preview before paying',
+      trustText: `England-only Form 3A | N215 and service checks | Preview before paying | Fixed price ${PRODUCTS.notice_only.displayPrice}`,
       title: 'Create a Section 8 eviction notice and service file',
       subtitle:
         'Use this when the next job is serving notice. Prepare the England Form 3A notice, N215 service record, arrears schedule, service instructions, checks before service, case summary, and next-step guide in one file you can preview before paying.',
@@ -356,7 +356,7 @@ export default function NoticeOnlyPage() {
       body:
         'Choose this if your immediate job is to prepare the notice file properly before anything is sent to the tenant.',
       primary: {
-        label: 'Create my Section 8 notice',
+        label: descriptor.primaryCtaLabel,
         href: descriptor.wizardHref,
       },
       secondary: {
@@ -455,7 +455,7 @@ export default function NoticeOnlyPage() {
       body:
         'Choose this if you need the notice, service instructions, N215, arrears schedule, and checks ready before anything is served.',
       primary: {
-        label: 'Create my Section 8 notice',
+        label: descriptor.primaryCtaLabel,
         href: descriptor.wizardHref,
       },
       secondary: {
