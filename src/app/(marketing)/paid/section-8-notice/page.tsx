@@ -30,26 +30,36 @@ const grounds = [
     code: '8',
     title: 'Serious rent arrears',
     copy: 'For arrears that meet the current mandatory threshold at service and at the hearing.',
+    image: '/images/tenant-is-not-paying-rent.webp',
+    imageAlt: 'Landlord reviewing a case where a tenant is not paying rent',
   },
   {
     code: '10',
     title: 'Some rent remains unpaid',
     copy: 'A discretionary arrears ground that may support the notice where Ground 8 is unavailable.',
+    image: '/images/the-court-looks-at-the-notice-first.webp',
+    imageAlt: 'Court review of a landlord possession notice',
   },
   {
     code: '11',
     title: 'Persistent late payment',
     copy: 'For an evidenced history of late rent, even if arrears fluctuate.',
+    image: '/images/tenant-keeps-paying-late.webp',
+    imageAlt: 'Landlord tracking a tenant history of late rent payments',
   },
   {
     code: '12',
     title: 'Breach of tenancy',
     copy: 'For a supported breach of a tenancy obligation other than paying rent.',
+    image: '/images/tenant-has-broken-the-tenancy-or-caused-damage.webp',
+    imageAlt: 'Evidence of a broken tenancy term or property damage',
   },
   {
     code: '14',
     title: 'Antisocial behaviour',
     copy: 'For evidenced nuisance, annoyance, illegal use or antisocial behaviour.',
+    image: '/images/specialist-housing-or-employment-case.webp',
+    imageAlt: 'Housing officer assessing a specialist housing case',
   },
 ];
 
@@ -90,7 +100,7 @@ export default function EvictionNoticePaidLandingPage() {
             <CommercialSeoTrackedCta
               href={ctaHref()}
               label={`Create my eviction notice — ${PRODUCTS.notice_only.displayPrice}`}
-              className="mt-8 inline-flex min-h-12 items-center justify-center rounded-xl bg-[#c9ff72] px-6 py-3 font-bold text-[#20164f] shadow-lg transition hover:bg-white"
+              className="mt-8 inline-flex min-h-12 items-center justify-center rounded-xl bg-white px-6 py-3 font-bold text-[#20164f] shadow-lg transition hover:bg-[#f4efff]"
               variant="primary"
               sourcePage={sourcePage}
               pageType="paid_landing_page"
@@ -106,13 +116,13 @@ export default function EvictionNoticePaidLandingPage() {
             </p>
           </div>
 
-          <div className="rounded-2xl border border-white/15 bg-white p-4 shadow-2xl">
+          <div className="relative">
             <Image
-              src="/images/notice-only-pack.webp"
-              alt="Preview of the Section 8 eviction notice and service pack"
-              width={900}
-              height={675}
-              className="h-auto w-full rounded-xl"
+              src="/images/section-8-hero.webp"
+              alt="Section 8 notice with a property file, house and keys"
+              width={1000}
+              height={1000}
+              className="h-auto w-full drop-shadow-2xl"
               priority
             />
           </div>
@@ -137,7 +147,7 @@ export default function EvictionNoticePaidLandingPage() {
         </div>
       </section>
 
-      <section className="bg-white py-14" aria-labelledby="grounds-title">
+      <section id="grounds" className="scroll-mt-24 bg-white py-14" aria-labelledby="grounds-title">
         <div className="mx-auto max-w-6xl px-5">
           <div className="max-w-3xl">
             <p className="font-semibold text-primary">Common Section 8 grounds</p>
@@ -151,26 +161,38 @@ export default function EvictionNoticePaidLandingPage() {
           </div>
           <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {grounds.map((ground) => (
-              <div key={ground.code} className="rounded-2xl border border-gray-200 p-5">
-                <p className="text-sm font-bold uppercase tracking-wide text-primary">
-                  Ground {ground.code}
-                </p>
-                <h3 className="mt-2 text-xl font-bold text-gray-950">{ground.title}</h3>
-                <p className="mt-2 min-h-20 text-sm leading-6 text-gray-600">{ground.copy}</p>
-                <CommercialSeoTrackedCta
-                  href={ctaHref(ground.code)}
-                  label={`Start Ground ${ground.code} notice`}
-                  className="mt-4 inline-flex items-center font-bold text-primary hover:underline"
-                  variant="secondary"
-                  sourcePage={sourcePage}
-                  pageType="paid_landing_page"
-                  intent={`section_8_ground_${ground.code}`}
-                  ctaPosition="grounds"
-                  recommendedProduct="notice_only"
-                >
-                  Start Ground {ground.code} notice
-                  <ChevronRight className="ml-1 h-4 w-4" aria-hidden />
-                </CommercialSeoTrackedCta>
+              <div
+                key={ground.code}
+                className="overflow-hidden rounded-2xl border border-gray-200 bg-white"
+              >
+                <Image
+                  src={ground.image}
+                  alt={ground.imageAlt}
+                  width={768}
+                  height={512}
+                  className="aspect-[3/2] w-full object-cover"
+                />
+                <div className="p-5">
+                  <p className="text-sm font-bold uppercase tracking-wide text-primary">
+                    Ground {ground.code}
+                  </p>
+                  <h3 className="mt-2 text-xl font-bold text-gray-950">{ground.title}</h3>
+                  <p className="mt-2 min-h-20 text-sm leading-6 text-gray-600">{ground.copy}</p>
+                  <CommercialSeoTrackedCta
+                    href={ctaHref(ground.code)}
+                    label={`Start Ground ${ground.code} notice`}
+                    className="mt-4 inline-flex items-center font-bold text-primary hover:underline"
+                    variant="secondary"
+                    sourcePage={sourcePage}
+                    pageType="paid_landing_page"
+                    intent={`section_8_ground_${ground.code}`}
+                    ctaPosition="grounds"
+                    recommendedProduct="notice_only"
+                  >
+                    Start Ground {ground.code} notice
+                    <ChevronRight className="ml-1 h-4 w-4" aria-hidden />
+                  </CommercialSeoTrackedCta>
+                </div>
               </div>
             ))}
           </div>
