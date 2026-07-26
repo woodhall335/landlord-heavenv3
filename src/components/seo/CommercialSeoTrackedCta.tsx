@@ -35,7 +35,7 @@ function destinationPath(href: string) {
 function inferProduct(href: string) {
   if (href.includes('money-claim')) return 'money_claim';
   if (href.includes('complete-pack')) return 'complete_pack';
-  if (href.includes('notice-only')) return 'notice_only';
+  if (href.includes('notice-only') || href.includes('product=notice_only')) return 'notice_only';
   if (href.includes('section-13-standard')) return 'section13_standard';
   if (href.includes('section-13-defence')) return 'section13_defensive';
   if (
@@ -124,4 +124,3 @@ export function CommercialSeoTrackedCta({
     </Link>
   );
 }
-
