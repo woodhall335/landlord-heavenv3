@@ -118,10 +118,10 @@ export default function EvictionNoticePaidLandingPage() {
 
           <div className="relative">
             <Image
-              src="/images/section-8-hero.webp"
-              alt="Section 8 notice with a property file, house and keys"
-              width={1000}
-              height={1000}
+              src="/images/eviction_packs.webp"
+              alt="Landlord Heaven eviction pack shown on a laptop"
+              width={1536}
+              height={1024}
               className="h-auto w-full drop-shadow-2xl"
               priority
             />
