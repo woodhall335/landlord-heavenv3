@@ -8,7 +8,7 @@ import { CommercialSeoTrackedCta } from '@/components/seo/CommercialSeoTrackedCt
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getCanonicalUrl } from '@/lib/seo';
 
-const sourcePage = '/eviction-notice';
+const sourcePage = '/paid/section-8-notice';
 const noticeHref =
   '/wizard/flow?type=eviction&product=notice_only&src=google_ads&topic=eviction';
 
