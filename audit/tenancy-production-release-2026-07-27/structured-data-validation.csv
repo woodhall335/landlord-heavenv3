@@ -1,0 +1,6 @@
+route,result
+/products/ast,PASS_READ_ONLY_TYPES_PRESENT
+/wales-tenancy-agreement-template,FAIL_NOT_CURRENT_RELEASE
+/private-residential-tenancy-agreement-template,FAIL_NOT_CURRENT_RELEASE
+/northern-ireland-tenancy-agreement-template,FAIL_NOT_CURRENT_RELEASE
+

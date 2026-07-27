@@ -1,0 +1,35 @@
+{
+  "checked_at": "2026-07-27",
+  "sources": [
+    {
+      "jurisdiction": "northern-ireland",
+      "topic": "current landlord and tenant notice periods",
+      "url": "https://www.nidirect.gov.uk/articles/private-rent-and-tenancies",
+      "status": "reviewed"
+    },
+    {
+      "jurisdiction": "northern-ireland",
+      "topic": "Tenancy Information Notice",
+      "url": "https://www.communities-ni.gov.uk/articles/section-1-2-private-tenancies-northern-ireland-act-2022",
+      "status": "reviewed"
+    },
+    {
+      "jurisdiction": "northern-ireland",
+      "topic": "2024 alarm regulations and guidance",
+      "url": "https://www.communities-ni.gov.uk/articles/smoke-heat-and-carbon-monoxide-alarms-private-tenancies-regulations-northern-ireland-2024-guidance-notes",
+      "status": "reviewed"
+    },
+    {
+      "jurisdiction": "scotland",
+      "topic": "model PRT and supporting documents",
+      "url": "https://www.gov.scot/publications/private-residential-tenancy-model-agreement/documents/",
+      "status": "source captured; external parity approval outstanding"
+    },
+    {
+      "jurisdiction": "wales",
+      "topic": "June 2026 Renting Homes amendments",
+      "url": "https://www.gov.wales/renting-homes-miscellaneous-amendments-wales-regulations-2026-guidance-landlords-html",
+      "status": "source captured; external parity approval outstanding"
+    }
+  ]
+}

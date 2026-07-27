@@ -1,0 +1,200 @@
+{
+  "samples": [
+    {
+      "file": "output/pdf/scotland-prt-branded-sample.pdf",
+      "bytes": 612137,
+      "pages": 27,
+      "sha256": "c7ca7e32b4642c2fa592206c3fab3ac06b6d499808b5065c0a0b5e93b9d000aa",
+      "packManifest": "output/pdf/scotland-prt-branded-sample-pack/manifest.json",
+      "packAssets": [
+        {
+          "title": "Private Residential Tenancy Agreement",
+          "category": "agreement",
+          "documentType": "prt_agreement",
+          "fileName": "tenancy_agreement.pdf",
+          "bytes": 612137,
+          "pages": 27,
+          "sha256": "c7ca7e32b4642c2fa592206c3fab3ac06b6d499808b5065c0a0b5e93b9d000aa",
+          "openCheck": "passed"
+        },
+        {
+          "title": "Inventory & Schedule of Condition",
+          "category": "schedule",
+          "documentType": "inventory_schedule",
+          "fileName": "inventory_schedule.pdf",
+          "bytes": 359045,
+          "pages": 9,
+          "sha256": "67e0e5ef5e564808e60c398af486ea63005440d03d4db4b8515b3542a8a900f8",
+          "openCheck": "passed"
+        },
+        {
+          "title": "Pre-Tenancy Compliance Checklist (Scotland)",
+          "category": "checklist",
+          "documentType": "pre_tenancy_checklist_scotland",
+          "fileName": "compliance_checklist.pdf",
+          "bytes": 239400,
+          "pages": 3,
+          "sha256": "9900a8d303c031c04aedc3cb606dd28bdd6aa2df7dfc43a06580611a16b91b40",
+          "openCheck": "passed"
+        },
+        {
+          "title": "Private Residential Tenancy Statutory Terms Supporting Notes",
+          "category": "guidance",
+          "documentType": "easy_read_notes_scotland",
+          "fileName": "scotland_prt_statutory_terms_supporting_notes_april_2024.pdf",
+          "bytes": 354633,
+          "pages": 42,
+          "sha256": "6f8891bf2488d433e98665352e67a6f06e70e211b330052bf17be582d6d82876",
+          "openCheck": "passed"
+        }
+      ]
+    },
+    {
+      "file": "output/pdf/wales-fixed-branded-sample.pdf",
+      "bytes": 591145,
+      "pages": 35,
+      "sha256": "e8145c3266b9dca404b7318a071e098ebc4a0ae7bef83ebc243f685bce553992",
+      "packManifest": "output/pdf/wales-fixed-branded-sample-pack/manifest.json",
+      "packAssets": [
+        {
+          "title": "Fixed Term Standard Occupation Contract",
+          "category": "agreement",
+          "documentType": "soc_agreement",
+          "fileName": "tenancy_agreement.pdf",
+          "bytes": 591145,
+          "pages": 35,
+          "sha256": "e8145c3266b9dca404b7318a071e098ebc4a0ae7bef83ebc243f685bce553992",
+          "openCheck": "passed"
+        },
+        {
+          "title": "Inventory & Schedule of Condition",
+          "category": "schedule",
+          "documentType": "inventory_schedule",
+          "fileName": "inventory_schedule.pdf",
+          "bytes": 360163,
+          "pages": 9,
+          "sha256": "b3545b5ce894ccb8bb8c4e44deb4d0eae7b811f0c201105b38ca83036b3bead7",
+          "openCheck": "passed"
+        },
+        {
+          "title": "Pre-Tenancy Compliance Checklist (Wales)",
+          "category": "checklist",
+          "documentType": "pre_tenancy_checklist_wales",
+          "fileName": "compliance_checklist.pdf",
+          "bytes": 245736,
+          "pages": 3,
+          "sha256": "e98a5b3074eeabfc2007d11998293701b4cc0a92f2d4b69333e15f8251573ae8",
+          "openCheck": "passed"
+        }
+      ]
+    },
+    {
+      "file": "output/pdf/wales-periodic-branded-sample.pdf",
+      "bytes": 648615,
+      "pages": 40,
+      "sha256": "d0da9b36ab1e58add6727a7cef953dc1e8dc192f2cc9255c0e5e790dd0ba862f",
+      "packManifest": "output/pdf/wales-periodic-branded-sample-pack/manifest.json",
+      "packAssets": [
+        {
+          "title": "Standard Occupation Contract",
+          "category": "agreement",
+          "documentType": "soc_agreement",
+          "fileName": "tenancy_agreement.pdf",
+          "bytes": 648615,
+          "pages": 40,
+          "sha256": "d0da9b36ab1e58add6727a7cef953dc1e8dc192f2cc9255c0e5e790dd0ba862f",
+          "openCheck": "passed"
+        },
+        {
+          "title": "Inventory & Schedule of Condition",
+          "category": "schedule",
+          "documentType": "inventory_schedule",
+          "fileName": "inventory_schedule.pdf",
+          "bytes": 359600,
+          "pages": 9,
+          "sha256": "8de0bb15210ed71dc94ec7afc914470718623c8913b4abf378c5800ebaf29386",
+          "openCheck": "passed"
+        },
+        {
+          "title": "Pre-Tenancy Compliance Checklist (Wales)",
+          "category": "checklist",
+          "documentType": "pre_tenancy_checklist_wales",
+          "fileName": "compliance_checklist.pdf",
+          "bytes": 245594,
+          "pages": 3,
+          "sha256": "77f7317709d9381a0a711231c187e495e1ae8a4e6a587bcbdb9ada881d3604c1",
+          "openCheck": "passed"
+        }
+      ]
+    },
+    {
+      "file": "output/pdf/northern-ireland-private-tenancy-branded-sample.pdf",
+      "bytes": 577737,
+      "pages": 24,
+      "sha256": "a10a60e7897f935be17f06c27e28d19cfdb172b9348c5b98579137d507f050bc",
+      "packManifest": "output/pdf/northern-ireland-private-tenancy-branded-sample-pack/manifest.json",
+      "packAssets": [
+        {
+          "title": "Private Tenancy Agreement",
+          "category": "agreement",
+          "documentType": "private_tenancy_agreement",
+          "fileName": "tenancy_agreement.pdf",
+          "bytes": 577737,
+          "pages": 24,
+          "sha256": "a10a60e7897f935be17f06c27e28d19cfdb172b9348c5b98579137d507f050bc",
+          "openCheck": "passed"
+        },
+        {
+          "title": "Inventory & Schedule of Condition",
+          "category": "schedule",
+          "documentType": "inventory_schedule",
+          "fileName": "inventory_schedule.pdf",
+          "bytes": 359563,
+          "pages": 9,
+          "sha256": "db01d8b85b7ad43bcc3250ab9e5bc056c458875df399c357ba5d49d0af60feff",
+          "openCheck": "passed"
+        },
+        {
+          "title": "Pre-Tenancy Compliance Checklist (Northern Ireland)",
+          "category": "checklist",
+          "documentType": "pre_tenancy_checklist_northern_ireland",
+          "fileName": "compliance_checklist.pdf",
+          "bytes": 239899,
+          "pages": 3,
+          "sha256": "13a9429ae923d3f8b070728e00198d162da7525b5e4904787e7736e35898cf23",
+          "openCheck": "passed"
+        },
+        {
+          "title": "Northern Ireland Rent Book",
+          "category": "schedule",
+          "documentType": "rent_book_northern_ireland",
+          "fileName": "northern_ireland_rent_book.pdf",
+          "bytes": 166948,
+          "pages": 2,
+          "sha256": "66ae3b0585d03433ffd95dd851b139d9d767fd1c3a39a8d616a984f2f393c073",
+          "openCheck": "passed"
+        },
+        {
+          "title": "Landlord\u2019s Notice Relating to the Granting of a Private Tenancy",
+          "category": "guidance",
+          "documentType": "tenancy_information_notice_northern_ireland",
+          "fileName": "northern_ireland_tenancy_information_notice.pdf",
+          "bytes": 227571,
+          "pages": 7,
+          "sha256": "75fe34a800cd987b7f61c1e47733f19a231c89ba125a56947b908d3cd4de24e3",
+          "openCheck": "passed"
+        },
+        {
+          "title": "Tenancy Information Notice Completion Guidance",
+          "category": "guidance",
+          "documentType": "tenancy_information_notice_guidance_northern_ireland",
+          "fileName": "northern_ireland_tenancy_information_notice_guidance.pdf",
+          "bytes": 96386,
+          "pages": 4,
+          "sha256": "c9f46ddc973d838a4aa0e32724f8dd74b1c7ec04eb17d85c02fa667949dca94b",
+          "openCheck": "passed"
+        }
+      ]
+    }
+  ]
+}

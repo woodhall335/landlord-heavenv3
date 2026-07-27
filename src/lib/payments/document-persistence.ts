@@ -24,13 +24,16 @@ export async function persistDocumentRecordWithFallback(
     caseId: string;
     documentType: string;
     outputSnapshotId?: string | null;
+    tenancyOutputSnapshotId?: string | null;
   }
 ): Promise<{ error: any; method: 'upsert' | 'update' | 'insert' }> {
-  const { caseId, documentType, outputSnapshotId } = options;
+  const { caseId, documentType, outputSnapshotId, tenancyOutputSnapshotId } = options;
 
   const upsertResult = await supabase.from('documents').upsert(payload, {
     onConflict: outputSnapshotId
       ? 'case_id,document_type,is_preview,output_snapshot_id'
+      : tenancyOutputSnapshotId
+        ? 'case_id,document_type,is_preview,tenancy_output_snapshot_id'
       : 'case_id,document_type,is_preview',
   });
 
@@ -47,6 +50,10 @@ export async function persistDocumentRecordWithFallback(
 
   const existingResult = outputSnapshotId
     ? await selectBuilder.eq('output_snapshot_id', outputSnapshotId).maybeSingle()
+    : tenancyOutputSnapshotId
+      ? await selectBuilder
+          .eq('tenancy_output_snapshot_id', tenancyOutputSnapshotId)
+          .maybeSingle()
     : await selectBuilder.is('output_snapshot_id', null).maybeSingle();
 
   if (existingResult.error && !isNoRowsError(existingResult.error)) {

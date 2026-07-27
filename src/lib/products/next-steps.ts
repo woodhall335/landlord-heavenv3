@@ -267,7 +267,7 @@ function getScotlandPRTSteps(): NextStepsResult {
       'Both parties should sign and date two copies (one each).',
       'Protect any deposit in a government-approved tenancy deposit scheme.',
       'Provide the tenant with the deposit scheme information within 30 days.',
-      'Provide a copy of the Easy Read Notes and any other required information.',
+      'Provide the Scottish Government PRT Statutory Terms Supporting Notes with the agreement.',
       'Keep your signed copy and all compliance documents safely.',
     ],
   };
@@ -283,8 +283,9 @@ function getNorthernIrelandTenancySteps(): NextStepsResult {
     steps: [
       'Review the Private Tenancy Agreement carefully with your tenant.',
       'Both parties should sign and date two copies (one each).',
-      'Protect any deposit in an approved tenancy deposit scheme (TDS NI or MyDeposits NI).',
-      'Provide the tenant with the deposit protection information within 28 days.',
+      'Complete and sign the official Tenancy Information Notice included in the pack, then give it to the tenant free of charge within 28 days of granting the tenancy.',
+      'Protect any deposit in an approved tenancy deposit scheme (TDS NI or MyDeposits NI) within 28 days of receiving it.',
+      'Give the tenant the prescribed deposit information within 35 days of receiving the deposit.',
       'Ensure you have valid gas safety certificate, EPC, and (from April 2025) Electrical Safety Certificate.',
       'Keep your signed copy and all compliance documents safely.',
     ],

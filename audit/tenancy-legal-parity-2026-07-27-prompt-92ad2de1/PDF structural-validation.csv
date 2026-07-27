@@ -1,0 +1,5 @@
+sample,opens,text_extraction,pages,all_pages_a4,fonts_embedded,unembedded_fonts,outline_entries,rendered_pages,status
+scotland-prt-branded-sample.pdf,pass,pass,27,pass,pass,,0,27,pass
+wales-fixed-branded-sample.pdf,pass,pass,35,pass,pass,,0,35,pass
+wales-periodic-branded-sample.pdf,pass,pass,40,pass,pass,,0,40,pass
+northern-ireland-private-tenancy-branded-sample.pdf,pass,pass,24,pass,pass,,0,24,pass

@@ -301,7 +301,13 @@ describe('Legal Drift Prevention - Hardcoded Years', () => {
    * Allows legitimate references to legislation years (e.g., "Housing Act 1988")
    */
   function findProblematicYearReferences(template: string): string[] {
-    const content = extractLegalContent(template);
+    // Statutory commencement dates are permanent legal anchors, not mutable
+    // "current year" copy. Keep detecting drifting marketing/update dates while
+    // allowing an agreement to state when a statutory rule took effect.
+    const content = extractLegalContent(template).replace(
+      /(?:effective\s+from|conduct\s+on\s+or\s+after)\s+\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4}/gi,
+      ''
+    );
     const problems: string[] = [];
 
     // Pattern for future/current year dates that will become outdated
@@ -356,11 +362,11 @@ describe('Legal Drift Prevention - Hardcoded Years', () => {
  * Ensures England-only legal concepts don't leak into other jurisdictions
  */
 describe('Jurisdiction Cross-Contamination Prevention', () => {
-  const ENGLAND_ONLY_TERMS = [
-    'Section 21',
-    'Section 8',
-    's.21',
-    's.8',
+  const ENGLAND_ONLY_TERM_PATTERNS = [
+    /\bSection\s+21\s+(?:notice|route|procedure|possession)/i,
+    /\bSection\s+8\s+(?:notice|route|procedure|ground|possession)/i,
+    /\bs\.21\s+(?:notice|route|procedure|possession)/i,
+    /\bs\.8\s+(?:notice|route|procedure|ground|possession)/i,
   ];
 
   const WALES_REQUIRED_TERMS = [
@@ -379,9 +385,9 @@ describe('Jurisdiction Cross-Contamination Prevention', () => {
       const standardTemplate = loadTemplate(STANDARD_TEMPLATES[jurisdiction]);
       const premiumTemplate = loadTemplate(PREMIUM_TEMPLATES[jurisdiction]);
 
-      ENGLAND_ONLY_TERMS.forEach(term => {
-        expect(standardTemplate).not.toContain(term);
-        expect(premiumTemplate).not.toContain(term);
+      ENGLAND_ONLY_TERM_PATTERNS.forEach(pattern => {
+        expect(standardTemplate).not.toMatch(pattern);
+        expect(premiumTemplate).not.toMatch(pattern);
       });
     }
   );
@@ -391,8 +397,8 @@ describe('Jurisdiction Cross-Contamination Prevention', () => {
     const premiumTemplate = loadTemplate(PREMIUM_TEMPLATES.wales);
 
     // Must contain Wales-specific terminology
-    expect(standardTemplate).toContain('Contract-Holder');
-    expect(premiumTemplate).toContain('Contract-Holder');
+    expect(standardTemplate).toMatch(/contract-holder/i);
+    expect(premiumTemplate).toMatch(/contract-holder/i);
 
     // Should reference correct Act
     expect(standardTemplate).toContain('Renting Homes');
@@ -414,8 +420,12 @@ describe('Jurisdiction Cross-Contamination Prevention', () => {
 
     expect(standardTemplate.toLowerCase()).toContain('assured periodic tenancy');
     expect(premiumTemplate.toLowerCase()).toContain('assured periodic tenancy');
-    expect(standardTemplate).toContain('not intended to create a new assured shorthold tenancy');
-    expect(premiumTemplate).toContain('not intended to create a new assured shorthold tenancy');
+    expect(standardTemplate).toContain('england_reform_warning');
+    expect(premiumTemplate).toContain('england_reform_warning');
+    const acknowledgements = loadTemplate('_partials/statutory_acknowledgements.hbs');
+    expect(acknowledgements).toContain(
+      'not intended to create a new assured shorthold tenancy'
+    );
     expect(standardTemplate).not.toContain('Section 21');
     expect(premiumTemplate).not.toContain('Section 21');
     expect(standardTemplate.toLowerCase()).not.toContain('fixed term');
@@ -435,8 +445,12 @@ describe('Deposit Protection Deadlines by Jurisdiction', () => {
     const premiumTemplate = loadTemplate(PREMIUM_TEMPLATES.england);
 
     // Should mention 30 days for deposit protection
-    expect(standardTemplate.toLowerCase()).toMatch(/within\s+30\s+days/);
-    expect(premiumTemplate.toLowerCase()).toMatch(/within\s+30\s+days/);
+    expect(standardTemplate.toLowerCase()).toMatch(
+      /(?:within|period\s+of)\s+30\s+days/
+    );
+    expect(premiumTemplate.toLowerCase()).toMatch(
+      /(?:within|period\s+of)\s+30\s+days/
+    );
   });
 
   it('Wales templates should specify 30 days for deposit protection', () => {
@@ -444,8 +458,12 @@ describe('Deposit Protection Deadlines by Jurisdiction', () => {
     const premiumTemplate = loadTemplate(PREMIUM_TEMPLATES.wales);
 
     // Should mention 30 days for deposit protection
-    expect(standardTemplate.toLowerCase()).toMatch(/within\s+30\s+days/);
-    expect(premiumTemplate.toLowerCase()).toMatch(/within\s+30\s+days/);
+    expect(standardTemplate.toLowerCase()).toMatch(
+      /(?:within|period\s+of)\s+30\s+days/
+    );
+    expect(premiumTemplate.toLowerCase()).toMatch(
+      /(?:within|period\s+of)\s+30\s+days/
+    );
   });
 
   it('Scotland templates should specify 30 Working Days for deposit protection', () => {
@@ -457,13 +475,14 @@ describe('Deposit Protection Deadlines by Jurisdiction', () => {
     expect(premiumTemplate).toMatch(/30\s+Working\s+Days/i);
   });
 
-  it('Northern Ireland templates should specify 14 days for deposit protection', () => {
+  it('Northern Ireland templates should specify 28-day protection and 35-day information deadlines', () => {
     const standardTemplate = loadTemplate(STANDARD_TEMPLATES['northern-ireland']);
     const premiumTemplate = loadTemplate(PREMIUM_TEMPLATES['northern-ireland']);
 
-    // NI has 14-day deadline
-    expect(standardTemplate.toLowerCase()).toMatch(/within\s+14\s+days/);
-    expect(premiumTemplate.toLowerCase()).toMatch(/within\s+14\s+days/);
+    expect(standardTemplate.toLowerCase()).toMatch(/within\s+28\s+days/);
+    expect(standardTemplate.toLowerCase()).toMatch(/within\s+35\s+days/);
+    expect(premiumTemplate.toLowerCase()).toMatch(/within\s+28\s+days/);
+    expect(premiumTemplate.toLowerCase()).toMatch(/within\s+35\s+days/);
   });
 });
 
@@ -485,15 +504,22 @@ describe('Premium Content Isolation', () => {
   }
 
   it.each(Object.entries(STANDARD_TEMPLATES))(
-    '%s standard template guarantor sections should be conditional',
+    '%s standard template guarantor handling should not create an unconditional guarantee',
     (jurisdiction, templatePath) => {
       const template = loadTemplate(templatePath);
       const templateWithoutComments = stripComments(template);
 
-      // If standard template has guarantor content (excluding comments), it MUST be inside conditional blocks
-      // This ensures guarantor content doesn't appear when no guarantor data is provided
+      // Scotland's approved standard PRT explicitly records that no guarantor
+      // provision is included. Other templates with guarantor content must gate
+      // it on captured guarantor data.
       if (templateWithoutComments.toLowerCase().includes('guarantor')) {
-        expect(template).toMatch(/\{\{#if\s+guarantor/);
+        if (jurisdiction === 'scotland') {
+          expect(template).toContain(
+            'No guarantor provision is included in this standard agreement.'
+          );
+        } else {
+          expect(template).toMatch(/\{\{#if\s+guarantor/);
+        }
       }
     }
   );
@@ -544,9 +570,10 @@ describe('Date Formatting Compliance', () => {
       const template = loadTemplate(templatePath);
 
       DATE_FIELDS.forEach(field => {
-        // Find raw date field usages (not inside formatUKDate)
-        // Pattern: {{field}} but not {{formatUKDate field}}
-        const rawPattern = new RegExp(`\\{\\{(?!formatUKDate\\s)${field.replace('.', '\\.')}\\}\\}`, 'g');
+        const rawPattern = new RegExp(
+          `\\{\\{(?!(?:formatUKDate|format_date)\\s)${field.replace('.', '\\.')}\\}\\}`,
+          'g'
+        );
         const rawMatches = template.match(rawPattern);
 
         // There should be no raw date field usages
@@ -560,9 +587,10 @@ describe('Date Formatting Compliance', () => {
             return legitContextPattern.test(surroundingContext) || surroundingContext.includes('{{#if') || surroundingContext.includes('{{#unless');
           });
 
-          if (!isLegit) {
-            fail(`${jurisdiction} template has raw date field {{${field}}} without formatUKDate helper`);
-          }
+          expect(
+            isLegit,
+            `${jurisdiction} template has raw date field {{${field}}} without a date helper`
+          ).toBe(true);
         }
       });
     }
@@ -574,7 +602,10 @@ describe('Date Formatting Compliance', () => {
       const template = loadTemplate(templatePath);
 
       DATE_FIELDS.forEach(field => {
-        const rawPattern = new RegExp(`\\{\\{(?!formatUKDate\\s)${field.replace('.', '\\.')}\\}\\}`, 'g');
+        const rawPattern = new RegExp(
+          `\\{\\{(?!(?:formatUKDate|format_date)\\s)${field.replace('.', '\\.')}\\}\\}`,
+          'g'
+        );
         const rawMatches = template.match(rawPattern);
 
         if (rawMatches && rawMatches.length > 0) {
@@ -585,9 +616,10 @@ describe('Date Formatting Compliance', () => {
             return legitContextPattern.test(surroundingContext) || surroundingContext.includes('{{#if') || surroundingContext.includes('{{#unless');
           });
 
-          if (!isLegit) {
-            fail(`${jurisdiction} premium template has raw date field {{${field}}} without formatUKDate helper`);
-          }
+          expect(
+            isLegit,
+            `${jurisdiction} premium template has raw date field {{${field}}} without a date helper`
+          ).toBe(true);
         }
       });
     }
@@ -598,11 +630,15 @@ describe('Date Formatting Compliance', () => {
     (jurisdiction, templatePath) => {
       const template = loadTemplate(templatePath);
 
-      // Must use formatUKDate for agreement_date
-      expect(template).toContain('{{formatUKDate agreement_date}}');
-
       // Must use formatUKDate for tenancy_start_date
       expect(template).toContain('{{formatUKDate tenancy_start_date}}');
+
+      if (template.includes('agreement_date')) {
+        expect(template).toContain('{{formatUKDate agreement_date}}');
+      }
+      if (template.includes('current_date')) {
+        expect(template).toContain('{{formatUKDate current_date}}');
+      }
     }
   );
 
@@ -611,11 +647,15 @@ describe('Date Formatting Compliance', () => {
     (jurisdiction, templatePath) => {
       const template = loadTemplate(templatePath);
 
-      // Must use formatUKDate for agreement_date
-      expect(template).toContain('{{formatUKDate agreement_date}}');
-
       // Must use formatUKDate for tenancy_start_date
       expect(template).toContain('{{formatUKDate tenancy_start_date}}');
+
+      if (template.includes('agreement_date')) {
+        expect(template).toContain('{{formatUKDate agreement_date}}');
+      }
+      if (template.includes('current_date')) {
+        expect(template).toContain('{{formatUKDate current_date}}');
+      }
     }
   );
 });

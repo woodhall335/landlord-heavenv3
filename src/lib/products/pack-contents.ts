@@ -1357,12 +1357,11 @@ function getScotlandPRTContents(tier: 'standard' | 'premium', hasInventoryData?:
     required: true,
   });
 
-  // Easy Read Notes - Scotland-specific plain-language guide for tenants
-  // Required under PRT as part of prescribed information
+  // Official statutory supporting notes for a landlord-drafted Scottish PRT.
   items.push({
     key: 'easy_read_notes_scotland',
-    title: 'Easy Read Notes (Scotland)',
-    description: 'Plain-language guide explaining tenant rights and responsibilities under the Private Housing (Tenancies) (Scotland) Act 2016',
+    title: 'Scottish Government PRT Statutory Terms Supporting Notes',
+    description: 'Exact April 2024 Scottish Government supporting notes for a landlord-drafted Private Residential Tenancy agreement',
     category: 'Guidance',
     required: true,
   });
@@ -1449,6 +1448,23 @@ function getNorthernIrelandTenancyContents(tier: 'standard' | 'premium', hasInve
     category: 'Checklists',
     required: true,
   });
+
+  items.push(
+    {
+      key: 'tenancy_information_notice_northern_ireland',
+      title: 'Official Northern Ireland Tenancy Information Notice',
+      description: 'Prescribed notice to complete, sign, and give to the tenant free of charge within 28 days',
+      category: 'Other',
+      required: true,
+    },
+    {
+      key: 'tenancy_information_notice_guidance_northern_ireland',
+      title: 'Official Tenancy Information Notice Completion Guidance',
+      description: 'Department for Communities guidance for completing the prescribed notice',
+      category: 'Guidance',
+      required: true,
+    }
+  );
 
   if (tier === 'premium') {
     items.push(...getPremiumSupportPackItems('Northern Ireland'));

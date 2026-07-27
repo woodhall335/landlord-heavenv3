@@ -27,7 +27,7 @@ import type { ASTData, TenancyJurisdiction } from '../ast-generator';
 import { generatePremiumASTDocuments, generateStandardASTDocuments } from '../ast-generator';
 
 function createBaseASTData(jurisdiction: TenancyJurisdiction): ASTData {
-  return {
+  const data = {
     jurisdiction,
     agreement_date: '2026-06-01',
     landlord_full_name: 'Amelia Hart',
@@ -52,7 +52,37 @@ function createBaseASTData(jurisdiction: TenancyJurisdiction): ASTData {
     payment_details: 'Monthly standing order to the landlord account',
     deposit_amount: 1450,
     deposit_scheme_name: 'DPS',
+    inventory_delivery_method: 'later',
   } as ASTData;
+
+  if (jurisdiction === 'wales') {
+    data.rent_smart_wales_registered = true;
+    data.rent_smart_wales_registration_number = 'RSW-REG-TEST';
+  } else if (jurisdiction === 'scotland') {
+    data.deposit_payer = 'Noah Bennett';
+    data.deposit_scheme_address = 'Example scheme address';
+    data.deposit_scheme_contact_details = 'Example scheme contact';
+  } else if (jurisdiction === 'northern-ireland') {
+    data.ni_capital_value = '£100,000';
+    data.ni_rates_payable = '£1,000 per year';
+    data.ni_rates_liability = 'landlord_included';
+    data.ni_rates_landlord_included = true;
+    data.ni_rates_included_in_rent = 'Landlord pays the rates; they are included in the rent.';
+    data.ni_other_required_payments = 'None';
+    data.deposit_lifecycle = 'expected';
+    data.deposit_is_expected = true;
+    data.inventory_due_date = '2026-06-15';
+    data.smoke_alarms_fitted = true;
+    data.smoke_alarm_locations = 'Living room; ground-floor and first-floor halls';
+    data.heat_alarm_locations = 'Kitchen';
+    data.fixed_combustion_appliances = 'Gas boiler in utility room';
+    data.carbon_monoxide_alarms = true;
+    data.carbon_monoxide_alarm_locations = 'Utility room';
+    data.carbon_monoxide_alarm_exclusions = 'Gas cooker excluded by the Regulations';
+    data.alarms_tested = true;
+    data.alarms_tested_date = '2026-06-14';
+  }
+  return data;
 }
 
 describe('AST document pack generation', () => {
@@ -115,7 +145,7 @@ describe('AST document pack generation', () => {
       england: 8,
       wales: 6,
       scotland: 7,
-      'northern-ireland': 6,
+      'northern-ireland': 10,
     } as const;
 
     for (const jurisdiction of Object.keys(expectedCounts) as Array<keyof typeof expectedCounts>) {

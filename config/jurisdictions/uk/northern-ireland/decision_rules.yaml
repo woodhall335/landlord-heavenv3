@@ -24,7 +24,7 @@ hmo_licensing: {}
 
 compliance:
   deposit_protection:
-    description: "Deposit must be protected in an approved scheme within 14 days."
+    description: "Deposit must be protected in an approved scheme within 28 days and prescribed information provided within 35 days."
     schemes:
       - "TDS Northern Ireland"
   safety_checks:

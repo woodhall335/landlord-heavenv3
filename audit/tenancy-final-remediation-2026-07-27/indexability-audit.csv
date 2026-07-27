@@ -1,0 +1,8 @@
+route,intended,actual,canonical,result
+/tenancy-agreement-template-uk,noindex,noindex,self,PASS
+/products/ast,index,index,self,PASS
+/wales-tenancy-agreement-template,index,index,self,PASS
+/private-residential-tenancy-agreement-template,index,index,self,PASS_WITH_COPY_WARNING
+/northern-ireland-tenancy-agreement-template,index,index,self,PASS_WITH_COPY_WARNING
+/wizard/*,noindex,source protected,n/a,PASS_SOURCE
+/dashboard/*,noindex,source protected,n/a,PASS_SOURCE

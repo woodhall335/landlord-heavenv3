@@ -246,6 +246,8 @@ describe('Pack-Contents AST Document Keys', () => {
         'private_tenancy_agreement',
         'inventory_schedule',
         'pre_tenancy_checklist_northern_ireland',
+        'tenancy_information_notice_northern_ireland',
+        'tenancy_information_notice_guidance_northern_ireland',
       ],
     };
 
@@ -270,18 +272,36 @@ describe('Pack-Contents AST Document Keys', () => {
         'pre_tenancy_checklist_england',
         'deposit_protection_certificate',
         'tenancy_deposit_information',
+        'key_schedule',
+        'property_maintenance_guide',
+        'checkout_procedure',
       ],
-      wales: ['soc_agreement_hmo', 'inventory_schedule', 'pre_tenancy_checklist_wales'],
+      wales: [
+        'soc_agreement_hmo',
+        'inventory_schedule',
+        'pre_tenancy_checklist_wales',
+        'key_schedule',
+        'property_maintenance_guide',
+        'checkout_procedure',
+      ],
       scotland: [
         'prt_agreement_hmo',
         'inventory_schedule',
         'pre_tenancy_checklist_scotland',
         'easy_read_notes_scotland',
+        'key_schedule',
+        'property_maintenance_guide',
+        'checkout_procedure',
       ],
       'northern-ireland': [
         'private_tenancy_agreement_hmo',
         'inventory_schedule',
         'pre_tenancy_checklist_northern_ireland',
+        'tenancy_information_notice_northern_ireland',
+        'tenancy_information_notice_guidance_northern_ireland',
+        'key_schedule',
+        'property_maintenance_guide',
+        'checkout_procedure',
       ],
     };
 

@@ -556,7 +556,7 @@ describe('validateTenancyRequiredFacts', () => {
     );
   });
 
-  it('does not require fixed-term fields for Scotland PRT', () => {
+  it('rejects fixed-term Scottish PRT input without requiring end-date fields', () => {
     const result = validateTenancyRequiredFacts({
       ...completeFacts,
       __meta: { jurisdiction: 'scotland' },
@@ -568,9 +568,10 @@ describe('validateTenancyRequiredFacts', () => {
 
     expect(result.missing_fields).not.toContain('tenancy_end_date');
     expect(result.missing_fields).not.toContain('term_length');
+    expect(result.invalid_fields).toContain('is_fixed_term');
   });
 
-  it('enforces Scotland landlord registration and NI payment core fields', () => {
+  it('enforces Scotland landlord registration and NI payment and prescribed-notice fields', () => {
     const scotlandResult = validateTenancyRequiredFacts({
       ...completeFacts,
       __meta: { jurisdiction: 'scotland' },
@@ -585,10 +586,12 @@ describe('validateTenancyRequiredFacts', () => {
       rent_due_day: '',
       payment_method: '',
       payment_details: '',
+      tenancy_information_notice_acknowledged: false,
     }, { jurisdiction: 'northern-ireland' });
     expect(niResult.missing_fields).toEqual(
       expect.arrayContaining(['agreement_date', 'rent_due_day', 'payment_method', 'payment_details'])
     );
+    expect(niResult.invalid_fields).toContain('tenancy_information_notice_acknowledged');
   });
 });
 

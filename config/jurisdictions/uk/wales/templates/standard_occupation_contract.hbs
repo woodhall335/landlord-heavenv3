@@ -1,867 +1,885 @@
-{{!--
-  ============================================================================
-  STANDARD OCCUPATION CONTRACT
-  Wales Only - Solicitor-Grade Professional Edition
-
-  LEGAL NOTE: This Standard Occupation Contract applies to Wales ONLY under
-  the Renting Homes (Wales) Act 2016. It does NOT apply to England (which
-  uses Assured Shorthold Tenancies under the Housing Act 1988).
-
-  STRUCTURE:
-  1. Cover/Title
-  2. Parties
-  3. Definitions & Interpretation
-  4. Core Clauses (Dwelling, Term, Rent, Deposit, Obligations)
-  5. Signatures
-  6. Schedules (Dwelling, Rent/Deposit, Utilities, Inventory, House Rules)
-  ============================================================================
---}}
-
-<!DOCTYPE html>
-<html lang="en-GB">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Standard Occupation Contract</title>
-  <style>
-    /* ===== PAGE SETUP ===== */
-    @page {
-      size: A4;
-      margin: 25mm 20mm 25mm 20mm;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Georgia', 'Times New Roman', serif;
-      font-size: 11pt;
-      line-height: 1.5;
-      color: #1a1a1a;
-      background: white;
-    }
-
-    /* ===== TYPOGRAPHY ===== */
-    h1, h2, h3, h4 {
-      font-family: 'Arial', 'Helvetica', sans-serif;
-      font-weight: 600;
-      margin-top: 0;
-      page-break-after: avoid;
-    }
-
-    h1 {
-      font-size: 18pt;
-      text-align: center;
-      margin-bottom: 6pt;
-      text-transform: uppercase;
-      letter-spacing: 1pt;
-    }
-
-    h2 {
-      font-size: 13pt;
-      border-bottom: 1pt solid #333;
-      padding-bottom: 4pt;
-      margin: 20pt 0 12pt 0;
-      text-transform: uppercase;
-    }
-
-    h3 {
-      font-size: 11pt;
-      margin: 14pt 0 8pt 0;
-    }
-
-    p {
-      margin: 0 0 8pt 0;
-      text-align: justify;
-      hyphens: auto;
-    }
-
-    /* ===== DOCUMENT HEADER ===== */
-    .doc-header {
-      text-align: center;
-      border-bottom: 2pt solid #333;
-      padding-bottom: 15pt;
-      margin-bottom: 20pt;
-    }
-
-    .doc-subtitle {
-      font-size: 10pt;
-      color: #555;
-      margin: 5pt 0;
-    }
-
-    .doc-jurisdiction {
-      font-size: 10pt;
-      color: #333;
-      font-weight: bold;
-      margin: 5pt 0;
-    }
-
-    .doc-date {
-      font-size: 10pt;
-      margin-top: 10pt;
-    }
-
-    /* ===== PARTIES ===== */
-    .parties-section {
-      margin: 15pt 0;
-    }
-
-    .party-block {
-      margin: 10pt 0;
-      padding-left: 20pt;
-    }
-
-    .party-role {
-      font-weight: bold;
-      text-transform: uppercase;
-      font-size: 9pt;
-      letter-spacing: 0.5pt;
-      margin-bottom: 3pt;
-    }
-
-    .party-details-text {
-      line-height: 1.6;
-    }
-
-    /* ===== DEFINITIONS ===== */
-    .definitions-section {
-      margin: 20pt 0;
-    }
-
-    .definitions-list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    .definitions-list li {
-      margin: 6pt 0;
-      padding-left: 0;
-    }
-
-    .defined-term {
-      font-weight: bold;
-    }
-
-    /* ===== CLAUSES ===== */
-    .clause {
-      margin: 8pt 0;
-      padding-left: 30pt;
-      text-indent: -30pt;
-    }
-
-    .clause-num {
-      display: inline-block;
-      width: 28pt;
-      font-weight: bold;
-    }
-
-    .sub-clause {
-      margin: 6pt 0 6pt 30pt;
-      padding-left: 25pt;
-      text-indent: -25pt;
-    }
-
-    .sub-clause-num {
-      display: inline-block;
-      width: 23pt;
-    }
-
-    /* ===== TABLES ===== */
-    .data-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 12pt 0;
-      font-size: 10pt;
-    }
-
-    .data-table th,
-    .data-table td {
-      border: 0.5pt solid #666;
-      padding: 6pt 8pt;
-      text-align: left;
-      vertical-align: top;
-    }
-
-    .data-table th {
-      background: #f5f5f5;
-      font-weight: bold;
-      font-size: 9pt;
-      text-transform: uppercase;
-    }
-
-    .data-table td.label {
-      width: 35%;
-      font-weight: 500;
-      background: #fafafa;
-    }
-
-    .data-table td.value {
-      width: 65%;
-      word-wrap: break-word;
-      overflow-wrap: anywhere;
-    }
-
-    /* ===== SCHEDULES ===== */
-    .schedule {
-      page-break-before: always;
-      margin-top: 0;
-    }
-
-    .schedule-header {
-      text-align: center;
-      border: 1pt solid #333;
-      padding: 10pt;
-      margin-bottom: 15pt;
-      background: #f5f5f5;
-    }
-
-    .schedule-header h2 {
-      border: none;
-      margin: 0;
-      padding: 0;
-      color: #333;
-    }
-
-    .schedule-title {
-      font-size: 12pt;
-      margin-top: 5pt;
-      font-weight: normal;
-      text-transform: none;
-    }
-
-    /* ===== SIGNATURES ===== */
-    /* CRITICAL: Signatures MUST always start on a fresh page for legal documents */
-    .signature-section {
-      page-break-before: always;
-      page-break-inside: avoid;
-      margin-top: 0; /* Reset since we're on a new page */
-      padding-top: 20pt;
-      min-height: 400pt; /* Reserve minimum space for signature blocks */
-    }
-
-    .signature-block {
-      margin: 25pt 0;
-      page-break-inside: avoid;
-    }
-
-    .signature-role {
-      font-weight: bold;
-      text-transform: uppercase;
-      font-size: 9pt;
-      margin-bottom: 8pt;
-    }
-
-    .signature-name {
-      margin-bottom: 20pt;
-    }
-
-    .signature-line {
-      border-bottom: 1pt solid #333;
-      width: 250pt;
-      height: 25pt;
-    }
-
-    .signature-label {
-      font-size: 9pt;
-      color: #555;
-      margin-top: 3pt;
-    }
-
-    .signature-date-line {
-      border-bottom: 1pt solid #333;
-      width: 150pt;
-      display: inline-block;
-      margin-left: 10pt;
-    }
-
-    /* ===== LEGAL NOTICES ===== */
-    .legal-notice {
-      border: 1pt solid #333;
-      padding: 10pt;
-      margin: 12pt 0;
-      background: #f5f5f5;
-      page-break-inside: avoid;
-    }
-
-    .legal-notice-title {
-      font-weight: bold;
-      font-size: 10pt;
-      margin-bottom: 6pt;
-      text-transform: uppercase;
-      color: #333;
-    }
-
-    /* ===== LISTS ===== */
-    ul, ol {
-      margin: 6pt 0 6pt 25pt;
-      padding: 0;
-    }
-
-    li {
-      margin: 4pt 0;
-    }
-
-    /* ===== TEXT OVERFLOW ===== */
-    .wrap-text, .email-text, .address-text {
-      word-wrap: break-word;
-      overflow-wrap: anywhere;
-    }
-
-    /* ===== FOOTER ===== */
-    /* Footer with guaranteed safety margin to prevent content overlap */
-    .doc-footer {
-      margin-top: 40pt; /* Increased safety margin */
-      padding-top: 15pt;
-      border-top: 0.5pt solid #999;
-      font-size: 8pt;
-      color: #666;
-      text-align: center;
-      page-break-inside: avoid;
-      clear: both; /* Ensure no floating content overlaps */
-    }
-
-    /* Footer spacer - use before footer to guarantee minimum clearance */
-    .footer-spacer {
-      height: 30pt;
-      clear: both;
-    }
-
-    /* ===== PAGINATION SAFETY ===== */
-    /* Prevent orphaned headings and text */
-    h2, h3, h4 {
-      page-break-after: avoid;
-      orphans: 3;
-      widows: 3;
-    }
-
-    p, li {
-      orphans: 3;
-      widows: 3;
-    }
-
-    /* Utility class for explicit page breaks */
-    .page-break {
-      page-break-before: always;
-      height: 0;
-      margin: 0;
-      padding: 0;
-    }
-
-    /* ===== PRINT ===== */
-    @media print {
-      .schedule { page-break-before: always; }
-
-      /* CRITICAL: Signatures MUST start on fresh page */
-      .signature-section {
-        page-break-before: always;
-        page-break-inside: avoid;
-      }
-
-      .signature-block, .legal-notice, .schedule-header, .doc-footer { page-break-inside: avoid; }
-
-      /* Prevent orphaned headings */
-      h2, h3, h4 {
-        page-break-after: avoid;
-        orphans: 3;
-        widows: 3;
-      }
-
-      /* Prevent orphaned/widowed text */
-      p, li {
-        orphans: 3;
-        widows: 3;
-      }
-
-      .data-table, .data-table tr { page-break-inside: avoid; }
-
-      .page-break { page-break-before: always; }
-    }
-  </style>
-</head>
-<body>
-
-  <!-- ===== COVER / TITLE ===== -->
-  <div class="doc-header">
-    <h1>Standard Occupation Contract</h1>
-    <div class="doc-subtitle">Renting Homes (Wales) Act 2016</div>
-    <div class="doc-jurisdiction">Wales</div>
-    <div class="doc-date">Dated: <strong>{{formatUKDate agreement_date}}</strong></div>
-  </div>
-
-  <div class="legal-notice">
-    <div class="legal-notice-title">Written Statement</div>
-    <p>This document is the written statement of the occupation contract as required under section 31 of the Renting Homes (Wales) Act 2016. The landlord must provide this to the contract-holder within 14 days of the occupation date.</p>
-  </div>
-
-  <div class="legal-notice">
-    <div class="legal-notice-title">Prescribed Terms Note</div>
-    <p>This written statement is intended to record the fundamental, supplementary, and any additional terms applying to the occupation contract. Any additional term is effective only so far as it is compatible with the Renting Homes (Wales) Act 2016 and does not conflict with a mandatory prescribed term.</p>
-  </div>
-
-  <!-- ===== 1. PARTIES ===== -->
-  <h2>1. Parties</h2>
-  <div class="parties-section">
-    <div class="party-block">
-      <div class="party-role">Landlord</div>
-      <div class="party-details-text">
-        <strong>{{landlord_full_name}}</strong><br>
-        <span class="address-text">{{landlord_address}}</span><br>
-        <span class="email-text">{{landlord_email}}</span> | {{landlord_phone}}
-      </div>
-    </div>
-
-    {{#if rent_smart_wales_number}}
-    <div class="party-block">
-      <div class="party-role">Rent Smart Wales</div>
-      <div class="party-details-text">
-        Registration: <strong>{{rent_smart_wales_number}}</strong>{{#if rent_smart_wales_license_number}}<br>Licence: <strong>{{rent_smart_wales_license_number}}</strong>{{/if}}
-      </div>
-    </div>
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><title>Periodic Standard Occupation Contract</title>
+<style>
+@page { size: A4; margin: 22mm 18mm 22mm; }
+* { box-sizing: border-box; }
+body { margin: 0; color: #172033; font: 10.2pt/1.46 Georgia, "Times New Roman", serif; }
+h1, h2, h3 { font-family: Arial, Helvetica, sans-serif; break-after: avoid; }
+h1 { font-size: 21pt; letter-spacing: .35pt; text-align: center; text-transform: uppercase; }
+h2 { margin: 20pt 0 9pt; padding-bottom: 4pt; border-bottom: 1.2pt solid #243b53; font-size: 13pt; }
+h3 { margin: 13pt 0 6pt; font-size: 10.8pt; }
+p { margin: 0 0 7pt; orphans: 3; widows: 3; text-align: justify; }
+.cover { min-height: 205mm; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+.brand { color: #176b57; font: 700 11pt Arial, sans-serif; letter-spacing: 1.5pt; text-transform: uppercase; }
+.subtitle { color: #52616b; font: 11pt Arial, sans-serif; text-align: center; }
+.legal-source { margin: 18pt auto; max-width: 135mm; padding: 10pt; border: 1pt solid #9fb3c8; background: #f4f8fb; font-size: 9pt; text-align: left; }
+.page-break { break-before: page; page-break-before: always; }
+.section { margin: 12pt 0; }
+.data-table, .signature-table { width: 100%; margin: 9pt 0 14pt; border-collapse: collapse; break-inside: avoid; }
+.data-table th, .data-table td, .signature-table th, .signature-table td { border: .65pt solid #829ab1; padding: 6pt 7pt; vertical-align: top; }
+.data-table th { width: 34%; background: #edf3f7; font: 700 8.6pt Arial, sans-serif; text-align: left; text-transform: uppercase; }
+.tenant-card { margin: 8pt 0; padding: 8pt; border: .65pt solid #bcccdc; break-inside: avoid; }
+.term-heading { margin-top: 14pt; color: #102a43; }
+.term-number { display: inline-block; min-width: 24pt; }
+.legal-paragraph { margin-left: 18pt; }
+.legal-list { margin: 2pt 0 8pt 34pt; }
+.legal-list-item { margin: 2pt 0; text-align: justify; }
+.explanatory { padding: 8pt 10pt; border-left: 3pt solid #176b57; background: #f2f8f6; }
+.omitted { padding: 7pt 9pt; border: 1pt solid #c6d4df; background: #f8fafc; font-style: italic; }
+.signature-table td { height: 38pt; }
+.signature-table .line { height: 54pt; }
+.footer-note { margin-top: 24pt; padding-top: 8pt; border-top: .5pt solid #9fb3c8; color: #52616b; font-size: 8.5pt; }
+</style></head><body>
+<section class="cover">
+  <div class="brand">Landlord Heaven</div>
+  <h1>Periodic Standard Occupation Contract</h1>
+  <p class="subtitle">Wales</p>
+  <div class="legal-source">Welsh Government periodic model written statement (May 2026) used as the clause-parity specification.</div>
+<p class="subtitle">Document ID: {{document_id}}<br>Generated: {{formatUKDate current_date}}</p>
+</section>
+
+<section class="page-break">
+  <h2>Contents</h2>
+  <table class="data-table">
+    <tr><th>Part 1</th><td>Explanatory information</td></tr>
+    <tr><th>Part 2</th><td>Key matters and contract-holder details</td></tr>
+    <tr><th>Part 3</th><td>Fundamental and supplementary terms 1–83, including terms 14A and 14B effective from 1 June 2026</td></tr>
+    <tr><th>Execution</th><td>Signatures and agreement</td></tr>
+  </table>
+  <p class="explanatory"><strong>Navigation note:</strong> The numbered terms form the contract. This contents page is non-contractual and does not replace or vary any term.</p>
+</section>
+
+<section class="page-break"><h2>Part 1 — Explanatory information</h2><p class="legal-paragraph"><strong>PART </strong><strong>1</strong></p>
+<p class="legal-paragraph"><strong>PERIODIC STANDARD</strong><strong> OCCUPATION CONTRACT – EXPLANATORY INFORMATION</strong></p>
+<p class="legal-paragraph">This is your written statement of the occupation contract you have made under the Renting Homes (Wales) Act 2016 (“the Act”). The contract is between you, as the “contract-holder,” and the “landlord”.</p>
+<p class="legal-paragraph">Your landlord must give you a written statement free of charge. It may be given to you before the occupation date and, if it is not, must be given to you within 14 days of the “occupation date” (the day on which you were entitled to move in). If you did not receive a copy of this written statement (including electronically, if you have agreed to receive the written statement in an electronic form) within 14 days of the occupation date, for each day (starting with the occupation date) that the written statement has not been provided, the landlord may be liable to pay you compensation equivalent to a day’s rent, up to a maximum of two months’ rent (unless the landlord’s failure was intentional, in which case you can apply to the court to increase this amount).</p>
+<p class="legal-paragraph">The written statement must contain the terms of your contract and the explanatory information that the landlord is required to give you. The terms set out your rights and responsibilities and those of the landlord (that is, the things that you and your landlord must do or are permitted to do under the occupation contract). You should read the terms to ensure you fully understand and are content with them and then sign where indicated to confirm that you are content. The written statement should be kept safe as you may need to refer to it in the future.</p>
+<p class="legal-paragraph">The terms of your contract consist of:</p>
+<p class="legal-paragraph"><strong>key matters</strong> – that is, the address of the dwelling, the occupation date, the amount of rent (or other consideration) and the rental period (i.e. the period in respect of which the rent is payable (e.g. weekly or monthly))</p>
+<p class="legal-paragraph"><strong>fundamental terms</strong> – these are provisions of the Act that are automatically included as terms of an occupation contract. Some cannot be changed and must reflect the wording in the Act. However, others can be left out or changed, but only if you and the landlord agree to do that and it benefits you as the contract-holder.</p>
+<p class="legal-paragraph"><strong>supplementary terms</strong> – these are provisions, set out in regulations made by the Welsh Ministers, which are also automatically included as terms of an occupation contract. However, providing you and the landlord agree to it, these can be left out or changed, either to benefit you or the landlord. Supplementary terms cannot be omitted or modified in a way that would make those terms incompatible with a fundamental term.</p>
+<p class="legal-paragraph">Where a fundamental or supplementary term has been left out or changed, this must be identified in this written statement.</p>
+<p class="legal-paragraph">The terms of your contract may also include:</p>
+<p class="legal-paragraph"><strong>additional terms</strong> – these are provisions agreed by you and the landlord, which can cover any other matter, provided they do not conflict with a key matter, a fundamental term or a supplementary term.</p>
+<p class="legal-paragraph">Under section 62 of the Consumer Rights Act 2015, an additional term, or any change to a supplementary term, which is unfair (within the meaning of that Act), is not binding on you.</p>
+<p class="legal-paragraph">An incorrect or incomplete written statement may mean the landlord is liable to pay you compensation.</p>
+<p class="legal-paragraph">Where any changes to this contract are agreed after the start of this contract, the landlord must provide you with a written copy of the new term or terms or a new written statement of this contract, within 14 days of the change being agreed.</p>
+<p class="legal-paragraph">Your contract is a periodic standard contract, which means that it continues from one rental period to the next (typically from month to month or week to week). It also means that you cannot be evicted without a court order, unless you abandon the dwelling.</p>
+<p class="legal-paragraph">Before a court makes such an order the landlord must demonstrate that the correct procedures have been followed and that at least one of the following is satisfied —</p>
+<ul class="legal-list">
+<li class="legal-list-item">you were given at least six months’ notice (under term 55 of this contract) that you must give up possession and that the notice was not issued in the first six months following the occupation date and no other restrictions on the giving of a notice applied, including the restrictions set out in sections 75 and 98 of the Housing Act 2004 and section 44 of the Housing (Wales) Act 2014,</li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item">you have broken one or more terms of this contract (which includes any arrears of rent, engaging in anti-social behaviour or other prohibited conduct, and failing to take proper care of the dwelling) and it is reasonable to evict you,</li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item">you are seriously in arrears with your rent (e.g. if the rental period is a month, at least two months’ rent is unpaid), or</li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item">your landlord needs to move you, and one of the estate management grounds under section 160 (estate management grounds) of the Act applies, suitable alternative accommodation is available (or will be available when the order takes effect), and it is reasonable to evict you.</li>
+</ul>
+<p class="legal-paragraph">You have important rights as to how you can use the dwelling, although some of these require the consent of your landlord. Someone who lives with you at the dwelling may have a right to succeed to this contract if you die.</p>
+<p class="legal-paragraph">You must not allow the dwelling to become overcrowded by permitting more people to live in it than the maximum number allowed. Part 10 of the Housing Act 1985 provides the basis for determining the maximum number of people permitted to live in the dwelling.</p>
+<p class="legal-paragraph">You can be held responsible for the behaviour of everyone who lives in and visits the dwelling. Anti-social behaviour and other prohibited conduct can include excessive noise, verbal abuse and physical assault. It may also include domestic abuse (including physical, sexual, psychological, emotional or financial abuse).</p>
+<p class="legal-paragraph">If you have a problem with your home, you should first contact your landlord. Many problems can be resolved quickly by raising them when they first arise. If you are unable to reach an agreement with your landlord, you may wish to contact an advice agency (such as Citizens Advice Cymru or Shelter Cymru) or independent legal advisors. Disputes regarding your contract may ultimately be settled through the county courts.</p>
+<p class="legal-paragraph">If you have any questions about this contract, you may find the answer on the Welsh Government’s website along with other relevant information, such as information on the resolution of disputes. Alternatively, you may wish to contact an advice agency (such as Citizens Advice Cymru or Shelter Cymru) or independent legal advisors.</p></section>
+
+<section class="page-break">
+  <h2>Part 2 — Key matters</h2>
+  <table class="data-table">
+    <tr><th>Landlord</th><td>{{landlord_full_name}}{{#if landlord_2_full_name}} and {{landlord_2_full_name}}{{/if}}</td></tr>
+    <tr><th>Landlord contact address</th><td>{{landlord_address}}</td></tr>
+    <tr><th>Telephone / email</th><td>{{landlord_phone}} / {{landlord_email}}</td></tr>
+    <tr><th>Dwelling</th><td>{{property_address}}</td></tr>
+<tr><th>Occupation date</th><td>{{formatUKDate tenancy_start_date}}</td></tr>
+
+    <tr><th>Rent</th><td>{{currency rent_amount}} per {{rent_period}}</td></tr>
+    <tr><th>First payment</th><td>{{currency first_payment}} on {{format_date first_payment_date}}</td></tr>
+    <tr><th>Further payments</th><td>{{rent_due_day}} of each {{rent_period}}</td></tr>
+    <tr><th>Deposit</th><td>{{currency deposit_amount}} — {{deposit_scheme_name}}</td></tr>
+    <tr><th>Rent Smart Wales registration</th><td>Status: {{#if rent_smart_wales_registered}}registered{{else}}not recorded as registered{{/if}}<br>Number: {{rent_smart_wales_registration_number}}{{#if rent_smart_wales_registration_expiry}}<br>Expiry: {{format_date rent_smart_wales_registration_expiry}}{{/if}}</td></tr>
+    <tr><th>Landlord licence</th><td>{{#if rent_smart_wales_licensed}}Licensed{{#if rent_smart_wales_licence_number}} — {{rent_smart_wales_licence_number}}{{/if}}{{#if rent_smart_wales_licence_expiry}} (expires {{format_date rent_smart_wales_licence_expiry}}){{/if}}{{else}}No landlord licence recorded; registration alone does not authorise regulated letting or management work{{/if}}</td></tr>
+    <tr><th>Managing-agent licence</th><td>{{#if managing_agent_rsw_licensed}}Licensed{{#if managing_agent_rsw_licence_number}} — {{managing_agent_rsw_licence_number}}{{/if}}{{else}}No licensed managing agent recorded{{/if}}</td></tr>
+    {{#if occupation_exclusion_applies}}
+    <tr><th>Occupation exclusion</th><td>From {{format_date occupation_exclusion_start_date}} to {{format_date occupation_exclusion_end_date}}</td></tr>
     {{/if}}
+  </table>
 
-    {{#if agent_name}}
-    <div class="party-block">
-      <div class="party-role">Landlord's Agent</div>
-      <div class="party-details-text">
-        <strong>{{agent_name}}</strong><br>
-        <span class="address-text">{{agent_address}}</span><br>
-        <span class="email-text">{{agent_email}}</span> | {{agent_phone}}{{#if agent_rent_smart_wales_license}}<br>RSW Licence: {{agent_rent_smart_wales_license}}{{/if}}
-      </div>
-    </div>
-    {{/if}}
+<h2>Contract-holder(s)</h2>
+{{#each tenants}}
+<div class="tenant-card">
+  <strong>{{full_name}}</strong><br>
+  {{#if address}}{{address}}<br>{{/if}}
+  Email: {{email}} &nbsp; Telephone: {{phone}}
+</div>
+{{/each}}
+</section>
+<section class="page-break"><h2>Part 3 — Fundamental and supplementary terms</h2><p class="legal-paragraph"><strong>PART </strong><strong>3</strong></p>
+<p class="legal-paragraph"><strong>PERIODIC STANDARD OCCUPATION CONTRACT – FUNDAMENTAL AND SUPPLEMENTARY TERMS</strong></p>
+<p class="legal-paragraph">The fundamental and supplementary terms of this periodic standard contract are set out in this Part. Fundamental terms that cannot be left out of this contract or changed have <strong>(F)</strong> added after the term sub-heading. Fundamental terms that can be left out or changed have <strong>(F+)</strong> added. Supplementary terms have <strong>(S)</strong> added.</p>
+{{#if additional_terms}}<p class="legal-paragraph">Additional terms included in this contract have <strong>(A)</strong> added and are set out in the additional-terms section.</p>{{/if}}
+<p class="legal-paragraph"><strong>Model-term declaration:</strong> No fundamental or supplementary terms have been omitted or modified.</p>
+<p class="legal-paragraph">Where a term refers to the contract-holder, it usually uses “you” instead of “the contract-holder”. Similarly, where a term refers to something belonging to the contract-holder, it usually uses “your” rather than “the contract-holder’s”.</p>
+<p class="legal-paragraph">Explanatory footnotes do not form part of the terms of this contract.</p>
+<p class="legal-paragraph"><strong>TERMS</strong></p>
+<h2>Rent and other charges</h2>
+<p class="legal-paragraph"><strong>1.</strong><strong> </strong><strong>Receipt of rent or other consideration (S)</strong></p>
+<p class="legal-paragraph">Within 14 days of a request from you, the landlord must provide you with a written receipt for any rent or other consideration paid or provided under the contract.</p>
+<p class="legal-paragraph"><strong>2. </strong><strong>Periods when the dwelling is unfit for human habitation (S)</strong></p>
+<p class="legal-paragraph">You are not required to pay rent in respect of any day or part day during which the dwelling is unfit for human habitation.</p>
+<p class="legal-paragraph"><strong>3. </strong><strong>Right of set off</strong><strong> (F+)</strong></p>
+<p class="legal-paragraph">If the landlord is liable to pay you compensation under section 87 of the Act, you may set off that liability against rent.</p>
+<p class="legal-paragraph"><strong>4. </strong><strong>Variation of </strong><strong>rent</strong><strong> (F+)</strong></p>
+<p class="legal-paragraph">(1) The landlord may vary the rent payable under this contract by giving you a notice setting out a new rent to take effect on the date specified in the notice.</p>
+<p class="legal-paragraph">(2) The period between the day on which the notice is given to you and the specified date may not be less than two months.</p>
+<p class="legal-paragraph">(3) Subject to that —</p>
+<ul class="legal-list">
+<li class="legal-list-item">the first notice may specify any date, and</li>
+<li class="legal-list-item">subsequent notices must specify a date which is not less than one year after the last date on which a new rent took effect.</li>
+</ul>
+<p class="legal-paragraph"><strong>5. </strong><strong>Variation of other </strong><strong>consideration</strong><strong> (F+)</strong></p>
+<p class="legal-paragraph">(1) Where consideration other than rent is payable under this contract, the amount of consideration may be varied —</p>
+<ul class="legal-list">
+<li class="legal-list-item">by agreement between the landlord and you, or</li>
+<li class="legal-list-item">by the landlord in accordance with paragraphs (2) to (4) of this term.</li>
+</ul>
+<p class="legal-paragraph">(2) The landlord may give you a notice setting out a new amount of consideration to take effect on the date specified in the notice.</p>
+<p class="legal-paragraph">(3) The period between the day on which the notice is given to you and the specified date may not be less than two months.</p>
+<p class="legal-paragraph">(4) Subject to that —</p>
+<ul class="legal-list">
+<li class="legal-list-item">the first notice may specify any date, and</li>
+<li class="legal-list-item">subsequent notices must specify a date which is not less than one year after the last date on which a new amount of consideration took effect.</li>
+</ul>
+<h2>Deposit</h2>
+<p class="legal-paragraph"><strong>6. </strong><strong>Form of security (F+)</strong></p>
+<p class="legal-paragraph">The landlord may not require security (which includes a deposit) to be given in any form other than —</p>
+<ul class="legal-list">
+<li class="legal-list-item">money, or</li>
+<li class="legal-list-item">a guarantee.</li>
+</ul>
+<p class="legal-paragraph"><strong>7. </strong><strong>Requirement to use a deposit scheme (F)</strong></p>
+<p class="legal-paragraph">(1) If you pay a deposit under this contract (or another person pays a deposit on your behalf), the deposit must be dealt with in accordance with an authorised deposit scheme.</p>
+<p class="legal-paragraph">(2) Before the end of the period of 30 days starting with the day on which the deposit is paid, the landlord must —</p>
+<ul class="legal-list">
+<li class="legal-list-item">comply with the initial requirements of the authorised deposit scheme, and</li>
+<li class="legal-list-item">give you (and any person who has paid the deposit on your behalf) the required information.</li>
+</ul>
+<p class="legal-paragraph">(3) The required information is such information as may be specified by the Welsh Ministers in regulations in accordance with section 45 of the Act, relating to —</p>
+<ul class="legal-list">
+<li class="legal-list-item">the authorised deposit scheme which applies,</li>
+<li class="legal-list-item">the landlord’s compliance with the initial requirements of the scheme, and</li>
+</ul>
+<p class="legal-paragraph">(c) the operation of Chapter 4 of Part 3 of the Act (Deposits and Deposit Schemes), including your rights (and the rights of any person who has paid the deposit on your behalf) in relation to the deposit.</p>
+<h2>Prohibited conduct</h2>
+<p class="legal-paragraph"><strong>8. </strong><strong>Anti-social behaviour and other prohibited conduct</strong><strong> </strong><strong>(F)</strong></p>
+<p class="legal-paragraph">  You must not engage or threaten to engage in conduct capable of causing nuisance or annoyance to a person with a right (of whatever description) —</p>
+<ul class="legal-list">
+<li class="legal-list-item">to live in the dwelling subject to this contract, or</li>
+<li class="legal-list-item">to live in a dwelling or other accommodation in the locality of the dwelling subject to this contract.</li>
+</ul>
+<p class="legal-paragraph">(2) You must not engage or threaten to engage in conduct capable of causing nuisance or annoyance to a person engaged in lawful activity —</p>
+<ul class="legal-list">
+<li class="legal-list-item">in the dwelling subject to this contract, or</li>
+<li class="legal-list-item">in the locality of that dwelling.</li>
+</ul>
+<p class="legal-paragraph">(3) You must not engage or threaten to engage in conduct —</p>
+<ul class="legal-list">
+<li class="legal-list-item">capable of causing nuisance or annoyance to  —</li>
+<li class="legal-list-item">the landlord, or</li>
+<li class="legal-list-item">a person (whether or not employed by the landlord) acting in connection with the exercise of the landlord’s housing management functions, and</li>
+<li class="legal-list-item">that is directly or indirectly related to or affects the landlord’s housing management functions.</li>
+</ul>
+<p class="legal-paragraph">(4) You may not use or threaten to use the dwelling subject to this contract, including any common parts and any other part of a building comprising the dwelling, for criminal purposes.</p>
+<p class="legal-paragraph">(5) You must not, by any act or omission —</p>
+<ul class="legal-list">
+<li class="legal-list-item">allow, incite or encourage any person who is living in or visiting the dwelling to act as mentioned in paragraphs (1) to (3) of this term or</li>
+<li class="legal-list-item">allow, incite or encourage any person to act as mentioned in paragraph (4) of this term.</li>
+</ul>
+<h2>Control of the dwelling</h2>
+<p class="legal-paragraph"><strong>9. </strong><strong>Use of the dwelling by the contract-holder (S)</strong></p>
+<p class="legal-paragraph">You must not carry on or permit any trade or business at the dwelling without the landlord’s consent.</p>
+<p class="legal-paragraph"><strong>10. </strong><strong>Permitted occupiers who are not lodgers or sub-holders (S)</strong></p>
+<p class="legal-paragraph">You may permit persons who are not lodgers or sub-holders to live in the dwelling as a home.</p>
+<p class="legal-paragraph"><strong>11. </strong><strong>Right to occupy without interference from the landlord (F+)</strong></p>
+<p class="legal-paragraph">(1) The landlord may not, by any act or omission, interfere with your right to occupy the dwelling.</p>
+<p class="legal-paragraph">(2) The landlord does not interfere with your right to occupy the dwelling by reasonably exercising the landlord’s rights under this contract.</p>
+<p class="legal-paragraph">(3) The landlord does not interfere with your right to occupy the dwelling because of a failure to comply with repairing obligations (within the meaning of section 100(2) of the Act).</p>
+<p class="legal-paragraph">(4) The landlord is to be treated as having interfered with your right if a person who —</p>
+<ul class="legal-list">
+<li class="legal-list-item">acts on behalf of the landlord, or</li>
+<li class="legal-list-item">has an interest in the dwelling, or part of it, that is superior to the landlord’s interest,</li>
+</ul>
+<p class="legal-paragraph">interferes with your right by any lawful act or omission.</p>
+<p class="legal-paragraph"><strong>12. </strong><strong>Landlord’s right to enter the dwelling – Repairs (F+)</strong></p>
+<p class="legal-paragraph">(1) The landlord may enter the dwelling at any reasonable time for the purpose of —</p>
+<ul class="legal-list">
+<li class="legal-list-item">inspecting its condition and state of repair, or</li>
+<li class="legal-list-item">carrying out works or repairs needed in order to comply with the obligations set out terms 17 and 18 of this contract.</li>
+</ul>
+<p class="legal-paragraph">(2) The landlord must give at least 24 hours’ notice to you before exercising that right.</p>
+<p class="legal-paragraph">(3) Paragraph (4) of this term applies where —</p>
+<ul class="legal-list">
+<li class="legal-list-item">the dwelling forms part only of a building, and</li>
+<li class="legal-list-item">in order to comply with the obligations set out in terms 17 and 18 the landlord needs to carry out works or repairs in another part of the building.</li>
+</ul>
+<p class="legal-paragraph">(4) The landlord is not liable for failing to comply with the obligations under terms 17 and 18 if the landlord does not have sufficient rights over that other part of the building to be able to carry out the works or repairs, and was unable to obtain such rights after making a reasonable effort to do so.</p>
+<p class="legal-paragraph"><strong>13. </strong><strong>Landlord’s right to enter the dwelling – repairs to fixtures and fittings (S)</strong></p>
+<p class="legal-paragraph">(1) In circumstances where you have not undertaken the repairs that are your responsibility in accordance with term 16(2) and (3), the landlord may enter the dwelling at any reasonable time for the purpose of carrying out repairs to the fixtures and fittings or other items listed in the inventory, or replacing them.</p>
+<p class="legal-paragraph">(2) But the landlord must give you at least 24 hours’ notice before entering the dwelling.</p>
+<p class="legal-paragraph"><strong>14. </strong><strong>Landlord’s right to enter the dwelling – Emergencies (S)</strong></p>
+<p class="legal-paragraph">(1) In the event of an emergency which results in the landlord needing to enter the dwelling without notice, you must give the landlord immediate access to the dwelling.</p>
+<p class="legal-paragraph">(2) If you do not provide access immediately, the landlord may enter the dwelling without your permission.</p>
+<p class="legal-paragraph">(3) If the landlord enters the dwelling in accordance with paragraph (2) of this term, the landlord must use all reasonable endeavours to notify you that they have entered the dwelling as soon as reasonably practicable after entry.</p>
+<p class="legal-paragraph">(4) For the purposes of paragraph (1) of this term, an emergency includes —</p>
+<ul class="legal-list">
+<li class="legal-list-item">something which requires urgent work to prevent the dwelling or dwellings in the vicinity from being severely damaged, further damaged or destroyed, and</li>
+<li class="legal-list-item">something which if not dealt with by the landlord immediately, would put at imminent risk the health and safety of you, any permitted occupier of the dwelling or other persons in the vicinity of the dwelling.</li>
+</ul>
+<p class="legal-paragraph"><strong>Prohibition of discrimination against people with children and benefits claimants</strong></p>
+<p class="legal-paragraph"><strong>14A. </strong><strong>Right for children to live at or visit dwelling (F+)</strong></p>
+<p class="legal-paragraph">(1) Subject to paragraph (2) of this term, you may permit a person who has not reached the age of 18 to live in or visit the dwelling.</p>
+<p class="legal-paragraph">(2) The landlord must not interfere with or restrict the exercise of your right under paragraph (1) of this term, unless the interference or restriction is a proportionate means of achieving a legitimate aim.</p>
+<p class="legal-paragraph"><strong>14B</strong><strong>.</strong><strong> Right to claim benefits (F+)</strong></p>
+<p class="legal-paragraph">The landlord must not prohibit you from being a benefits claimant within the meaning given by section 8J of the Renting Homes (Fees, Discrimination etc.) (Wales) Act 2019.</p>
+<h2>Care of the dwelling – contract-holder’s responsibilities</h2>
+<p class="legal-paragraph"><strong>15. </strong><strong>Duty to take care of the dwelling (S)</strong></p>
+<p class="legal-paragraph">You are not liable for fair wear and tear to the dwelling or to fixtures and fittings within the dwelling but must —</p>
+<ul class="legal-list">
+<li class="legal-list-item">take proper care of the dwelling, fixtures and fittings within the dwelling and any items listed in any inventory,</li>
+<li class="legal-list-item">not remove any fixtures and fittings or any items listed in any inventory from the dwelling without the consent of the landlord,</li>
+<li class="legal-list-item">keep the dwelling in a state of reasonable decorative order, and</li>
+<li class="legal-list-item">not keep anything in the dwelling that would be a health and safety risk to you, any permitted occupier, any persons visiting the dwelling or any persons residing in the vicinity of the dwelling.</li>
+</ul>
+<p class="legal-paragraph"><strong>16. </strong><strong>Duty to notify landlord of defect or disrepair (S)</strong></p>
+<p class="legal-paragraph">(1) You must notify the landlord as soon as reasonably practicable of any fault, defect, damage or disrepair which you reasonably believe is the landlord’s responsibility.</p>
+<p class="legal-paragraph">(2) Where you reasonably believe that any fault, defect, damage or disrepair to the fixtures and fittings or items listed in any inventory is not the landlord’s responsibility, you must, within a reasonable period of time, carry out repairs to such fixtures and fittings or other items listed in any inventory, or replace them.</p>
+<p class="legal-paragraph">(3) The circumstances in which paragraph (2) of this term applies include where the fault, defect, damage or disrepair has occurred wholly or mainly because of an act or omission amounting to a lack of care by you, any permitted occupier or any person visiting the dwelling.</p>
+<h2>Care of the dwelling – landlord’s obligations</h2>
+<p class="legal-paragraph"><strong>17. </strong><strong>Landlord’s obligation: fitness for human habitation (F+)</strong></p>
+<p class="legal-paragraph">(1) The landlord must ensure that the dwelling is fit for human habitation —</p>
+<ul class="legal-list">
+<li class="legal-list-item">on the occupation date of this contract, and</li>
+<li class="legal-list-item">for the duration of this contract.</li>
+</ul>
+<p class="legal-paragraph">(2) The reference to the dwelling in paragraph (1) of this term includes, if the dwelling forms part only of a building, the structure and exterior of the building and the common parts.</p>
+<p class="legal-paragraph"><strong>18. </strong><strong>Landlord’s obligation to keep a dwelling in repair (F+)</strong></p>
+<p class="legal-paragraph">(1) The landlord must —</p>
+<ul class="legal-list">
+<li class="legal-list-item">keep in repair the structure and exterior of the dwelling (including drains, gutters and external pipes), and</li>
+<li class="legal-list-item">keep in repair and proper working order the service installations in the dwelling.</li>
+</ul>
+<p class="legal-paragraph">(2) If the dwelling forms part only of a building, the landlord must —</p>
+<ul class="legal-list">
+<li class="legal-list-item">keep in repair the structure and exterior of any other part of the building (including drains, gutters and external pipes) in which the landlord has an estate or interest, and</li>
+<li class="legal-list-item">keep in repair and proper working order a service installation which directly or indirectly serves the dwelling, and which either —</li>
+<li class="legal-list-item">forms part of any part of the building in which the landlord has an estate or interest, or</li>
+<li class="legal-list-item">is owned by the landlord or is under the landlord’s control.</li>
+</ul>
+<p class="legal-paragraph">(3) The standard of repair required by paragraphs (1) and (2) of this term is that which is reasonable having regard to the age and character of the dwelling, and the period during which the dwelling is likely to be available for occupation as a home.</p>
+<p class="legal-paragraph">(4) In this contract, “service installation” means an installation for the supply of water, gas or electricity, for sanitation, for space heating or for heating water.</p>
+<p class="legal-paragraph"><strong>19. </strong><strong>Further landlord obl</strong><strong>igations in relation to terms 17 and 18</strong><strong> (F+)</strong></p>
+<p class="legal-paragraph">(1) The landlord must make good any damage caused by works and repairs carried out in order to comply with the landlord’s obligations under terms 17 and 18.</p>
+<p class="legal-paragraph">(2) The landlord may not impose any obligation on you in the event of you enforcing or relying on the landlord’s obligations under terms 17 and 18.</p>
+<p class="legal-paragraph"><strong>20. </strong><strong>Limits on landlord obli</strong><strong>gations in relation to terms 17 and 18</strong><strong>: General (F+)</strong></p>
+<p class="legal-paragraph"> (1) Term 17(1) does not impose any liability on the landlord in respect of a dwelling which the landlord cannot make fit for human habitation at reasonable expense.</p>
+<p class="legal-paragraph">(2) The landlord’s obligations under terms 17(1) and 18(1) do not require the landlord —</p>
+<ul class="legal-list">
+<li class="legal-list-item">to keep in repair anything which you are entitled to remove from the dwelling, or</li>
+<li class="legal-list-item">to rebuild or reinstate the dwelling or any part of it, in the case of destruction or damage by a relevant cause.</li>
+</ul>
+<p class="legal-paragraph">(3) If the dwelling forms part only of a building, the landlord’s obligation under terms 17(1) and 18(2) do not require the landlord to rebuild or reinstate any other part of the building in which the landlord has an estate or interest, in the case of destruction or damage by a relevant cause.</p>
+<p class="legal-paragraph">(4) Relevant causes for the purpose of paragraphs (2)(b) and (3) of this term, are fire, storm, flood or other inevitable accident.</p>
+<p class="legal-paragraph">(5) Term 18(2) does not require the landlord to carry out works or repairs unless the disrepair or failure to keep in proper working order affects your enjoyment of —</p>
+<ul class="legal-list">
+<li class="legal-list-item">the dwelling, or</li>
+<li class="legal-list-item">the common parts that you are entitled to use under this contract.</li>
+</ul>
+<p class="legal-paragraph"><strong>21. </strong><strong>Limits on landlord obl</strong><strong>igations in relation to terms 17 and 18</strong><strong>: contract-holder’s fault (F+)</strong></p>
+<p class="legal-paragraph">(1) Term 17(1) does not impose any liability on the landlord if the dwelling is unfit for human habitation wholly or mainly because of an act or omission (including an act or omission amounting to lack of care) by you or a permitted occupier of the dwelling.</p>
+<p class="legal-paragraph">(2) The landlord is not obliged by term 18(1) or (2) to carry out works or repairs if the disrepair, or the failure of a service installation to be in working order, is wholly or mainly attributable to lack of care by you or a permitted occupier of the dwelling.</p>
+<p class="legal-paragraph">(3) “Lack of care” means a failure to take proper care —</p>
+<ul class="legal-list">
+<li class="legal-list-item">of the dwelling, or</li>
+<li class="legal-list-item">if the dwelling forms part only of a building, of the common parts that you are entitled to use under this contract.</li>
+</ul>
+<p class="legal-paragraph"><strong>22. </strong><strong>Limits on landlord obligatio</strong><strong>ns in relation to terms 17 and 18</strong><strong>: notice (F+)</strong></p>
+<p class="legal-paragraph">(1) The landlord’s obligations under term 17(1)(b) and under term 18(1) and (2) do not arise until the landlord (or in the case of joint landlords, any one of them) becomes aware that works or repairs are necessary.</p>
+<p class="legal-paragraph">(2) The landlord complies with the obligations under term 17(1)(b) and under term 18(1) and (2) if the landlord carries out the necessary works or repairs within a reasonable time after the day on which the landlord becomes aware that they are necessary.</p>
+<p class="legal-paragraph">(3) If —</p>
+<ul class="legal-list">
+<li class="legal-list-item">the landlord (the “old landlord”) transfers the old landlord’s interest in the dwelling to another person (the “new landlord”), and</li>
+<li class="legal-list-item">the old landlord (or where two or more persons jointly constitute the old landlord, any one of them) is aware before the date of the transfer that works or repairs are necessary in order to comply with term 17(1) or 18(1) or (2),</li>
+</ul>
+<p class="legal-paragraph">the new landlord is to be treated as becoming aware of the need for those works or repairs on the date of the transfer, but not before.</p>
+<p class="legal-paragraph"><strong>23. </strong><strong>Rights of permitted occupiers (F+)</strong></p>
+<p class="legal-paragraph">(1) A permitted occupier who suffers personal injury, or loss of or damage to personal property, as a result of the landlord failing to comply with term 17 or 18, may enforce the term in question in his or her own right by bringing proceedings in respect of the injury, loss or damage.</p>
+<p class="legal-paragraph">(2) But a permitted occupier who is a lodger or sub-holder may do so only if the lodger is allowed to live in the dwelling, or the sub-occupation contract is made, in accordance with this contract.</p>
+<h2>Making changes to the dwelling or utilities</h2>
+<p class="legal-paragraph"><strong>24. </strong><strong>Changes to the dwelling (S)</strong></p>
+<p class="legal-paragraph">(1) You must not make any alteration to the dwelling without the consent of the landlord.</p>
+<p class="legal-paragraph">(2) For the purposes of paragraph (1) of this term, “alteration” includes —</p>
+<ul class="legal-list">
+<li class="legal-list-item">any addition to or alteration of the fixtures and fittings in the dwelling,</li>
+<li class="legal-list-item">the erection of an aerial or satellite dish,</li>
+<li class="legal-list-item"> the erection, removal or structural alteration to sheds, garages or any other structures in the dwelling, and</li>
+<li class="legal-list-item">the carrying out of external decoration to the dwelling.</li>
+</ul>
+<p class="legal-paragraph"><strong>25. </strong><strong>Changes to the provision of utilities to the dwelling (S)</strong></p>
+<p class="legal-paragraph">(1) You may change any of the suppliers to the dwelling of —</p>
+<ul class="legal-list">
+<li class="legal-list-item">electricity, gas or other fuel or water (including sewerage) services;</li>
+<li class="legal-list-item">telephone, internet, cable television or satellite television services.</li>
+</ul>
+<p class="legal-paragraph">(2) You must inform the landlord as soon as reasonably practicable of any changes made pursuant to paragraph (1) of this term.</p>
+<p class="legal-paragraph">(3) Unless the landlord consents, you must not —</p>
+<ul class="legal-list">
+<li class="legal-list-item">leave the dwelling at the end of the contract, without a supplier of electricity, gas or other fuel (if applicable) or water (including sewerage) services, unless these utilities were not present at the dwelling on the occupation date;</li>
+<li class="legal-list-item">install or remove, or arrange to have installed or removed, any specified service installations at the dwelling.</li>
+</ul>
+<p class="legal-paragraph">(4) For the purposes of paragraph (3)(b) of this term, “specified service installations” means an installation for the supply of water, gas, electricity or other fuel (if applicable) for sanitation, for space heating or for heating water.</p>
+<h2>Security and safety of the dwelling: contract-holder’s responsibilities</h2>
+<p class="legal-paragraph"><strong>26. </strong><strong>Security of the dwelling – unoccupied periods (S)</strong></p>
+<p class="legal-paragraph">If you become aware that the dwelling has been or will be unoccupied for 28 or more consecutive days, you must notify the landlord as soon as reasonably practicable.</p>
+<p class="legal-paragraph"><strong>27. </strong><strong>Security of the dwelling – </strong><strong>lock</strong><strong>s (S)</strong></p>
+<p class="legal-paragraph">(1) You must take reasonable steps to ensure the dwelling is secure.</p>
+<p class="legal-paragraph">(2) You may change any lock on the external or internal doors of the dwelling provided that any such changes provide no less security than that previously in place.</p>
+<p class="legal-paragraph">(3) If any change made under paragraph (2) of this term results in a new key being needed to access the dwelling or any part of the dwelling, you must notify the landlord as soon as reasonably practicable of any change and make available to the landlord a working copy of the new key.</p>
+<h2>Creating a sub-tenancy or sub-licence, transferring the contract or taking out a mortgage</h2>
+<p class="legal-paragraph"><strong>28. </strong><strong>Permissible forms of dealing (F+)</strong></p>
+<p class="legal-paragraph">(1) You may not deal with this contract, the dwelling or any part of the dwelling except —</p>
+<ul class="legal-list">
+<li class="legal-list-item">in a way permitted by this contract, or</li>
+<li class="legal-list-item">in accordance with a family property order (see section 251 of the Act).</li>
+</ul>
+<p class="legal-paragraph">(2) A joint contract-holder may not deal with his or her rights and obligations under this contract (or with this contract, the dwelling or any part of the dwelling), except —</p>
+<ul class="legal-list">
+<li class="legal-list-item">in a way permitted by this contract, or</li>
+<li class="legal-list-item">in accordance with a family property order.</li>
+</ul>
+<p class="legal-paragraph">(3) If you do anything in breach of paragraph (1) of this term, or a joint contract-holder does anything in breach of paragraph (2) of this term —</p>
+<ul class="legal-list">
+<li class="legal-list-item">the transaction is not binding on the landlord, and</li>
+<li class="legal-list-item">you or a joint contract-holder are in breach of this contract (despite the transaction not being binding on the landlord).</li>
+</ul>
+<p class="legal-paragraph">(4) “Dealing” includes —</p>
+<ul class="legal-list">
+<li class="legal-list-item">creating a tenancy, or creating a licence which confers the right to occupy the dwelling;</li>
+<li class="legal-list-item">transferring;</li>
+</ul>
+<p class="legal-paragraph">(c) mortgaging or otherwise charging.</p>
+<p class="legal-paragraph"><strong>29. </strong><strong>Permitting lodgers (</strong><strong>S</strong><strong>)</strong></p>
+<p class="legal-paragraph">You must not allow persons to live in the dwelling as lodgers without the landlord’s consent.</p>
+<h2>Provisions about joint contract-holders</h2>
+<p class="legal-paragraph"><strong>30. </strong><strong>Adding a joint contract-holder (F+)</strong></p>
+<p class="legal-paragraph">(1) You, as the contract-holder under this contract, and another person may, with the consent of the landlord, make that person a joint contract-holder under this contract.</p>
+<p class="legal-paragraph">(2) If a person is made a joint contract-holder under this term, he or she becomes entitled to all the rights and subject to all the obligations of a contract-holder under this contract from the day on which he or she becomes a joint contract-holder.</p>
+<p class="legal-paragraph"><strong>31. </strong><strong>Withdrawal of a joint contract-holder (F+)</strong></p>
+<p class="legal-paragraph">(1) If you are a joint contract-holder, you may withdraw from this contract by giving a notice (a “withdrawal notice”) to the landlord.</p>
+<p class="legal-paragraph">(2) The withdrawal notice must specify the date on which you intend to cease to be a party to this contract (the “withdrawal date”).</p>
+<p class="legal-paragraph">(3) You must give a written warning to the other joint contract-holders when you give the withdrawal notice to the landlord; and a copy of the withdrawal notice must be attached to the warning.</p>
+<p class="legal-paragraph">(4) The landlord must give a written warning to the other joint contract-holders as soon as reasonably practicable after the landlord receives the withdrawal notice; and a copy of the withdrawal notice must be attached to the warning.</p>
+<p class="legal-paragraph">(5) You will cease to be a party to this contract on the withdrawal date.</p>
+<p class="legal-paragraph">(6) A notice given to the landlord by one or more (but not all) of the joint contract-holders that purports to be a notice under term 41 (contract-holder’s notice to end contract) is to be treated as a withdrawal notice, and the date specified in the notice is to be treated as the withdrawal date.</p>
+<p class="legal-paragraph">(7) Paragraph (3) of this term does not apply to a notice which is treated as a withdrawal notice because of paragraph (6) of this term.</p>
+<p class="legal-paragraph"><strong>32. </strong><strong>Withdrawal of a joint contract-holder – notice required (S)</strong></p>
+<p class="legal-paragraph">The minimum time period between the date on which a notice under term 31 is given to the landlord, and the date specified in the notice, is one month.</p>
+<p class="legal-paragraph"><strong>33. </strong><strong>Joint contract-holder ceasing to be a party to a contract – survivorship (F)</strong></p>
+<p class="legal-paragraph">(1) If a joint contract-holder under this contract dies, or ceases to be a party to this contract for some other reason, from the time he or she ceases to be a party the remaining joint contract-holders are —</p>
+<ul class="legal-list">
+<li class="legal-list-item">fully entitled to all the rights under this contract, and</li>
+<li class="legal-list-item">liable to perform fully every obligation owed to the landlord under this contract.</li>
+</ul>
+<p class="legal-paragraph">(2) The joint contract-holder is not entitled to any right or liable to any obligation in respect of the period after he or she ceases to be a party to this contract.</p>
+<p class="legal-paragraph">(3) Nothing in paragraph (1) or (2) of this term removes any right or waives any liability of the joint contract-holder accruing before he or she ceases to be a party to this contract.</p>
+<p class="legal-paragraph">(4) This term does not apply where a joint contract-holder ceases to be a party to this contract because his or her rights and obligations under this contract are transferred in accordance with this contract.</p>
+<h2>Termination of contract – general</h2>
+<p class="legal-paragraph"><strong>34. </strong><strong>Permissible termination etc. (F)</strong></p>
+<p class="legal-paragraph">(1) This contract may be ended only in accordance with —</p>
+<ul class="legal-list">
+<li class="legal-list-item">the fundamental terms of this contract which incorporate fundamental provisions set out in Part 9 of the Act, or other terms included in this contract in accordance with Part 9 these are terms 34 to 37, 40 to 72 and term 81, or</li>
+<li class="legal-list-item">any enactment, such as an Act of Senedd Cymru or an Act of Parliament or regulations made by the Welsh Ministers.</li>
+</ul>
+<p class="legal-paragraph">(2) Nothing in this term affects —</p>
+<ul class="legal-list">
+<li class="legal-list-item">any right of the landlord or contract-holder to rescind this contract, or</li>
+<li class="legal-list-item">the operation of the law of frustration.</li>
+</ul>
+<p class="legal-paragraph"><strong>35. </strong><strong>Termination by agreement (F+)</strong></p>
+<p class="legal-paragraph">(1) If the landlord and you agree to end this contract, this contract ends —</p>
+<ul class="legal-list">
+<li class="legal-list-item">when you give up possession of the dwelling in accordance with what you agree with the landlord, or</li>
+<li class="legal-list-item">if you do not give up possession and a substitute occupation contract is made, immediately before the occupation date of the substitute occupation contract.</li>
+</ul>
+<p class="legal-paragraph">(2) An occupation contract is a substitute contract if —</p>
+<ul class="legal-list">
+<li class="legal-list-item">it is made in respect of the same (or substantially the same) dwelling as the original contract, and</li>
+<li class="legal-list-item">you were also the contract-holder under the original contract.</li>
+</ul>
+<p class="legal-paragraph"><strong>36. </strong><strong>Repudiatory breach by landlord (F+)</strong></p>
+<p class="legal-paragraph">If the landlord commits a repudiatory breach of contract and you give up possession of the dwelling because of that breach, this contract ends when you give up possession of the dwelling.</p>
+<p class="legal-paragraph"><strong>37. </strong><strong>Death of a sole contract-holder (F)</strong></p>
+<p class="legal-paragraph">(1) If you are the sole contract-holder, this contract ends —</p>
+<ul class="legal-list">
+<li class="legal-list-item">one month after your death, or</li>
+<li class="legal-list-item">if earlier, when the landlord is given notice of your death by the authorised persons.</li>
+</ul>
+<p class="legal-paragraph">(2) The authorised persons are —</p>
+<ul class="legal-list">
+<li class="legal-list-item">your personal representatives, or</li>
+<li class="legal-list-item">the permitted occupiers of the dwelling aged 18 and over (if any) acting together.</li>
+</ul>
+<p class="legal-paragraph">(3) This contract does not end if under section 74 (persons qualified to succeed) of the Act, one or more persons are qualified to succeed you.</p>
+<p class="legal-paragraph">(4) This contract does not end if, at your death, a family property order has effect which requires the contract to be transferred to another person.</p>
+<p class="legal-paragraph">(5) If, after your death, the family property order ceases to have effect and there is no person qualified to succeed you, this contract ends —</p>
+<ul class="legal-list">
+<li class="legal-list-item">when the order ceases to have effect, or</li>
+<li class="legal-list-item">if later, at the time this contract would end under paragraph (1) of this term.</li>
+</ul>
+<p class="legal-paragraph"><strong>38. </strong><strong>Contract-holders’ obligations at the end of the contract (S)</strong></p>
+<p class="legal-paragraph">When you vacate the dwelling at the end of this contract, you must —</p>
+<ul class="legal-list">
+<li class="legal-list-item">remove from the dwelling all property belonging —</li>
+<li class="legal-list-item">to you, or</li>
+<li class="legal-list-item">to any permitted occupier who is not entitled to remain in occupation of the dwelling,</li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item">return any property belonging to the landlord to the position that property was in on the occupation date, and</li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item"> return to the landlord all keys which enable access to the dwelling, which were held during the term of the contract by you or any permitted occupier who is not entitled to remain in occupation of the dwelling.</li>
+</ul>
+<p class="legal-paragraph"><strong>39. </strong><strong>Repayment of rent or other consideration (S)</strong></p>
+<p class="legal-paragraph">The landlord must repay, within a reasonable time of the end of this contract, to you any pre-paid rent or other consideration which relates to any period falling after the date on which this contract ends.</p>
+<h2>Termination by contract-holder</h2>
+<p class="legal-paragraph"><strong>40. </strong><strong>Early termination by contract-holder (F+)</strong></p>
+<p class="legal-paragraph">(1) You may end this contract at any time before the earlier of —</p>
+<ul class="legal-list">
+<li class="legal-list-item">the landlord giving you a written statement of this contract under term 76(1), or</li>
+<li class="legal-list-item">the occupation date.</li>
+</ul>
+<p class="legal-paragraph">(2) To end this contract under paragraph (1) of this term, you must give a notice to the landlord stating that you are ending this contract.</p>
+<p class="legal-paragraph">(3) On giving the notice to the landlord, you —</p>
+<ul class="legal-list">
+<li class="legal-list-item">cease to have any liability under this contract, and</li>
+<li class="legal-list-item">become entitled to the return of any deposit, rent or other consideration given to the landlord in accordance with this contract.</li>
+</ul>
+<p class="legal-paragraph"><strong>41. </strong><strong>Contract-holder’s notice (F+)</strong></p>
+<p class="legal-paragraph">You may end this contract by giving the landlord notice that you will give up possession of the dwelling on a date specified in the notice.</p>
+<p class="legal-paragraph"><strong>42. </strong><strong>Contract-holder’s notice: minimum notice period (F+)</strong></p>
+<p class="legal-paragraph">The date specified in a notice under term 41 may not be less than four weeks after the day on which the notice is given to the landlord.</p>
+<p class="legal-paragraph"><strong>43. </strong><strong>Termination of contract on contract-holder’s notice (F+)</strong></p>
+<p class="legal-paragraph">(1) If you give up possession of the dwelling on or before the date specified in a notice under term 41, this contract ends on the date specified in the notice.</p>
+<p class="legal-paragraph">(2) If you give up possession of the dwelling after that date but in connection with the notice, this contract ends —</p>
+<ul class="legal-list">
+<li class="legal-list-item">on the day on which you give up possession of the dwelling, or</li>
+<li class="legal-list-item">if an order for possession is made, on the date determined in accordance with term 72.</li>
+</ul>
+<p class="legal-paragraph">(3) The notice ceases to have effect if, before this contract ends —</p>
+<ul class="legal-list">
+<li class="legal-list-item">you withdraw the notice by further notice to the landlord, and</li>
+<li class="legal-list-item">the landlord does not object to the withdrawal in writing before the end of a reasonable period.</li>
+</ul>
+<p class="legal-paragraph"><strong>44. </strong><strong>Termination of the contract with joint contract-holders (F+)</strong></p>
+<p class="legal-paragraph">If there are joint contract-holders under this contract, this contract cannot be ended by the act of one or more of the joint contract-holders acting without the other joint contract-holder or joint contract-holders.</p>
+<h2>Termination by the landlord: possession claims and possession notices</h2>
+<p class="legal-paragraph"><strong>45. </strong><strong>Possession claims (F)</strong></p>
+<p class="legal-paragraph">The landlord may make a claim to the court for recovery of possession of the dwelling from you (“a possession claim”) only in the circumstances set out in Chapters 3 and 5 of Part 9 of the Act which are set out in terms 47 to 71, and term 81.</p>
+<p class="legal-paragraph"><strong>46. </strong><strong>Possession notices (F+)</strong></p>
+<p class="legal-paragraph">(1) This term applies in relation to a possession notice which the landlord is required to give to you under any of the following terms before making a possession claim —</p>
+<ul class="legal-list">
+<li class="legal-list-item">term 48 (in relation to a breach of contract by a contract-holder);</li>
+<li class="legal-list-item">term 50 (in relation to estate management grounds);</li>
+<li class="legal-list-item">term 54 (in relation to a contract-holder’s notice);</li>
+<li class="legal-list-item">term 52 (in relation to serious rent arrears)</li>
+</ul>
+<p class="legal-paragraph">(2) The notice must (in addition to specifying the ground on which the claim will be made) —</p>
+<ul class="legal-list">
+<li class="legal-list-item">state the landlord’s intention to make a possession claim,</li>
+<li class="legal-list-item">give particulars of the ground for seeking possession, and</li>
+<li class="legal-list-item">state the date after which the landlord is able to make a possession claim.</li>
+</ul>
+<h2>Termination by the landlord: grounds for making a possession claim</h2>
+<p class="legal-paragraph"><strong>47. </strong><strong>Breach of contract (F+)</strong></p>
+<p class="legal-paragraph">(1) If you breach this contract, the landlord may on that ground make a possession claim.</p>
+<p class="legal-paragraph">(2) Section 209 of the Act provides that the court may not make an order for possession on that ground unless it considers it reasonable to do so (and reasonableness is to be determined in accordance with Schedule 10 to the Act).</p>
+<p class="legal-paragraph"><strong>48. </strong><strong>Restrictions on making a possession claim in relation to a breach of contract (F+)</strong></p>
+<p class="legal-paragraph">(1) Before making a possession claim on the ground in term 47, the landlord must give you a possession notice specifying that ground.</p>
+<p class="legal-paragraph">(2) The landlord may make a possession claim in reliance on a breach of term 8 (anti-social behaviour and other prohibited conduct) on or after the day on which the landlord gives you a possession notice specifying a breach of that term.</p>
+<p class="legal-paragraph">(3) The landlord may not make a possession claim in reliance on a breach of any other term of this contract before the end of the period of one month starting with the day on which the landlord gives you a possession notice specifying a breach of that term.</p>
+<p class="legal-paragraph">(4) In either case, the landlord may not make a possession claim after the end of the period of six months starting with the day on which the landlord gives you the possession notice.</p>
+<p class="legal-paragraph"><strong>49. </strong><strong>Estate management grounds (F+)</strong></p>
+<p class="legal-paragraph">(1) The landlord may make a possession claim on one or more of the estate management grounds.</p>
+<p class="legal-paragraph">(2) The estate management grounds (which are set out in Part 1 of Schedule 8 to the Act) are included in the Annex to this contract.</p>
+<p class="legal-paragraph">(3) Section 210 of the Act provides that the court may not make an order for possession on an estate management ground unless —</p>
+<ul class="legal-list">
+<li class="legal-list-item">it considers it reasonable to do so (and reasonableness is to be determined in accordance with Schedule 10 to the Act), and</li>
+<li class="legal-list-item">it is satisfied that suitable alternative accommodation (what is suitable is to be determined in accordance with Schedule 11 to the Act) is available to you (or will be available to you when the order takes effect).</li>
+</ul>
+<p class="legal-paragraph">(4) If the court makes an order for possession on an estate management ground (and on no other ground), the landlord must pay to you a sum equal to the reasonable expenses likely to be incurred by you in moving from the dwelling.</p>
+<p class="legal-paragraph">(5) Paragraph (4) of this term does not apply if the court makes an order for possession on Ground A or B (the redevelopment grounds) of the estate management grounds (and on no other ground).</p>
+<p class="legal-paragraph"><strong>50. </strong><strong>Restrictions on making a possession claim under term </strong><strong>49</strong><strong> (estate management grounds) (F+)</strong></p>
+<p class="legal-paragraph">(1) Before making a possession claim on an estate management ground, the landlord must give you a possession notice specifying that ground.</p>
+<p class="legal-paragraph">(2) The landlord may not make the claim —</p>
+<ul class="legal-list">
+<li class="legal-list-item">before the end of the period of one month starting with the day on which the landlord gives you the possession notice, or</li>
+<li class="legal-list-item">after the end of the period of six months starting with that day.</li>
+</ul>
+<p class="legal-paragraph">(3) If a redevelopment scheme is approved under Part 2 of Schedule 8 to the Act subject to conditions, the landlord may give you a possession notice specifying estate management Ground B before the conditions are met.</p>
+<p class="legal-paragraph">(4) The landlord may not give you a possession notice specifying estate management Ground G (accommodation not required by successor) —</p>
+<ul class="legal-list">
+<li class="legal-list-item">before the end of the period of six months starting with the day on which the landlord (or in the case of joint landlords, any one of them) became aware of the previous contract-holder’s death, or</li>
+<li class="legal-list-item">after the end of the period of twelve months starting with that day.</li>
+</ul>
+<p class="legal-paragraph">(5) The landlord may not give you a possession notice specifying estate management Ground H (departing joint contract-holder) after the end of the period of six months starting with the day on which the joint contract-holder’s rights and obligations under this contract ended.</p>
+<p class="legal-paragraph"><strong>51. </strong><strong>Serious rent arrears (F+)</strong></p>
+<p class="legal-paragraph">(1) If you are seriously in arrears with your rent, the landlord may on that ground make a possession claim.</p>
+<p class="legal-paragraph">(2) You are seriously in arrears with your rent —</p>
+<ul class="legal-list">
+<li class="legal-list-item">where the rental period is a week, a fortnight or four weeks, if at least eight weeks’ rent is unpaid;</li>
+<li class="legal-list-item">where the rental period is a month, if at least two months’ rent is unpaid;</li>
+<li class="legal-list-item">where the rental period is a quarter, if at least one quarter’s rent is more than three months in arrears;</li>
+<li class="legal-list-item">where the rental period is a year, if at least 25% of the rent is more than three months in arrears.</li>
+</ul>
+<p class="legal-paragraph">(3) Section 216 of the Act provides that the court must (subject to any available defence based on your Convention rights) make an order for possession of the dwelling if it is satisfied that you —</p>
+<ul class="legal-list">
+<li class="legal-list-item">were seriously in arrears with your rent on the day on which the landlord gave you the possession notice, and</li>
+<li class="legal-list-item">are seriously in arrears with your rent on the day on which the court hears the possession claim.</li>
+</ul>
+<p class="legal-paragraph"><strong>52. </strong><strong>Restrictions on making a possession claim under term 51 (serious rent arrears) (F+)</strong></p>
+<p class="legal-paragraph">(1) Before making a possession claim on the ground in term 51, the landlord must give you a possession notice specifying that ground.</p>
+<p class="legal-paragraph">(2) The landlord may not make the claim —</p>
+<ul class="legal-list">
+<li class="legal-list-item">before the end of the period of 14 days starting with the day on which the landlord gives you the possession notice, or</li>
+<li class="legal-list-item">after the end of the period of six months starting with that day.</li>
+</ul>
+<p class="legal-paragraph"><strong>53. </strong><strong>Recovery of possession on the ground of a notice given under term </strong><strong>41</strong><strong> (contract-holder’s notice) (F+)</strong></p>
+<p class="legal-paragraph">(1) If you fail to give up possession of the dwelling on the date specified in a notice under term 41, the landlord may on that ground make a possession claim.</p>
+<p class="legal-paragraph">(2) Section 215 of the Act provides that if the court is satisfied that the ground is made out, it must make an order for possession of the dwelling (subject to any available defence based on your Convention rights).</p>
+<p class="legal-paragraph"><strong>54. </strong><strong>Restrictions on making a possession claim under term 5</strong><strong>3</strong><strong> </strong><strong>(F+)</strong></p>
+<p class="legal-paragraph">(1) Before making a possession claim on the ground in term 53 the landlord must give you a possession notice specifying that ground.</p>
+<p class="legal-paragraph">(2) The landlord may make the possession claim on or after the day on which the landlord gives you the possession notice.</p>
+<p class="legal-paragraph">(3) But the landlord may not make the possession claim after the end of the period of six months starting with that day.</p>
+<p class="legal-paragraph">(4) The landlord may not give you a possession notice specifying the ground in term 53 after the end of the period of two months starting with the date specified in the notice under term 41 as the date on which you would give up possession of the dwelling.</p>
+<h2>Termination by the landlord: landlord’s notice</h2>
+<p class="legal-paragraph"><strong>55. </strong><strong>Landlord’s notice (F+)</strong></p>
+<p class="legal-paragraph">The landlord may end this contract by giving you notice that you must give up possession of the dwelling on a date specified in the notice.</p>
+<p class="legal-paragraph"><strong>56. </strong><strong>Minimum notice period (F+)</strong></p>
+<p class="legal-paragraph">The date specified in any notice given under term 55 may not be less than six months after the day on which the notice is given to you.</p>
+<p class="legal-paragraph"><strong>57. </strong><strong>Restrictions on giving further notices under term 55 (landlord’s notice) (F+)</strong></p>
+<p class="legal-paragraph">(1) Paragraphs (2) and (3) apply where —</p>
+<ul class="legal-list">
+<li class="legal-list-item">a landlord has given you a notice under term 55 (“the first notice”), and</li>
+<li class="legal-list-item">the landlord has subsequently withdrawn the notice (see term 60(3)).</li>
+</ul>
+<p class="legal-paragraph">(2) The landlord may not give another notice under term 55 to you before the end of the period of six months starting with the day on which the first notice was withdrawn, other than in accordance with paragraph (3) of this term.</p>
+<p class="legal-paragraph">(3) The landlord may give one more notice under term 55 to you during the period of 28 days starting with the day on which the first notice was given.</p>
+<p class="legal-paragraph">(4) Paragraph (5) applies where —</p>
+<ul class="legal-list">
+<li class="legal-list-item">a landlord has given a contract-holder a notice under term 55, and</li>
+<li class="legal-list-item">the period for making a possession claim on the ground in term 58 has ended without the landlord having made a claim.</li>
+</ul>
+<p class="legal-paragraph">(5) The landlord may not give another notice under term 55 to you before the end of the period of six months starting with the last day of the period before the end of which the landlord could have made the claim (see term 59(b)).</p>
+<p class="legal-paragraph"><strong>58. </strong><strong>Recovery of possession following a notice given under term 55 (F+)</strong></p>
+<p class="legal-paragraph">(1) If the landlord gives you a notice under term 55, the landlord may on that ground make a possession claim.</p>
+<p class="legal-paragraph">(2) Section 215 of the Act provides that if the court is satisfied that the ground is made out, it must make an order for possession of the dwelling, unless section 217 of the Act (retaliatory possession claims to avoid obligations to repair etc.) applies (and subject to any available defence based on your Convention rights).</p>
+<p class="legal-paragraph"><strong>59. </strong><strong>Restriction on making a possession claim under term 58 (F+)</strong></p>
+<p class="legal-paragraph">The landlord may not make a possession claim on the ground in term 58 —</p>
+<ul class="legal-list">
+<li class="legal-list-item">before the date specified in the notice given by the landlord to you under term 55, or</li>
+<li class="legal-list-item">after the end of the period of two months starting with that date.</li>
+</ul>
+<p class="legal-paragraph"><strong>60. </strong><strong>Termination of contract following a notice given under term 55 (F+)</strong></p>
+<p class="legal-paragraph">(1) If you give up possession of the dwelling on or before the date specified in a notice under term 55, this contract ends on the date specified in the notice.</p>
+<p class="legal-paragraph">(2) If you give up possession of the dwelling after that date but in connection with the notice, this contract ends —</p>
+<ul class="legal-list">
+<li class="legal-list-item">on the day on which you give up possession of the dwelling, or</li>
+<li class="legal-list-item">if an order for possession is made, on the date determined in accordance with term 72.</li>
+</ul>
+<p class="legal-paragraph">(3) The notice ceases to have effect if —</p>
+<ul class="legal-list">
+<li class="legal-list-item">before this contract ends, and during the period of 28 days starting with the day on which the notice was given, the landlord withdraws the notice by giving further notice to you, or</li>
+<li class="legal-list-item">before this contract ends, and after the end of the period of 28 days starting with the day on which the notice was given —</li>
+<li class="legal-list-item">the landlord withdraws the notice by giving further notice to you, and</li>
+<li class="legal-list-item">you do not object to the withdrawal in writing before the end of a reasonable period.</li>
+</ul>
+<h2>Termination by the landlord: restrictions on giving a landlord’s notice</h2>
+<p class="legal-paragraph"><strong>61. </strong><strong>Restrictions on giving notice under term 55: notice may not be given until after the first six months of </strong><strong>occupation</strong><strong> (F+)</strong></p>
+<p class="legal-paragraph">(1) The landlord may not give notice under term 55 before the end of the period of six months starting with the occupation date of this contract.</p>
+<p class="legal-paragraph">(2) If this contract is a substitute occupation contract, the landlord may not give such notice under term 55 before the end of the period of six months starting with the occupation date of the original contract.</p>
+<p class="legal-paragraph">(3) For the purposes of paragraph (2) of this term —</p>
+<ul class="legal-list">
+<li class="legal-list-item">an occupation contract is a substitute occupation contract if —</li>
+<li class="legal-list-item">the occupation date of this contract falls immediately after the end of a preceding occupation contract,</li>
+<li class="legal-list-item">immediately before the occupation date of this contract a contract-holder under this contract was a contract-holder under the preceding contract and a landlord under this contract was a landlord under the preceding contract, and</li>
+<li class="legal-list-item">this contract relates to the same (or substantially the same) dwelling as the preceding contract, and</li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item">“original contract” means —</li>
+<li class="legal-list-item">where the substitute occupation contract has an occupation date falling immediately after the end of a contract which is not a substitute occupation contract, the occupation contract which precedes the substitute occupation contract;</li>
+<li class="legal-list-item">where there have been successive substitute occupation contracts, the occupation contract which preceded the first of the substitute occupation contracts.</li>
+</ul>
+<p class="legal-paragraph"><strong>62. </strong><strong>Restriction on giving notice under term 55 following retaliatory possession claim (F+)</strong></p>
+<p class="legal-paragraph">(1) Paragraph (2) of this term applies where —</p>
+<ul class="legal-list">
+<li class="legal-list-item">the landlord (having given you a notice under term 55) has made a possession claim on the ground in term 58, and</li>
+<li class="legal-list-item">the court has refused to make an order for possession because it considered the claim to be a retaliatory claim (see section 217 of the Act).</li>
+</ul>
+<p class="legal-paragraph">(2) The landlord may not give another notice under term 55 to you before the end of the period of six months starting with the day on which the court refused to make an order for possession.</p>
+<p class="legal-paragraph"><strong>63. </strong><strong>Further restrictions on giving notice under term 55 - failure to provide written statement (F)</strong></p>
+<p class="legal-paragraph">The landlord may not give notice under term 55 at a time when —</p>
+<ul class="legal-list">
+<li class="legal-list-item">you have not been given a written statement of the contract under term 76(1) (requirement to provide written statement at the start of a contract), or</li>
+<li class="legal-list-item">the landlord is aware that the identity of the contract-holder has changed, and the new contract-holder has not been given a written statement of the contract under term 76(2).</li>
+</ul>
+<p class="legal-paragraph"><strong>64. </strong><strong>Restriction on giving notice under term 55 – late provision of written statement (F)</strong></p>
+<p class="legal-paragraph">If the landlord has failed to comply with term 76(1) and (2) (the duty to provide written statement of contract), the landlord may not give notice under term 55 during the period of six months starting with the day on which the landlord gave a written statement of this contract to you.</p>
+<p class="legal-paragraph"><strong>65. </strong><strong>Restriction on giving notice under term 55 – failure to provide information about landlord (F)</strong></p>
+<p class="legal-paragraph">The landlord may not give notice under term 55 at a time when the landlord has not provided a notice in accordance with the landlord’s duty to provide information under term 78 (duty to provide information about landlord).</p>
+<p class="legal-paragraph"><strong>66. </strong><strong>Restriction on giving notice under term 55 – failure to provide a valid energy performance certificate (F)</strong></p>
+<p class="legal-paragraph">(1) The landlord may not give notice under term 55 at a time when the landlord has not complied with regulation 6(5) of the EPB Regulations.</p>
+<p class="legal-paragraph">(2) For the purposes of this term, it does not matter when the valid energy performance certificate was given (and nothing in this paragraph requires that a new energy performance certificate be given to you when a certificate given to you in compliance with that regulation ceases to be valid under the EPB Regulations).</p>
+<p class="legal-paragraph">(3) In this term —</p>
+<p class="legal-paragraph">“the EPB Regulations” (“y Rheoliadau PYA”) means the Energy Performance of Buildings (England and Wales) Regulations 2012;</p>
+<p class="legal-paragraph">“valid energy performance certificate” (“tystysgrif perfformiad ynni ddilys”) is to be interpreted in accordance with the EPB Regulations.</p>
+<p class="legal-paragraph"><strong>67. </strong><strong>Restriction on giving notice under term 55 – breach of security and deposit requirements (F)</strong></p>
+<p class="legal-paragraph">(1) The landlord may not give notice under term 55 at a time when security required by the landlord in connection with the contract in a form not permitted by term 6 has not been returned to the person by whom it was given.</p>
+<p class="legal-paragraph">(2) The landlord may not give a notice under term 55 at a time when any of paragraphs (3) to (5) of this term apply unless —</p>
+<ul class="legal-list">
+<li class="legal-list-item">a deposit paid in connection with this contract has been returned to you (or any person who paid the deposit on your behalf) either in full or with such deduction as may have been agreed, or</li>
+<li class="legal-list-item">an application to the county court has been made under paragraph 2 of Schedule 5 to the Act() and has been determined by the county court, withdrawn, or settled by agreement between the parties.</li>
+</ul>
+<p class="legal-paragraph">(3) This paragraph applies if a deposit has been paid in connection with this contract but the initial requirements of an authorised deposit scheme have not been complied with.</p>
+<p class="legal-paragraph">(4) This paragraph applies if a deposit has been paid in connection with this contract but the landlord has not provided the information required by term 7(2)(b).</p>
+<p class="legal-paragraph">(5) This paragraph applies if a deposit paid in connection with this contract is not being held in accordance with an authorised deposit scheme.</p>
+<p class="legal-paragraph"><strong>68. </strong><strong>Restriction on giving notice under term 55 – prohibited payments and holding deposits under the Renting Homes (Fees etc.) (Wales) Act 2019 (anaw 2) (F)</strong></p>
+<p class="legal-paragraph">(1) The landlord may not give a notice under term 55 at a time when —</p>
+<ul class="legal-list">
+<li class="legal-list-item">a prohibited payment (within the meaning of the Renting Homes (Fees etc.) (Wales) Act 2019) has been made in relation to this contract as described in section 2 or 3 of that Act, and</li>
+<li class="legal-list-item">that prohibited payment has not been repaid.</li>
+</ul>
+<p class="legal-paragraph">(2) The landlord may not give a notice at a time when —</p>
+<ul class="legal-list">
+<li class="legal-list-item">(a) a holding deposit (within the meaning of the Renting Homes (Fees etc.) (Wales) Act 2019) paid in relation to this contract has not been repaid, and</li>
+<li class="legal-list-item">the circumstances are such that the failure to repay the deposit amounts to a breach of the requirements of Schedule 2 to that Act.</li>
+</ul>
+<p class="legal-paragraph">(3) In determining for the purposes of this term whether a prohibited payment or a holding deposit has been repaid, the payment or deposit is to be treated as having been repaid to the extent (if any) that it has been applied towards either or both of the following⁠ —</p>
+<ul class="legal-list">
+<li class="legal-list-item">a payment of rent under this contract;</li>
+<li class="legal-list-item">a payment required as security in respect of this contract.</li>
+</ul>
+<p class="legal-paragraph"><strong>69. </strong><strong>Restriction on giving notice under term 55 – failure to ensure that working smoke alarms and carbon monoxide alarms are installed (F)</strong></p>
+<p class="legal-paragraph">The landlord may not give notice under term 55 at a time when —</p>
+<ul class="legal-list">
+<li class="legal-list-item">the dwelling is treated as unfit for human habitation by virtue of regulation 5(3) of the Renting Homes (Fitness for Human Habitation) (Wales) Regulations 2022 (failure to ensure that working smoke alarms and, in certain circumstances, carbon monoxide alarms are installed in a dwelling), and</li>
+<li class="legal-list-item">as a result, the landlord is required under Part 4 of the Act to take steps to stop the dwelling from being treated as unfit for human habitation by virtue of that regulation.</li>
+</ul>
+<p class="legal-paragraph"><strong>70. </strong><strong>Restriction on giving notice under term 55 – failure to supply electrical condition report etc. (F)</strong></p>
+<p class="legal-paragraph">The landlord may not give notice under term 55 at a time when —</p>
+<ul class="legal-list">
+<li class="legal-list-item">the dwelling is treated as unfit for human habitation by virtue of regulation 6(6) of the Renting Homes (Fitness for Human Habitation) (Wales) Regulations 2022 (failure to obtain an electrical condition report, or to give the contract-holder such a report or written confirmation of certain other electrical work), and</li>
+<li class="legal-list-item">as a result, the landlord is required under Part 4 of the Act to take steps to stop the dwelling from being treated as unfit for human habitation by virtue of that regulation.</li>
+</ul>
+<p class="legal-paragraph"><strong>71. </strong><strong>Restriction on giving notice under term 55 – failure to provide gas safety report to contract-holder (F)</strong></p>
+<p class="legal-paragraph">(1) The landlord may not give notice under term 55 at a time when the landlord has not complied with regulation 36(6) or (as the case may be) (7) of the Gas Safety Regulations (requirement to provide or display report on safety etc. of gas installations).</p>
+<p class="legal-paragraph">(2) For the purposes of paragraph (1) of this term, a landlord who has not complied with regulation 36(6) or (7) of the Gas Safety Regulations is to be treated as in compliance with the provision in question at any time when—</p>
+<ul class="legal-list">
+<li class="legal-list-item">the landlord has ensured that you have been given, or (as the case may be) there is displayed in a prominent position in the dwelling, a copy of the applicable gas safety record, and</li>
+<li class="legal-list-item">that record is valid.</li>
+</ul>
+<p class="legal-paragraph">(3) For the purposes of paragraph (2) of this term, a gas safety record is valid until the end of the period within which the appliance or flue to which the record relates is required, under the Gas Safety Regulations, to again be subjected to a check for safety.</p>
+<p class="legal-paragraph">(4) In this term —</p>
+<p class="legal-paragraph">“check for safety” (“gwiriad diogelwch”) means a check for safety carried out in accordance with regulation 36(3) of the Gas Safety Regulations;</p>
+<p class="legal-paragraph">“gas safety record” (“cofnod diogelwch nwy”) means a record made pursuant to the requirements of regulation 36(3)(c) of the Gas Safety Regulations;</p>
+<p class="legal-paragraph">“Gas Safety Regulations” (“y Rheoliadau Diogelwch Nwy”) means the Gas Safety (Installation and Use) Regulations 1998.</p>
+<h2>Court’s Order for possession</h2>
+<p class="legal-paragraph"><strong>72. </strong><strong>Effect of order for possession (F+)</strong></p>
+<p class="legal-paragraph">(1) If the court makes an order requiring you to give up possession of the dwelling on a date specified in the order, this contract ends —</p>
+<ul class="legal-list">
+<li class="legal-list-item">if you give up possession of the dwelling on or before that date, on that date,</li>
+<li class="legal-list-item">if you give up possession of the dwelling after that date but before the order for possession is executed, on the day on which you give up possession of the dwelling, or</li>
+<li class="legal-list-item">if you do not give up possession of the dwelling before the order for possession is executed, when the order for possession is executed.</li>
+</ul>
+<p class="legal-paragraph">(2) Paragraph (3) of this term applies if —</p>
+<ul class="legal-list">
+<li class="legal-list-item">it is a condition of the order that the landlord must offer a new contract in respect of the same dwelling to one or more joint contract-holders (but not all of them), and</li>
+<li class="legal-list-item">that joint contract-holder (or those joint contract-holders) continues to occupy the dwelling on and after the occupation date of the new contract.</li>
+</ul>
+<p class="legal-paragraph">(3) This contract ends immediately before the occupation date of the new contract.</p>
+<h2>Variation</h2>
+<p class="legal-paragraph"><strong>73. </strong><strong>Variation (F – except </strong><strong>73</strong><strong>(1)(a) which is F+)</strong></p>
+<p class="legal-paragraph">(1) This contract may not be varied except —</p>
+<ul class="legal-list">
+<li class="legal-list-item">in accordance with term 4 (variation of rent), 5 (variation of other consideration), and 74 (variation of terms other than rent), or</li>
+<li class="legal-list-item">by or as a result of an enactment such as an Act of Senedd Cymru or an Act of Parliament or regulations made by the Welsh Ministers.</li>
+</ul>
+<p class="legal-paragraph">(2) A variation of this contract (other than by or as a result of any enactment) must be in accordance with term 75.</p>
+<p class="legal-paragraph"><strong>74. </strong><strong>Variation of terms other than rent (F+)</strong></p>
+<p class="legal-paragraph">The fundamental terms, supplementary terms and additional terms of this contract may be varied (subject to term 75) by agreement between the landlord and you.</p>
+<p class="legal-paragraph"><strong>75. </strong><strong>Limitation on variation (F)</strong></p>
+<p class="legal-paragraph">(1) A fundamental term of this contract set out in paragraph (2) of this term may not be varied (except by or as a result of an enactment such as an Act of Senedd Cymru or an Act of Parliament or regulations made by the Welsh Ministers).</p>
+<p class="legal-paragraph">(2) The fundamental terms to which paragraph (1) of this term applies are —</p>
+<ul class="legal-list">
+<li class="legal-list-item">term 7 (requirement to use deposit scheme),</li>
+<li class="legal-list-item">term 8 (anti-social behaviour and other prohibited conduct),</li>
+<li class="legal-list-item">term 33 (joint contract-holder ceasing to be a party to the occupation contract),</li>
+<li class="legal-list-item">term 34 (permissible termination),</li>
+<li class="legal-list-item">term 37 (death of sole contract-holder),</li>
+<li class="legal-list-item">term 45 (possession claims),</li>
+<li class="legal-list-item">terms 63 to 71 (further restrictions on giving landlord’s notice under term 55),</li>
+<li class="legal-list-item">term 73(1)(b) and (2) (variation),</li>
+<li class="legal-list-item">this term, and</li>
+<li class="legal-list-item">term 81 (false statement - inducing landlord to make contract to be treated as breach of conduct).</li>
+</ul>
+<p class="legal-paragraph">(3) A variation of any other fundamental term (other than by or as a result of an enactment) is of no effect —</p>
+<ul class="legal-list">
+<li class="legal-list-item">unless as a result of the variation —</li>
+<li class="legal-list-item">the fundamental provision which the term incorporates is incorporated without modification, or</li>
+<li class="legal-list-item">the fundamental provision which the term incorporates is not incorporated or is incorporated with modification, but the effect of this is that your position is improved;</li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item">if the variation (regardless of whether it is within paragraph (3)(a) of this term) would render the fundamental term incompatible with a fundamental term which incorporates a fundamental provision to which paragraph (2) of this term applies.</li>
+</ul>
+<p class="legal-paragraph">(4) A variation of a term of this contract is of no effect if it would render any term of this contract incompatible with a fundamental term (unless that fundamental term is also varied in accordance with this term in a way that would avoid the incompatibility).</p>
+<p class="legal-paragraph">(5) Paragraph (4) of this term does not apply to a variation made by or as a result of an enactment.</p>
+<h2>Written statements and the provision of information by landlord</h2>
+<p class="legal-paragraph"><strong>76. </strong><strong>Written statements (F+)</strong></p>
+<p class="legal-paragraph">(1) The landlord must give you a written statement of the contract before the end of the period of 14 days starting with the occupation date.</p>
+<p class="legal-paragraph">(2) If there is a change in the identity of the contract-holder, the landlord must give the new contract-holder a written statement of the contract before the end of the period of 14 days starting with —</p>
+<ul class="legal-list">
+<li class="legal-list-item">the day on which the identity of the contract-holder changes, or</li>
+<li class="legal-list-item">if later, the day on which the landlord (or in the case of joint landlords, any one of them) becomes aware that the identity of the contract-holder has changed.</li>
+</ul>
+<p class="legal-paragraph">(3) The landlord may not charge a fee for providing a written statement under paragraph (1) or (2) of this term.</p>
+<p class="legal-paragraph">(4) You may request a further written statement of the contract at any time.</p>
+<p class="legal-paragraph">(5) The landlord may charge a reasonable fee for providing a further written statement.</p>
+<p class="legal-paragraph">(6) The landlord must give you the further written statement before the end of the period of 14 days starting with —</p>
+<ul class="legal-list">
+<li class="legal-list-item">the day of the request, or</li>
+<li class="legal-list-item">if the landlord charges a fee, the day on which you pay the fee.</li>
+</ul>
+<p class="legal-paragraph"><strong>77. </strong><strong>Written statement of variation (F+)</strong></p>
+<p class="legal-paragraph">(1) If this contract is varied the landlord must, before the end of the relevant period, give you —</p>
+<ul class="legal-list">
+<li class="legal-list-item">a written statement of the term or terms varied, or</li>
+<li class="legal-list-item">a written statement of the occupation contract as varied,</li>
+</ul>
+<p class="legal-paragraph">unless the landlord has given notice of the variation in accordance with term 4 (variation of rent), or term 5(2) to (4) (variation of other consideration).</p>
+<p class="legal-paragraph">(2) The relevant period is the period of 14 days starting with the day on which this contract is varied.</p>
+<p class="legal-paragraph">(3) The landlord may not charge a fee for providing a written statement under paragraph (1) of this term.</p>
+<p class="legal-paragraph"><strong>78. </strong><strong>Provision of information by landlord about the landlord (F+)</strong></p>
+<p class="legal-paragraph">(1)  The landlord must, before the end of the period of 14 days starting with the occupation date, give you notice of an address to which you may send documents that are intended for the landlord.</p>
+<p class="legal-paragraph">(2) If there is a change in the identity of the landlord, the new landlord must, before the end of the period of 14 days starting with the day on which the new landlord becomes the landlord, give you notice of the change in identity and of an address to which you may send documents that are intended for the new landlord.</p>
+<p class="legal-paragraph">(3) If the address to which you may send documents that are intended for the landlord changes, the landlord must, before the end of the period of 14 days starting with the day on which the address changes, give you notice of the new address.</p>
+<p class="legal-paragraph"><strong>79. </strong><strong>Compensation for breach of term </strong><strong>78</strong><strong> (F+)</strong></p>
+<p class="legal-paragraph">(1)  If the landlord fails to comply with an obligation under term 78, the landlord is liable to pay you compensation under section 87 of the Act.</p>
+<p class="legal-paragraph">(2) The compensation is payable in respect of the relevant date and every day after the relevant date until —</p>
+<ul class="legal-list">
+<li class="legal-list-item">the day on which the landlord gives the notice in question, or</li>
+<li class="legal-list-item">if earlier, the last day of the period of two months starting with the relevant date.</li>
+</ul>
+<p class="legal-paragraph">(3) Interest on the compensation is payable if the landlord fails to give you the notice on or before the day referred to in paragraph (2)(b) of this term.</p>
+<p class="legal-paragraph">(4) The interest starts to run on the day referred to in paragraph (2)(b) of this term, at the rate prevailing under section 6 of the Late Payment of Commercial Debts (Interest) Act 1998 at the end of that day.</p>
+<p class="legal-paragraph">(5) The relevant date is the first day of the period before the end of which the landlord was required to give the notice.</p>
+<p class="legal-paragraph"><strong>80. </strong><strong>Inventory (S)</strong></p>
+<p class="legal-paragraph">(1) The landlord must provide you with an inventory in relation to the dwelling no later than the date by which the landlord must provide you with the written statement of this contract in accordance with term 76.</p>
+<p class="legal-paragraph">(2) The inventory must set out the dwelling’s contents, including all fixtures and fittings and must describe their condition as at the occupation date.</p>
+<p class="legal-paragraph">(3) If you disagree with the information within the inventory, you may provide comments to the landlord.</p>
+<p class="legal-paragraph">(4) Where no comments are received by the landlord within 14 days, the inventory is deemed accurate.</p>
+<p class="legal-paragraph">(5) Where comments are received by the landlord within 14 days, the landlord must either—</p>
+<ul class="legal-list">
+<li class="legal-list-item">amend the inventory in accordance with those comments and send the amended inventory to you, or</li>
+<li class="legal-list-item">inform you that the comments are not agreed, and re-send the original inventory to you, with the comments attached to a copy of the inventory, or</li>
+<li class="legal-list-item">amend the inventory in accordance with some of the comments and send the amended inventory to you, together with a record of the comments which have not been agreed.</li>
+</ul>
+<h2>Other matters</h2>
+<p class="legal-paragraph"><strong>81. </strong><strong>False statement inducing landlord to make contract to be treated as breach of conduct (F)</strong></p>
+<p class="legal-paragraph">(1) If the landlord is induced to make this contract by means of a relevant false statement —</p>
+<ul class="legal-list">
+<li class="legal-list-item">you are to be treated as being in breach of this contract, and</li>
+<li class="legal-list-item">the landlord may accordingly make a possession claim on the ground in term 47 (breach of contract).</li>
+</ul>
+<p class="legal-paragraph">(2) A relevant false statement is one which is made knowingly or recklessly by —</p>
+<ul class="legal-list">
+<li class="legal-list-item">you, or</li>
+<li class="legal-list-item">another person acting at your instigation.</li>
+</ul>
+<p class="legal-paragraph"><strong>82. </strong><strong>Forms of notices etc. (F+)</strong></p>
+<p class="legal-paragraph">(1) Any notice, statement or other document required or authorised to be given or made by this contract must be in writing.</p>
+<p class="legal-paragraph">(2) Sections 236 and 237 of the Act make further provision about form of notices and other documents, and about how to deliver or otherwise give a document required or authorised to be given to a person by or because of the Act.</p>
+<p class="legal-paragraph"><strong>83. </strong><strong>Passing notices etc. to the landlord (S)</strong></p>
+<p class="legal-paragraph">You must —</p>
+<ul class="legal-list">
+<li class="legal-list-item">keep safe any notices, orders or other documents delivered to the dwelling addressed to the landlord specifically or the owner generally, and</li>
+<li class="legal-list-item">as soon as is reasonably practicable, give the original copies of any such notices, orders or other documents to the landlord.</li>
+</ul>
+<h2>ANNEX</h2>
+<p class="legal-paragraph">See term 49</p>
+<p class="legal-paragraph">ESTATE MANAGEMENT GROUNDS</p>
+<p class="legal-paragraph">REDEVELOPMENT GROUNDS</p>
+<p class="legal-paragraph"><em>Ground A (building works)</em></p>
+<p class="legal-paragraph">1	The landlord intends, within a reasonable time of obtaining possession of the dwelling—</p>
+<p class="legal-paragraph">(a) to demolish or reconstruct the building or part of the building comprising the dwelling, or</p>
+<p class="legal-paragraph">(b) to carry out work on that building or on land treated as part of the dwelling, and cannot reasonably do so without obtaining possession of the dwelling.</p>
+<p class="legal-paragraph"><em>Ground B (redevelopment schemes)</em></p>
+<p class="legal-paragraph">2	(1) This ground arises if the dwelling satisfies the first condition or the second condition.</p>
+<p class="legal-paragraph">(2) The first condition is that the dwelling is in an area which is the subject of a redevelopment scheme approved in accordance with Part 2 of Schedule 8 to the Act, and the landlord intends within a reasonable time of obtaining possession to dispose of the dwelling in accordance with the scheme.</p>
+<p class="legal-paragraph">(3) The second condition is that part of the dwelling is in such an area and the landlord intends within a reasonable time of obtaining possession to dispose of that part in accordance with the scheme, and for that purpose reasonably requires possession of the dwelling.</p>
+<p class="legal-paragraph">SPECIAL ACCOMMODATION GROUNDS <br></p>
+<p class="legal-paragraph"><em>Ground C (charities)</em></p>
+<p class="legal-paragraph">3	(1) The landlord is a charity and the contract-holder’s continued occupation of the dwelling would conflict with the objects of the charity.</p>
+<p class="legal-paragraph">(2) But this ground is not available to the landlord (“L”) unless, at the time the contract was made and at all times after that, the person in the position of landlord (whether L or another person) has been a charity.</p>
+<p class="legal-paragraph">(3) In this paragraph “charity” has the same meaning as in the Charities Act 2011 (c. 25) (see section 1 of that Act).</p>
+<p class="legal-paragraph"><em>Ground D (dwelling suitable for disabled people)</em></p>
+<p class="legal-paragraph">4	The dwelling has features which are substantially different from those of ordinary dwellings and which are designed to make it suitable for occupation by a physically disabled person who requires accommodation of a kind provided by the dwelling and—</p>
+<p class="legal-paragraph">(a) there is no longer such a person living in the dwelling, and</p>
+<p class="legal-paragraph">(b) the landlord requires the dwelling for occupation by such a person (whether alone or with members of that person’s family).</p>
+<p class="legal-paragraph"><em>Ground E (housing associations and housing trusts: people difficult to house)</em></p>
+<p class="legal-paragraph">5	(1) The landlord is a housing association or housing trust which makes dwellings available only for occupation (whether alone or with others) by people who are difficult to house, and—</p>
+<p class="legal-paragraph">(a) either there is no longer such a person living in the dwelling or a local housing authority has offered the contract-holder a right to occupy another dwelling under a secure contract, and</p>
+<p class="legal-paragraph">(b) the landlord requires the dwelling for occupation by such a person (whether alone or with members of that person’s family).</p>
+<p class="legal-paragraph">(2) A person is difficult to house if that person’s circumstances (other than financial circumstances) make it especially difficult for him or her to satisfy his or her need for housing.</p>
+<p class="legal-paragraph"><em>Ground F (groups of dwellings for people with special needs)</em></p>
+<p class="legal-paragraph">6	The dwelling constitutes part of a group of dwellings which it is the practice of the landlord to make available for occupation by persons with special needs and—</p>
+<p class="legal-paragraph">(a) a social service or special facility is provided in close proximity to the group of dwellings in order to assist persons with those special needs,</p>
+<p class="legal-paragraph">(b) there is no longer a person with those special needs living in the dwelling, and</p>
+<p class="legal-paragraph">(c) the landlord requires the dwelling for occupation by a person who has those special needs (whether alone or with members of his or her family).</p>
+<p class="legal-paragraph">UNDER-OCCUPATION GROUNDS </p>
+<p class="legal-paragraph"><br><em>Ground G (reserve successors)</em></p>
+<p class="legal-paragraph">7	The contract-holder succeeded to the occupation contract under section 73 of the Act as a reserve successor (see sections 76 and 77 of the Act), and the accommodation comprised in the dwelling is more extensive than is reasonably required by the contract-holder.</p>
+<p class="legal-paragraph"><em>Ground H (joint contract-holders)</em></p>
+<p class="legal-paragraph">8	(1) This ground arises if the first condition and the second condition are met.</p>
+<p class="legal-paragraph">(2) The first condition is that a joint contract-holder’s rights and obligations under the contract have been ended in accordance with—</p>
+<p class="legal-paragraph">(a) Term 31  (withdrawal), or</p>
+<p class="legal-paragraph">(b) section 225, 227 or 230 (exclusion) of the Act.</p>
+<p class="legal-paragraph">(3) The second condition is that—</p>
+<p class="legal-paragraph">(a) the accommodation comprised in the dwelling is more extensive than is reasonably required by the remaining contract-holder (or contract-holders), or</p>
+<p class="legal-paragraph">(b) where the landlord is a community landlord, the remaining contract-holder does not (or the remaining contract-holders do not) meet the landlord’s criteria for the allocation of housing accommodation.</p>
+<p class="legal-paragraph">OTHER ESTATE MANAGEMENT REASONS </p>
+<p class="legal-paragraph"><br><em>Ground I (other estate management reasons)</em></p>
+<p class="legal-paragraph">9	(1) This ground arises where it is desirable for some other substantial estate management reason that the landlord should obtain possession of the dwelling.</p>
+<p class="legal-paragraph">(2) An estate management reason may, in particular, relate to—</p>
+<p class="legal-paragraph">(a) all or part of the dwelling, or</p>
+<p class="legal-paragraph">(b) any other premises of the landlord to which the dwelling is connected, whether by reason of proximity or the purposes for which they are used, or in any other manner.</p></section>
 
-    <div class="party-block">
-      <div class="party-role">Contract-Holder{{#if multiple_tenants}}s{{/if}}</div>
-      <div class="party-details-text">
-        {{#each tenants}}
-        <strong>{{this.full_name}}</strong>{{#if this.dob}} (DOB: {{formatUKDate this.dob}}){{/if}}<br>
-        <span class="email-text">{{this.email}}</span>{{#if this.phone}} | {{this.phone}}{{/if}}{{#unless @last}}<br><br>{{/unless}}
-        {{/each}}
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== 2. DEFINITIONS ===== -->
-  <h2>2. Definitions and Interpretation</h2>
-  <p>In this Contract, unless the context requires otherwise:</p>
-  <ul class="definitions-list">
-    <li><span class="defined-term">"Contract"</span> means this occupation contract and the Schedules attached.</li>
-    <li><span class="defined-term">"Landlord"</span> means {{landlord_full_name}} and successors in title.</li>
-    {{#if agent_name}}<li><span class="defined-term">"Agent"</span> means {{agent_name}}, the Landlord's authorised agent.</li>{{/if}}
-    <li><span class="defined-term">"Contract-Holder"</span> means {{#each tenants}}{{this.full_name}}{{#unless @last}}, {{/unless}}{{/each}}{{#if multiple_tenants}} (jointly and severally){{/if}}.</li>
-    <li><span class="defined-term">"Dwelling"</span> means {{property_address}} as described in Schedule 1.</li>
-    <li><span class="defined-term">"Occupation Date"</span> means {{formatUKDate tenancy_start_date}}.</li>
-    <li><span class="defined-term">"Term"</span> means the {{#if is_fixed_term}}fixed term from {{formatUKDate tenancy_start_date}} to {{formatUKDate tenancy_end_date}}{{else}}periodic contract from {{formatUKDate tenancy_start_date}}{{/if}} and any continuation.</li>
-    <li><span class="defined-term">"Rent"</span> means £{{rent_amount}} per {{rent_period}} as set out in Schedule 2.</li>
-    <li><span class="defined-term">"Deposit"</span> means £{{deposit_amount}} held in {{deposit_scheme_name}} as set out in Schedule 2.</li>
-    <li><span class="defined-term">"Scheme"</span> means the government-authorised deposit protection scheme.</li>
-    <li><span class="defined-term">"RH(W)A 2016"</span> means the Renting Homes (Wales) Act 2016.</li>
-    <li><span class="defined-term">"Written Notice"</span> means notice in writing by hand, post, or email.</li>
-  </ul>
-  <p>Words importing the singular include the plural. Where there is more than one Contract-Holder, their obligations are joint and several.</p>
-
-  <!-- ===== 3. THE DWELLING ===== -->
-  <h2>3. The Dwelling</h2>
-  <p class="clause"><span class="clause-num">3.1</span> The Landlord lets to the Contract-Holder the Dwelling described in Schedule 1 for the Term.</p>
-  <p class="clause"><span class="clause-num">3.2</span> The Dwelling is let for use as a private residential dwelling only.</p>
-  <p class="clause"><span class="clause-num">3.3</span> The Landlord warrants that the Dwelling is fit for human habitation in accordance with section 91 of RH(W)A 2016.</p>
-  <p class="clause"><span class="clause-num">3.4</span> All required compliance certificates are valid and have been or will be provided to the Contract-Holder.</p>
-
-  <!-- ===== 4. THE TERM ===== -->
-  <h2>4. The Term</h2>
-  {{#if is_fixed_term}}
-  <p class="clause"><span class="clause-num">4.1</span> The occupation date is <strong>{{formatUKDate tenancy_start_date}}</strong> and the contract ends on <strong>{{formatUKDate tenancy_end_date}}</strong> (the "Fixed Term").</p>
-  <p class="clause"><span class="clause-num">4.2</span> Upon expiry of the Fixed Term, unless either party serves notice, this contract continues as a periodic standard contract on the same terms.</p>
-  {{else}}
-  <p class="clause"><span class="clause-num">4.1</span> The occupation date is <strong>{{formatUKDate tenancy_start_date}}</strong> and this is a periodic standard contract.</p>
-  <p class="clause"><span class="clause-num">4.2</span> The contract continues until terminated by either party giving proper notice.</p>
+<section class="page-break">
+  <h2>Execution</h2>
+  <p>By signing, each party confirms that they have read and agree to this written agreement.</p>
+  {{#each tenants}}
+  <table class="signature-table">
+    <tr><th colspan="2">Contract-holder: {{full_name}}</th></tr>
+    <tr><td class="line">Signature</td><td>Date</td></tr>
+  </table>
+  {{/each}}
+  <table class="signature-table">
+    <tr><th colspan="2">Landlord: {{landlord_full_name}}</th></tr>
+    <tr><td class="line">Signature</td><td>Date</td></tr>
+  </table>
+  {{#if landlord_2_full_name}}
+  <table class="signature-table">
+    <tr><th colspan="2">Joint landlord: {{landlord_2_full_name}}</th></tr>
+    <tr><td class="line">Signature</td><td>Date</td></tr>
+  </table>
   {{/if}}
-  <p class="clause"><span class="clause-num">4.3</span> The Landlord may give notice under section 173 RH(W)A 2016 (no-fault, minimum 6 months' notice) or seek possession on breach grounds.</p>
-  <p class="clause"><span class="clause-num">4.4</span> The Contract-Holder may end the contract by giving at least 4 weeks' written notice (or one rental period, whichever is longer).</p>
-
-  <!-- ===== 5. RENT ===== -->
-  <h2>5. Rent</h2>
-  <p class="clause"><span class="clause-num">5.1</span> The Contract-Holder shall pay the Rent of <strong>£{{rent_amount}}</strong> per {{rent_period}} in advance on the <strong>{{rent_due_day}}</strong> of each {{rent_period}}.</p>
-  <p class="clause"><span class="clause-num">5.2</span> Payment shall be made by {{payment_method}} to the account specified in Schedule 2.</p>
-  <p class="clause"><span class="clause-num">5.3</span> The first payment is due on or before {{formatUKDate tenancy_start_date}}.</p>
-  <p class="clause"><span class="clause-num">5.4</span> Rent increases require at least 2 months' written notice under section 123 RH(W)A 2016 and may be challenged at the Residential Property Tribunal Wales.</p>
-
-  <!-- ===== 6. DEPOSIT ===== -->
-  <h2>6. Deposit</h2>
-  <p class="clause"><span class="clause-num">6.1</span> The Contract-Holder has paid a Deposit of <strong>£{{deposit_amount}}</strong>.</p>
-  <p class="clause"><span class="clause-num">6.2</span> The Landlord will protect the Deposit in {{deposit_scheme_name}} within 30 days and provide the prescribed information.</p>
-  <p class="clause"><span class="clause-num">6.3</span> The Deposit may be applied against unpaid rent, damage beyond fair wear and tear, cleaning costs, missing inventory items, or other sums due under this Contract.</p>
-  <p class="clause"><span class="clause-num">6.4</span> Any dispute over deductions may be referred to the Scheme's free alternative dispute resolution service.</p>
-
-  <!-- ===== 7. CONTRACT-HOLDER OBLIGATIONS ===== -->
-  <h2>7. Contract-Holder Obligations</h2>
-  <p class="clause"><span class="clause-num">7.1</span> <strong>Rent:</strong> Pay the Rent on time and in full.</p>
-  <p class="clause"><span class="clause-num">7.2</span> <strong>Utilities:</strong> Pay all charges for gas, electricity, water, council tax, telephone, and internet as set out in Schedule 3.</p>
-  <p class="clause"><span class="clause-num">7.3</span> <strong>Care of Dwelling:</strong> Keep the Dwelling clean and in good condition, not cause damage, and promptly report any disrepair to the Landlord.</p>
-  <p class="clause"><span class="clause-num">7.4</span> <strong>Access:</strong> Allow the Landlord (with at least 24 hours' notice, except in emergency) to enter the Dwelling for inspection, repairs, or safety checks.</p>
-  <p class="clause"><span class="clause-num">7.5</span> <strong>Use:</strong> Use the Dwelling only as a private residence and comply with the House Rules in Schedule 5.</p>
-  <p class="clause"><span class="clause-num">7.6</span> <strong>Nuisance:</strong> Not cause nuisance, annoyance, or disturbance to neighbours.</p>
-  <p class="clause"><span class="clause-num">7.7</span> <strong>Subletting:</strong> Not sublet, assign, or part with possession without the Landlord's prior written consent.</p>
-  <p class="clause"><span class="clause-num">7.8</span> <strong>Alterations:</strong> Not make alterations to the Dwelling without the Landlord's prior written consent.</p>
-  <p class="clause"><span class="clause-num">7.9</span> <strong>Insurance:</strong> Not do anything that would invalidate the Landlord's insurance.</p>
-  <p class="clause"><span class="clause-num">7.10</span> <strong>End of Contract:</strong> Return the Dwelling at the end of the contract in the same condition as at the start (fair wear and tear excepted), return all keys, and provide a forwarding address.</p>
-
-  <!-- ===== 8. LANDLORD OBLIGATIONS ===== -->
-  <h2>8. Landlord Obligations</h2>
-  <p class="clause"><span class="clause-num">8.1</span> <strong>Quiet Enjoyment:</strong> Allow the Contract-Holder to occupy the Dwelling without interference, except as permitted by this Contract.</p>
-  <p class="clause"><span class="clause-num">8.2</span> <strong>Fitness:</strong> Ensure the Dwelling is and remains fit for human habitation (section 91 RH(W)A 2016).</p>
-  <p class="clause"><span class="clause-num">8.3</span> <strong>Repairs:</strong> Keep the structure, exterior, and installations for water, gas, electricity, heating, and sanitation in repair and proper working order.</p>
-  <p class="clause"><span class="clause-num">8.4</span> <strong>Safety:</strong> Ensure the Dwelling has valid Gas Safety Certificate, Electrical Installation Condition Report, smoke and carbon monoxide alarms, and an EPC rating of E or above.</p>
-  <p class="clause"><span class="clause-num">8.5</span> <strong>Deposit:</strong> Protect the Deposit in a government-authorised scheme and provide prescribed information within 30 days.</p>
-  <p class="clause"><span class="clause-num">8.6</span> <strong>Written Statement:</strong> Provide this written statement within 14 days of the occupation date.</p>
-  <p class="clause"><span class="clause-num">8.7</span> <strong>Rent Smart Wales:</strong> Be registered (and licensed if self-managing) with Rent Smart Wales.</p>
-  <p class="clause"><span class="clause-num">8.8</span> <strong>Insurance:</strong> Maintain buildings insurance for the Dwelling.</p>
-
-  <!-- ===== 9. GENERAL ===== -->
-  <h2>9. General Provisions</h2>
-  <p class="clause"><span class="clause-num">9.1</span> This Contract constitutes the entire agreement between the parties.</p>
-  <p class="clause"><span class="clause-num">9.2</span> No variation is effective unless in writing and signed by all parties.</p>
-  <p class="clause"><span class="clause-num">9.3</span> This Contract is governed by the laws of Wales and the Renting Homes (Wales) Act 2016.</p>
-  <p class="clause"><span class="clause-num">9.4</span> Disputes may be referred to the Residential Property Tribunal Wales.</p>
-  <p class="clause"><span class="clause-num">9.5</span> Notices may be served by hand, first-class post, or email to the addresses given in this Contract.</p>
-  <p class="clause"><span class="clause-num">9.6</span> If any provision is unenforceable, the remaining provisions continue in effect.</p>
-
-  {{> statutory_acknowledgements jurisdiction="wales" format="html" heading_style="h2"}}
-
-  <!-- ===== SIGNATURES ===== -->
-  <div class="signature-section">
-    <h2>Signatures</h2>
-    <p>By signing below, the parties confirm they have read, understood, and agree to be bound by all terms of this Contract and the attached Schedules.</p>
-
-    <div class="signature-block">
-      <div class="signature-role">Landlord</div>
-      <div class="signature-name">Name: {{landlord_full_name}}</div>
-      <div class="signature-line"></div>
-      <div class="signature-label">Signature</div>
-      <div style="margin-top: 10pt;">Date: <span class="signature-date-line"></span></div>
-    </div>
-
-    {{#if agent_name}}
-    <div class="signature-block">
-      <div class="signature-role">Agent (signing on behalf of Landlord)</div>
-      <div class="signature-name">Name: {{agent_name}}</div>
-      <div class="signature-line"></div>
-      <div class="signature-label">Signature</div>
-      <div style="margin-top: 10pt;">Date: <span class="signature-date-line"></span></div>
-    </div>
-    {{/if}}
-
-    {{#each tenants}}
-    <div class="signature-block">
-      <div class="signature-role">Contract-Holder {{add @index 1}}</div>
-      <div class="signature-name">Name: {{this.full_name}}</div>
-      <div class="signature-line"></div>
-      <div class="signature-label">Signature</div>
-      <div style="margin-top: 10pt;">Date: <span class="signature-date-line"></span></div>
-    </div>
-    {{/each}}
-  </div>
-
-  <!-- ===== SCHEDULE 1: DWELLING ===== -->
-  <section class="schedule">
-    <div class="schedule-header">
-      <h2>Schedule 1</h2>
-      <div class="schedule-title">Dwelling Details</div>
-    </div>
-
-    <table class="data-table">
-      <tr>
-        <td class="label">Dwelling Address</td>
-        <td class="value address-text">{{property_address}}</td>
-      </tr>
-      {{#if property_type}}
-      <tr>
-        <td class="label">Property Type</td>
-        <td class="value">{{property_type}}</td>
-      </tr>
-      {{/if}}
-      {{#if number_of_bedrooms}}
-      <tr>
-        <td class="label">Bedrooms</td>
-        <td class="value">{{number_of_bedrooms}}</td>
-      </tr>
-      {{/if}}
-      {{#if furnished_status}}
-      <tr>
-        <td class="label">Furnished Status</td>
-        <td class="value">{{#eq furnished_status "furnished"}}Furnished{{/eq}}{{#eq furnished_status "unfurnished"}}Unfurnished{{/eq}}{{#eq furnished_status "part-furnished"}}Part-Furnished{{/eq}}{{#unless (eq furnished_status "furnished")}}{{#unless (eq furnished_status "unfurnished")}}{{#unless (eq furnished_status "part-furnished")}}{{furnished_status}}{{/unless}}{{/unless}}{{/unless}}</td>
-      </tr>
-      {{/if}}
-      {{#if council_tax_band}}
-      <tr>
-        <td class="label">Council Tax Band</td>
-        <td class="value">{{council_tax_band}}</td>
-      </tr>
-      {{/if}}
-      {{#if epc_rating}}
-      <tr>
-        <td class="label">EPC Rating</td>
-        <td class="value">{{epc_rating}}</td>
-      </tr>
-      {{/if}}
-      {{#if parking_available}}
-      <tr>
-        <td class="label">Parking</td>
-        <td class="value">{{#if parking_details}}{{parking_details}}{{else}}Included{{/if}}</td>
-      </tr>
-      {{/if}}
-    </table>
-
-    <h3>Compliance Certificates</h3>
-    <table class="data-table">
-      <tr>
-        <td class="label">Gas Safety Certificate</td>
-        <td class="value">{{#if gas_safety_certificate}}Valid{{#if gas_safety_certificate_expiry}} (expires {{formatUKDate gas_safety_certificate_expiry}}){{/if}}{{else}}To be provided{{/if}}</td>
-      </tr>
-      <tr>
-        <td class="label">EICR</td>
-        <td class="value">{{#if electrical_safety_certificate}}Valid{{#if eicr_next_inspection_date}} (next inspection {{formatUKDate eicr_next_inspection_date}}){{/if}}{{else}}To be provided{{/if}}</td>
-      </tr>
-      <tr>
-        <td class="label">EPC</td>
-        <td class="value">{{#if epc_rating}}Rating {{epc_rating}}{{#if epc_expiry}} (valid until {{formatUKDate epc_expiry}}){{/if}}{{else}}To be provided{{/if}}</td>
-      </tr>
-      <tr>
-        <td class="label">Smoke Alarms</td>
-        <td class="value">{{#if smoke_alarms_fitted}}Fitted{{else}}Fitted (legally required){{/if}}</td>
-      </tr>
-      <tr>
-        <td class="label">CO Alarms</td>
-        <td class="value">{{#if carbon_monoxide_alarms}}Fitted{{else}}Fitted where required{{/if}}</td>
-      </tr>
-    </table>
-
-    <h3>Documents to be Provided</h3>
-    <p>The Landlord confirms the following have been or will be provided to the Contract-Holder:</p>
-    <ul>
-      <li>This Written Statement (within 14 days of occupation)</li>
-      <li>Energy Performance Certificate</li>
-      <li>Gas Safety Certificate (annually)</li>
-      <li>Electrical Installation Condition Report</li>
-      <li>Deposit protection prescribed information (within 30 days)</li>
-    </ul>
-  </section>
-
-  <!-- ===== SCHEDULE 2: RENT & DEPOSIT ===== -->
-  <section class="schedule">
-    <div class="schedule-header">
-      <h2>Schedule 2</h2>
-      <div class="schedule-title">Rent and Deposit</div>
-    </div>
-
-    <h3>Part A: Rent</h3>
-    <table class="data-table">
-      <tr>
-        <td class="label">Rent Amount</td>
-        <td class="value">£{{rent_amount}} per {{rent_period}}</td>
-      </tr>
-      <tr>
-        <td class="label">Payment Due</td>
-        <td class="value">{{rent_due_day}} of each {{rent_period}}</td>
-      </tr>
-      <tr>
-        <td class="label">Payment Method</td>
-        <td class="value">{{payment_method}}</td>
-      </tr>
-      <tr>
-        <td class="label">First Payment</td>
-        <td class="value">{{#if first_payment_date}}{{formatUKDate first_payment_date}}{{else}}{{formatUKDate tenancy_start_date}}{{/if}}</td>
-      </tr>
-    </table>
-
-    <h4>Bank Details</h4>
-    <table class="data-table">
-      <tr>
-        <td class="label">Account Name</td>
-        <td class="value">{{#if bank_account_name}}{{bank_account_name}}{{else}}{{landlord_full_name}}{{/if}}</td>
-      </tr>
-      <tr>
-        <td class="label">Sort Code</td>
-        <td class="value">{{bank_sort_code}}</td>
-      </tr>
-      <tr>
-        <td class="label">Account Number</td>
-        <td class="value">{{bank_account_number}}</td>
-      </tr>
-    </table>
-
-    <h3>Part B: Deposit</h3>
-    <table class="data-table">
-      <tr>
-        <td class="label">Deposit Amount</td>
-        <td class="value">£{{deposit_amount}}</td>
-      </tr>
-      <tr>
-        <td class="label">Protection Scheme</td>
-        <td class="value">{{deposit_scheme_name}}</td>
-      </tr>
-    </table>
-
-    <div class="legal-notice">
-      <div class="legal-notice-title">Deposit Protection</div>
-      <p>The Deposit will be protected within 30 days and prescribed information provided. At contract end, the Deposit (less any lawful deductions) will be returned via the Scheme's procedures. Disputes may be referred to the Scheme's free ADR service.</p>
-    </div>
-
-    <h4>Permitted Deductions</h4>
-    <ul>
-      <li>Unpaid rent or other sums due</li>
-      <li>Damage beyond fair wear and tear</li>
-      <li>Missing inventory items</li>
-      <li>Cleaning costs if not left in comparable condition</li>
-      <li>Unreturned keys or access devices</li>
-    </ul>
-  </section>
-
-  <!-- ===== SCHEDULE 3: UTILITIES ===== -->
-  <section class="schedule">
-    <div class="schedule-header">
-      <h2>Schedule 3</h2>
-      <div class="schedule-title">Utilities and Services</div>
-    </div>
-
-    <table class="data-table">
-      <tr>
-        <th style="width: 40%;">Utility</th>
-        <th style="width: 30%;">Responsibility</th>
-        <th style="width: 30%;">Notes</th>
-      </tr>
-      <tr>
-        <td>Council Tax</td>
-        <td>{{#if council_tax_responsibility}}{{council_tax_responsibility}}{{else}}Contract-Holder{{/if}}</td>
-        <td>{{#if council_tax_band}}Band {{council_tax_band}}{{/if}}</td>
-      </tr>
-      <tr>
-        <td>Gas</td>
-        <td>{{#if utilities_responsibility}}{{utilities_responsibility}}{{else}}Contract-Holder{{/if}}</td>
-        <td>Register with supplier</td>
-      </tr>
-      <tr>
-        <td>Electricity</td>
-        <td>{{#if utilities_responsibility}}{{utilities_responsibility}}{{else}}Contract-Holder{{/if}}</td>
-        <td>Register with supplier</td>
-      </tr>
-      <tr>
-        <td>Water</td>
-        <td>{{#if utilities_responsibility}}{{utilities_responsibility}}{{else}}Contract-Holder{{/if}}</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>Internet</td>
-        <td>{{#if internet_responsibility}}{{internet_responsibility}}{{else}}Contract-Holder{{/if}}</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>TV Licence</td>
-        <td>Contract-Holder</td>
-        <td>If required</td>
-      </tr>
-      <tr>
-        <td>Buildings Insurance</td>
-        <td>Landlord</td>
-        <td>Contract-Holder arranges contents</td>
-      </tr>
-    </table>
-
-    <p>The Contract-Holder must notify utility suppliers of occupation within 7 days and provide meter readings at start and end of contract.</p>
-
-    {{#if meter_reading_gas}}{{#if meter_reading_electric}}
-    <h3>Meter Readings at Start</h3>
-    <table class="data-table">
-      {{#if meter_reading_gas}}<tr><td class="label">Gas</td><td class="value">{{meter_reading_gas}}</td></tr>{{/if}}
-      {{#if meter_reading_electric}}<tr><td class="label">Electricity</td><td class="value">{{meter_reading_electric}}</td></tr>{{/if}}
-      {{#if meter_reading_water}}<tr><td class="label">Water</td><td class="value">{{meter_reading_water}}</td></tr>{{/if}}
-    </table>
-    {{/if}}{{/if}}
-  </section>
-
-  <!-- ===== SCHEDULE 4: INVENTORY ===== -->
-  <section class="schedule">
-    <div class="schedule-header">
-      <h2>Schedule 4</h2>
-      <div class="schedule-title">Inventory and Condition</div>
-    </div>
-
-    {{#if inventory_attached}}
-    <p>A detailed inventory and schedule of condition is attached or provided separately and forms part of this Contract.</p>
-    {{else}}
-    <p>{{#if inventory_provided}}An inventory will be provided at or before the occupation date.{{else}}The Contract-Holder should prepare a photographic record of the Dwelling's condition at the start of the contract.{{/if}}</p>
-    {{/if}}
-
-    <h3>Keys and Access Devices</h3>
-    <table class="data-table">
-      {{#if number_of_front_door_keys}}<tr><td class="label">Front Door Keys</td><td class="value">{{number_of_front_door_keys}}</td></tr>{{/if}}
-      {{#if number_of_back_door_keys}}<tr><td class="label">Back Door Keys</td><td class="value">{{number_of_back_door_keys}}</td></tr>{{/if}}
-      {{#if access_cards_fobs}}<tr><td class="label">Access Cards/Fobs</td><td class="value">{{access_cards_fobs}}</td></tr>{{/if}}
-      {{#if number_of_mailbox_keys}}<tr><td class="label">Mailbox Keys</td><td class="value">{{number_of_mailbox_keys}}</td></tr>{{/if}}
-    </table>
-    <p>All keys must be returned at contract end. Lost key replacement will be charged to the Contract-Holder.</p>
-
-    <h3>Condition at End of Contract</h3>
-    <p>The Contract-Holder must return the Dwelling in the same condition as at the start (fair wear and tear excepted). A check-out inspection will be conducted, preferably with the Contract-Holder present.</p>
-  </section>
-
-  <!-- ===== SCHEDULE 5: HOUSE RULES ===== -->
-  <section class="schedule">
-    <div class="schedule-header">
-      <h2>Schedule 5</h2>
-      <div class="schedule-title">House Rules</div>
-    </div>
-
-    <h3>Permitted Use</h3>
-    <p>The Dwelling is let for use as a private residential dwelling only. The Contract-Holder must not use the Dwelling for trade or business, or do anything causing nuisance to neighbours.</p>
-
-    <h3>Pets</h3>
-    <table class="data-table">
-      <tr>
-        <td class="label">Pets Permitted</td>
-        <td class="value">{{#if pets_allowed}}Yes{{#if approved_pets}} ({{approved_pets}}){{/if}}{{else}}No (consent required){{/if}}</td>
-      </tr>
-    </table>
-    {{#if pets_allowed}}
-    <p>Approved pets must be kept under control, not cause nuisance, and be up to date with vaccinations. The Contract-Holder is liable for any pet damage.</p>
-    {{else}}
-    <p>The Contract-Holder may request consent for pets in writing. The Landlord will not unreasonably refuse well-behaved pets.</p>
-    {{/if}}
-
-    <h3>Smoking</h3>
-    <table class="data-table">
-      <tr>
-        <td class="label">Smoking Permitted</td>
-        <td class="value">{{#if smoking_allowed}}Outdoors only{{else}}No{{/if}}</td>
-      </tr>
-    </table>
-
-    <h3>Subletting</h3>
-    <p>The Contract-Holder must not sublet, take in lodgers, or list the Dwelling on short-term letting platforms without prior written consent. Unauthorised subletting is a serious breach.</p>
-
-    <h3>Quiet Enjoyment</h3>
-    <p>The Contract-Holder must behave considerately, keep noise reasonable (especially 11pm-7am), and ensure visitors respect these rules.</p>
-
-    {{#if has_garden}}
-    <h3>Garden</h3>
-    <p>The Contract-Holder is responsible for keeping the garden in reasonable condition: mowing lawns, trimming hedges, and keeping paths clear.</p>
-    {{/if}}
-
-    <h3>Alterations</h3>
-    <p>No alterations without prior written consent. Minor picture hooks may be permitted. Any alterations become the Landlord's property.</p>
-  </section>
-
-  <!-- ===== FOOTER ===== -->
-  <div class="doc-footer">
-    <p>Standard Occupation Contract &mdash; Wales</p>
-    <p>Generated: {{formatUKDate current_date}} | Reference: {{#if case_id}}{{case_id}}{{else}}{{document_id}}{{/if}}</p>
-    <p>Compliant with Renting Homes (Wales) Act 2016, Housing (Wales) Act 2014</p>
-  </div>
-
-</body>
-</html>
+</section>
+<p class="footer-note">This document should be reviewed in full before signature. Keep the signed agreement, inventory and all prescribed information together.</p>
+</body></html>

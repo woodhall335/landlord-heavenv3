@@ -1,0 +1,933 @@
+{
+  "automated_term_evidence": [
+    {
+      "document": "scotland",
+      "source": "Scottish Government model PRT April 2024",
+      "expected_range": [
+        7,
+        39
+      ],
+      "terms": [
+        {
+          "term": 7,
+          "present_in_order": true,
+          "character_offset": 10583
+        },
+        {
+          "term": 8,
+          "present_in_order": true,
+          "character_offset": 10812
+        },
+        {
+          "term": 9,
+          "present_in_order": true,
+          "character_offset": 11294
+        },
+        {
+          "term": 10,
+          "present_in_order": true,
+          "character_offset": 11592
+        },
+        {
+          "term": 11,
+          "present_in_order": true,
+          "character_offset": 12652
+        },
+        {
+          "term": 12,
+          "present_in_order": true,
+          "character_offset": 15036
+        },
+        {
+          "term": 13,
+          "present_in_order": true,
+          "character_offset": 15402
+        },
+        {
+          "term": 14,
+          "present_in_order": true,
+          "character_offset": 16684
+        },
+        {
+          "term": 15,
+          "present_in_order": true,
+          "character_offset": 17148
+        },
+        {
+          "term": 16,
+          "present_in_order": true,
+          "character_offset": 17702
+        },
+        {
+          "term": 17,
+          "present_in_order": true,
+          "character_offset": 18064
+        },
+        {
+          "term": 18,
+          "present_in_order": true,
+          "character_offset": 19026
+        },
+        {
+          "term": 19,
+          "present_in_order": true,
+          "character_offset": 27741
+        },
+        {
+          "term": 20,
+          "present_in_order": true,
+          "character_offset": 28327
+        },
+        {
+          "term": 21,
+          "present_in_order": true,
+          "character_offset": 29299
+        },
+        {
+          "term": 22,
+          "present_in_order": true,
+          "character_offset": 31797
+        },
+        {
+          "term": 23,
+          "present_in_order": true,
+          "character_offset": 32654
+        },
+        {
+          "term": 24,
+          "present_in_order": true,
+          "character_offset": 32844
+        },
+        {
+          "term": 25,
+          "present_in_order": true,
+          "character_offset": 39829
+        },
+        {
+          "term": 26,
+          "present_in_order": true,
+          "character_offset": 40884
+        },
+        {
+          "term": 27,
+          "present_in_order": true,
+          "character_offset": 41360
+        },
+        {
+          "term": 28,
+          "present_in_order": true,
+          "character_offset": 42260
+        },
+        {
+          "term": 29,
+          "present_in_order": true,
+          "character_offset": 43211
+        },
+        {
+          "term": 30,
+          "present_in_order": true,
+          "character_offset": 43552
+        },
+        {
+          "term": 31,
+          "present_in_order": true,
+          "character_offset": 43631
+        },
+        {
+          "term": 32,
+          "present_in_order": true,
+          "character_offset": 43763
+        },
+        {
+          "term": 33,
+          "present_in_order": true,
+          "character_offset": 44447
+        },
+        {
+          "term": 34,
+          "present_in_order": true,
+          "character_offset": 44657
+        },
+        {
+          "term": 35,
+          "present_in_order": true,
+          "character_offset": 45239
+        },
+        {
+          "term": 36,
+          "present_in_order": true,
+          "character_offset": 45604
+        },
+        {
+          "term": 37,
+          "present_in_order": true,
+          "character_offset": 45850
+        },
+        {
+          "term": 38,
+          "present_in_order": true,
+          "character_offset": 45954
+        },
+        {
+          "term": 39,
+          "present_in_order": true,
+          "character_offset": 46035
+        }
+      ],
+      "all_present_in_order": true
+    },
+    {
+      "document": "wales-fixed",
+      "source": "Welsh Government fixed model May 2026",
+      "expected_range": [
+        1,
+        56
+      ],
+      "terms": [
+        {
+          "term": 1,
+          "present_in_order": true,
+          "character_offset": 12160
+        },
+        {
+          "term": 2,
+          "present_in_order": true,
+          "character_offset": 12370
+        },
+        {
+          "term": 3,
+          "present_in_order": true,
+          "character_offset": 12561
+        },
+        {
+          "term": 4,
+          "present_in_order": true,
+          "character_offset": 12719
+        },
+        {
+          "term": 5,
+          "present_in_order": true,
+          "character_offset": 12869
+        },
+        {
+          "term": 6,
+          "present_in_order": true,
+          "character_offset": 13866
+        },
+        {
+          "term": 7,
+          "present_in_order": true,
+          "character_offset": 15279
+        },
+        {
+          "term": 8,
+          "present_in_order": true,
+          "character_offset": 15431
+        },
+        {
+          "term": 9,
+          "present_in_order": true,
+          "character_offset": 15586
+        },
+        {
+          "term": 10,
+          "present_in_order": true,
+          "character_offset": 16339
+        },
+        {
+          "term": 11,
+          "present_in_order": true,
+          "character_offset": 17281
+        },
+        {
+          "term": 12,
+          "present_in_order": true,
+          "character_offset": 17768
+        },
+        {
+          "term": 13,
+          "present_in_order": true,
+          "character_offset": 19512
+        },
+        {
+          "term": 14,
+          "present_in_order": true,
+          "character_offset": 20176
+        },
+        {
+          "term": 15,
+          "present_in_order": true,
+          "character_offset": 21044
+        },
+        {
+          "term": 16,
+          "present_in_order": true,
+          "character_offset": 21444
+        },
+        {
+          "term": 17,
+          "present_in_order": true,
+          "character_offset": 22660
+        },
+        {
+          "term": 18,
+          "present_in_order": true,
+          "character_offset": 23030
+        },
+        {
+          "term": 19,
+          "present_in_order": true,
+          "character_offset": 24221
+        },
+        {
+          "term": 20,
+          "present_in_order": true,
+          "character_offset": 25025
+        },
+        {
+          "term": 21,
+          "present_in_order": true,
+          "character_offset": 26074
+        },
+        {
+          "term": 22,
+          "present_in_order": true,
+          "character_offset": 26637
+        },
+        {
+          "term": 23,
+          "present_in_order": true,
+          "character_offset": 27115
+        },
+        {
+          "term": 24,
+          "present_in_order": true,
+          "character_offset": 28209
+        },
+        {
+          "term": 25,
+          "present_in_order": true,
+          "character_offset": 28429
+        },
+        {
+          "term": 26,
+          "present_in_order": true,
+          "character_offset": 29071
+        },
+        {
+          "term": 27,
+          "present_in_order": true,
+          "character_offset": 30048
+        },
+        {
+          "term": 28,
+          "present_in_order": true,
+          "character_offset": 30209
+        },
+        {
+          "term": 29,
+          "present_in_order": true,
+          "character_offset": 30668
+        },
+        {
+          "term": 30,
+          "present_in_order": true,
+          "character_offset": 31679
+        },
+        {
+          "term": 31,
+          "present_in_order": true,
+          "character_offset": 32269
+        },
+        {
+          "term": 32,
+          "present_in_order": true,
+          "character_offset": 32849
+        },
+        {
+          "term": 33,
+          "present_in_order": true,
+          "character_offset": 33077
+        },
+        {
+          "term": 34,
+          "present_in_order": true,
+          "character_offset": 33985
+        },
+        {
+          "term": 35,
+          "present_in_order": true,
+          "character_offset": 34589
+        },
+        {
+          "term": 36,
+          "present_in_order": true,
+          "character_offset": 34876
+        },
+        {
+          "term": 37,
+          "present_in_order": true,
+          "character_offset": 35455
+        },
+        {
+          "term": 38,
+          "present_in_order": true,
+          "character_offset": 35807
+        },
+        {
+          "term": 39,
+          "present_in_order": true,
+          "character_offset": 36070
+        },
+        {
+          "term": 40,
+          "present_in_order": true,
+          "character_offset": 36798
+        },
+        {
+          "term": 41,
+          "present_in_order": true,
+          "character_offset": 37142
+        },
+        {
+          "term": 42,
+          "present_in_order": true,
+          "character_offset": 38031
+        },
+        {
+          "term": 43,
+          "present_in_order": true,
+          "character_offset": 39168
+        },
+        {
+          "term": 44,
+          "present_in_order": true,
+          "character_offset": 40512
+        },
+        {
+          "term": 45,
+          "present_in_order": true,
+          "character_offset": 41486
+        },
+        {
+          "term": 46,
+          "present_in_order": true,
+          "character_offset": 41961
+        },
+        {
+          "term": 47,
+          "present_in_order": true,
+          "character_offset": 42976
+        },
+        {
+          "term": 48,
+          "present_in_order": true,
+          "character_offset": 43356
+        },
+        {
+          "term": 49,
+          "present_in_order": true,
+          "character_offset": 45239
+        },
+        {
+          "term": 50,
+          "present_in_order": true,
+          "character_offset": 46328
+        },
+        {
+          "term": 51,
+          "present_in_order": true,
+          "character_offset": 46771
+        },
+        {
+          "term": 52,
+          "present_in_order": true,
+          "character_offset": 47589
+        },
+        {
+          "term": 53,
+          "present_in_order": true,
+          "character_offset": 48511
+        },
+        {
+          "term": 54,
+          "present_in_order": true,
+          "character_offset": 49599
+        },
+        {
+          "term": 55,
+          "present_in_order": true,
+          "character_offset": 50084
+        },
+        {
+          "term": 56,
+          "present_in_order": true,
+          "character_offset": 50476
+        }
+      ],
+      "all_present_in_order": true
+    },
+    {
+      "document": "wales-periodic",
+      "source": "Welsh Government periodic model May 2026",
+      "expected_range": [
+        1,
+        83
+      ],
+      "terms": [
+        {
+          "term": 1,
+          "present_in_order": true,
+          "character_offset": 12091
+        },
+        {
+          "term": 2,
+          "present_in_order": true,
+          "character_offset": 12301
+        },
+        {
+          "term": 3,
+          "present_in_order": true,
+          "character_offset": 12488
+        },
+        {
+          "term": 4,
+          "present_in_order": true,
+          "character_offset": 12637
+        },
+        {
+          "term": 5,
+          "present_in_order": true,
+          "character_offset": 13136
+        },
+        {
+          "term": 6,
+          "present_in_order": true,
+          "character_offset": 13882
+        },
+        {
+          "term": 7,
+          "present_in_order": true,
+          "character_offset": 14032
+        },
+        {
+          "term": 8,
+          "present_in_order": true,
+          "character_offset": 15041
+        },
+        {
+          "term": 9,
+          "present_in_order": true,
+          "character_offset": 16465
+        },
+        {
+          "term": 10,
+          "present_in_order": true,
+          "character_offset": 16617
+        },
+        {
+          "term": 11,
+          "present_in_order": true,
+          "character_offset": 16773
+        },
+        {
+          "term": 12,
+          "present_in_order": true,
+          "character_offset": 17539
+        },
+        {
+          "term": 13,
+          "present_in_order": true,
+          "character_offset": 18490
+        },
+        {
+          "term": 14,
+          "present_in_order": true,
+          "character_offset": 18981
+        },
+        {
+          "term": 15,
+          "present_in_order": true,
+          "character_offset": 20738
+        },
+        {
+          "term": 16,
+          "present_in_order": true,
+          "character_offset": 21402
+        },
+        {
+          "term": 17,
+          "present_in_order": true,
+          "character_offset": 22278
+        },
+        {
+          "term": 18,
+          "present_in_order": true,
+          "character_offset": 22682
+        },
+        {
+          "term": 19,
+          "present_in_order": true,
+          "character_offset": 23910
+        },
+        {
+          "term": 20,
+          "present_in_order": true,
+          "character_offset": 24285
+        },
+        {
+          "term": 21,
+          "present_in_order": true,
+          "character_offset": 25495
+        },
+        {
+          "term": 22,
+          "present_in_order": true,
+          "character_offset": 26309
+        },
+        {
+          "term": 23,
+          "present_in_order": true,
+          "character_offset": 27368
+        },
+        {
+          "term": 24,
+          "present_in_order": true,
+          "character_offset": 27935
+        },
+        {
+          "term": 25,
+          "present_in_order": true,
+          "character_offset": 28421
+        },
+        {
+          "term": 26,
+          "present_in_order": true,
+          "character_offset": 29523
+        },
+        {
+          "term": 27,
+          "present_in_order": true,
+          "character_offset": 29743
+        },
+        {
+          "term": 28,
+          "present_in_order": true,
+          "character_offset": 30394
+        },
+        {
+          "term": 29,
+          "present_in_order": true,
+          "character_offset": 31385
+        },
+        {
+          "term": 30,
+          "present_in_order": true,
+          "character_offset": 31548
+        },
+        {
+          "term": 31,
+          "present_in_order": true,
+          "character_offset": 32012
+        },
+        {
+          "term": 32,
+          "present_in_order": true,
+          "character_offset": 33267
+        },
+        {
+          "term": 33,
+          "present_in_order": true,
+          "character_offset": 33482
+        },
+        {
+          "term": 34,
+          "present_in_order": true,
+          "character_offset": 34508
+        },
+        {
+          "term": 35,
+          "present_in_order": true,
+          "character_offset": 35094
+        },
+        {
+          "term": 36,
+          "present_in_order": true,
+          "character_offset": 35683
+        },
+        {
+          "term": 37,
+          "present_in_order": true,
+          "character_offset": 35911
+        },
+        {
+          "term": 38,
+          "present_in_order": true,
+          "character_offset": 36840
+        },
+        {
+          "term": 39,
+          "present_in_order": true,
+          "character_offset": 37444
+        },
+        {
+          "term": 40,
+          "present_in_order": true,
+          "character_offset": 37731
+        },
+        {
+          "term": 41,
+          "present_in_order": true,
+          "character_offset": 38318
+        },
+        {
+          "term": 42,
+          "present_in_order": true,
+          "character_offset": 38492
+        },
+        {
+          "term": 43,
+          "present_in_order": true,
+          "character_offset": 38686
+        },
+        {
+          "term": 44,
+          "present_in_order": true,
+          "character_offset": 39405
+        },
+        {
+          "term": 45,
+          "present_in_order": true,
+          "character_offset": 39757
+        },
+        {
+          "term": 46,
+          "present_in_order": true,
+          "character_offset": 40026
+        },
+        {
+          "term": 47,
+          "present_in_order": true,
+          "character_offset": 40798
+        },
+        {
+          "term": 48,
+          "present_in_order": true,
+          "character_offset": 41146
+        },
+        {
+          "term": 49,
+          "present_in_order": true,
+          "character_offset": 42047
+        },
+        {
+          "term": 50,
+          "present_in_order": true,
+          "character_offset": 43200
+        },
+        {
+          "term": 51,
+          "present_in_order": true,
+          "character_offset": 44560
+        },
+        {
+          "term": 52,
+          "present_in_order": true,
+          "character_offset": 45542
+        },
+        {
+          "term": 53,
+          "present_in_order": true,
+          "character_offset": 45992
+        },
+        {
+          "term": 54,
+          "present_in_order": true,
+          "character_offset": 46474
+        },
+        {
+          "term": 55,
+          "present_in_order": true,
+          "character_offset": 47220
+        },
+        {
+          "term": 56,
+          "present_in_order": true,
+          "character_offset": 47387
+        },
+        {
+          "term": 57,
+          "present_in_order": true,
+          "character_offset": 47554
+        },
+        {
+          "term": 58,
+          "present_in_order": true,
+          "character_offset": 48651
+        },
+        {
+          "term": 59,
+          "present_in_order": true,
+          "character_offset": 49161
+        },
+        {
+          "term": 60,
+          "present_in_order": true,
+          "character_offset": 49451
+        },
+        {
+          "term": 61,
+          "present_in_order": true,
+          "character_offset": 50530
+        },
+        {
+          "term": 62,
+          "present_in_order": true,
+          "character_offset": 51984
+        },
+        {
+          "term": 63,
+          "present_in_order": true,
+          "character_offset": 52568
+        },
+        {
+          "term": 64,
+          "present_in_order": true,
+          "character_offset": 53059
+        },
+        {
+          "term": 65,
+          "present_in_order": true,
+          "character_offset": 53435
+        },
+        {
+          "term": 66,
+          "present_in_order": true,
+          "character_offset": 53757
+        },
+        {
+          "term": 67,
+          "present_in_order": true,
+          "character_offset": 54612
+        },
+        {
+          "term": 68,
+          "present_in_order": true,
+          "character_offset": 55929
+        },
+        {
+          "term": 69,
+          "present_in_order": true,
+          "character_offset": 57091
+        },
+        {
+          "term": 70,
+          "present_in_order": true,
+          "character_offset": 57762
+        },
+        {
+          "term": 71,
+          "present_in_order": true,
+          "character_offset": 58425
+        },
+        {
+          "term": 72,
+          "present_in_order": true,
+          "character_offset": 59944
+        },
+        {
+          "term": 73,
+          "present_in_order": true,
+          "character_offset": 60967
+        },
+        {
+          "term": 74,
+          "present_in_order": true,
+          "character_offset": 61444
+        },
+        {
+          "term": 75,
+          "present_in_order": true,
+          "character_offset": 61647
+        },
+        {
+          "term": 76,
+          "present_in_order": true,
+          "character_offset": 63600
+        },
+        {
+          "term": 77,
+          "present_in_order": true,
+          "character_offset": 64687
+        },
+        {
+          "term": 78,
+          "present_in_order": true,
+          "character_offset": 65305
+        },
+        {
+          "term": 79,
+          "present_in_order": true,
+          "character_offset": 66131
+        },
+        {
+          "term": 80,
+          "present_in_order": true,
+          "character_offset": 67070
+        },
+        {
+          "term": 81,
+          "present_in_order": true,
+          "character_offset": 68173
+        },
+        {
+          "term": 82,
+          "present_in_order": true,
+          "character_offset": 68656
+        },
+        {
+          "term": 83,
+          "present_in_order": true,
+          "character_offset": 69040
+        }
+      ],
+      "all_present_in_order": true
+    }
+  ],
+  "explained_differences": [
+    {
+      "document": "scotland",
+      "classification": "authoritative-current-law adaptation",
+      "location": "term 10 and glossary",
+      "change": "RPZ-only language replaced with commencement-sensitive rent-control-area wording",
+      "authority": "Housing (Scotland) Act 2025 commencement and Scottish Government rent-control guidance",
+      "legal_review_status": "external solicitor review still required"
+    },
+    {
+      "document": "scotland",
+      "classification": "expanded contractual equality wording",
+      "location": "term 22",
+      "change": "Protected-characteristic list expanded and 1 May 2026 children/benefits rule acknowledged",
+      "authority": "Equality Act 2010 and Scottish rental-discrimination guidance",
+      "legal_review_status": "external solicitor review still required"
+    },
+    {
+      "document": "wales-fixed and wales-periodic",
+      "classification": "defect correction",
+      "location": "explanatory text and terms 1-2/deposit text",
+      "change": "Known malformed copy and unresolved model drafting instructions removed; explicit no-modification declaration rendered",
+      "authority": "current Welsh Government model sources and 2026 guidance",
+      "legal_review_status": "source/difference review complete; external solicitor approval not obtained"
+    },
+    {
+      "document": "all",
+      "classification": "populated key matter",
+      "location": "party, property, rent, deposit and date fields",
+      "change": "Model blanks replaced with coherent synthetic sample facts",
+      "authority": "customer data mapping",
+      "legal_review_status": "not a clause modification"
+    }
+  ],
+  "unexplained_substantive_differences": [],
+  "certification_limit": "This report proves structural coverage and explains intentional differences; it does not certify legal validity or solicitor approval."
+}

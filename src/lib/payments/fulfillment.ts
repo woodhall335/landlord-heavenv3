@@ -48,6 +48,11 @@ import type {
   Section13OutputSnapshot,
   Section13ProductSku,
 } from '@/lib/section13/types';
+import {
+  assertTenancyOutputSnapshotIntegrity,
+  getTenancyOutputSnapshotByOrderId,
+  type TenancyOutputSnapshot,
+} from '@/lib/tenancy/output-snapshot.server';
 
 // =============================================================================
 // TYPES
@@ -297,6 +302,7 @@ async function persistGeneratedDocuments(
     documents: PersistableGeneratedDocument[];
     metadata?: Record<string, unknown>;
     outputSnapshotId?: string | null;
+    tenancyOutputSnapshot?: TenancyOutputSnapshot | null;
     storageFolder?: string | null;
   }
 ): Promise<number> {
@@ -309,6 +315,7 @@ async function persistGeneratedDocuments(
     documents,
     metadata,
     outputSnapshotId,
+    tenancyOutputSnapshot,
     storageFolder,
   } = params;
   let generatedDocsCount = 0;
@@ -318,7 +325,9 @@ async function persistGeneratedDocuments(
 
     const fileName = storageFolder
       ? `${storageFolder}/${doc.file_name}`
-      : `${userId}/${caseId}/${doc.file_name}`;
+      : tenancyOutputSnapshot
+        ? `${userId}/${caseId}/${tenancyOutputSnapshot.id}/${doc.file_name}`
+        : `${userId}/${caseId}/${doc.file_name}`;
     const { error: uploadError } = await supabase.storage
       .from('documents')
       .upload(fileName, doc.pdf, {
@@ -337,6 +346,7 @@ async function persistGeneratedDocuments(
       case_id: caseId,
       order_id: orderId,
       output_snapshot_id: outputSnapshotId || null,
+      tenancy_output_snapshot_id: tenancyOutputSnapshot?.id || null,
       document_type: doc.document_type,
       document_title: doc.title,
       jurisdiction,
@@ -350,6 +360,9 @@ async function persistGeneratedDocuments(
         pack_type: productType,
         order_id: orderId,
         output_snapshot_id: outputSnapshotId || null,
+        tenancy_output_snapshot_id: tenancyOutputSnapshot?.id || null,
+        tenancy_output_snapshot_sha256: tenancyOutputSnapshot?.content_sha256 || null,
+        tenancy_output_snapshot_source_version: tenancyOutputSnapshot?.source_version || null,
         ...(metadata || {}),
       },
     };
@@ -361,6 +374,7 @@ async function persistGeneratedDocuments(
         caseId,
         documentType: doc.document_type,
         outputSnapshotId,
+        tenancyOutputSnapshotId: tenancyOutputSnapshot?.id,
       }
     );
 
@@ -722,8 +736,19 @@ async function generateDocumentsForProduct(params: {
   jurisdiction: string;
   wizardFacts: Record<string, any>;
   caseFacts: Record<string, any>;
+  tenancyOutputSnapshot?: TenancyOutputSnapshot | null;
 }): Promise<number> {
-  const { supabase, productType, orderId, caseId, userId, jurisdiction, wizardFacts, caseFacts } = params;
+  const {
+    supabase,
+    productType,
+    orderId,
+    caseId,
+    userId,
+    jurisdiction,
+    wizardFacts,
+    caseFacts,
+    tenancyOutputSnapshot,
+  } = params;
 
   if (productType === 'notice_only' || productType === 'complete_pack') {
     const { generateNoticeOnlyPack, generateCompleteEvictionPack } = await import(
@@ -854,6 +879,7 @@ async function generateDocumentsForProduct(params: {
       productType,
       documents: astPack.documents,
       metadata: { tier: astPack.tier },
+      tenancyOutputSnapshot,
     });
   }
 
@@ -887,6 +913,7 @@ async function generateDocumentsForProduct(params: {
       orderId,
       productType,
       documents: pack.documents,
+      tenancyOutputSnapshot,
     });
   }
 
@@ -926,7 +953,45 @@ export async function fulfillOrder({
     throw new Error('Case not found for fulfillment');
   }
 
-  const wizardFacts = (caseData as any).collected_facts || {};
+  const { data: paidOrder, error: paidOrderError } = await supabase
+    .from('orders')
+    .select('id,case_id,user_id,product_type,payment_status')
+    .eq('id', orderId)
+    .single();
+  if (
+    paidOrderError ||
+    !paidOrder ||
+    paidOrder.payment_status !== 'paid' ||
+    paidOrder.case_id !== caseId
+  ) {
+    throw new Error('Fulfillment entitlement check failed');
+  }
+
+  const tenancyProductRequested = requestedFulfillmentProducts.some(
+    (sku) =>
+      sku === 'ast_standard' ||
+      sku === 'ast_premium' ||
+      isResidentialLettingProductSku(sku)
+  );
+  let tenancyOutputSnapshot: TenancyOutputSnapshot | null = null;
+  let wizardFacts = ((caseData as any).collected_facts || {}) as Record<string, any>;
+  if (tenancyProductRequested) {
+    tenancyOutputSnapshot = await getTenancyOutputSnapshotByOrderId(supabase, orderId);
+    if (!tenancyOutputSnapshot) {
+      throw new Error(
+        'Paid tenancy order has no immutable output snapshot; generation is blocked to prevent answer drift'
+      );
+    }
+    assertTenancyOutputSnapshotIntegrity(tenancyOutputSnapshot);
+    if (
+      tenancyOutputSnapshot.case_id !== caseId ||
+      tenancyOutputSnapshot.order_id !== orderId ||
+      tenancyOutputSnapshot.user_id !== paidOrder.user_id
+    ) {
+      throw new Error('Tenancy output snapshot does not match the paid order entitlement');
+    }
+    wizardFacts = tenancyOutputSnapshot.wizard_answers as Record<string, any>;
+  }
   const isGenericClaimsMoneyClaim =
     primaryRequestedProductType === 'money_claim' &&
     (wizardFacts.claim_flow_mode === 'generic_small_claim' ||
@@ -959,6 +1024,14 @@ export async function fulfillOrder({
       context: `fulfillment:${caseId}:${productType}`,
     });
     jurisdiction = resolved.jurisdiction;
+    if (
+      tenancyOutputSnapshot &&
+      tenancyOutputSnapshot.jurisdiction !== jurisdiction
+    ) {
+      throw new Error(
+        'Tenancy output snapshot jurisdiction does not match the resolved paid-order jurisdiction'
+      );
+    }
     console.log(
       `[fulfillment] Resolved jurisdiction: "${jurisdiction}" from source: "${resolved.source}" for case ${caseId}`
     );
@@ -1289,6 +1362,7 @@ export async function fulfillOrder({
         jurisdiction,
         wizardFacts,
         caseFacts,
+        tenancyOutputSnapshot,
       });
     }
 

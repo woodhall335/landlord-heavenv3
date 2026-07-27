@@ -1,0 +1,16 @@
+surface,result
+public routes,PARTIAL_READ_ONLY
+SEO,FAIL_STALE_REGIONAL_COPY
+structured data,FAIL_STALE_REGIONAL_COPY
+prices,NOT_FULLY_VERIFIED
+currencies,NOT_FULLY_VERIFIED
+checkout,NOT_RUN
+payment,BLOCKED
+webhooks,BLOCKED
+fulfilment,BLOCKED
+storage,BLOCKED
+access isolation,BLOCKED
+document output,NOT_RUN
+analytics,NOT_RUN
+production logs,BLOCKED
+

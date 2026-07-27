@@ -9,10 +9,11 @@ import {
   PRODUCTS,
   TENANCY_AGREEMENT_FROM_PRICE,
 } from '@/lib/pricing/products';
+import { isNonEnglandStandardTenancyPubliclyEnabled } from '@/lib/tenancy/non-england-rollout';
 
 const PRICE_VALID_UNTIL = '2026-12-31';
 const standardPrice = PRODUCTS.ast_standard.displayPrice;
-const premiumPrice = PRODUCTS.ast_premium.displayPrice;
+const isPubliclyEnabled = isNonEnglandStandardTenancyPubliclyEnabled('wales');
 
 export const metadata: Metadata = {
   title: 'Wales Occupation Contract 2026 | Template',
@@ -33,7 +34,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Wales Occupation Contract 2026 | Template',
     description:
-      'Landlord guide to creating a Wales Occupation Contract with written statement wording, current Welsh compliance, and clearer route choice.',
+      'Landlord guide to creating a Wales Occupation Contract with jurisdiction-specific written statement wording and clearer route choice.',
     type: 'website',
     url: getCanonicalUrl('/wales-tenancy-agreement-template'),
   },
@@ -41,10 +42,14 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Wales Occupation Contract 2026 | Template',
     description:
-      'Create a Wales Occupation Contract online with written statement wording, current Welsh compliance, and clearer landlord guidance.',
+      'Create a Wales Occupation Contract online with jurisdiction-specific written statement wording and clearer landlord guidance.',
   },
   alternates: {
     canonical: getCanonicalUrl('/wales-tenancy-agreement-template'),
+  },
+  robots: {
+    index: isPubliclyEnabled,
+    follow: isPubliclyEnabled,
   },
 };
 
@@ -109,18 +114,12 @@ export default function WalesOccupationContractPage() {
     '@type': 'Product',
     name: 'Wales Occupation Contract Template',
     description:
-      'Legally compliant Wales Occupation Contract template under the Renting Homes (Wales) Act 2016.',
+      'Jurisdiction-specific Wales Occupation Contract template designed around the Renting Homes (Wales) Act 2016.',
     image: 'https://landlordheaven.co.uk/og-image.png',
     offers: [
       buildMerchantOffer({
         name: 'Standard Occupation Contract',
         price: PRODUCT_PRICE_AMOUNT_STRINGS.ast_standard,
-        priceValidUntil: PRICE_VALID_UNTIL,
-        url: getCanonicalUrl('/wales-tenancy-agreement-template'),
-      }),
-      buildMerchantOffer({
-        name: 'Premium Occupation Contract',
-        price: PRODUCT_PRICE_AMOUNT_STRINGS.ast_premium,
         priceValidUntil: PRICE_VALID_UNTIL,
         url: getCanonicalUrl('/wales-tenancy-agreement-template'),
       }),
@@ -211,12 +210,6 @@ export default function WalesOccupationContractPage() {
                 className="inline-flex items-center justify-center rounded-lg border-2 border-red-600 bg-white px-6 py-3 font-semibold text-red-600 shadow-sm transition-colors hover:bg-red-50"
               >
                 {`Create Standard Contract - ${standardPrice}`}
-              </Link>
-              <Link
-                href="/wizard?product=ast_premium&jurisdiction=wales&src=wales_tenancy_hub&topic=tenancy"
-                className="inline-flex items-center justify-center rounded-lg bg-red-600 px-6 py-3 font-semibold text-white shadow-sm transition-colors hover:bg-red-700"
-              >
-                {`Create Premium Contract - ${premiumPrice}`}
               </Link>
             </div>
 
@@ -603,10 +596,10 @@ export default function WalesOccupationContractPage() {
         <section className="container mx-auto px-4 py-12 bg-gray-50">
           <div className="max-w-5xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-              Choose your contract package
+              Standard Wales Occupation Contract
             </h2>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="mx-auto max-w-2xl">
               <div className="bg-white rounded-xl shadow-lg p-8 border-2 border-gray-200 text-gray-900">
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Standard Contract</h3>
                 <p className="text-4xl font-bold text-red-600 mb-4">{standardPrice}</p>
@@ -622,29 +615,6 @@ export default function WalesOccupationContractPage() {
                   className="block text-center bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
                 >
                   Create Standard Contract
-                </Link>
-              </div>
-
-              <div className="bg-white rounded-xl shadow-lg p-8 border-2 border-red-200 text-gray-900">
-                <div className="inline-block bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold mb-2">
-                  RECOMMENDED
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Premium Contract</h3>
-                <p className="text-4xl font-bold text-red-700 mb-4">{premiumPrice}</p>
-                <ul className="space-y-2 text-gray-700 mb-6">
-                  <li>? Everything in Standard plus</li>
-                  <li>? Comprehensive inventory section</li>
-                  <li>? Additional supplementary terms</li>
-                  <li>? Enhanced compliance information</li>
-                  <li className="font-semibold text-red-700">
-                    ? Helpful for more complex lets and HMOs
-                  </li>
-                </ul>
-                <Link
-                  href="/wizard?product=ast_premium&jurisdiction=wales&src=wales_tenancy_hub&topic=tenancy"
-                  className="block text-center bg-red-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-800 transition-colors"
-                >
-                  Create Premium Contract
                 </Link>
               </div>
             </div>
@@ -780,7 +750,7 @@ export default function WalesOccupationContractPage() {
               Ready to create your Wales Occupation Contract?
             </h2>
             <p className="text-xl text-red-50 mb-8">
-              Fully compliant with the Renting Homes (Wales) Act 2016. Instant download.
+              Designed around the Renting Homes (Wales) Act 2016. Instant download.
             </p>
             <div className="flex gap-6 justify-center flex-wrap">
               <Link
@@ -789,15 +759,9 @@ export default function WalesOccupationContractPage() {
               >
                 {`Standard Contract - ${standardPrice}`}
               </Link>
-              <Link
-                href="/wizard?product=ast_premium&jurisdiction=wales&src=wales_tenancy_hub&topic=tenancy"
-                className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg"
-              >
-                {`Premium Contract - ${premiumPrice}`}
-              </Link>
             </div>
             <p className="mt-6 text-sm text-red-100">
-              Instant download • Legally compliant • No subscription required
+              Instant download • Jurisdiction-specific wording • No subscription required
             </p>
           </div>
         </section>

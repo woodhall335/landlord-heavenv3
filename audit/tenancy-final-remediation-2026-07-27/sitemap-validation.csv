@@ -1,0 +1,7 @@
+route,expected,present,result
+/products/ast,true,true,PASS_SOURCE
+/wales-tenancy-agreement-template,true,true,PASS_SOURCE
+/private-residential-tenancy-agreement-template,true,true,PASS_SOURCE
+/northern-ireland-tenancy-agreement-template,true,true,PASS_SOURCE
+/tenancy-agreement-template-uk,false,false,PASS_SOURCE
+/wizard/*,false,false,PASS_SOURCE

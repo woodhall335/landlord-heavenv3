@@ -32,8 +32,7 @@ questions:
     inputType: select
     options:
       - "Standard PRT"
-      - "Premium PRT"
-    helperText: "Standard covers simple lets. Premium adds guarantor, HMO, detailed maintenance schedules and tighter controls."
+    helperText: "This route creates the standard Scottish Private Residential Tenancy agreement."
     validation:
       required: true
     maps_to:
@@ -128,6 +127,38 @@ questions:
       - furnished_status
       - parking_available
       - parking_details
+
+  - id: model_property_details
+    section: Property Details
+    question: "Areas and facilities included in the let"
+    inputType: group
+    helperText: "The Scottish Government model has separate fields for included, shared and excluded areas. Enter 'None' where appropriate."
+    fields:
+      - id: included_areas
+        label: "Other areas or facilities included"
+        inputType: textarea
+        placeholder: "Parking space, garage, cellar, appliances, storage"
+        validation:
+          required: true
+        width: full
+      - id: shared_areas
+        label: "Shared areas or facilities"
+        inputType: textarea
+        placeholder: "Shared stair, garden, drying green, bin store, or None"
+        validation:
+          required: true
+        width: full
+      - id: excluded_areas
+        label: "Excluded areas or facilities"
+        inputType: textarea
+        placeholder: "Locked owner cupboard, loft, shed, or None"
+        validation:
+          required: true
+        width: full
+    maps_to:
+      - included_areas
+      - shared_areas
+      - excluded_areas
 
   - id: outdoor_space
     section: Property Details
@@ -245,6 +276,60 @@ questions:
       - landlord_registration_number
       - landlord_registration_authority
 
+  - id: joint_landlord
+    section: Landlord Details
+    question: "Is there a second landlord?"
+    inputType: yes_no
+    validation:
+      required: true
+    maps_to:
+      - has_second_landlord
+
+  - id: joint_landlord_details
+    section: Landlord Details
+    question: "Second landlord details"
+    inputType: group
+    dependsOn:
+      questionId: joint_landlord
+      value: true
+    fields:
+      - id: landlord_2_full_name
+        label: "Full name"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: landlord_2_address
+        label: "Address"
+        inputType: textarea
+        validation:
+          required: true
+        width: full
+      - id: landlord_2_email
+        label: "Email"
+        inputType: email
+        validation:
+          required: true
+        width: half
+      - id: landlord_2_phone
+        label: "Phone"
+        inputType: tel
+        validation:
+          required: true
+        width: half
+      - id: landlord_2_registration_number
+        label: "Scottish landlord registration number"
+        inputType: text
+        validation:
+          required: true
+        width: full
+    maps_to:
+      - landlord_2_full_name
+      - landlord_2_address
+      - landlord_2_email
+      - landlord_2_phone
+      - landlord_2_registration_number
+
   - id: agent_usage
     section: Landlord Details
     question: "Are you using a letting agent?"
@@ -291,6 +376,26 @@ questions:
         validation:
           required: true
         width: half
+      - id: agent_registration_number
+        label: "Letting agent registration number"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: agent_services
+        label: "Services the agent will provide"
+        inputType: textarea
+        placeholder: "Rent collection, repairs, inspections, notices"
+        validation:
+          required: true
+        width: full
+      - id: agent_contact_matters
+        label: "When should the tenant contact the agent first?"
+        inputType: textarea
+        placeholder: "Repairs, rent queries, emergencies"
+        validation:
+          required: true
+        width: full
       - id: agent_signs
         label: "Should the agent sign on your behalf?"
         inputType: yes_no
@@ -302,6 +407,9 @@ questions:
       - agent_address
       - agent_email
       - agent_phone
+      - agent_registration_number
+      - agent_services
+      - agent_contact_matters
       - agent_signs
 
   # 3. Tenants
@@ -350,11 +458,19 @@ questions:
         validation:
           required: true
         width: half
+      - id: address
+        label: "Current or correspondence address"
+        inputType: textarea
+        helperText: "Required by the Scottish Government model PRT."
+        validation:
+          required: true
+        width: full
     maps_to:
       - tenants.0.full_name
       - tenants.0.dob
       - tenants.0.email
       - tenants.0.phone
+      - tenants.0.address
 
   - id: tenant_2
     section: Tenants
@@ -388,11 +504,18 @@ questions:
         validation:
           required: true
         width: half
+      - id: address
+        label: "Current or correspondence address"
+        inputType: textarea
+        validation:
+          required: true
+        width: full
     maps_to:
       - tenants.1.full_name
       - tenants.1.dob
       - tenants.1.email
       - tenants.1.phone
+      - tenants.1.address
 
   - id: tenant_3
     section: Tenants
@@ -426,11 +549,18 @@ questions:
         validation:
           required: true
         width: half
+      - id: address
+        label: "Current or correspondence address"
+        inputType: textarea
+        validation:
+          required: true
+        width: full
     maps_to:
       - tenants.2.full_name
       - tenants.2.dob
       - tenants.2.email
       - tenants.2.phone
+      - tenants.2.address
 
   - id: tenant_4
     section: Tenants
@@ -464,11 +594,18 @@ questions:
         validation:
           required: true
         width: half
+      - id: address
+        label: "Current or correspondence address"
+        inputType: textarea
+        validation:
+          required: true
+        width: full
     maps_to:
       - tenants.3.full_name
       - tenants.3.dob
       - tenants.3.email
       - tenants.3.phone
+      - tenants.3.address
 
   - id: tenant_5
     section: Tenants
@@ -502,11 +639,18 @@ questions:
         validation:
           required: true
         width: half
+      - id: address
+        label: "Current or correspondence address"
+        inputType: textarea
+        validation:
+          required: true
+        width: full
     maps_to:
       - tenants.4.full_name
       - tenants.4.dob
       - tenants.4.email
       - tenants.4.phone
+      - tenants.4.address
 
   # 4. Tenancy type & dates
   - id: tenancy_type_and_dates
@@ -521,37 +665,23 @@ questions:
         validation:
           required: true
         width: half
-      - id: is_fixed_term
-        label: "Is this a fixed term tenancy?"
-        inputType: yes_no
-        helperText: "PRTs are open-ended, but you can note an initial period"
-        validation:
-          required: true
-        width: half
-      - id: term_length
-        label: "Initial term length (for reference)"
-        inputType: select
-        options:
-          - "6 months"
-          - "12 months"
-          - "18 months"
-          - "24 months"
-        dependsOn:
-          questionId: is_fixed_term
-          value: true
-        width: half
-      - id: tenancy_end_date
-        label: "End date (if noting an initial period)"
-        inputType: date
-        dependsOn:
-          questionId: is_fixed_term
-          value: true
-        width: half
     maps_to:
       - tenancy_start_date
-      - is_fixed_term
-      - term_length
-      - tenancy_end_date
+
+  - id: communication_method
+    section: Tenancy
+    question: "How will formal tenancy communications be sent?"
+    inputType: select
+    options:
+      - value: "hard_copy"
+        label: "Personal delivery or recorded post"
+      - value: "email"
+        label: "Email using the addresses in the agreement"
+    helperText: "This selects the communication option in clause 4 of the Scottish Government model."
+    validation:
+      required: true
+    maps_to:
+      - communication_method
 
   # 5. Rent & payment details
   - id: rent_details
@@ -572,10 +702,18 @@ questions:
         label: "Rent period"
         inputType: select
         options:
-          - "month"
-          - "week"
-          - "quarter"
-          - "year"
+          - value: "week"
+            label: "Weekly"
+          - value: "fortnight"
+            label: "Fortnightly"
+          - value: "four_weeks"
+            label: "Every four weeks"
+          - value: "month"
+            label: "Calendar monthly"
+          - value: "quarter"
+            label: "Quarterly"
+          - value: "six_months"
+            label: "Every six months"
         validation:
           required: true
         width: half
@@ -617,6 +755,50 @@ questions:
         validation:
           required: true
         width: half
+      - id: rent_payment_timing
+        label: "Is rent paid in advance or arrears?"
+        inputType: select
+        options:
+          - value: "advance"
+            label: "In advance"
+          - value: "arrears"
+            label: "In arrears"
+        validation:
+          required: true
+        width: half
+      - id: first_payment
+        label: "First payment amount"
+        inputType: currency
+        validation:
+          required: true
+          min: 1
+        width: half
+      - id: first_payment_date
+        label: "First payment date"
+        inputType: date
+        validation:
+          required: true
+        width: half
+      - id: first_payment_period_from
+        label: "First payment covers from"
+        inputType: date
+        validation:
+          required: true
+        width: half
+      - id: first_payment_period_to
+        label: "First payment covers to"
+        inputType: date
+        validation:
+          required: true
+        width: half
+      - id: rent_includes
+        label: "Services included in the rent, with prices"
+        inputType: textarea
+        placeholder: "Enter None, or list each included service and its price"
+        helperText: "The official model requires included services to be listed together with their prices."
+        validation:
+          required: true
+        width: full
       - id: payment_method
         label: "Preferred payment method"
         inputType: select
@@ -652,6 +834,12 @@ questions:
       - rent_amount
       - rent_period
       - rent_due_day
+      - rent_payment_timing
+      - first_payment
+      - first_payment_date
+      - first_payment_period_from
+      - first_payment_period_to
+      - rent_includes
       - payment_method
       - payment_details
       - bank_account_name
@@ -663,7 +851,7 @@ questions:
     section: Deposit
     question: "Deposit and protection"
     inputType: group
-    helperText: "IMPORTANT: In Scotland, deposits must be protected within 30 WORKING DAYS (not calendar days) of receipt. This is approximately 6 weeks. Failure to protect on time can result in being ordered to pay 3x the deposit amount to the tenant."
+    helperText: "IMPORTANT: The deposit cannot exceed two months' rent. It must be protected within 30 WORKING DAYS of the tenancy start (or within 30 working days of receiving a later instalment). Failure to comply can result in an order for up to 3x the deposit amount."
     fields:
       - id: deposit_amount
         label: "Deposit amount"
@@ -685,28 +873,78 @@ questions:
           required: true
         width: half
       - id: deposit_paid_date
-        label: "Date deposit was/will be received"
+        label: "Date deposit was received (leave blank if not yet paid)"
         inputType: date
         helperText: "Protection deadline is 30 WORKING DAYS from this date"
-        validation:
-          required: true
         width: half
       - id: deposit_protection_date
-        label: "Date deposit was/will be protected"
+        label: "Actual date protected"
         inputType: date
-        helperText: "Must be within 30 WORKING DAYS of receiving the deposit"
-        validation:
-          required: true
+        helperText: "Only enter a completed date shown by the scheme; do not enter a planned date"
+        dependsOn:
+          questionId: deposit_already_protected
+          value: true
         width: half
       - id: deposit_already_protected
         label: "Is the deposit already protected?"
         inputType: yes_no
+        validation:
+          required: true
         width: half
       - id: deposit_reference_number
         label: "Deposit protection reference number (if already protected)"
         inputType: text
         placeholder: "Reference from scheme"
+        dependsOn:
+          questionId: deposit_already_protected
+          value: true
+        validation:
+          required: true
         width: half
+      - id: deposit_payer
+        label: "Who paid or will pay the deposit?"
+        inputType: text
+        placeholder: "Tenant name or third-party payer"
+        validation:
+          required: true
+        width: half
+      - id: deposit_scheme_type
+        label: "Scheme status/type"
+        inputType: select
+        options:
+          - value: "custodial"
+            label: "Custodial / scheme holds the deposit"
+          - value: "insurance"
+            label: "Insurance-backed / landlord holds the deposit"
+          - value: "pending"
+            label: "Pending receipt or protection"
+        validation:
+          required: true
+        width: half
+      - id: deposit_scheme_address
+        label: "Scheme postal address"
+        inputType: textarea
+        validation:
+          required: true
+        width: full
+      - id: deposit_scheme_contact_details
+        label: "Scheme contact details and website"
+        inputType: textarea
+        validation:
+          required: true
+        width: full
+      - id: deposit_deduction_circumstances
+        label: "Circumstances in which deductions may be sought"
+        inputType: textarea
+        validation:
+          required: true
+        width: full
+      - id: deposit_repayment_dispute_information
+        label: "Repayment and dispute information"
+        inputType: textarea
+        validation:
+          required: true
+        width: full
     maps_to:
       - deposit_amount
       - deposit_scheme_name
@@ -714,6 +952,12 @@ questions:
       - deposit_protection_date
       - deposit.already_protected
       - deposit.reference_number
+      - deposit_payer
+      - deposit_scheme_type
+      - deposit_scheme_address
+      - deposit_scheme_contact_details
+      - deposit_deduction_circumstances
+      - deposit_repayment_dispute_information
 
   - id: prescribed_information_served
     section: Deposit
@@ -779,6 +1023,17 @@ questions:
       - council_tax_responsibility
       - utilities_responsibility
       - internet_responsibility
+
+  - id: tenant_utility_accounts
+    section: Bills & Utilities
+    question: "Which utility accounts must the tenant place in their name?"
+    inputType: textarea
+    placeholder: "Gas, electricity, telephone, TV licence, internet and broadband"
+    helperText: "This completes the selectable list in clause 27 of the official model."
+    validation:
+      required: true
+    maps_to:
+      - tenant_utility_accounts
 
   - id: meter_readings
     section: Bills & Utilities
@@ -970,6 +1225,30 @@ questions:
       - emergency_contact
 
   # 10. Inventory & condition
+  - id: occupancy_details
+    section: Inventory & Condition
+    question: "Occupancy and residents"
+    inputType: group
+    helperText: "Record only agreed facts. The agreement will not infer an occupancy limit or HMO licence."
+    fields:
+      - id: permitted_residents
+        label: "Permitted residents who are not tenants"
+        inputType: textarea
+        placeholder: "Names, or 'None'"
+        validation:
+          required: true
+        width: full
+      - id: maximum_occupancy
+        label: "Maximum number of occupants"
+        inputType: number
+        validation:
+          required: true
+          min: 1
+        width: half
+    maps_to:
+      - permitted_residents
+      - maximum_occupancy
+
   - id: inventory_condition
     section: Inventory & Condition
     question: "Inventory and cleaning"
@@ -979,6 +1258,17 @@ questions:
       - id: inventory_attached
         label: "Will you attach an inventory schedule?"
         inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: inventory_delivery_method
+        label: "How will the inventory be supplied?"
+        inputType: select
+        options:
+          - value: "attached"
+            label: "Attached as Schedule 1"
+          - value: "later"
+            label: "Supplied no later than the tenancy start date"
         validation:
           required: true
         width: half
@@ -1004,6 +1294,7 @@ questions:
         width: full
     maps_to:
       - inventory_attached
+      - inventory_delivery_method
       - professional_cleaning_required
       - decoration_condition
       - property_description
@@ -1048,158 +1339,27 @@ questions:
       - end_of_tenancy_viewings
 
   # 12. Property rules
-  - id: property_rules
-    section: Property Rules
-    question: "House rules"
-    inputType: group
-    helperText: "Pets, smoking and subletting policies."
-    fields:
-      - id: pets_allowed
-        label: "Are pets allowed?"
-        inputType: yes_no
-        validation:
-          required: true
-        width: third
-      - id: approved_pets
-        label: "Approved pets (if any)"
-        inputType: text
-        placeholder: "e.g. 1 cat named Luna"
-        dependsOn:
-          questionId: pets_allowed
-          value: true
-        width: full
-      - id: smoking_allowed
-        label: "Smoking allowed inside?"
-        inputType: select
-        options:
-          - "No"
-          - "Yes"
-          - "Vaping only"
-        validation:
-          required: true
-        width: third
-      - id: subletting_allowed
-        label: "Subletting / Airbnb policy"
-        inputType: select
-        options:
-          - "Not allowed"
-          - "Only with written consent"
-          - "Allowed"
-        validation:
-          required: true
-        width: third
-    maps_to:
-      - pets_allowed
-      - approved_pets
-      - smoking_allowed
-      - subletting_allowed
-
   # 13. Rent reviews
-  - id: in_rent_pressure_zone
+  - id: scotland_rent_control_area_status
     section: Rent Reviews
-    question: "Is the property in a Rent Pressure Zone?"
-    inputType: yes_no
-    helperText: "Rent Pressure Zones (RPZs) are designated areas where rent increases are capped. Check with your local council to confirm if the property is in an RPZ. If it is, rent increases are limited and subject to additional restrictions."
+    question: "Rent control area status on the tenancy start date"
+    inputType: select
+    options:
+      - value: "not_designated"
+        label: "Not in a designated rent control area"
+      - value: "designated"
+        label: "In a designated rent control area"
+      - value: "unknown"
+        label: "Not yet checked"
+    helperText: "Check the current Scottish Government designation position for the property and the tenancy start date. Do not rely on the former Rent Pressure Zone label."
     validation:
       required: true
     maps_to:
-      - in_rent_pressure_zone
+      - scotland_rent_control_area_status
 
-  - id: rent_increase
-    section: Rent Reviews
-    question: "Rent increase provisions"
-    inputType: group
-    helperText: "In Scotland, rent can only be increased once per 12 months using the proper legal procedure."
-    fields:
-      - id: rent_increase_clause
-        label: "Include a rent increase clause?"
-        inputType: yes_no
-        validation:
-          required: true
-        width: half
-      - id: rent_increase_method
-        label: "Method"
-        inputType: select
-        options:
-          - "RPI"
-          - "CPI"
-          - "Market review"
-          - "Fixed review"
-        dependsOn:
-          questionId: rent_increase_clause
-          value: true
-        width: half
-      - id: rent_increase_frequency
-        label: "Frequency"
-        inputType: select
-        options:
-          - "Annually"
-          - "Every 2 years"
-          - "On anniversary with notice"
-        dependsOn:
-          questionId: rent_increase_clause
-          value: true
-        width: half
-    maps_to:
-      - rent_increase_clause
-      - rent_increase_method
-      - rent_increase_frequency
-
-  # 14. Additional terms
-  - id: break_clause
-    section: Additional Terms
-    question: "Include a break clause?"
-    inputType: yes_no
-    validation:
-      required: true
-    maps_to:
-      - break_clause
-
-  - id: break_clause_details
-    section: Additional Terms
-    question: "Break clause details"
-    inputType: group
-    dependsOn:
-      questionId: break_clause
-      value: true
-    fields:
-      - id: break_clause_months
-        label: "Can be exercised after"
-        inputType: select
-        options:
-          - "6 months"
-          - "9 months"
-          - "12 months"
-        width: half
-      - id: break_clause_notice_period
-        label: "Notice required"
-        inputType: select
-        options:
-          - "1 month"
-          - "2 months"
-          - "3 months"
-        width: half
-    maps_to:
-      - break_clause_months
-      - break_clause_notice_period
-
-  - id: uses_model_tenancy_terms
-    section: Additional Terms
-    question: "Are you using the Scottish Government's model PRT terms?"
-    inputType: yes_no
-    helperText: "The Scottish Government provides model clauses for Private Residential Tenancies. Using these is recommended (but not mandatory) as they provide clarity and reduce the risk of disputes."
-    validation:
-      required: true
-    maps_to:
-      - uses_model_tenancy_terms
-
-  - id: additional_terms
-    section: Additional Terms
-    question: "Any additional bespoke terms?"
-    inputType: textarea
-    helperText: "Optional bespoke clauses to insert into the agreement."
-    maps_to:
-      - additional_terms
+  # Rent review wording, ending provisions and all core rights are taken directly
+  # from the official Scottish Government model. The standard flow does not ask
+  # landlords to invent a rent formula, fixed period or break clause.
 
   # 15. Premium-only protections
   - id: guarantor_required

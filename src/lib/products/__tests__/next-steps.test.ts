@@ -262,7 +262,7 @@ describe('getNextSteps', () => {
         const result = getNextSteps(args);
 
         expect(result.steps.some(s => s.includes('Private Residential Tenancy'))).toBe(true);
-        expect(result.steps.some(s => s.includes('Easy Read Notes'))).toBe(true);
+        expect(result.steps.some(s => s.includes('Statutory Terms Supporting Notes'))).toBe(true);
       });
     });
 
@@ -275,7 +275,9 @@ describe('getNextSteps', () => {
         const result = getNextSteps(args);
 
         expect(result.steps.some(s => s.includes('Private Tenancy Agreement'))).toBe(true);
+        expect(result.steps.some(s => s.includes('Tenancy Information Notice'))).toBe(true);
         expect(result.steps.some(s => s.includes('28 days'))).toBe(true);
+        expect(result.steps.some(s => s.includes('35 days'))).toBe(true);
         expect(result.steps.some(s => s.includes('TDS NI') || s.includes('MyDeposits NI'))).toBe(true);
       });
     });

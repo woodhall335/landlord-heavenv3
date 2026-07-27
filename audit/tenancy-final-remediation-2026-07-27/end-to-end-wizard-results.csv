@@ -1,0 +1,7 @@
+journey,draft_id,snapshot_id,snapshot_hash,payment,generated_files,result
+England representative,not created,not created,not created,not attempted,none,NOT_RUN
+Scotland PRT,not created,not created,not created,not attempted,none,BLOCKED_LEGAL_GATE
+Wales fixed,not created,not created,not created,not attempted,none,BLOCKED_LEGAL_GATE
+Wales periodic,not created,not created,not created,not attempted,none,BLOCKED_LEGAL_GATE
+Northern Ireland,not created,not created,not created,not attempted,none,BLOCKED_LEGAL_GATE
+cross-tenant sentinel isolation,not created,not created,not created,not attempted,none,NOT_RUN

@@ -149,11 +149,11 @@ describe('Pricing Consistency', () => {
         expect(isProductAvailableInRegion('ast_standard', 'northern-ireland')).toBe(true);
       });
 
-      it('ast_premium should be available in all regions', () => {
+      it('ast_premium should be available in England only', () => {
         expect(isProductAvailableInRegion('ast_premium', 'england')).toBe(true);
-        expect(isProductAvailableInRegion('ast_premium', 'wales')).toBe(true);
-        expect(isProductAvailableInRegion('ast_premium', 'scotland')).toBe(true);
-        expect(isProductAvailableInRegion('ast_premium', 'northern-ireland')).toBe(true);
+        expect(isProductAvailableInRegion('ast_premium', 'wales')).toBe(false);
+        expect(isProductAvailableInRegion('ast_premium', 'scotland')).toBe(false);
+        expect(isProductAvailableInRegion('ast_premium', 'northern-ireland')).toBe(false);
       });
     });
   });

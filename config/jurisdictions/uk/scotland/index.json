@@ -82,6 +82,14 @@
       "key_sections": ["Repairing standard"]
     },
     {
+      "act": "Housing (Scotland) Act 2025",
+      "key_sections": ["Private rent controls", "Tenant protections", "Phased reforms from 2026"]
+    },
+    {
+      "act": "Renters' Rights Act 2025",
+      "key_sections": ["Rental discrimination protections in force in Scotland from 1 May 2026"]
+    },
+    {
       "act": "Antisocial Behaviour etc. (Scotland) Act 2004",
       "key_sections": ["ASB definitions and procedures"]
     }
@@ -90,7 +98,7 @@
     "required": true,
     "schemes": ["SafeDeposits Scotland", "MyDeposits Scotland", "Letting Protection Service Scotland"],
     "deadline": "30 working days from start of tenancy",
-    "cap": "No statutory cap (but must be reasonable)"
+    "cap": "Maximum two months' rent"
   },
   "landlord_registration": {
     "required": true,

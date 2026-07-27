@@ -1,0 +1,5 @@
+sample,pages,contact_sheet,review_status,clipping,overlap,blank_pages,notes
+scotland-prt-branded-sample.pdf,27,contact-sheets/scotland.png,pass,pass,pass,pass,All 27 pages manually inspected in three contact-sheet chunks; sparse cover and inventory pages are intentional.
+wales-fixed-branded-sample.pdf,35,contact-sheets/wales-fixed.png,pass,pass,pass,pass,All 35 pages manually inspected in three contact-sheet chunks; sparse annex and inventory pages are intentional.
+wales-periodic-branded-sample.pdf,40,contact-sheets/wales-periodic.png,pass,pass,pass,pass,All 40 pages manually inspected in four contact-sheet chunks; sparse inventory pages are intentional.
+northern-ireland-private-tenancy-branded-sample.pdf,24,contact-sheets/northern-ireland.png,pass,pass,pass,pass,All 24 pages manually inspected in two contact-sheet chunks; sparse schedules and inventory pages are intentional.

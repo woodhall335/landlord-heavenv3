@@ -1,0 +1,5 @@
+control,result
+source snapshot integrity focus,PASS
+paid entitlement production proof,BLOCKED_NO_STRIPE_OR_DATABASE_ACCESS
+unpaid denial production proof,BLOCKED_NO_STRIPE_OR_DATABASE_ACCESS
+

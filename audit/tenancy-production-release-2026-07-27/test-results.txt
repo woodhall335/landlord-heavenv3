@@ -1,0 +1,16 @@
+Continuation results - 2026-07-27
+
+PASS: TypeScript (`tsc --noEmit`)
+PASS: YAML validation (40 files)
+PASS: complete legacy tenancy compliance file (124 passed, 0 failed, 0 skipped)
+PASS: certification and snapshot integrity focus (14 passed, 0 failed, 0 skipped)
+PASS: `git diff --check`
+WARNING: Vite CJS Node API deprecation warning
+
+Automated assertion totals: passed=138, failed=0, blocked=0, not_run=0, warnings=1.
+Mandatory release groups blocked by unavailable external access: 9.
+Remaining mandatory local/full-suite groups not run after stop condition: 25.
+
+No full repository test run, ESLint run, production build, database integration run,
+payment run, webhook run, browser customer journey, or PDF visual QA was completed.
+

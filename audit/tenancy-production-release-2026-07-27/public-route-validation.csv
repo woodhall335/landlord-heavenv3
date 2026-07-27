@@ -1,0 +1,7 @@
+route,result,finding
+/tenancy-agreement-template-uk,PASS_READ_ONLY,noindex self canonical
+/products/ast,PASS_READ_ONLY,current England page
+/wales-tenancy-agreement-template,FAIL_LIVE_STALE,Open Graph legally validated wording and unsupported premium links remain live
+/private-residential-tenancy-agreement-template,FAIL_LIVE_STALE,legally validated wording and unsupported premium links remain live
+/northern-ireland-tenancy-agreement-template,FAIL_LIVE_STALE,legally validated wording and unsupported premium links remain live
+

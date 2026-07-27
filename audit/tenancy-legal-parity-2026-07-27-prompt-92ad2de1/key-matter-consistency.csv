@@ -1,0 +1,5 @@
+sample,check,status
+scotland-prt-branded-sample.pdf,Scottish property/address and registration isolation,pass
+wales-fixed-branded-sample.pdf,Fixed end date follows start date and 12-month term,pass
+wales-periodic-branded-sample.pdf,Periodic agreement contains no contractual end date,pass
+northern-ireland-private-tenancy-branded-sample.pdf,NI landlord registration and Belfast data,pass

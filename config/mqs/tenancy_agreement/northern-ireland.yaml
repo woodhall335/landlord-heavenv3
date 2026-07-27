@@ -32,8 +32,7 @@ questions:
     inputType: select
     options:
       - "Standard NI Private Tenancy"
-      - "Premium NI Private Tenancy"
-    helperText: "Standard covers simple lets. Premium adds guarantor, HMO, detailed maintenance schedules and tighter controls."
+    helperText: "This route creates the standard residential Private Tenancy Agreement for Northern Ireland."
     validation:
       required: true
     maps_to:
@@ -223,14 +222,16 @@ questions:
 
   - id: landlord_registration
     section: Landlord Details
-    question: "Landlord registration (if applicable)"
+    question: "Northern Ireland landlord registration"
     inputType: group
-    helperText: "If landlord registration is required and already obtained."
+    helperText: "All private landlords in Northern Ireland must register before letting. Enter the current registration number."
     fields:
       - id: landlord_registration_number
         label: "Registration number"
         inputType: text
-        placeholder: "Registration reference (if applicable)"
+        placeholder: "Landlord registration number"
+        validation:
+          required: true
         width: full
     maps_to:
       - landlord_registration_number
@@ -544,15 +545,19 @@ questions:
 
   - id: ni_notice_period_days
     section: Tenancy
-    question: "Notice period for ending the tenancy (days)"
-    inputType: number
-    helperText: "Notice periods in Northern Ireland depend on tenancy length and local law. Minimum notice periods apply. For tenancies less than 1 year, typically 4 weeks notice is required. For tenancies 1+ years, typically 8-12 weeks. Consult NI tenancy law or legal advice for your specific situation."
-    placeholder: "e.g., 28, 56, 84"
-    validation:
-      required: true
-      min: 1
-    maps_to:
-      - ni_notice_period_days
+    question: "Current notice-to-quit framework"
+    inputType: info
+    content: |
+      The agreement applies the current commenced Northern Ireland minimum periods automatically.
+
+      **Notice given by the tenant:** at least 4 weeks where the tenancy has existed for up to
+      10 years, and at least 12 weeks where it has existed for more than 10 years.
+
+      **Notice given by the landlord:** at least 4 weeks where the tenancy has existed for no
+      more than 12 months, 8 weeks where it has existed for more than 12 months but no more than
+      10 years, and 12 weeks where it has existed for more than 10 years.
+
+      The longer periods proposed under section 11 of the 2022 Act are not treated as commenced.
 
   # 5. Rent & payment details
   - id: rent_details
@@ -664,15 +669,13 @@ questions:
     section: Rent Details
     question: "Rent Book Requirement"
     inputType: info
-    dependsOn:
-      questionId: rent_period
-      value: week
     content: |
-      📚 **NORTHERN IRELAND: RENT BOOK REQUIRED**
+      **NORTHERN IRELAND: RENT BOOK REQUIRED**
 
-      Under the Rent (Northern Ireland) Order 1978, Article 5:
+      Article 5 of the Private Tenancies (Northern Ireland) Order 2006 requires the landlord
+      of a private tenancy to provide the tenant with a rent book.
 
-      **You MUST provide a rent book** for tenancies where rent is payable weekly.
+      **A compliant rent book is included in this document pack for every Northern Ireland private tenancy.**
 
       **The rent book must include:**
       - Landlord's name and address
@@ -682,7 +685,63 @@ questions:
       - Rent payment period
       - Space for recording rent payments
 
-      **Failure to provide a rent book is a criminal offence** punishable by a fine.
+      Complete and give the rent book to the tenant at the start of the tenancy.
+
+  - id: rent_book_particulars
+    section: Rent Details
+    question: "Rent book particulars"
+    inputType: group
+    helperText: "These answers populate the mandatory Northern Ireland rent book included in the pack."
+    fields:
+      - id: ni_capital_value
+        label: "Capital value of the dwelling-house"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: ni_rates_payable
+        label: "Amount of rates payable"
+        inputType: text
+        placeholder: "e.g., £1,120 per year"
+        validation:
+          required: true
+        width: half
+      - id: ni_rates_liability
+        label: "Who is responsible for domestic rates?"
+        inputType: select
+        options:
+          - value: "landlord_included"
+            label: "Landlord pays - included in the rent"
+          - value: "tenant"
+            label: "Tenant pays the full rates separately"
+          - value: "apportioned"
+            label: "Rates are shared or apportioned"
+        validation:
+          required: true
+        width: full
+      - id: ni_rates_explanation
+        label: "Explain exactly how the rates are shared"
+        inputType: textarea
+        placeholder: "State each party's responsibility, amount or percentage, and when payment is due"
+        dependsOn:
+          questionId: ni_rates_liability
+          value: "apportioned"
+        validation:
+          required: true
+        width: full
+      - id: ni_other_required_payments
+        label: "Other payments required in addition to rent and rates"
+        inputType: textarea
+        placeholder: "State amount, description and payment period, or 'None'"
+        validation:
+          required: true
+        width: full
+    maps_to:
+      - ni_capital_value
+      - ni_rates_payable
+      - ni_rates_liability
+      - ni_rates_explanation
+      - ni_other_required_payments
 
   # 6. Deposit
   - id: deposit_details
@@ -690,9 +749,26 @@ questions:
     question: "Deposit and protection"
     inputType: group
     helperText: |
-      ⚠️ NORTHERN IRELAND: Deposits must be protected within 14 DAYS - the strictest deadline in the UK.
-      Failure to protect on time can result in penalties of up to 3x the deposit amount.
+      NORTHERN IRELAND: The total deposit cannot exceed one month's rent. Protect it within 28 days
+      and give the prescribed deposit information within 35 days of receipt.
     fields:
+      - id: deposit_lifecycle
+        label: "What is the deposit's current status?"
+        inputType: select
+        options:
+          - value: "no_deposit"
+            label: "No deposit is required"
+          - value: "expected"
+            label: "Deposit is expected but has not been received"
+          - value: "received_awaiting_protection"
+            label: "Received and awaiting protection"
+          - value: "protected"
+            label: "Protected, prescribed information not yet supplied"
+          - value: "prescribed_information_supplied"
+            label: "Protected and prescribed information supplied"
+        validation:
+          required: true
+        width: full
       - id: deposit_amount
         label: "Deposit amount"
         inputType: currency
@@ -701,52 +777,92 @@ questions:
           required: true
           min: 0
         width: half
+      - id: deposit_paid_date
+        label: "Date the deposit was actually received"
+        inputType: date
+        helperText: "Leave blank until money has actually been received"
+        width: half
+    maps_to:
+      - deposit_lifecycle
+      - deposit_amount
+      - deposit_paid_date
+
+  - id: deposit_protection_completed
+    section: Deposit
+    question: "Completed protection details"
+    inputType: group
+    dependsOn:
+      questionId: deposit_lifecycle
+      value: "protected"
+    helperText: "Enter only completed events. The protection date and reference must come from the scheme."
+    fields:
       - id: deposit_scheme_name
-        label: "Deposit protection scheme"
+        label: "Approved Northern Ireland deposit scheme"
         inputType: select
         options:
           - "Tenancy Deposit Scheme Northern Ireland (TDS NI)"
           - "MyDeposits Northern Ireland"
-          - "Other"
         validation:
           required: true
-        helperText: "Only NI-approved schemes can be used"
-        width: half
-      - id: deposit_paid_date
-        label: "Date deposit will be paid"
-        inputType: date
         width: half
       - id: deposit_protection_date
-        label: "Date you will protect the deposit"
+        label: "Actual protection date"
         inputType: date
-        helperText: "⚠️ MUST be within 14 DAYS of receiving deposit"
-        width: half
-      - id: deposit_already_protected
-        label: "Is the deposit already protected?"
-        inputType: yes_no
+        validation:
+          required: true
         width: half
       - id: deposit_reference_number
-        label: "Deposit protection reference number (if already protected)"
+        label: "Protection reference number"
         inputType: text
-        placeholder: "Reference from scheme"
+        validation:
+          required: true
+        width: full
+    maps_to:
+      - deposit_scheme_name
+      - deposit_protection_date
+      - deposit_reference_number
+
+  - id: deposit_prescribed_information_completed
+    section: Deposit
+    question: "Completed protection and prescribed-information details"
+    inputType: group
+    dependsOn:
+      questionId: deposit_lifecycle
+      value: "prescribed_information_supplied"
+    helperText: "Enter actual completed dates and the scheme reference; do not enter future plans."
+    fields:
+      - id: deposit_scheme_name
+        label: "Approved Northern Ireland deposit scheme"
+        inputType: select
+        options:
+          - "Tenancy Deposit Scheme Northern Ireland (TDS NI)"
+          - "MyDeposits Northern Ireland"
+        validation:
+          required: true
+        width: half
+      - id: deposit_protection_date
+        label: "Actual protection date"
+        inputType: date
+        validation:
+          required: true
+        width: half
+      - id: deposit_reference_number
+        label: "Protection reference number"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: prescribed_information_date
+        label: "Date prescribed information was supplied"
+        inputType: date
+        validation:
+          required: true
         width: half
     maps_to:
-      - deposit_amount
       - deposit_scheme_name
-      - deposit_paid_date
       - deposit_protection_date
-      - deposit.already_protected
-      - deposit.reference_number
-
-  - id: prescribed_information_served
-    section: Deposit
-    question: "Prescribed information compliance"
-    inputType: yes_no
-    helperText: "Will the deposit prescribed information be (or has it been) served within the required timeframe?"
-    validation:
-      required: true
-    maps_to:
-      - deposit.prescribed_information_served
+      - deposit_reference_number
+      - prescribed_information_date
 
   # 7. Bills & utilities
   - id: bills_utilities
@@ -863,7 +979,7 @@ questions:
           required: true
         width: half
       - id: smoke_alarms_fitted
-        label: "Smoke alarms fitted and tested?"
+        label: "Required smoke alarms fitted?"
         inputType: yes_no
         validation:
           required: true
@@ -871,6 +987,53 @@ questions:
       - id: carbon_monoxide_alarms
         label: "CO alarms where required?"
         inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: smoke_alarm_locations
+        label: "Smoke alarm locations"
+        inputType: textarea
+        placeholder: "Living room and every circulation space on each storey"
+        validation:
+          required: true
+        width: full
+      - id: heat_alarm_locations
+        label: "Heat alarm locations"
+        inputType: textarea
+        placeholder: "Every kitchen"
+        validation:
+          required: true
+        width: full
+      - id: fixed_combustion_appliances
+        label: "Fixed combustion appliances and flues"
+        inputType: textarea
+        placeholder: "List each appliance/flue and room, or state None (exclude gas cookers and ovens)"
+        validation:
+          required: true
+        width: full
+      - id: carbon_monoxide_alarm_locations
+        label: "Carbon monoxide alarm locations"
+        inputType: textarea
+        placeholder: "List each room or circulation space containing a flue or fixed combustion appliance"
+        validation:
+          required: true
+        width: full
+      - id: carbon_monoxide_alarm_exclusions
+        label: "CO-alarm exclusions or not-applicable explanation"
+        inputType: textarea
+        placeholder: "Explain any listed appliance not requiring a CO alarm, or why none is required"
+        validation:
+          required: true
+        width: full
+      - id: alarms_tested
+        label: "Were all required alarms tested before the tenancy began?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: alarms_tested_date
+        label: "Actual date alarms were tested"
+        inputType: date
         validation:
           required: true
         width: half
@@ -886,6 +1049,13 @@ questions:
       - epc_rating
       - smoke_alarms_fitted
       - carbon_monoxide_alarms
+      - smoke_alarm_locations
+      - heat_alarm_locations
+      - fixed_combustion_appliances
+      - carbon_monoxide_alarm_locations
+      - carbon_monoxide_alarm_exclusions
+      - alarms_tested
+      - alarms_tested_date
       - fitness_standard_compliance
 
   # 9. Maintenance & repairs
@@ -927,9 +1097,23 @@ questions:
     inputType: group
     helperText: "Helps us generate the inventory and cleaning clauses."
     fields:
-      - id: inventory_attached
-        label: "Will you attach an inventory schedule?"
-        inputType: yes_no
+      - id: inventory_delivery_method
+        label: "How will the inventory be supplied?"
+        inputType: select
+        options:
+          - value: "attached"
+            label: "Attach the completed inventory to this pack now"
+          - value: "later"
+            label: "Supply a completed inventory separately by a stated date"
+        validation:
+          required: true
+        width: full
+      - id: inventory_due_date
+        label: "Date the separate inventory will be supplied"
+        inputType: date
+        dependsOn:
+          questionId: inventory_delivery_method
+          value: "later"
         validation:
           required: true
         width: half
@@ -954,7 +1138,8 @@ questions:
         inputType: text
         width: full
     maps_to:
-      - inventory_attached
+      - inventory_delivery_method
+      - inventory_due_date
       - professional_cleaning_required
       - decoration_condition
       - property_description
@@ -1828,6 +2013,17 @@ questions:
       - deep_cleaning_areas
       - cleaning_checklist_provided
       - cleaning_cost_estimates
+
+  # Prescribed Tenancy Information Notice
+  - id: tenancy_information_notice_acknowledged
+    section: Required NI Documents
+    question: "Will you complete, sign and give the official Tenancy Information Notice to the tenant within 28 days?"
+    inputType: yes_no
+    helperText: "The purchased pack includes the official Department for Communities form and guidance. The tenancy agreement does not replace this prescribed notice. It must be completed, signed and supplied free of charge within 28 days of granting the tenancy."
+    validation:
+      required: true
+    maps_to:
+      - tenancy_information_notice_acknowledged
 
   # Evidence uploads
   - id: evidence_uploads

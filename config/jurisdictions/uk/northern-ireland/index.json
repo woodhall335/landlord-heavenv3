@@ -15,7 +15,7 @@
       "replaces": "Controlled and regulated tenancies",
       "notes": [
         "Tenancy agreements must comply with the Private Tenancies (NI) Order 2006",
-        "Deposit protection within 14 days is mandatory"
+        "A deposit cannot exceed one month's rent, must be protected within 28 days, and prescribed information must be given within 35 days"
       ]
     }
   },
@@ -23,6 +23,10 @@
     {
       "act": "Private Tenancies (Northern Ireland) Order 2006",
       "key_provisions": ["Definition of private tenancies", "Deposit protection", "Fitness standard"]
+    },
+    {
+      "act": "Private Tenancies Act (Northern Ireland) 2022",
+      "key_provisions": ["Tenancy Information Notice", "One-month deposit cap", "Rent increase restrictions"]
     },
     {
       "act": "Rent (Northern Ireland) Order 1978",
@@ -36,13 +40,13 @@
   "deposit_protection": {
     "required": true,
     "scheme": "Tenancy Deposit Scheme Northern Ireland (TDS NI)",
-    "deadline": "14 days from receipt of deposit",
-    "cap": "No statutory cap but must be reasonable (typically 1 month's rent)"
+    "deadline": "Protect within 28 days of receipt and give prescribed information within 35 days",
+    "cap": "Maximum one month's rent"
   },
   "landlord_registration": {
-    "required": false,
-    "note": "No general landlord registration (unlike Scotland)",
-    "exception": "HMO landlords must hold a certificate"
+    "required": true,
+    "note": "All private landlords must register with the Northern Ireland Landlord Registration Scheme before letting",
+    "exception": "HMO licensing is a separate additional requirement where applicable"
   },
   "hmo_licensing": {
     "mandatory_hmo": {
@@ -65,15 +69,15 @@
   "key_differences": {
     "from_england_wales": [
       "Different deposit scheme (TDS NI only)",
-      "Shorter deposit protection deadline (14 days vs 30)",
+      "Deposit protection within 28 days and prescribed information within 35 days",
       "No Section 8/21 notices in scope (only tenancy agreements)",
       "Different court system and procedures",
-      "No landlord registration requirement"
+      "Northern Ireland landlord registration is mandatory"
     ],
     "from_scotland": [
       "No PRT system",
       "No First-tier Tribunal",
-      "No landlord registration",
+      "A separate Northern Ireland landlord registration scheme applies",
       "Different HMO thresholds",
       "No rent caps or pressure zones",
       "No penalties for misuse of eviction grounds because eviction automation is unsupported"

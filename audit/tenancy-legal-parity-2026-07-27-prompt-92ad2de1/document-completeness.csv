@@ -1,0 +1,17 @@
+sample,required_document_type,included,status
+scotland-prt-branded-sample.pdf,prt_agreement,yes,pass
+scotland-prt-branded-sample.pdf,inventory_schedule,yes,pass
+scotland-prt-branded-sample.pdf,pre_tenancy_checklist_scotland,yes,pass
+scotland-prt-branded-sample.pdf,easy_read_notes_scotland,yes,pass
+wales-fixed-branded-sample.pdf,soc_agreement,yes,pass
+wales-fixed-branded-sample.pdf,inventory_schedule,yes,pass
+wales-fixed-branded-sample.pdf,pre_tenancy_checklist_wales,yes,pass
+wales-periodic-branded-sample.pdf,soc_agreement,yes,pass
+wales-periodic-branded-sample.pdf,inventory_schedule,yes,pass
+wales-periodic-branded-sample.pdf,pre_tenancy_checklist_wales,yes,pass
+northern-ireland-private-tenancy-branded-sample.pdf,private_tenancy_agreement,yes,pass
+northern-ireland-private-tenancy-branded-sample.pdf,inventory_schedule,yes,pass
+northern-ireland-private-tenancy-branded-sample.pdf,pre_tenancy_checklist_northern_ireland,yes,pass
+northern-ireland-private-tenancy-branded-sample.pdf,rent_book_northern_ireland,yes,pass
+northern-ireland-private-tenancy-branded-sample.pdf,tenancy_information_notice_northern_ireland,yes,pass
+northern-ireland-private-tenancy-branded-sample.pdf,tenancy_information_notice_guidance_northern_ireland,yes,pass

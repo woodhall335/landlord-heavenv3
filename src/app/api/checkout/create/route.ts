@@ -47,6 +47,8 @@ import {
   getAssistedPrepServiceFromSku,
 } from '@/lib/assisted-prep';
 import { deriveCaseRecoveryContact } from '@/lib/cases/recovery';
+import { isNonEnglandStandardTenancyPubliclyEnabled } from '@/lib/tenancy/non-england-rollout';
+import { createOrGetTenancyOutputSnapshot } from '@/lib/tenancy/output-snapshot.server';
 
 /**
  * Normalize display SKUs to payment SKUs for order storage
@@ -65,6 +67,14 @@ function normalizeToPaymentSku(productType: string): string {
     ni_premium: 'ast_premium',
   };
   return displayToPayment[productType] || productType;
+}
+
+function isTenancyAgreementProductSku(productType: string): boolean {
+  return (
+    productType === 'ast_standard' ||
+    productType === 'ast_premium' ||
+    isEnglandModernTenancyProductSku(productType)
+  );
 }
 
 function isLegacyOnlyPublicCheckoutSku(productType: string): boolean {
@@ -487,11 +497,31 @@ export async function POST(request: Request) {
         );
       }
 
+      const { data: canonicalFactsRow, error: canonicalFactsError } = await adminSupabase
+        .from('case_facts')
+        .select('facts')
+        .eq('case_id', case_id)
+        .maybeSingle();
+      if (canonicalFactsError) {
+        logger.error('Unable to load canonical case facts for checkout', {
+          caseId: case_id,
+          error: canonicalFactsError.message,
+        });
+        return NextResponse.json(
+          { error: 'Unable to verify the answers reviewed for checkout. Please try again.' },
+          { status: 500 }
+        );
+      }
+
       checkoutCaseData = {
         id: caseData.id,
         case_type: caseData.case_type,
         jurisdiction: caseData.jurisdiction,
-        collected_facts: (caseData.collected_facts || {}) as Record<string, any>,
+        collected_facts: (
+          canonicalFactsRow?.facts ||
+          caseData.collected_facts ||
+          {}
+        ) as Record<string, any>,
       };
 
       if (isNoticeOnlyToCompletePackUpgrade) {
@@ -585,10 +615,21 @@ export async function POST(request: Request) {
 
 
       if (caseData) {
-        const isTenancyAgreementCheckout =
-          normalizedProductType === 'ast_standard' ||
-          normalizedProductType === 'ast_premium' ||
-          isEnglandModernTenancyProductSku(normalizedProductType);
+        if (
+          normalizedProductType === 'ast_premium' &&
+          (caseData as any).jurisdiction !== 'england'
+        ) {
+          return NextResponse.json(
+            {
+              error: 'Premium tenancy agreements are available for England only.',
+              code: 'PRODUCT_NOT_AVAILABLE_IN_REGION',
+              available_product: 'ast_standard',
+            },
+            { status: 400 }
+          );
+        }
+
+        const isTenancyAgreementCheckout = isTenancyAgreementProductSku(normalizedProductType);
         const isTenancyAgreementCase =
           caseData.case_type === 'tenancy_agreement' ||
           (typeof caseData.case_type === 'string' && caseData.case_type.includes('tenancy_agreement'));
@@ -596,7 +637,21 @@ export async function POST(request: Request) {
         // HARD GATE: Block tenancy checkout unless all critical tenancy facts are complete
         // Applies to all tenancy agreement variants (ast_standard, ast_premium, and future tenancy_agreement case types)
         if (isTenancyAgreementCheckout && isTenancyAgreementCase) {
-          const collectedFacts = (caseData as any).collected_facts || {};
+          const collectedFacts = checkoutCaseData.collected_facts || {};
+          const caseJurisdiction = (caseData as any).jurisdiction;
+          if (
+            ['wales', 'scotland', 'northern-ireland'].includes(caseJurisdiction) &&
+            !isNonEnglandStandardTenancyPubliclyEnabled(caseJurisdiction)
+          ) {
+            return NextResponse.json(
+              {
+                error:
+                  'This jurisdiction is still held behind legal approval and is not available for purchase.',
+                code: 'TENANCY_LEGAL_APPROVAL_REQUIRED',
+              },
+              { status: 409 }
+            );
+          }
           const tenancyValidation = validateTenancyRequiredFacts(collectedFacts, {
             jurisdiction: (caseData as any).jurisdiction,
             product: normalizedProductType,
@@ -1117,6 +1172,58 @@ export async function POST(request: Request) {
       );
     }
 
+    let tenancySnapshotMetadata: {
+      id: string;
+      sha256: string;
+      sourceVersion: string;
+    } | null = null;
+    if (
+      case_id &&
+      checkoutCaseData &&
+      isTenancyAgreementProductSku(normalizedProductType)
+    ) {
+      const snapshot = await createOrGetTenancyOutputSnapshot(adminSupabase, {
+        orderId: (order as any).id,
+        caseId: case_id,
+        userId: user.id,
+        productType: normalizedProductType,
+        jurisdiction: checkoutCaseData.jurisdiction as
+          | 'england'
+          | 'wales'
+          | 'scotland'
+          | 'northern-ireland',
+        wizardAnswers: checkoutCaseData.collected_facts || {},
+        derivedFields: {
+          case_type: checkoutCaseData.case_type,
+        },
+        clauseDecisions: {
+          product_type: normalizedProductType,
+          jurisdiction: checkoutCaseData.jurisdiction,
+        },
+        attachmentStates: {
+          inventory_delivery_method:
+            checkoutCaseData.collected_facts?.inventory_delivery_method ?? null,
+        },
+      });
+
+      await adminSupabase
+        .from('orders')
+        .update({
+          metadata: {
+            ...((order as any).metadata || orderPayload.metadata),
+            tenancy_output_snapshot_id: snapshot.id,
+            tenancy_output_snapshot_sha256: snapshot.content_sha256,
+            tenancy_output_snapshot_source_version: snapshot.source_version,
+          },
+        })
+        .eq('id', (order as any).id);
+      tenancySnapshotMetadata = {
+        id: snapshot.id,
+        sha256: snapshot.content_sha256,
+        sourceVersion: snapshot.source_version,
+      };
+    }
+
     // Create Stripe checkout session using price_data from products.ts (source of truth)
     // This ensures UI price and Stripe charge match exactly
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL ||
@@ -1170,6 +1277,17 @@ export async function POST(request: Request) {
         user_id: user.id,
         order_id: (order as any).id,
         product_type,
+        agreement_type:
+          checkoutCaseData && isTenancyAgreementProductSku(normalizedProductType)
+            ? normalizedProductType
+            : '',
+        jurisdiction:
+          checkoutCaseData && isTenancyAgreementProductSku(normalizedProductType)
+            ? checkoutCaseData.jurisdiction
+            : '',
+        tenancy_snapshot_id: tenancySnapshotMetadata?.id || '',
+        tenancy_snapshot_sha256: tenancySnapshotMetadata?.sha256 || '',
+        tenancy_source_version: tenancySnapshotMetadata?.sourceVersion || '',
           add_ons: permittedAddOnSkus.join(','),
           case_id: case_id || '',
           assisted_service: assistedService || '',

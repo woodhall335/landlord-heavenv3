@@ -1,0 +1,5 @@
+document,desktop_render,mobile_context,defects,result
+NI generated pack,not generated,n/a,legal gate,NOT_RUN
+Scotland supporting notes,official source PDF,n/a,latest package render not generated,PARTIAL
+Wales templates,source typography scan,n/a,malformed fixed-term dash corrected,PASS_SOURCE
+shared inventory,source colour scan,n/a,bright blue bars replaced with brand green,PASS_SOURCE

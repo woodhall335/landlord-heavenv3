@@ -1,0 +1,10 @@
+surface,result,evidence
+tenancy hub,PASS_WITH_NOINDEX,"self canonical; noindex follow; no create link observed"
+England product,PASS,"self canonical; index follow; England H1"
+Wales landing,WARNING,"indexable; standard and premium CTAs visible"
+Scotland landing,FAIL_COPY,"live title says Legally Validated; source has since removed claim"
+Northern Ireland landing,FAIL_COPY,"live title says Legally Validated; source has since removed claim"
+regional wizard progression,BLOCKED,"mandatory legal approval gate is false"
+review and checkout,BLOCKED,"mandatory legal approval gate is false"
+completion and secure download,NOT_RUN,"no approved payment mechanism"
+mobile/tablet/desktop,NOT_RUN,"no deployable release"

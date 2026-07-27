@@ -74,7 +74,7 @@
     "required": true,
     "schemes": ["Deposit Protection Service (Custodial/Insured)", "MyDeposits", "Tenancy Deposit Scheme"],
     "deadline": "30 days from receipt",
-    "maximum": "5 weeks' rent cap (Tenant Fees Act 2019 as applied)",
+    "maximum": "No general statutory cap identified for a security deposit; holding deposits are separately capped at one week's rent",
     "notes": "Prescribed information must be served; non-compliance undermines possession claims."
   },
   "licensing": {

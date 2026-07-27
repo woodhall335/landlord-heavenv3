@@ -1,0 +1,37 @@
+PASS — Sample generation
+Command: npx.cmd -p node@20 -p tsx tsx scripts/generate-branded-non-england-certification-samples.ts
+Result: Scotland 4 assets; Wales fixed 3 assets; Wales periodic 3 assets; Northern Ireland 6 assets.
+
+PASS — Certification audit and complete PDF rendering
+Command: python scripts/audit-non-england-tenancy-certification.py
+Result: 126/126 agreement pages rendered. Structural, completeness, term-order, leakage, token, malformed-copy, attachment and key-matter checks passed.
+
+PASS — Manual visual QA
+Result: 126/126 agreement pages inspected using 12 contact-sheet chunks. No clipping, overlap or accidental blank pages found.
+
+PASS — Focused regression tests
+Command: npx.cmd -p node@20 node .\node_modules\vitest\vitest.mjs run tests/tenancy/branded-model-derived-agreements.test.ts tests/tenancy/non-england-legal-drift-2026.test.ts src/lib/documents/__tests__/ast-pack-generation.test.ts --reporter=dot
+Result: 3 files passed; 24 tests passed.
+
+PASS — YAML configuration validation
+Command: npm.cmd run validate:yaml-config
+Result: 40 YAML config files validated.
+
+PASS — TypeScript
+Command: npx.cmd tsc --noEmit
+Result: no errors.
+
+PASS WITH EXISTING WARNINGS — ESLint
+Command: npm.cmd run lint
+Result: exit code 0; 0 errors and 760 repository-wide warnings.
+
+PASS — Production build
+Command: npx.cmd next build --webpack
+Result: optimized webpack build completed; 518 static pages generated. The external IndexNow postbuild hook was intentionally not run.
+
+PASS — Whitespace/error-marker check
+Command: git diff --check
+Result: exit code 0; line-ending normalization warnings only.
+
+RELEASE GATE — CLOSED
+Reason: the technical remediation and evidence pack do not substitute for jurisdiction-qualified solicitor approval. Public enablement remains fail-closed.

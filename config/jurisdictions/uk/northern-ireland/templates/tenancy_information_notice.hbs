@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <title>Landlord's Notice Relating to the Granting of a Private Tenancy</title>
+  <style>
+    @page { size: A4; margin: 16mm 17mm 18mm; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: #172033; font: 9.2pt/1.38 Arial, Helvetica, sans-serif; }
+    h1 { margin: 0 0 5pt; color: #2f0d68; font-size: 17pt; text-transform: uppercase; }
+    h2 { margin: 15pt 0 6pt; padding: 5pt 7pt; color: #fff; background: #2f0d68; font-size: 11pt; }
+    h3 { margin: 11pt 0 4pt; color: #2f0d68; font-size: 10pt; }
+    p { margin: 0 0 6pt; }
+    ul { margin: 3pt 0 7pt 16pt; padding: 0; }
+    table { width: 100%; border-collapse: collapse; margin: 7pt 0 10pt; }
+    th, td { border: .65pt solid #9a8eb4; padding: 5pt 6pt; text-align: left; vertical-align: top; }
+    th { width: 35%; color: #2f0d68; background: #f3eff9; font-size: 8.2pt; }
+    .header { display: flex; justify-content: space-between; gap: 10pt; margin-bottom: 12pt; padding-bottom: 7pt; border-bottom: 2pt solid #2f0d68; }
+    .brand { color: #2f0d68; font-weight: 700; }
+    .meta { color: #52616b; font-size: 7.6pt; text-align: right; }
+    .notice { padding: 7pt 9pt; border-left: 3pt solid #22a06b; background: #eef8f3; }
+    .page-break { break-before: page; }
+    .signature { height: 30pt; }
+    .small { color: #52616b; font-size: 7.4pt; }
+    .check { font-family: "DejaVu Sans", Arial, sans-serif; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="brand">LANDLORD HEAVEN</div>
+    <div class="meta">Document {{document_id}}<br>Source NI-TIN-2023/current</div>
+  </div>
+  <h1>Landlord's Notice Relating to the Granting of a Private Tenancy</h1>
+  <p class="notice"><strong>This Notice must be given to the tenant free of charge and within 28 days of the granting of the tenancy.</strong> It is a populated prescribed Tenancy Information Notice, distinct from the tenancy agreement.</p>
+
+  <h2>Parties and dwelling-house</h2>
+  <table>
+    <tr><th>Tenant(s)</th><td>{{#each tenants}}{{full_name}}{{#unless @last}}; {{/unless}}{{/each}}</td></tr>
+    <tr><th>Dwelling-house</th><td>{{property_address}}</td></tr>
+    <tr><th>House in Multiple Occupation?</th><td>{{#if is_hmo}}Yes — licence {{hmo_licence_number}}{{else}}No{{/if}}</td></tr>
+    <tr><th>Landlord</th><td>{{landlord_full_name}}</td></tr>
+    <tr><th>Landlord's address</th><td>{{landlord_address}}</td></tr>
+    <tr><th>Landlord's phone / email</th><td>{{landlord_phone}} / {{landlord_email}}</td></tr>
+    <tr><th>Landlord registration number</th><td>{{landlord_registration_number}}</td></tr>
+    <tr><th>Emergency phone number</th><td>{{#if emergency_contact}}{{emergency_contact}}{{else}}{{landlord_phone}}{{/if}}</td></tr>
+  </table>
+
+  <h2>Landlord's agent</h2>
+  <table>
+    <tr><th>Name</th><td>{{#if agent_name}}{{agent_name}}{{else}}None appointed{{/if}}</td></tr>
+    <tr><th>Address</th><td>{{agent_address}}</td></tr>
+    <tr><th>Phone / email</th><td>{{agent_phone}} {{agent_email}}</td></tr>
+    <tr><th>Services provided</th><td>{{agent_services}}</td></tr>
+    <tr><th>Emergency phone</th><td>{{#if agent_phone}}{{agent_phone}}{{else}}{{landlord_phone}}{{/if}}</td></tr>
+  </table>
+
+  <h2>Tenancy</h2>
+  <p>If a tenancy has an end date it is a fixed-term tenancy and cannot end before that date unless the tenancy terms lawfully permit it. A tenancy without an end date, or whose original end date has passed, is periodic. Written notice must be given to end a periodic tenancy.</p>
+  <table>
+    <tr><th>Tenancy start date</th><td>{{format_date tenancy_start_date}}</td></tr>
+    <tr><th>Duration</th><td>{{#if is_fixed_term}}{{term_length}}{{else}}Periodic{{/if}}</td></tr>
+    <tr><th>End date</th><td>{{#if is_fixed_term}}{{format_date tenancy_end_date}}{{else}}No contractual end date{{/if}}</td></tr>
+  </table>
+
+  <h2 class="page-break">Rent, rates and payments</h2>
+  <table>
+    <tr><th>Rent</th><td>{{currency rent_amount}} per {{rent_period}}</td></tr>
+    <tr><th>Date rent due</th><td>{{rent_due_day}} of each {{rent_period}}</td></tr>
+    <tr><th>Method of payment</th><td>{{payment_method}} — {{payment_details}}</td></tr>
+    <tr><th>Does rent include rates?</th><td>{{#if ni_rates_landlord_included}}Yes{{else}}No{{/if}}</td></tr>
+    <tr><th>Amount of rates</th><td>{{ni_rates_payable}}</td></tr>
+    <tr><th>If not included, who pays?</th><td>{{#if ni_rates_tenant_responsible}}Tenant{{/if}}{{#if ni_rates_apportioned}}{{ni_rates_explanation}}{{/if}}{{#if ni_rates_landlord_included}}Landlord — included in rent{{/if}}</td></tr>
+    <tr><th>Other payments</th><td>{{ni_other_required_payments}}</td></tr>
+  </table>
+
+  <h2>Deposit</h2>
+  {{#if deposit_is_none}}
+  <p>No tenancy deposit is payable.</p>
+  {{else}}
+  <table>
+    <tr><th>Amount</th><td>{{currency deposit_amount}}</td></tr>
+    <tr><th>Lifecycle status</th><td>{{deposit_lifecycle}}</td></tr>
+    <tr><th>Date received</th><td>{{format_date deposit_paid_date}}</td></tr>
+    <tr><th>Scheme</th><td>{{deposit_scheme_name}}</td></tr>
+    <tr><th>Protection date</th><td>{{format_date deposit_protection_date}}</td></tr>
+    <tr><th>Reference</th><td>{{deposit_reference_number}}</td></tr>
+    <tr><th>Prescribed information</th><td>{{#if deposit_prescribed_information_supplied}}Supplied on {{format_date prescribed_information_date}}{{else}}Not yet supplied{{/if}}</td></tr>
+  </table>
+  <p>Any deposit must not exceed one month's rent. It must be protected in an approved scheme within 28 days of receipt, and the prescribed deposit information must be provided within 35 days of receipt.</p>
+  {{/if}}
+
+  <h2>Inventory and additional terms</h2>
+  <table>
+    <tr><th>Signed inventory supplied?</th><td>{{#if_eq inventory_delivery_method "attached"}}Yes — attached to the agreement{{else}}No — to be supplied by {{format_date inventory_due_date}}{{/if_eq}}</td></tr>
+    <tr><th>Additional information</th><td>{{additional_terms}}</td></tr>
+  </table>
+  <table>
+    <tr><th>Signed by landlord/agent</th><td class="signature"></td></tr>
+    <tr><th>Date</th><td></td></tr>
+  </table>
+
+  <h2 class="page-break">Notes</h2>
+  <h3>1. General</h3>
+  <p>This tenancy is not a protected or statutory tenancy within the meaning of the Rent (Northern Ireland) Order 1978 as amended by the Private Tenancies (Northern Ireland) Order 2006. Other terms and conditions are a matter for landlord and tenant, subject to current law.</p>
+  <h3>2. Repairs</h3>
+  <p>The landlord must keep gas fittings, flues and installations in repair and provide required gas-safety information. Responsibility for other repairs is determined by the tenancy agreement and any applicable statutory default terms.</p>
+  <h3>3. Access for repairs</h3>
+  <p>The tenant must permit reasonable access for repairs or inspection. The landlord should give reasonable notice except in an emergency.</p>
+  <h3>4. Fitness for human habitation</h3>
+  <p>The landlord is responsible for ensuring the property is safe. The local council can advise on the applicable fitness standard and rent-control consequences.</p>
+  <h3>5. Receipts</h3>
+  <p>A private tenant has a legal right to a receipt for a cash payment. It should record the amount, date, purpose and any balance outstanding, or state that payment was made in full.</p>
+
+  <h3>6. Notice to Quit</h3>
+  <p>Except where a fixed-term tenancy ends as agreed, written notice must be given by the landlord or tenant to the other party. The current minimum periods are different for landlords and tenants:</p>
+  <table>
+    <tr><th colspan="2">Notice landlord must give tenant</th></tr>
+    <tr><td>Tenancy not more than 12 months</td><td>No less than 4 weeks' written notice</td></tr>
+    <tr><td>More than 12 months but not more than 10 years</td><td>No less than 8 weeks' written notice</td></tr>
+    <tr><td>More than 10 years</td><td>No less than 12 weeks' written notice</td></tr>
+  </table>
+  <table>
+    <tr><th colspan="2">Notice tenant must give landlord</th></tr>
+    <tr><td>Tenancy not more than 10 years</td><td>No less than 4 weeks' written notice</td></tr>
+    <tr><td>More than 10 years</td><td>No less than 12 weeks' written notice</td></tr>
+  </table>
+  <p class="small">These are the current commenced periods. Proposed replacement periods under section 11 of the Private Tenancies Act (Northern Ireland) 2022 are not applied before commencement.</p>
+
+  <h3>7. Illegal eviction and harassment</h3>
+  <p>The landlord or anyone acting on the landlord's behalf must not harass the tenant or household, enter unlawfully, remove belongings or cut off essential services to force the tenant to leave.</p>
+  <h3>8. Legal process for eviction</h3>
+  <p>The tenant cannot be evicted until the landlord follows the correct legal process and obtains a possession order from the court.</p>
+  <h3>9. Help with paying rent and rates</h3>
+  <p>A tenant may be able to obtain help through Universal Credit, Discretionary Housing Payment, Rate Rebate or Housing Benefit, depending on eligibility.</p>
+  <h3>10. Further advice</h3>
+  <p>Contact the local council's environmental-health department, Housing Rights, Advice NI or a solicitor for independent advice.</p>
+
+  <h2 class="page-break">Appendix 1 — Repairs</h2>
+  <p>Where a tenancy granted after 1 April 2007 does not clearly allocate repair responsibility, statutory default terms may apply.</p>
+  <h3>The landlord is generally responsible for</h3>
+  <ul>
+    <li>the structure and exterior, including drains, gutters and external pipes;</li>
+    <li>the interior other than matters for which the tenant is responsible;</li>
+    <li>installations for water, gas, electricity and sanitation;</li>
+    <li>appliances, fixtures, fittings and furnishings provided by the landlord;</li>
+    <li>installations for heating and hot water; and</li>
+    <li>common areas and access routes that the landlord is required to maintain.</li>
+  </ul>
+  <h3>The tenant is generally responsible for</h3>
+  <ul>
+    <li>taking proper care of the property;</li>
+    <li>repairing damage caused by the tenant, household or guests;</li>
+    <li>keeping the interior in reasonable decorative order; and</li>
+    <li>not altering the property without permission.</li>
+  </ul>
+  <p class="notice"><strong>Review before signature.</strong> This populated notice is generated from the same validated agreement data as the tenancy agreement. The landlord or authorised agent must check it, sign it and give it to the tenant within the statutory deadline.</p>
+</body>
+</html>

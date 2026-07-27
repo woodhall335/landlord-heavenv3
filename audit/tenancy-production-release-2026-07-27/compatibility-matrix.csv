@@ -1,0 +1,7 @@
+jurisdiction,agreement_type,source_gate,production_result
+england,assured_periodic_tenancy,open,NOT_REVALIDATED_END_TO_END
+wales,fixed_term_standard_occupation_contract,open,NOT_DEPLOYED
+wales,periodic_standard_occupation_contract,open,NOT_DEPLOYED
+scotland,private_residential_tenancy,open,NOT_DEPLOYED
+northern-ireland,private_tenancy_agreement,open,NOT_DEPLOYED
+

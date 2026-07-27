@@ -1,0 +1,5 @@
+control,result
+signature configuration,BLOCKED_NO_STRIPE_AUTHENTICATION
+idempotent duplicate processing,NOT_RUN
+paid entitlement grant,NOT_RUN
+

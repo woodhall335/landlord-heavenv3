@@ -147,7 +147,7 @@ export async function POST(request: NextRequest) {
         reason:
           'Northern Ireland: tenancy agreement flows only (eviction notices planned). England & Wales and Scotland support evictions (notices and court packs) and money claims where available.',
         supported: {
-          'northern-ireland': ['ast_standard', 'ast_premium', 'tenancy_agreement'],
+          'northern-ireland': ['ast_standard', 'tenancy_agreement'],
           england: [
             'notice_only',
             'complete_pack',
@@ -161,8 +161,8 @@ export async function POST(request: NextRequest) {
             'england_hmo_shared_house_tenancy_agreement',
             'england_lodger_agreement',
           ],
-          wales: ['notice_only', 'complete_pack', 'money_claim', 'ast_standard', 'ast_premium', 'tenancy_agreement'],
-          scotland: ['notice_only', 'complete_pack', 'money_claim', 'ast_standard', 'ast_premium', 'tenancy_agreement'],
+          wales: ['notice_only', 'complete_pack', 'money_claim', 'ast_standard', 'tenancy_agreement'],
+          scotland: ['notice_only', 'complete_pack', 'money_claim', 'ast_standard', 'tenancy_agreement'],
         },
       },
       { status: 422 }

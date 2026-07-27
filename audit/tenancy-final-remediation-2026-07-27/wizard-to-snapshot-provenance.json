@@ -1,0 +1,22 @@
+{
+  "source_of_truth": "case_facts.facts",
+  "flow": [
+    "public page",
+    "wizard",
+    "server validation",
+    "case_facts persistence",
+    "review",
+    "order creation",
+    "immutable tenancy_output_snapshots row",
+    "Stripe checkout",
+    "paid-order entitlement check",
+    "snapshot hash verification",
+    "PDF and supporting-document generation",
+    "snapshot-scoped storage"
+  ],
+  "schema_version": "tenancy-output-snapshot.v1",
+  "source_version": "2026-07-27",
+  "hash": "SHA-256 over stable canonical JSON",
+  "mutable_browser_state_used_for_final_pdf": false,
+  "real_wizard_proof": "BLOCKED - legal release gate and no approved live payment mechanism"
+}

@@ -1,0 +1,5 @@
+jurisdiction,forbidden_terms_test,result
+england,Wales/Scotland/NI legal regimes,existing suite
+wales,Section 8 and Section 21 as operative Welsh routes,legacy suite currently failing
+scotland,England/Wales/NI legal regimes,existing suite
+northern-ireland,England Section 8/21 and Scottish/Welsh regimes,focused NI suite passes

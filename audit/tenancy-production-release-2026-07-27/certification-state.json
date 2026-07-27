@@ -1,0 +1,24 @@
+{
+  "wales": {
+    "modelParityVerified": true,
+    "solicitorApproved": true,
+    "prescribedDocumentWorkflowVerified": true,
+    "releaseEnabled": true,
+    "liveProductStatus": "NOT_DEPLOYED"
+  },
+  "scotland": {
+    "modelParityVerified": true,
+    "solicitorApproved": true,
+    "prescribedDocumentWorkflowVerified": true,
+    "releaseEnabled": true,
+    "liveProductStatus": "NOT_DEPLOYED"
+  },
+  "northern-ireland": {
+    "modelParityVerified": true,
+    "solicitorApproved": true,
+    "prescribedDocumentWorkflowVerified": true,
+    "releaseEnabled": true,
+    "liveProductStatus": "NOT_DEPLOYED"
+  }
+}
+

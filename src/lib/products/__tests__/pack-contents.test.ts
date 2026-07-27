@@ -317,17 +317,19 @@ describe('getPackContents', () => {
       expect(items.find(i => i.key === 'easy_read_notes_scotland')).toBeDefined();
     });
 
-    it('returns agreement, inventory, and checklist for Northern Ireland', () => {
+    it('returns agreement, inventory, checklist, and prescribed documents for Northern Ireland', () => {
       const args: GetPackContentsArgs = {
         product: 'ast_standard',
         jurisdiction: 'northern-ireland',
       };
       const items = getPackContents(args);
 
-      expect(items.length).toBe(3);
+      expect(items.length).toBe(5);
       expect(items.find(i => i.key === 'private_tenancy_agreement')).toBeDefined();
       expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
       expect(items.find(i => i.key === 'pre_tenancy_checklist_northern_ireland')).toBeDefined();
+      expect(items.find(i => i.key === 'tenancy_information_notice_northern_ireland')).toBeDefined();
+      expect(items.find(i => i.key === 'tenancy_information_notice_guidance_northern_ireland')).toBeDefined();
     });
 
     it('shows blank template copy for standard tier inventory', () => {
@@ -401,10 +403,12 @@ describe('getPackContents', () => {
       };
       const items = getPackContents(args);
 
-      expect(items.length).toBe(6);
+      expect(items.length).toBe(8);
       expect(items.find(i => i.key === 'private_tenancy_agreement_hmo')).toBeDefined();
       expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
       expect(items.find(i => i.key === 'pre_tenancy_checklist_northern_ireland')).toBeDefined();
+      expect(items.find(i => i.key === 'tenancy_information_notice_northern_ireland')).toBeDefined();
+      expect(items.find(i => i.key === 'tenancy_information_notice_guidance_northern_ireland')).toBeDefined();
       expect(items.find(i => i.key === 'key_schedule')).toBeDefined();
       expect(items.find(i => i.key === 'property_maintenance_guide')).toBeDefined();
       expect(items.find(i => i.key === 'checkout_procedure')).toBeDefined();
@@ -451,6 +455,15 @@ describe('getPackContents', () => {
           expect(premiumItems.length).toBe(7);
           expect(standardItems.find(i => i.key === 'easy_read_notes_scotland')).toBeDefined();
           expect(premiumItems.find(i => i.key === 'easy_read_notes_scotland')).toBeDefined();
+        } else if (jur === 'northern-ireland') {
+          expect(standardItems.length).toBe(5);
+          expect(premiumItems.length).toBe(8);
+          expect(
+            standardItems.find(i => i.key === 'tenancy_information_notice_northern_ireland')
+          ).toBeDefined();
+          expect(
+            premiumItems.find(i => i.key === 'tenancy_information_notice_guidance_northern_ireland')
+          ).toBeDefined();
         } else {
           expect(standardItems.length).toBe(3);
           expect(premiumItems.length).toBe(6);

@@ -1,0 +1,50 @@
+{
+  "sample": "scotland-prt-branded-sample.pdf",
+  "generatedOn": "2026-07-27",
+  "jurisdiction": "scotland",
+  "tenancyStartDate": "2026-09-01",
+  "inventoryMode": "attached",
+  "agreementIncludesAppendedSchedule1": true,
+  "documents": [
+    {
+      "title": "Private Residential Tenancy Agreement",
+      "category": "agreement",
+      "documentType": "prt_agreement",
+      "fileName": "tenancy_agreement.pdf",
+      "bytes": 612137,
+      "pages": 27,
+      "sha256": "c7ca7e32b4642c2fa592206c3fab3ac06b6d499808b5065c0a0b5e93b9d000aa",
+      "openCheck": "passed"
+    },
+    {
+      "title": "Inventory & Schedule of Condition",
+      "category": "schedule",
+      "documentType": "inventory_schedule",
+      "fileName": "inventory_schedule.pdf",
+      "bytes": 359045,
+      "pages": 9,
+      "sha256": "67e0e5ef5e564808e60c398af486ea63005440d03d4db4b8515b3542a8a900f8",
+      "openCheck": "passed"
+    },
+    {
+      "title": "Pre-Tenancy Compliance Checklist (Scotland)",
+      "category": "checklist",
+      "documentType": "pre_tenancy_checklist_scotland",
+      "fileName": "compliance_checklist.pdf",
+      "bytes": 239400,
+      "pages": 3,
+      "sha256": "9900a8d303c031c04aedc3cb606dd28bdd6aa2df7dfc43a06580611a16b91b40",
+      "openCheck": "passed"
+    },
+    {
+      "title": "Private Residential Tenancy Statutory Terms Supporting Notes",
+      "category": "guidance",
+      "documentType": "easy_read_notes_scotland",
+      "fileName": "scotland_prt_statutory_terms_supporting_notes_april_2024.pdf",
+      "bytes": 354633,
+      "pages": 42,
+      "sha256": "6f8891bf2488d433e98665352e67a6f06e70e211b330052bf17be582d6d82876",
+      "openCheck": "passed"
+    }
+  ]
+}

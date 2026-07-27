@@ -1,0 +1,18 @@
+Interim results - 2026-07-27
+
+PASS: TypeScript (`tsc --noEmit`)
+PASS: YAML validation (40 config files)
+PASS: focused Northern Ireland Specific Notes tests (9 passed)
+PASS: tenancy required-facts validator suite (27 passed)
+PASS: focused AST pack, snapshot-integrity and tenancy-validator run (36 passed)
+PASS: focused ESLint (0 errors; 5 existing warnings)
+PASS: `git diff --check`
+PASS: Next.js production build (518 static pages generated)
+KNOWN FAILURES IN WIDER LEGACY COMPLIANCE FILE:
+- Wales and Scotland hardcoded-date assertions
+- Wales cross-contamination/terminology assertions
+- England transition wording assertion
+- Wales deposit deadline assertion
+- Scotland guarantor/date-format assertions
+
+The known wider failures are not reported as passes and prevent a full release certification.

@@ -1,0 +1,34 @@
+{
+  "recorded_at": "2026-07-27",
+  "branch": "main",
+  "commit": "b0dabfd6e206232a3b951112958c0403b9057504",
+  "working_tree": "dirty inherited release candidate; 46 tracked files modified and 233 untracked files before this continuation",
+  "deployment_provider": "Vercel",
+  "linked_project": {
+    "name": "landlord-heavenv6",
+    "project_id": "prj_sXVVY7KCzwtpf7uIacvu26anW25u",
+    "org_id": "team_SKApKjWykobrjxKgpPJOmXGr",
+    "source": ".vercel/repo.json"
+  },
+  "production_url": "https://landlordheaven.co.uk",
+  "production_commit": "NOT_VERIFIED",
+  "observed_live_build_id": "iefis7U1MnE8Q4kGFni3I",
+  "production_environment": "BLOCKED_NO_VERCEL_AUTHENTICATION",
+  "supabase_project": "BLOCKED_NO_SUPABASE_ACCESS_TOKEN",
+  "migration_026": "PREVIOUSLY_RUN_PER_AUTHORITATIVE_PROJECT_FACT; LIVE_SCHEMA_NOT_VERIFIED",
+  "stripe_mode": "BLOCKED_NO_STRIPE_AUTHENTICATION",
+  "stripe_webhook": "BLOCKED_NO_STRIPE_AUTHENTICATION",
+  "storage": "BLOCKED_NO_SUPABASE_ACCESS",
+  "certification_source_state": "enabled for Wales, Scotland and Northern Ireland",
+  "agreement_registry_entries": 5,
+  "live_metadata": {
+    "england": "current",
+    "wales": "title corrected but Open Graph still contains stale legally validated wording",
+    "scotland": "stale legally validated wording",
+    "northern_ireland": "stale legally validated wording"
+  },
+  "live_checkout": "NOT_EXECUTED",
+  "production_errors": "BLOCKED_NO_LOG_ACCESS",
+  "secrets_recorded": false
+}
+

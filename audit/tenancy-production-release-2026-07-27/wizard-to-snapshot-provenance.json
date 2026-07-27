@@ -1,0 +1,9 @@
+{
+  "source_design": "case_facts to immutable order-bound tenancy_output_snapshots",
+  "schema_version": "tenancy-output-snapshot.v1",
+  "hash": "SHA-256 canonical JSON",
+  "focused_source_test": "PASS",
+  "production_proof": "BLOCKED_NO_DATABASE_ACCESS",
+  "real_wizard_proof": "NOT_RUN"
+}
+

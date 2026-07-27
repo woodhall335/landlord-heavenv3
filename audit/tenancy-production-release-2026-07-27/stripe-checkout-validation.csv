@@ -1,0 +1,5 @@
+scenario,result
+Stripe mode and account configuration,BLOCKED_NO_STRIPE_AUTHENTICATION
+authorised test checkout,BLOCKED_NO_STRIPE_AUTHENTICATION
+tampering matrix,NOT_RUN
+

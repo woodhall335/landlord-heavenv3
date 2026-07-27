@@ -1,0 +1,5 @@
+state,controlled_surfaces,contradiction_rule,result
+rates,"agreement; rent book; notice; schedule; summary","one canonical liability; explanation required for apportioned",PASS_SOURCE
+deposit,"agreement; notice; manifest; validation","completed dates/references forbidden for earlier lifecycle states",PASS_SOURCE
+inventory,"agreement; appended PDF decision; manifest","attached/later disagreement fails generation",PARTIAL
+alarms,"wizard; agreement; checklist","locations and actual test date required",PASS_SOURCE

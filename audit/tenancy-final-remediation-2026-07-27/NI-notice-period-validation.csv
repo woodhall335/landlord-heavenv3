@@ -1,0 +1,6 @@
+surface,landlord_scale,tenant_scale,future_proposal_applied,result
+canonical_rules,"4 weeks <=12m; 8 weeks >12m <=10y; 12 weeks >10y","4 weeks <=10y; 12 weeks >10y",no,PASS
+agreement,"4/8/12","4/12",no,PASS
+tenancy_information_notice,"4/8/12","4/12",no,PASS
+wizard_help,"4/8/12","4/12",no,PASS
+live_production,not redeployed,not redeployed,unknown,BLOCKED

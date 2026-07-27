@@ -275,6 +275,19 @@
     <p>This is a <strong>Private Tenancy</strong> under the Private Tenancies Act (Northern Ireland) 2022, which amends the Private Tenancies (Northern Ireland) Order 2006. The Tenant has the right to occupy the Property during the tenancy. The Landlord can only regain possession by following the correct legal procedures and obtaining a court order from the County Court of Northern Ireland.</p>
   </div>
 
+  <div class="section page-break">
+    <div class="section-title">Contents</div>
+    <table class="data-table">
+      <tr><td class="label">Sections 1–3</td><td class="value">Parties, definitions and the tenancy</td></tr>
+      <tr><td class="label">Sections 4–5</td><td class="value">Rent, payments and deposit</td></tr>
+      <tr><td class="label">Sections 6–7</td><td class="value">Tenant and landlord obligations</td></tr>
+      <tr><td class="label">Sections 8–10</td><td class="value">Ending the tenancy, general provisions and Northern Ireland information</td></tr>
+      <tr><td class="label">Execution</td><td class="value">Landlord and tenant signatures</td></tr>
+      <tr><td class="label">Schedules 1–5</td><td class="value">Property, rent and deposit, utilities, inventory status and statutory information</td></tr>
+    </table>
+    <div class="info-box"><strong>Navigation note:</strong> This contents page is non-contractual and does not replace or vary the agreement.</div>
+  </div>
+
   <!-- SECTION 1: PARTIES -->
   <div class="section">
     <div class="section-title">1. Parties</div>
@@ -296,6 +309,10 @@
       <tr>
         <td class="label">Telephone</td>
         <td class="value">{{landlord_phone}}</td>
+      </tr>
+      <tr>
+        <td class="label">Northern Ireland Landlord Registration</td>
+        <td class="value">{{landlord_registration_number}}</td>
       </tr>
     </table>
 
@@ -410,12 +427,6 @@
     </div>
     {{/if}}
 
-    {{#if ni_notice_period_days}}
-    <div class="clause">
-      <span class="clause-num">3.4</span>
-      The notice period for ending this tenancy is <strong>{{ni_notice_period_days}} days</strong>, subject to Northern Ireland tenancy law and minimum statutory requirements.
-    </div>
-    {{/if}}
   </div>
 
   <!-- SECTION 4: RENT -->
@@ -456,6 +467,27 @@
     </div>
     {{/if}}
 
+    <div class="subsection-title">Domestic Rates</div>
+    {{#if ni_rates_landlord_included}}
+    <div class="clause">
+      The Landlord is responsible for domestic rates. The rates are included in the Rent and
+      the Tenant does not pay them separately.
+    </div>
+    {{/if}}
+    {{#if ni_rates_tenant_responsible}}
+    <div class="clause">
+      The Tenant is responsible for paying the domestic rates separately from the Rent.
+      The stated rates amount is <strong>{{ni_rates_payable}}</strong>.
+    </div>
+    {{/if}}
+    {{#if ni_rates_apportioned}}
+    <div class="clause">
+      Domestic rates are shared or apportioned as follows:
+      <strong>{{ni_rates_explanation}}</strong>. The stated rates amount is
+      <strong>{{ni_rates_payable}}</strong>.
+    </div>
+    {{/if}}
+
     <div class="subsection-title">Rent Increases</div>
     <div class="clause">
       The Landlord may increase the Rent subject to the following restrictions under current Northern Ireland law:
@@ -471,38 +503,53 @@
   <div class="section">
     <div class="section-title">5. Deposit</div>
 
+    {{#if deposit_is_none}}
+    <div class="clause"><span class="clause-num">5.1</span>No tenancy deposit is required.</div>
+    {{else}}
     <div class="clause">
       <span class="clause-num">5.1</span>
-      The Tenant shall pay a deposit of <strong>£{{deposit_amount}}</strong> on or before the commencement of this tenancy.
+      The tenancy deposit is <strong>&pound;{{deposit_amount}}</strong>.
     </div>
 
     <div class="clause">
       <span class="clause-num">5.2</span>
-      Within <strong>14 days</strong> of receiving the Deposit, the Landlord shall:
+      The total Deposit must not exceed one month's Rent. Within <strong>28 days</strong> of receiving it, the Landlord shall:
       <ul class="obligations-list">
-        <li>protect the Deposit in an approved tenancy deposit scheme; and</li>
-        <li>provide the Tenant with the prescribed information about the protection.</li>
+        <li>protect the Deposit in an approved tenancy deposit scheme.</li>
       </ul>
+      The Landlord shall give the Tenant the prescribed deposit information within <strong>35 days</strong> of receiving the Deposit.
     </div>
 
-    {{#if deposit_scheme_name}}
+    {{#if deposit_is_expected}}
     <div class="clause">
       <span class="clause-num">5.3</span>
-      The Deposit will be protected with: <strong>{{deposit_scheme_name}}</strong>.
+      <strong>Current status:</strong> the Deposit is expected but has not yet been received.
+    </div>
+    {{/if}}
+    {{#if deposit_is_received_awaiting_protection}}
+    <div class="clause">
+      <span class="clause-num">5.3</span>
+      <strong>Current status:</strong> received on {{formatUKDate deposit_paid_date}} and awaiting
+      protection. No scheme reference is asserted by this Agreement.
+    </div>
+    {{/if}}
+    {{#if deposit_is_protected}}
+    <div class="clause">
+      <span class="clause-num">5.3</span>
+      <strong>Current status:</strong> received on {{formatUKDate deposit_paid_date}} and protected
+      with <strong>{{deposit_scheme_name}}</strong> on
+      {{formatUKDate deposit_protection_date}}, reference
+      <strong>{{deposit_reference_number}}</strong>.
+      {{#if deposit_prescribed_information_supplied}}
+      The prescribed information was supplied on {{formatUKDate prescribed_information_date}}.
+      {{else}}
+      The prescribed information has not yet been recorded as supplied.
+      {{/if}}
     </div>
     {{/if}}
 
     <div class="clause">
-      <span class="clause-num">{{#if deposit_scheme_name}}5.4{{else}}5.3{{/if}}</span>
-      The approved tenancy deposit schemes in Northern Ireland are:
-      <ul class="obligations-list">
-        <li>TDS Northern Ireland</li>
-        <li>MyDeposits Northern Ireland</li>
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">{{#if deposit_scheme_name}}5.5{{else}}5.4{{/if}}</span>
+      <span class="clause-num">5.4</span>
       The Deposit is held as security for:
       <ul class="obligations-list">
         <li>damage to the Property, fixtures, fittings or contents (beyond fair wear and tear);</li>
@@ -515,8 +562,9 @@
 
     <div class="warning-notice">
       <div class="warning-notice-title">Failure to Protect Deposit</div>
-      <p>If the Landlord fails to protect the Deposit within 14 days, the Landlord may not be able to obtain a possession order from the County Court.</p>
+      <p>If the Landlord fails to protect the Deposit within 28 days or provide the prescribed information within 35 days, enforcement consequences may apply and the Landlord may be restricted from obtaining a possession order.</p>
     </div>
+    {{/if}}
   </div>
 
   <!-- SECTION 6: TENANT'S OBLIGATIONS -->
@@ -530,7 +578,11 @@
 
     <div class="clause">
       <span class="clause-num">6.2</span>
-      <strong>Utilities and Rates:</strong> Pay all charges for gas, electricity, water, sewerage, telephone, internet, and rates (unless included in the Rent) during the tenancy.
+      <strong>Utilities and Rates:</strong> Pay the utilities allocated to the Tenant under this
+      Agreement. {{#if ni_rates_tenant_responsible}}The Tenant must also pay the domestic rates
+      separately.{{/if}}{{#if ni_rates_apportioned}}The Tenant must pay only the apportioned rates
+      liability stated in clause 4.{{/if}}{{#if ni_rates_landlord_included}}Domestic rates are
+      included in the Rent and remain the Landlord's responsibility.{{/if}}
     </div>
 
     <div class="clause">
@@ -656,12 +708,22 @@
       <strong>(b) Electrical Safety:</strong> Provide an Electrical Safety Report (EICR) from a qualified professional where required by current legislation (mandatory from April 2025) and ensure electrical installations are safe.
     </div>
     <div class="sub-clause">
-      <strong>(c) Fire Safety:</strong> Provide smoke alarms on each floor, ensure smoke alarms are in working order at the start of the tenancy, and ensure furniture and furnishings meet fire safety regulations.
+      <strong>(c) Alarm Safety:</strong> Provide a smoke alarm in the living room and every
+      circulation space on each storey, a heat alarm in every kitchen, and a carbon monoxide
+      alarm in each room or circulation space containing a flue or fixed combustion appliance
+      (other than a gas cooker or oven). Smoke and heat alarms must be interlinked, and all
+      alarms must be kept in proper working order and tested before the tenancy begins.
+      <br><strong>Recorded smoke locations:</strong> {{smoke_alarm_locations}}
+      <br><strong>Recorded heat locations:</strong> {{heat_alarm_locations}}
+      <br><strong>Fixed combustion appliances/flues:</strong> {{fixed_combustion_appliances}}
+      <br><strong>Recorded CO locations:</strong> {{carbon_monoxide_alarm_locations}}
+      <br><strong>CO exclusions/not-applicable explanation:</strong> {{carbon_monoxide_alarm_exclusions}}
+      <br><strong>Tested:</strong> {{#if alarms_tested}}Yes, on {{formatUKDate alarms_tested_date}}{{else}}No - this pack must not be issued until testing is completed.{{/if}}
     </div>
 
     <div class="clause">
       <span class="clause-num">7.4</span>
-      <strong>Deposit Protection:</strong> Protect the Deposit in an approved scheme within 14 days and provide the prescribed information.
+      <strong>Deposit Protection:</strong> Protect the Deposit in an approved scheme within 28 days and provide the prescribed information within 35 days.
     </div>
 
     <div class="clause">
@@ -690,9 +752,8 @@
       <span class="clause-num">8.1</span>
       The Tenant can end the tenancy by giving written notice to the Landlord. The required notice period depends on the length of the tenancy:
       <ul class="obligations-list">
-        <li><strong>Less than 1 year:</strong> 4 weeks (28 days)</li>
-        <li><strong>1 to 10 years:</strong> 8 weeks (56 days)</li>
-        <li><strong>10 years or more:</strong> 12 weeks (84 days)</li>
+        <li><strong>Up to and including 10 years:</strong> 4 weeks (28 days)</li>
+        <li><strong>More than 10 years:</strong> 12 weeks (84 days)</li>
       </ul>
     </div>
 
@@ -732,8 +793,8 @@
     </div>
 
     <div class="legal-notice">
-      <div class="legal-notice-title">Eviction Grounds</div>
-      <p>The Landlord must apply to the County Court on one of the eviction grounds specified in the Private Tenancies Act (Northern Ireland) 2022 (amending the Private Tenancies (Northern Ireland) Order 2006). The Landlord cannot evict the Tenant without a court order.</p>
+      <div class="legal-notice-title">Lawful recovery of possession</div>
+      <p>The Landlord must comply with the current Northern Ireland notice-to-quit framework and, if the Tenant does not leave lawfully, obtain and enforce a possession order through the County Court. This Agreement does not import the eviction-ground regimes used in England, Scotland or Wales.</p>
     </div>
   </div>
 
@@ -770,12 +831,16 @@
 
     <div class="clause">
       <span class="clause-num">10.1</span>
-      <strong>Rent Book:</strong> Where rent is paid in cash or other prescribed circumstances apply, Northern Ireland law may require the Landlord to provide a rent book. This Agreement does not replace that statutory obligation.
+      <strong>Rent Book:</strong> Providing a rent book is a statutory obligation under Article 5
+      of the Private Tenancies (Northern Ireland) Order 2006. A populated rent-book component is
+      included in this pack and must be given to the Tenant within 28 days after the tenancy is
+      granted and then used to record rent and other tenancy payments.
     </div>
 
     <div class="clause">
       <span class="clause-num">10.2</span>
-      <strong>Rates Liability:</strong> Responsibility for rates is determined by Northern Ireland law and the circumstances of the tenancy. The parties should ensure rates liability is clearly understood and complies with applicable requirements.
+      <strong>Rates Liability:</strong> Responsibility for rates is determined under Northern
+      Ireland law and is recorded for this tenancy as follows: {{ni_rates_included_in_rent}}
     </div>
 
     <div class="clause">
@@ -925,7 +990,7 @@
       </tr>
       <tr>
         <td class="label">Protection Deadline</td>
-        <td class="value">Within 14 days of receipt</td>
+        <td class="value">Within 28 days of receipt; prescribed information within 35 days</td>
       </tr>
       {{#if deposit_scheme_name}}
       <tr>
@@ -992,7 +1057,10 @@
 
     <div class="legal-notice">
       <div class="legal-notice-title">Tenant Responsibility</div>
-      <p>The Tenant is responsible for transferring utilities into their name, paying all utility bills and rates during the tenancy, and notifying suppliers at the end of the tenancy with final meter readings.</p>
+      <p>The Tenant is responsible for transferring allocated utilities into their name, paying
+      the utilities allocated to them, and notifying suppliers at the end of the tenancy with
+      final meter readings. Domestic rates are governed by the specific rates allocation in
+      clause 4 and the rent book.</p>
     </div>
   </div>
 
@@ -1007,7 +1075,9 @@
       <p>The Tenant should check the inventory carefully and notify the Landlord in writing within <strong>7 days</strong> of any inaccuracies. The inventory will be used at the end of the tenancy to assess whether there is any damage beyond fair wear and tear.</p>
     </div>
     {{else}}
-    <p>An inventory and condition report will be prepared and provided to the Tenant within 7 days of the commencement date.</p>
+    <p>The completed inventory and condition report is not attached to this pack. It must be
+    provided separately to the Tenant by <strong>{{formatUKDate inventory_due_date}}</strong>.
+    This Agreement does not represent that a later inventory is already attached or completed.</p>
     {{/if}}
   </div>
 
@@ -1022,8 +1092,9 @@
       <tr><td class="label">Property</td><td class="value">{{property_address}}</td></tr>
       <tr><td class="label">Tenancy Start</td><td class="value">{{formatUKDate tenancy_start_date}}</td></tr>
       <tr><td class="label">Rent</td><td class="value">&pound;{{rent_amount}} per {{rent_period}}, payable on the {{rent_due_day}} of each {{rent_period}}</td></tr>
-      <tr><td class="label">Deposit</td><td class="value">&pound;{{deposit_amount}}{{#if deposit_scheme_name}} protected with {{deposit_scheme_name}}{{/if}}</td></tr>
-      <tr><td class="label">Notice to Quit</td><td class="value">Less than 1 year: 28 days; 1 to 10 years: 56 days; over 10 years: 84 days, subject to statute.</td></tr>
+      <tr><td class="label">Deposit</td><td class="value">{{#if deposit_is_none}}No deposit{{else}}&pound;{{deposit_amount}} - {{deposit_lifecycle}}{{/if}}</td></tr>
+      <tr><td class="label">Tenant notice</td><td class="value">Up to 10 years: 28 days; more than 10 years: 84 days.</td></tr>
+      <tr><td class="label">Landlord notice to quit</td><td class="value">Up to 12 months: 28 days; over 12 months and up to 10 years: 56 days; more than 10 years: 84 days.</td></tr>
     </table>
 
     <div class="subsection-title">Documents and Compliance Information</div>
@@ -1039,13 +1110,16 @@
     <table class="data-table">
       <tr><td class="label">Emergency Contact</td><td class="value">{{#if emergency_contact}}{{emergency_contact}}{{else}}{{#if agent_name}}{{agent_phone}}{{else}}{{landlord_phone}}{{/if}}{{/if}}</td></tr>
       <tr><td class="label">Repairs Reporting</td><td class="value">{{#if repairs_reporting_method}}{{repairs_reporting_method}}{{else}}Report repairs promptly in writing to the Landlord or Agent.{{/if}}</td></tr>
-      <tr><td class="label">Rates Liability</td><td class="value">{{#if council_tax_responsibility}}{{council_tax_responsibility}}{{else}}As allocated by Northern Ireland law and this Agreement{{/if}}</td></tr>
+      <tr><td class="label">Rates Liability</td><td class="value">{{ni_rates_included_in_rent}}</td></tr>
       {{#if domestic_rates_registration_deadline}}<tr><td class="label">Rates Registration Deadline</td><td class="value">{{domestic_rates_registration_deadline}}</td></tr>{{/if}}
     </table>
 
     <div class="legal-notice">
       <div class="legal-notice-title">Tenant Information Notice</div>
-      <p>This Schedule is intended to help capture the core information that Northern Ireland landlords are expected to give to tenants about the tenancy, the landlord or agent, safety compliance, rent, deposit, and notice position. It supplements, and does not replace, any statutory tenancy information notice or rent book obligation that may apply in the circumstances.</p>
+      <p>A separate, populated Northern Ireland Tenancy Information Notice is generated from the
+      same validated wizard data and included as its own document in this pack. The Landlord must
+      review it, sign it, and give it to the Tenant within the applicable statutory deadline.
+      Schedule 5 is a summary only and is not presented as a substitute for that distinct notice.</p>
     </div>
 
     <div class="subsection-title">Useful Contacts</div>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <title>Northern Ireland Rent Book</title>
+  <style>
+    @page { size: A4; margin: 18mm; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: #172033; font: 10pt/1.4 Arial, Helvetica, sans-serif; }
+    h1 { margin: 0 0 5pt; color: #176b57; font-size: 20pt; text-transform: uppercase; }
+    h2 { margin: 18pt 0 7pt; padding-bottom: 4pt; border-bottom: 1pt solid #243b53; font-size: 12pt; }
+    p { margin: 0 0 7pt; }
+    .subtitle { color: #52616b; }
+    table { width: 100%; border-collapse: collapse; margin: 8pt 0 14pt; }
+    th, td { border: .7pt solid #829ab1; padding: 6pt; text-align: left; vertical-align: top; }
+    th { width: 34%; background: #edf3f7; font-size: 8.5pt; text-transform: uppercase; }
+    .payments th { width: auto; }
+    .payments td { height: 27pt; }
+    .note { padding: 8pt 10pt; border-left: 3pt solid #176b57; background: #f2f8f6; }
+    .page-break { break-before: page; }
+  </style>
+</head>
+<body>
+  <h1>Rent Book</h1>
+  <p class="subtitle">Northern Ireland private tenancy</p>
+  <p class="note">Provided under Article 5 of the Private Tenancies (Northern Ireland) Order 2006. Keep this book as the written record of rent and other tenancy payments.</p>
+
+  <h2>Prescribed tenancy particulars</h2>
+  <table>
+    <tr><th>Dwelling-house</th><td>{{property_address}}</td></tr>
+    <tr><th>Tenant(s)</th><td>{{#each tenants}}{{full_name}}{{#unless @last}}; {{/unless}}{{/each}}</td></tr>
+    <tr><th>Landlord</th><td>{{landlord_full_name}}<br>{{landlord_address}}<br>{{landlord_phone}}</td></tr>
+    <tr><th>Landlord's agent</th><td>{{#if agent_name}}{{agent_name}}<br>{{agent_address}}<br>{{agent_phone}}{{else}}None appointed{{/if}}</td></tr>
+    <tr><th>Rent</th><td>{{currency rent_amount}} per {{rent_period}}</td></tr>
+    <tr><th>Capital value</th><td>{{ni_capital_value}}</td></tr>
+    <tr><th>Rates payable</th><td>{{ni_rates_payable}}</td></tr>
+    <tr><th>Rates responsibility</th><td>{{ni_rates_included_in_rent}}</td></tr>
+    <tr><th>Other required payments</th><td>{{ni_other_required_payments}}</td></tr>
+    <tr><th>Tenancy commencement</th><td>{{format_date tenancy_start_date}}</td></tr>
+  </table>
+
+  <h2 class="page-break">Rent and payment record</h2>
+  <table class="payments">
+    <tr><th>Date due</th><th>Period covered</th><th>Rent</th><th>Rates / other</th><th>Paid</th><th>Balance</th><th>Receipt / initials</th></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  </table>
+  <p class="note">This rent book is included as a mandatory pack component. Cash payments also require the free written receipt specified by current Northern Ireland law.</p>
+</body>
+</html>

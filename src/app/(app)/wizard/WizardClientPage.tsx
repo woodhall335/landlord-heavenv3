@@ -5,6 +5,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
+  isNonEnglandStandardTenancyPubliclyEnabled,
+  isStandardTenancyEntryProduct,
+} from '@/lib/tenancy/non-england-rollout';
+import {
   RiArrowRightLine,
   RiFileCheckLine,
   RiFileTextLine,
@@ -227,7 +231,7 @@ export default function WizardClientPage() {
     const attribution = setWizardAttribution({
       ...baseAttribution,
       product: rawProduct || undefined,
-      jurisdiction: 'england',
+      jurisdiction: rawJurisdiction || 'england',
       topic:
         rawTopic ||
         (caseType === 'tenancy_agreement'
@@ -243,7 +247,7 @@ export default function WizardClientPage() {
 
     trackWizardEntryViewWithAttribution({
       product: rawProduct || 'wizard_home',
-      jurisdiction: 'england',
+      jurisdiction: rawJurisdiction || 'england',
       src: attribution.src,
       topic: attribution.topic,
       utm_source: attribution.utm_source,
@@ -253,7 +257,16 @@ export default function WizardClientPage() {
       first_seen_at: attribution.first_seen_at,
     });
 
-    if (rawJurisdiction && rawJurisdiction !== 'england') {
+    const allowedNonEnglandStandardTenancy =
+      caseType === 'tenancy_agreement' &&
+      isStandardTenancyEntryProduct(rawProduct) &&
+      isNonEnglandStandardTenancyPubliclyEnabled(rawJurisdiction);
+
+    if (
+      rawJurisdiction &&
+      rawJurisdiction !== 'england' &&
+      !allowedNonEnglandStandardTenancy
+    ) {
       trackWizardIncompatibleChoice({
         attemptedProduct: rawProduct || caseType || 'wizard',
         jurisdiction: rawJurisdiction,

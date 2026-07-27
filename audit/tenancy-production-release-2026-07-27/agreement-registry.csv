@@ -1,0 +1,7 @@
+agreement_id,jurisdiction,agreement_type,release_status,live_status
+england-standard-assured-periodic-tenancy,england,assured_periodic_tenancy,available,LIVE_EXISTING
+wales-fixed-term-standard-occupation-contract,wales,fixed_term_standard_occupation_contract,available,NOT_DEPLOYED
+wales-periodic-standard-occupation-contract,wales,periodic_standard_occupation_contract,available,NOT_DEPLOYED
+scotland-private-residential-tenancy,scotland,private_residential_tenancy,available,NOT_DEPLOYED
+northern-ireland-private-tenancy-agreement,northern-ireland,private_tenancy_agreement,available,NOT_DEPLOYED
+

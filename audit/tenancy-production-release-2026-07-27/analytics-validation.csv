@@ -1,0 +1,7 @@
+event,result
+wizard events,NOT_RUN
+checkout events,NOT_RUN
+payment events,BLOCKED
+fulfilment events,BLOCKED
+download events,BLOCKED
+

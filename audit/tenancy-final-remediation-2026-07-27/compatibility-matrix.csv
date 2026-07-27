@@ -1,0 +1,8 @@
+jurisdiction,agreement_type,technical_route,release_gate,result
+england,assured_periodic_tenancy,available,open,PASS
+wales,fixed_term_standard_occupation_contract,implemented,legal approval required,BLOCKED
+wales,periodic_standard_occupation_contract,implemented,legal approval required,BLOCKED
+scotland,private_residential_tenancy,implemented,legal approval required,BLOCKED
+northern-ireland,private_tenancy_agreement,implemented,legal approval required,BLOCKED
+scotland,fixed_term_tenancy,blocked,not applicable,PASS
+cross-jurisdiction,mismatched agreement,blocked,not applicable,PASS

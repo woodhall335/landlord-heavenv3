@@ -1,1123 +1,432 @@
-{{! Private Residential Tenancy Agreement - Scotland }}
-{{! Private Housing (Tenancies) (Scotland) Act 2016 }}
-{{! Standard Tier - No Guarantor }}
-
-<!DOCTYPE html>
-<html lang="en-GB">
-<head>
-  <meta charset="UTF-8">
-  <title>Private Residential Tenancy Agreement</title>
-  <style>
-    @page {
-      size: A4;
-      margin: 25mm 20mm 25mm 20mm;
-    }
-    * {
-      box-sizing: border-box;
-    }
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: "Georgia", "Times New Roman", serif;
-      font-size: 11pt;
-      line-height: 1.5;
-      color: #1a1a1a;
-    }
-    .document-container {
-      max-width: 100%;
-      overflow-wrap: anywhere;
-      word-wrap: break-word;
-    }
-    .doc-header {
-      text-align: center;
-      margin-bottom: 2em;
-      padding-bottom: 1.5em;
-      border-bottom: 2px solid #1f2937;
-    }
-    .doc-title {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 22pt;
-      font-weight: bold;
-      margin: 0 0 0.3em 0;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-    }
-    .doc-subtitle {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 12pt;
-      color: #444;
-      margin: 0.3em 0;
-    }
-    .doc-jurisdiction {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 14pt;
-      font-weight: bold;
-      color: #111827;
-      margin: 0.5em 0;
-    }
-    .doc-date {
-      font-size: 11pt;
-      margin-top: 1em;
-    }
-    .legal-ref {
-      font-size: 10pt;
-      color: #666;
-      margin-top: 0.5em;
-      font-style: italic;
-    }
-    .section {
-      margin: 1.5em 0;
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-    .section-title {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 13pt;
-      font-weight: bold;
-      margin: 1.5em 0 0.8em 0;
-      padding-bottom: 0.3em;
-      border-bottom: 1px solid #374151;
-      text-transform: uppercase;
-      page-break-after: avoid;
-    }
-    .subsection-title {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 11pt;
-      font-weight: bold;
-      margin: 1.2em 0 0.5em 0;
-    }
-    .clause {
-      margin: 0.8em 0;
-      text-align: justify;
-      page-break-inside: avoid;
-    }
-    .clause-num {
-      font-weight: bold;
-      margin-right: 0.5em;
-    }
-    .sub-clause {
-      margin: 0.4em 0 0.4em 2em;
-      text-align: justify;
-    }
-    .data-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1em 0;
-      page-break-inside: avoid;
-    }
-    .data-table td {
-      padding: 0.5em 0.8em;
-      border: 1px solid #ccc;
-      vertical-align: top;
-      overflow-wrap: anywhere;
-      word-wrap: break-word;
-    }
-    .data-table .label {
-      width: 35%;
-      background-color: #f5f5f5;
-      font-weight: bold;
-    }
-    .data-table .value {
-      width: 65%;
-    }
-    .tenant-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1em 0;
-    }
-    .tenant-table th,
-    .tenant-table td {
-      padding: 0.5em;
-      border: 1px solid #ccc;
-      text-align: left;
-      overflow-wrap: anywhere;
-    }
-    .tenant-table th {
-      background-color: #f5f5f5;
-      font-weight: bold;
-    }
-    .legal-notice {
-      background-color: #f8f9fa;
-      border: 1px solid #1a1a1a;
-      border-left: 4px solid #0055a4;
-      padding: 1em;
-      margin: 1.5em 0;
-      page-break-inside: avoid;
-    }
-    .legal-notice-title {
-      font-weight: bold;
-      font-family: Arial, Helvetica, sans-serif;
-      margin-bottom: 0.5em;
-      color: #0055a4;
-    }
-    .warning-notice {
-      background-color: #fff8e6;
-      border: 1px solid #d4a012;
-      border-left: 4px solid #d4a012;
-      padding: 1em;
-      margin: 1.5em 0;
-      page-break-inside: avoid;
-    }
-    .warning-notice-title {
-      font-weight: bold;
-      font-family: Arial, Helvetica, sans-serif;
-      margin-bottom: 0.5em;
-      color: #9a7b0a;
-    }
-    .definition-list {
-      margin: 1em 0;
-    }
-    .definition-item {
-      margin: 0.6em 0;
-      padding-left: 1.5em;
-      text-indent: -1.5em;
-    }
-    .definition-term {
-      font-weight: bold;
-    }
-    .obligations-list {
-      margin: 0.5em 0 0.5em 1.5em;
-      padding: 0;
-    }
-    .obligations-list li {
-      margin: 0.4em 0;
-      text-align: justify;
-    }
-    .schedule {
-      page-break-before: always;
-      break-before: page;
-      margin-top: 2em;
-    }
-    .schedule-title {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 14pt;
-      font-weight: bold;
-      text-align: center;
-      margin-bottom: 1em;
-      padding-bottom: 0.5em;
-      border-bottom: 2px solid #1a1a1a;
-      text-transform: uppercase;
-    }
-    /* CRITICAL: Signatures MUST always start on a fresh page for legal documents */
-    .signature-section {
-      page-break-before: always;
-      page-break-inside: avoid;
-      margin-top: 0;
-      padding-top: 20pt;
-      min-height: 400pt;
-    }
-    .signature-block {
-      margin: 2em 0;
-      page-break-inside: avoid;
-    }
-    .signature-line {
-      border-bottom: 1px solid #1a1a1a;
-      width: 60%;
-      margin: 2em 0 0.3em 0;
-    }
-    .signature-label {
-      font-size: 10pt;
-      color: #666;
-    }
-    .page-break {
-      page-break-before: always;
-      break-before: page;
-    }
-    .info-box {
-      border: 1px solid #0055a4;
-      background-color: #f0f7ff;
-      padding: 1em;
-      margin: 1em 0;
-      page-break-inside: avoid;
-    }
-    .info-box-title {
-      font-weight: bold;
-      color: #0055a4;
-      margin-bottom: 0.5em;
-    }
-    .checklist {
-      margin: 0.5em 0;
-      padding-left: 0;
-      list-style: none;
-    }
-    .checklist li {
-      margin: 0.3em 0;
-      padding-left: 1.5em;
-      position: relative;
-    }
-    .checklist li::before {
-      content: "☐";
-      position: absolute;
-      left: 0;
-    }
-    /* Footer with guaranteed safety margin */
-    .footer-info {
-      margin-top: 40pt;
-      padding-top: 15pt;
-      border-top: 1px solid #ccc;
-      font-size: 9pt;
-      color: #666;
-      text-align: center;
-      page-break-inside: avoid;
-      clear: both;
-    }
-    /* ===== PAGINATION SAFETY ===== */
-    h2, h3, h4, .section-title, .subsection-title {
-      page-break-after: avoid;
-      orphans: 3;
-      widows: 3;
-    }
-    p, li {
-      orphans: 3;
-      widows: 3;
-    }
-    @media print {
-      .page-break { page-break-before: always; }
-      .signature-section { page-break-before: always; page-break-inside: avoid; }
-      .signature-block, .info-box, .footer-info { page-break-inside: avoid; }
-      h2, h3, h4, .section-title { page-break-after: avoid; orphans: 3; widows: 3; }
-      p, li { orphans: 3; widows: 3; }
-    }
-  </style>
-</head>
-<body>
-<div class="document-container">
-
-  <!-- DOCUMENT HEADER -->
-  <div class="doc-header">
-    <div class="doc-title">Private Residential Tenancy Agreement</div>
-    <div class="doc-jurisdiction">SCOTLAND</div>
-    <div class="doc-subtitle">Standard Tenancy Agreement</div>
-    <div class="legal-ref">Private Housing (Tenancies) (Scotland) Act 2016</div>
-    <div class="doc-date">
-      <strong>Agreement Date:</strong> {{formatUKDate agreement_date}}
-    </div>
-  </div>
-
-  <div class="legal-notice">
-    <div class="legal-notice-title">About This Tenancy</div>
-    <p>This is a <strong>Private Residential Tenancy (PRT)</strong> under the Private Housing (Tenancies) (Scotland) Act 2016. A PRT has <strong>no fixed end date</strong> and continues until properly ended by either party. The Tenant has security of tenure and can only be evicted on grounds specified in the Act, following the correct legal procedures and obtaining an order from the First-tier Tribunal for Scotland.</p>
-  </div>
-
-  <!-- SECTION 1: PARTIES -->
-  <div class="section">
-    <div class="section-title">1. Parties</div>
-
-    <div class="subsection-title">The Landlord</div>
-    <table class="data-table">
-      <tr>
-        <td class="label">Name</td>
-        <td class="value">{{landlord_full_name}}{{#if landlord_2_name}} and {{landlord_2_name}}{{/if}}</td>
-      </tr>
-      <tr>
-        <td class="label">Address</td>
-        <td class="value">{{landlord_address}}</td>
-      </tr>
-      <tr>
-        <td class="label">Email</td>
-        <td class="value">{{landlord_email}}</td>
-      </tr>
-      <tr>
-        <td class="label">Telephone</td>
-        <td class="value">{{landlord_phone}}</td>
-      </tr>
-      {{#if landlord_reg_number}}
-      <tr>
-        <td class="label">Landlord Registration No.</td>
-        <td class="value">{{landlord_reg_number}}</td>
-      </tr>
-      {{#if registration_authority}}
-      <tr>
-        <td class="label">Registered With</td>
-        <td class="value">{{registration_authority}}</td>
-      </tr>
-      {{/if}}
-      {{#if registration_expiry}}
-      <tr>
-        <td class="label">Registration Valid Until</td>
-        <td class="value">{{formatUKDate registration_expiry}}</td>
-      </tr>
-      {{/if}}
-      {{/if}}
-    </table>
-
-    {{#unless landlord_reg_number}}
-    <div class="warning-notice">
-      <div class="warning-notice-title">Landlord Registration Required</div>
-      <p>Under the Antisocial Behaviour etc. (Scotland) Act 2004, the Landlord must be registered with the local council. It is a criminal offence to act as an unregistered landlord in Scotland, punishable by a fine of up to £50,000. The Landlord Registration Number must be provided.</p>
-    </div>
-    {{/unless}}
-
-    {{#if agent_name}}
-    <div class="subsection-title">Landlord's Letting Agent</div>
-    <table class="data-table">
-      <tr>
-        <td class="label">Agent Name</td>
-        <td class="value">{{agent_name}}</td>
-      </tr>
-      <tr>
-        <td class="label">Address</td>
-        <td class="value">{{agent_address}}</td>
-      </tr>
-      <tr>
-        <td class="label">Email</td>
-        <td class="value">{{agent_email}}</td>
-      </tr>
-      <tr>
-        <td class="label">Telephone</td>
-        <td class="value">{{agent_phone}}</td>
-      </tr>
-      {{#if agent_reg_number}}
-      <tr>
-        <td class="label">Registration Number</td>
-        <td class="value">{{agent_reg_number}}</td>
-      </tr>
-      {{/if}}
-    </table>
-    {{/if}}
-
-    <div class="subsection-title">The Tenant{{#if multiple_tenants}}s{{/if}}</div>
-    <table class="tenant-table">
-      <thead>
-        <tr>
-          <th style="width:5%">#</th>
-          <th style="width:30%">Full Name</th>
-          <th style="width:20%">Date of Birth</th>
-          <th style="width:25%">Email</th>
-          <th style="width:20%">Telephone</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each tenants}}
-        <tr>
-          <td>{{this.number}}</td>
-          <td>{{this.full_name}}</td>
-          <td>{{formatUKDate this.dob}}</td>
-          <td>{{this.email}}</td>
-          <td>{{this.phone}}</td>
-        </tr>
-        {{/each}}
-      </tbody>
-    </table>
-
-    {{#if multiple_tenants}}
-    <div class="legal-notice">
-      <div class="legal-notice-title">Joint and Several Liability</div>
-      <p>Where there is more than one Tenant, each Tenant is jointly and severally liable for all obligations under this Agreement, including the full rent. Any notice served on one Tenant is treated as served on all Tenants. If one Tenant gives notice to end the tenancy, it will normally end the tenancy for all Tenants unless the statutory procedure for joint tenants is followed.</p>
-    </div>
-    {{/if}}
-  </div>
-
-  <!-- SECTION 2: DEFINITIONS -->
-  <div class="section">
-    <div class="section-title">2. Definitions</div>
-    <div class="definition-list">
-      <div class="definition-item">
-        <span class="definition-term">"the Act"</span> means the Private Housing (Tenancies) (Scotland) Act 2016, as amended.
-      </div>
-      <div class="definition-item">
-        <span class="definition-term">"the Property"</span> means the dwelling-house described in Schedule 1, including all fixtures, fittings and contents listed in the Inventory.
-      </div>
-      <div class="definition-item">
-        <span class="definition-term">"the Landlord"</span> means the person(s) named as landlord in this Agreement and includes successors in title.
-      </div>
-      <div class="definition-item">
-        <span class="definition-term">"the Tenant"</span> means the person(s) named as tenant in this Agreement. Where there is more than one tenant, references to "the Tenant" include all tenants jointly and each tenant individually.
-      </div>
-      <div class="definition-item">
-        <span class="definition-term">"PRT"</span> means a Private Residential Tenancy under the Act.
-      </div>
-      <div class="definition-item">
-        <span class="definition-term">"the Tribunal"</span> means the First-tier Tribunal for Scotland (Housing and Property Chamber).
-      </div>
-      <div class="definition-item">
-        <span class="definition-term">"the Rent"</span> means the rent specified in Schedule 2, payable in accordance with this Agreement.
-      </div>
-      <div class="definition-item">
-        <span class="definition-term">"the Deposit"</span> means the security deposit specified in Schedule 2, held in accordance with the Tenancy Deposit Schemes (Scotland) Regulations 2011.
-      </div>
-      <div class="definition-item">
-        <span class="definition-term">"the Repairing Standard"</span> means the standard prescribed by the Housing (Scotland) Act 2006, as amended.
-      </div>
-      <div class="definition-item">
-        <span class="definition-term">"Working Days"</span> means days other than Saturdays, Sundays and public holidays in Scotland.
-      </div>
-    </div>
-  </div>
-
-  <!-- SECTION 3: THE TENANCY -->
-  <div class="section">
-    <div class="section-title">3. The Tenancy</div>
-
-    <div class="clause">
-      <span class="clause-num">3.1</span>
-      The Landlord lets the Property to the Tenant as a Private Residential Tenancy under the Act. The Tenant is entitled to occupy the Property as the Tenant's only or principal home.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">3.2</span>
-      The tenancy commences on <strong>{{formatUKDate tenancy_start_date}}</strong> and continues indefinitely until ended in accordance with the Act. There is no fixed end date for a PRT.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">3.3</span>
-      This tenancy cannot be converted to any other type of tenancy and remains a PRT throughout its duration.
-    </div>
-
-    {{#if uses_model_tenancy_terms}}
-    <div class="info-box">
-      <div class="info-box-title">Scottish Government Model Terms</div>
-      <p>This Agreement is based on the Scottish Government's model PRT terms, which provide a standardised framework designed to reduce disputes and ensure compliance with the Act.</p>
-    </div>
-    {{/if}}
-  </div>
-
-  <!-- SECTION 4: RENT -->
-  <div class="section">
-    <div class="section-title">4. Rent</div>
-
-    <div class="clause">
-      <span class="clause-num">4.1</span>
-      The Tenant shall pay the Rent of <strong>£{{rent_amount}}</strong> per <strong>{{rent_period}}</strong>, payable in advance on the <strong>{{rent_due_day}}</strong> of each {{rent_period}}.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">4.2</span>
-      The first payment of <strong>£{{first_payment}}</strong> is due on <strong>{{formatUKDate first_payment_date}}</strong>.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">4.3</span>
-      Payment shall be made by <strong>{{payment_method}}</strong> to: {{payment_details}}.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">4.4</span>
-      The Rent is payable without deduction or set-off unless the Tenant is legally entitled to make such deduction.
-    </div>
-
-    {{#if rent_includes}}
-    <div class="clause">
-      <span class="clause-num">4.5</span>
-      The Rent includes: {{rent_includes}}.
-    </div>
-    {{/if}}
-
-    {{#if rent_excludes}}
-    <div class="clause">
-      <span class="clause-num">{{#if rent_includes}}4.6{{else}}4.5{{/if}}</span>
-      The Rent excludes: {{rent_excludes}}. The Tenant is responsible for these costs.
-    </div>
-    {{/if}}
-
-    <div class="subsection-title">Rent Increases</div>
-    <div class="clause">
-      The Landlord may increase the Rent by serving a Rent Increase Notice (Form 4) on the Tenant, subject to the following:
-      <ul class="obligations-list">
-        <li>At least <strong>3 months' written notice</strong> must be given;</li>
-        <li>The rent cannot be increased more than once in any 12-month period;</li>
-        <li>The proposed rent must not exceed the open market rent for a comparable property;</li>
-        <li>The Tenant may refer the increase to a Rent Officer if they consider it unreasonable.</li>
-      </ul>
-    </div>
-
-    {{#if in_rent_pressure_zone}}
-    <div class="legal-notice">
-      <div class="legal-notice-title">Rent Pressure Zone</div>
-      <p>The Property is located in a designated Rent Pressure Zone (RPZ). Rent increases are subject to additional restrictions and caps as set by the local authority. The Landlord must comply with all RPZ regulations when proposing any rent increase.</p>
-    </div>
-    {{/if}}
-  </div>
-
-  <!-- SECTION 5: DEPOSIT -->
-  <div class="section">
-    <div class="section-title">5. Deposit</div>
-
-    <div class="clause">
-      <span class="clause-num">5.1</span>
-      The Tenant shall pay a deposit of <strong>£{{deposit_amount}}</strong> on or before the commencement of this tenancy.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">5.2</span>
-      Within <strong>30 Working Days</strong> of receiving the Deposit, the Landlord shall:
-      <ul class="obligations-list">
-        <li>protect the Deposit in an approved tenancy deposit scheme; and</li>
-        <li>provide the Tenant with the prescribed information about the protection.</li>
-      </ul>
-    </div>
-
-    {{#if deposit_scheme_name}}
-    <div class="clause">
-      <span class="clause-num">5.3</span>
-      The Deposit will be protected with: <strong>{{deposit_scheme_name}}</strong>.
-    </div>
-    {{/if}}
-
-    <div class="clause">
-      <span class="clause-num">{{#if deposit_scheme_name}}5.4{{else}}5.3{{/if}}</span>
-      The approved tenancy deposit schemes in Scotland are:
-      <ul class="obligations-list">
-        <li>SafeDeposits Scotland</li>
-        <li>MyDeposits Scotland</li>
-        <li>Letting Protection Service Scotland</li>
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">{{#if deposit_scheme_name}}5.5{{else}}5.4{{/if}}</span>
-      The Deposit is held as security for:
-      <ul class="obligations-list">
-        <li>damage to the Property, fixtures, fittings or contents (beyond fair wear and tear);</li>
-        <li>unpaid Rent;</li>
-        <li>unpaid utility bills for which the Tenant is responsible; and</li>
-        <li>other breaches of this Agreement.</li>
-      </ul>
-    </div>
-
-    <div class="warning-notice">
-      <div class="warning-notice-title">Failure to Protect Deposit</div>
-      <p>If the Landlord fails to protect the Deposit or provide the prescribed information within 30 Working Days, the Tenant may apply to the Tribunal for an order requiring the Landlord to pay the Tenant up to <strong>three times the deposit amount</strong>.</p>
-    </div>
-  </div>
-
-  <!-- SECTION 6: TENANT'S OBLIGATIONS -->
-  <div class="section">
-    <div class="section-title">6. Tenant's Obligations</div>
-
-    <div class="clause">
-      <span class="clause-num">6.1</span>
-      <strong>Rent:</strong> Pay the Rent in full and on time without deduction (unless legally entitled).
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">6.2</span>
-      <strong>Utilities:</strong> Pay all charges for gas, electricity, water, sewerage, telephone, internet, council tax (unless included in Rent or exempt), and TV licence during the tenancy.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">6.3</span>
-      <strong>Use of Property:</strong> Use the Property as the Tenant's only or principal home. The Tenant shall not:
-      <ul class="obligations-list">
-        <li>operate any business from the Property without the Landlord's prior written consent;</li>
-        <li>use the Property for any illegal or immoral purpose.</li>
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">6.4</span>
-      <strong>Care of Property:</strong> The Tenant shall:
-      <ul class="obligations-list">
-        <li>take reasonable care of the Property;</li>
-        <li>keep the Property in a reasonable state of cleanliness;</li>
-        <li>keep the Property adequately heated and ventilated to prevent condensation, dampness and mould;</li>
-        <li>report any defects or damage to the Landlord without unreasonable delay;</li>
-        <li>not cause damage (fair wear and tear excepted);</li>
-        <li>make good any damage caused by the Tenant, household members, or visitors.</li>
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">6.5</span>
-      <strong>Alterations:</strong> Not make any alterations, additions or improvements to the Property without the Landlord's prior written consent. If consent is given, the Tenant may be entitled to compensation for improvements at the end of the tenancy.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">6.6</span>
-      <strong>Decorations:</strong> Not remove or alter the Landlord's decorations, fixtures, fittings or furnishings without consent.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">6.7</span>
-      <strong>Pets:</strong> {{#if pets_allowed}}Keep pets only with the Landlord's prior written consent. Currently approved pets: {{approved_pets}}. {{else}}Not keep any pets at the Property without the Landlord's prior written consent. {{/if}}The Landlord's consent must not be unreasonably withheld. If the Tenant requests permission to keep a pet, the Landlord must respond within 28 days; failure to respond shall be treated as consent.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">6.8</span>
-      <strong>Smoking:</strong> {{#if smoking_allowed}}Smoking is permitted in the Property, but the Tenant must ensure no damage is caused and odours are minimised.{{else}}Not smoke or permit smoking inside the Property.{{/if}}
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">6.9</span>
-      <strong>Subletting:</strong> The Tenant shall not:
-      <ul class="obligations-list">
-        <li>sublet the whole of the Property;</li>
-        <li>sublet any part of the Property without the Landlord's prior written consent;</li>
-        <li>take in lodgers without the Landlord's prior written consent.</li>
-      </ul>
-      The Landlord's consent must not be unreasonably withheld.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">6.10</span>
-      <strong>Access:</strong> Allow the Landlord or their agent reasonable access to the Property for:
-      <ul class="obligations-list">
-        <li>viewing the condition of the Property;</li>
-        <li>carrying out repairs, maintenance or inspections;</li>
-        <li>showing prospective buyers or tenants (when the tenancy is ending).</li>
-      </ul>
-      At least <strong>24 hours' notice</strong> must be given (except in emergencies). Routine inspections shall be no more frequent than once every 3 months.
-    </div>
-
-    {{#if has_garden}}
-    <div class="clause">
-      <span class="clause-num">6.11</span>
-      <strong>Garden:</strong> Keep any garden, patio and external areas in reasonable condition, cut lawns regularly, and not remove or severely prune trees, shrubs or plants without consent.
-    </div>
-    {{/if}}
-
-    <div class="clause">
-      <span class="clause-num">{{#if has_garden}}6.12{{else}}6.11{{/if}}</span>
-      <strong>Waste:</strong> Dispose of all waste appropriately, follow the local council's recycling requirements, and not allow rubbish to accumulate.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">{{#if has_garden}}6.13{{else}}6.12{{/if}}</span>
-      <strong>Behaviour:</strong> Not behave in an antisocial manner or cause nuisance, annoyance or disturbance to neighbours. The Tenant shall keep noise to reasonable levels, especially between 11pm and 7am, and ensure household members and visitors behave appropriately.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">{{#if has_garden}}6.14{{else}}6.13{{/if}}</span>
-      <strong>Insurance:</strong> The Tenant is responsible for insuring their own belongings. The Landlord's insurance does not cover the Tenant's possessions.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">{{#if has_garden}}6.15{{else}}6.14{{/if}}</span>
-      <strong>Notification:</strong> Notify the Landlord promptly of any damage, any defects requiring repair, any change in household composition, and any absence exceeding {{#if absence_notification_days}}{{absence_notification_days}}{{else}}14{{/if}} days.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">{{#if has_garden}}6.16{{else}}6.15{{/if}}</span>
-      <strong>End of Tenancy:</strong> When the tenancy ends, the Tenant shall:
-      <ul class="obligations-list">
-        <li>give at least 28 days' notice in writing;</li>
-        <li>leave the Property clean and in the same condition as at commencement (fair wear and tear excepted);</li>
-        <li>return all keys, access devices and security fobs;</li>
-        <li>remove all personal belongings;</li>
-        <li>provide a forwarding address.</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- SECTION 7: LANDLORD'S OBLIGATIONS -->
-  <div class="section">
-    <div class="section-title">7. Landlord's Obligations</div>
-
-    <div class="clause">
-      <span class="clause-num">7.1</span>
-      <strong>Quiet Enjoyment:</strong> Allow the Tenant to occupy and use the Property without interference, except as permitted by this Agreement or required by law.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">7.2</span>
-      <strong>Repairing Standard:</strong> Ensure the Property meets the Repairing Standard at all times, including:
-      <ul class="obligations-list">
-        <li>the Property is wind and watertight and reasonably fit for human habitation;</li>
-        <li>the structure and exterior are in reasonable repair;</li>
-        <li>installations for water, gas, electricity, sanitation, heating are in reasonable repair and working order;</li>
-        <li>fixtures, fittings and furnishings are in reasonable repair and working order;</li>
-        <li>satisfactory fire and carbon monoxide detection is installed and working;</li>
-        <li>common areas are maintained in reasonable repair and safe condition.</li>
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">7.3</span>
-      <strong>Safety Compliance:</strong>
-    </div>
-    <div class="sub-clause">
-      <strong>(a) Gas Safety:</strong> Ensure all gas appliances are safe, provide an annual Gas Safety Certificate (CP12), and arrange annual safety checks by a Gas Safe registered engineer.
-    </div>
-    <div class="sub-clause">
-      <strong>(b) Electrical Safety:</strong> Ensure electrical installations are safe, provide an Electrical Installation Condition Report (EICR) every 5 years (or at change of tenancy), and ensure all provided appliances are safe.
-    </div>
-    <div class="sub-clause">
-      <strong>(c) Fire Safety:</strong> Install interlinked smoke alarms on each floor with living accommodation, interlinked heat alarms in every kitchen, and carbon monoxide detectors in rooms with fixed combustion appliances (except gas cookers). All alarms must be in working order at the start of the tenancy.
-    </div>
-    <div class="sub-clause">
-      <strong>(d) Furniture:</strong> Ensure all furniture and furnishings comply with fire safety regulations.
-    </div>
-    <div class="sub-clause">
-      <strong>(e) Legionella:</strong> Conduct legionella risk assessment where appropriate.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">7.4</span>
-      <strong>Energy Efficiency:</strong> Ensure the Property has a minimum EPC rating of E (unless exempt). Current EPC rating: <strong>{{epc_rating}}</strong>{{#if epc_expiry}}, valid until <strong>{{formatUKDate epc_expiry}}</strong>{{/if}}.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">7.5</span>
-      <strong>Landlord Registration:</strong> Maintain valid registration with the local authority as required by the Antisocial Behaviour etc. (Scotland) Act 2004.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">7.6</span>
-      <strong>Deposit Protection:</strong> Protect the Deposit in an approved scheme within 30 Working Days and provide the prescribed information.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">7.7</span>
-      <strong>Information:</strong> Provide the Tenant with:
-      <ul class="obligations-list">
-        <li>a copy of this Agreement;</li>
-        <li>the Easy Read Notes (Scottish Government guidance);</li>
-        <li>Gas Safety Certificate;</li>
-        <li>Energy Performance Certificate;</li>
-        <li>Electrical Installation Condition Report (if available);</li>
-        <li>Deposit protection information;</li>
-        <li>Landlord registration details.</li>
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">7.8</span>
-      <strong>Repairs:</strong> Carry out repairs within a reasonable time after being notified. The Landlord is not responsible for repairs needed due to damage caused by the Tenant.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">7.9</span>
-      <strong>Insurance:</strong> Insure the Property and the Landlord's contents.
-    </div>
-  </div>
-
-  <!-- SECTION 8: ENDING THE TENANCY -->
-  <div class="section">
-    <div class="section-title">8. Ending the Tenancy</div>
-
-    <div class="subsection-title">By the Tenant</div>
-    <div class="clause">
-      <span class="clause-num">8.1</span>
-      The Tenant may end the tenancy by giving at least <strong>28 days' notice in writing</strong> to the Landlord. The notice period begins on the day the Landlord receives the notice. The Tenant does not need to give a reason.
-    </div>
-
-    <div class="subsection-title">By the Landlord</div>
-    <div class="clause">
-      <span class="clause-num">8.2</span>
-      The Landlord can only end the tenancy by:
-      <ul class="obligations-list">
-        <li>serving a Notice to Leave stating the eviction ground(s);</li>
-        <li>waiting for the notice period to expire (28 or 84 days depending on the ground);</li>
-        <li>applying to the Tribunal for an eviction order;</li>
-        <li>obtaining an eviction order from the Tribunal;</li>
-        <li>having the order enforced by sheriff officers (if necessary).</li>
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">8.3</span>
-      The 18 grounds for eviction are set out in Schedule 3 of the Act. The Landlord cannot evict the Tenant without a Tribunal eviction order.
-    </div>
-
-    <div class="subsection-title">Abandonment</div>
-    <div class="clause">
-      <span class="clause-num">8.4</span>
-      If the Landlord believes the Tenant has abandoned the Property, the Landlord must follow the statutory abandonment procedures before re-entering.
-    </div>
-  </div>
-
-  <!-- SECTION 9: GENERAL PROVISIONS -->
-  <div class="section">
-    <div class="section-title">9. General Provisions</div>
-
-    <div class="clause">
-      <span class="clause-num">9.1</span>
-      <strong>Changes to Terms:</strong> The Landlord may change the terms of this Agreement by giving at least 3 months' notice using the prescribed form. Only reasonable changes may be made, and the Tenant may challenge unreasonable changes at the Tribunal.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">9.2</span>
-      <strong>Assignment and Succession:</strong> The Tenant may request to assign the tenancy to another person. The Landlord's consent is required and must not be unreasonably withheld. On the Tenant's death, the tenancy may pass to a qualifying spouse, civil partner, or family member in accordance with the Act.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">9.3</span>
-      <strong>Data Protection:</strong> Personal data will be processed in accordance with UK GDPR and the Data Protection Act 2018. The Landlord will use the Tenant's data for managing the tenancy, rent collection, property maintenance, legal compliance, and providing references (with consent). Data will be retained for 6 years after the tenancy ends.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">9.4</span>
-      <strong>Unfair Terms:</strong> Under the Consumer Rights Act 2015, any term in this Agreement that is unfair shall not be binding on the Tenant.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">9.5</span>
-      <strong>Dispute Resolution:</strong> Disputes may be referred to the First-tier Tribunal for Scotland (Housing and Property Chamber). The Tribunal can deal with eviction applications, rent disputes, repairing standard matters, deposit disputes, and other PRT matters.
-    </div>
-
-    <div class="clause">
-      <span class="clause-num">9.6</span>
-      <strong>Jurisdiction:</strong> This Agreement is governed by Scots law and the jurisdiction of the Scottish courts.
-    </div>
-
-    {{#if additional_terms}}
-    <div class="clause">
-      <span class="clause-num">9.7</span>
-      <strong>Additional Terms:</strong> {{additional_terms}}
-    </div>
-    <div class="legal-notice">
-      <div class="legal-notice-title">Note on Additional Terms</div>
-      <p>Additional terms cannot override or contradict the statutory terms of a PRT. Any term inconsistent with the Act will be unenforceable.</p>
-    </div>
-    {{/if}}
-  </div>
-
-  {{> statutory_acknowledgements jurisdiction="scotland" format="html" heading_style="section"}}
-
-  <!-- SIGNATURES -->
-  <div class="section page-break">
-    <div class="section-title">Signatures</div>
-    <p>By signing this Agreement, the parties confirm they have read and understood all terms and agree to be bound by them.</p>
-
-    <div class="subsection-title">Landlord</div>
-    <div class="signature-block">
-      <div class="signature-line"></div>
-      <div class="signature-label">Signature</div>
-      <p><strong>Name:</strong> {{landlord_full_name}}</p>
-      <p><strong>Date:</strong> ________________________</p>
-    </div>
-
-    {{#if landlord_2_name}}
-    <div class="signature-block">
-      <div class="signature-line"></div>
-      <div class="signature-label">Signature</div>
-      <p><strong>Name:</strong> {{landlord_2_name}}</p>
-      <p><strong>Date:</strong> ________________________</p>
-    </div>
-    {{/if}}
-
-    {{#if agent_signs}}
-    <div class="signature-block">
-      <p><em>Signed on behalf of Landlord by Letting Agent:</em></p>
-      <div class="signature-line"></div>
-      <div class="signature-label">Signature</div>
-      <p><strong>Name:</strong> {{agent_name}}</p>
-      <p><strong>Date:</strong> ________________________</p>
-    </div>
-    {{/if}}
-
-    <div class="subsection-title">Tenant{{#if multiple_tenants}}s{{/if}}</div>
-    {{#each tenants}}
-    <div class="signature-block">
-      <div class="signature-line"></div>
-      <div class="signature-label">Signature</div>
-      <p><strong>Name:</strong> {{this.full_name}}</p>
-      <p><strong>Date:</strong> ________________________</p>
-    </div>
-    {{/each}}
-  </div>
-
-  <!-- SCHEDULE 1: THE PROPERTY -->
-  <div class="schedule">
-    <div class="schedule-title">Schedule 1 - The Property</div>
-
-    <table class="data-table">
-      <tr>
-        <td class="label">Property Address</td>
-        <td class="value">{{property_address}}</td>
-      </tr>
-      {{#if property_description}}
-      <tr>
-        <td class="label">Description</td>
-        <td class="value">{{property_description}}</td>
-      </tr>
-      {{/if}}
-      {{#if furnished_status}}
-      <tr>
-        <td class="label">Furnished Status</td>
-        <td class="value">{{furnished_status}}</td>
-      </tr>
-      {{/if}}
-      {{#if included_areas}}
-      <tr>
-        <td class="label">Areas Included</td>
-        <td class="value">{{included_areas}}</td>
-      </tr>
-      {{/if}}
-      {{#if excluded_areas}}
-      <tr>
-        <td class="label">Areas Excluded</td>
-        <td class="value">{{excluded_areas}}</td>
-      </tr>
-      {{/if}}
-      {{#if parking}}
-      <tr>
-        <td class="label">Parking</td>
-        <td class="value">{{parking_details}}</td>
-      </tr>
-      {{/if}}
-      {{#if council_tax_band}}
-      <tr>
-        <td class="label">Council Tax Band</td>
-        <td class="value">{{council_tax_band}}</td>
-      </tr>
-      {{/if}}
-      <tr>
-        <td class="label">EPC Rating</td>
-        <td class="value">{{epc_rating}}{{#if epc_expiry}} (valid until {{formatUKDate epc_expiry}}){{/if}}</td>
-      </tr>
-    </table>
-  </div>
-
-  <!-- SCHEDULE 2: RENT AND DEPOSIT -->
-  <div class="schedule">
-    <div class="schedule-title">Schedule 2 - Rent and Deposit</div>
-
-    <div class="subsection-title">Rent</div>
-    <table class="data-table">
-      <tr>
-        <td class="label">Rent Amount</td>
-        <td class="value">£{{rent_amount}} per {{rent_period}}</td>
-      </tr>
-      <tr>
-        <td class="label">Payment Due</td>
-        <td class="value">{{rent_due_day}} of each {{rent_period}}</td>
-      </tr>
-      <tr>
-        <td class="label">First Payment</td>
-        <td class="value">£{{first_payment}} due on {{formatUKDate first_payment_date}}</td>
-      </tr>
-      <tr>
-        <td class="label">Payment Method</td>
-        <td class="value">{{payment_method}}</td>
-      </tr>
-      <tr>
-        <td class="label">Payment Details</td>
-        <td class="value">{{payment_details}}</td>
-      </tr>
-      {{#if rent_includes}}
-      <tr>
-        <td class="label">Rent Includes</td>
-        <td class="value">{{rent_includes}}</td>
-      </tr>
-      {{/if}}
-      {{#if rent_excludes}}
-      <tr>
-        <td class="label">Rent Excludes</td>
-        <td class="value">{{rent_excludes}}</td>
-      </tr>
-      {{/if}}
-      {{#if in_rent_pressure_zone}}
-      <tr>
-        <td class="label">Rent Pressure Zone</td>
-        <td class="value">Yes - additional restrictions apply</td>
-      </tr>
-      {{/if}}
-    </table>
-
-    <div class="subsection-title">Deposit</div>
-    <table class="data-table">
-      <tr>
-        <td class="label">Deposit Amount</td>
-        <td class="value">£{{deposit_amount}}</td>
-      </tr>
-      <tr>
-        <td class="label">Protection Deadline</td>
-        <td class="value">Within 30 Working Days of receipt</td>
-      </tr>
-      {{#if deposit_scheme_name}}
-      <tr>
-        <td class="label">Deposit Scheme</td>
-        <td class="value">{{deposit_scheme_name}}</td>
-      </tr>
-      {{/if}}
-    </table>
-  </div>
-
-  <!-- SCHEDULE 3: UTILITIES -->
-  <div class="schedule">
-    <div class="schedule-title">Schedule 3 - Utilities and Services</div>
-
-    <table class="data-table">
-      {{#if electricity_supplier}}
-      <tr>
-        <td class="label">Electricity Supplier</td>
-        <td class="value">{{electricity_supplier}}</td>
-      </tr>
-      {{/if}}
-      {{#if gas_supplier}}
-      <tr>
-        <td class="label">Gas Supplier</td>
-        <td class="value">{{gas_supplier}}</td>
-      </tr>
-      {{/if}}
-      {{#if water_supplier}}
-      <tr>
-        <td class="label">Water Supplier</td>
-        <td class="value">{{water_supplier}}</td>
-      </tr>
-      {{/if}}
-      {{#if broadband_provider}}
-      <tr>
-        <td class="label">Broadband Provider</td>
-        <td class="value">{{broadband_provider}}</td>
-      </tr>
-      {{/if}}
-    </table>
-
-    <div class="legal-notice">
-      <div class="legal-notice-title">Tenant Responsibility</div>
-      <p>The Tenant is responsible for transferring utilities into their name, paying all utility bills during the tenancy, and notifying suppliers at the end of the tenancy with final meter readings.</p>
-    </div>
-  </div>
-
-  <!-- SCHEDULE 4: INVENTORY -->
-  <div class="schedule">
-    <div class="schedule-title">Schedule 4 - Inventory and Condition</div>
-
-    {{#if inventory_attached}}
-    <p>A detailed inventory and condition report is attached to this Agreement and forms part of it.</p>
-    <div class="legal-notice">
-      <div class="legal-notice-title">Important</div>
-      <p>The Tenant should check the inventory carefully and notify the Landlord in writing within <strong>7 days</strong> of any inaccuracies. The inventory will be used at the end of the tenancy to assess whether there is any damage beyond fair wear and tear.</p>
-    </div>
-    {{else}}
-    <p>An inventory and condition report will be prepared and provided to the Tenant within 7 days of the commencement date.</p>
-    {{/if}}
-  </div>
-
-  <!-- SCHEDULE 5: PRESCRIBED INFORMATION -->
-  <div class="schedule">
-    <div class="schedule-title">Schedule 5 - Prescribed Information</div>
-
-    <p>The Landlord confirms the following documents have been or will be provided to the Tenant:</p>
-
-    <ul class="checklist">
-      <li>Copy of this Private Residential Tenancy Agreement</li>
-      <li>Easy Read Notes (Scottish Government guidance on PRTs)</li>
-      <li>Gas Safety Certificate (CP12)</li>
-      <li>Energy Performance Certificate (EPC)</li>
-      <li>Electrical Installation Condition Report (EICR)</li>
-      <li>Deposit protection scheme information</li>
-      <li>Landlord registration details</li>
-      <li>Inventory and condition report</li>
-    </ul>
-
-    <div class="subsection-title">Useful Contacts</div>
-    <table class="data-table">
-      <tr>
-        <td class="label">First-tier Tribunal</td>
-        <td class="value">www.housingandpropertychamber.scot</td>
-      </tr>
-      <tr>
-        <td class="label">Shelter Scotland</td>
-        <td class="value">0808 800 4444 | scotland.shelter.org.uk</td>
-      </tr>
-      <tr>
-        <td class="label">Citizens Advice Scotland</td>
-        <td class="value">www.citizensadvice.org.scot</td>
-      </tr>
-    </table>
-  </div>
-
-  <!-- FOOTER -->
-  <div class="footer-info">
-    <p><strong>Document Reference:</strong> {{document_id}}</p>
-    <p><strong>Generated:</strong> {{formatUKDate generation_timestamp}}</p>
-    <p>This Agreement is governed by the Private Housing (Tenancies) (Scotland) Act 2016, Housing (Scotland) Act 2006, Antisocial Behaviour etc. (Scotland) Act 2004, Tenancy Deposit Schemes (Scotland) Regulations 2011, Consumer Rights Act 2015, UK GDPR and Data Protection Act 2018.</p>
-    <p style="margin-top: 1em;">Generated by Landlord Heaven | {{site_domain}}</p>
-  </div>
-
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><title>Private Residential Tenancy Agreement</title>
+<style>
+@page { size: A4; margin: 22mm 18mm 22mm; }
+* { box-sizing: border-box; }
+body { margin: 0; color: #172033; font: 10.2pt/1.46 Georgia, "Times New Roman", serif; }
+h1, h2, h3 { font-family: Arial, Helvetica, sans-serif; break-after: avoid; }
+h1 { font-size: 21pt; letter-spacing: .35pt; text-align: center; text-transform: uppercase; }
+h2 { margin: 20pt 0 9pt; padding-bottom: 4pt; border-bottom: 1.2pt solid #243b53; font-size: 13pt; }
+h3 { margin: 13pt 0 6pt; font-size: 10.8pt; }
+p { margin: 0 0 7pt; orphans: 3; widows: 3; text-align: justify; }
+.cover { min-height: 205mm; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+.brand { color: #176b57; font: 700 11pt Arial, sans-serif; letter-spacing: 1.5pt; text-transform: uppercase; }
+.subtitle { color: #52616b; font: 11pt Arial, sans-serif; text-align: center; }
+.legal-source { margin: 18pt auto; max-width: 135mm; padding: 10pt; border: 1pt solid #9fb3c8; background: #f4f8fb; font-size: 9pt; text-align: left; }
+.page-break { break-before: page; page-break-before: always; }
+.section { margin: 12pt 0; }
+.data-table, .signature-table { width: 100%; margin: 9pt 0 14pt; border-collapse: collapse; break-inside: avoid; }
+.data-table th, .data-table td, .signature-table th, .signature-table td { border: .65pt solid #829ab1; padding: 6pt 7pt; vertical-align: top; }
+.data-table th { width: 34%; background: #edf3f7; font: 700 8.6pt Arial, sans-serif; text-align: left; text-transform: uppercase; }
+.tenant-card { margin: 8pt 0; padding: 8pt; border: .65pt solid #bcccdc; break-inside: avoid; }
+.term-heading { margin-top: 14pt; color: #102a43; }
+.term-number { display: inline-block; min-width: 24pt; }
+.legal-paragraph { margin-left: 18pt; }
+.legal-list { margin: 2pt 0 8pt 34pt; }
+.legal-list-item { margin: 2pt 0; text-align: justify; }
+.explanatory { padding: 8pt 10pt; border-left: 3pt solid #176b57; background: #f2f8f6; }
+.omitted { padding: 7pt 9pt; border: 1pt solid #c6d4df; background: #f8fafc; font-style: italic; }
+.signature-table td { height: 38pt; }
+.signature-table .line { height: 54pt; }
+.footer-note { margin-top: 24pt; padding-top: 8pt; border-top: .5pt solid #9fb3c8; color: #52616b; font-size: 8.5pt; }
+</style></head><body>
+<section class="cover">
+  <div class="brand">Landlord Heaven</div>
+  <h1>Private Residential Tenancy Agreement</h1>
+  <p class="subtitle">Scotland — open-ended tenancy</p>
+  <div class="legal-source">Scottish Government Model Private Residential Tenancy Agreement (April 2024) used as the clause-parity specification. The official statutory supporting notes are supplied separately.</div>
+<p class="subtitle">Document ID: {{document_id}}<br>Generated: {{formatUKDate current_date}}</p>
+</section>
+
+<section class="page-break"><h2>Glossary and interpretation</h2><p class="legal-paragraph">Section 2: glossary of terms &amp; interpretation</p>
+<p class="legal-paragraph">In this Agreement, the following words have these meanings except where the content indicates otherwise:</p>
+<ul class="legal-list">
+<li class="legal-list-item">Assignation: Where a Tenant transfers his or her rights to a private residential tenancy (or share in a joint tenancy) to another person, subject to obtaining the Landlord’s prior written permission.</li>
+<li class="legal-list-item">Common Parts: in relation to premises, the structure and exterior of, and any common facilities within or used in connection with, the building or part of a building which includes the premises but only in so far as the structure, exterior and common facilities are not solely owned by the owner of the premises.</li>
+<li class="legal-list-item">Data Protection Laws: any law, statute, subordinate legislation, regulation, order, mandatory guidance or code of practice, judgment of a relevant court of law, or directives or requirements of any regulatory body which relates to the protection of individuals with regard to the processing of Personal Data to which a Party is subject including the Data Protection Act 2018 and any statutory modification or re-enactment thereof and the GDPR.</li>
+<li class="legal-list-item">Eviction ground: one or more of the grounds named in schedule 3 of the Act on the basis of which an eviction order may be issued by the First-tier Tribunal for Scotland Housing and Property Chamber (“the Tribunal”).</li>
+<li class="legal-list-item">Eviction order: an order issued by the Tribunal which brings a private residential tenancy to an end on a certain date.</li>
+<li class="legal-list-item">Fixed carbon-fuelled appliance: an appliance that is attached to the building fabric or connected to a mains fuel supply and burns fuel to produce energy.</li>
+<li class="legal-list-item">GDPR: the General Data Protection Regulation (EU) 2016/679 of the European Parliament and of the Council of 27 April 2016 on the protection of natural persons with regard to the processing of personal data and on the free movement of such data, and repealing Directive 95/46/EC.</li>
+<li class="legal-list-item">Guarantor: a third party, such as a parent or close relative, who agrees to pay rent if the Tenant doesn’t pay it and meet any other obligation that the Tenant fails to meet. The Landlord can take legal action to recover from a guarantor all payments of rent, any other obligations under this Agreement, and any other payments due to the Landlord which the Tenant is required to pay under this Agreement.</li>
+<li class="legal-list-item">House in Multiple Occupation (HMO): Living accommodation is an HMO if it is occupied by three or more adults (aged 16 or over) from three or more families as their only or main residence and comprises either a house, premises or a group of premises owned by the same person with shared basic amenities (a toilet, personal washing facilities, and facilities for the preparation or provision of cooked food) as defined in section 125 of the Housing (Scotland) Act 2006.</li>
+<li class="legal-list-item">Jointly and severally liable: where there are two or more Joint Tenants, each Joint Tenant is fully liable to the Landlord(s) for the obligations of the Tenant under this Agreement including, in particular, the obligation to pay rent. Likewise, each joint Landlord is fully liable to the Tenant(s) for the obligations of the Landlord under this Agreement.</li>
+<li class="legal-list-item">Landlord: includes any Joint Landlord (also see ‘Jointly and severally liable’ above).</li>
+<li class="legal-list-item">Let Property: the property rented by the Tenant from the Landlord.</li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item">Letting Agent: works for the Landlord of a Let Property and offers a range of services from finding suitable Tenants, collecting rent, arranging repairs etc.</li>
+<li class="legal-list-item">Neighbour: any person living in the neighbourhood</li>
+<li class="legal-list-item">Neighbourhood: the local area of the Let Property</li>
+<li class="legal-list-item">Overcrowding: A house is regarded as being overcrowded if it fails either of two tests - the room standard and/or the space standard (see definition of each test below).</li>
+<li class="legal-list-item">Private Residential Tenancy: a tenancy where the property is let to an individual as a separate dwelling; the Tenant occupies all or part of it as the Tenant’s only or principal home; and the tenancy is not one which is excluded under schedule 1 of the Act.</li>
+<li class="legal-list-item">Registered Landlord: a person who is entered in the register prepared and maintained by the local authority for the purposes of Part 8 of the Antisocial Behaviour etc. (Scotland) Act 2004.</li>
+<li class="legal-list-item">Rent: any sum payable periodically by the Tenant to the Landlord in connection with the tenancy (and includes, for the avoidance of doubt, any sums payable in respect of services, repairs, maintenance or insurance).</li>
+<li class="legal-list-item">Rent-increase notice: the notice that a Landlord under a private residential tenancy must use when notifying a Tenant of a proposed rent increase.</li>
+<li class="legal-list-item">Rent officer: an independent officer appointed by law who can determine rent matters referred under the statutory private residential tenancy procedure.</li>
+<li class="legal-list-item">Rent control area: an area designated by the Scottish Ministers under the rent-control framework inserted by the Housing (Scotland) Act 2025. Any designation and applicable cap must be checked for the property and relevant date.</li>
+<li class="legal-list-item">Statutory terms: the terms which apply to every private residential tenancy.</li>
+<li class="legal-list-item">Tenant: includes any joint Tenant or joint sub-Tenant (also see ‘Jointly and severally liable’ above)</li>
+<li class="legal-list-item">The Tribunal: the First-tier Tribunal for Scotland Housing and Property Chamber, the body which deals with all civil disputes arising from a private residential tenancy.</li>
+<li class="legal-list-item">The room standard: this is contravened when two people of opposite sexes, who are not living as husband and wife, have to sleep in the same room. This does not apply to children under 10. The rooms regarded as sleeping accommodation are defined as being &#x27;of a type normally used in the locality either as a bedroom or as a living room&#x27;.</li>
+<li class="legal-list-item">The space standard: sets limits on the number of people who can occupy a house, relative to both the number and floor area of the rooms available as sleeping accommodation. For this purpose, children aged at least one but less than 10 count as half of a person, while children under the age of one do not count at all. Rooms of less than 50 square feet are not taken into account.</li>
+</ul>
+<p class="legal-paragraph">Declaring for the purposes of this Agreement that words in the singular include the plural, and where there are two or more persons included in the expression “the Tenant” the obligations and conditions to be met by “the Tenant”, including payment of the rent, apply to all such persons jointly and severally.</p></section>
+
+<section class="page-break">
+  <h2>Key tenancy details</h2>
+
+<h2>1. Tenant(s)</h2>
+{{#each tenants}}
+<div class="tenant-card">
+  <strong>{{full_name}}</strong><br>
+  {{#if address}}{{address}}<br>{{/if}}
+  Email: {{email}} &nbsp; Telephone: {{phone}}
 </div>
-</body>
-</html>
+{{/each}}
+  {{#if agent_name}}<h2>2. Letting agent</h2>
+  <table class="data-table">
+    <tr><th>Name and address</th><td>{{agent_name}}<br>{{agent_address}}</td></tr>
+    <tr><th>Contact</th><td>{{agent_phone}} / {{agent_email}}</td></tr>
+    <tr><th>Registration</th><td>{{agent_registration_number}}</td></tr>
+    <tr><th>Services</th><td>{{agent_services}}</td></tr>
+    <tr><th>First contact for</th><td>{{agent_contact_matters}}</td></tr>
+  </table>{{/if}}
+  <h2>3. Landlord</h2>
+  <table class="data-table">
+    <tr><th>Name and address</th><td>{{landlord_full_name}}<br>{{landlord_address}}</td></tr>
+    <tr><th>Contact</th><td>{{landlord_phone}} / {{landlord_email}}</td></tr>
+    <tr><th>Registration</th><td>{{landlord_registration_number}}</td></tr>
+    {{#if landlord_2_full_name}}<tr><th>Joint landlord</th><td>{{landlord_2_full_name}}<br>{{landlord_2_address}}<br>{{landlord_2_phone}} / {{landlord_2_email}}<br>Registration: {{landlord_2_registration_number}}</td></tr>{{/if}}
+  </table>
+  <h2>4. Communication</h2><p>Formal communications will be made in writing by: <strong>{{communication_method}}</strong>.</p>
+  <h2>5. Details of the let property</h2>
+  <table class="data-table">
+    <tr><th>Address</th><td>{{property_address}}</td></tr>
+    <tr><th>Type / furnishing</th><td>{{property_type}} / {{furnished_status}}</td></tr>
+    <tr><th>Included areas</th><td>{{included_areas}}</td></tr>
+    <tr><th>Shared areas</th><td>{{shared_areas}}</td></tr>
+    <tr><th>Excluded areas</th><td>{{excluded_areas}}</td></tr>
+    <tr><th>Rent control area status</th><td>{{scotland_rent_control_area_status}}</td></tr>
+    <tr><th>House in Multiple Occupation</th><td>{{#if is_hmo}}Yes{{else}}No{{/if}}</td></tr>
+    {{#if permitted_residents}}<tr><th>Permitted residents</th><td>{{permitted_residents}}</td></tr>{{/if}}
+    {{#if maximum_occupancy}}<tr><th>Maximum occupancy</th><td>{{maximum_occupancy}} people</td></tr>{{/if}}
+    {{#if is_hmo}}<tr><th>HMO licence status</th><td>{{hmo_licence_status}}{{#if hmo_licence_number}}<br>Licence: {{hmo_licence_number}}{{/if}}{{#if hmo_licence_expiry}}<br>Expiry: {{format_date hmo_licence_expiry}}{{/if}}</td></tr>{{/if}}
+  </table>
+<h2>6. Start date of the tenancy</h2><p>The private residential tenancy will start on <strong>{{formatUKDate tenancy_start_date}}</strong>.</p>
+</section>
+<section class="page-break">
+  <h2>Model private residential tenancy terms</h2>
+  <h3 class="term-heading"><span class="term-number">7.</span>Occupation and use of the let property</h3>
+  <p class="legal-paragraph">The Tenant agrees to continue to occupy the Let Property as his or her home and must obtain the Landlord’s written permission before carrying out any trade, business or profession there.</p>
+  <h3 class="term-heading"><span class="term-number">8.</span>Rent</h3>
+  <p class="legal-paragraph">The rent is <strong>{{currency rent_amount}}</strong> per {{rent_period}}, payable in {{rent_payment_timing}}.</p>
+  <p class="legal-paragraph">The first payment of {{currency first_payment}} will be paid on {{format_date first_payment_date}} and covers {{format_date first_payment_period_from}} to {{format_date first_payment_period_to}}. Thereafter {{currency rent_amount}} must be received on {{rent_due_day}} of each {{rent_period}}. Payment method: {{payment_method}}.</p>
+  <p class="legal-paragraph">Services included in the rent: {{rent_includes}}.</p>
+  <h3 class="term-heading"><span class="term-number">9.</span>Rent receipts</h3>
+<p class="legal-paragraph">Where any payment of rent is made in cash, the Landlord must provide the Tenant with a dated written receipt for the payment stating: the amount paid, and either (as the case may be) the amount which remains outstanding, or confirmation that no further amount remains outstanding.</p>
+<h3 class="term-heading"><span class="term-number">10.</span>Rent increases</h3>
+<p class="legal-paragraph">The rent cannot be increased more than once in any twelve month period and the Landlord must give the Tenant at least three months’ notice before any increase can take place. In order to increase the rent, the Landlord must give the Tenant a rent-increase notice, the content of which is set out in ‘The Private Residential Tenancies (Prescribed Notices and Forms) (Scotland) Regulations 2017’. The notice will be sent using the communication method agreed in the ‘Communication’ clause above.</p>
+<p class="legal-paragraph">Within 21 days of receiving a rent-increase notice, the Tenant may use the current statutory referral process if the proposed increase is disputed. The Tenant must follow the current prescribed notice and referral instructions in force on the date of the notice.</p>
+<p class="legal-paragraph">If the Let Property is in a designated rent control area, the Landlord and Tenant must apply the cap, exemptions and challenge process in force for that area and date. The status recorded in the key details is a point-in-time statement and must be rechecked before any rent increase.</p>
+  <h3 class="term-heading"><span class="term-number">11.</span>Deposit</h3>
+  <p class="legal-paragraph">The Landlord must lodge any deposit received with a tenancy deposit scheme within 30 working days of the start date of the tenancy. Each later instalment must be lodged within 30 working days of payment.</p>
+  <p class="legal-paragraph">A deposit of {{currency deposit_amount}} {{#if deposit_already_protected}}has been received{{else}}is expected{{/if}}{{#if deposit_payer}} from {{deposit_payer}}{{/if}}. It cannot exceed two months’ rent.</p>
+  {{#if deposit_already_protected}}
+  <p class="legal-paragraph"><strong>Protection completed:</strong> scheme administrator {{deposit_scheme_name}}{{#if deposit_scheme_type}} ({{deposit_scheme_type}}){{/if}}{{#if deposit_scheme_address}}, {{deposit_scheme_address}}{{/if}}{{#if deposit_scheme_contact_details}}; contact {{deposit_scheme_contact_details}}{{/if}}. Date received: {{formatUKDate deposit_paid_date}}. Date protected: {{formatUKDate deposit_protection_date}}{{#if deposit_reference_number}}. Reference: {{deposit_reference_number}}{{/if}}.</p>
+  {{else}}
+  <p class="legal-paragraph"><strong>Protection pending:</strong> no protection date or reference is asserted by this agreement. After the deposit is received, the Landlord must lodge it with {{deposit_scheme_name}}{{#if deposit_scheme_address}}, {{deposit_scheme_address}}{{/if}}{{#if deposit_scheme_contact_details}}; contact {{deposit_scheme_contact_details}}{{/if}} within the applicable statutory deadline, record the actual protection date and reference, and give the required information to the Tenant.</p>
+  {{/if}}
+  <p class="legal-paragraph"><strong>Property:</strong> {{property_address}}. <strong>Landlord registration:</strong> {{landlord_registration_number}} ({{landlord_registration_authority}}).</p>
+  <p class="legal-paragraph"><strong>Potential deductions:</strong> {{#if deposit_deduction_circumstances}}{{deposit_deduction_circumstances}}{{else}}unpaid rent or other sums due, damage beyond fair wear and tear, missing items, and reasonable evidenced costs arising from a breach of this Agreement{{/if}}.</p>
+  <p class="legal-paragraph">{{#if deposit_repayment_dispute_information}}{{deposit_repayment_dispute_information}}{{else}}At the end of the tenancy, the parties should request repayment through the scheme. If the amount is disputed, the scheme’s repayment and independent dispute-resolution process applies; any liability above the protected deposit remains recoverable through the appropriate lawful process.{{/if}}</p>
+  <p class="legal-paragraph"><strong>Required deposit information:</strong> {{#if prescribed_information_served}}recorded as supplied{{else}}pending completion and delivery; this agreement does not state that it has already been supplied{{/if}}.</p>
+  <h3 class="term-heading"><span class="term-number">12.</span>Subletting and assignation</h3>
+<p class="legal-paragraph">Unless the Tenant has received prior written permission from the Landlord, the Tenant must not:</p>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>sublet</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Let</strong><strong> </strong><strong>Property (or any part of </strong><strong>it),</strong></li>
+<li class="legal-list-item"><strong>take</strong><strong> </strong><strong>in</strong><strong> </strong><strong>a </strong><strong>lodger,</strong></li>
+<li class="legal-list-item"><strong>assign</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Tenant’s interest in</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Let</strong><strong> </strong><strong>Property (or any part of it),</strong><strong> </strong><strong>or</strong></li>
+<li class="legal-list-item"><strong>otherwise</strong><strong> </strong><strong>part</strong><strong> </strong><strong>with,</strong><strong> </strong><strong>or</strong><strong> </strong><strong>give</strong><strong> </strong><strong>up</strong><strong> </strong><strong>to</strong><strong> </strong><strong>another</strong><strong> </strong><strong>person,</strong><strong> </strong><strong>possession</strong><strong> </strong><strong>of</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Let Property (or any part of it).</strong></li>
+</ul>
+<h3 class="term-heading"><span class="term-number">13.</span>Notification about other residents</h3>
+<p class="legal-paragraph">If a person aged 16 or over (who is not a Joint Tenant) occupies the Let Property with the Tenant as that person’s only or principal home, the Tenant must tell the Landlord in writing that person’s name, and relationship to the Tenant.</p>
+<p class="legal-paragraph">If that person subsequently leaves the Let Property the Tenant must tell the Landlord.</p>
+<p class="legal-paragraph"><strong>The Tenant will take reasonable care to ensure that anyone living with them does</strong><strong> </strong><strong>not</strong><strong> </strong><strong>do</strong><strong> </strong><strong>anything</strong><strong> </strong><strong>that</strong><strong> </strong><strong>would</strong><strong> </strong><strong>be</strong><strong> </strong><strong>a</strong><strong> </strong><strong>breach</strong><strong> </strong><strong>of</strong><strong> </strong><strong>this</strong><strong> </strong><strong>Agreement</strong><strong> </strong><strong>if</strong><strong> </strong><strong>they</strong><strong> </strong><strong>were</strong><strong> </strong><strong>the Tenant.</strong><strong> </strong>If they do, the Tenant will be treated as being responsible for any such action and will be liable for the cost of any repairs, renewals or replacement of items where required.</p>
+<p class="legal-paragraph">When allowing a person to occupy the Let Property with the Tenant as that person’s only or principal home, the Tenant must ensure that the Let Property does not become an unlicensed “house in multiple occupation” (HMO) (see <strong> </strong><strong> </strong>for definition of “house in multiple occupation”).</p>
+<p class="legal-paragraph">The Tenant will be liable for reasonable costs and expenses, including if applicable, legal or court expenses, payable by the Landlord or his or her Agent as a result of the accommodation being, as a consequence of the Tenant’s breach, deemed an unlicensed or unregistered “house in multiple occupation”.</p>
+<h3 class="term-heading"><span class="term-number">14.</span>Overcrowding</h3>
+<p class="legal-paragraph">The number of people who may live in a Let Property depends on the number and size of the rooms, and the age, gender and relationships of the people.</p>
+<p class="legal-paragraph">Living rooms and bedrooms are counted as rooms, but not the kitchen or bathroom.</p>
+<p class="legal-paragraph">The Tenant must not allow the Let Property to become overcrowded. If the Let Property does become overcrowded, the Landlord can take action to evict the Tenant as the Tenant has breached this term of this Agreement.</p>
+<h3 class="term-heading"><span class="term-number">15.</span>Insurance</h3>
+<p class="legal-paragraph">The Landlord is responsible for paying premiums for any insurance of the building and contents belonging to him or her, such as those items included in the property inventory. The Landlord will have no liability to insure any items belonging to the Tenant.</p>
+<p class="legal-paragraph">The Tenant is responsible for arranging any contents insurance which the Tenant requires for his or her own belongings. The Tenant’s belongings may include personal effects, foodstuffs and consumables, belongings, and any other contents brought in to the Let Property by the Tenant.</p>
+<h3 class="term-heading"><span class="term-number">16.</span>Absences</h3>
+<p class="legal-paragraph">The Tenant agrees to tell the Landlord if he or she is to be absent from the Let Property for any reason for a period of more than 14 days. The Tenant must take such measures as the Landlord may reasonably require to secure the Let Property prior to such absence and take appropriate reasonable measures to meet the ‘Reasonable Care’ section below.</p>
+<h3 class="term-heading"><span class="term-number">17.</span>Reasonable care</h3>
+<p class="legal-paragraph">The Tenant agrees to take reasonable care of the Let Property and any common parts, and in particular agrees to take all reasonable steps to:</p>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>keep</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Let</strong><strong> </strong><strong>Property adequately</strong><strong> </strong><strong>ventilated</strong><strong> </strong><strong>and</strong><strong> </strong><strong>heated;</strong></li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>not bring any hazardous or combustible goods or material into the Let Property,</strong><strong> </strong><strong>notwithstanding</strong><strong> </strong><strong>the</strong><strong> </strong><strong>normal</strong><strong> </strong><strong>and</strong><strong> </strong><strong>safe</strong><strong> </strong><strong>storage</strong><strong> </strong><strong>of</strong><strong> </strong><strong>petroleum</strong><strong> </strong><strong>and gas for garden appliances (mowers etc.), barbecues or other commonly used household goods or </strong><strong>appliances;</strong></li>
+<li class="legal-list-item"><strong>not</strong><strong> </strong><strong>put</strong><strong> </strong><strong>any</strong><strong> </strong><strong>damaging</strong><strong> </strong><strong>oil,</strong><strong> </strong><strong>grease</strong><strong> </strong><strong>or</strong><strong> </strong><strong>other</strong><strong> </strong><strong>harmful</strong><strong> </strong><strong>or</strong><strong> </strong><strong>corrosive substance into the washing or sanitary appliances or </strong><strong>drains;</strong></li>
+<li class="legal-list-item"><strong>prevent</strong><strong> </strong><strong>water pipes freezing</strong><strong> </strong><strong>in</strong><strong> </strong><strong>cold</strong><strong> </strong><strong>weather;</strong></li>
+<li class="legal-list-item"><strong>avoid</strong><strong> </strong><strong>danger</strong><strong> </strong><strong>to</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Let</strong><strong> </strong><strong>Property</strong><strong> </strong><strong>or</strong><strong> </strong><strong>neighbouring</strong><strong> </strong><strong>properties</strong><strong> </strong><strong>by</strong><strong> </strong><strong>way</strong><strong> </strong><strong>of fire or </strong><strong>flooding;</strong></li>
+<li class="legal-list-item"><strong>ensure</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Let</strong><strong> </strong><strong>Property</strong><strong> </strong><strong>and</strong><strong> </strong><strong>its</strong><strong> </strong><strong>fixtures</strong><strong> </strong><strong>and</strong><strong> </strong><strong>fittings</strong><strong> </strong><strong>are</strong><strong> </strong><strong>kept</strong><strong> </strong><strong>clean during the </strong><strong>tenancy;</strong></li>
+<li class="legal-list-item"><strong>not</strong><strong> </strong><strong>interfere</strong><strong> </strong><strong>with</strong><strong> </strong><strong>the</strong><strong> </strong><strong>smoke</strong><strong> </strong><strong>detectors,</strong><strong> </strong><strong>carbon</strong><strong> </strong><strong>monoxide</strong><strong> </strong><strong>detectors,</strong><strong> </strong><strong>heat detectors or the fire alarm </strong><strong>system;</strong></li>
+<li class="legal-list-item"><strong>not</strong><strong> </strong><strong>interfere with</strong><strong> </strong><strong>door </strong><strong>closer</strong><strong> </strong><strong>mechanisms.</strong></li>
+</ul>
+<h3 class="term-heading"><span class="term-number">18.</span>The Repairing Standard etc. and other information</h3>
+<p class="legal-paragraph">The Repairing Standard</p>
+<p class="legal-paragraph">The Landlord is responsible for ensuring that the Let Property meets the Repairing Standard.</p>
+<p class="legal-paragraph">The Landlord must carry out a pre-tenancy check of the Let Property to identify work required to meet the Repairing Standard (described below) and notify the Tenant of any such work. The Landlord also has a duty to repair and maintain the Let Property from the start date of the tenancy and throughout the tenancy. This includes a duty to make good any damage caused by doing this work. On becoming aware of a defect, the Landlord must complete the work within a reasonable time.</p>
+<p class="legal-paragraph">A privately rented Let Property must meet the Repairing Standard as follows:</p>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>The</strong><strong> </strong><strong>house</strong><strong> </strong><strong>meets</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Tolerable</strong><strong> </strong><strong>Standard,</strong><strong> </strong><strong>including</strong><strong> </strong><u><strong>satisfactory</strong></u><u><strong> </strong></u><u><strong>fire</strong></u><u><strong> </strong></u><u><strong>and</strong></u><strong> </strong><u><strong>carbon monoxide detection.</strong></u></li>
+<li class="legal-list-item"><strong>The</strong><strong> </strong><strong>Let</strong><strong> </strong><strong>Property</strong><strong> </strong><strong>must</strong><strong> </strong><strong>be</strong><strong> </strong><strong>wind</strong><strong> </strong><strong>and</strong><strong> </strong><strong>water</strong><strong> </strong><strong>tight</strong><strong> </strong><strong>and</strong><strong> </strong><strong>in</strong><strong> </strong><strong>all</strong><strong> </strong><strong>other</strong><strong> </strong><strong>respects reasonably fit for people to live in.</strong></li>
+<li class="legal-list-item"><strong>The</strong><strong> </strong><strong>structure</strong><strong> </strong><strong>and</strong><strong> </strong><strong>exterior</strong><strong> </strong><strong>(including</strong><strong> </strong><strong>drains,</strong><strong> </strong><strong>gutters</strong><strong> </strong><strong>and</strong><strong> </strong><strong>external</strong><strong> </strong><strong>pipes) must be in a reasonable state of repair and in proper working order.</strong></li>
+<li class="legal-list-item"><strong>Installations for supplying water, </strong><strong>gas</strong><strong> and electricity and for sanitation, space</strong><strong> </strong><strong>heating</strong><strong> </strong><strong>and</strong><strong> </strong><strong>heating</strong><strong> </strong><strong>water</strong><strong> </strong><strong>must</strong><strong> </strong><strong>be</strong><strong> </strong><strong>in</strong><strong> </strong><strong>a</strong><strong> </strong><strong>reasonable</strong><strong> </strong><strong>state</strong><strong> </strong><strong>of</strong><strong> </strong><strong>repair and in proper working order.</strong></li>
+<li class="legal-list-item"><strong>Any</strong><strong> </strong><strong>fixtures,</strong><strong> </strong><strong>fittings</strong><strong> </strong><strong>and</strong><strong> </strong><strong>appliances</strong><strong> </strong><strong>that</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Landlord</strong><strong> </strong><strong>provides</strong><strong> </strong><strong>under the tenancy must be in a reasonable state of repair and in proper working order.</strong></li>
+<li class="legal-list-item"><strong>Any</strong><strong> </strong><strong>furnishings</strong><strong> </strong><strong>that</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Landlord</strong><strong> </strong><strong>provides</strong><strong> </strong><strong>under</strong><strong> </strong><strong>the</strong><strong> </strong><strong>tenancy</strong><strong> </strong><strong>must</strong><strong> </strong><strong>be capable of being used safely for the purpose for which they are </strong><strong>designed.</strong></li>
+<li class="legal-list-item"><strong>The</strong><strong> </strong><strong>Let</strong><strong> </strong><strong>Property</strong><strong> </strong><strong>must</strong><strong> </strong><strong>have</strong><strong> </strong><strong>satisfactory</strong><strong> </strong><strong>provision</strong><strong> </strong><strong>for,</strong><strong> </strong><strong>and</strong><strong> </strong><strong>safe</strong><strong> </strong><strong>access </strong><strong>to</strong><strong> a food storage area and a food preparation space.</strong></li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>Common</strong><strong> </strong><strong>parts</strong><strong> </strong><strong>pertaining</strong><strong> </strong><strong>to</strong><strong> </strong><strong>the</strong><strong> </strong><strong>house</strong><strong> </strong><strong>can</strong><strong> </strong><strong>be</strong><strong> </strong><strong>safely</strong><strong> </strong><strong>accessed</strong><strong> </strong><strong>and </strong><strong>used.</strong></li>
+<li class="legal-list-item"><strong>Where</strong><strong> </strong><strong>a</strong><strong> </strong><strong>house</strong><strong> </strong><strong>is</strong><strong> </strong><strong>in</strong><strong> </strong><strong>a</strong><strong> </strong><strong>tenement,</strong><strong> </strong><strong>common</strong><strong> </strong><strong>doors</strong><strong> </strong><strong>are</strong><strong> </strong><strong>secure</strong><strong> </strong><strong>and</strong><strong> </strong><strong>fitted with satisfactory emergency exit locks.</strong></li>
+</ul>
+<p class="legal-paragraph">More detail on the Repairing Standard is available in the Easy Read Notes for the Scottish Government Model Private Residential Tenancy Agreement, or on the Scottish Government website. If the Tenant believes that the Landlord has failed to ensure that the Let Property meets the Repairing Standard at all times during the tenancy, he or she should discuss this with the Landlord in the first instance. If the Landlord does not rectify the problem within a reasonable time, the Tenant has the right to apply to the First-tier Tribunal for Scotland Housing and Property Chamber (“the Tribunal”). The Tribunal may reject the application; consider whether the case can be resolved by the Tenant and Landlord (for example, by agreeing to mediation); consider the application; or reject the case. The Tribunal has power to require a Landlord to carry out work necessary to meet the Repairing Standard.</p>
+<p class="legal-paragraph">The Repairing Standard does not cover work for which the Tenant is responsible due to his or her duty to use the Let Property in a proper manner; nor does it cover the repair or maintenance of anything that the Tenant is entitled to remove from the Let Property.</p>
+<p class="legal-paragraph">Structure &amp; exterior:</p>
+<p class="legal-paragraph">The Landlord is responsible (together with any other owners of common parts of the building in which the accommodation is situated, if appropriate) for keeping in repair the structure and exterior of the accommodation.</p>
+<p class="legal-paragraph">Gas safety:</p>
+<p class="legal-paragraph">The Landlord must ensure that there is an annual Gas safety check on all pipework and appliances carried out by a Gas Safe registered engineer. The Tenant must be given a copy of the Landlord’s gas safety certificate. The Landlord must keep certificates for at least 2 years. The Gas Safety (Installation and use) Regulations 1998 places duties on Tenants to report any defects with gas pipework or gas appliances that they are aware of to the Landlord. Tenants are forbidden to use appliances that have been deemed unsafe by a gas contractor.</p>
+<p class="legal-paragraph">The Landlord must also ensure that a carbon monoxide detector is installed where there is a fixed carbon-fuelled appliance (excluding an appliance used solely for cooking) or where a fixed carbon-fuelled appliance is situated in an inter-connected space such as a garage. A carbon monoxide detector is also required in the bedrooms and main living room if a flue from a carbon-fuelled appliance passes through the room. “Carbon-fuelled” includes wood, coal and oil as well as gas.</p>
+<p class="legal-paragraph">Tenants must be advised of the following action to be taken should there be a smell of gas, or suspicion of a gas escape, or a carbon monoxide leak:</p>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>Open</strong><strong> </strong><strong>all</strong><strong> </strong><strong>doors and</strong><strong> </strong><strong>windows;</strong></li>
+<li class="legal-list-item"><strong>Shut</strong><strong> </strong><strong>off the gas supply</strong><strong> </strong><strong>at the meter control</strong><strong> </strong><strong>valve;</strong></li>
+<li class="legal-list-item"><strong>If</strong><strong> </strong><strong>gas</strong><strong> </strong><strong>continues</strong><strong> </strong><strong>to</strong><strong> </strong><strong>escape</strong><strong> </strong><strong>the</strong><strong> </strong><strong>National</strong><strong> </strong><strong>Gas</strong><strong> </strong><strong>Emergency</strong><strong> </strong><strong>Service</strong><strong> </strong><strong>should be called on 0800 111 999 – it operates 24 hours a day; and</strong></li>
+<li class="legal-list-item"><strong>Any</strong><strong> </strong><strong>investigations</strong><strong> </strong><strong>or</strong><strong> </strong><strong>repairs</strong><strong> </strong><strong>must</strong><strong> </strong><strong>be</strong><strong> </strong><strong>carried</strong><strong> </strong><strong>out</strong><strong> </strong><strong>by</strong><strong> </strong><strong>a</strong><strong> </strong><strong>Gas</strong><strong> </strong><strong>Safe registered engineer.</strong></li>
+</ul>
+<p class="legal-paragraph">Electrical safety:</p>
+<p class="legal-paragraph">Landlords must ensure an electrical safety inspection comprising of periodic inspection and testing of the electrical installation and &#x27;In-service inspection and testing of electrical equipment’ (also known as PAT testing) is carried out by a suitably competent person before the property is let for the first time, and then at intervals of no more than five years.</p>
+<p class="legal-paragraph">Electrical inspection reports must be supplied to the tenant.</p>
+<p class="legal-paragraph">Additionally, landlords should advise tenants to test that the following devices operate when their integral test button is pressed at time intervals as specified:</p>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>Residual</strong><strong> </strong><strong>Current Devices (six monthly </strong><strong>check)</strong></li>
+<li class="legal-list-item"><strong>Smoke</strong><strong> </strong><strong>or heat</strong><strong> </strong><strong>detectors (weekly </strong><strong>check)</strong></li>
+<li class="legal-list-item"><strong>Carbon</strong><strong> </strong><strong>monoxide detectors</strong><strong> </strong><strong>(monthly </strong><strong>check)</strong></li>
+</ul>
+<p class="legal-paragraph">Installations:</p>
+<p class="legal-paragraph">The Landlord will keep in repair and in proper working order the installations in the Let Property for the supply of water, gas, electricity, sanitation, space heating and water heating (with the exception of those installed by the Tenant or which the Tenant is entitled to remove).</p>
+<p class="legal-paragraph">Energy Performance Certificate (EPC):</p>
+<p class="legal-paragraph">A valid EPC (not more than 10 years old) must be given to the Tenant at the start date of the tenancy, unless the Tenant is renting a room with shared access to a kitchen, bathroom and living area.</p>
+<p class="legal-paragraph">Furnishings:</p>
+<p class="legal-paragraph">Landlords should ensure that all upholstered furniture provided complies with the Furniture and Furnishings (Fire Safety) Regulations 1988 as amended, as evidenced by the permanent labelling.</p>
+<p class="legal-paragraph">Defective fixtures and fittings:</p>
+<p class="legal-paragraph">All fixtures and fittings provided by the Landlord in the Let Property should be in a reasonable state of repair and in proper working order. The Landlord will repair or replace any of the fixtures, fittings or furnishings supplied which become defective and will do so within a reasonable period of time. Nothing contained in this Agreement makes the Landlord responsible for repairing</p>
+<p class="legal-paragraph">damage caused wilfully or negligently by the Tenant, anyone living with the Tenant or an invited visitor to the Let Property.</p>
+<p class="legal-paragraph">Food storage and preparation:</p>
+<p class="legal-paragraph">Landlords must ensure that the tenant can safely access food storage and food preparation space. This includes appropriate space to store food, as well as space and an appropriate power source for the installation of a fridge and freezer or a fridge/freezer. The food preparation space must be appropriate and set out in a way that allows it to be used safely.</p>
+<p class="legal-paragraph">Access to common parts:</p>
+<p class="legal-paragraph">Landlords must ensure that any common parts pertaining to the house can be safely accessed and used. In relation to the obstructions and cleanliness of common areas, landlords are entitled to expect tenants to store possessions such as bicycles and pushchairs appropriately and dispose of rubbish properly, but if necessary items may have to be removed</p>
+<p class="legal-paragraph">Tenements and common doors:</p>
+<p class="legal-paragraph">Where a house is in a tenement and has common doors (or is designed to have common doors), the Landlord must ensure that these doors are secure and fitted with satisfactory emergency exit locks.</p>
+<p class="legal-paragraph">Repair timetable</p>
+<p class="legal-paragraph">The Tenant undertakes to notify the Landlord as soon as is reasonably practicable of the need for any repair or emergency. The Landlord is responsible for carrying out necessary repairs as soon as is reasonably practicable after having been notified of the need to do so.</p>
+<p class="legal-paragraph">The Tenant must allow the Landlord reasonable access to the Let Property to enable the Landlord to fulfil their duties under the repairing standard (see the clause on ‘Access for Repairs’).</p>
+<p class="legal-paragraph">Payment for repairs</p>
+<p class="legal-paragraph">The Tenant will be liable for the cost of repairs where the need for them is attributable to his or her fault or negligence, that of any person residing with him or her, or any guest of his or hers.</p>
+<p class="legal-paragraph">Information</p>
+<p class="legal-paragraph">In addition to this Agreement, the Landlord must give to the Tenant:-</p>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>gas</strong><strong> </strong><strong>safety</strong><strong> </strong><strong>certificate;</strong></li>
+<li class="legal-list-item"><strong>electrical</strong><strong> </strong><strong>safety</strong><strong> </strong><strong>inspection</strong><strong> </strong><strong>reports;</strong></li>
+<li class="legal-list-item"><strong>energy</strong><strong> </strong><strong>performance</strong><strong> </strong><strong>certificate</strong><strong> </strong><strong>(unless</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Tenant</strong><strong> </strong><strong>is</strong><strong> </strong><strong>renting</strong><strong> </strong><strong>a</strong><strong> </strong><strong>room</strong><strong> </strong><strong>with shared access to a kitchen, bathroom and living area).</strong></li>
+</ul>
+<h3 class="term-heading"><span class="term-number">19.</span>Legionella</h3>
+<p class="legal-paragraph">At the start of the tenancy and throughout, the Landlord must take reasonable steps to assess any risk from exposure to legionella to ensure the safety of the Tenant in the Let Property.</p>
+<p class="legal-paragraph">Private landlords must advise tenants of control measures put in place and of their responsibility to help ensure they are maintained. Tenants must be advised:</p>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>Not</strong><strong> </strong><strong>to</strong><strong> </strong><strong>adjust the temperature setting</strong><strong> </strong><strong>of the hot water </strong><strong>tank;</strong></li>
+<li class="legal-list-item"><strong>To</strong><strong> </strong><strong>regularly clean</strong><strong> </strong><strong>and</strong><strong> </strong><strong>disinfect showerheads; </strong><strong>and</strong></li>
+<li class="legal-list-item"><strong>Inform</strong><strong> </strong><strong>the</strong><strong> </strong><strong>landlord</strong><strong> </strong><strong>if</strong><strong> </strong><strong>the</strong><strong> </strong><strong>hot</strong><strong> </strong><strong>water</strong><strong> </strong><strong>is</strong><strong> </strong><strong>not</strong><strong> </strong><strong>heating</strong><strong> </strong><strong>properly</strong><strong> </strong><strong>or</strong><strong> </strong><strong>if</strong><strong> </strong><strong>there</strong><strong> </strong><strong>are any other problems with the system.</strong></li>
+</ul>
+<h3 class="term-heading"><span class="term-number">20.</span>Access for repairs, inspections and valuations</h3>
+<p class="legal-paragraph">The Tenant must allow reasonable access to the Let Property for an authorised purpose where the Tenant has been given at least 48 hours’ notice, or access is required urgently. Authorised purposes are carrying out work in the Let Property which the Landlord is required to or is allowed to, either by law, under the terms of this Agreement, or any other agreement between the Landlord and the Tenant; inspecting the Let Property to see if any such work is needed; and carrying out a valuation of the Let Property. The right of access also covers access by others such as a contractor or tradesman hired by the Landlord.</p>
+<p class="legal-paragraph">There is nothing to stop the Tenant and Landlord from mutually agreeing more generous rights of access if both parties want to resolve a non-urgent problem more promptly.</p>
+<p class="legal-paragraph">The Landlord has no right to use retained keys to enter the Let Property without the Tenant’s permission, except in an emergency.</p>
+<h3 class="term-heading"><span class="term-number">21.</span>Respect for others</h3>
+<p class="legal-paragraph">The Tenant, those living with him/her, and his/her visitors must not engage in antisocial behaviour to another person. A person includes anyone in the Let Property, a neighbour, visitor, the Landlord, Agent or contractor.</p>
+<p class="legal-paragraph">“Antisocial behaviour” means behaving in a way which causes, or is likely to cause, alarm, distress, nuisance or annoyance to any person; or which amounts to harassment of any person. Harassment of a person includes causing the person alarm or distress. Antisocial behaviour includes speech.</p>
+<p class="legal-paragraph">In particular, the Tenant, those living with him/her, and his/her visitors must not:</p>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>make</strong><strong> </strong><strong>excessive</strong><strong> </strong><strong>noise.</strong><strong> </strong><strong>This</strong><strong> </strong><strong>includes,</strong><strong> </strong><strong>but</strong><strong> </strong><strong>is</strong><strong> </strong><strong>not</strong><strong> </strong><strong>limited</strong><strong> </strong><strong>to,</strong><strong> </strong><strong>the</strong><strong> </strong><strong>use</strong><strong> </strong><strong>of televisions, CD players, digital media players, radios and musical instruments and DIY and power </strong><strong>tools;</strong></li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>fail</strong><strong> </strong><strong>to</strong><strong> </strong><strong>control</strong><strong> </strong><strong>pets</strong><strong> </strong><strong>properly</strong><strong> </strong><strong>or</strong><strong> </strong><strong>allow</strong><strong> </strong><strong>them</strong><strong> </strong><strong>to</strong><strong> </strong><strong>foul</strong><strong> </strong><strong>or</strong><strong> </strong><strong>cause</strong><strong> </strong><strong>damage</strong><strong> </strong><strong>to other people’s </strong><strong>property;</strong></li>
+<li class="legal-list-item"><strong>allow</strong><strong> </strong><strong>visitors to</strong><strong> </strong><strong>the Let Property</strong><strong> </strong><strong>to</strong><strong> </strong><strong>be noisy or </strong><strong>disruptive;</strong></li>
+<li class="legal-list-item"><strong>vandalise</strong><strong> </strong><strong>or</strong><strong> </strong><strong>damage</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Let</strong><strong> </strong><strong>Property</strong><strong> </strong><strong>or</strong><strong> </strong><strong>any</strong><strong> </strong><strong>part</strong><strong> </strong><strong>of</strong><strong> </strong><strong>the</strong><strong> </strong><strong>common</strong><strong> </strong><strong>parts or </strong><strong>neighbourhood</strong><strong>;</strong></li>
+<li class="legal-list-item"><strong>leave</strong><strong> </strong><strong>rubbish</strong><strong> </strong><strong>either in</strong><strong> </strong><strong>unauthorised</strong><strong> </strong><strong>places or at inappropriate </strong><strong>times;</strong></li>
+<li class="legal-list-item"><strong>allow any other person (including children) living in or using the property</strong><strong> </strong><strong>to</strong><strong> </strong><strong>cause</strong><strong> </strong><strong>a</strong><strong> </strong><strong>nuisance</strong><strong> </strong><strong>or</strong><strong> </strong><strong>annoyance</strong><strong> </strong><strong>to</strong><strong> </strong><strong>other</strong><strong> </strong><strong>people</strong><strong> </strong><strong>by</strong><strong> </strong><strong>failing</strong><strong> </strong><strong>to take reasonable steps to prevent </strong><strong>this;</strong></li>
+<li class="legal-list-item"><strong>harass any other Tenant, member of his/her household, visitors, </strong><strong>neighbours</strong><strong>, family members of the Landlord or employees of the Landlord or Agent, or any other person or persons in the house, or </strong><strong>neighbourhood</strong><strong>, for whatever reason. This includes </strong><strong>behaviour</strong><strong> due to that</strong><strong> </strong><strong>person’s</strong><strong> </strong><strong>race,</strong><strong> </strong><strong>colour</strong><strong> </strong><strong>or</strong><strong> </strong><strong>ethnic</strong><strong> </strong><strong>origin,</strong><strong> </strong><strong>nationality,</strong><strong> </strong><strong>gender,</strong><strong> </strong><strong>sexuality, disability, age, religion or other belief, or other </strong><strong>status;</strong></li>
+</ul>
+<p class="legal-paragraph">In addition, the Tenant, those living with him/her, and his/her visitors must not engage in the following unlawful activities:</p>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>use</strong><strong> </strong><strong>or carry</strong><strong> </strong><strong>offensive </strong><strong>weapons;</strong></li>
+<li class="legal-list-item"><strong>use,</strong><strong> </strong><strong>sell,</strong><strong> </strong><strong>cultivate or supply unlawful</strong><strong> </strong><strong>drugs or sell</strong><strong> </strong><strong>alcohol;</strong></li>
+<li class="legal-list-item"><strong>store or bring onto the premises any type of unlicensed firearm or firearm</strong><strong> </strong><strong>ammunition</strong><strong> </strong><strong>including</strong><strong> </strong><strong>any</strong><strong> </strong><strong>replica</strong><strong> </strong><strong>or</strong><strong> </strong><strong>decommissioned</strong><strong> </strong><strong>firearms.</strong></li>
+<li class="legal-list-item"><strong>use</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Let</strong><strong> </strong><strong>Property</strong><strong> </strong><strong>or</strong><strong> </strong><strong>allow</strong><strong> </strong><strong>it</strong><strong> </strong><strong>to</strong><strong> </strong><strong>be</strong><strong> </strong><strong>used,</strong><strong> </strong><strong>for</strong><strong> </strong><strong>illegal</strong><strong> </strong><strong>or</strong><strong> </strong><strong>immoral </strong><strong>purposes;</strong></li>
+<li class="legal-list-item"><strong>threaten or assault any other Tenant, member of his/her household, visitors, </strong><strong>neighbours</strong><strong>, family members of the Landlord or employees of the</strong><strong> </strong><strong>Landlord</strong><strong> </strong><strong>or</strong><strong> </strong><strong>Agent,</strong><strong> </strong><strong>or</strong><strong> </strong><strong>any</strong><strong> </strong><strong>other</strong><strong> </strong><strong>person</strong><strong> </strong><strong>or</strong><strong> </strong><strong>persons</strong><strong> </strong><strong>in</strong><strong> </strong><strong>the</strong><strong> </strong><strong>house,</strong><strong> </strong><strong>or </strong><strong>neighbourhood</strong><strong>, for whatever reason.</strong></li>
+</ul>
+<p class="legal-paragraph">The particular prohibitions on behaviour listed above do not in any way restrict the general responsibilities of the Tenant.</p>
+<h3 class="term-heading"><span class="term-number">22.</span>Equality requirements:</h3>
+<p class="legal-paragraph">Under the Equality Act 2010, neither the Landlord nor the Tenant may unlawfully discriminate, harass or victimise a landlord, prospective landlord, tenant or prospective tenant in relation to the tenancy on the basis of age, disability, sex, gender reassignment, marriage or civil partnership, pregnancy or maternity, race, religion or belief, or sexual orientation. Nothing in this term alters the statutory exceptions or the allocation of duties under that Act.</p>
+<p class="legal-paragraph">For conduct on or after 1 May 2026, the Landlord, Letting Agent and anyone acting for them must also comply with the Scottish rental-discrimination rules concerning people who have children and people who receive benefits. Affordability may be assessed, but income from benefits must be considered and any conditions must be applied without unlawful discrimination.</p>
+<h3 class="term-heading"><span class="term-number">23.</span>Data Protection</h3>
+<p class="legal-paragraph">The Landlord must comply with the requirements of the Data Protection Laws to ensure that the Tenant’s personal information is held securely and only lawfully disclosed.</p>
+<h3 class="term-heading"><span class="term-number">24.</span>Ending the tenancy</h3>
+<p class="legal-paragraph">This Tenancy may be ended by:-</p>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>The Tenant giving</strong><strong> </strong><strong>notice to</strong><strong> </strong><strong>the </strong><strong>Landlord</strong></li>
+<li class="legal-list-item"><strong>The Tenant giving the Landlord at least 28 days’ notice in writing to terminate the tenancy, or an earlier date if the Landlord is content to waive the minimum </strong><strong>28 day</strong><strong> notice period.</strong><strong> </strong><strong>Where the Landlord agrees to waive the notice period, his or her agreement must be in writing.</strong><strong> </strong><strong>The tenancy</strong><strong> </strong><strong>will</strong><strong> </strong><strong>come</strong><strong> </strong><strong>to</strong><strong> </strong><strong>an</strong><strong> </strong><strong>end</strong><strong> </strong><strong>on</strong><strong> </strong><strong>the</strong><strong> </strong><strong>date</strong><strong> </strong><strong>specified</strong><strong> </strong><strong>in</strong><strong> </strong><strong>the</strong><strong> </strong><strong>notice</strong><strong> </strong><strong>or,</strong><strong> </strong><strong>where appropriate, the earlier date agreed between the Tenant and Landlord. To end a joint tenancy, all the Joint Tenants must agree to end the tenancy.</strong><strong> </strong><strong>One Joint Tenant cannot terminate the joint tenancy on behalf of all Joint Tenants.</strong></li>
+<li class="legal-list-item"><strong>The</strong><strong> </strong><strong>Landlord</strong><strong> </strong><strong>giving</strong><strong> </strong><strong>notice</strong><strong> </strong><strong>to</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Tenant,</strong><strong> </strong><strong>which</strong><strong> </strong><strong>is</strong><strong> </strong><strong>only</strong><strong> </strong><strong>possible</strong><strong> </strong><strong>using</strong><strong> </strong><strong>one of the 18 grounds for eviction set out in schedule 3 of the Act. This can happen </strong><strong>either:-</strong></li>
+<li class="legal-list-item"><strong>By</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Landlord</strong><strong> </strong><strong>giving</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Tenant</strong><strong> </strong><strong>a</strong><strong> </strong><strong>Notice</strong><strong> </strong><strong>to</strong><strong> </strong><strong>Leave</strong><strong> </strong><strong>stating</strong><strong> </strong><strong>one</strong><strong> </strong><strong>or</strong><strong> </strong><strong>more of the eviction grounds, and the Tenant choosing to leave.</strong><strong> </strong><strong>In this case, the tenancy will come to an end on the day specified in the Notice to Leave, or the day on which the Tenant </strong><strong>actually leaves</strong><strong> the Let Property, whichever is the </strong><strong>later</strong><strong>.</strong></li>
+</ul>
+<p class="legal-paragraph">or:-</p>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>By the Landlord</strong><strong> </strong><strong>giving</strong><strong> </strong><strong>the Tenant a Notice to</strong><strong> </strong><strong>Leave</strong><strong> </strong><strong>stating one</strong><strong> </strong><strong>or</strong><strong> </strong><strong>more of the eviction grounds and then, if the Tenant chooses not to leave on the day after the notice period expires, subsequently obtaining an eviction</strong><strong> </strong><strong>order</strong><strong> </strong><strong>from</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Tribunal</strong><strong> </strong><strong>on</strong><strong> </strong><strong>the</strong><strong> </strong><strong>stated</strong><strong> </strong><strong>eviction</strong><strong> </strong><strong>ground(s).</strong><strong> </strong><strong>In</strong><strong> </strong><strong>this case, the tenancy will come to an end on the date specified in the eviction order.</strong></li>
+</ul>
+<p class="legal-paragraph">The Landlord can bring the tenancy to an end only if one of the eviction grounds in schedule 3 to the 2016 Act applies.</p>
+<p class="legal-paragraph">If the Landlord serves a Notice to Leave on the Tenant, he or she must specify which eviction ground(s) is being used, and give the reasons why they believe this eviction ground applies.</p>
+<p class="legal-paragraph">If the Landlord applies to the Tribunal for an eviction order, the Tribunal will ask the Landlord to provide supporting evidence for any eviction ground(s) being used.</p>
+<p class="legal-paragraph">The amount of notice a Landlord must give the Tenant will depend on which eviction ground is being used by the Landlord and how long the Tenant has lived in the Let Property.</p>
+<p class="legal-paragraph">The Landlord must give the Tenant 28 days’ notice if, on the day the Tenant receives the Notice to Leave, the Tenant has been entitled to occupy the Let</p>
+<p class="legal-paragraph">Property for six months or less, or if the eviction ground (or grounds) that the Landlord is stating is one or more of the following. The Tenant:</p>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>is</strong><strong> </strong><strong>not</strong><strong> </strong><strong>occupying</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Let</strong><strong> </strong><strong>Property</strong><strong> </strong><strong>as</strong><strong> </strong><strong>his</strong><strong> </strong><strong>or</strong><strong> </strong><strong>her</strong><strong> </strong><strong>only</strong><strong> </strong><strong>or principal </strong><strong>home</strong></li>
+<li class="legal-list-item"><strong>has</strong><strong> </strong><strong>breached</strong><strong> </strong><strong>the</strong><strong> </strong><strong>tenancy </strong><strong>agreement</strong></li>
+<li class="legal-list-item"><strong>is</strong><strong> </strong><strong>in rent arrears for three or more consecutive </strong><strong>months</strong></li>
+<li class="legal-list-item"><strong>has</strong><strong> </strong><strong>a relevant</strong><strong> </strong><strong>criminal</strong><strong> </strong><strong>conviction</strong></li>
+<li class="legal-list-item"><strong>has</strong><strong> </strong><strong>engaged</strong><strong> </strong><strong>in</strong><strong> </strong><strong>relevant antisocial </strong><strong>behaviour</strong></li>
+<li class="legal-list-item"><strong>has</strong><strong> </strong><strong>associated</strong><strong> </strong><strong>with</strong><strong> </strong><strong>a</strong><strong> </strong><strong>person</strong><strong> </strong><strong>who</strong><strong> </strong><strong>has</strong><strong> </strong><strong>a</strong><strong> </strong><strong>relevant</strong><strong> </strong><strong>conviction or has engaged in antisocial </strong><strong>behaviour</strong><strong>.</strong></li>
+</ul>
+<p class="legal-paragraph">The Landlord must give the Tenant 84 days’ notice if, on the date the Tenant receives the Notice to Leave, the Tenant has been entitled to occupy the Let Property for over six months and the Notice to Leave does not rely exclusively on one (or more) of the eviction grounds already mentioned in this paragraph.</p>
+<p class="legal-paragraph">The Landlord must secure repossession only by lawful means and must comply with all relevant legislation affecting private residential tenancies.</p>
+<p class="legal-paragraph">SCHEDULE 3 to the act – Eviction Grounds</p>
+<p class="legal-paragraph">All eviction grounds are discretionary. This means that the First-tier Tribunal (Housing and Property Chamber) are able to exercise discretion and take into account of the circumstances of a case when deciding whether to grant an eviction or not.</p>
+<p class="legal-paragraph">Schedule 3 sets out the 18 grounds under which a Landlord may seek eviction.</p>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>The</strong><strong> </strong><strong>Landlord</strong><strong> </strong><strong>intends</strong><strong> </strong><strong>to</strong><strong> </strong><strong>sell</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Let</strong><strong> </strong><strong>Property</strong><strong> </strong><strong>for</strong><strong> </strong><strong>market</strong><strong> </strong><strong>value within three months of the Tenant ceasing to occupy it.</strong></li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>Let</strong><strong> </strong><strong>Property to</strong><strong> </strong><strong>be sold</strong><strong> </strong><strong>by the mortgage </strong><strong>lender.</strong></li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>The</strong><strong> </strong><strong>Landlord</strong><strong> </strong><strong>intends</strong><strong> </strong><strong>to</strong><strong> </strong><strong>refurbish</strong><strong> </strong><strong>and</strong><strong> </strong><strong>this</strong><strong> </strong><strong>will</strong><strong> </strong><strong>entail</strong><strong> </strong><strong>significantly disruptive works to, or in relation to, the Let Property.</strong></li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>The</strong><strong> </strong><strong>Landlord</strong><strong> </strong><strong>intends</strong><strong> </strong><strong>to</strong><strong> </strong><strong>live</strong><strong> </strong><strong>in</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Let</strong><strong> </strong><strong>Property</strong><strong> </strong><strong>as</strong><strong> </strong><strong>his</strong><strong> </strong><strong>or</strong><strong> </strong><strong>her</strong><strong> </strong><strong>only or principal home.</strong></li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>The</strong><strong> </strong><strong>Landlord</strong><strong> </strong><strong>intends</strong><strong> </strong><strong>to</strong><strong> </strong><strong>use</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Let</strong><strong> </strong><strong>Property</strong><strong> </strong><strong>for</strong><strong> </strong><strong>a</strong><strong> </strong><strong>purpose</strong><strong> </strong><strong>other than providing a person with a home.</strong></li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>The Let Property is held for a person engaged in the work of a religious</strong><strong> </strong><strong>denomination</strong><strong> </strong><strong>as</strong><strong> </strong><strong>a</strong><strong> </strong><strong>residence</strong><strong> </strong><strong>from</strong><strong> </strong><strong>which</strong><strong> </strong><strong>the</strong><strong> </strong><strong>duties</strong><strong> </strong><strong>of such a person are to be performed; the Let Property has previously been used for that purpose; and the Let Property is required for that purpose.</strong></li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>The</strong><strong> </strong><strong>Tenant</strong><strong> </strong><strong>is</strong><strong> </strong><strong>not</strong><strong> </strong><strong>occupying</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Let</strong><strong> </strong><strong>Property</strong><strong> </strong><strong>as</strong><strong> </strong><strong>his</strong><strong> </strong><strong>or</strong><strong> </strong><strong>her</strong><strong> </strong><strong>only</strong><strong> </strong><strong>or principal home or has abandoned the Let Property.</strong></li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>After the start date of the tenancy, the Tenant is convicted of using, or allowing the use of, the Let Property for an immoral or illegal purpose, or is convicted of an imprisonable offence committed</strong><strong> </strong><strong>in</strong><strong> </strong><strong>or</strong><strong> </strong><strong>in</strong><strong> </strong><strong>the</strong><strong> </strong><strong>locality</strong><strong> </strong><strong>of</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Let</strong><strong> </strong><strong>Property.</strong><strong> </strong><strong>The</strong><strong> </strong><strong>application must usually be made within 12 months of the Tenant’s </strong><strong>conviction.</strong></li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>A</strong><strong> </strong><strong>member</strong><strong> </strong><strong>of</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Landlord’s</strong><strong> </strong><strong>family</strong><strong> </strong><strong>intends</strong><strong> </strong><strong>to</strong><strong> </strong><strong>live</strong><strong> </strong><strong>in</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Let Property as his or her only or principal home.</strong></li>
+<li class="legal-list-item"><strong>The tenancy was entered into on account of the Tenant having an assessed</strong><strong> </strong><strong>need</strong><strong> </strong><strong>for</strong><strong> </strong><strong>community</strong><strong> </strong><strong>care</strong><strong> </strong><strong>and</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Tenant</strong><strong> </strong><strong>has</strong><strong> </strong><strong>since</strong><strong> </strong><strong>been assessed as no longer having such </strong><strong>need</strong><strong>.</strong></li>
+<li class="legal-list-item"><strong>The</strong><strong> </strong><strong>Tenant</strong><strong> </strong><strong>has</strong><strong> </strong><strong>breached</strong><strong> </strong><strong>the</strong><strong> </strong><strong>tenancy</strong><strong> </strong><strong>agreement</strong><strong> </strong><strong>–</strong><strong> </strong><strong>this</strong><strong> </strong><strong>excludes the payment of rent.</strong></li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>The Tenant has acted in an antisocial manner to another person and the Tribunal is satisfied that it is reasonable to issue an eviction</strong><strong> </strong><strong>order</strong><strong> </strong><strong>given</strong><strong> </strong><strong>the</strong><strong> </strong><strong>nature</strong><strong> </strong><strong>of</strong><strong> </strong><strong>the</strong><strong> </strong><strong>behaviour</strong><strong> </strong><strong>and</strong><strong> </strong><strong>who</strong><strong> </strong><strong>it</strong><strong> </strong><strong>was</strong><strong> </strong><strong>in relation to or where it occurred.</strong><strong> </strong><strong>The application must usually be made within 12 months of the antisocial </strong><strong>behaviour</strong><strong> occurring.</strong></li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>The Tenant is associating in the Let Property with a person who has a relevant conviction or who has engaged in relevant antisocial</strong><strong> </strong><strong>behaviour</strong><strong>.</strong><strong> </strong><strong>A</strong><strong> </strong><strong>relevant</strong><strong> </strong><strong>conviction</strong><strong> </strong><strong>is</strong><strong> </strong><strong>a</strong><strong> </strong><strong>conviction</strong><strong> </strong><strong>which, if it was the Tenant’s, would entitle the Tribunal to issue an eviction order.</strong><strong> </strong><strong>Relevant antisocial </strong><strong>behaviour</strong><strong> means </strong><strong>behaviour</strong><strong> which, if engaged in by the Tenant, would entitle the Tribunal to issue an eviction order. The application must usually be made within 12 months of the conviction or antisocial </strong><strong>behaviour</strong><strong>.</strong></li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>Landlord</strong><strong> </strong><strong>registration</strong><strong> </strong><strong>has</strong><strong> </strong><strong>been</strong><strong> </strong><strong>refused</strong><strong> </strong><strong>or</strong><strong> </strong><strong>revoked</strong><strong> </strong><strong>by</strong><strong> </strong><strong>a</strong><strong> </strong><strong>local </strong><strong>authority.</strong></li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>House</strong><strong> </strong><strong>in</strong><strong> </strong><strong>Multiple</strong><strong> </strong><strong>Occupation</strong><strong> </strong><strong>(HMO)</strong><strong> </strong><strong>license</strong><strong> </strong><strong>revoked</strong><strong> </strong><strong>by</strong><strong> </strong><strong>the</strong><strong> </strong><strong>local </strong><strong>authority.</strong></li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>Overcrowding</strong><strong> </strong><strong>statutory</strong><strong> </strong><strong>notice</strong><strong> </strong><strong>in</strong><strong> </strong><strong>respect</strong><strong> </strong><strong>of</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Let</strong><strong> </strong><strong>Property</strong><strong> </strong><strong>has been served on the Landlord.</strong></li>
+<li class="legal-list-item"><strong>The Tenant </strong><strong>is</strong><strong> in rent arrears over three consecutive months. In deciding whether it is reasonable to evict, the Tribunal will consider whether the Tenant being in arrears is due to a delay or failure in the payment of a relevant benefit and the extent the landlord has complied with </strong><u><strong>pre-action protocols for rent arrears</strong></u><strong> </strong><strong>as</strong><strong> </strong><strong>required</strong><strong> </strong><strong>by</strong><strong> </strong><strong>the</strong><strong> </strong><u><strong>Coronavirus</strong></u><u><strong> </strong></u><u><strong>(Recovery</strong></u><u><strong> </strong></u><u><strong>and</strong></u><u><strong> </strong></u><u><strong>Reform)</strong></u><u><strong> </strong></u><u><strong>(Scotland)</strong></u><strong> </strong><u><strong>Act 2022</strong></u><strong>.</strong></li>
+</ul>
+<ul class="legal-list">
+<li class="legal-list-item"><strong>The</strong><strong> </strong><strong>tenancy</strong><strong> </strong><strong>was</strong><strong> </strong><strong>granted</strong><strong> </strong><strong>to</strong><strong> </strong><strong>an</strong><strong> </strong><strong>employee</strong><strong> </strong><strong>and</strong><strong> </strong><strong>the</strong><strong> </strong><strong>Tenant</strong><strong> </strong><strong>is</strong><strong> </strong><strong>no longer an employee.</strong></li>
+</ul>
+<p class="legal-paragraph">The Tenant agrees to remove all of his or her belongings when the Tenancy ends. The Tenant’s belongings may include personal effects, foodstuffs and consumables, belongings, and any other contents brought in to the Let Property by the Tenant.</p>
+<h3 class="term-heading"><span class="term-number">25.</span>Contents and condition</h3>
+<p class="legal-paragraph">The Tenant agrees that the signed Inventory and Record of Condition, {{#if_eq inventory_delivery_method "later"}}which will be supplied to the Tenant no later than the start date of the tenancy{{else}}attached as Schedule 1 to this Agreement{{/if_eq}}, is a full and accurate record of the contents and condition of the Let Property at the start date of the tenancy. The Tenant has 7 days from the start date to notify the Landlord in writing of discrepancies; otherwise the Tenant will be deemed satisfied with it.</p>
+<p class="legal-paragraph">The Tenant agrees to replace or repair (or, at the option of the Landlord, to pay the reasonable cost of repairing or replacing) any of the contents which are destroyed, damaged, removed or lost during the tenancy, fair wear and tear excepted, where this was caused wilfully or negligently by the Tenant, anyone living with the Tenant or an invited visitor to the Let Property (see clause above on ‘Reasonable care’).</p>
+<p class="legal-paragraph">Items to be replaced by the Tenant will be replaced by items of equivalent value and quality.</p>
+<h3 class="term-heading"><span class="term-number">26.</span>Local authority taxes/charges</h3>
+<p class="legal-paragraph">The Tenant will notify the local authority that they are responsible for paying the council tax and any other associated charges.</p>
+<p class="legal-paragraph">Unless exempt, the Tenant will be responsible for payment of any council tax and water and sewerage charges, or any local tax which may replace this. The Tenant will advise the local authority of the start date and end date of the tenancy and apply for any exemptions or discounts that they may be eligible for.</p>
+<h3 class="term-heading"><span class="term-number">27.</span>Utilities</h3>
+<p class="legal-paragraph">The Tenant undertakes to place the accounts for <strong>{{tenant_utility_accounts}}</strong> in their name with the relevant supplier and to pay all sums due for those supplies during the tenancy.</p>
+<p class="legal-paragraph">The Tenant agrees to make the necessary arrangements with the suppliers to settle all accounts for these services at the end of the tenancy.</p>
+<p class="legal-paragraph">The Tenant has the right to change supplier if he or she pays the energy supplier directly for gas or electricity. This includes if the Tenant has a prepayment meter. The Tenant agrees to inform the Landlord if they choose to change the utilities supplier, and to provide the Landlord with details of the new supplier.</p>
+<p class="legal-paragraph">If the Tenant allows the meter to be changed from or to a pre-payment meter during the tenancy, the Tenant is responsible for the reasonable cost of changing the meter back over at the end of the tenancy, unless the Landlord wishes it to remain.</p>
+<h3 class="term-heading"><span class="term-number">28.</span>Alterations</h3>
+<p class="legal-paragraph">The Tenant agrees not to make any alteration to the Let Property, its fixtures or fittings, nor to carry out any internal or external decoration without the prior written consent of the Landlord.</p>
+<p class="legal-paragraph">Any request for adaptations, auxiliary aids or services under section 37 of the Equality Act 2010 or section 52 of the Housing (Scotland) Act 2006 must be made in writing to the Landlord and any other owners of the common parts, where appropriate. Consent for alterations requested under this legislation should not be unreasonably withheld. If no consent is given for the adaptations you may appeal to the Tribunal in relation to section 52 (or sheriff court in relation to section 37) within 6 months of being notified of the decision. Before doing this, you may find it helpful to discuss your circumstance with your local Citizens Advice Bureau, Shelter Scotland or the local authority for the area where the Let Property is situated.</p>
+<h3 class="term-heading"><span class="term-number">29.</span>Common parts</h3>
+<p class="legal-paragraph">In the case of a flatted Let Property, or any other Let Property having common parts the Tenant agrees, in conjunction with the other proprietors / occupiers, to sweep and clean the common stairway and to co-operate with other proprietors/properties in keeping the garden, back green or other communal areas clean and tidy.</p>
+<h3 class="term-heading"><span class="term-number">30.</span>Private garden</h3>
+<p class="legal-paragraph">The Tenant will maintain the garden in a reasonable manner.</p>
+<h3 class="term-heading"><span class="term-number">31.</span>Roof</h3>
+<p class="legal-paragraph">The Tenant is not permitted to access the roof without the Landlord’s written consent, except in the case of an emergency.</p>
+<h3 class="term-heading"><span class="term-number">32.</span>Bins and recycling</h3>
+<p class="legal-paragraph">The Tenant agrees to dispose of or recycle all rubbish in an appropriate manner and at the appropriate time. Rubbish must not be placed anywhere in the common stair</p>
+<p class="legal-paragraph">at any time. The Tenant must take reasonable care to ensure that the rubbish is properly bagged or recycled in the appropriate container. If rubbish is normally collected from the street, on the day of collection it should be put out by the time specified by the local authority. Rubbish and recycling containers should be returned to their normal storage places as soon as possible after it has been collected. The Tenant must comply with any local arrangements for the disposal of large items.</p>
+<h3 class="term-heading"><span class="term-number">33.</span>Storage</h3>
+<p class="legal-paragraph">Nothing belonging to the Tenant or anyone living with the Tenant or a visitor may be left or stored in the common stair if it causes a fire or safety hazard, or nuisance or annoyance to neighbours.</p>
+<h3 class="term-heading"><span class="term-number">34.</span>Dangerous substances including liquid petroleum gas</h3>
+<p class="legal-paragraph">The Tenant agrees to the normal and safe storage of any petroleum and/or gas, including liquid petroleum gas, for garden appliances (mowers etc.), barbecues or other commonly used household goods or appliances. The Tenant must not store, keep or bring into the Let Property or any store, shed or garage any other flammable liquids, explosives or explosive gases which might reasonably be considered to be a fire hazard or otherwise dangerous to the Let Property or its occupants or the neighbours or the neighbour’s property.</p>
+<h3 class="term-heading"><span class="term-number">35.</span>Pets</h3>
+<p class="legal-paragraph">The Tenant will not keep any animals or pets in the Let Property without the prior written consent of the Landlord. Any pet (where permitted) will be kept under supervision and control to ensure that it does not cause deterioration in the condition of the Let Property or common areas, nuisance either to neighbours or in the locality of the Let Property.</p>
+<h3 class="term-heading"><span class="term-number">36.</span>Smoking</h3>
+<p class="legal-paragraph">The Tenant agrees not to smoke, or to permit visitors to smoke tobacco or any other substance, in the Let Property, without the prior written consent of the Landlord.</p>
+<p class="legal-paragraph">The Tenant will not smoke in stairwells or any other common parts.</p>
+  <h3 class="term-heading"><span class="term-number">37.</span>Additional tenancy terms</h3>
+  <p class="omitted">No additional discretionary terms are included in this standard agreement.</p>
+  <h3 class="term-heading"><span class="term-number">38.</span>The guarantor</h3>
+  <p class="omitted">No guarantor provision is included in this standard agreement.</p>
+  <h3 class="term-heading"><span class="term-number">39.</span>Declarations</h3>
+  <p class="legal-paragraph">By signing and taking entry to the Let Property, the Tenant confirms that they made full and true disclosure of information sought in connection with the tenancy, did not knowingly or carelessly make a false or misleading statement affecting the decision to grant it, and read and understood this Agreement and the accompanying statutory supporting notes.</p>
+</section>
+
+<section class="page-break">
+  <h2>Execution</h2>
+  <p>By signing, each party confirms that they have read and agree to this written agreement.</p>
+  {{#each tenants}}
+  <table class="signature-table">
+    <tr><th colspan="2">Tenant: {{full_name}}</th></tr>
+    <tr><td class="line">Signature</td><td>Date</td></tr>
+  </table>
+  {{/each}}
+  <table class="signature-table">
+    <tr><th colspan="2">Landlord: {{landlord_full_name}}</th></tr>
+    <tr><td class="line">Signature</td><td>Date</td></tr>
+  </table>
+  {{#if landlord_2_full_name}}
+  <table class="signature-table">
+    <tr><th colspan="2">Joint landlord: {{landlord_2_full_name}}</th></tr>
+    <tr><td class="line">Signature</td><td>Date</td></tr>
+  </table>
+  {{/if}}
+</section>
+<p class="footer-note">This document should be reviewed in full before signature. Keep the signed agreement, inventory and all prescribed information together.</p>
+</body></html>

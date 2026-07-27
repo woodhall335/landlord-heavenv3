@@ -1,0 +1,3 @@
+journey,result,reason
+all five paid production journeys,BLOCKED,no authenticated deployment database Stripe or test-customer access
+

@@ -36,8 +36,7 @@ questions:
     inputType: select
     options:
       - "Standard Occupation Contract"
-      - "Premium Occupation Contract"
-    helperText: "Under the Renting Homes (Wales) Act 2016, tenancies in Wales are called 'occupation contracts'. Standard covers simple lets. Premium adds guarantor, HMO, rent review and tighter controls."
+    helperText: "This route creates the standard residential Occupation Contract for Wales."
     validation:
       required: true
     maps_to:
@@ -228,9 +227,9 @@ questions:
   # WALES MANDATORY: Rent Smart Wales Registration
   - id: rent_smart_wales_registration
     section: Landlord Details
-    question: "Rent Smart Wales registration"
+    question: "Rent Smart Wales registration and licensing"
     inputType: group
-    helperText: "MANDATORY: All landlords letting property in Wales MUST be registered with Rent Smart Wales. Without valid registration, you cannot legally let a property, serve notices, or make deposit claims."
+    helperText: "Registration identifies the landlord. A separate landlord or agent licence is required where that person carries out letting or property-management work that requires a licence."
     fields:
       - id: rent_smart_wales_registered
         label: "Are you registered with Rent Smart Wales?"
@@ -258,10 +257,102 @@ questions:
         validation:
           required: true
         width: half
+      - id: rent_smart_wales_licensed
+        label: "Does the landlord hold the required Rent Smart Wales licence?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: rent_smart_wales_licence_number
+        label: "Landlord licence number"
+        inputType: text
+        dependsOn:
+          questionId: rent_smart_wales_licensed
+          value: true
+        validation:
+          required: true
+        width: half
+      - id: rent_smart_wales_licence_expiry
+        label: "Landlord licence expiry date"
+        inputType: date
+        dependsOn:
+          questionId: rent_smart_wales_licensed
+          value: true
+        validation:
+          required: true
+        width: half
+      - id: managing_agent_rsw_licensed
+        label: "Is the managing agent licensed by Rent Smart Wales?"
+        inputType: yes_no
+        helperText: "Choose No if no managing agent is appointed."
+        validation:
+          required: true
+        width: half
+      - id: managing_agent_rsw_licence_number
+        label: "Managing-agent licence number"
+        inputType: text
+        dependsOn:
+          questionId: managing_agent_rsw_licensed
+          value: true
+        validation:
+          required: true
+        width: half
     maps_to:
       - wales_compliance.rent_smart_wales_registered
       - wales_compliance.rent_smart_wales_number
       - wales_compliance.rent_smart_wales_expiry
+      - rent_smart_wales_licensed
+      - rent_smart_wales_licence_number
+      - rent_smart_wales_licence_expiry
+      - managing_agent_rsw_licensed
+      - managing_agent_rsw_licence_number
+
+  - id: joint_landlord
+    section: Landlord Details
+    question: "Is there a second landlord?"
+    inputType: yes_no
+    validation:
+      required: true
+    maps_to:
+      - has_second_landlord
+
+  - id: joint_landlord_details
+    section: Landlord Details
+    question: "Second landlord details"
+    inputType: group
+    dependsOn:
+      questionId: joint_landlord
+      value: true
+    fields:
+      - id: landlord_2_full_name
+        label: "Full name"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: landlord_2_address
+        label: "Address"
+        inputType: textarea
+        validation:
+          required: true
+        width: full
+      - id: landlord_2_email
+        label: "Email"
+        inputType: email
+        validation:
+          required: true
+        width: half
+      - id: landlord_2_phone
+        label: "Phone"
+        inputType: tel
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - landlord_2_full_name
+      - landlord_2_address
+      - landlord_2_email
+      - landlord_2_phone
 
   - id: agent_usage
     section: Landlord Details
@@ -547,15 +638,14 @@ questions:
         width: half
       - id: term_length
         label: "Fixed term length"
-        inputType: select
-        options:
-          - "6 months"
-          - "12 months"
-          - "18 months"
-          - "24 months"
+        inputType: text
+        placeholder: "e.g. 12 months"
+        helperText: "This standard model is for a fixed term of less than seven years."
         dependsOn:
           questionId: is_fixed_term
           value: true
+        validation:
+          required: true
         width: half
       - id: tenancy_end_date
         label: "End date (if fixed term)"
@@ -570,12 +660,47 @@ questions:
       - term_length
       - tenancy_end_date
 
+  - id: occupation_exclusion
+    section: Contract
+    question: "Are there dates when the contract-holder cannot occupy the dwelling as a home?"
+    inputType: group
+    helperText: "Most standard residential contracts have no excluded occupation period. Only answer yes where a genuine agreed period must appear in the official key matters."
+    fields:
+      - id: occupation_exclusion_applies
+        label: "Does an excluded occupation period apply?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: occupation_exclusion_start_date
+        label: "Excluded period starts"
+        inputType: date
+        dependsOn:
+          questionId: occupation_exclusion_applies
+          value: true
+        validation:
+          required: true
+        width: half
+      - id: occupation_exclusion_end_date
+        label: "Excluded period ends"
+        inputType: date
+        dependsOn:
+          questionId: occupation_exclusion_applies
+          value: true
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - occupation_exclusion_applies
+      - occupation_exclusion_start_date
+      - occupation_exclusion_end_date
+
   # WALES MANDATORY: Written Statement of Occupation Contract
   - id: written_statement_compliance
     section: Contract
     question: "Written statement of occupation contract"
     inputType: group
-    helperText: "MANDATORY under Renting Homes (Wales) Act 2016, Section 31: You MUST provide a written statement of the occupation contract within 14 days of the occupation date. Failure to do so is a criminal offence and can result in a fine."
+    helperText: "The landlord must provide the written statement free of charge within 14 days of the occupation date. Failure can give rise to statutory compensation."
     fields:
       - id: written_statement_provided
         label: "Will you provide a written statement of the occupation contract?"
@@ -662,6 +787,19 @@ questions:
         validation:
           required: true
         width: half
+      - id: first_payment
+        label: "First payment amount"
+        inputType: currency
+        validation:
+          required: true
+          min: 1
+        width: half
+      - id: first_payment_date
+        label: "First payment date"
+        inputType: date
+        validation:
+          required: true
+        width: half
       - id: payment_method
         label: "Preferred payment method"
         inputType: select
@@ -697,6 +835,8 @@ questions:
       - rent_amount
       - rent_period
       - rent_due_day
+      - first_payment
+      - first_payment_date
       - payment_method
       - payment_details
       - bank_account_name
@@ -1094,138 +1234,9 @@ questions:
       - end_of_tenancy_viewings
 
   # 12. Property rules
-  - id: property_rules
-    section: Property Rules
-    question: "House rules"
-    inputType: group
-    helperText: "Pets, smoking and subletting policies."
-    fields:
-      - id: pets_allowed
-        label: "Are pets allowed?"
-        inputType: yes_no
-        validation:
-          required: true
-        width: third
-      - id: approved_pets
-        label: "Approved pets (if any)"
-        inputType: text
-        placeholder: "e.g. 1 cat named Luna"
-        dependsOn:
-          questionId: pets_allowed
-          value: true
-        width: full
-      - id: smoking_allowed
-        label: "Smoking allowed inside?"
-        inputType: select
-        options:
-          - "No"
-          - "Yes"
-          - "Vaping only"
-        validation:
-          required: true
-        width: third
-      - id: subletting_allowed
-        label: "Subletting / Airbnb policy"
-        inputType: select
-        options:
-          - "Not allowed"
-          - "Only with written consent"
-          - "Allowed"
-        validation:
-          required: true
-        width: third
-    maps_to:
-      - pets_allowed
-      - approved_pets
-      - smoking_allowed
-      - subletting_allowed
-
-  # 13. Rent reviews
-  - id: rent_increase
-    section: Rent Reviews
-    question: "Rent increase provisions"
-    inputType: group
-    helperText: "Premium occupation contract can include index-linked reviews. Under the Renting Homes (Wales) Act 2016, landlords must give at least 2 months' written notice of any rent increase."
-    fields:
-      - id: rent_increase_clause
-        label: "Include a rent increase clause?"
-        inputType: yes_no
-        validation:
-          required: true
-        width: half
-      - id: rent_increase_method
-        label: "Method"
-        inputType: select
-        options:
-          - "RPI"
-          - "CPI"
-          - "Market review"
-          - "Fixed review"
-        dependsOn:
-          questionId: rent_increase_clause
-          value: true
-        width: half
-      - id: rent_increase_frequency
-        label: "Frequency"
-        inputType: select
-        options:
-          - "Annually"
-          - "Every 2 years"
-          - "On anniversary with 2 months notice"
-        dependsOn:
-          questionId: rent_increase_clause
-          value: true
-        width: half
-    maps_to:
-      - rent_increase_clause
-      - rent_increase_method
-      - rent_increase_frequency
-
-  # 14. Additional terms
-  - id: break_clause
-    section: Additional Terms
-    question: "Include a break clause?"
-    inputType: yes_no
-    validation:
-      required: true
-    maps_to:
-      - break_clause
-
-  - id: break_clause_details
-    section: Additional Terms
-    question: "Break clause details"
-    inputType: group
-    dependsOn:
-      questionId: break_clause
-      value: true
-    fields:
-      - id: break_clause_months
-        label: "Can be exercised after"
-        inputType: select
-        options:
-          - "6 months"
-          - "9 months"
-          - "12 months"
-        width: half
-      - id: break_clause_notice_period
-        label: "Notice required"
-        inputType: select
-        options:
-          - "1 month"
-          - "2 months"
-          - "3 months"
-        width: half
-    maps_to:
-      - break_clause_months
-      - break_clause_notice_period
-
-  - id: additional_terms
-    section: Additional Terms
-    question: "Any additional bespoke terms?"
-    inputType: textarea
-    helperText: "Optional bespoke clauses to insert into the agreement."
-    maps_to:
-      - additional_terms
+  # Rent variation, ending provisions and all statutory terms are taken directly
+  # from the selected Welsh Government model. The standard flow does not invite
+  # unreviewed rent formulas, break clauses or bespoke legal terms.
 
   # 15. Premium-only protections
   - id: guarantor_required

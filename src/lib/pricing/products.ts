@@ -487,7 +487,8 @@ export const REGIONAL_PRODUCT_AVAILABILITY: Record<
     available: ['england', 'wales', 'scotland', 'northern-ireland'],
   },
   ast_premium: {
-    available: ['england', 'wales', 'scotland', 'northern-ireland'],
+    available: ['england'],
+    badge: 'England',
   },
   england_standard_tenancy_agreement: {
     available: ['england'],

@@ -1,0 +1,9 @@
+route,resolved_url,page_type,status_code,canonical,robots,sitemap_status,intended_indexability,actual_indexability,action_taken,reason
+/tenancy-agreement-template-uk,https://landlordheaven.co.uk/tenancy-agreement-template-uk,public selector,rendered,https://landlordheaven.co.uk/tenancy-agreement-template-uk,"noindex, follow",excluded,noindex,noindex,none,duplicate selector
+/products/ast,https://landlordheaven.co.uk/products/ast,public England product,rendered,https://landlordheaven.co.uk/products/ast,"index, follow",included,index,index,read-only validation,canonical England page
+/wales-tenancy-agreement-template,https://landlordheaven.co.uk/wales-tenancy-agreement-template,public regional landing,rendered,self,"index, follow",included,index,index,read-only validation,useful jurisdiction page
+/private-residential-tenancy-agreement-template,https://landlordheaven.co.uk/private-residential-tenancy-agreement-template,public regional landing,rendered,self,"index, follow",included,index,index,read-only validation,useful jurisdiction page
+/northern-ireland-tenancy-agreement-template,https://landlordheaven.co.uk/northern-ireland-tenancy-agreement-template,public regional landing,rendered,self,"index, follow",included,index,index,read-only validation,useful jurisdiction page
+/wizard/*,transactional,private wizard,not live-tested,none,noindex,excluded,noindex,not verified,unchanged,contains user data
+/dashboard/*,transactional,private dashboard,not live-tested,none,noindex,excluded,noindex,not verified,unchanged,authenticated user data
+/api/*,transactional,API,not live-tested,none,n/a,excluded,not indexable,not verified,unchanged,server endpoint

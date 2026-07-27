@@ -1,0 +1,25 @@
+sample,pattern,matches,status
+scotland-prt-branded-sample.pdf,\[Where\b,0,pass
+scotland-prt-branded-sample.pdf,\{\{[^}]+\}\},0,pass
+scotland-prt-branded-sample.pdf,\bundefined\b,0,pass
+scotland-prt-branded-sample.pdf,\bnull\b,0,pass
+scotland-prt-branded-sample.pdf,TO BE COMPLETED,0,pass
+scotland-prt-branded-sample.pdf,sample-only internal,0,pass
+wales-fixed-branded-sample.pdf,\[Where\b,0,pass
+wales-fixed-branded-sample.pdf,\{\{[^}]+\}\},0,pass
+wales-fixed-branded-sample.pdf,\bundefined\b,0,pass
+wales-fixed-branded-sample.pdf,\bnull\b,0,pass
+wales-fixed-branded-sample.pdf,TO BE COMPLETED,0,pass
+wales-fixed-branded-sample.pdf,sample-only internal,0,pass
+wales-periodic-branded-sample.pdf,\[Where\b,0,pass
+wales-periodic-branded-sample.pdf,\{\{[^}]+\}\},0,pass
+wales-periodic-branded-sample.pdf,\bundefined\b,0,pass
+wales-periodic-branded-sample.pdf,\bnull\b,0,pass
+wales-periodic-branded-sample.pdf,TO BE COMPLETED,0,pass
+wales-periodic-branded-sample.pdf,sample-only internal,0,pass
+northern-ireland-private-tenancy-branded-sample.pdf,\[Where\b,0,pass
+northern-ireland-private-tenancy-branded-sample.pdf,\{\{[^}]+\}\},0,pass
+northern-ireland-private-tenancy-branded-sample.pdf,\bundefined\b,0,pass
+northern-ireland-private-tenancy-branded-sample.pdf,\bnull\b,0,pass
+northern-ireland-private-tenancy-branded-sample.pdf,TO BE COMPLETED,0,pass
+northern-ireland-private-tenancy-branded-sample.pdf,sample-only internal,0,pass

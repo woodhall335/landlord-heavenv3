@@ -1,0 +1,4 @@
+document,source,expected_terms,terms_found_in_order,2026_terms_14A_14B,status,claim
+scotland,Scottish Government model PRT April 2024,33,33,n/a,pass,structural source-parity evidence only; not a legal-compliance certification
+wales-fixed,Welsh Government fixed model May 2026,56,56,pass,pass,structural source-parity evidence only; not a legal-compliance certification
+wales-periodic,Welsh Government periodic model May 2026,83,83,pass,pass,structural source-parity evidence only; not a legal-compliance certification

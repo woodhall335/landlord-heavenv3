@@ -7,6 +7,10 @@
  */
 
 import { NextResponse } from 'next/server';
+import {
+  isNonEnglandStandardTenancyPubliclyEnabled,
+  isStandardTenancyEntryProduct,
+} from '@/lib/tenancy/non-england-rollout';
 import { z } from 'zod';
 import { getServerUser } from '@/lib/supabase/server';
 import {
@@ -229,7 +233,16 @@ export async function POST(request: Request) {
     const legacyRequestedProduct =
       originalRequestedProduct !== storedProduct ? originalRequestedProduct : null;
 
-    if (!case_id && effectiveJurisdiction !== 'england') {
+    const allowedNonEnglandStandardTenancy =
+      resolvedCaseType === 'tenancy_agreement' &&
+      isStandardTenancyEntryProduct(product) &&
+      isNonEnglandStandardTenancyPubliclyEnabled(effectiveJurisdiction);
+
+    if (
+      !case_id &&
+      effectiveJurisdiction !== 'england' &&
+      !allowedNonEnglandStandardTenancy
+    ) {
       return NextResponse.json(
         {
           error: 'Public wizard starts are available for England only.',

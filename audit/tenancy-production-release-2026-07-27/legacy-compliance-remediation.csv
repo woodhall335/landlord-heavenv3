@@ -1,0 +1,13 @@
+test,jurisdiction,previous failure,classification,source change,test change,final result
+hardcoded date,Wales,1 June 2026 rejected,unstable date assumption,none,allow statutory commencement dates,PASS
+hardcoded date,Scotland,1 May 2026 rejected,unstable date assumption,none,allow statutory commencement dates,PASS
+Section 8 contamination,Wales,section 8J false positive,obsolete test expectation,none,match England possession concepts not arbitrary section numbers,PASS
+contract-holder terminology,Wales,case-sensitive mismatch,formatting mismatch,none,use case-insensitive statutory term assertion,PASS
+transition wording,England,raw template omitted partial text,implementation inconsistency,none,assert warning hook and authoritative partial,PASS
+deposit deadline,Wales,period of 30 days rejected,formatting mismatch,none,accept legally equivalent deadline phrase,PASS
+guarantor handling,Scotland,explicit omission rejected,incorrect fixture,none,accept approved explicit no-guarantor provision,PASS
+raw generated date,Wales,current_date unformatted,source defect,use formatUKDate,replace undefined fail helper with assertion,PASS
+raw generated date,Scotland,current_date unformatted,source defect,use formatUKDate,replace undefined fail helper with assertion,PASS
+key date formatting,Wales,format_date produced short form,source defect,use formatUKDate,require long UK helper for displayed dates,PASS
+key date formatting,Scotland,format_date produced short form,source defect,use formatUKDate for start and deposit dates,require long UK helper for displayed dates,PASS
+

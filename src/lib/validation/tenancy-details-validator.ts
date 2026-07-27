@@ -198,6 +198,162 @@ export function validateTenancyRequiredFacts(
     }
   }
 
+  if (
+    jurisdiction === 'northern-ireland' &&
+    rentAmount !== null &&
+    depositAmount !== null &&
+    depositAmount > 0
+  ) {
+    const frequency = String(rentFrequency || 'month').trim().toLowerCase();
+    const monthlyRent =
+      frequency === 'week' || frequency === 'weekly'
+        ? (rentAmount * 52) / 12
+        : frequency === 'fortnight' || frequency === 'fortnightly'
+          ? (rentAmount * 26) / 12
+          : frequency === 'quarter' || frequency === 'quarterly'
+            ? rentAmount / 3
+            : frequency === 'year' || frequency === 'yearly' || frequency === 'annual'
+              ? rentAmount / 12
+              : rentAmount;
+
+    if (depositAmount > monthlyRent + 0.01) {
+      invalid.add('deposit_amount');
+    }
+  }
+
+  if (jurisdiction === 'northern-ireland') {
+    const ratesLiability = wizardFacts.ni_rates_liability;
+    const depositLifecycle = wizardFacts.deposit_lifecycle;
+    const inventoryDeliveryMethod = wizardFacts.inventory_delivery_method;
+    const validRatesLiabilities = new Set(['landlord_included', 'tenant', 'apportioned']);
+    const validDepositLifecycles = new Set([
+      'no_deposit',
+      'expected',
+      'received_awaiting_protection',
+      'protected',
+      'prescribed_information_supplied',
+    ]);
+
+    if (isBlankString(ratesLiability)) {
+      missing.add('ni_rates_liability');
+    } else if (!validRatesLiabilities.has(String(ratesLiability))) {
+      invalid.add('ni_rates_liability');
+    } else if (
+      ratesLiability === 'apportioned' &&
+      isBlankString(wizardFacts.ni_rates_explanation)
+    ) {
+      missing.add('ni_rates_explanation');
+    }
+
+    if (isBlankString(wizardFacts.ni_capital_value)) missing.add('ni_capital_value');
+    if (isBlankString(wizardFacts.ni_rates_payable)) missing.add('ni_rates_payable');
+    if (isBlankString(wizardFacts.ni_other_required_payments)) {
+      missing.add('ni_other_required_payments');
+    }
+
+    if (isBlankString(depositLifecycle)) {
+      missing.add('deposit_lifecycle');
+    } else if (!validDepositLifecycles.has(String(depositLifecycle))) {
+      invalid.add('deposit_lifecycle');
+    } else {
+      const hasPaidDate = hasValidDate(wizardFacts.deposit_paid_date);
+      const hasProtectionDate = hasValidDate(wizardFacts.deposit_protection_date);
+      const hasProtectionReference = !isBlankString(wizardFacts.deposit_reference_number);
+      const hasScheme = !isBlankString(wizardFacts.deposit_scheme_name);
+      const hasPrescribedDate = hasValidDate(wizardFacts.prescribed_information_date);
+
+      if (depositLifecycle === 'no_deposit') {
+        if (depositAmount !== 0) invalid.add('deposit_amount');
+        if (
+          hasPaidDate ||
+          hasProtectionDate ||
+          hasProtectionReference ||
+          hasScheme ||
+          hasPrescribedDate
+        ) {
+          invalid.add('deposit_lifecycle');
+        }
+      }
+
+      if (depositLifecycle === 'expected') {
+        if (depositAmount === null || depositAmount <= 0) invalid.add('deposit_amount');
+        if (
+          hasPaidDate ||
+          hasProtectionDate ||
+          hasProtectionReference ||
+          hasPrescribedDate
+        ) {
+          invalid.add('deposit_lifecycle');
+        }
+      }
+
+      if (depositLifecycle === 'received_awaiting_protection') {
+        if (depositAmount === null || depositAmount <= 0) invalid.add('deposit_amount');
+        if (!hasPaidDate) missing.add('deposit_paid_date');
+        if (hasProtectionDate || hasProtectionReference || hasPrescribedDate) {
+          invalid.add('deposit_lifecycle');
+        }
+      }
+
+      if (
+        depositLifecycle === 'protected' ||
+        depositLifecycle === 'prescribed_information_supplied'
+      ) {
+        if (depositAmount === null || depositAmount <= 0) invalid.add('deposit_amount');
+        if (!hasPaidDate) missing.add('deposit_paid_date');
+        if (!hasScheme) missing.add('deposit_scheme_name');
+        if (!hasProtectionDate) missing.add('deposit_protection_date');
+        if (!hasProtectionReference) missing.add('deposit_reference_number');
+      }
+
+      if (depositLifecycle === 'protected' && hasPrescribedDate) {
+        invalid.add('deposit_lifecycle');
+      }
+
+      if (
+        depositLifecycle === 'prescribed_information_supplied' &&
+        !hasPrescribedDate
+      ) {
+        missing.add('prescribed_information_date');
+      }
+    }
+
+    if (
+      inventoryDeliveryMethod !== 'attached' &&
+      inventoryDeliveryMethod !== 'later'
+    ) {
+      missing.add('inventory_delivery_method');
+    } else if (
+      inventoryDeliveryMethod === 'later' &&
+      !hasValidDate(wizardFacts.inventory_due_date)
+    ) {
+      missing.add('inventory_due_date');
+    }
+
+    [
+      'smoke_alarm_locations',
+      'heat_alarm_locations',
+      'fixed_combustion_appliances',
+      'carbon_monoxide_alarm_locations',
+      'carbon_monoxide_alarm_exclusions',
+    ].forEach((field) => {
+      if (isBlankString(wizardFacts[field])) missing.add(field);
+    });
+
+    if (toOptionalBoolean(wizardFacts.smoke_alarms_fitted) !== true) {
+      invalid.add('smoke_alarms_fitted');
+    }
+    if (toOptionalBoolean(wizardFacts.carbon_monoxide_alarms) === undefined) {
+      missing.add('carbon_monoxide_alarms');
+    }
+    if (toOptionalBoolean(wizardFacts.alarms_tested) !== true) {
+      invalid.add('alarms_tested');
+    }
+    if (!hasValidDate(wizardFacts.alarms_tested_date)) {
+      missing.add('alarms_tested_date');
+    }
+  }
+
   const isFixedTerm =
     typeof wizardFacts.is_fixed_term === 'boolean'
       ? wizardFacts.is_fixed_term
@@ -246,6 +402,8 @@ export function validateTenancyRequiredFacts(
   }
 
   if (englandPostReformStart && isFixedTerm === true) {
+    invalid.add('is_fixed_term');
+  } else if (jurisdiction === 'scotland' && isFixedTerm === true) {
     invalid.add('is_fixed_term');
   } else if (
     jurisdiction !== 'scotland' &&
@@ -520,8 +678,134 @@ export function validateTenancyRequiredFacts(
     }
   }
 
-  if (jurisdiction === 'scotland' && isBlankString(wizardFacts.landlord_registration_number)) {
+  if (
+    (jurisdiction === 'scotland' || jurisdiction === 'northern-ireland') &&
+    isBlankString(wizardFacts.landlord_registration_number)
+  ) {
     missing.add('landlord_registration_number');
+  }
+
+  if (jurisdiction === 'wales') {
+    if (isBlankString(wizardFacts.first_payment)) missing.add('first_payment');
+    if (!hasValidDate(wizardFacts.first_payment_date)) {
+      if (isBlankString(wizardFacts.first_payment_date)) {
+        missing.add('first_payment_date');
+      } else {
+        invalid.add('first_payment_date');
+      }
+    }
+
+    const exclusionApplies = toOptionalBoolean(wizardFacts.occupation_exclusion_applies);
+    if (exclusionApplies === undefined) {
+      missing.add('occupation_exclusion_applies');
+    } else if (exclusionApplies) {
+      if (!hasValidDate(wizardFacts.occupation_exclusion_start_date)) {
+        missing.add('occupation_exclusion_start_date');
+      }
+      if (!hasValidDate(wizardFacts.occupation_exclusion_end_date)) {
+        missing.add('occupation_exclusion_end_date');
+      }
+    }
+
+    const writtenStatementProvided = toOptionalBoolean(
+      wizardFacts.written_statement_provided
+    );
+    if (writtenStatementProvided === undefined) {
+      missing.add('written_statement_provided');
+    } else if (writtenStatementProvided !== true) {
+      invalid.add('written_statement_provided');
+    }
+  }
+
+  if (jurisdiction === 'scotland') {
+    const requiredModelFields = [
+      'communication_method',
+      'included_areas',
+      'shared_areas',
+      'excluded_areas',
+      'rent_payment_timing',
+      'first_payment',
+      'first_payment_date',
+      'first_payment_period_from',
+      'first_payment_period_to',
+      'rent_includes',
+      'inventory_delivery_method',
+      'tenant_utility_accounts',
+    ];
+    requiredModelFields.forEach((field) => {
+      if (isBlankString(wizardFacts[field])) missing.add(field);
+    });
+
+    const rawTenants = wizardFacts.tenants;
+    if (Array.isArray(rawTenants)) {
+      rawTenants.forEach((tenant, index) => {
+        if (isBlankString((tenant as Record<string, unknown>)?.address)) {
+          missing.add(`tenants[${index}].address`);
+        }
+      });
+    } else if (rawTenants && typeof rawTenants === 'object') {
+      Object.entries(rawTenants as Record<string, unknown>).forEach(([key, tenant]) => {
+        if (
+          /^\d+$/.test(key) &&
+          isBlankString((tenant as Record<string, unknown> | undefined)?.address)
+        ) {
+          missing.add(`tenants[${key}].address`);
+        }
+      });
+    }
+
+    const communicationMethod = normalizePaymentMethodText(
+      wizardFacts.communication_method
+    );
+    if (
+      !isBlankString(wizardFacts.communication_method) &&
+      !['hard_copy', 'email'].includes(communicationMethod)
+    ) {
+      invalid.add('communication_method');
+    }
+
+    const rentPaymentTiming = String(wizardFacts.rent_payment_timing || '')
+      .trim()
+      .toLowerCase();
+    if (rentPaymentTiming && !['advance', 'arrears'].includes(rentPaymentTiming)) {
+      invalid.add('rent_payment_timing');
+    }
+
+    if (
+      !isBlankString(wizardFacts.first_payment_date) &&
+      !hasValidDate(wizardFacts.first_payment_date)
+    ) {
+      invalid.add('first_payment_date');
+    }
+    if (
+      !isBlankString(wizardFacts.first_payment_period_from) &&
+      !hasValidDate(wizardFacts.first_payment_period_from)
+    ) {
+      invalid.add('first_payment_period_from');
+    }
+    if (
+      !isBlankString(wizardFacts.first_payment_period_to) &&
+      !hasValidDate(wizardFacts.first_payment_period_to)
+    ) {
+      invalid.add('first_payment_period_to');
+    }
+  }
+
+  const hasSecondLandlord = toOptionalBoolean(
+    wizardFacts.joint_landlord ?? wizardFacts.has_second_landlord
+  );
+  if ((jurisdiction === 'wales' || jurisdiction === 'scotland') && hasSecondLandlord) {
+    ['landlord_2_full_name', 'landlord_2_address', 'landlord_2_email', 'landlord_2_phone'].forEach(
+      (field) => {
+        if (isBlankString(wizardFacts[field])) missing.add(field);
+      }
+    );
+    if (
+      jurisdiction === 'scotland' &&
+      isBlankString(wizardFacts.landlord_2_registration_number)
+    ) {
+      missing.add('landlord_2_registration_number');
+    }
   }
 
   if (jurisdiction === 'northern-ireland') {
@@ -529,6 +813,15 @@ export function validateTenancyRequiredFacts(
     if (isBlankString(wizardFacts.rent_due_day)) missing.add('rent_due_day');
     if (isBlankString(wizardFacts.payment_method)) missing.add('payment_method');
     if (isBlankString(wizardFacts.payment_details)) missing.add('payment_details');
+
+    const tenancyInformationNoticeAcknowledged = toOptionalBoolean(
+      wizardFacts.tenancy_information_notice_acknowledged
+    );
+    if (tenancyInformationNoticeAcknowledged === undefined) {
+      missing.add('tenancy_information_notice_acknowledged');
+    } else if (tenancyInformationNoticeAcknowledged !== true) {
+      invalid.add('tenancy_information_notice_acknowledged');
+    }
   }
 
   return {

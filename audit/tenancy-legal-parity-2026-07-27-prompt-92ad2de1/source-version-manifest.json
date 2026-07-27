@@ -1,0 +1,192 @@
+{
+  "generated": "2026-07-27",
+  "sources": [
+    {
+      "jurisdiction": "scotland",
+      "title": "Scottish Government Model Private Residential Tenancy Agreement",
+      "url": "https://www.gov.scot/publications/private-residential-tenancy-model-agreement/documents/",
+      "publication_or_amendment_date": "2024-04-01",
+      "effective_date": "2024-04-01",
+      "checked": "2026-07-27",
+      "clauses": "Model PRT clauses 1-39",
+      "wording_rule": "Mandatory terms source-derived; discretionary wording may be selected or adapted",
+      "retained_files": [
+        {
+          "path": "config/mqs/tenancy_agreement/official_model_sources/scotland-model-prt-2024-04.docx",
+          "bytes": 351619,
+          "sha256": "5e8ed9c716bb5839f3700324c5ebe3e981d3e0285acabbe37248f19e9a4ebcff"
+        },
+        {
+          "path": "config/mqs/tenancy_agreement/official_model_sources/scotland-model-prt-2024-04.pdf",
+          "bytes": 314075,
+          "sha256": "f351cfc1fb5c3448ff20edfa166bfaab7eae34162d074529be9e4a2ed50a0a55"
+        }
+      ]
+    },
+    {
+      "jurisdiction": "scotland",
+      "title": "Private Residential Tenancy Statutory Terms Supporting Notes",
+      "url": "https://www.gov.scot/publications/private-residential-tenancy-statutory-terms-supporting-notes/",
+      "publication_or_amendment_date": "2024-04-01",
+      "effective_date": "2024-04-01",
+      "checked": "2026-07-27",
+      "clauses": "Mandatory supporting pack asset",
+      "wording_rule": "Official PDF retained and delivered unchanged",
+      "retained_files": [
+        {
+          "path": "config/mqs/tenancy_agreement/scotland_prt_statutory_terms_supporting_notes_april_2024.pdf",
+          "bytes": 354633,
+          "sha256": "6f8891bf2488d433e98665352e67a6f06e70e211b330052bf17be582d6d82876"
+        }
+      ]
+    },
+    {
+      "jurisdiction": "scotland",
+      "title": "Housing (Scotland) Act 2025 commencement and rent-control guidance",
+      "url": "https://www.gov.scot/policies/private-renting/rent-controls/",
+      "publication_or_amendment_date": "2026-04-01",
+      "effective_date": "2026-04-01",
+      "checked": "2026-07-27",
+      "clauses": "Rent-control-area status and commencement-sensitive rent wording",
+      "wording_rule": "Adapted current-law explanatory wording",
+      "retained_files": []
+    },
+    {
+      "jurisdiction": "scotland",
+      "title": "Rental discrimination: guidance for Scotland",
+      "url": "https://www.gov.scot/publications/rental-discrimination-guidance-for-scotland/",
+      "publication_or_amendment_date": "2026-05-01",
+      "effective_date": "2026-05-01",
+      "checked": "2026-07-27",
+      "clauses": "Children and benefits claimant rental-discrimination statement",
+      "wording_rule": "Adapted explanatory wording; statute prevails",
+      "retained_files": []
+    },
+    {
+      "jurisdiction": "wales-periodic",
+      "title": "Welsh Government model written statement for periodic standard contracts",
+      "url": "https://www.gov.wales/model-written-statement-periodic-standard-contracts",
+      "publication_or_amendment_date": "2026-05-29",
+      "effective_date": "2026-06-01",
+      "checked": "2026-07-27",
+      "clauses": "Periodic terms 1-83 plus 14A and 14B",
+      "wording_rule": "Fundamental and supplementary corpus source-derived; populated key matters substituted",
+      "retained_files": [
+        {
+          "path": "config/mqs/tenancy_agreement/official_model_sources/wales-periodic-standard-2026-05.docx",
+          "bytes": 97285,
+          "sha256": "e9c3a2422552e1d2ff6f5f1e59ad50b08e69afaba3ab7501e01002a5a93f9605"
+        },
+        {
+          "path": "config/mqs/tenancy_agreement/official_model_sources/wales-periodic-standard-2026-05.pdf",
+          "bytes": 457851,
+          "sha256": "b708a7321ae8ebab1df0b6afaa6c1e52cc6635d62e424d08ea12625da08cddb2"
+        }
+      ]
+    },
+    {
+      "jurisdiction": "wales-fixed",
+      "title": "Welsh Government model written statement for fixed term standard contracts",
+      "url": "https://www.gov.wales/model-written-statement-fixed-term-standard-contracts",
+      "publication_or_amendment_date": "2026-05-29",
+      "effective_date": "2026-06-01",
+      "checked": "2026-07-27",
+      "clauses": "Fixed terms 1-56 plus 14A and 14B",
+      "wording_rule": "Fundamental and supplementary corpus source-derived; populated key matters substituted",
+      "retained_files": [
+        {
+          "path": "config/mqs/tenancy_agreement/official_model_sources/wales-fixed-standard-2026-06.docx",
+          "bytes": 114487,
+          "sha256": "b596f03569dd56ee6f4aec272d9bf05431b6e682851c4f977edb4c29d5dc3913"
+        },
+        {
+          "path": "config/mqs/tenancy_agreement/official_model_sources/wales-fixed-standard-2026-06.pdf",
+          "bytes": 489246,
+          "sha256": "7cbd01a350b69c57d744c1117bd431314b5f17a8bbfcaddf851236db7a689071"
+        }
+      ]
+    },
+    {
+      "jurisdiction": "wales",
+      "title": "Renting Homes (Miscellaneous Amendments) (Wales) Regulations 2026 guidance",
+      "url": "https://www.gov.wales/renting-homes-miscellaneous-amendments-wales-regulations-2026-guidance-landlords-html",
+      "publication_or_amendment_date": "2026-04-29",
+      "effective_date": "2026-06-01",
+      "checked": "2026-07-27",
+      "clauses": "Terms 14A and 14B and related restrictions",
+      "wording_rule": "New fundamental terms preserved",
+      "retained_files": []
+    },
+    {
+      "jurisdiction": "northern-ireland",
+      "title": "Private Tenancies Act (Northern Ireland) 2022 commencement position",
+      "url": "https://www.communities-ni.gov.uk/articles/private-tenancies-act-northern-ireland-2022",
+      "publication_or_amendment_date": "2026-07-27 check",
+      "effective_date": "Multiple; section 11 longer notice periods remain in progress",
+      "checked": "2026-07-27",
+      "clauses": "Tenancy information, deposits, rent increases, alarms, electrical safety and notice position",
+      "wording_rule": "Current commenced law only",
+      "retained_files": []
+    },
+    {
+      "jurisdiction": "northern-ireland",
+      "title": "Landlord's Notice Relating to the Granting of a Private Tenancy",
+      "url": "https://www.communities-ni.gov.uk/publications/private-tenancies-act-northern-ireland-2022-guide-sections-1-6-tenants-and-landlords",
+      "publication_or_amendment_date": "2023-03-01",
+      "effective_date": "2023-04-01",
+      "checked": "2026-07-27",
+      "clauses": "Prescribed Tenancy Information Notice and completion guidance",
+      "wording_rule": "Official blank prescribed document delivered unchanged",
+      "retained_files": [
+        {
+          "path": "config/mqs/tenancy_agreement/northern_ireland_tenancy_information_notice_2023.docx",
+          "bytes": 35475,
+          "sha256": "c96977773bdcfa7d21a57915ff8917cd22b019a5b984ef8bd6f596f11a4ef316"
+        },
+        {
+          "path": "config/mqs/tenancy_agreement/northern_ireland_tenancy_information_notice_2023.pdf",
+          "bytes": 227571,
+          "sha256": "75fe34a800cd987b7f61c1e47733f19a231c89ba125a56947b908d3cd4de24e3"
+        },
+        {
+          "path": "config/mqs/tenancy_agreement/northern_ireland_tenancy_information_notice_guidance_2023.pdf",
+          "bytes": 96386,
+          "sha256": "c9f46ddc973d838a4aa0e32724f8dd74b1c7ec04eb17d85c02fa667949dca94b"
+        }
+      ]
+    },
+    {
+      "jurisdiction": "northern-ireland",
+      "title": "Rent Book Regulations (Northern Ireland) 2007",
+      "url": "https://www.legislation.gov.uk/nisr/2007/89/contents",
+      "publication_or_amendment_date": "2007-02-13",
+      "effective_date": "2007-04-01",
+      "checked": "2026-07-27",
+      "clauses": "Mandatory rent-book particulars and payment record",
+      "wording_rule": "Prescribed particulars populated; record layout adapted",
+      "retained_files": []
+    },
+    {
+      "jurisdiction": "northern-ireland",
+      "title": "Electrical Safety Standards for Private Tenancies Regulations (Northern Ireland) 2024",
+      "url": "https://www.legislation.gov.uk/nisr/2024/201/contents",
+      "publication_or_amendment_date": "2024",
+      "effective_date": "2025-04-01",
+      "checked": "2026-07-27",
+      "clauses": "Five-year inspection/report and tenant-copy duties",
+      "wording_rule": "Adapted contractual acknowledgement; regulations prevail",
+      "retained_files": []
+    },
+    {
+      "jurisdiction": "northern-ireland",
+      "title": "Smoke, Heat and Carbon Monoxide Alarms for Private Tenancies Regulations (Northern Ireland) 2024",
+      "url": "https://www.legislation.gov.uk/nisr/2024/123/contents",
+      "publication_or_amendment_date": "2024-05-30",
+      "effective_date": "2024-12-01 for all private tenancies",
+      "checked": "2026-07-27",
+      "clauses": "Alarm installation, testing and maintenance",
+      "wording_rule": "Adapted contractual acknowledgement; regulations prevail",
+      "retained_files": []
+    }
+  ]
+}

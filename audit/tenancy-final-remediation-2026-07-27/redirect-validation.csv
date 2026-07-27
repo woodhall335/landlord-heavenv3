@@ -1,0 +1,4 @@
+source,destination,type,result
+/tenancy-agreements/wales,/wales-tenancy-agreement-template,permanent,CONFIGURED
+/tenancy-agreements/scotland,/private-residential-tenancy-agreement-template,permanent,CONFIGURED
+/tenancy-agreements/northern-ireland,/northern-ireland-tenancy-agreement-template,canonical alias,CONFIGURED

@@ -1,0 +1,8 @@
+control,evidence,result
+server-calculated amount,checkout uses PRODUCTS price,PASS_SOURCE
+no entitlement before payment,fulfillment requires paid order,PASS_SOURCE
+order/case/user binding,fulfillment checks paid order and snapshot identifiers,PASS_SOURCE
+immutable snapshot,migration trigger rejects update/delete,PASS_SOURCE
+snapshot hash,fulfillment recomputes SHA-256 before generation,PASS_SOURCE
+idempotency,order unique snapshot and existing Stripe idempotency retained,PASS_SOURCE
+live payment,not attempted without approved test mechanism,NOT_RUN

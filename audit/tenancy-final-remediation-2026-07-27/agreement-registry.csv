@@ -1,0 +1,6 @@
+public_name,jurisdiction,agreement_type,details_route,release_status,indexable
+England Standard Assured Periodic Tenancy Agreement,england,assured_periodic_tenancy,/products/ast,available,true
+Wales Fixed-Term Standard Occupation Contract,wales,fixed_term_standard_occupation_contract,/wales-tenancy-agreement-template,legal-review-required,true
+Wales Periodic Standard Occupation Contract,wales,periodic_standard_occupation_contract,/wales-tenancy-agreement-template,legal-review-required,true
+Scotland Private Residential Tenancy,scotland,private_residential_tenancy,/private-residential-tenancy-agreement-template,legal-review-required,true
+Northern Ireland Private Tenancy Agreement,northern-ireland,private_tenancy_agreement,/northern-ireland-tenancy-agreement-template,legal-review-required,true

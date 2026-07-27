@@ -1,0 +1,10 @@
+event,pii_policy,source_status,live_status
+tenancy_hub_viewed,no names/addresses/tenant data,not consolidated,NOT_VERIFIED
+jurisdiction_selected,no names/addresses/tenant data,not consolidated,NOT_VERIFIED
+agreement_selected,no names/addresses/tenant data,not consolidated,NOT_VERIFIED
+wizard_started,no names/addresses/tenant data,existing generic event,NOT_VERIFIED
+wizard_step_completed,no names/addresses/tenant data,existing generic event,NOT_VERIFIED
+checkout_started,no names/addresses/tenant data,existing generic event,NOT_VERIFIED
+payment_completed,no names/addresses/tenant data,existing generic event,NOT_VERIFIED
+document_generated,no names/addresses/tenant data,not consolidated,NOT_VERIFIED
+document_downloaded,no names/addresses/tenant data,not consolidated,NOT_VERIFIED

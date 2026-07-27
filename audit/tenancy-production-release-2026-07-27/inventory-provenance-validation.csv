@@ -1,0 +1,4 @@
+scenario,result
+full inventory provenance suite,NOT_RUN
+production storage binding,BLOCKED_NO_SUPABASE_ACCESS
+

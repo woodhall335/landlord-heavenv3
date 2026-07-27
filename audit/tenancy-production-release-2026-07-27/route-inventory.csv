@@ -1,0 +1,8 @@
+route,type,result
+/products/ast,canonical England product,PASS_READ_ONLY
+/wales-tenancy-agreement-template,canonical Wales product,FAIL_STALE_LIVE
+/private-residential-tenancy-agreement-template,canonical Scotland product,FAIL_STALE_LIVE
+/northern-ireland-tenancy-agreement-template,canonical Northern Ireland product,FAIL_STALE_LIVE
+/wizard/*,transactional,NOT_RUN
+/api/*,transactional,NOT_RUN
+

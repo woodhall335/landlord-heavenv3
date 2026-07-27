@@ -1,0 +1,38 @@
+{
+  "captured_on": "2026-07-27",
+  "sources": [
+    {
+      "jurisdiction": "wales",
+      "contract_type": "periodic_standard_occupation_contract",
+      "publisher": "Welsh Government",
+      "published_page": "https://www.gov.wales/model-written-statement-periodic-standard-contracts",
+      "source_url": "https://www.gov.wales/sites/default/files/publications/2026-05/model-written-statement-periodic-standard-contract.pdf",
+      "last_updated": "2026-05-29",
+      "file": "wales-periodic-standard-2026-05.pdf",
+      "pages": 44,
+      "sha256": "B708A7321AE8EBAB1DF0B6AFAA6C1E52CC6635D62E424D08EA12625DA08CDDB2"
+    },
+    {
+      "jurisdiction": "wales",
+      "contract_type": "fixed_term_standard_occupation_contract_under_seven_years",
+      "publisher": "Welsh Government",
+      "published_page": "https://www.gov.wales/model-written-statement-fixed-term-standard-contracts",
+      "source_url": "https://www.gov.wales/sites/default/files/publications/2026-06/model-written-statement-for-a-fixed-term-standard-contract.pdf",
+      "last_updated": "2026-05-29",
+      "file": "wales-fixed-standard-2026-06.pdf",
+      "pages": 42,
+      "sha256": "7CBD01A350B69C57D744C1117BD431314B5F17A8BBFCADDF851236DB7A689071"
+    },
+    {
+      "jurisdiction": "scotland",
+      "contract_type": "private_residential_tenancy",
+      "publisher": "Scottish Government",
+      "published_page": "https://www.gov.scot/publications/private-residential-tenancy-model-agreement/documents/",
+      "source_url": "https://www.gov.scot/binaries/content/documents/govscot/publications/advice-and-guidance/2024/04/private-residential-tenancy-model-agreement/documents/scottish-government-model-private-residential-tenancy-agreement-private-rented-sector/scottish-government-model-private-residential-tenancy-agreement-private-rented-sector/govscot%3Adocument/scottish-government-model-private-residential-tenancy-agreement-private-rented-sector.pdf",
+      "published": "2024-04-01",
+      "file": "scotland-model-prt-2024-04.pdf",
+      "pages": 32,
+      "sha256": "F351CFC1FB5C3448FF20EDFA166BFAAB7EAE34162D074529BE9E4A2ED50A0A55"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+route,title,h1,canonical,robots,cta,result
+/tenancy-agreement-template-uk,Tenancy Agreement Template UK | Choose Your Jurisdiction,Tenancy Agreement Template UK,self,"noindex, follow",none observed,PASS_LIVE
+/products/ast,Tenancy Agreement England | Renters' Rights Act Compliant,Create the right England tenancy agreement for the let,self,"index, follow",England wizard,PASS_LIVE
+/wales-tenancy-agreement-template,Wales Tenancy Agreement 2026 | Occupation Contract,Wales Tenancy Agreement,self,"index, follow",standard and premium visible,WARNING_LIVE_STALE
+/private-residential-tenancy-agreement-template,Private Residential Tenancy Agreement 2026 | Legally Validated PRT,Private Residential Tenancy Agreement (Scotland),self,"index, follow",standard and premium visible,FAIL_PROHIBITED_LIVE_CLAIM
+/northern-ireland-tenancy-agreement-template,Northern Ireland Tenancy Agreement 2026 | Legally Validated,Northern Ireland Tenancy Agreement,self,"index, follow",standard and premium visible,FAIL_PROHIBITED_LIVE_CLAIM

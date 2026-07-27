@@ -9,10 +9,12 @@ import {
   PRODUCTS,
   TENANCY_AGREEMENT_FROM_PRICE,
 } from '@/lib/pricing/products';
+import { isNonEnglandStandardTenancyPubliclyEnabled } from '@/lib/tenancy/non-england-rollout';
 
 const PRICE_VALID_UNTIL = '2026-12-31';
 const standardPrice = PRODUCTS.ast_standard.displayPrice;
-const premiumPrice = PRODUCTS.ast_premium.displayPrice;
+const isPubliclyEnabled =
+  isNonEnglandStandardTenancyPubliclyEnabled('northern-ireland');
 
 export const metadata: Metadata = {
   title: 'Private Tenancy Agreement Northern Ireland',
@@ -27,6 +29,10 @@ export const metadata: Metadata = {
   alternates: {
     canonical: getCanonicalUrl('/northern-ireland-tenancy-agreement-template'),
   },
+  robots: {
+    index: isPubliclyEnabled,
+    follow: isPubliclyEnabled,
+  },
 };
 
 export default function NorthernIrelandTenancyPage() {
@@ -39,7 +45,7 @@ export default function NorthernIrelandTenancyPage() {
         name: 'Is a Private Tenancy Agreement legally valid in Northern Ireland?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Yes. Our Private Tenancy Agreements are drafted to comply with the Private Tenancies Order (Northern Ireland) 2006, Private Tenancies Act (Northern Ireland) 2022, and all 2025 legal updates including mandatory EICR requirements. Both Standard and Premium versions are legally binding.',
+          text: 'A properly completed and signed Private Tenancy Agreement can be legally binding in Northern Ireland. It must be used alongside the prescribed Tenancy Information Notice and the landlord must meet registration, deposit, safety, and other statutory duties.',
         },
       },
       {
@@ -55,7 +61,7 @@ export default function NorthernIrelandTenancyPage() {
         name: 'What is the maximum deposit I can charge in Northern Ireland?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'In Northern Ireland, the maximum deposit is 2 months rent. Our wizard automatically validates your deposit amount to ensure compliance with NI law. Deposits must be protected in an approved tenancy deposit scheme.',
+          text: 'In Northern Ireland, the maximum deposit is one month’s rent. It must be protected in an approved scheme within 28 days, with the prescribed deposit information given within 35 days of receipt.',
         },
       },
       {
@@ -87,12 +93,6 @@ export default function NorthernIrelandTenancyPage() {
       buildMerchantOffer({
         name: 'Standard Private Tenancy',
         price: PRODUCT_PRICE_AMOUNT_STRINGS.ast_standard,
-        priceValidUntil: PRICE_VALID_UNTIL,
-        url: getCanonicalUrl('/northern-ireland-tenancy-agreement-template'),
-      }),
-      buildMerchantOffer({
-        name: 'Premium Private Tenancy',
-        price: PRODUCT_PRICE_AMOUNT_STRINGS.ast_premium,
         priceValidUntil: PRICE_VALID_UNTIL,
         url: getCanonicalUrl('/northern-ireland-tenancy-agreement-template'),
       }),
@@ -155,7 +155,7 @@ export default function NorthernIrelandTenancyPage() {
               <span className="block text-3xl text-red-600 mt-2">Northern Ireland</span>
             </h1>
             <p className="text-xl text-gray-700 mb-4">
-              Create a legally compliant Private Tenancy Agreement for Northern Ireland in minutes. Fully updated for 2025 including mandatory EICR requirements, rent increase restrictions, and all current NI legislation.
+              Create a jurisdiction-specific Private Tenancy Agreement for Northern Ireland in minutes, with prompts covering EICR requirements, rent increase restrictions, deposit protection and landlord registration.
             </p>
             <div className="bg-amber-100 border-l-4 border-primary-600 p-4 mb-8 text-left">
               <p className="text-sm font-semibold text-primary-900">
@@ -168,12 +168,6 @@ export default function NorthernIrelandTenancyPage() {
                 className="hero-btn-secondary"
               >
                 {`Create Standard - ${standardPrice}`}
-              </Link>
-              <Link
-                href="/wizard?product=ast_premium&jurisdiction=northern-ireland&src=ni_tenancy_hub&topic=tenancy"
-                className="hero-btn-primary"
-              >
-                {`Create Premium - ${premiumPrice}`}
               </Link>
             </div>
           </div>
@@ -238,7 +232,7 @@ export default function NorthernIrelandTenancyPage() {
                 <h3 className="text-xl font-semibold text-red-900 mb-2">Key Features of NI Private Tenancies</h3>
                 <ul className="list-disc list-inside text-gray-700 space-y-2">
                   <li><strong>Fixed-term or Periodic:</strong> Can be fixed (e.g., 6 or 12 months) or periodic (rolling month-to-month)</li>
-                  <li><strong>Deposit Protection:</strong> Maximum 2 months' rent, must be protected in approved scheme</li>
+                  <li><strong>Deposit Protection:</strong> Maximum one month's rent, protected within 28 days with prescribed information given within 35 days</li>
                   <li><strong>EICR Mandatory (2025):</strong> Electrical safety certificates required from 1 April 2025</li>
                   <li><strong>Rent Increase Limits (2025):</strong> Once per year, 12-month gap, 3 months' notice</li>
                   <li><strong>Length-Based Notice:</strong> Notice periods vary by tenancy duration (28/56/84 days)</li>
@@ -301,7 +295,7 @@ export default function NorthernIrelandTenancyPage() {
                       • Tenancy deposit protection requirements<br />
                       • Notice to Quit procedures<br />
                       • Tenant rights and landlord obligations<br />
-                      • Maximum deposit cap (2 months' rent)
+                      • Maximum deposit cap (one month's rent)
                     </td>
                   </tr>
                   <tr className="bg-gray-50">
@@ -478,7 +472,7 @@ export default function NorthernIrelandTenancyPage() {
                 <div className="text-4xl mb-4">??</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Financial Clarity</h3>
                 <p className="text-gray-700">
-                  Clear terms on rent amount, payment dates, deposit (max 2 months' rent), permitted charges, and rent increase procedures (once per year, 12-month gap, 3 months' notice).
+                  Clear terms on rent amount, payment dates, deposit (maximum one month's rent), permitted charges, and rent increase procedures (once per year, 12-month gap, 3 months' notice).
                 </p>
               </div>
 
@@ -494,7 +488,7 @@ export default function NorthernIrelandTenancyPage() {
                 <div className="text-4xl mb-4">??</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Deposit Protection</h3>
                 <p className="text-gray-700">
-                  Clearly states deposit amount (maximum 2 months' rent), chosen protection scheme (TDS NI or MyDeposits NI), and procedures for deductions. Protects both landlord and tenant interests.
+                  Clearly states the deposit amount (maximum one month's rent), chosen protection scheme (TDS NI or MyDeposits NI), and procedures for deductions. Protects both landlord and tenant interests.
                 </p>
               </div>
 
@@ -566,7 +560,7 @@ export default function NorthernIrelandTenancyPage() {
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">Portfolio Landlords</h3>
                   <p className="text-gray-700">
-                    Landlords with multiple NI properties need consistent, legally compliant agreements across their portfolio. Our templates ensure standardization and compliance with 2025 regulations.
+                    Landlords with multiple NI properties need consistent agreements across their portfolio. The guided template applies the same NI-specific questions and wording to every property.
                   </p>
                 </div>
               </div>
@@ -593,7 +587,7 @@ export default function NorthernIrelandTenancyPage() {
 
             <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
               <p className="text-gray-700 text-lg mb-6">
-                Our intelligent wizard guides you through creating a comprehensive NI Private Tenancy Agreement in approximately 10-15 minutes. We ask 70+ questions to ensure your agreement is complete and compliant with 2025 regulations.
+                Our intelligent wizard guides you through creating a comprehensive NI Private Tenancy Agreement in approximately 10-15 minutes. It asks detailed questions so the agreement and supporting checklist can be tailored to the tenancy.
               </p>
 
               <h3 className="text-2xl font-semibold text-gray-900 mb-4">NI-Specific Information You'll Provide:</h3>
@@ -620,7 +614,7 @@ export default function NorthernIrelandTenancyPage() {
                     <div className="shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Deposit Information</h4>
-                      <p className="text-sm text-gray-600">Deposit amount (max 2 months' rent), chosen scheme (TDS NI or MyDeposits NI)</p>
+                      <p className="text-sm text-gray-600">Deposit amount (maximum one month's rent), chosen scheme (TDS NI or MyDeposits NI)</p>
                     </div>
                   </div>
 
@@ -718,9 +712,9 @@ export default function NorthernIrelandTenancyPage() {
             </div>
 
             <div className="bg-primary text-white rounded-xl shadow-lg p-8">
-              <h3 className="text-2xl font-semibold mb-4">Two Options to Suit Your Needs</h3>
+              <h3 className="text-2xl font-semibold mb-4">Standard Northern Ireland Agreement</h3>
 
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="mx-auto max-w-2xl">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-6">
                   <h4 className="text-xl font-bold mb-3">{`Standard - ${standardPrice}`}</h4>
                   <ul className="space-y-2 text-sm">
@@ -736,30 +730,6 @@ export default function NorthernIrelandTenancyPage() {
                     className="mt-4 block text-center bg-white text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-50 transition-colors"
                   >
                     Create Standard
-                  </Link>
-                </div>
-
-                <div className="bg-white/10 backdrop-blur rounded-lg p-6 border-2 border-white/50">
-                  <div className="inline-block bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold mb-2">
-                    RECOMMENDED
-                  </div>
-                  <h4 className="text-xl font-bold mb-3">{`Premium - ${premiumPrice}`}</h4>
-                  <ul className="space-y-2 text-sm">
-                    <li>? Everything in Standard PLUS:</li>
-                    <li>? Comprehensive inventory section with white goods grid</li>
-                    <li>? Exhaustive terms & conditions (13 detailed clauses)</li>
-                    <li>? Professional gradient styling (NI red theme)</li>
-                    <li>? Enhanced 2025 legal compliance boxes</li>
-                    <li>? Rights of change clauses for flexibility</li>
-                    <li>? Detailed repair obligations</li>
-                    <li>? Superior professional presentation</li>
-                    <li className="font-semibold text-yellow-300">? Covers HMOs (Houses in Multiple Occupation)</li>
-                  </ul>
-                  <Link
-                    href="/wizard?product=ast_premium&jurisdiction=northern-ireland&src=ni_tenancy_hub&topic=tenancy"
-                    className="mt-4 block text-center bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
-                  >
-                    Create Premium
                   </Link>
                 </div>
               </div>
@@ -969,12 +939,8 @@ export default function NorthernIrelandTenancyPage() {
               answer: "From 1 April 2025, key changes include: Mandatory EICR (all private rentals must have an Electrical Installation Condition Report renewed every 5 years), Rent Increase Limits (once per year maximum, 12-month gap between increases), 3-Month Notice required for all rent increases, and Length-Based Notice Periods (28/56/84 days depending on tenancy duration)."
             },
             {
-              question: "What is the difference between Standard and Premium agreements?",
-              answer: `The Standard (${standardPrice}) covers all legal essentials for NI tenancies, including 2025 updates, deposit protection, and length-based notice periods. The Premium (${premiumPrice}) adds: comprehensive inventory section with white goods grid, exhaustive terms and conditions (13 detailed clauses), professional gradient styling (NI red theme), enhanced 2025 legal compliance boxes, rights of change clauses, detailed repair obligations, and superior professional presentation.`
-            },
-            {
               question: "What is the maximum deposit I can charge in Northern Ireland?",
-              answer: "In Northern Ireland, the maximum deposit is 2 months' rent. Our wizard automatically validates your deposit amount to ensure compliance. You must also protect the deposit in an approved scheme (TDS Northern Ireland or MyDeposits Northern Ireland) within 28 days of receipt."
+              answer: "In Northern Ireland, the maximum deposit is one month's rent. It must be protected in an approved scheme (TDS Northern Ireland or MyDeposits Northern Ireland) within 28 days, and the prescribed information must be given within 35 days of receipt."
             },
             {
               question: "Do I need a written tenancy agreement in Northern Ireland?",
@@ -994,11 +960,11 @@ export default function NorthernIrelandTenancyPage() {
             },
             {
               question: "Can tenants have pets?",
-              answer: "It's up to the landlord. Our wizard asks whether pets are allowed, what types, and how many. If you allow pets, you can request a higher deposit (up to the 2 months' rent maximum) or require pet insurance."
+              answer: "It is generally for the landlord to decide, subject to the agreement and wider law. Any amount described as a pet deposit forms part of the total deposit, which cannot exceed one month's rent."
             },
             {
               question: "Do I need to register as a landlord in Northern Ireland?",
-              answer: "Currently, landlord registration is not mandatory in Northern Ireland (unlike Scotland). However, you must comply with all other legal requirements including deposit protection, safety certificates (gas, EICR from 2025, EPC), and proper notice procedures."
+              answer: "Yes. All private landlords in Northern Ireland must register with the Landlord Registration Scheme and keep their registration and property details current. HMO licensing may apply separately."
             },
             {
               question: "How quickly can I get my agreement?",
@@ -1049,12 +1015,6 @@ export default function NorthernIrelandTenancyPage() {
                 className="bg-white text-red-600 px-8 py-4 rounded-lg font-semibold hover:bg-red-50 transition-colors text-lg shadow-lg"
               >
                 {`Standard - ${standardPrice}`}
-              </Link>
-              <Link
-                href="/wizard?product=ast_premium&jurisdiction=northern-ireland&src=ni_tenancy_hub&topic=tenancy"
-                className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg"
-              >
-                {`Premium - ${premiumPrice} ?`}
               </Link>
             </div>
             <p className="mt-6 text-sm opacity-75">

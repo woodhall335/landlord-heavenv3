@@ -232,7 +232,7 @@ describe('Scotland PRT Pack Fixes', () => {
       const easyReadNotes = packContents.find((item) => item.key === 'easy_read_notes_scotland');
 
       expect(easyReadNotes).toBeDefined();
-      expect(easyReadNotes?.title).toContain('Easy Read Notes');
+      expect(easyReadNotes?.title).toContain('Statutory Terms Supporting Notes');
       expect(easyReadNotes?.category).toBe('Guidance');
       expect(easyReadNotes?.required).toBe(true);
     });
@@ -248,7 +248,7 @@ describe('Scotland PRT Pack Fixes', () => {
       const easyReadNotes = packContents.find((item) => item.key === 'easy_read_notes_scotland');
 
       expect(easyReadNotes).toBeDefined();
-      expect(easyReadNotes?.title).toContain('Easy Read Notes');
+      expect(easyReadNotes?.title).toContain('Statutory Terms Supporting Notes');
     });
 
     it('should NOT include Easy Read Notes in England pack contents', async () => {

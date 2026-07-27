@@ -17,6 +17,11 @@ import {
   getEnglandTenancyPurpose,
   isEnglandPostReformTenancy,
 } from '@/lib/tenancy/england-reform';
+import {
+  describeNorthernIrelandRates,
+  deriveNorthernIrelandDepositLifecycle,
+  deriveNorthernIrelandRatesLiability,
+} from '@/lib/tenancy/northern-ireland-rules';
 
 type AnyRecord = Record<string, any>;
 
@@ -71,12 +76,14 @@ function normalizeTenants(caseFacts: CaseFacts, wizardFacts: WizardFacts): Tenan
         const fullNameFromWizard = getValueAtPath(wizardFacts, `tenants.${index}.full_name`);
         const emailFromWizard = getValueAtPath(wizardFacts, `tenants.${index}.email`);
         const phoneFromWizard = getValueAtPath(wizardFacts, `tenants.${index}.phone`);
+        const addressFromWizard = getValueAtPath(wizardFacts, `tenants.${index}.address`);
 
         return {
           full_name: t.name || fullNameFromWizard || '',
           dob: dobFromCase || dobFromWizard || '',
           email: t.email || emailFromWizard || '',
           phone: t.phone || phoneFromWizard || '',
+          address: addressFromWizard || '',
         };
       });
   }
@@ -93,6 +100,7 @@ function normalizeTenants(caseFacts: CaseFacts, wizardFacts: WizardFacts): Tenan
         dob: t.dob || '',
         email: t.email || '',
         phone: t.phone || '',
+        address: t.address || '',
       }));
   }
 
@@ -108,6 +116,7 @@ function normalizeTenants(caseFacts: CaseFacts, wizardFacts: WizardFacts): Tenan
       dob: t.dob || '',
       email: t.email || '',
       phone: t.phone || '',
+      address: t.address || '',
     }));
 }
 
@@ -126,6 +135,9 @@ function buildAddress(
 function mapRentPeriod(value: string | null): ASTData['rent_period'] {
   if (!value) return undefined;
   const normalized = value.toLowerCase();
+  if (normalized.includes('fortnight')) return 'fortnight';
+  if (normalized.includes('four_week') || normalized.includes('four week')) return 'four_weeks';
+  if (normalized.includes('six_month') || normalized.includes('six month')) return 'six_months';
   if (normalized.includes('month')) return 'month';
   if (normalized.includes('week')) return 'week';
   if (normalized.includes('quarter')) return 'quarter';
@@ -282,6 +294,16 @@ export function mapWizardToASTData(
   });
   const tenancyStartDate =
     caseFacts.tenancy.start_date || getValueAtPath(wizardFacts, 'tenancy_start_date') || '';
+  const normalizedJurisdiction = String(resolvedJurisdiction || '')
+    .toLowerCase()
+    .replace(/\s+/g, '-');
+  const wizardFixedTerm = getValueAtPath(wizardFacts, 'is_fixed_term');
+  const isFixedTerm =
+    englandPostReform || normalizedJurisdiction === 'scotland'
+      ? false
+      : wizardFixedTerm !== undefined && wizardFixedTerm !== null
+        ? (coerceBoolean(wizardFixedTerm) ?? false)
+        : (caseFacts.tenancy.fixed_term ?? false);
   const resolvedProduct =
     getValueAtPath(wizardFacts, '__meta.product') ||
     getValueAtPath(wizardFacts, '__meta.canonical_product') ||
@@ -289,6 +311,31 @@ export function mapWizardToASTData(
     undefined;
   const suitability = getAgreementSuitabilityFacts(wizardFacts as Record<string, any>, {
     product: typeof resolvedProduct === 'string' ? resolvedProduct : undefined,
+  });
+  const niRatesLiability = deriveNorthernIrelandRatesLiability(
+    getValueAtPath(wizardFacts, 'ni_rates_liability') ??
+      getValueAtPath(wizardFacts, 'council_tax_responsibility')
+  );
+  const niRatesExplanation = getValueAtPath(wizardFacts, 'ni_rates_explanation');
+  const depositAmount = caseFacts.tenancy.deposit_amount ?? 0;
+  const depositPaidDate = getValueAtPath(wizardFacts, 'deposit_paid_date');
+  const depositProtectionDate =
+    caseFacts.tenancy.deposit_protection_date ??
+    getValueAtPath(wizardFacts, 'deposit_protection_date');
+  const depositReference =
+    getValueAtPath(wizardFacts, 'deposit_reference_number') ??
+    getValueAtPath(wizardFacts, 'deposit.reference_number');
+  const prescribedInformationServed = coerceBoolean(
+    getValueAtPath(wizardFacts, 'prescribed_information_served') ??
+      getValueAtPath(wizardFacts, 'deposit.prescribed_information_served')
+  );
+  const niDepositLifecycle = deriveNorthernIrelandDepositLifecycle({
+    explicitLifecycle: getValueAtPath(wizardFacts, 'deposit_lifecycle'),
+    amount: depositAmount,
+    receivedDate: depositPaidDate,
+    protectionDate: depositProtectionDate,
+    reference: depositReference,
+    prescribedInformationServed,
   });
 
   // Extract tenants (hybrid approach for fields not yet in CaseFacts)
@@ -328,6 +375,40 @@ export function mapWizardToASTData(
     landlord_address_postcode: caseFacts.parties.landlord.postcode ?? undefined,
     landlord_email: caseFacts.parties.landlord.email || '',
     landlord_phone: caseFacts.parties.landlord.phone || '',
+    landlord_2_full_name: getValueAtPath(wizardFacts, 'landlord_2_full_name'),
+    landlord_2_address: getValueAtPath(wizardFacts, 'landlord_2_address'),
+    landlord_2_email: getValueAtPath(wizardFacts, 'landlord_2_email'),
+    landlord_2_phone: getValueAtPath(wizardFacts, 'landlord_2_phone'),
+    landlord_registration_number: getValueAtPath(wizardFacts, 'landlord_registration_number'),
+    landlord_registration_authority: getValueAtPath(wizardFacts, 'landlord_registration_authority'),
+    landlord_2_registration_number: getValueAtPath(wizardFacts, 'landlord_2_registration_number'),
+    rent_smart_wales_number:
+      getValueAtPath(wizardFacts, 'rent_smart_wales_number') ||
+      getValueAtPath(wizardFacts, 'wales_compliance.rent_smart_wales_number'),
+    rent_smart_wales_registered: coerceBoolean(
+      getValueAtPath(wizardFacts, 'rent_smart_wales_registered') ??
+      getValueAtPath(wizardFacts, 'wales_compliance.rent_smart_wales_registered')
+    ),
+    rent_smart_wales_registration_number:
+      getValueAtPath(wizardFacts, 'rent_smart_wales_registration_number') ||
+      getValueAtPath(wizardFacts, 'rent_smart_wales_number') ||
+      getValueAtPath(wizardFacts, 'wales_compliance.rent_smart_wales_number'),
+    rent_smart_wales_registration_expiry:
+      getValueAtPath(wizardFacts, 'rent_smart_wales_registration_expiry') ||
+      getValueAtPath(wizardFacts, 'rent_smart_wales_expiry') ||
+      getValueAtPath(wizardFacts, 'wales_compliance.rent_smart_wales_expiry'),
+    rent_smart_wales_licensed: coerceBoolean(
+      getValueAtPath(wizardFacts, 'rent_smart_wales_licensed')
+    ),
+    rent_smart_wales_licence_number:
+      getValueAtPath(wizardFacts, 'rent_smart_wales_licence_number'),
+    rent_smart_wales_licence_expiry:
+      getValueAtPath(wizardFacts, 'rent_smart_wales_licence_expiry'),
+    managing_agent_rsw_licensed: coerceBoolean(
+      getValueAtPath(wizardFacts, 'managing_agent_rsw_licensed')
+    ),
+    managing_agent_rsw_licence_number:
+      getValueAtPath(wizardFacts, 'managing_agent_rsw_licence_number'),
 
     // Agent - use CaseFacts
     agent_name: caseFacts.parties.agent.name ?? undefined,
@@ -340,6 +421,9 @@ export function mapWizardToASTData(
     agent_email: caseFacts.parties.agent.email ?? undefined,
     agent_phone: caseFacts.parties.agent.phone ?? undefined,
     agent_signs: coerceBoolean(getValueAtPath(wizardFacts, 'agent_signs')),
+    agent_registration_number: getValueAtPath(wizardFacts, 'agent_registration_number'),
+    agent_services: getValueAtPath(wizardFacts, 'agent_services'),
+    agent_contact_matters: getValueAtPath(wizardFacts, 'agent_contact_matters'),
 
     // Tenants
     tenants,
@@ -354,6 +438,9 @@ export function mapWizardToASTData(
     number_of_bedrooms: getValueAtPath(wizardFacts, 'number_of_bedrooms')?.toString(),
     furnished_status: getValueAtPath(wizardFacts, 'furnished_status'),
     property_description: getValueAtPath(wizardFacts, 'property_description'),
+    included_areas: getValueAtPath(wizardFacts, 'included_areas'),
+    shared_areas: getValueAtPath(wizardFacts, 'shared_areas'),
+    excluded_areas: getValueAtPath(wizardFacts, 'excluded_areas'),
     parking_available: coerceBoolean(getValueAtPath(wizardFacts, 'parking_available')),
     parking_details: getValueAtPath(wizardFacts, 'parking_details'),
     has_garden: coerceBoolean(getValueAtPath(wizardFacts, 'has_garden')),
@@ -362,9 +449,25 @@ export function mapWizardToASTData(
     // Tenancy - use CaseFacts where available
     tenancy_start_date: tenancyStartDate,
     england_tenancy_purpose: englandTenancyPurpose,
-    is_fixed_term: englandPostReform ? false : (caseFacts.tenancy.fixed_term ?? false),
-    tenancy_end_date: englandPostReform ? undefined : (caseFacts.tenancy.end_date ?? undefined),
+    is_fixed_term: isFixedTerm,
+    tenancy_end_date:
+      englandPostReform || normalizedJurisdiction === 'scotland'
+        ? undefined
+        : getValueAtPath(wizardFacts, 'tenancy_end_date') ||
+          caseFacts.tenancy.end_date ||
+          undefined,
     term_length: englandPostReform ? undefined : getValueAtPath(wizardFacts, 'term_length'),
+    occupation_exclusion_applies: coerceBoolean(
+      getValueAtPath(wizardFacts, 'occupation_exclusion_applies')
+    ),
+    occupation_exclusion_start_date: getValueAtPath(
+      wizardFacts,
+      'occupation_exclusion_start_date'
+    ),
+    occupation_exclusion_end_date: getValueAtPath(
+      wizardFacts,
+      'occupation_exclusion_end_date'
+    ),
 
     // Rent - use CaseFacts
     rent_amount: caseFacts.tenancy.rent_amount ?? 0,
@@ -396,17 +499,65 @@ export function mapWizardToASTData(
       getValueAtPath(wizardFacts, 'first_payment'),
       getValueAtPath(wizardFacts, 'first_payment_date')
     ).date,
+    first_payment_period_from: getValueAtPath(wizardFacts, 'first_payment_period_from'),
+    first_payment_period_to: getValueAtPath(wizardFacts, 'first_payment_period_to'),
+    rent_payment_timing: getValueAtPath(wizardFacts, 'rent_payment_timing'),
+    rent_includes: getValueAtPath(wizardFacts, 'rent_includes'),
+    ni_capital_value: getValueAtPath(wizardFacts, 'ni_capital_value'),
+    ni_rates_payable: getValueAtPath(wizardFacts, 'ni_rates_payable'),
+    ni_rates_included_in_rent:
+      describeNorthernIrelandRates(niRatesLiability, niRatesExplanation) ||
+      getValueAtPath(wizardFacts, 'ni_rates_included_in_rent'),
+    ni_other_required_payments: getValueAtPath(wizardFacts, 'ni_other_required_payments'),
+    ni_rates_liability: niRatesLiability,
+    ni_rates_explanation: niRatesExplanation,
+    ni_rates_landlord_included: niRatesLiability === 'landlord_included',
+    ni_rates_tenant_responsible: niRatesLiability === 'tenant',
+    ni_rates_apportioned: niRatesLiability === 'apportioned',
 
     // Deposit - use CaseFacts
     // Output both deposit_scheme and deposit_scheme_name for template compatibility
-    deposit_amount: caseFacts.tenancy.deposit_amount ?? 0,
-    deposit_scheme: normalizeDepositScheme(caseFacts.tenancy.deposit_scheme_name) as any,
-    deposit_scheme_name: normalizeDepositScheme(caseFacts.tenancy.deposit_scheme_name) as any,
-    deposit_paid_date: getValueAtPath(wizardFacts, 'deposit_paid_date'),
-    deposit_protection_date: caseFacts.tenancy.deposit_protection_date ?? undefined,
-    deposit_already_protected: caseFacts.tenancy.deposit_protected ?? undefined,
-    deposit_reference_number: getValueAtPath(wizardFacts, 'deposit.reference_number'),
-    prescribed_information_served: coerceBoolean(getValueAtPath(wizardFacts, 'deposit.prescribed_information_served')),
+    deposit_amount: depositAmount,
+    deposit_scheme: normalizeDepositScheme(
+      caseFacts.tenancy.deposit_scheme_name ??
+        getValueAtPath(wizardFacts, 'deposit_scheme_name')
+    ) as any,
+    deposit_scheme_name: normalizeDepositScheme(
+      caseFacts.tenancy.deposit_scheme_name ??
+        getValueAtPath(wizardFacts, 'deposit_scheme_name')
+    ) as any,
+    deposit_paid_date: depositPaidDate,
+    deposit_protection_date: depositProtectionDate,
+    deposit_already_protected:
+      niDepositLifecycle === 'protected' ||
+      niDepositLifecycle === 'prescribed_information_supplied',
+    deposit_reference_number: depositReference,
+    prescribed_information_served:
+      niDepositLifecycle === 'prescribed_information_supplied'
+        ? true
+        : prescribedInformationServed,
+    deposit_payer: getValueAtPath(wizardFacts, 'deposit_payer'),
+    deposit_scheme_address: getValueAtPath(wizardFacts, 'deposit_scheme_address'),
+    deposit_scheme_contact_details: getValueAtPath(wizardFacts, 'deposit_scheme_contact_details'),
+    deposit_scheme_type: getValueAtPath(wizardFacts, 'deposit_scheme_type'),
+    deposit_deduction_circumstances: getValueAtPath(
+      wizardFacts,
+      'deposit_deduction_circumstances'
+    ),
+    deposit_repayment_dispute_information: getValueAtPath(
+      wizardFacts,
+      'deposit_repayment_dispute_information'
+    ),
+    deposit_lifecycle: niDepositLifecycle,
+    deposit_is_none: niDepositLifecycle === 'no_deposit',
+    deposit_is_expected: niDepositLifecycle === 'expected',
+    deposit_is_received_awaiting_protection:
+      niDepositLifecycle === 'received_awaiting_protection',
+    deposit_is_protected:
+      niDepositLifecycle === 'protected' ||
+      niDepositLifecycle === 'prescribed_information_supplied',
+    deposit_prescribed_information_supplied:
+      niDepositLifecycle === 'prescribed_information_supplied',
 
     // Utilities (not in CaseFacts yet)
     council_tax_responsibility: getValueAtPath(wizardFacts, 'council_tax_responsibility'),
@@ -414,7 +565,11 @@ export function mapWizardToASTData(
     internet_responsibility: getValueAtPath(wizardFacts, 'internet_responsibility'),
 
     // Inventory
-    inventory_attached: coerceBoolean(getValueAtPath(wizardFacts, 'inventory_attached')),
+    inventory_attached:
+      getValueAtPath(wizardFacts, 'inventory_delivery_method') === 'attached'
+        ? true
+        : coerceBoolean(getValueAtPath(wizardFacts, 'inventory_attached')),
+    inventory_delivery_method: getValueAtPath(wizardFacts, 'inventory_delivery_method'),
     professional_cleaning_required: coerceBoolean(getValueAtPath(wizardFacts, 'professional_cleaning_required')),
     decoration_condition: getValueAtPath(wizardFacts, 'decoration_condition'),
     inventory_schedule_notes: getValueAtPath(wizardFacts, 'inventory_schedule_notes'),
@@ -445,6 +600,22 @@ export function mapWizardToASTData(
     electrical_safety_certificate: coerceBoolean(getValueAtPath(wizardFacts, 'electrical_safety_certificate')),
     smoke_alarms_fitted: coerceBoolean(getValueAtPath(wizardFacts, 'smoke_alarms_fitted')),
     carbon_monoxide_alarms: coerceBoolean(getValueAtPath(wizardFacts, 'carbon_monoxide_alarms')),
+    smoke_alarm_locations: getValueAtPath(wizardFacts, 'smoke_alarm_locations'),
+    heat_alarm_locations: getValueAtPath(wizardFacts, 'heat_alarm_locations'),
+    fixed_combustion_appliances: getValueAtPath(
+      wizardFacts,
+      'fixed_combustion_appliances'
+    ),
+    carbon_monoxide_alarm_locations: getValueAtPath(
+      wizardFacts,
+      'carbon_monoxide_alarm_locations'
+    ),
+    carbon_monoxide_alarm_exclusions: getValueAtPath(
+      wizardFacts,
+      'carbon_monoxide_alarm_exclusions'
+    ),
+    alarms_tested: coerceBoolean(getValueAtPath(wizardFacts, 'alarms_tested')),
+    alarms_tested_date: getValueAtPath(wizardFacts, 'alarms_tested_date'),
 
     // Safety Certificate Dates - for compliance verification
     gas_safety_certificate_date: getValueAtPath(wizardFacts, 'gas_safety_certificate_date'),
@@ -456,6 +627,7 @@ export function mapWizardToASTData(
 
     // Prescribed Information Date
     prescribed_information_date: getValueAtPath(wizardFacts, 'prescribed_information_date'),
+    inventory_due_date: getValueAtPath(wizardFacts, 'inventory_due_date'),
 
     // Maintenance
     landlord_maintenance_responsibilities: getValueAtPath(wizardFacts, 'landlord_maintenance_responsibilities'),
@@ -488,13 +660,26 @@ export function mapWizardToASTData(
     // HMO - use CaseFacts
     communal_areas: getValueAtPath(wizardFacts, 'communal_areas'),
     is_hmo: caseFacts.property.is_hmo ?? undefined,
+    hmo_contact_number: getValueAtPath(wizardFacts, 'hmo_contact_number'),
+    hmo_renewal_application_submitted: coerceBoolean(
+      getValueAtPath(wizardFacts, 'hmo_renewal_application_submitted')
+    ),
     communal_cleaning: getValueAtPath(wizardFacts, 'communal_cleaning'),
     number_of_sharers: getValueAtPath(wizardFacts, 'number_of_sharers'),
     hmo_licence_status: getValueAtPath(wizardFacts, 'hmo_licence_status'),
     hmo_licence_number: getValueAtPath(wizardFacts, 'hmo_licence_number'),
     hmo_licence_expiry: getValueAtPath(wizardFacts, 'hmo_licence_expiry'),
+    permitted_residents: getValueAtPath(wizardFacts, 'permitted_residents'),
+    maximum_occupancy: Number(getValueAtPath(wizardFacts, 'maximum_occupancy')) || undefined,
     recycling_bins: coerceBoolean(getValueAtPath(wizardFacts, 'recycling_bins')),
-
+    communication_method: getValueAtPath(wizardFacts, 'communication_method'),
+    tenant_utility_accounts: getValueAtPath(wizardFacts, 'tenant_utility_accounts'),
+    in_rent_pressure_zone: coerceBoolean(getValueAtPath(wizardFacts, 'in_rent_pressure_zone')),
+    scotland_rent_control_area_status:
+      getValueAtPath(wizardFacts, 'scotland_rent_control_area_status') ||
+      (coerceBoolean(getValueAtPath(wizardFacts, 'in_rent_pressure_zone'))
+        ? 'designated'
+        : undefined),
     // Premium Enhanced Features - Meter Readings
     meter_reading_gas: getValueAtPath(wizardFacts, 'meter_reading_gas'),
     meter_reading_electric: getValueAtPath(wizardFacts, 'meter_reading_electric'),

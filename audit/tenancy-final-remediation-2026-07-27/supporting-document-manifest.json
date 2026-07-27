@@ -1,0 +1,23 @@
+{
+  "scotland": {
+    "file": "scotland_prt_statutory_terms_supporting_notes_april_2024.pdf",
+    "bytes": 354633,
+    "sha256": "6f8891bf2488d433e98665352e67a6f06e70e211b330052bf17be582d6d82876",
+    "included_by_generator": true,
+    "render_validation": "pending latest build output"
+  },
+  "northern_ireland": [
+    {
+      "file": "northern_ireland_tenancy_information_notice_2023.pdf",
+      "bytes": 227571,
+      "sha256": "75fe34a800cd987b7f61c1e47733f19a231c89ba125a56947b908d3cd4de24e3",
+      "role": "prescribed source reference"
+    },
+    {
+      "file": "northern_ireland_tenancy_information_notice_guidance_2023.pdf",
+      "bytes": 96386,
+      "sha256": "c9f46ddc973d838a4aa0e32724f8dd74b1c7ec04eb17d85c02fa667949dca94b",
+      "role": "official completion guidance delivered in pack"
+    }
+  ]
+}

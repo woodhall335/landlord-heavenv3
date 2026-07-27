@@ -1,0 +1,70 @@
+{
+  "sample": "northern-ireland-private-tenancy-branded-sample.pdf",
+  "generatedOn": "2026-07-27",
+  "jurisdiction": "northern-ireland",
+  "tenancyStartDate": "2026-09-01",
+  "inventoryMode": "attached",
+  "agreementIncludesAppendedSchedule1": true,
+  "documents": [
+    {
+      "title": "Private Tenancy Agreement",
+      "category": "agreement",
+      "documentType": "private_tenancy_agreement",
+      "fileName": "tenancy_agreement.pdf",
+      "bytes": 577737,
+      "pages": 24,
+      "sha256": "a10a60e7897f935be17f06c27e28d19cfdb172b9348c5b98579137d507f050bc",
+      "openCheck": "passed"
+    },
+    {
+      "title": "Inventory & Schedule of Condition",
+      "category": "schedule",
+      "documentType": "inventory_schedule",
+      "fileName": "inventory_schedule.pdf",
+      "bytes": 359563,
+      "pages": 9,
+      "sha256": "db01d8b85b7ad43bcc3250ab9e5bc056c458875df399c357ba5d49d0af60feff",
+      "openCheck": "passed"
+    },
+    {
+      "title": "Pre-Tenancy Compliance Checklist (Northern Ireland)",
+      "category": "checklist",
+      "documentType": "pre_tenancy_checklist_northern_ireland",
+      "fileName": "compliance_checklist.pdf",
+      "bytes": 239899,
+      "pages": 3,
+      "sha256": "13a9429ae923d3f8b070728e00198d162da7525b5e4904787e7736e35898cf23",
+      "openCheck": "passed"
+    },
+    {
+      "title": "Northern Ireland Rent Book",
+      "category": "schedule",
+      "documentType": "rent_book_northern_ireland",
+      "fileName": "northern_ireland_rent_book.pdf",
+      "bytes": 166948,
+      "pages": 2,
+      "sha256": "66ae3b0585d03433ffd95dd851b139d9d767fd1c3a39a8d616a984f2f393c073",
+      "openCheck": "passed"
+    },
+    {
+      "title": "Landlord’s Notice Relating to the Granting of a Private Tenancy",
+      "category": "guidance",
+      "documentType": "tenancy_information_notice_northern_ireland",
+      "fileName": "northern_ireland_tenancy_information_notice.pdf",
+      "bytes": 227571,
+      "pages": 7,
+      "sha256": "75fe34a800cd987b7f61c1e47733f19a231c89ba125a56947b908d3cd4de24e3",
+      "openCheck": "passed"
+    },
+    {
+      "title": "Tenancy Information Notice Completion Guidance",
+      "category": "guidance",
+      "documentType": "tenancy_information_notice_guidance_northern_ireland",
+      "fileName": "northern_ireland_tenancy_information_notice_guidance.pdf",
+      "bytes": 96386,
+      "pages": 4,
+      "sha256": "c9f46ddc973d838a4aa0e32724f8dd74b1c7ec04eb17d85c02fa667949dca94b",
+      "openCheck": "passed"
+    }
+  ]
+}

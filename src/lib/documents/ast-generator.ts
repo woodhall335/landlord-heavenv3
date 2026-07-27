@@ -34,6 +34,12 @@ import { isEnglandPostReformTenancy } from '../tenancy/england-reform';
 import { shouldIncludeEnglandInformationSheet } from '../tenancy/england-reform';
 import { readFile } from 'fs/promises';
 import path from 'path';
+import { PDFDocument } from 'pdf-lib';
+import { createHash } from 'node:crypto';
+import type {
+  NorthernIrelandDepositLifecycle,
+  NorthernIrelandRatesLiability,
+} from '../tenancy/northern-ireland-rules';
 
 // ============================================================================
 // PRODUCT TIER (2-VARIANTS ONLY RULE)
@@ -103,6 +109,7 @@ interface JurisdictionConfig {
   jurisdictionLabel: string;
   templatePaths: {
     standard: string;
+    standardFixed?: string;
     premium: string;
     premiumHmo?: string; // HMO-specific premium template with HBS-style formatting (Scotland)
     standardHmo?: string; // HMO-specific standard template (Scotland)
@@ -118,6 +125,8 @@ interface JurisdictionConfig {
     keySchedule: string;
     maintenanceGuide: string;
     checkoutProcedure: string;
+    rentBook?: string;
+    tenancyInformationNotice?: string;
     easyReadNotes?: string; // Scotland-specific Easy Read Notes (optional for other jurisdictions)
   };
   /** Document type key for inventory schedule (must match pack-contents) */
@@ -127,6 +136,9 @@ interface JurisdictionConfig {
   /** Document type key for Easy Read Notes (Scotland only, must match pack-contents) */
   easyReadNotesDocumentType?: string;
   rentersRightsInformationSheet2026Path?: string;
+  scotlandStatutorySupportingNotesPath?: string;
+  northernIrelandTenancyInformationNoticePath?: string;
+  northernIrelandTenancyInformationNoticeGuidancePath?: string;
 }
 
 /**
@@ -172,7 +184,7 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
   wales: {
     jurisdiction: 'wales',
     agreementTitle: 'Standard Occupation Contract',
-    agreementDescription: 'Solicitor-grade occupation contract with embedded schedules. Compliant with Renting Homes (Wales) Act 2016.',
+    agreementDescription: 'Wales occupation contract draft with embedded schedules, pending model-parity certification.',
     agreementDocumentType: 'soc_agreement',
     modelClausesTitle: 'Model Clauses (Wales)',
     modelClausesDescription: 'Prescribed statutory terms under Renting Homes (Wales) Act 2016',
@@ -182,6 +194,7 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
     checklistDocumentType: 'pre_tenancy_checklist_wales',
     templatePaths: {
       standard: 'uk/wales/templates/standard_occupation_contract.hbs',
+      standardFixed: 'uk/wales/templates/fixed_term_standard_occupation_contract.hbs',
       premium: 'uk/wales/templates/occupation_contract_hmo.hbs', // HMO-specific template
       modelClauses: 'uk/wales/templates/model_clauses.hbs',
       termsSchedule: 'shared/templates/terms_and_conditions.hbs',
@@ -202,7 +215,7 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
   scotland: {
     jurisdiction: 'scotland',
     agreementTitle: 'Private Residential Tenancy Agreement',
-    agreementDescription: 'Solicitor-grade PRT agreement with embedded schedules. Compliant with Private Housing (Tenancies) (Scotland) Act 2016.',
+    agreementDescription: 'Scotland PRT agreement draft with embedded schedules, pending model-parity certification.',
     agreementDocumentType: 'prt_agreement',
     modelClausesTitle: 'Model Clauses (Scotland)',
     modelClausesDescription: 'Scottish Government prescribed terms for PRTs',
@@ -211,6 +224,8 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
     inventoryDocumentType: 'inventory_schedule',
     checklistDocumentType: 'pre_tenancy_checklist_scotland',
     easyReadNotesDocumentType: 'easy_read_notes_scotland',
+    scotlandStatutorySupportingNotesPath:
+      'mqs/tenancy_agreement/scotland_prt_statutory_terms_supporting_notes_april_2024.pdf',
     templatePaths: {
       standard: 'uk/scotland/templates/prt_agreement.hbs',
       premium: 'uk/scotland/templates/prt_agreement_premium.hbs', // Non-HMO premium
@@ -244,6 +259,10 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
     jurisdictionLabel: 'Northern Ireland',
     inventoryDocumentType: 'inventory_schedule',
     checklistDocumentType: 'pre_tenancy_checklist_northern_ireland',
+    northernIrelandTenancyInformationNoticePath:
+      'mqs/tenancy_agreement/northern_ireland_tenancy_information_notice_2023.pdf',
+    northernIrelandTenancyInformationNoticeGuidancePath:
+      'mqs/tenancy_agreement/northern_ireland_tenancy_information_notice_guidance_2023.pdf',
     templatePaths: {
       standard: 'uk/northern-ireland/templates/private_tenancy_agreement.hbs',
       premium: 'uk/northern-ireland/templates/private_tenancy_premium.hbs',
@@ -257,6 +276,9 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
       keySchedule: 'uk/northern-ireland/templates/premium/key_schedule.hbs',
       maintenanceGuide: 'uk/northern-ireland/templates/premium/property_maintenance_guide.hbs',
       checkoutProcedure: 'uk/northern-ireland/templates/premium/checkout_procedure.hbs',
+      rentBook: 'uk/northern-ireland/templates/rent_book.hbs',
+      tenancyInformationNotice:
+        'uk/northern-ireland/templates/tenancy_information_notice.hbs',
     },
   },
 };
@@ -541,6 +563,210 @@ async function appendEnglandInformationSheetDocument(
   });
 }
 
+async function appendScotlandStatutorySupportingNotes(
+  documents: ASTPackDocument[],
+  config: JurisdictionConfig
+): Promise<void> {
+  if (
+    config.jurisdiction !== 'scotland' ||
+    !config.scotlandStatutorySupportingNotesPath ||
+    !config.easyReadNotesDocumentType
+  ) {
+    return;
+  }
+
+  const pdfPath = path.join(
+    process.cwd(),
+    'config',
+    config.scotlandStatutorySupportingNotesPath
+  );
+  const pdf = await readFile(pdfPath);
+
+  documents.push({
+    title: 'Private Residential Tenancy Statutory Terms Supporting Notes',
+    description:
+      'Exact Scottish Government April 2024 supporting notes required when the landlord uses a landlord-drafted PRT agreement.',
+    category: 'guidance',
+    document_type: config.easyReadNotesDocumentType,
+    html: [
+      '<!DOCTYPE html>',
+      '<html lang="en-GB">',
+      '<body style="font-family: Arial, sans-serif; padding: 32px; color: #111827;">',
+      '<h1>Private Residential Tenancy Statutory Terms Supporting Notes</h1>',
+      '<p>This bundle includes the exact Scottish Government April 2024 PDF stored locally in the repository.</p>',
+      '<p>Give this PDF to the tenant with the landlord-drafted PRT agreement.</p>',
+      '</body>',
+      '</html>',
+    ].join(''),
+    pdf,
+    file_name: 'scotland_prt_statutory_terms_supporting_notes_april_2024.pdf',
+  });
+}
+
+async function appendNorthernIrelandPrescribedDocuments(
+  documents: ASTPackDocument[],
+  config: JurisdictionConfig,
+  enrichedData: Record<string, any>,
+  caseId: string
+): Promise<void> {
+  if (
+    config.jurisdiction !== 'northern-ireland' ||
+    !config.northernIrelandTenancyInformationNoticePath ||
+    !config.northernIrelandTenancyInformationNoticeGuidancePath
+  ) {
+    return;
+  }
+
+  if (!config.templatePaths.rentBook || !config.templatePaths.tenancyInformationNotice) {
+    throw new Error(
+      '[AST Generator] Northern Ireland rent-book and Tenancy Information Notice templates must be configured'
+    );
+  }
+
+  const { generateDocument } = await import('./generator');
+  const rentBook = await generateDocument({
+    templatePath: config.templatePaths.rentBook,
+    data: {
+      ...enrichedData,
+      case_id: caseId,
+      timestamp: Date.now(),
+    },
+    isPreview: false,
+    outputFormat: 'both',
+  });
+  documents.push({
+    title: 'Northern Ireland Rent Book',
+    description:
+      'Rent book containing the particulars prescribed by the Rent Book Regulations (Northern Ireland) 2007 and payment-record pages.',
+    category: 'schedule',
+    document_type: 'rent_book_northern_ireland',
+    html: rentBook.html,
+    pdf: rentBook.pdf,
+    file_name: 'northern_ireland_rent_book.pdf',
+  });
+
+  const tenancyInformationNotice = await generateDocument({
+    templatePath: config.templatePaths.tenancyInformationNotice,
+    data: {
+      ...enrichedData,
+      case_id: caseId,
+      timestamp: Date.now(),
+    },
+    isPreview: false,
+    outputFormat: 'both',
+  });
+  documents.push({
+    title: 'Landlord’s Notice Relating to the Granting of a Private Tenancy',
+    description:
+      'Populated Northern Ireland Tenancy Information Notice reproducing the current prescribed fields, notes and separate landlord/tenant notice scales.',
+    category: 'notice',
+    document_type: 'tenancy_information_notice_northern_ireland',
+    html: tenancyInformationNotice.html,
+    pdf: tenancyInformationNotice.pdf,
+    file_name: 'northern_ireland_tenancy_information_notice.pdf',
+  });
+
+  const guidancePath = path.join(
+    process.cwd(),
+    'config',
+    config.northernIrelandTenancyInformationNoticeGuidancePath
+  );
+  const guidancePdf = await readFile(guidancePath);
+  documents.push({
+    title: 'Tenancy Information Notice Completion Guidance',
+    description:
+      'Official Department for Communities guidance for completing the prescribed Tenancy Information Notice.',
+    category: 'guidance',
+    document_type: 'tenancy_information_notice_guidance_northern_ireland',
+    html: [
+      '<!DOCTYPE html>',
+      '<html lang="en-GB">',
+      '<body style="font-family: Arial, sans-serif; padding: 32px; color: #111827;">',
+      '<h1>Tenancy Information Notice Completion Guidance</h1>',
+      '<p>Official Department for Communities guidance for completing the prescribed Tenancy Information Notice.</p>',
+      '</body>',
+      '</html>',
+    ].join(''),
+    pdf: guidancePdf,
+    file_name: 'northern_ireland_tenancy_information_notice_guidance.pdf',
+  });
+}
+
+function appendNorthernIrelandPackageManifest(
+  documents: ASTPackDocument[],
+  config: JurisdictionConfig,
+  data: ASTData,
+  caseId: string
+): void {
+  if (config.jurisdiction !== 'northern-ireland') return;
+
+  const includedDocuments = documents.map((document) => ({
+    title: document.title,
+    document_type: document.document_type,
+    file_name: document.file_name,
+    sha256: document.pdf
+      ? createHash('sha256').update(document.pdf).digest('hex')
+      : null,
+  }));
+  const manifest = {
+    manifest_version: 'tenancy-package-manifest.v1',
+    case_id: caseId,
+    document_id: data.document_id,
+    jurisdiction: config.jurisdiction,
+    source_version: '2026-07-27',
+    inventory: {
+      status: data.inventory_delivery_method,
+      due_date: data.inventory_due_date || null,
+      included: data.inventory_delivery_method === 'attached',
+      agreement_contains_appended_inventory:
+        data.inventory_delivery_method === 'attached',
+    },
+    deposit: {
+      lifecycle: data.deposit_lifecycle,
+      prescribed_information_supplied:
+        data.deposit_prescribed_information_supplied === true,
+    },
+    documents: includedDocuments,
+  };
+  const json = `${JSON.stringify(manifest, null, 2)}\n`;
+
+  documents.push({
+    title: 'Northern Ireland Tenancy Package Manifest',
+    description:
+      'Machine-readable list of the generated pack contents, attachment states and SHA-256 document hashes.',
+    category: 'guidance',
+    document_type: 'tenancy_package_manifest_northern_ireland',
+    html: `<pre>${json}</pre>`,
+    pdf: Buffer.from(json, 'utf8'),
+    file_name: 'northern_ireland_tenancy_package_manifest.json',
+    contentType: 'application/json',
+  });
+}
+
+async function appendInventoryScheduleToAgreementWhenClaimed(
+  documents: ASTPackDocument[],
+  data: ASTData
+): Promise<void> {
+  if (data.inventory_delivery_method !== 'attached') return;
+
+  const agreement = documents.find((document) => document.category === 'agreement');
+  const inventory = documents.find(
+    (document) => document.document_type === 'inventory_schedule'
+  );
+  if (!agreement?.pdf || !inventory?.pdf) {
+    throw new Error(
+      '[AST Generator] Inventory is marked attached, but the agreement or Schedule 1 inventory PDF is missing'
+    );
+  }
+
+  const destination = await PDFDocument.load(agreement.pdf);
+  const source = await PDFDocument.load(inventory.pdf);
+  const pages = await destination.copyPages(source, source.getPageIndices());
+  for (const page of pages) destination.addPage(page);
+  agreement.pdf = Buffer.from(await destination.save());
+  agreement.description = `${agreement.description} Schedule 1 inventory appended to this agreement.`;
+}
+
 const PREMIUM_SUPPORT_DOCUMENTS = [
   {
     title: 'Key Receipt & Handover Schedule',
@@ -612,6 +838,8 @@ export interface TenantInfo {
   dob: string;
   email: string;
   phone: string;
+  /** Current/correspondence address, required by the Scottish Government model PRT. */
+  address?: string;
 }
 
 export interface ASTData {
@@ -639,6 +867,22 @@ export interface ASTData {
   landlord_address_postcode?: string;
   landlord_email: string;
   landlord_phone: string;
+  landlord_2_full_name?: string;
+  landlord_2_address?: string;
+  landlord_2_email?: string;
+  landlord_2_phone?: string;
+  landlord_registration_number?: string;
+  landlord_registration_authority?: string;
+  landlord_2_registration_number?: string;
+  rent_smart_wales_number?: string;
+  rent_smart_wales_registered?: boolean;
+  rent_smart_wales_registration_number?: string;
+  rent_smart_wales_registration_expiry?: string;
+  rent_smart_wales_licensed?: boolean;
+  rent_smart_wales_licence_number?: string;
+  rent_smart_wales_licence_expiry?: string;
+  managing_agent_rsw_licensed?: boolean;
+  managing_agent_rsw_licence_number?: string;
 
   // Agent (optional)
   agent_name?: string;
@@ -646,6 +890,9 @@ export interface ASTData {
   agent_email?: string;
   agent_phone?: string;
   agent_signs?: boolean;
+  agent_registration_number?: string;
+  agent_services?: string;
+  agent_contact_matters?: string;
 
   // Tenants
   tenants: TenantInfo[];
@@ -660,6 +907,7 @@ export interface ASTData {
   number_of_bedrooms?: string;
   property_description?: string;
   included_areas?: string;
+  shared_areas?: string;
   excluded_areas?: string;
   parking?: boolean;
   parking_available?: boolean;
@@ -670,6 +918,8 @@ export interface ASTData {
   hmo_licence_status?: string;
   hmo_licence_number?: string;
   hmo_licence_expiry?: string;
+  permitted_residents?: string;
+  maximum_occupancy?: number;
 
   // Term
   tenancy_start_date: string;
@@ -677,7 +927,17 @@ export interface ASTData {
   is_fixed_term: boolean;
   tenancy_end_date?: string; // Required if fixed term
   term_length?: string; // e.g., "12 months"
-  rent_period?: 'week' | 'month' | 'quarter' | 'year';
+  rent_period?:
+    | 'week'
+    | 'fortnight'
+    | 'four_weeks'
+    | 'month'
+    | 'quarter'
+    | 'six_months'
+    | 'year';
+  occupation_exclusion_applies?: boolean;
+  occupation_exclusion_start_date?: string;
+  occupation_exclusion_end_date?: string;
 
   // Rent
   rent_amount: number;
@@ -689,9 +949,21 @@ export interface ASTData {
   bank_account_number?: string;
   first_payment?: number | string; // Can be number or placeholder string
   first_payment_date?: string;
+  first_payment_period_from?: string;
+  first_payment_period_to?: string;
+  rent_payment_timing?: 'advance' | 'arrears';
   rent_includes?: string; // What's included in rent
   rent_excludes?: string; // What tenant pays separately
   rent_increase_method?: string;
+  ni_capital_value?: string;
+  ni_rates_payable?: string;
+  ni_rates_included_in_rent?: string;
+  ni_other_required_payments?: string;
+  ni_rates_liability?: NorthernIrelandRatesLiability;
+  ni_rates_explanation?: string;
+  ni_rates_landlord_included?: boolean;
+  ni_rates_tenant_responsible?: boolean;
+  ni_rates_apportioned?: boolean;
 
   // Deposit
   deposit_amount: number;
@@ -702,6 +974,18 @@ export interface ASTData {
   deposit_already_protected?: boolean;
   deposit_reference_number?: string;
   prescribed_information_served?: boolean;
+  deposit_payer?: string;
+  deposit_scheme_address?: string;
+  deposit_scheme_contact_details?: string;
+  deposit_scheme_type?: 'custodial' | 'insurance' | 'pending';
+  deposit_deduction_circumstances?: string;
+  deposit_repayment_dispute_information?: string;
+  deposit_lifecycle?: NorthernIrelandDepositLifecycle;
+  deposit_is_none?: boolean;
+  deposit_is_expected?: boolean;
+  deposit_is_received_awaiting_protection?: boolean;
+  deposit_is_protected?: boolean;
+  deposit_prescribed_information_supplied?: boolean;
 
   // Bills & Utilities
   council_tax_responsibility?: string;
@@ -711,6 +995,8 @@ export interface ASTData {
   // Inventory
   inventory_attached?: boolean;
   inventory_provided?: boolean;
+  inventory_delivery_method?: 'attached' | 'later';
+  inventory_due_date?: string;
   professional_cleaning_required?: boolean;
   decoration_condition?: string;
   inventory_schedule_notes?: string;
@@ -760,6 +1046,13 @@ export interface ASTData {
   eicr_next_inspection_date?: string;
   smoke_alarms_fitted?: boolean;
   carbon_monoxide_alarms?: boolean;
+  smoke_alarm_locations?: string;
+  heat_alarm_locations?: string;
+  fixed_combustion_appliances?: string;
+  carbon_monoxide_alarm_locations?: string;
+  carbon_monoxide_alarm_exclusions?: string;
+  alarms_tested?: boolean;
+  alarms_tested_date?: string;
   how_to_rent_guide_provided?: boolean;
   how_to_rent_guide_date?: string;
 
@@ -796,9 +1089,14 @@ export interface ASTData {
   white_goods_included?: string[];
   communal_areas?: string; // Description of communal areas (for HMOs)
   is_hmo?: boolean; // Is this property a licensed HMO?
+  hmo_contact_number?: string;
+  hmo_renewal_application_submitted?: boolean;
   communal_cleaning?: string; // Cleaning arrangements for shared areas
   recycling_bins?: boolean;
-
+  communication_method?: 'hard_copy' | 'email';
+  tenant_utility_accounts?: string;
+  in_rent_pressure_zone?: boolean;
+  scotland_rent_control_area_status?: 'designated' | 'not_designated' | 'unknown';
   // Jurisdiction
   jurisdiction?: string;  // Canonical jurisdiction: 'england' | 'wales' | 'scotland' | 'northern-ireland'
   jurisdiction_england?: boolean;
@@ -943,6 +1241,7 @@ export function validateASTSuitability(data: ASTData): ASTSuitabilityResult {
  */
 export function validateASTData(data: ASTData): string[] {
   const errors: string[] = [];
+  const jurisdiction = detectJurisdiction(data);
 
   // Required fields
   if (!data.landlord_full_name) errors.push('landlord_full_name is required');
@@ -989,21 +1288,144 @@ export function validateASTData(data: ASTData): string[] {
     errors.push('deposit_amount is required');
   }
 
-  // Tenant Fees Act 2019 - Deposit Limits (England & Wales)
+  if (
+    jurisdiction !== 'england' &&
+    !['attached', 'later'].includes(data.inventory_delivery_method || '')
+  ) {
+    errors.push('inventory_delivery_method must be attached or later');
+  }
+  if (
+    data.inventory_delivery_method === 'attached' &&
+    data.inventory_attached === false
+  ) {
+    errors.push('inventory attachment facts are contradictory');
+  }
+  if (
+    data.inventory_delivery_method === 'later' &&
+    data.inventory_attached === true
+  ) {
+    errors.push('inventory cannot be marked attached when delivery mode is later');
+  }
+
+  if (jurisdiction === 'scotland' && data.deposit_amount > 0) {
+    if (!data.deposit_payer) errors.push('deposit_payer is required for Scotland');
+    if (!data.deposit_scheme_address) {
+      errors.push('deposit_scheme_address is required for Scotland');
+    }
+    if (!data.deposit_scheme_contact_details) {
+      errors.push('deposit_scheme_contact_details is required for Scotland');
+    }
+    if (data.deposit_already_protected) {
+      if (!data.deposit_paid_date) errors.push('deposit_paid_date is required when protected');
+      if (!data.deposit_protection_date) {
+        errors.push('deposit_protection_date is required when protected');
+      }
+      if (!data.deposit_reference_number) {
+        errors.push('deposit_reference_number is required when protected');
+      }
+    } else if (data.deposit_protection_date || data.deposit_reference_number) {
+      errors.push('pending Scotland deposit must not assert a protection date or reference');
+    }
+  }
+
+  if (jurisdiction === 'wales') {
+    if (!data.rent_smart_wales_registered) {
+      errors.push('Rent Smart Wales landlord registration must be recorded');
+    }
+    if (!data.rent_smart_wales_registration_number) {
+      errors.push('Rent Smart Wales registration number is required');
+    }
+    if (data.rent_smart_wales_licensed && !data.rent_smart_wales_licence_number) {
+      errors.push('Rent Smart Wales landlord licence number is required when licensed');
+    }
+    if (
+      data.managing_agent_rsw_licensed &&
+      !data.managing_agent_rsw_licence_number
+    ) {
+      errors.push('Rent Smart Wales managing-agent licence number is required when licensed');
+    }
+  }
+
+  if (jurisdiction === 'northern-ireland') {
+    if (!data.ni_capital_value) errors.push('ni_capital_value is required for the rent book');
+    if (!data.ni_rates_payable) errors.push('ni_rates_payable is required for the rent book');
+    if (!data.ni_rates_liability) {
+      errors.push('ni_rates_liability is required for Northern Ireland');
+    }
+    if (data.ni_rates_apportioned && !data.ni_rates_explanation) {
+      errors.push('ni_rates_explanation is required when rates are apportioned');
+    }
+    if (!data.ni_other_required_payments) {
+      errors.push('ni_other_required_payments is required for the rent book');
+    }
+    if (!data.deposit_lifecycle) {
+      errors.push('deposit_lifecycle is required for Northern Ireland');
+    }
+    if (!data.inventory_delivery_method) {
+      errors.push('inventory_delivery_method is required for Northern Ireland');
+    }
+    if (data.inventory_delivery_method === 'later' && !data.inventory_due_date) {
+      errors.push('inventory_due_date is required when the inventory is supplied later');
+    }
+    if (!data.smoke_alarm_locations) errors.push('smoke_alarm_locations is required');
+    if (!data.heat_alarm_locations) errors.push('heat_alarm_locations is required');
+    if (!data.fixed_combustion_appliances) {
+      errors.push('fixed_combustion_appliances is required');
+    }
+    if (!data.carbon_monoxide_alarm_locations) {
+      errors.push('carbon_monoxide_alarm_locations is required');
+    }
+    if (!data.carbon_monoxide_alarm_exclusions) {
+      errors.push('carbon_monoxide_alarm_exclusions is required');
+    }
+    if (!data.alarms_tested || !data.alarms_tested_date) {
+      errors.push('all required alarms must be recorded as tested with an actual date');
+    }
+  }
+
+  if (data.is_fixed_term && data.tenancy_end_date && data.tenancy_start_date) {
+    const start = Date.parse(data.tenancy_start_date);
+    const end = Date.parse(data.tenancy_end_date);
+    if (!Number.isFinite(start) || !Number.isFinite(end) || end < start) {
+      errors.push('tenancy_end_date must be on or after tenancy_start_date');
+    }
+  }
+
+  // Jurisdiction-specific deposit limits.
   if (data.deposit_amount > 0 && data.rent_amount > 0) {
-    const monthlyRent = data.rent_amount;
+    const monthlyRent =
+      data.rent_period === 'week'
+        ? (data.rent_amount * 52) / 12
+        : data.rent_period === 'fortnight'
+          ? (data.rent_amount * 26) / 12
+          : data.rent_period === 'four_weeks'
+            ? (data.rent_amount * 13) / 12
+        : data.rent_period === 'quarter'
+          ? data.rent_amount / 3
+          : data.rent_period === 'six_months'
+            ? data.rent_amount / 6
+          : data.rent_period === 'year'
+            ? data.rent_amount / 12
+            : data.rent_amount;
     const annualRent = monthlyRent * 12;
     const weeklyRent = monthlyRent / 4.33; // Average weeks per month
 
-    // 6 weeks if annual rent > £50,000, otherwise 5 weeks
-    const maxWeeks = annualRent > 50000 ? 6 : 5;
-    const maxDeposit = weeklyRent * maxWeeks;
+    if (jurisdiction === 'england') {
+      const maxWeeks = annualRent > 50000 ? 6 : 5;
+      const maxDeposit = weeklyRent * maxWeeks;
 
-    if (data.deposit_amount > maxDeposit + 0.01) { // Allow 1p rounding tolerance
+      if (data.deposit_amount > maxDeposit + 0.01) {
+        errors.push(
+          `deposit_amount exceeds the ${maxWeeks}-week statutory cap (£${maxDeposit.toFixed(2)}) for ${jurisdiction}`
+        );
+      }
+    } else if (jurisdiction === 'northern-ireland' && data.deposit_amount > monthlyRent + 0.01) {
       errors.push(
-        `⚠️ ILLEGAL DEPOSIT: £${data.deposit_amount} exceeds ${maxWeeks} weeks rent (£${maxDeposit.toFixed(2)}). ` +
-        `This VIOLATES the Tenant Fees Act 2019. Maximum permitted: £${maxDeposit.toFixed(2)}. ` +
-        `Penalty: £5,000 fine + criminal prosecution for repeat offense.`
+        `deposit_amount exceeds the Northern Ireland one-month statutory cap (£${monthlyRent.toFixed(2)})`
+      );
+    } else if (jurisdiction === 'scotland' && data.deposit_amount > monthlyRent * 2 + 0.01) {
+      errors.push(
+        `deposit_amount exceeds the Scotland two-month statutory cap (£${(monthlyRent * 2).toFixed(2)})`
       );
     }
   }
@@ -1060,6 +1482,15 @@ export async function generateStandardAST(
     data.break_clause_notice_period = undefined;
   }
 
+  if (jurisdiction === 'scotland') {
+    data.is_fixed_term = false;
+    data.tenancy_end_date = undefined;
+    data.term_length = undefined;
+    data.break_clause = false;
+    data.break_clause_months = undefined;
+    data.break_clause_notice_period = undefined;
+  }
+
   const generationTimestamp = new Date().toISOString();
   const documentId = `${jurisdiction.toUpperCase()}-STD-${Date.now()}`;
   const renderedAgreementTitle = getRenderedAgreementTitle(
@@ -1100,18 +1531,16 @@ export async function generateStandardAST(
     }),
   };
 
-  // STANDARD PRODUCT: Agreement + Blank Inventory + Compliance Checklist
-  // Integration Layer: Always includes inventory and checklist
+  const agreementTemplate =
+    jurisdiction === 'wales' && data.is_fixed_term && config.templatePaths.standardFixed
+      ? config.templatePaths.standardFixed
+      : config.templatePaths.standard;
   const templatePaths = [
-    config.templatePaths.standard,
-    config.templatePaths.inventoryBlank, // Blank inventory for manual completion
-    config.templatePaths.complianceChecklist, // Jurisdiction-specific checklist
+    agreementTemplate,
+    config.templatePaths.inventoryBlank,
+    config.templatePaths.complianceChecklist,
   ];
-
-  // Compile and merge all templates
   const mergedHtml = await compileAndMergeTemplates(templatePaths, enrichedData);
-
-  // Generate PDF from merged HTML
   const pdf = await htmlToPdf(mergedHtml);
 
   return {
@@ -1175,6 +1604,14 @@ export async function generatePremiumAST(
   }
 
   if (englandPostReformRegime) {
+    data.is_fixed_term = false;
+    data.tenancy_end_date = undefined;
+    data.term_length = undefined;
+    data.break_clause = false;
+    data.break_clause_months = undefined;
+    data.break_clause_notice_period = undefined;
+  }
+  if (jurisdiction === 'scotland') {
     data.is_fixed_term = false;
     data.tenancy_end_date = undefined;
     data.term_length = undefined;
@@ -1377,12 +1814,13 @@ export function getDocumentKey(
 export interface ASTPackDocument {
   title: string;
   description: string;
-  category: 'agreement' | 'schedule' | 'checklist' | 'guidance';
+  category: 'agreement' | 'schedule' | 'checklist' | 'guidance' | 'notice';
   /** Canonical document type key matching pack-contents (e.g., 'ast_agreement', 'terms_schedule') */
   document_type: string;
   html: string;
   pdf?: Buffer;
   file_name: string;
+  contentType?: string;
 }
 
 export interface ASTDocumentPack {
@@ -1431,6 +1869,14 @@ export async function generateStandardASTDocuments(
     data.break_clause_months = undefined;
     data.break_clause_notice_period = undefined;
   }
+  if (jurisdiction === 'scotland') {
+    data.is_fixed_term = false;
+    data.tenancy_end_date = undefined;
+    data.term_length = undefined;
+    data.break_clause = false;
+    data.break_clause_months = undefined;
+    data.break_clause_notice_period = undefined;
+  }
 
   const generationTimestamp = new Date().toISOString();
   const documentId = `${jurisdiction.toUpperCase()}-STD-${Date.now()}`;
@@ -1472,8 +1918,12 @@ export async function generateStandardASTDocuments(
 
   // DOCUMENT 1: Main Agreement
   try {
+    const agreementTemplate =
+      jurisdiction === 'wales' && data.is_fixed_term && config.templatePaths.standardFixed
+        ? config.templatePaths.standardFixed
+        : config.templatePaths.standard;
     const agreementDoc = await generateDocument({
-      templatePath: config.templatePaths.standard,
+      templatePath: agreementTemplate,
       data: enrichedData,
       isPreview: false,
       outputFormat: 'both',
@@ -1482,7 +1932,9 @@ export async function generateStandardASTDocuments(
       title:
         jurisdiction === 'england'
           ? ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL
-          : renderedAgreementTitle,
+          : jurisdiction === 'wales' && data.is_fixed_term
+            ? 'Fixed Term Standard Occupation Contract'
+            : renderedAgreementTitle,
       description: config.agreementDescription,
       category: 'agreement',
       document_type: config.agreementDocumentType, // jurisdiction-specific key
@@ -1520,7 +1972,7 @@ export async function generateStandardASTDocuments(
     });
   } catch (err) {
     console.error(`Failed to generate inventory schedule:`, err);
-    // Don't throw - inventory should never block generation
+    if (data.inventory_delivery_method === 'attached') throw err;
     console.warn(`[AST Generator] Inventory generation failed but continuing without it`);
   }
 
@@ -1562,35 +2014,20 @@ export async function generateStandardASTDocuments(
     documentId
   );
 
-  // DOCUMENT 4 (Scotland only): Easy Read Notes
-  // Required under PRT as part of prescribed information
-  if (config.templatePaths.easyReadNotes && config.easyReadNotesDocumentType) {
-    try {
-    const easyReadDoc = await generateDocument({
-        templatePath: config.templatePaths.easyReadNotes,
-        data: {
-          ...enrichedData,
-          case_id: caseId || documentId,
-          timestamp: Date.now(),
-        },
-        isPreview: false,
-        outputFormat: 'both',
-      });
-      documents.push({
-        title: `Easy Read Notes (${config.jurisdictionLabel})`,
-        description: `Plain-language guide explaining tenant rights and responsibilities under the ${config.legalFramework}`,
-        category: 'guidance',
-        document_type: config.easyReadNotesDocumentType,
-        html: easyReadDoc.html,
-        pdf: easyReadDoc.pdf,
-        file_name: 'easy_read_notes.pdf',
-      });
-    } catch (err) {
-      console.error(`Failed to generate Easy Read Notes:`, err);
-      // Don't throw - Easy Read Notes should never block generation
-      console.warn(`[AST Generator] Easy Read Notes generation failed but continuing without it`);
-    }
-  }
+  await appendInventoryScheduleToAgreementWhenClaimed(documents, data);
+  await appendScotlandStatutorySupportingNotes(documents, config);
+  await appendNorthernIrelandPrescribedDocuments(
+    documents,
+    config,
+    enrichedData,
+    caseId || documentId
+  );
+  appendNorthernIrelandPackageManifest(
+    documents,
+    config,
+    data,
+    caseId || documentId
+  );
 
   console.log(`✅ Generated ${documents.length} documents for ${config.jurisdictionLabel} Standard pack`);
 
@@ -1640,6 +2077,14 @@ export async function generatePremiumASTDocuments(
   if (!data.rent_period) data.rent_period = 'month';
   if (!data.tenant_notice_period) data.tenant_notice_period = englandPostReformRegime ? '2 months' : '1 month';
   if (englandPostReformRegime) {
+    data.is_fixed_term = false;
+    data.tenancy_end_date = undefined;
+    data.term_length = undefined;
+    data.break_clause = false;
+    data.break_clause_months = undefined;
+    data.break_clause_notice_period = undefined;
+  }
+  if (jurisdiction === 'scotland') {
     data.is_fixed_term = false;
     data.tenancy_end_date = undefined;
     data.term_length = undefined;
@@ -1753,7 +2198,7 @@ export async function generatePremiumASTDocuments(
     });
   } catch (err) {
     console.error(`Failed to generate inventory schedule:`, err);
-    // Don't throw - inventory should never block generation
+    if (data.inventory_delivery_method === 'attached') throw err;
     console.warn(`[AST Generator] Inventory generation failed but continuing without it`);
   }
 
@@ -1795,35 +2240,14 @@ export async function generatePremiumASTDocuments(
     documentId
   );
 
-  // DOCUMENT 4 (Scotland only): Easy Read Notes
-  // Required under PRT as part of prescribed information
-  if (config.templatePaths.easyReadNotes && config.easyReadNotesDocumentType) {
-    try {
-      const easyReadDoc = await generateDocument({
-        templatePath: config.templatePaths.easyReadNotes,
-        data: {
-          ...enrichedData,
-          case_id: caseId || documentId,
-          timestamp: Date.now(),
-        },
-        isPreview: false,
-        outputFormat: 'both',
-      });
-      documents.push({
-        title: `Easy Read Notes (${config.jurisdictionLabel})`,
-        description: `Plain-language guide explaining tenant rights and responsibilities under the ${config.legalFramework}`,
-        category: 'guidance',
-        document_type: config.easyReadNotesDocumentType,
-        html: easyReadDoc.html,
-        pdf: easyReadDoc.pdf,
-        file_name: 'easy_read_notes.pdf',
-      });
-    } catch (err) {
-      console.error(`Failed to generate Easy Read Notes:`, err);
-      // Don't throw - Easy Read Notes should never block generation
-      console.warn(`[AST Generator] Easy Read Notes generation failed but continuing without it`);
-    }
-  }
+  await appendInventoryScheduleToAgreementWhenClaimed(documents, data);
+  await appendScotlandStatutorySupportingNotes(documents, config);
+  await appendNorthernIrelandPrescribedDocuments(
+    documents,
+    config,
+    enrichedData,
+    caseId || documentId
+  );
 
   console.log(`✅ Generated ${documents.length} documents for ${config.jurisdictionLabel} HMO Premium pack`);
 
@@ -1833,6 +2257,12 @@ export async function generatePremiumASTDocuments(
     enrichedData,
     caseId || documentId,
     documentId
+  );
+  appendNorthernIrelandPackageManifest(
+    documents,
+    config,
+    data,
+    caseId || documentId
   );
 
   return {

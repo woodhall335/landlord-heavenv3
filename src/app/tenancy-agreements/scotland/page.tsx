@@ -16,6 +16,7 @@ import {
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { tenancyAgreementScotlandLinks } from '@/lib/seo/internal-links';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { isNonEnglandStandardTenancyPubliclyEnabled } from '@/lib/tenancy/non-england-rollout';
 import {
   AlertTriangle,
   ArrowRight,
@@ -36,10 +37,9 @@ const PAGE_TYPE = 'tenancy' as const;
 const canonicalUrl = getCanonicalUrl(PAGE_PATH);
 
 const standardPrice = PRODUCTS.ast_standard.displayPrice;
-const premiumPrice = PRODUCTS.ast_premium.displayPrice;
+const isPubliclyEnabled = isNonEnglandStandardTenancyPubliclyEnabled('scotland');
 
 const standardWizardHref = '/wizard?product=ast_standard&jurisdiction=scotland&src=tenancy_hub&topic=tenancy';
-const premiumWizardHref = '/wizard?product=ast_premium&jurisdiction=scotland&src=tenancy_hub&topic=tenancy';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -83,8 +83,8 @@ export const metadata: Metadata = {
       'Create a Scotland PRT agreement online with current Scottish wording and clearer landlord guidance.',
   },
   robots: {
-    index: true,
-    follow: true,
+    index: isPubliclyEnabled,
+    follow: isPubliclyEnabled,
   },
 };
 
@@ -118,11 +118,6 @@ const faqs = [
     question: 'When should I choose the standard PRT instead of premium?',
     answer:
       'The standard route is usually the right starting point for a more straightforward Scottish let where the property and occupier setup are relatively simple and you want the main agreement workflow without broader premium drafting.',
-  },
-  {
-    question: 'When is the premium PRT the better option?',
-    answer:
-      'Premium is generally better for more complex Scottish lets, such as shared households, joint tenants, guarantor-backed arrangements, student or HMO-style occupation patterns, or situations where you want broader drafting and more operational detail from the outset.',
   },
   {
     question: 'Can a Scottish landlord simply ask a tenant to leave at the end of a term?',
@@ -188,10 +183,6 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
           primaryCta={{
             label: `Create Standard PRT - ${standardPrice}`,
             href: standardWizardHref,
-          }}
-          secondaryCta={{
-            label: `Create Premium PRT - ${premiumPrice}`,
-            href: premiumWizardHref,
           }}
           showTrustPositioningBar
           variant="pastel"
@@ -462,14 +453,13 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-5xl">
               <h2 className="mb-4 text-center text-3xl font-bold text-gray-900">
-                Standard vs premium PRT: which route should you choose?
+                Standard Scottish PRT agreement
               </h2>
               <p className="mx-auto mb-12 max-w-3xl text-center text-gray-600">
-                Strong commercial pages do not just show two buttons. They help landlords
-                choose the right product path for the tenancy they are actually granting.
+                One focused route for a standard residential Private Residential Tenancy.
               </p>
 
-              <div className="grid gap-8 md:grid-cols-2">
+              <div className="mx-auto max-w-2xl">
                 <div className="rounded-2xl border-2 border-gray-200 bg-white p-6 shadow-sm">
                   <h3 className="mb-2 text-2xl font-bold text-gray-900">
                     Standard PRT
@@ -507,49 +497,6 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                     className="block w-full rounded-lg bg-blue-600 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-700"
                   >
                     Create Standard PRT
-                  </Link>
-                </div>
-
-                <div className="relative rounded-2xl border-2 border-blue-200 bg-white p-6 shadow-lg">
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-yellow-400 px-3 py-1 text-xs font-bold text-gray-900">
-                    RECOMMENDED FOR COMPLEX LETS
-                  </div>
-                  <h3 className="mb-2 text-2xl font-bold text-gray-900">
-                    Premium PRT
-                  </h3>
-                  <p className="mb-4 text-2xl font-bold text-blue-700">
-                    {premiumPrice}
-                  </p>
-                  <p className="mb-6 leading-relaxed text-gray-700">
-                    Premium is usually the better fit where the letting is more involved and
-                    you want broader wording from the outset. This often applies where there
-                    are multiple tenants, sharers, HMO-style occupation patterns, more
-                    operational rules, guarantor use, or simply a stronger preference for
-                    fuller drafting rather than the leaner standard route.
-                  </p>
-                  <ul className="mb-6 space-y-3 text-gray-700">
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="mt-0.5 w-5 h-5 flex-shrink-0 text-green-500" />
-                      <span>Better for more complex Scottish letting scenarios</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="mt-0.5 w-5 h-5 flex-shrink-0 text-green-500" />
-                      <span>Useful for joint tenant, sharer, student, or HMO-style setups</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="mt-0.5 w-5 h-5 flex-shrink-0 text-green-500" />
-                      <span>Broader drafting where more operational detail matters</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="mt-0.5 w-5 h-5 flex-shrink-0 text-green-500" />
-                      <span>Stronger choice where a basic route feels too light for the tenancy</span>
-                    </li>
-                  </ul>
-                  <Link
-                    href={premiumWizardHref}
-                    className="block w-full rounded-lg bg-blue-700 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-800"
-                  >
-                    Create Premium PRT
                   </Link>
                 </div>
               </div>
