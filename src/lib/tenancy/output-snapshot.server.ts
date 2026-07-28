@@ -58,6 +58,55 @@ function payloadForHash(snapshot: Omit<TenancyOutputSnapshot, 'id' | 'created_at
   };
 }
 
+export function assertTenancySnapshotInputConsistency(input: {
+  productType: string;
+  jurisdiction: TenancyOutputSnapshot['jurisdiction'];
+  wizardAnswers: Record<string, unknown>;
+}): void {
+  const answerJurisdiction = input.wizardAnswers.jurisdiction;
+  if (
+    typeof answerJurisdiction === 'string' &&
+    answerJurisdiction !== input.jurisdiction
+  ) {
+    throw new Error(
+      `Tenancy snapshot jurisdiction mismatch: case is ${input.jurisdiction}, answers are ${answerJurisdiction}`
+    );
+  }
+
+  if (
+    input.jurisdiction !== 'england' &&
+    (input.productType === 'ast_premium' ||
+      input.productType.endsWith('_premium') ||
+      input.productType.startsWith('england_'))
+  ) {
+    throw new Error(
+      `Tenancy snapshot product ${input.productType} is not available for ${input.jurisdiction}`
+    );
+  }
+
+  const contractType = input.wizardAnswers.contract_type;
+  if (
+    input.jurisdiction !== 'wales' &&
+    (contractType === 'fixed' || contractType === 'periodic')
+  ) {
+    throw new Error('Welsh occupation-contract type cannot be used outside Wales');
+  }
+
+  if (input.jurisdiction === 'wales') {
+    if (contractType !== 'fixed' && contractType !== 'periodic') {
+      throw new Error('Wales tenancy snapshot requires a fixed or periodic contract type');
+    }
+
+    const isFixedTerm = input.wizardAnswers.is_fixed_term;
+    if (
+      typeof isFixedTerm === 'boolean' &&
+      isFixedTerm !== (contractType === 'fixed')
+    ) {
+      throw new Error('Wales contract type conflicts with the fixed-term wizard answer');
+    }
+  }
+}
+
 export async function getTenancyOutputSnapshotByOrderId(
   supabase: any,
   orderId: string
@@ -86,6 +135,8 @@ export async function createOrGetTenancyOutputSnapshot(
     attachmentStates?: Record<string, unknown>;
   }
 ): Promise<TenancyOutputSnapshot> {
+  assertTenancySnapshotInputConsistency(input);
+
   const hashPayload = {
     order_id: input.orderId,
     case_id: input.caseId,

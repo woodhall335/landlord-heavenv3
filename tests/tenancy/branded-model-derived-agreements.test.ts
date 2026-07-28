@@ -189,7 +189,8 @@ describe('branded official-model-derived standard agreements', () => {
       'rent_book_particulars',
       'ni_capital_value',
       'ni_rates_payable',
-      'ni_rates_included_in_rent',
+      'ni_rates_liability',
+      'ni_rates_explanation',
       'ni_other_required_payments',
     ]) {
       expect(northernIrelandWizard).toContain(`id: ${id}`);

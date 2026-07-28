@@ -1,0 +1,816 @@
+[
+  {
+    "route": "/standard-tenancy-agreement",
+    "finalUrl": "http://localhost:5000/standard-tenancy-agreement",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/standard-tenancy-agreement",
+    "h1s": [
+      "Choose the standard tenancy agreement for your property"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "#choose-jurisdiction",
+    "primaryLabel": "Choose property jurisdiction",
+    "robots": "index, follow",
+    "title": "Standard Tenancy Agreements for England, Wales, Scotland and Northern Ireland"
+  },
+  {
+    "route": "/tenancy-agreements",
+    "finalUrl": "http://localhost:5000/tenancy-agreement-template-uk",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/tenancy-agreement-template-uk",
+    "h1s": [
+      "Choose the tenancy agreement for the property jurisdiction"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "#choose-jurisdiction",
+    "primaryLabel": "Choose property jurisdiction",
+    "robots": "index, follow",
+    "title": "Tenancy Agreement Template UK | Choose Your Jurisdiction"
+  },
+  {
+    "route": "/tenancy-agreements/wales",
+    "finalUrl": "http://localhost:5000/wales-tenancy-agreement-template",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/wales-tenancy-agreement-template",
+    "h1s": [
+      "Standard Occupation Contracts for Wales"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard?product=ast_standard&jurisdiction=wales&contract_type=fixed&src=wales_tenancy_hub&topic=tenancy",
+    "primaryLabel": "Create Fixed-Term Contract - £14.99",
+    "robots": "index, follow",
+    "title": "Wales Occupation Contract 2026 | Template"
+  },
+  {
+    "route": "/tenancy-agreements/scotland",
+    "finalUrl": "http://localhost:5000/private-residential-tenancy-agreement-template",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/private-residential-tenancy-agreement-template",
+    "h1s": [
+      "Private Residential Tenancy Agreement (PRT)"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard?product=ast_standard&jurisdiction=scotland&src=tenancy_hub&topic=tenancy",
+    "primaryLabel": "Create Standard PRT - £14.99",
+    "robots": "index, follow",
+    "title": "Private Residential Tenancy Agreement Scotland | Create a PRT Online"
+  },
+  {
+    "route": "/tenancy-agreements/northern-ireland",
+    "finalUrl": "http://localhost:5000/northern-ireland-tenancy-agreement-template",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/northern-ireland-tenancy-agreement-template",
+    "h1s": [
+      "Private Tenancy Agreement for Northern Ireland"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard?product=ast_standard&jurisdiction=northern-ireland&src=ni_tenancy_hub&topic=tenancy",
+    "primaryLabel": "Create Private Tenancy Agreement - £14.99",
+    "robots": "index, follow",
+    "title": "Private Tenancy Agreement Northern Ireland"
+  },
+  {
+    "route": "/wales-tenancy-agreement-template",
+    "finalUrl": "http://localhost:5000/wales-tenancy-agreement-template",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/wales-tenancy-agreement-template",
+    "h1s": [
+      "Standard Occupation Contracts for Wales"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard?product=ast_standard&jurisdiction=wales&contract_type=fixed&src=wales_tenancy_hub&topic=tenancy",
+    "primaryLabel": "Create Fixed-Term Contract - £14.99",
+    "robots": "index, follow",
+    "title": "Wales Occupation Contract 2026 | Template"
+  },
+  {
+    "route": "/private-residential-tenancy-agreement-template",
+    "finalUrl": "http://localhost:5000/private-residential-tenancy-agreement-template",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/private-residential-tenancy-agreement-template",
+    "h1s": [
+      "Private Residential Tenancy Agreement (PRT)"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard?product=ast_standard&jurisdiction=scotland&src=tenancy_hub&topic=tenancy",
+    "primaryLabel": "Create Standard PRT - £14.99",
+    "robots": "index, follow",
+    "title": "Private Residential Tenancy Agreement Scotland | Create a PRT Online"
+  },
+  {
+    "route": "/northern-ireland-tenancy-agreement-template",
+    "finalUrl": "http://localhost:5000/northern-ireland-tenancy-agreement-template",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/northern-ireland-tenancy-agreement-template",
+    "h1s": [
+      "Private Tenancy Agreement for Northern Ireland"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard?product=ast_standard&jurisdiction=northern-ireland&src=ni_tenancy_hub&topic=tenancy",
+    "primaryLabel": "Create Private Tenancy Agreement - £14.99",
+    "robots": "index, follow",
+    "title": "Private Tenancy Agreement Northern Ireland"
+  },
+  {
+    "route": "/renting-homes-wales-written-statement",
+    "finalUrl": "http://localhost:5000/renting-homes-wales-written-statement",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/renting-homes-wales-written-statement",
+    "h1s": [
+      "Renting Homes Wales Written Statement"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wales-tenancy-agreement-template",
+    "primaryLabel": "View tenancy agreement packs",
+    "robots": "index, follow",
+    "title": "Wales Written Statement 2026 | Legal Requirements"
+  },
+  {
+    "route": "/update-occupation-contract-wales",
+    "finalUrl": "http://localhost:5000/update-occupation-contract-wales",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/update-occupation-contract-wales",
+    "h1s": [
+      "Update Occupation Contract Wales"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wales-tenancy-agreement-template",
+    "primaryLabel": "Create New Contract — £14.99",
+    "robots": "index, follow",
+    "title": "Update Occupation Contract Wales | Changing Terms and Rent"
+  },
+  {
+    "route": "/joint-occupation-contract-wales",
+    "error": "Error: Timed out waiting for load in tab 1."
+  },
+  {
+    "route": "/fixed-term-periodic-occupation-contract-wales",
+    "finalUrl": "http://localhost:5000/fixed-term-periodic-occupation-contract-wales",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/fixed-term-periodic-occupation-contract-wales",
+    "h1s": [
+      "Fixed Term vs Periodic Occupation Contract Wales Guide"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard?product=ast_standard&jurisdiction=wales&contract_type=fixed&src=fixed_periodic_wales_guide&topic=tenancy",
+    "primaryLabel": "Create Fixed-Term Contract — £14.99",
+    "robots": "index, follow",
+    "title": "Fixed Term vs Periodic Occupation Contract Wales Guide"
+  },
+  {
+    "route": "/standard-occupation-contract-wales",
+    "finalUrl": "http://localhost:5000/wales-tenancy-agreement-template",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/wales-tenancy-agreement-template",
+    "h1s": [
+      "Standard Occupation Contracts for Wales"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard?product=ast_standard&jurisdiction=wales&contract_type=fixed&src=wales_tenancy_hub&topic=tenancy",
+    "primaryLabel": "Create Fixed-Term Contract - £14.99",
+    "robots": "index, follow",
+    "title": "Wales Occupation Contract 2026 | Template"
+  },
+  {
+    "route": "/occupation-contract-template-wales",
+    "finalUrl": "http://localhost:5000/products/ast",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/products/ast",
+    "h1s": [
+      "Create the right England tenancy agreement for the let"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/standard-tenancy-agreement",
+    "primaryLabel": "Choose Standard agreement",
+    "robots": "index, follow",
+    "title": "Tenancy Agreement England | Renters' Rights Act Compliant"
+  },
+  {
+    "route": "/scotland-prt-model-agreement-guide",
+    "finalUrl": "http://localhost:5000/scotland-prt-model-agreement-guide",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/scotland-prt-model-agreement-guide",
+    "h1s": [
+      "Scotland PRT Model Agreement: What It Is and What It Lacks"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard?product=ast_standard&jurisdiction=scotland&src=scotland_model_guide&topic=tenancy",
+    "primaryLabel": "View tenancy agreement packs",
+    "robots": "index, follow",
+    "title": "Scotland PRT Model Agreement Guide"
+  },
+  {
+    "route": "/update-prt-tenancy-agreement-scotland",
+    "finalUrl": "http://localhost:5000/update-prt-tenancy-agreement-scotland",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/update-prt-tenancy-agreement-scotland",
+    "h1s": [
+      "Update Your PRT Tenancy Agreement"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard?product=ast_standard&jurisdiction=scotland&src=update_prt_guide&topic=tenancy",
+    "primaryLabel": "Create New PRT — £14.99",
+    "robots": "index, follow",
+    "title": "Update Scotland PRT Agreement | Tenant, Rent & Term Changes"
+  },
+  {
+    "route": "/joint-prt-tenancy-agreement-scotland",
+    "finalUrl": "http://localhost:5000/joint-prt-tenancy-agreement-scotland",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/joint-prt-tenancy-agreement-scotland",
+    "h1s": [
+      "Joint PRT Tenancy Agreement"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard?product=ast_standard&jurisdiction=scotland&src=joint_prt_guide&topic=tenancy",
+    "primaryLabel": "Create Joint PRT — £14.99",
+    "robots": "index, follow",
+    "title": "Joint PRT Tenancy Agreement Scotland | Multiple Tenants PRT 2026"
+  },
+  {
+    "route": "/common-prt-tenancy-mistakes-scotland",
+    "finalUrl": "http://localhost:5000/common-prt-tenancy-mistakes-scotland",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/common-prt-tenancy-mistakes-scotland",
+    "h1s": [
+      "Common PRT Tenancy Mistakes"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard?product=ast_standard&jurisdiction=scotland&src=prt_mistakes_guide&topic=tenancy",
+    "primaryLabel": "Create Standard PRT — £14.99",
+    "robots": "index, follow",
+    "title": "Common PRT Tenancy Mistakes Scotland | Landlord PRT Obligations 2026"
+  },
+  {
+    "route": "/private-residential-tenancy-agreement-scotland",
+    "finalUrl": "http://localhost:5000/private-residential-tenancy-agreement-template",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/private-residential-tenancy-agreement-template",
+    "h1s": [
+      "Private Residential Tenancy Agreement (PRT)"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard?product=ast_standard&jurisdiction=scotland&src=tenancy_hub&topic=tenancy",
+    "primaryLabel": "Create Standard PRT - £14.99",
+    "robots": "index, follow",
+    "title": "Private Residential Tenancy Agreement Scotland | Create a PRT Online"
+  },
+  {
+    "route": "/scottish-tenancy-agreement-template",
+    "finalUrl": "http://localhost:5000/private-residential-tenancy-agreement-template",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/private-residential-tenancy-agreement-template",
+    "h1s": [
+      "Private Residential Tenancy Agreement (PRT)"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard?product=ast_standard&jurisdiction=scotland&src=tenancy_hub&topic=tenancy",
+    "primaryLabel": "Create Standard PRT - £14.99",
+    "robots": "index, follow",
+    "title": "Private Residential Tenancy Agreement Scotland | Create a PRT Online"
+  },
+  {
+    "route": "/prt-template-scotland",
+    "finalUrl": "http://localhost:5000/private-residential-tenancy-agreement-template",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/private-residential-tenancy-agreement-template",
+    "h1s": [
+      "Private Residential Tenancy Agreement (PRT)"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard?product=ast_standard&jurisdiction=scotland&src=tenancy_hub&topic=tenancy",
+    "primaryLabel": "Create Standard PRT - £14.99",
+    "robots": "index, follow",
+    "title": "Private Residential Tenancy Agreement Scotland | Create a PRT Online"
+  },
+  {
+    "route": "/prt-tenancy-agreement-template-scotland",
+    "finalUrl": "http://localhost:5000/private-residential-tenancy-agreement-template",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/private-residential-tenancy-agreement-template",
+    "h1s": [
+      "Private Residential Tenancy Agreement (PRT)"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard?product=ast_standard&jurisdiction=scotland&src=tenancy_hub&topic=tenancy",
+    "primaryLabel": "Create Standard PRT - £14.99",
+    "robots": "index, follow",
+    "title": "Private Residential Tenancy Agreement Scotland | Create a PRT Online"
+  },
+  {
+    "route": "/update-tenancy-agreement-northern-ireland",
+    "finalUrl": "http://localhost:5000/update-tenancy-agreement-northern-ireland",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/update-tenancy-agreement-northern-ireland",
+    "h1s": [
+      "Update Tenancy Agreement Northern Ireland"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard?product=ast_standard&jurisdiction=northern-ireland&src=update_ni_tenancy_guide&topic=tenancy",
+    "primaryLabel": "Create new agreement - £14.99",
+    "robots": "index, follow",
+    "title": "Update Tenancy Agreement Northern Ireland | Renew NI Tenancy"
+  },
+  {
+    "route": "/joint-tenancy-agreement-northern-ireland",
+    "finalUrl": "http://localhost:5000/joint-tenancy-agreement-northern-ireland",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/joint-tenancy-agreement-northern-ireland",
+    "h1s": [
+      "Joint Tenancy Agreement Northern Ireland"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard?product=ast_standard&jurisdiction=northern-ireland&src=joint_ni_tenancy_guide&topic=tenancy",
+    "primaryLabel": "Create joint tenancy - £14.99",
+    "robots": "index, follow",
+    "title": "Joint Tenancy Agreement Northern Ireland | Multiple Tenants NI"
+  },
+  {
+    "route": "/fixed-term-tenancy-agreement-northern-ireland",
+    "finalUrl": "http://localhost:5000/fixed-term-tenancy-agreement-northern-ireland",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/fixed-term-tenancy-agreement-northern-ireland",
+    "h1s": [
+      "Fixed Term Tenancy Agreement Northern Ireland"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard?product=ast_standard&jurisdiction=northern-ireland&src=fixed_term_ni_guide&topic=tenancy",
+    "primaryLabel": "Create fixed term tenancy - £14.99",
+    "robots": "index, follow",
+    "title": "Fixed Term Tenancy Agreement Northern Ireland | NI Fixed Term Tenancy"
+  },
+  {
+    "route": "/tenancy-agreement-northern-ireland",
+    "finalUrl": "http://localhost:5000/northern-ireland-tenancy-agreement-template",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/northern-ireland-tenancy-agreement-template",
+    "h1s": [
+      "Private Tenancy Agreement for Northern Ireland"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard?product=ast_standard&jurisdiction=northern-ireland&src=ni_tenancy_hub&topic=tenancy",
+    "primaryLabel": "Create Private Tenancy Agreement - £14.99",
+    "robots": "index, follow",
+    "title": "Private Tenancy Agreement Northern Ireland"
+  },
+  {
+    "route": "/tenancy-agreement-template-northern-ireland",
+    "finalUrl": "http://localhost:5000/northern-ireland-tenancy-agreement-template",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/northern-ireland-tenancy-agreement-template",
+    "h1s": [
+      "Private Tenancy Agreement for Northern Ireland"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard?product=ast_standard&jurisdiction=northern-ireland&src=ni_tenancy_hub&topic=tenancy",
+    "primaryLabel": "Create Private Tenancy Agreement - £14.99",
+    "robots": "index, follow",
+    "title": "Private Tenancy Agreement Northern Ireland"
+  },
+  {
+    "route": "/ni-private-tenancy-agreement",
+    "finalUrl": "http://localhost:5000/northern-ireland-tenancy-agreement-template",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/northern-ireland-tenancy-agreement-template",
+    "h1s": [
+      "Private Tenancy Agreement for Northern Ireland"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard?product=ast_standard&jurisdiction=northern-ireland&src=ni_tenancy_hub&topic=tenancy",
+    "primaryLabel": "Create Private Tenancy Agreement - £14.99",
+    "robots": "index, follow",
+    "title": "Private Tenancy Agreement Northern Ireland"
+  },
+  {
+    "route": "/ni-tenancy-agreement-template-free",
+    "finalUrl": "http://localhost:5000/products/ast",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/products/ast",
+    "h1s": [
+      "Create the right England tenancy agreement for the let"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/standard-tenancy-agreement",
+    "primaryLabel": "Choose Standard agreement",
+    "robots": "index, follow",
+    "title": "Tenancy Agreement England | Renters' Rights Act Compliant"
+  },
+  {
+    "route": "/how-to-evict-tenant",
+    "finalUrl": "http://localhost:5000/how-to-evict-tenant",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/how-to-evict-tenant",
+    "h1s": [
+      "How to Evict a Tenant in the UK"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/renters-rights-act-eviction-rules",
+    "primaryLabel": "Check current England rules",
+    "robots": "index, follow",
+    "title": "How to Evict a Tenant | UK Landlord Guide by Jurisdiction"
+  },
+  {
+    "route": "/how-to-evict-a-tenant-uk",
+    "finalUrl": "http://localhost:5000/how-to-evict-a-tenant-uk",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/how-to-evict-a-tenant-uk",
+    "h1s": [
+      "How to evict a tenant: choose the property jurisdiction"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "#jurisdiction-route",
+    "primaryLabel": "Choose property jurisdiction",
+    "robots": "index, follow",
+    "title": "How to Evict a Tenant in the UK | England Landlord Route"
+  },
+  {
+    "route": "/tenant-refusing-inspection",
+    "finalUrl": "http://localhost:5000/tenant-refusing-access",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/tenant-refusing-access",
+    "h1s": [
+      "Tenant Refusing Access: Enforcement Without Harassment Risk"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/products/notice-only?src=refusing_access_notice",
+    "primaryLabel": "Start Notice Only",
+    "robots": "index, follow",
+    "title": "Tenant Refusing Access? Landlord Legal Options"
+  },
+  {
+    "route": "/tenant-refuses-to-leave-after-notice",
+    "finalUrl": "http://localhost:5000/tenant-refuses-to-leave-after-notice",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/tenant-refuses-to-leave-after-notice",
+    "h1s": [
+      "Tenant Refuses to Leave After Notice? Next Steps"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/products/complete-pack",
+    "primaryLabel": "Prepare court papers",
+    "robots": "index, follow",
+    "title": "Tenant Refuses to Leave After Notice | Landlord Next Steps"
+  },
+  {
+    "route": "/tenant-wont-leave",
+    "finalUrl": "http://localhost:5000/tenant-refuses-to-leave-after-notice",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/tenant-refuses-to-leave-after-notice",
+    "h1s": [
+      "Tenant Refuses to Leave After Notice? Next Steps"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/products/complete-pack",
+    "primaryLabel": "Prepare court papers",
+    "robots": "index, follow",
+    "title": "Tenant Refuses to Leave After Notice | Landlord Next Steps"
+  },
+  {
+    "route": "/tenant-breach-of-tenancy",
+    "finalUrl": "http://localhost:5000/tenant-breach-of-tenancy",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/tenant-breach-of-tenancy",
+    "h1s": [
+      "Tenant Breach of Tenancy: What Landlords Should Do Next"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/products/notice-only",
+    "primaryLabel": "Start the right notice",
+    "robots": "index, follow",
+    "title": "Tenant Breach of Tenancy: What Landlords Should Do Next"
+  },
+  {
+    "route": "/tenant-subletting-without-permission",
+    "finalUrl": "http://localhost:5000/tenant-subletting-without-permission",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/tenant-subletting-without-permission",
+    "h1s": [
+      "Tenant Subletting Without Permission: Landlord Action Guide"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/products/notice-only",
+    "primaryLabel": "Start the right notice",
+    "robots": "index, follow",
+    "title": "Tenant Subletting Without Permission: Landlord Action Guide"
+  },
+  {
+    "route": "/eviction-notice",
+    "finalUrl": "http://localhost:5000/eviction-notice-template",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/eviction-notice-template",
+    "h1s": [
+      "Eviction Notice Template for England"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/products/notice-only",
+    "primaryLabel": "Create and preview my Form 3A — £39.99",
+    "robots": "index, follow",
+    "title": "Eviction Notice Template England | Current Notice Hub"
+  },
+  {
+    "route": "/eviction-notice-template",
+    "finalUrl": "http://localhost:5000/eviction-notice-template",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/eviction-notice-template",
+    "h1s": [
+      "Eviction Notice Template for England"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/products/notice-only",
+    "primaryLabel": "Create and preview my Form 3A — £39.99",
+    "robots": "index, follow",
+    "title": "Eviction Notice Template England | Current Notice Hub"
+  },
+  {
+    "route": "/eviction-notice-england",
+    "finalUrl": "http://localhost:5000/eviction-notice-england",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/eviction-notice-england",
+    "h1s": [
+      "England Eviction Notice Generator"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/products/notice-only",
+    "primaryLabel": "Create and preview my Form 3A — £39.99",
+    "robots": "index, follow",
+    "title": "England Eviction Notice Generator | Form 3A Route"
+  },
+  {
+    "route": "/eviction-notice-uk",
+    "finalUrl": "http://localhost:5000/eviction-notice-template",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/eviction-notice-template",
+    "h1s": [
+      "Eviction Notice Template for England"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/products/notice-only",
+    "primaryLabel": "Create and preview my Form 3A — £39.99",
+    "robots": "index, follow",
+    "title": "Eviction Notice Template England | Current Notice Hub"
+  },
+  {
+    "route": "/no-fault-eviction",
+    "finalUrl": "http://localhost:5000/no-fault-eviction",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/no-fault-eviction",
+    "h1s": [
+      "No-Fault Eviction (England)"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/eviction-process-england",
+    "primaryLabel": "See the current England process",
+    "robots": "index, follow",
+    "title": "No-Fault Eviction (England) | Historical Transition and Current Rules"
+  },
+  {
+    "route": "/products/notice-only",
+    "finalUrl": "http://localhost:5000/products/notice-only",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/products/notice-only",
+    "h1s": [
+      "Create a Section 8 eviction notice and service file"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard/flow?type=eviction&product=notice_only&src=product_page&topic=eviction",
+    "primaryLabel": "Create and preview my Form 3A — £39.99",
+    "robots": "index, follow",
+    "title": "Serve a Section 8 Form 3A Notice | £39.99"
+  },
+  {
+    "route": "/products/section-13-standard",
+    "finalUrl": "http://localhost:5000/products/section-13-standard",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/products/section-13-standard",
+    "h1s": [
+      "Create a Form 4A rent increase pack with market evidence."
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard/flow?type=rent_increase&product=section13_standard&src=product_page&topic=general",
+    "primaryLabel": "Build my supported rent increase - £24.99",
+    "robots": "index, follow",
+    "title": "Form 4A Rent Increase Pack | Market Evidence | £24.99"
+  },
+  {
+    "route": "/products/section-13-defence",
+    "finalUrl": "http://localhost:5000/products/section-13-defence",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/products/section-13-defence",
+    "h1s": [
+      "Prepare for a Section 13 rent challenge before it lands."
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard/flow?type=rent_increase&product=section13_defensive&src=product_page&topic=general",
+    "primaryLabel": "Build my tribunal-ready file - £34.99",
+    "robots": "index, follow",
+    "title": "Section 13 Rent Challenge Pack | Tribunal-Ready | £34.99"
+  },
+  {
+    "route": "/section-21-notice-template",
+    "finalUrl": "http://localhost:5000/section-21-notice",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/section-21-notice",
+    "h1s": [
+      "Section 21 Notice"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/products/notice-only",
+    "primaryLabel": "Start eviction notice pack",
+    "robots": "index, follow",
+    "title": "Section 21 Notice | Historical-Only Transition Guide for England"
+  },
+  {
+    "route": "/section-8-notice-template",
+    "finalUrl": "http://localhost:5000/section-8-notice-template",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/section-8-notice-template",
+    "h1s": [
+      "Serve a Section 8 notice without date or service mistakes"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/products/notice-only",
+    "primaryLabel": "Create my Section 8 notice - £39.99",
+    "robots": "index, follow",
+    "title": "Serve a Section 8 Notice Without Date or Service Mistakes"
+  },
+  {
+    "route": "/n5b-form-guide",
+    "finalUrl": "http://localhost:5000/n5-n119-possession-claim",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/n5-n119-possession-claim",
+    "h1s": [
+      "Prepare N5 and N119 court papers after notice"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/products/complete-pack",
+    "primaryLabel": "Start Complete Pack",
+    "robots": "index, follow",
+    "title": "Prepare N5 and N119 Court Papers After Notice"
+  },
+  {
+    "route": "/n5b-possession-claim-form",
+    "finalUrl": "http://localhost:5000/n5-n119-possession-claim",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/n5-n119-possession-claim",
+    "h1s": [
+      "Prepare N5 and N119 court papers after notice"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/products/complete-pack",
+    "primaryLabel": "Start Complete Pack",
+    "robots": "index, follow",
+    "title": "Prepare N5 and N119 Court Papers After Notice"
+  },
+  {
+    "route": "/section-21-checklist",
+    "finalUrl": "http://localhost:5000/section-21-notice",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/section-21-notice",
+    "h1s": [
+      "Section 21 Notice"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/products/notice-only",
+    "primaryLabel": "Start eviction notice pack",
+    "robots": "index, follow",
+    "title": "Section 21 Notice | Historical-Only Transition Guide for England"
+  },
+  {
+    "route": "/form-6a-section-21",
+    "finalUrl": "http://localhost:5000/section-21-notice",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/section-21-notice",
+    "h1s": [
+      "Section 21 Notice"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/products/notice-only",
+    "primaryLabel": "Start eviction notice pack",
+    "robots": "index, follow",
+    "title": "Section 21 Notice | Historical-Only Transition Guide for England"
+  },
+  {
+    "route": "/section-21-court-pack",
+    "finalUrl": "http://localhost:5000/products/complete-pack",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/products/complete-pack",
+    "h1s": [
+      "Section 8 possession claim pack with N5 and N119"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard/flow?type=eviction&product=complete_pack&src=product_page&topic=eviction",
+    "primaryLabel": "Prepare my court pack",
+    "robots": "index, follow",
+    "title": "Prepare Section 8 Court Papers | N5 & N119 | £69.99"
+  },
+  {
+    "route": "/section-8-court-pack",
+    "finalUrl": "http://localhost:5000/products/complete-pack",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/products/complete-pack",
+    "h1s": [
+      "Section 8 possession claim pack with N5 and N119"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard/flow?type=eviction&product=complete_pack&src=product_page&topic=eviction",
+    "primaryLabel": "Prepare my court pack",
+    "robots": "index, follow",
+    "title": "Prepare Section 8 Court Papers | N5 & N119 | £69.99"
+  },
+  {
+    "route": "/complete-eviction-pack-england",
+    "finalUrl": "http://localhost:5000/products/complete-pack",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/products/complete-pack",
+    "h1s": [
+      "Section 8 possession claim pack with N5 and N119"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard/flow?type=eviction&product=complete_pack&src=product_page&topic=eviction",
+    "primaryLabel": "Prepare my court pack",
+    "robots": "index, follow",
+    "title": "Prepare Section 8 Court Papers | N5 & N119 | £69.99"
+  },
+  {
+    "route": "/eviction-pack-england",
+    "finalUrl": "http://localhost:5000/products/complete-pack",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/products/complete-pack",
+    "h1s": [
+      "Section 8 possession claim pack with N5 and N119"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/wizard/flow?type=eviction&product=complete_pack&src=product_page&topic=eviction",
+    "primaryLabel": "Prepare my court pack",
+    "robots": "index, follow",
+    "title": "Prepare Section 8 Court Papers | N5 & N119 | £69.99"
+  },
+  {
+    "route": "/section-21-notice-generator",
+    "finalUrl": "http://localhost:5000/section-21-notice",
+    "blockedClaim": false,
+    "canonical": "https://landlordheaven.co.uk/section-21-notice",
+    "h1s": [
+      "Section 21 Notice"
+    ],
+    "hero": true,
+    "overflow": false,
+    "primaryHref": "/products/notice-only",
+    "primaryLabel": "Start eviction notice pack",
+    "robots": "index, follow",
+    "title": "Section 21 Notice | Historical-Only Transition Guide for England"
+  }
+]

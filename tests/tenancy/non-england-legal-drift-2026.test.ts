@@ -268,7 +268,7 @@ describe('2026 non-England tenancy legal drift safeguards', () => {
       ).toBe(true);
       expect(
         NON_ENGLAND_STANDARD_TENANCY_CERTIFICATION[jurisdiction]
-          .solicitorApproved
+          .prescribedDocumentWorkflowVerified
       ).toBe(true);
       expect(
         NON_ENGLAND_STANDARD_TENANCY_CERTIFICATION[jurisdiction].releaseEnabled

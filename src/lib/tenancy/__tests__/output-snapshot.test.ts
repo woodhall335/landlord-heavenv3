@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  assertTenancySnapshotInputConsistency,
   assertTenancyOutputSnapshotIntegrity,
   hashTenancySnapshotPayload,
   type TenancyOutputSnapshot,
@@ -52,5 +53,94 @@ describe('tenancy output snapshot integrity', () => {
     expect(() => assertTenancyOutputSnapshotIntegrity(changedEntitlement)).toThrow(
       /integrity check failed|entitlement mismatch/
     );
+  });
+
+  it.each([
+    { paidType: 'fixed', paidFlag: true, manipulatedFlag: false },
+    { paidType: 'periodic', paidFlag: false, manipulatedFlag: true },
+  ])(
+    'rejects changing a paid Wales $paidType contract to the other contract type',
+    ({ paidFlag, manipulatedFlag }) => {
+      const paidSnapshot = snapshot();
+      paidSnapshot.jurisdiction = 'wales';
+      paidSnapshot.wizard_answers = {
+        ...paidSnapshot.wizard_answers,
+        is_fixed_term: paidFlag,
+      };
+
+      const core = {
+        order_id: paidSnapshot.order_id,
+        case_id: paidSnapshot.case_id,
+        user_id: paidSnapshot.user_id,
+        product_type: paidSnapshot.product_type,
+        jurisdiction: paidSnapshot.jurisdiction,
+        schema_version: paidSnapshot.schema_version,
+        source_version: paidSnapshot.source_version,
+        wizard_answers: paidSnapshot.wizard_answers,
+        derived_fields: paidSnapshot.derived_fields,
+        clause_decisions: paidSnapshot.clause_decisions,
+        attachment_states: paidSnapshot.attachment_states,
+        entitlement_reference: paidSnapshot.entitlement_reference,
+      };
+      paidSnapshot.content_sha256 = hashTenancySnapshotPayload(core);
+      expect(() => assertTenancyOutputSnapshotIntegrity(paidSnapshot)).not.toThrow();
+
+      paidSnapshot.wizard_answers = {
+        ...paidSnapshot.wizard_answers,
+        is_fixed_term: manipulatedFlag,
+      };
+      expect(() => assertTenancyOutputSnapshotIntegrity(paidSnapshot)).toThrow(
+        /integrity check failed/
+      );
+    }
+  );
+
+  it('rejects a Scotland case carrying Wales wizard state', () => {
+    expect(() =>
+      assertTenancySnapshotInputConsistency({
+        productType: 'ast_standard',
+        jurisdiction: 'scotland',
+        wizardAnswers: {
+          jurisdiction: 'wales',
+          contract_type: 'periodic',
+        },
+      })
+    ).toThrow(/jurisdiction mismatch/i);
+  });
+
+  it('rejects England and Premium products for a non-England snapshot', () => {
+    expect(() =>
+      assertTenancySnapshotInputConsistency({
+        productType: 'england_standard_tenancy_agreement',
+        jurisdiction: 'northern-ireland',
+        wizardAnswers: { jurisdiction: 'northern-ireland' },
+      })
+    ).toThrow(/not available/i);
+
+    expect(() =>
+      assertTenancySnapshotInputConsistency({
+        productType: 'ast_premium',
+        jurisdiction: 'wales',
+        wizardAnswers: {
+          jurisdiction: 'wales',
+          contract_type: 'fixed',
+          is_fixed_term: true,
+        },
+      })
+    ).toThrow(/not available/i);
+  });
+
+  it('requires a consistent Wales fixed or periodic selection', () => {
+    expect(() =>
+      assertTenancySnapshotInputConsistency({
+        productType: 'ast_standard',
+        jurisdiction: 'wales',
+        wizardAnswers: {
+          jurisdiction: 'wales',
+          contract_type: 'fixed',
+          is_fixed_term: false,
+        },
+      })
+    ).toThrow(/conflicts/i);
   });
 });

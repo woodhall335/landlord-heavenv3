@@ -12,6 +12,7 @@ import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { jointOccupationContractFAQs } from '@/data/faqs';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { getReleasedStandardTenancyEntry } from '@/lib/tenancy/agreement-registry';
 import {
   CheckCircle,
   Clock,
@@ -30,7 +31,10 @@ const PAGE_PATH = '/joint-occupation-contract-wales';
 const PAGE_TITLE = 'Joint Occupation Contract Wales Landlord Guide';
 const PAGE_TYPE = 'tenancy' as const;
 
-const astProductHref = '/products/ast';
+const astProductHref = getReleasedStandardTenancyEntry(
+  'wales',
+  'fixed_term_standard_occupation_contract'
+).detailsRoute;
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -114,15 +118,15 @@ export default function JointOccupationContractWalesPage() {
             href: astProductHref,
           }}
           secondaryCta={{
-            label: 'Premium Contract with Extra Protection',
-            href: astProductHref,
+            label: 'Compare fixed-term and periodic contracts',
+            href: '/fixed-term-periodic-occupation-contract-wales',
           }}
         >
           {/* Trust Signals */}
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
             <span className="flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-green-500" />
-              Renting Homes Act 2016 Compliant
+              Wales-specific standard contract route
             </span>
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-green-500" />
@@ -491,102 +495,17 @@ export default function JointOccupationContractWalesPage() {
           </div>
         </section>
 
-        {/* Standard vs Premium Section */}
-        <section className="py-16 lg:py-20 bg-gray-50">
+        <section className="bg-gray-50 py-16 lg:py-20">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Standard vs Premium Joint Contract
-              </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Choose the right level of protection for letting to multiple contract-holders.
+            <div className="mx-auto max-w-4xl rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-sm">
+              <h2 className="text-3xl font-bold text-gray-900">Joint holders use the standard Wales route</h2>
+              <p className="mx-auto mt-4 max-w-2xl text-gray-600">
+                Enter every contract-holder in the standard Wales wizard. Choose fixed-term or
+                periodic before starting; only the released standard product is offered.
               </p>
-
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="bg-white rounded-2xl p-6 border-2 border-gray-200 shadow-sm">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Standard Contract</h3>
-                  <p className="text-2xl font-bold text-primary mb-4">
-                    {PRODUCTS.ast_standard.displayPrice}
-                  </p>
-                  <p className="text-gray-600 mb-6">
-                    Complete joint occupation contract with all essential terms for multiple
-                    contract-holders.
-                  </p>
-                  <ul className="space-y-3 mb-6">
-                    <li className="flex items-start gap-2 text-gray-600">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Joint and several liability clause</span>
-                    </li>
-                    <li className="flex items-start gap-2 text-gray-600">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>All fundamental terms included</span>
-                    </li>
-                    <li className="flex items-start gap-2 text-gray-600">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Deposit protection clauses</span>
-                    </li>
-                    <li className="flex items-start gap-2 text-gray-600">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Written statement format</span>
-                    </li>
-                    <li className="flex items-start gap-2 text-gray-600">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Space for multiple names</span>
-                    </li>
-                  </ul>
-                  <Link
-                    href={astProductHref}
-                    className="block w-full text-center bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
-                  >
-                    Create Standard Contract
-                  </Link>
-                </div>
-
-                <div className="bg-white rounded-2xl p-6 border-2 border-primary shadow-lg relative">
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-white text-sm px-3 py-1 rounded-full">
-                    Recommended
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Premium Contract</h3>
-                  <p className="text-2xl font-bold text-primary mb-4">
-                    {PRODUCTS.ast_premium.displayPrice}
-                  </p>
-                  <p className="text-gray-600 mb-6">
-                    Enhanced protection for complex joint lettings with additional clauses.
-                  </p>
-                  <ul className="space-y-3 mb-6">
-                    <li className="flex items-start gap-2 text-gray-600">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Everything in Standard</span>
-                    </li>
-                    <li className="flex items-start gap-2 text-gray-600">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Guarantor agreement included</span>
-                    </li>
-                    <li className="flex items-start gap-2 text-gray-600">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Detailed shared area responsibilities</span>
-                    </li>
-                    <li className="flex items-start gap-2 text-gray-600">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Break clause options</span>
-                    </li>
-                    <li className="flex items-start gap-2 text-gray-600">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Professional cleaning clause</span>
-                    </li>
-                    <li className="flex items-start gap-2 text-gray-600">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Pet policy clauses</span>
-                    </li>
-                  </ul>
-                  <Link
-                    href={astProductHref}
-                    className="block w-full text-center bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
-                  >
-                    Create Premium Contract
-                  </Link>
-                </div>
-              </div>
+              <Link href={astProductHref} className="hero-btn-primary mt-6 inline-flex">
+                Choose fixed-term or periodic
+              </Link>
             </div>
           </div>
         </section>
@@ -663,7 +582,7 @@ export default function JointOccupationContractWalesPage() {
                 pagePath={PAGE_PATH}
                 jurisdiction="wales"
                 title="Create Your Joint Welsh Contract Today"
-                description="Joint and several liability. Renting Homes Act compliant. Written statement included. Ready in minutes."
+                description="Add each contract-holder and prepare the released standard Wales contract through the jurisdiction-specific wizard."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />

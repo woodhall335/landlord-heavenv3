@@ -204,10 +204,24 @@ export function templateContainsForbiddenHMO(
     // Check for unconditional presence (not wrapped in {{#if}})
     // We're looking for hard-coded HMO sections, not conditional ones
     if (templateContent.includes(marker)) {
-      // Make sure it's not inside a comment
+      // Make sure it is neither inside a comment nor an explicitly conditional
+      // HMO block. A standard agreement can record HMO facts when the property
+      // is an HMO without becoming a separate HMO/Premium product.
       const index = templateContent.indexOf(marker);
       const beforeMarker = templateContent.slice(Math.max(0, index - 50), index);
-      if (!beforeMarker.includes('{{!--') && !beforeMarker.includes('{{!')) {
+      const lastHmoConditional = templateContent.lastIndexOf(
+        '{{#if is_hmo}}',
+        index
+      );
+      const lastConditionalClose = templateContent.lastIndexOf('{{/if}}', index);
+      const isInsideConditionalHmoBlock =
+        lastHmoConditional !== -1 && lastHmoConditional > lastConditionalClose;
+
+      if (
+        !beforeMarker.includes('{{!--') &&
+        !beforeMarker.includes('{{!') &&
+        !isInsideConditionalHmoBlock
+      ) {
         foundMarkers.push(marker);
       }
     }

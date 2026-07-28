@@ -176,3 +176,34 @@ export const TENANCY_AGREEMENT_REGISTRY: readonly TenancyAgreementRegistryEntry[
     releaseStatus: nonEnglandReleaseStatus('northern-ireland'),
   },
 ] as const;
+
+export function getReleasedStandardTenancyEntries(
+  jurisdiction: TenancyAgreementRegistryEntry['jurisdiction']
+): readonly TenancyAgreementRegistryEntry[] {
+  return TENANCY_AGREEMENT_REGISTRY.filter(
+    (entry) =>
+      entry.jurisdiction === jurisdiction &&
+      entry.releaseStatus === 'available' &&
+      entry.standardAvailable &&
+      !entry.premiumAvailable
+  );
+}
+
+export function getReleasedStandardTenancyEntry(
+  jurisdiction: TenancyAgreementRegistryEntry['jurisdiction'],
+  agreementType?: string
+): TenancyAgreementRegistryEntry {
+  const matches = getReleasedStandardTenancyEntries(jurisdiction).filter(
+    (entry) => !agreementType || entry.agreementType === agreementType
+  );
+
+  if (matches.length !== 1) {
+    throw new Error(
+      `Expected one released standard tenancy entry for ${jurisdiction}${
+        agreementType ? ` (${agreementType})` : ''
+      }, found ${matches.length}`
+    );
+  }
+
+  return matches[0];
+}

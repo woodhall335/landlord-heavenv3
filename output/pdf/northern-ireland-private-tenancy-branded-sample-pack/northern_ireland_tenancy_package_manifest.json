@@ -1,0 +1,54 @@
+{
+  "manifest_version": "tenancy-package-manifest.v1",
+  "case_id": "CERT-northern-ireland-private-tenancy-branded-sample",
+  "jurisdiction": "northern-ireland",
+  "source_version": "2026-07-27",
+  "inventory": {
+    "status": "attached",
+    "due_date": null,
+    "included": true,
+    "agreement_contains_appended_inventory": true
+  },
+  "deposit": {
+    "lifecycle": "expected",
+    "prescribed_information_supplied": false
+  },
+  "documents": [
+    {
+      "title": "Private Tenancy Agreement",
+      "document_type": "private_tenancy_agreement",
+      "file_name": "tenancy_agreement.pdf",
+      "sha256": "57b997219fc43b2d00702c0de1a20de099daa592a9654da71015b8d349a82ddf"
+    },
+    {
+      "title": "Inventory & Schedule of Condition",
+      "document_type": "inventory_schedule",
+      "file_name": "inventory_schedule.pdf",
+      "sha256": "56fa8036edcfc82a9875b94617836bf9aa7aedf3c03a85eca81db3e1f25ba3cb"
+    },
+    {
+      "title": "Pre-Tenancy Compliance Checklist (Northern Ireland)",
+      "document_type": "pre_tenancy_checklist_northern_ireland",
+      "file_name": "compliance_checklist.pdf",
+      "sha256": "ac3b839a27b819878e9929d94a1fbf50b171872fac8f4dc389eb308400ac773b"
+    },
+    {
+      "title": "Northern Ireland Rent Book",
+      "document_type": "rent_book_northern_ireland",
+      "file_name": "northern_ireland_rent_book.pdf",
+      "sha256": "7ba599198392aa9026fd2a3eaf94073123406c39ae14626911cec14bf8bd778f"
+    },
+    {
+      "title": "Landlord’s Notice Relating to the Granting of a Private Tenancy",
+      "document_type": "tenancy_information_notice_northern_ireland",
+      "file_name": "northern_ireland_tenancy_information_notice.pdf",
+      "sha256": "7ad6a7765ee8e391f2d2751b9ffce9128100e9ad5a4b44972535861d066dd1ba"
+    },
+    {
+      "title": "Tenancy Information Notice Completion Guidance",
+      "document_type": "tenancy_information_notice_guidance_northern_ireland",
+      "file_name": "northern_ireland_tenancy_information_notice_guidance.pdf",
+      "sha256": "c9f46ddc973d838a4aa0e32724f8dd74b1c7ec04eb17d85c02fa667949dca94b"
+    }
+  ]
+}

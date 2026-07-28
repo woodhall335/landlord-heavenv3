@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { EnglandTenancyPage } from '@/components/seo/EnglandTenancyPage';
+import { TenancyJurisdictionSelector } from '@/components/tenancy/TenancyJurisdictionSelector';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import { getProductSamplePageByPackKey } from '@/lib/marketing/product-sample-pages';
 import { PRODUCTS } from '@/lib/pricing/products';
@@ -18,8 +19,9 @@ const standardSamplePage = getProductSamplePageByPackKey('england_standard_tenan
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: PRODUCT_OWNER_METADATA.standardTenancy.title,
-  description: PRODUCT_OWNER_METADATA.standardTenancy.description,
+  title: 'Standard Tenancy Agreements for England, Wales, Scotland and Northern Ireland',
+  description:
+    'Choose the property jurisdiction and create the currently released standard tenancy agreement for England, Wales, Scotland or Northern Ireland.',
   keywords: [
     'standard periodic tenancy agreement',
     'standard periodic tenancy agreement england',
@@ -28,7 +30,7 @@ export const metadata: Metadata = {
     'current England tenancy agreement',
     'standard England tenancy agreement',
     'current tenancy agreement',
-    'Renters Rights Act compliant tenancy agreement',
+    'Renters Rights Act tenancy agreement',
     'post-May 2026 periodic tenancy',
     'england standard periodic tenancy agreement',
     'assured periodic tenancy agreement england',
@@ -44,8 +46,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: PRODUCT_OWNER_METADATA.standardTenancy.title,
-    description: PRODUCT_OWNER_METADATA.standardTenancy.description,
+    title: 'Choose a Standard Tenancy Agreement by UK Jurisdiction',
+    description:
+      'Start the correct released standard tenancy agreement for the property jurisdiction, including separate fixed-term and periodic options for Wales.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -71,12 +74,18 @@ export default function StandardTenancyAgreementPage() {
       />
       <EnglandTenancyPage
         pagePath="/standard-tenancy-agreement"
-        title="Create a standard England tenancy agreement pack"
-        subtitle="Use this standard periodic tenancy agreement pack if you are letting a whole property in England and want current wording, setup records, validation checks, and preview before payment without student, HMO, lodger, or Premium-level management wording."
-        primaryCtaLabel="Create my Standard agreement"
-        primaryCtaHref={standardWizardHref}
-        secondaryCtaLabel="Read periodic tenancy guide"
-        secondaryCtaHref="/periodic-tenancy-agreement"
+        title="Choose the standard tenancy agreement for your property"
+        subtitle="Property law and agreement terminology differ across the UK. Choose England, Wales, Scotland or Northern Ireland before starting so the wizard asks the right jurisdiction-specific questions."
+        primaryCtaLabel="Choose property jurisdiction"
+        primaryCtaHref="#choose-jurisdiction"
+        secondaryCtaLabel="Compare England agreements"
+        secondaryCtaHref="/tenancy-agreements/england"
+        heroPreTitleLabel="Standard tenancy agreements"
+        heroBadge="England, Wales, Scotland and Northern Ireland"
+        heroTrustText="Released standard agreement routes for England, Wales, Scotland and Northern Ireland."
+        heroFeature="Wales includes separate Fixed-Term and Periodic Standard Occupation Contract choices."
+        showHeroTrustPositioningBar={false}
+        afterHero={<TenancyJurisdictionSelector />}
         workflowImageLink={{
           href: standardWizardHref,
           desktopSrc: '/images/standard-tenancy-desktop.webp',
@@ -93,7 +102,7 @@ export default function StandardTenancyAgreementPage() {
         ]}
         highlights={[
           'Standard periodic tenancy agreement for a straightforward whole-property residential let',
-          "Renters' Rights Act compliant tenancy agreement with current wording",
+          "Current England periodic tenancy wording for the post-May 2026 framework",
           'Keeps the wording and pack paperwork practical and proportionate',
           'Separate from the Premium, Student, HMO / Shared House, and Lodger routes',
           'Review-ready guided agreement pack with validation checks and a preview before payment',
@@ -134,7 +143,7 @@ export default function StandardTenancyAgreementPage() {
             description:
               'The current England agreement for a straightforward whole-property let, with setup records, key clauses, and practical landlord wording.',
             href: '/standard-tenancy-agreement',
-            ctaLabel: 'Build my validated Standard pack',
+            ctaLabel: 'Build my Standard pack',
             imageSrc: '/images/wizard-standard-tenancy-agreement.webp',
             imageAlt: 'Standard tenancy agreement preview',
             price: PRODUCTS.england_standard_tenancy_agreement.displayPrice,
@@ -165,7 +174,7 @@ export default function StandardTenancyAgreementPage() {
             description:
               'The fuller current England option for ordinary residential lets that need stronger management wording.',
             href: '/premium-tenancy-agreement',
-            ctaLabel: 'Build my validated Premium pack',
+            ctaLabel: 'Build my Premium pack',
             imageSrc: '/images/wizard-premium-tenancy-agreement.webp',
             imageAlt: 'Premium tenancy agreement preview',
             price: PRODUCTS.england_premium_tenancy_agreement.displayPrice,

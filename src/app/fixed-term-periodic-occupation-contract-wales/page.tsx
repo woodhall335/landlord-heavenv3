@@ -11,6 +11,7 @@ import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { getReleasedStandardTenancyEntry } from '@/lib/tenancy/agreement-registry';
 import {
   CheckCircle,
   Clock,
@@ -28,7 +29,14 @@ const PAGE_PATH = '/fixed-term-periodic-occupation-contract-wales';
 const PAGE_TITLE = 'Fixed Term vs Periodic Occupation Contract Wales Guide';
 const PAGE_TYPE = 'tenancy' as const;
 
-const astProductHref = '/products/ast';
+const fixedContractHref = `${getReleasedStandardTenancyEntry(
+  'wales',
+  'fixed_term_standard_occupation_contract'
+).startRoute}&src=fixed_periodic_wales_guide&topic=tenancy`;
+const periodicContractHref = `${getReleasedStandardTenancyEntry(
+  'wales',
+  'periodic_standard_occupation_contract'
+).startRoute}&src=fixed_periodic_wales_guide&topic=tenancy`;
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -145,18 +153,18 @@ export default function FixedTermPeriodicOccupationContractWalesPage() {
             </>
           }
           primaryCta={{
-            label: `Create Standard Contract — ${PRODUCTS.ast_standard.displayPrice}`,
-            href: astProductHref,
+            label: `Create Fixed-Term Contract — ${PRODUCTS.ast_standard.displayPrice}`,
+            href: fixedContractHref,
           }}
           secondaryCta={{
-            label: `Create Premium Contract — ${PRODUCTS.ast_premium.displayPrice}`,
-            href: astProductHref,
+            label: `Create Periodic Contract — ${PRODUCTS.ast_standard.displayPrice}`,
+            href: periodicContractHref,
           }}
         >
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-700 mt-4">
             <span className="flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-green-500" />
-              Renting Homes (Wales) Act 2016 compliant
+              Separate fixed-term and periodic choices
             </span>
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-green-500" />
@@ -465,104 +473,38 @@ export default function FixedTermPeriodicOccupationContractWalesPage() {
                 </p>
 
                 <p>
-                  For that reason, premium contracts often make more sense where flexibility is
-                  important. They can include wording that is better suited to more nuanced
-                  arrangements.
+                  For that reason, choose the fixed-term or periodic standard route according to
+                  the letting structure and record any agreed break-clause details accurately in
+                  the wizard.
                 </p>
               </div>
 
               <div className="mt-8 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
                 <p className="text-blue-900 text-sm">
-                  <strong>Premium occupation contracts</strong> can be a better choice where you want
-                  break clause options, more bespoke terms, or added flexibility for real-world
-                  letting scenarios.
+                  <strong>Only standard Wales contracts are currently offered.</strong> The wizard
+                  keeps the fixed-term or periodic selection attached to the case and generated
+                  document.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="py-16 lg:py-20 bg-gray-50">
+        <section className="bg-gray-50 py-16 lg:py-20">
           <div className="container mx-auto px-4">
-            <div className="max-w-5xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Standard vs Premium Occupation Contract
+            <div className="mx-auto max-w-5xl">
+              <h2 className="text-center text-3xl font-bold text-gray-900">
+                Choose the Wales standard contract type
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
-                Choose the Welsh contract package that matches the level of flexibility and coverage you need.
-              </p>
-
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="bg-white rounded-2xl p-6 border-2 border-gray-200 shadow-sm text-gray-900">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Standard Contract</h3>
-                  <p className="text-2xl font-bold text-red-600 mb-4">
-                    {PRODUCTS.ast_standard.displayPrice}
-                  </p>
-                  <p className="text-gray-700 mb-6">
-                    Suitable for many straightforward Welsh fixed-term or periodic lettings.
-                  </p>
-                  <ul className="space-y-3 mb-6">
-                    <li className="flex items-start gap-2 text-gray-700">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Fixed-term or periodic options</span>
-                    </li>
-                    <li className="flex items-start gap-2 text-gray-700">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Fundamental terms included</span>
-                    </li>
-                    <li className="flex items-start gap-2 text-gray-700">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Written statement format</span>
-                    </li>
-                    <li className="flex items-start gap-2 text-gray-700">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Suitable for many standard private lets</span>
-                    </li>
-                  </ul>
-                  <Link
-                    href={astProductHref}
-                    className="block w-full text-center bg-red-600 text-white py-3 rounded-lg font-medium hover:bg-red-700 transition-colors"
-                  >
-                    Create Standard Contract
-                  </Link>
-                </div>
-
-                <div className="bg-white rounded-2xl p-6 border-2 border-red-200 shadow-lg relative text-gray-900">
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-red-600 text-white text-sm px-3 py-1 rounded-full">
-                    Recommended
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Premium Contract</h3>
-                  <p className="text-2xl font-bold text-red-700 mb-4">
-                    {PRODUCTS.ast_premium.displayPrice}
-                  </p>
-                  <p className="text-gray-700 mb-6">
-                    Better for landlords who want added flexibility, extra clauses or more detailed protection.
-                  </p>
-                  <ul className="space-y-3 mb-6">
-                    <li className="flex items-start gap-2 text-gray-700">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Everything in Standard</span>
-                    </li>
-                    <li className="flex items-start gap-2 text-gray-700">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Break clause options</span>
-                    </li>
-                    <li className="flex items-start gap-2 text-gray-700">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Useful for more tailored terms</span>
-                    </li>
-                    <li className="flex items-start gap-2 text-gray-700">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Helpful for more complex letting scenarios</span>
-                    </li>
-                  </ul>
-                  <Link
-                    href={astProductHref}
-                    className="block w-full text-center bg-red-700 text-white py-3 rounded-lg font-medium hover:bg-red-800 transition-colors"
-                  >
-                    Create Premium Contract
-                  </Link>
-                </div>
+              <div className="mt-10 grid gap-8 md:grid-cols-2">
+                <Link href={fixedContractHref} className="rounded-2xl border-2 border-red-200 bg-white p-8 shadow-sm transition hover:border-red-500">
+                  <h3 className="text-xl font-bold text-gray-900">Fixed-Term Standard Occupation Contract</h3>
+                  <p className="mt-3 text-gray-700">Use when the agreement has a recorded fixed term.</p>
+                </Link>
+                <Link href={periodicContractHref} className="rounded-2xl border-2 border-red-200 bg-white p-8 shadow-sm transition hover:border-red-500">
+                  <h3 className="text-xl font-bold text-gray-900">Periodic Standard Occupation Contract</h3>
+                  <p className="mt-3 text-gray-700">Use when the agreement runs periodically from the start.</p>
+                </Link>
               </div>
             </div>
           </div>
@@ -646,7 +588,7 @@ export default function FixedTermPeriodicOccupationContractWalesPage() {
                 pagePath={PAGE_PATH}
                 jurisdiction="wales"
                 title="Create Your Welsh Occupation Contract"
-                description="Fixed-term or periodic. Break clause options. Renting Homes (Wales) Act compliant. Ready in minutes."
+                description="Choose fixed-term or periodic, then continue through the Wales-specific standard contract wizard."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />

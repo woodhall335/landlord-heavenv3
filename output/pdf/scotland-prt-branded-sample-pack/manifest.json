@@ -1,6 +1,6 @@
 {
   "sample": "scotland-prt-branded-sample.pdf",
-  "generatedOn": "2026-07-27",
+  "generatedOn": "2026-07-28",
   "jurisdiction": "scotland",
   "tenancyStartDate": "2026-09-01",
   "inventoryMode": "attached",
@@ -11,9 +11,9 @@
       "category": "agreement",
       "documentType": "prt_agreement",
       "fileName": "tenancy_agreement.pdf",
-      "bytes": 612137,
+      "bytes": 612488,
       "pages": 27,
-      "sha256": "c7ca7e32b4642c2fa592206c3fab3ac06b6d499808b5065c0a0b5e93b9d000aa",
+      "sha256": "fad27585488ae71bbb9957ff3e8b3513ce8042d205b8c4d65c56bf5895e768ec",
       "openCheck": "passed"
     },
     {
@@ -21,9 +21,9 @@
       "category": "schedule",
       "documentType": "inventory_schedule",
       "fileName": "inventory_schedule.pdf",
-      "bytes": 359045,
+      "bytes": 359253,
       "pages": 9,
-      "sha256": "67e0e5ef5e564808e60c398af486ea63005440d03d4db4b8515b3542a8a900f8",
+      "sha256": "8995fd4e32049a57a30b1f69c5444ef4cea7b8686441eaaf06dfbf0de6a95f05",
       "openCheck": "passed"
     },
     {
@@ -31,9 +31,9 @@
       "category": "checklist",
       "documentType": "pre_tenancy_checklist_scotland",
       "fileName": "compliance_checklist.pdf",
-      "bytes": 239400,
+      "bytes": 239870,
       "pages": 3,
-      "sha256": "9900a8d303c031c04aedc3cb606dd28bdd6aa2df7dfc43a06580611a16b91b40",
+      "sha256": "bb66bebe9cc031adbf1e6da2c20cc8ce05bb62a1c48a5b55e930256ca3b569f7",
       "openCheck": "passed"
     },
     {

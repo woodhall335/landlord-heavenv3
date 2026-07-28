@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { TenancyPackSection } from '@/components/value-proposition';
 import { getCanonicalUrl } from '@/lib/seo/urls';
@@ -168,6 +170,7 @@ export default function WalesOccupationContractPage() {
 
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
@@ -181,68 +184,31 @@ export default function WalesOccupationContractPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-red-50 via-red-100 to-red-50 pt-20 text-gray-900">
-        {/* Breadcrumb Navigation */}
-        <div className="container mx-auto px-4 py-4">
-          <nav className="text-sm text-gray-600">
-            <Link href="/" className="hover:text-red-600">
-              Home
-            </Link>
-            <span className="mx-2">/</span>
-            <Link href="/tenancy-agreements" className="hover:text-red-600">
-              Tenancy Agreements
-            </Link>
-            <span className="mx-2">/</span>
-            <span className="text-gray-900">Wales Occupation Contract</span>
-          </nav>
-        </div>
-
-        {/* Hero Section */}
-        <section className="container mx-auto px-4 py-16">
-          <div className="max-w-5xl mx-auto text-center">
-            <div className="flex justify-center mb-4">
-              <img src="/gb-wls.svg" alt="Wales flag" className="w-12 h-12" />
-            </div>
-
-            <div className="inline-flex items-center rounded-full bg-red-100 px-4 py-2 text-sm font-semibold text-red-800 mb-5">
-              Updated for 2026 • Based on the current Welsh model written statements
-            </div>
-
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-              Wales Occupation Contract Template
-            </h1>
-
-            <p className="text-xl text-gray-700 mb-4 max-w-4xl mx-auto">
-              Create a <strong>Wales occupation contract</strong> based on the{' '}
-              <strong>Renting Homes (Wales) Act 2016</strong> framework and the{' '}
-              <strong>written statement</strong> wording required for Welsh landlords.
-            </p>
-
-            <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
-              Since 1 December 2022, new residential tenancies in Wales use{' '}
-              <strong>Occupation Contracts</strong>, not English ASTs.
-            </p>
-
-            <div className="flex gap-4 justify-center flex-wrap">
-              <Link
-                href={fixedContractHref}
-                className="inline-flex items-center justify-center rounded-lg border-2 border-red-600 bg-white px-6 py-3 font-semibold text-red-600 shadow-sm transition-colors hover:bg-red-50"
-              >
-                {`Create Fixed-Term Contract - ${standardPrice}`}
-              </Link>
-              <Link
-                href={periodicContractHref}
-                className="inline-flex items-center justify-center rounded-lg border-2 border-red-600 bg-white px-6 py-3 font-semibold text-red-600 shadow-sm transition-colors hover:bg-red-50"
-              >
-                {`Create Periodic Contract - ${standardPrice}`}
-              </Link>
-            </div>
-
-            <p className="mt-4 text-sm text-gray-600">
-              Instant download • Written statement included • No subscription required
-            </p>
-          </div>
-        </section>
+      <main className="min-h-screen bg-gradient-to-br from-red-50 via-red-100 to-red-50 text-gray-900">
+        <UniversalHero
+          preTitleLabel="Wales tenancy agreements"
+          trustText="Standard occupation-contract routes based on the current Welsh model written statements."
+          title="Standard Occupation Contracts for Wales"
+          subtitle={
+            <>
+              Choose a <strong>Fixed-Term Standard Occupation Contract</strong> or a{' '}
+              <strong>Periodic Standard Occupation Contract</strong>. The selected type is
+              retained through the Wales-specific wizard.
+            </>
+          }
+          primaryCta={{
+            label: `Create Fixed-Term Contract - ${standardPrice}`,
+            href: fixedContractHref,
+          }}
+          secondaryCta={{
+            label: `Create Periodic Contract - ${standardPrice}`,
+            href: periodicContractHref,
+          }}
+          feature="For Welsh residential property. Do not use an English tenancy agreement for a Welsh let."
+          mediaSrc="/images/tenancy_agreements.webp"
+          mediaAlt="Wales standard occupation contract documents"
+          showTrustPositioningBar
+        />
 
         <section className="container mx-auto px-4 py-12">
           <TenancyPackSection
@@ -804,7 +770,7 @@ export default function WalesOccupationContractPage() {
             </p>
           </div>
         </section>
-      </div>
+      </main>
     </>
   );
 }

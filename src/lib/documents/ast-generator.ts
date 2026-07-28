@@ -1974,6 +1974,8 @@ export async function generateStandardASTDocuments(
       data: {
         ...enrichedData,
         inventory: hasInventoryData ? structuredInventory : null,
+        landlord_name: data.landlord_full_name,
+        tenant_names: data.tenants.map((tenant) => tenant.full_name).join(', '),
         case_id: caseId || documentId,
         timestamp: Date.now(),
       },

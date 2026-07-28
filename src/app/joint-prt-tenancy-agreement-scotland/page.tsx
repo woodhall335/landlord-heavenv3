@@ -12,6 +12,7 @@ import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { jointPrtFAQs } from '@/data/faqs';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { getReleasedStandardTenancyEntry } from '@/lib/tenancy/agreement-registry';
 import {
   CheckCircle,
   Clock,
@@ -20,11 +21,8 @@ import {
   FileText,
   Shield,
   AlertTriangle,
-  Home,
   Users,
   Gavel,
-  BadgeCheck,
-  XCircle,
   UserPlus,
   UserMinus,
 } from 'lucide-react';
@@ -34,7 +32,7 @@ const PAGE_PATH = '/joint-prt-tenancy-agreement-scotland';
 const PAGE_TITLE = 'Joint PRT Tenancy Agreement Scotland';
 const PAGE_TYPE = 'tenancy' as const;
 
-const astProductHref = '/products/ast';
+const astProductHref = `${getReleasedStandardTenancyEntry('scotland').startRoute}&src=joint_prt_guide&topic=tenancy`;
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -70,7 +68,7 @@ export default function JointPrtTenancyAgreementScotlandPage() {
     '@type': 'WebPage',
     name: 'Joint PRT Tenancy Agreement Scotland',
     description:
-      'Create a joint Private Residential Tenancy agreement for multiple tenants in Scotland. Compliant with the Private Housing (Tenancies) (Scotland) Act 2016.',
+      'Create a joint Private Residential Tenancy agreement for multiple tenants in Scotland using the released standard PRT route.',
     url: 'https://landlordheaven.co.uk/joint-prt-tenancy-agreement-scotland',
   };
 
@@ -115,8 +113,8 @@ export default function JointPrtTenancyAgreementScotlandPage() {
             href: astProductHref,
           }}
           secondaryCta={{
-            label: 'Premium Agreement with Extras',
-            href: astProductHref,
+            label: 'Read the Scottish model agreement guide',
+            href: '/scotland-prt-model-agreement-guide',
           }}
         >
           {/* Trust Signals */}
@@ -127,7 +125,7 @@ export default function JointPrtTenancyAgreementScotlandPage() {
             </span>
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-green-500" />
-              Tribunal-Ready
+              Scotland-specific PRT questions
             </span>
             <span className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-green-500" />
@@ -644,7 +642,7 @@ export default function JointPrtTenancyAgreementScotlandPage() {
                 pagePath={PAGE_PATH}
                 jurisdiction="scotland"
                 title="Create Your Joint PRT Agreement Today"
-                description="Joint and several liability included. Tribunal-ready. Compliant with the 2016 Act. Ready in minutes."
+                description="Add every tenant and prepare the released Scotland standard PRT through the jurisdiction-specific wizard."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />

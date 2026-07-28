@@ -93,6 +93,33 @@ const routeCards = [
   },
 ];
 
+const jurisdictionCards = [
+  {
+    title: 'England',
+    body: 'Landlord Heaven offers England notice and possession-pack workflows.',
+    href: '/how-to-evict-tenant',
+    label: 'Review the England route',
+  },
+  {
+    title: 'Wales',
+    body: 'Welsh occupation contracts and possession notices follow the Renting Homes framework.',
+    href: '/wales-eviction-notices',
+    label: 'Read the Wales guidance',
+  },
+  {
+    title: 'Scotland',
+    body: 'Scottish PRT possession uses Notice to Leave and the Scottish tribunal process.',
+    href: '/scotland-eviction-notices',
+    label: 'Read the Scotland guidance',
+  },
+  {
+    title: 'Northern Ireland',
+    body: 'Northern Ireland uses its own Notice to Quit and possession procedure.',
+    href: '/notice-to-quit-northern-ireland-guide',
+    label: 'Read the Northern Ireland guidance',
+  },
+] as const;
+
 export default function HowToEvictTenantUkPage() {
   return (
     <div className="min-h-screen bg-[#fcfaff]">
@@ -123,8 +150,10 @@ export default function HowToEvictTenantUkPage() {
       />
 
       <UniversalHero
-        title="How to evict a tenant in England"
-        subtitle="Use this page as the route explainer. If you need to serve notice first, start with the notice route. If the case is already moving toward possession paperwork and court, move straight into the complete pack."
+        preTitleLabel="UK jurisdiction route chooser"
+        trustText="Eviction procedure differs across England, Wales, Scotland and Northern Ireland."
+        title="How to evict a tenant: choose the property jurisdiction"
+        subtitle="Start with the country where the property is located. Landlord Heaven’s paid notice and possession products on this page are for England; the other jurisdictions link to their relevant guidance."
         mediaSrc="/images/wizard-icons/11-calendar-timeline.png"
         mediaAlt="England landlord eviction route"
         showReviewPill
@@ -133,43 +162,71 @@ export default function HowToEvictTenantUkPage() {
           <>
             <div className="w-full sm:w-auto">
               <TrackedLink
-                href="/products/complete-pack"
+                href="#jurisdiction-route"
                 pagePath="/how-to-evict-a-tenant-uk"
                 pageType="entry_page"
-                ctaLabel="View Complete Eviction Pack"
+                ctaLabel="Choose property jurisdiction"
                 ctaPosition="hero"
                 eventName="entry_page_primary_cta_click"
                 routeIntent="eviction_route"
-                product="complete_pack"
+                product="jurisdiction_route"
                 className="hero-btn-primary flex w-full justify-center text-center sm:w-auto"
               >
-                View Complete Eviction Pack
+                Choose property jurisdiction
               </TrackedLink>
             </div>
             <div className="w-full sm:w-auto">
               <TrackedLink
-                href="/products/notice-only"
+                href="/how-to-evict-tenant"
                 pagePath="/how-to-evict-a-tenant-uk"
                 pageType="entry_page"
-                ctaLabel="Start with notice only"
+                ctaLabel="Review England route"
                 ctaPosition="hero"
                 eventName="entry_page_secondary_cta_click"
                 routeIntent="eviction_route"
-                product="notice_only"
+                product="england_eviction_route"
                 className="hero-btn-secondary flex w-full justify-center text-center sm:w-auto"
               >
-                Start with notice only
+                Review England route
               </TrackedLink>
             </div>
           </>
         }
       >
         <ul className="mt-6 space-y-2 text-sm text-white/90 md:text-base">
-          <li>Built for landlords with property in England.</li>
-          <li>Helps you choose between notice-stage and court-stage support quickly.</li>
-          <li>Keeps the deeper guides available without making them the first click.</li>
+          <li>Choose the jurisdiction before relying on notice or court guidance.</li>
+          <li>England paid products are clearly separated from regional guidance.</li>
+          <li>No non-England visitor is sent directly into an England notice workflow.</li>
         </ul>
       </UniversalHero>
+
+      <section id="jurisdiction-route" className="border-b border-[#E6DBFF] bg-white py-10">
+        <Container>
+          <div className="mx-auto max-w-5xl">
+            <h2 className="text-3xl font-bold text-[#2a2161]">Select the property jurisdiction</h2>
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              {jurisdictionCards.map((card) => (
+                <TrackedLink
+                  key={card.title}
+                  href={card.href}
+                  pagePath="/how-to-evict-a-tenant-uk"
+                  pageType="entry_page"
+                  ctaLabel={card.label}
+                  ctaPosition="route_card"
+                  eventName="entry_page_secondary_cta_click"
+                  routeIntent="jurisdiction_route"
+                  product={`eviction_${card.title.toLowerCase().replaceAll(' ', '_')}`}
+                  className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 outline-none transition hover:border-primary focus-visible:ring-4 focus-visible:ring-primary/30"
+                >
+                  <h3 className="text-xl font-semibold text-[#2a2161]">{card.title}</h3>
+                  <p className="mt-2 leading-7 text-gray-700">{card.body}</p>
+                  <p className="mt-4 font-semibold text-primary">{card.label}</p>
+                </TrackedLink>
+              ))}
+            </div>
+          </div>
+        </Container>
+      </section>
 
       <section className="border-b border-[#E6DBFF] bg-white py-10">
         <Container>

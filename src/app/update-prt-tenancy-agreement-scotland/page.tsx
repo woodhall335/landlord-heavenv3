@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
@@ -12,19 +11,16 @@ import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { updatePrtFAQs } from '@/data/faqs';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { getReleasedStandardTenancyEntry } from '@/lib/tenancy/agreement-registry';
 import {
   CheckCircle,
   Clock,
-  ArrowRight,
   Scale,
   FileText,
   Shield,
   AlertTriangle,
-  Home,
   Users,
   Gavel,
-  BadgeCheck,
-  XCircle,
   RefreshCw,
   Edit,
   PoundSterling,
@@ -35,7 +31,7 @@ const PAGE_PATH = '/update-prt-tenancy-agreement-scotland';
 const PAGE_TITLE = 'Update PRT Tenancy Agreement Scotland';
 const PAGE_TYPE = 'tenancy' as const;
 
-const astProductHref = '/products/ast';
+const astProductHref = `${getReleasedStandardTenancyEntry('scotland').startRoute}&src=update_prt_guide&topic=tenancy`;
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -115,8 +111,8 @@ export default function UpdatePrtTenancyAgreementScotlandPage() {
             href: astProductHref,
           }}
           secondaryCta={{
-            label: 'Premium Agreement with Extras',
-            href: astProductHref,
+            label: 'Read the Scottish model agreement guide',
+            href: '/scotland-prt-model-agreement-guide',
           }}
           variant="pastel"
         >
@@ -124,11 +120,11 @@ export default function UpdatePrtTenancyAgreementScotlandPage() {
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
             <span className="flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-green-500" />
-              2016 Act Compliant
+              Scotland-specific standard PRT route
             </span>
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-green-500" />
-              Tribunal-Ready
+              Scottish PRT supporting notes
             </span>
             <span className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-green-500" />
@@ -694,7 +690,7 @@ export default function UpdatePrtTenancyAgreementScotlandPage() {
                 pagePath={PAGE_PATH}
                 jurisdiction="scotland"
                 title="Need a Fresh PRT Agreement?"
-                description="Major changes often call for a new agreement. Create a compliant PRT in minutes."
+                description="Major changes may call for a new agreement. Use the Scotland-specific standard PRT wizard."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />

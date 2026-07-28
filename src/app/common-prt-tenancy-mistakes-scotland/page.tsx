@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
@@ -12,18 +11,14 @@ import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { prtMistakesFAQs } from '@/data/faqs';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { getReleasedStandardTenancyEntry } from '@/lib/tenancy/agreement-registry';
 import {
   CheckCircle,
   Clock,
-  ArrowRight,
   Scale,
   FileText,
   Shield,
   AlertTriangle,
-  Home,
-  Users,
-  Gavel,
-  BadgeCheck,
   XCircle,
   AlertOctagon,
   Ban,
@@ -35,7 +30,7 @@ const PAGE_PATH = '/common-prt-tenancy-mistakes-scotland';
 const PAGE_TITLE = 'Common PRT Tenancy Mistakes Scotland';
 const PAGE_TYPE = 'tenancy' as const;
 
-const astProductHref = '/products/ast';
+const astProductHref = `${getReleasedStandardTenancyEntry('scotland').startRoute}&src=prt_mistakes_guide&topic=tenancy`;
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -111,12 +106,12 @@ export default function CommonPrtTenancyMistakesScotlandPage() {
             </>
           }
           primaryCta={{
-            label: `Create Compliant PRT — ${PRODUCTS.ast_standard.displayPrice}`,
+            label: `Create Standard PRT — ${PRODUCTS.ast_standard.displayPrice}`,
             href: astProductHref,
           }}
           secondaryCta={{
-            label: 'Premium Agreement with Extras',
-            href: astProductHref,
+            label: 'Read the Scottish model agreement guide',
+            href: '/scotland-prt-model-agreement-guide',
           }}
           variant="pastel"
         >
@@ -124,11 +119,11 @@ export default function CommonPrtTenancyMistakesScotlandPage() {
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
             <span className="flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-green-500" />
-              2016 Act Compliant
+              Scotland-specific standard PRT route
             </span>
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-green-500" />
-              Tribunal-Ready
+              Scotland-specific PRT questions
             </span>
             <span className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-green-500" />
@@ -186,8 +181,8 @@ export default function CommonPrtTenancyMistakesScotlandPage() {
                 </p>
                 <p>
                   The good news is that most mistakes are easily avoided with proper setup. This
-                  guide covers the most common errors we see and how to ensure your PRT is
-                  compliant from day one.
+                  guide covers the most common errors and the information to check before
+                  completing your PRT.
                 </p>
               </div>
             </div>
@@ -424,7 +419,7 @@ export default function CommonPrtTenancyMistakesScotlandPage() {
                 variant="section"
                 pagePath={PAGE_PATH}
                 jurisdiction="scotland"
-                title="Create a Compliant PRT Agreement"
+                title="Create a Standard PRT Agreement"
                 description="Avoid costly mistakes with a properly drafted PRT. All mandatory terms included. Ready in minutes."
               />
             </div>
@@ -768,7 +763,7 @@ export default function CommonPrtTenancyMistakesScotlandPage() {
                 pagePath={PAGE_PATH}
                 jurisdiction="scotland"
                 title="Get Your PRT Right From the Start"
-                description="A properly drafted PRT protects your ability to evict and claim rent. All mandatory terms included. Tribunal-ready."
+                description="Use the Scotland-specific standard PRT wizard and review the supporting notes before completing the agreement."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />

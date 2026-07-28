@@ -12,9 +12,9 @@ import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { fixedTermNIFAQs } from '@/data/faqs';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { getReleasedStandardTenancyEntry } from '@/lib/tenancy/agreement-registry';
 import {
   CheckCircle,
-  Clock,
   ArrowRight,
   Scale,
   FileText,
@@ -30,7 +30,7 @@ const PAGE_PATH = '/fixed-term-tenancy-agreement-northern-ireland';
 const PAGE_TITLE = 'Fixed Term Tenancy Agreement Northern Ireland';
 const PAGE_TYPE = 'tenancy' as const;
 
-const astProductHref = '/products/ast';
+const astProductHref = `${getReleasedStandardTenancyEntry('northern-ireland').startRoute}&src=fixed_term_ni_guide&topic=tenancy`;
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -120,7 +120,7 @@ export default function FixedTermTenancyAgreementNorthernIrelandPage() {
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
             <span className="flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-green-500" />
-              2022 Act Compliant
+              Northern Ireland-specific standard route
             </span>
             <span className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-green-500" />
@@ -377,7 +377,7 @@ export default function FixedTermTenancyAgreementNorthernIrelandPage() {
                         <li>• Allows early termination with notice</li>
                         <li>• Usually after minimum period (e.g., 6 months)</li>
                         <li>• Works both ways (landlord and tenant)</li>
-                        <li>• Included in Premium agreement</li>
+                        <li>• Include the agreed break-clause details in the standard wizard</li>
                       </ul>
                     </div>
                   </div>
@@ -397,7 +397,7 @@ export default function FixedTermTenancyAgreementNorthernIrelandPage() {
                 pagePath={PAGE_PATH}
                 jurisdiction="northern-ireland"
                 title="Create Your Fixed Term NI Tenancy Agreement"
-                description="Choose your fixed term length, add a break clause if needed, and get a compliant agreement in minutes."
+                description="Choose the fixed-term details and prepare the released Northern Ireland standard agreement."
               />
             </div>
           </div>
@@ -547,7 +547,7 @@ export default function FixedTermTenancyAgreementNorthernIrelandPage() {
                   href={astProductHref}
                   className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
                 >
-                  Get Premium Agreement with Break Clause
+                  Create Standard Agreement with Break Clause
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -573,7 +573,7 @@ export default function FixedTermTenancyAgreementNorthernIrelandPage() {
                 pagePath={PAGE_PATH}
                 jurisdiction="northern-ireland"
                 title="Create Your Fixed Term NI Agreement Today"
-                description="Legally valid. Income security. Optional break clause. Ready in minutes."
+                description="Record the fixed-term and break-clause details in the Northern Ireland standard agreement wizard."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />

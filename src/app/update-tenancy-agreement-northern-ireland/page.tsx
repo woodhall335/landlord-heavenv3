@@ -12,6 +12,7 @@ import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { updateNITenancyFAQs } from '@/data/faqs';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { getReleasedStandardTenancyEntry } from '@/lib/tenancy/agreement-registry';
 import {
   CheckCircle,
   Clock,
@@ -31,7 +32,7 @@ const PAGE_PATH = '/update-tenancy-agreement-northern-ireland';
 const PAGE_TITLE = 'Update Tenancy Agreement Northern Ireland';
 const PAGE_TYPE = 'tenancy' as const;
 
-const astProductHref = '/products/ast';
+const astProductHref = `${getReleasedStandardTenancyEntry('northern-ireland').startRoute}&src=update_ni_tenancy_guide&topic=tenancy`;
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -120,7 +121,7 @@ export default function UpdateTenancyAgreementNorthernIrelandPage() {
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
             <span className="flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-green-500" />
-              2022 Act Compliant
+              Northern Ireland-specific standard route
             </span>
             <span className="flex items-center gap-2">
               <RefreshCw className="w-4 h-4 text-green-500" />
@@ -443,7 +444,7 @@ export default function UpdateTenancyAgreementNorthernIrelandPage() {
                       <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-600">
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Guaranteed rental income
+                          Agreed rent for the new fixed period
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
@@ -451,7 +452,7 @@ export default function UpdateTenancyAgreementNorthernIrelandPage() {
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Fresh 2022 Act compliant agreement
+                          Fresh agreement using current tenancy information
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
@@ -518,7 +519,7 @@ export default function UpdateTenancyAgreementNorthernIrelandPage() {
                 Checklist: Updating Your NI Tenancy Agreement
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Steps to ensure your updated agreement is valid and compliant.
+                Steps for checking and recording an updated agreement.
               </p>
 
               <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm">
@@ -530,8 +531,8 @@ export default function UpdateTenancyAgreementNorthernIrelandPage() {
                     <div>
                       <h4 className="font-semibold text-gray-900">Review Current Agreement</h4>
                       <p className="text-gray-600 text-sm">
-                        Check what terms need updating and whether the current agreement is 2022 Act
-                        compliant.
+                        Check what terms need updating and compare the current agreement with the
+                        requirements that apply to the tenancy.
                       </p>
                     </div>
                   </div>

@@ -10,12 +10,13 @@ import { tenancyAgreementScotlandLinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { getReleasedStandardTenancyEntry } from '@/lib/tenancy/agreement-registry';
 import { TENANCY_AGREEMENT_PRICE_RANGE } from '@/lib/pricing/products';
 
 const PAGE_PATH = '/scotland-prt-model-agreement-guide';
 const PAGE_TITLE = 'Scotland PRT Model Agreement Guide';
 const PAGE_TYPE = 'tenancy' as const;
-const astProductHref = '/products/ast';
+const astProductHref = `${getReleasedStandardTenancyEntry('scotland').startRoute}&src=scotland_model_guide&topic=tenancy`;
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -76,7 +77,7 @@ const faqs = [
   },
   {
     question: 'How does your template compare on inventory and deposits?',
-    answer: 'The government model has minimal inventory provisions - just a reference to having one. Our Premium template includes comprehensive inventory sections where you can document condition, furnishings, and existing issues. This is crucial evidence for deposit disputes. Detailed inventories significantly improve your success rate in deduction claims.',
+    answer: 'The Scottish model refers to inventory arrangements. Landlord Heaven sells one standard PRT product and asks when the separate inventory will be supplied. Keep a detailed, agreed condition record for deposit evidence.',
   },
   {
     question: 'What about Repairing Standard compliance?',
@@ -128,7 +129,7 @@ export default function ScotlandPrtModelAgreementGuidePage() {
         <UniversalHero
           badge="Comparison Guide"
           title="Scotland PRT Model Agreement: What It Is and What It Lacks"
-          subtitle="The Scottish Government publishes a free model PRT agreement. Learn what it covers, what it omits, and why many landlords use a solicitor-grade drafted alternative."
+          subtitle="The Scottish Government publishes a free model PRT agreement. Learn what it covers and how Landlord Heaven’s released standard PRT workflow differs."
           primaryCta={{ label: 'View tenancy agreement packs', href: astProductHref }}
         />
 
@@ -196,12 +197,12 @@ export default function ScotlandPrtModelAgreementGuidePage() {
                   <tr>
                     <td className="px-6 py-4 font-medium">Comprehensive inventory sections</td>
                     <td className="px-6 py-4 text-center text-red-600">No</td>
-                    <td className="px-6 py-4 text-center text-green-600 bg-blue-50">Yes (Premium)</td>
+                    <td className="px-6 py-4 text-center text-green-600 bg-blue-50">Standard wizard prompts</td>
                   </tr>
                   <tr className="bg-gray-50">
                     <td className="px-6 py-4 font-medium">Detailed Repairing Standard schedule</td>
                     <td className="px-6 py-4 text-center text-amber-600">Basic reference</td>
-                    <td className="px-6 py-4 text-center text-green-600 bg-blue-50">Comprehensive (Premium)</td>
+                    <td className="px-6 py-4 text-center text-green-600 bg-blue-50">Separate inventory workflow</td>
                   </tr>
                   <tr>
                     <td className="px-6 py-4 font-medium">Pet policy provisions</td>
@@ -216,10 +217,10 @@ export default function ScotlandPrtModelAgreementGuidePage() {
                   <tr>
                     <td className="px-6 py-4 font-medium">HMO-specific provisions</td>
                     <td className="px-6 py-4 text-center text-red-600">No</td>
-                    <td className="px-6 py-4 text-center text-green-600 bg-blue-50">Yes (Premium)</td>
+                    <td className="px-6 py-4 text-center text-green-600 bg-blue-50">Standard wizard prompts</td>
                   </tr>
                   <tr className="bg-gray-50">
-                    <td className="px-6 py-4 font-medium">Professional tribunal-ready formatting</td>
+                    <td className="px-6 py-4 font-medium">Structured agreement formatting</td>
                     <td className="px-6 py-4 text-center text-amber-600">Basic</td>
                     <td className="px-6 py-4 text-center text-green-600 bg-blue-50">Professional</td>
                   </tr>
@@ -254,8 +255,9 @@ export default function ScotlandPrtModelAgreementGuidePage() {
                 <p className="text-gray-600">
                   The model agreement simply states that an inventory &ldquo;may&rdquo; be provided. It doesn&apos;t include
                   actual inventory sections. When deposit disputes arise, you need detailed documentation of
-                  property condition at check-in and check-out. Our Premium template includes comprehensive
-                  inventory sections that serve as evidence in disputes.
+                  property condition at check-in and check-out. Landlord Heaven&apos;s standard
+                  wizard records when the separate inventory will be supplied; complete and agree
+                  that inventory as a separate condition record.
                 </p>
               </div>
               <div className="bg-white p-6 rounded-xl shadow-sm border-l-4 border-amber-500">
@@ -309,7 +311,7 @@ export default function ScotlandPrtModelAgreementGuidePage() {
                 </p>
               </div>
               <div className="bg-blue-50 p-6 rounded-xl">
-                <h3 className="text-lg font-semibold text-blue-900 mb-3">Tribunal-Ready Format</h3>
+                <h3 className="text-lg font-semibold text-blue-900 mb-3">Structured Agreement Format</h3>
                 <p className="text-gray-700">
                   If you need to go to the First-tier Tribunal, a professionally formatted agreement
                   with clear terms is easier to reference and rely on than a minimally edited government template.

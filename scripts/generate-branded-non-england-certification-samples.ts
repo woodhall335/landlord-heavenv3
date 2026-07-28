@@ -5,9 +5,75 @@ import { PDFDocument } from 'pdf-lib';
 
 import type { ASTData } from '../src/lib/documents/ast-generator';
 import { generateStandardASTDocuments } from '../src/lib/documents/ast-generator';
+import { mapWizardToASTData } from '../src/lib/documents/ast-wizard-mapper';
+import type { WizardFacts } from '../src/lib/case-facts/schema';
 
-const generatedOn = '2026-07-27';
+const generatedOn = '2026-07-28';
 const outputRoot = path.join(process.cwd(), 'output', 'pdf');
+const sampleInventory = {
+  rooms: [
+    {
+      name: 'Living room',
+      items: [
+        {
+          name: 'Walls and ceiling',
+          condition: 'Good',
+          notes: 'Fresh neutral paint with one small filled mark beside the window.',
+        },
+        {
+          name: 'Flooring',
+          condition: 'Good',
+          notes: 'Clean laminate with light wear at the doorway.',
+        },
+      ],
+    },
+    {
+      name: 'Kitchen',
+      items: [
+        {
+          name: 'Cupboards and worktops',
+          condition: 'Good',
+          notes: 'Clean, secure and free from chips or burns.',
+        },
+        {
+          name: 'Oven and hob',
+          condition: 'Good',
+          notes: 'Clean and tested at check-in.',
+        },
+      ],
+    },
+    {
+      name: 'Main bedroom',
+      items: [
+        {
+          name: 'Walls and flooring',
+          condition: 'Good',
+          notes: 'Clean with light wear consistent with normal use.',
+        },
+        {
+          name: 'Window and blind',
+          condition: 'Good',
+          notes: 'Window opens and locks; blind operates correctly.',
+        },
+      ],
+    },
+    {
+      name: 'Bathroom',
+      items: [
+        {
+          name: 'Bath, shower and sealant',
+          condition: 'Good',
+          notes: 'Clean with intact sealant and no visible leaks.',
+        },
+        {
+          name: 'Flooring and extractor',
+          condition: 'Good',
+          notes: 'Floor dry and extractor tested.',
+        },
+      ],
+    },
+  ],
+};
 
 function sha256(value: Buffer): string {
   return createHash('sha256').update(value).digest('hex');
@@ -22,7 +88,10 @@ async function writePack(
   data: ASTData
 ): Promise<void> {
   const sampleKey = fileName.replace(/\.pdf$/i, '');
-  const pack = await generateStandardASTDocuments(data, `CERT-${sampleKey}`);
+  const mappedData = mapWizardToASTData(data as unknown as WizardFacts, {
+    canonicalJurisdiction: data.jurisdiction,
+  });
+  const pack = await generateStandardASTDocuments(mappedData, `CERT-${sampleKey}`);
   const agreement = pack.documents.find((document) => document.category === 'agreement');
   if (!agreement?.pdf) throw new Error(`Agreement PDF missing for ${sampleKey}`);
 
@@ -32,27 +101,40 @@ async function writePack(
 
   const manifestDocuments = [];
   for (const document of pack.documents) {
-    if (!document.pdf) throw new Error(`PDF missing for ${document.document_type}`);
+    if (!document.pdf) throw new Error(`Pack asset missing for ${document.document_type}`);
     await writeFile(path.join(packDirectory, document.file_name), document.pdf);
+    const isPdf = document.file_name.toLowerCase().endsWith('.pdf');
+    let pages: number | null = null;
+    let openCheck = 'passed';
+    if (isPdf) {
+      pages = await pageCount(document.pdf);
+    } else if (document.file_name.toLowerCase().endsWith('.json')) {
+      JSON.parse(document.pdf.toString('utf8'));
+      openCheck = 'passed-json';
+    } else {
+      throw new Error(
+        `Unsupported sample-pack asset type for ${document.file_name}`
+      );
+    }
     manifestDocuments.push({
       title: document.title,
       category: document.category,
       documentType: document.document_type,
       fileName: document.file_name,
       bytes: document.pdf.length,
-      pages: await pageCount(document.pdf),
+      pages,
       sha256: sha256(document.pdf),
-      openCheck: 'passed',
+      openCheck,
     });
   }
 
   const manifest = {
     sample: fileName,
     generatedOn,
-    jurisdiction: data.jurisdiction,
-    tenancyStartDate: data.tenancy_start_date,
-    inventoryMode: data.inventory_delivery_method,
-    agreementIncludesAppendedSchedule1: data.inventory_delivery_method === 'attached',
+    jurisdiction: mappedData.jurisdiction,
+    tenancyStartDate: mappedData.tenancy_start_date,
+    inventoryMode: mappedData.inventory_delivery_method,
+    agreementIncludesAppendedSchedule1: mappedData.inventory_delivery_method === 'attached',
     documents: manifestDocuments,
   };
   await writeFile(
@@ -108,6 +190,7 @@ const walesCommon: Omit<ASTData, 'jurisdiction' | 'is_fixed_term'> = {
   deposit_already_protected: false,
   deposit_payer: 'Eleri Hughes',
   inventory_delivery_method: 'attached',
+  inventory: sampleInventory,
   communication_method: 'email',
   tenant_utility_accounts: 'electricity, gas, water, broadband and council tax',
   gas_safety_certificate: true,
@@ -176,6 +259,7 @@ const scotland: ASTData = {
     'Repayment must be requested through SafeDeposits Scotland. Either party may use the scheme dispute-resolution service if the proposed allocation is disputed.',
   prescribed_information_served: false,
   inventory_delivery_method: 'attached',
+  inventory: sampleInventory,
   scotland_rent_control_area_status: 'not_designated',
   communication_method: 'email',
   tenant_utility_accounts: 'gas, electricity, broadband and council tax',
@@ -225,18 +309,30 @@ const northernIreland: ASTData = {
   ni_capital_value: '£135,000',
   ni_rates_payable: '£1,120 per year',
   ni_rates_included_in_rent: 'All domestic rates are included in the monthly rent',
+  ni_rates_liability: 'landlord_included',
+  ni_rates_landlord_included: true,
   ni_other_required_payments: 'None',
   deposit_amount: 900,
   deposit_scheme_name: 'Tenancy Deposit Scheme Northern Ireland' as ASTData['deposit_scheme_name'],
   deposit_payer: 'Conor O’Neill',
   deposit_already_protected: false,
+  deposit_lifecycle: 'expected',
+  deposit_is_expected: true,
   inventory_delivery_method: 'attached',
+  inventory: sampleInventory,
   communication_method: 'email',
   tenant_utility_accounts: 'electricity, gas, water and broadband',
   gas_safety_certificate: true,
   electrical_safety_certificate: true,
   smoke_alarms_fitted: true,
   carbon_monoxide_alarms: true,
+  smoke_alarm_locations: 'Ground-floor hall, first-floor landing and living room',
+  heat_alarm_locations: 'Kitchen',
+  fixed_combustion_appliances: 'Gas boiler and boiler flue in the utility cupboard',
+  carbon_monoxide_alarm_locations: 'Utility cupboard adjacent to the gas boiler',
+  carbon_monoxide_alarm_exclusions: 'No exclusions apply',
+  alarms_tested: true,
+  alarms_tested_date: '2026-08-28',
   meter_reading_gas: '00821.7 m3',
   meter_reading_electric: '019440 kWh',
   meter_reading_water: 'Not metered',

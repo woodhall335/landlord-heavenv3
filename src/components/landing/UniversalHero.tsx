@@ -124,7 +124,8 @@ export function UniversalHero({
   const shouldRenderHeading = Boolean(title || highlightTitle);
   const shouldShowReviewPill = showReviewPill ?? true;
   const shouldShowUsageCounter = showUsageCounter ?? Boolean(trustText);
-  const resolvedTrustText = trustText ?? 'Renters Right Act Compliant 2026';
+  const resolvedTrustText =
+    trustText ?? 'Guided landlord document preparation with preview before payment.';
   const trustTextLooksLikeReview = Boolean(
     resolvedTrustText &&
       /(\*{3,}|\bstars?\b|\breviews?\b|\/5\b|\brated\b)/i.test(resolvedTrustText)
@@ -167,6 +168,7 @@ export function UniversalHero({
       className={clsx(SECTION_WRAP_CLASSES, presetStyles.section)}
       aria-label={ariaLabel}
       id={id}
+      data-universal-hero="true"
     >
       <div className="pointer-events-none absolute inset-0 -z-20" aria-hidden="true">
         <Image

@@ -12,12 +12,11 @@ import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { jointTenancyNIFAQs } from '@/data/faqs';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { getReleasedStandardTenancyEntry } from '@/lib/tenancy/agreement-registry';
 import {
   CheckCircle,
-  Clock,
   ArrowRight,
   Scale,
-  FileText,
   Shield,
   AlertTriangle,
   Users,
@@ -31,7 +30,7 @@ const PAGE_PATH = '/joint-tenancy-agreement-northern-ireland';
 const PAGE_TITLE = 'Joint Tenancy Agreement Northern Ireland';
 const PAGE_TYPE = 'tenancy' as const;
 
-const astProductHref = '/products/ast';
+const astProductHref = `${getReleasedStandardTenancyEntry('northern-ireland').startRoute}&src=joint_ni_tenancy_guide&topic=tenancy`;
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -394,7 +393,7 @@ export default function JointTenancyAgreementNorthernIrelandPage() {
                 pagePath={PAGE_PATH}
                 jurisdiction="northern-ireland"
                 title="Create Your Joint Tenancy Agreement"
-                description="Add all tenant names, include joint and several liability, and get a compliant agreement in minutes."
+                description="Add every tenant and prepare the released Northern Ireland standard agreement through the jurisdiction-specific wizard."
               />
             </div>
           </div>

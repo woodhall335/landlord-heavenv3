@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { TenancyPackSection } from '@/components/value-proposition';
 import { getCanonicalUrl } from '@/lib/seo/urls';
@@ -125,6 +127,7 @@ export default function NorthernIrelandTenancyPage() {
 
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
@@ -138,43 +141,25 @@ export default function NorthernIrelandTenancyPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-20">
-        {/* Breadcrumb Navigation */}
-        <div className="container mx-auto px-4 py-4">
-          <nav className="text-sm text-gray-600">
-            <Link href="/" className="hover:text-red-600">Home</Link>
-            <span className="mx-2">/</span>
-            <Link href="/tenancy-agreements" className="hover:text-red-600">Tenancy Agreements</Link>
-            <span className="mx-2">/</span>
-            <span className="text-gray-900">Northern Ireland</span>
-          </nav>
-        </div>
-
-        {/* Hero Section */}
-        <section className="container mx-auto px-4 py-16">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl font-bold text-gray-900 mb-6">
-              Private Tenancy Agreement
-              <span className="block text-3xl text-red-600 mt-2">Northern Ireland</span>
-            </h1>
-            <p className="text-xl text-gray-700 mb-4">
-              Create a jurisdiction-specific Private Tenancy Agreement for Northern Ireland in minutes, with prompts covering EICR requirements, rent increase restrictions, deposit protection and landlord registration.
-            </p>
-            <div className="bg-amber-100 border-l-4 border-primary-600 p-4 mb-8 text-left">
-              <p className="text-sm font-semibold text-primary-900">
-                ? <strong>2025 Updates Included:</strong> Mandatory EICR from 1 April 2025 • 12-month gap between rent increases • 3-month notice for rent increases • Length-based notice periods
-              </p>
-            </div>
-            <div className="flex gap-4 justify-center flex-wrap">
-              <Link
-                href="/wizard?product=ast_standard&jurisdiction=northern-ireland&src=ni_tenancy_hub&topic=tenancy"
-                className="hero-btn-secondary"
-              >
-                {`Create Standard - ${standardPrice}`}
-              </Link>
-            </div>
-          </div>
-        </section>
+      <main className="min-h-screen bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
+        <UniversalHero
+          preTitleLabel="Northern Ireland tenancy agreements"
+          trustText="One released standard Private Tenancy Agreement route for Northern Ireland landlords."
+          title="Private Tenancy Agreement for Northern Ireland"
+          subtitle="Create a Northern Ireland-specific private tenancy agreement with wizard questions covering landlord registration, deposit handling, electrical safety, rent changes and the prescribed tenancy-information workflow."
+          primaryCta={{
+            label: `Create Private Tenancy Agreement - ${standardPrice}`,
+            href: '/wizard?product=ast_standard&jurisdiction=northern-ireland&src=ni_tenancy_hub&topic=tenancy',
+          }}
+          secondaryCta={{
+            label: 'Compare UK jurisdictions',
+            href: '/standard-tenancy-agreement#choose-jurisdiction',
+          }}
+          feature="For Northern Ireland property. England, Wales and Scotland use different agreement routes."
+          mediaSrc="/images/tenancy_agreements.webp"
+          mediaAlt="Northern Ireland private tenancy agreement documents"
+          showTrustPositioningBar
+        />
 
         <section className="container mx-auto px-4 py-12">
           <TenancyPackSection
@@ -371,7 +356,7 @@ export default function NorthernIrelandTenancyPage() {
             <div className="bg-primary-50 border-l-4 border-primary-600 p-6 mt-6">
               <h3 className="text-xl font-semibold text-primary-900 mb-2">Tenancy Deposit Schemes in Northern Ireland</h3>
               <p className="text-gray-700 mb-3">
-                All deposits must be protected in a government-approved scheme within <strong>28 days</strong> of receipt:
+                All deposits must be protected in an authorised tenancy deposit scheme within <strong>28 days</strong> of receipt:
               </p>
               <ul className="list-disc list-inside text-gray-700 space-y-1">
                 <li><strong>TDS Northern Ireland</strong> (Tenancy Deposit Scheme)</li>
@@ -1015,7 +1000,7 @@ export default function NorthernIrelandTenancyPage() {
               </Link>
             </div>
             <p className="mt-6 text-sm opacity-75">
-              Instant download • 2025 EICR & legal updates included • No subscription required
+              Instant download • Northern Ireland-specific questions • No subscription required
             </p>
           </div>
         </section>
@@ -1026,18 +1011,18 @@ export default function NorthernIrelandTenancyPage() {
             <h3 className="text-xl font-semibold text-gray-900 mb-4">Other UK Jurisdictions</h3>
             <div className="flex gap-6 flex-wrap">
               <Link href="/assured-shorthold-tenancy-agreement-template" className="text-red-600 hover:underline font-semibold">
-                England Assured Shorthold Tenancy (AST) ?
+                England tenancy agreements
               </Link>
               <Link href="/wales-tenancy-agreement-template" className="text-red-600 hover:underline font-semibold">
-                Wales Occupation Contract ?
+                Wales Standard Occupation Contracts
               </Link>
               <Link href="/private-residential-tenancy-agreement-template" className="text-red-600 hover:underline font-semibold">
-                Scotland Private Residential Tenancy (PRT) ?
+                Scotland Private Residential Tenancy Agreement
               </Link>
             </div>
           </div>
         </section>
-      </div>
+      </main>
     </>
   );
 }

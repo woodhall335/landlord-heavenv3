@@ -171,7 +171,7 @@ const seeds: Seed[] = [
     description: 'In-depth Section 21 pillar guide for landlords covering validity, service, court preparation, and linked resources.',
     heroTitle: 'Section 21 Notice Guide for Landlords',
     heroSubtitle: 'Everything you need to issue a valid Section 21 notice and convert it into possession with fewer delays.',
-    icon: '/images/wizard-icons/01-tenancy.png',
+    icon: '/images/wizard-icons/04-tenancy.png',
     focus: 'Section 21 notice strategy',
     scenario: 'no-fault possession planning',
     primaryCta: { label: 'Start Notice Only', href: '/products/notice-only' },

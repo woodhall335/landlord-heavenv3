@@ -1,6 +1,6 @@
 {
   "sample": "northern-ireland-private-tenancy-branded-sample.pdf",
-  "generatedOn": "2026-07-27",
+  "generatedOn": "2026-07-28",
   "jurisdiction": "northern-ireland",
   "tenancyStartDate": "2026-09-01",
   "inventoryMode": "attached",
@@ -11,9 +11,9 @@
       "category": "agreement",
       "documentType": "private_tenancy_agreement",
       "fileName": "tenancy_agreement.pdf",
-      "bytes": 577737,
-      "pages": 24,
-      "sha256": "a10a60e7897f935be17f06c27e28d19cfdb172b9348c5b98579137d507f050bc",
+      "bytes": 580317,
+      "pages": 25,
+      "sha256": "57b997219fc43b2d00702c0de1a20de099daa592a9654da71015b8d349a82ddf",
       "openCheck": "passed"
     },
     {
@@ -21,9 +21,9 @@
       "category": "schedule",
       "documentType": "inventory_schedule",
       "fileName": "inventory_schedule.pdf",
-      "bytes": 359563,
+      "bytes": 360129,
       "pages": 9,
-      "sha256": "db01d8b85b7ad43bcc3250ab9e5bc056c458875df399c357ba5d49d0af60feff",
+      "sha256": "56fa8036edcfc82a9875b94617836bf9aa7aedf3c03a85eca81db3e1f25ba3cb",
       "openCheck": "passed"
     },
     {
@@ -31,9 +31,9 @@
       "category": "checklist",
       "documentType": "pre_tenancy_checklist_northern_ireland",
       "fileName": "compliance_checklist.pdf",
-      "bytes": 239899,
+      "bytes": 239905,
       "pages": 3,
-      "sha256": "13a9429ae923d3f8b070728e00198d162da7525b5e4904787e7736e35898cf23",
+      "sha256": "ac3b839a27b819878e9929d94a1fbf50b171872fac8f4dc389eb308400ac773b",
       "openCheck": "passed"
     },
     {
@@ -41,19 +41,19 @@
       "category": "schedule",
       "documentType": "rent_book_northern_ireland",
       "fileName": "northern_ireland_rent_book.pdf",
-      "bytes": 166948,
+      "bytes": 167132,
       "pages": 2,
-      "sha256": "66ae3b0585d03433ffd95dd851b139d9d767fd1c3a39a8d616a984f2f393c073",
+      "sha256": "7ba599198392aa9026fd2a3eaf94073123406c39ae14626911cec14bf8bd778f",
       "openCheck": "passed"
     },
     {
       "title": "Landlord’s Notice Relating to the Granting of a Private Tenancy",
-      "category": "guidance",
+      "category": "notice",
       "documentType": "tenancy_information_notice_northern_ireland",
       "fileName": "northern_ireland_tenancy_information_notice.pdf",
-      "bytes": 227571,
-      "pages": 7,
-      "sha256": "75fe34a800cd987b7f61c1e47733f19a231c89ba125a56947b908d3cd4de24e3",
+      "bytes": 224660,
+      "pages": 6,
+      "sha256": "7ad6a7765ee8e391f2d2751b9ffce9128100e9ad5a4b44972535861d066dd1ba",
       "openCheck": "passed"
     },
     {
@@ -65,6 +65,16 @@
       "pages": 4,
       "sha256": "c9f46ddc973d838a4aa0e32724f8dd74b1c7ec04eb17d85c02fa667949dca94b",
       "openCheck": "passed"
+    },
+    {
+      "title": "Northern Ireland Tenancy Package Manifest",
+      "category": "guidance",
+      "documentType": "tenancy_package_manifest_northern_ireland",
+      "fileName": "northern_ireland_tenancy_package_manifest.json",
+      "bytes": 2092,
+      "pages": null,
+      "sha256": "5e236dbdc8b224602bbf286ad6675a25851d798e0ca7a1b308c32da693d12f19",
+      "openCheck": "passed-json"
     }
   ]
 }

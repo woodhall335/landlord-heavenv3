@@ -77,7 +77,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/tenancy-agreements',
     '/tenancy-agreement',
     '/tenancy-agreement-template-free',
-    '/tenancy-agreement-template-uk',
     '/eviction-notice',
     '/eviction-notice-uk',
     '/eviction-pack-england',
@@ -265,6 +264,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/money-claim-pap-financial-statement', priority: 0.7, changeFrequency: 'monthly' as const },
     // Tenancy Agreement SEO Pages - England (Q1 2026)
     { path: '/standard-tenancy-agreement', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/tenancy-agreement-template-uk', priority: 0.82, changeFrequency: 'weekly' as const },
     { path: '/premium-tenancy-agreement', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/student-tenancy-agreement', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/hmo-shared-house-tenancy-agreement', priority: 0.82, changeFrequency: 'weekly' as const },
@@ -470,11 +470,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   const excludedPrefixes = ['/admin', '/api', '/auth', '/checkout', '/dashboard', '/wizard', '/success'];
-  const noindexPaths = [
-    '/tenancy-agreement-template-uk',
-    '/wales-eviction-notices',
-    '/scotland-eviction-notices',
-  ];
+  const noindexPaths = ['/wales-eviction-notices', '/scotland-eviction-notices'];
 
   // Keep intentional static exclusions here for any indexable route we explicitly want omitted.
   const intentionalStaticRouteExclusions = new Set<string>(sitemapAllowlist.intentionallyExcludedRoutes);

@@ -30,7 +30,7 @@ const content: PillarPageContent = {
   description: metadata.description as string,
   heroTitle: 'Section 21 Notice',
   heroSubtitle: `If you are still searching for Section 21, this page explains in plain English that the route is due to end in England on ${SECTION21_END_DATE} and shows you what to do next.`,
-  icon: '/images/wizard-icons/01-tenancy.png',
+  icon: '/images/wizard-icons/13-section-21.png',
   heroBullets: [
     `Explains clearly that Section 21 is due to end in England on ${SECTION21_END_DATE}.`,
     'Uses the exact dates that matter instead of vague transition wording.',

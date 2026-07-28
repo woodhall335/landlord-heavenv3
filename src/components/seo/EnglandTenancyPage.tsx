@@ -95,6 +95,15 @@ interface EnglandTenancyPageProps {
     width: number;
     height: number;
   };
+  heroPreTitleLabel?: string;
+  heroBadge?: string;
+  heroTrustText?: string;
+  heroFeature?: string;
+  heroMediaSrc?: string;
+  heroMediaAlt?: string;
+  showHeroTrustPositioningBar?: boolean;
+  heroTrustPositioningHeadline?: string;
+  afterHero?: ReactNode;
 }
 
 const tenancyPositioningCards = [
@@ -218,6 +227,15 @@ export function EnglandTenancyPage({
   finalCtaBody,
   salesContent,
   workflowImageLink,
+  heroPreTitleLabel = 'Landlord document preparation',
+  heroBadge = 'England tenancy agreements',
+  heroTrustText = 'Current England tenancy setup packs for landlords, updated for the post-May 2026 rules.',
+  heroFeature = 'Create an England tenancy setup pack around your property, occupiers, rent, deposit, and management facts.',
+  heroMediaSrc = '/images/tenancy_agreements.webp',
+  heroMediaAlt = 'Tenancy agreement documents and landlord paperwork',
+  showHeroTrustPositioningBar = true,
+  heroTrustPositioningHeadline = 'Build the agreement from your facts, check the setup, preview before payment, and keep the pack together.',
+  afterHero,
 }: EnglandTenancyPageProps) {
   const isSalesMode = Boolean(salesContent);
   const shouldShowPackBreakdown =
@@ -231,9 +249,9 @@ export function EnglandTenancyPage({
   return (
     <main className="min-h-screen bg-[#FCFBF8]">
       <UniversalHero
-        badge="England tenancy agreements"
-        preTitleLabel="Landlord document preparation"
-        trustText="Current England tenancy setup packs for landlords, updated for the post-May 2026 rules."
+        badge={heroBadge}
+        preTitleLabel={heroPreTitleLabel}
+        trustText={heroTrustText}
         title={title}
         subtitle={subtitle}
         primaryCta={{ label: primaryCtaLabel, href: primaryCtaHref }}
@@ -242,13 +260,14 @@ export function EnglandTenancyPage({
             ? { label: secondaryCtaLabel, href: secondaryCtaHref }
             : undefined
         }
-        feature="Create an England tenancy setup pack around your property, occupiers, rent, deposit, and management facts."
-        mediaSrc="/images/tenancy_agreements.webp"
-        mediaAlt="Tenancy agreement documents and landlord paperwork"
-        showTrustPositioningBar
+        feature={heroFeature}
+        mediaSrc={heroMediaSrc}
+        mediaAlt={heroMediaAlt}
+        showTrustPositioningBar={showHeroTrustPositioningBar}
         trustPositioningPreset="ast"
-        trustPositioningHeadline="Build the agreement from your facts, check the setup, preview before payment, and keep the pack together."
+        trustPositioningHeadline={heroTrustPositioningHeadline}
       />
+      {afterHero}
 
       <Container className="py-12 md:py-16">
         {legacyNotice ? (

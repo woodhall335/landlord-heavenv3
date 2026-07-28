@@ -11,11 +11,15 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { PRODUCTS, TENANCY_AGREEMENT_FROM_PRICE } from '@/lib/pricing/products';
+import { getReleasedStandardTenancyEntry } from '@/lib/tenancy/agreement-registry';
 
 const PAGE_PATH = '/renting-homes-wales-written-statement';
 const PAGE_TITLE = 'Renting Homes Wales Written Statement';
 const PAGE_TYPE = 'tenancy' as const;
-const astProductHref = '/products/ast';
+const astProductHref = getReleasedStandardTenancyEntry(
+  'wales',
+  'fixed_term_standard_occupation_contract'
+).detailsRoute;
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -39,7 +43,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Wales Written Statement 2026 | Legal Requirements',
-    description: `Understand written statement requirements under the Renting Homes (Wales) Act 2016. Compliant template ${TENANCY_AGREEMENT_FROM_PRICE.toLowerCase()}.`,
+    description: `Understand written statement requirements under the Renting Homes (Wales) Act 2016 and start the released standard contract ${TENANCY_AGREEMENT_FROM_PRICE.toLowerCase()}.`,
     type: 'article',
     url: getCanonicalUrl('/renting-homes-wales-written-statement'),
   },
@@ -127,7 +131,7 @@ export default function RentingHomesWalesWrittenStatementPage() {
       <main className="min-h-screen bg-gradient-to-br from-red-50 via-white to-amber-50">
         <UniversalHero
           title="Renting Homes Wales Written Statement"
-          subtitle="Create a legally validated, solicitor-grade written statement that is compliance-checked for Wales."
+          subtitle="Understand the written-statement requirements and start the released Wales standard occupation-contract workflow."
           primaryCta={{ label: 'View tenancy agreement packs', href: astProductHref }}
           showTrustPositioningBar
           hideMedia
@@ -171,7 +175,7 @@ export default function RentingHomesWalesWrittenStatementPage() {
                 href={astProductHref}
                 className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
               >
-                {`Get Compliant Written Statement — ${PRODUCTS.ast_standard.displayPrice}`}
+                {`Create Standard Occupation Contract — ${PRODUCTS.ast_standard.displayPrice}`}
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-500">Includes all fundamental & supplementary terms required by law</p>
@@ -330,7 +334,7 @@ export default function RentingHomesWalesWrittenStatementPage() {
           pageType="tenancy"
           variant="section"
           jurisdiction="wales"
-          title="Get Your Compliant Written Statement"
+          title="Create Your Wales Written Statement"
           description="Our Occupation Contract template includes all required terms and serves as your written statement."
         />
 
