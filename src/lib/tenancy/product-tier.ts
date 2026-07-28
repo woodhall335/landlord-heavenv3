@@ -167,10 +167,10 @@ export function detectInventoryData(facts: Record<string, any> | null | undefine
 
   const inventoryData = facts.inventory || {};
   return Boolean(
-    // Check if rooms array has items (wizard-completed inventory)
+    // Only structured, renderable rows count as a completed inventory. Boolean
+    // attachment flags describe delivery state; they are not inventory content.
     (Array.isArray(inventoryData.rooms) && inventoryData.rooms.length > 0) ||
-    // Check legacy flags that indicate inventory was attached
-    facts.inventory_attached ||
-    facts.inventory_provided
+    (Array.isArray(facts.inventory_rooms) && facts.inventory_rooms.length > 0) ||
+    (Array.isArray(facts.inspection_rooms) && facts.inspection_rooms.length > 0)
   );
 }

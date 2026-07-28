@@ -13,6 +13,7 @@ import {
 } from '@/lib/documents/compliance-timing-types';
 import { validateComplianceTiming } from '@/lib/documents/court-ready-validator';
 import { buildComplianceTimingDataFromFacts } from '@/lib/documents/compliance-timing-facts';
+import { resolveStoragePath } from '@/lib/documents/download';
 
 type RouteParams = { id: string };
 
@@ -105,12 +106,8 @@ export async function POST(
       if (existingDocs && existingDocs.length > 0) {
         const storagePaths: string[] = [];
         for (const doc of existingDocs) {
-          if (doc.pdf_url) {
-            const match = doc.pdf_url.match(/\/documents\/(.+)$/);
-            if (match && match[1]) {
-              storagePaths.push(match[1]);
-            }
-          }
+          const storagePath = resolveStoragePath(doc.pdf_url);
+          if (storagePath) storagePaths.push(storagePath);
         }
 
         if (storagePaths.length > 0) {

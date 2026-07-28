@@ -570,6 +570,9 @@ export function mapWizardToASTData(
         ? true
         : coerceBoolean(getValueAtPath(wizardFacts, 'inventory_attached')),
     inventory_delivery_method: getValueAtPath(wizardFacts, 'inventory_delivery_method'),
+    inventory: getValueAtPath(wizardFacts, 'inventory'),
+    inventory_rooms: getValueAtPath(wizardFacts, 'inventory_rooms'),
+    inspection_rooms: getValueAtPath(wizardFacts, 'inspection_rooms'),
     professional_cleaning_required: coerceBoolean(getValueAtPath(wizardFacts, 'professional_cleaning_required')),
     decoration_condition: getValueAtPath(wizardFacts, 'decoration_condition'),
     inventory_schedule_notes: getValueAtPath(wizardFacts, 'inventory_schedule_notes'),

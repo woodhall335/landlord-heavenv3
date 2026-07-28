@@ -291,6 +291,17 @@ export default function WizardClientPage() {
       return;
     }
 
+    if (allowedNonEnglandStandardTenancy && rawProduct) {
+      router.replace(
+        buildFlowHref(
+          rawProduct,
+          'tenancy_agreement',
+          new URLSearchParams(searchParams.toString())
+        )
+      );
+      return;
+    }
+
     if (rawProduct && productDescriptor) {
       router.replace(
         buildFlowHref(

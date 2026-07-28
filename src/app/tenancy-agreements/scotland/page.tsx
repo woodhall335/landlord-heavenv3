@@ -115,9 +115,9 @@ const faqs = [
       "The usual Scottish maximum is 2 months' rent. If a deposit is taken, it should be dealt with using the correct Scottish wording and within the wider deposit protection process.",
   },
   {
-    question: 'When should I choose the standard PRT instead of premium?',
+    question: 'Is this the standard Scotland PRT product?',
     answer:
-      'The standard route is usually the right starting point for a more straightforward Scottish let where the property and occupier setup are relatively simple and you want the main agreement workflow without broader premium drafting.',
+      'Yes. Landlord Heaven sells one standard Scotland PRT product. The wizard checks the property and occupier setup and blocks arrangements that need a different agreement.',
   },
   {
     question: 'Can a Scottish landlord simply ask a tenant to leave at the end of a term?',
@@ -132,7 +132,7 @@ const faqs = [
   {
     question: 'How quickly can I create a Scottish PRT online?',
     answer:
-      'The online route is designed to be quick. For many landlords, the main work is entering the property, landlord, tenant, rent, deposit, and tenancy details correctly, then choosing whether standard or premium is the better fit for the tenancy.',
+      'The online route is designed to be quick. The main work is entering the property, landlord, tenant, rent, deposit, inventory-delivery, safety, and tenancy details accurately before preview and payment.',
   },
 ];
 
@@ -146,7 +146,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
           headline:
             'Private Residential Tenancy Agreement Scotland | Create a PRT Online',
           description:
-            'Create a Scotland PRT agreement online with current Scottish wording, landlord-focused guidance, and standard or premium options.',
+            'Create a standard Scotland PRT agreement online with current Scottish wording, landlord-focused guidance, and the official supporting notes.',
           url: canonicalUrl,
           datePublished: '2026-01-01',
           dateModified: '2026-03-20',
@@ -175,9 +175,9 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
           subtitle={
             <>
               Create a <strong>Scotland-specific Private Residential Tenancy agreement</strong>{' '}
-              online. Compare <strong>standard</strong> and <strong>premium</strong>{' '}
-              routes, understand the main Scottish rules that affect your let, and pick
-              the agreement that fits the property and tenancy you are actually setting up.
+              online. Use one <strong>standard PRT</strong> route, answer the
+              jurisdiction-specific questions, preview the agreement, and receive the
+              official supporting notes with the completed pack.
             </>
           }
           primaryCta={{
@@ -252,9 +252,9 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                   is and why Scotland needs a distinct agreement route. Second, it helps
                   landlords understand why Scottish tenancy law should not be mixed up with
                   English AST wording, Welsh occupation contracts, or Northern Ireland
-                  private tenancy language. Third, it explains when the standard PRT is
-                  likely to be enough and when premium drafting is the smarter commercial
-                  choice. Fourth, it covers the main legal and operational points landlords
+                  private tenancy language. Third, it explains the scope of the standard PRT
+                  and the arrangements that need a different agreement. Fourth, it covers
+                  the main legal and operational points landlords
                   usually want to understand before starting. Finally, it gives a clean path
                   into the live creation route.
                 </p>
@@ -440,8 +440,8 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                   <p className="leading-relaxed text-green-900/90">
                     Start with a Scottish PRT page built specifically for Scottish private
                     residential lettings. That gives you the right public framing, the right
-                    commercial choice between standard and premium, and a cleaner route into
-                    the actual agreement workflow.
+                    standard product scope and a clean route into the actual agreement
+                    workflow.
                   </p>
                 </div>
               </div>
@@ -471,8 +471,8 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                     The standard route is usually the right starting point for a more
                     straightforward Scottish private let where the property, household, and
                     tenancy structure are relatively simple. It is designed for landlords who
-                    want a practical Scotland-specific agreement without paying for broader
-                    drafting that may not be necessary for the tenancy.
+                    want a practical Scotland-specific standard agreement and its supporting
+                    workflow.
                   </p>
                   <ul className="mb-6 space-y-3 text-gray-700">
                     <li className="flex items-start gap-2">
@@ -506,11 +506,10 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                   Practical rule of thumb
                 </h3>
                 <p className="leading-relaxed text-gray-700">
-                  If the let is relatively ordinary, start with standard. If you already know
-                  the tenancy will involve more occupier complexity, more house rules, more
-                  coordination, or more risk of misunderstanding if the drafting is thin,
-                  premium is often the better choice. That is not fear-based selling. It is
-                  simply matching the agreement route to the real tenancy you are about to run.
+                  Use this route for a standard private residential tenancy. If the property
+                  is an HMO, the landlord lives at the property, the arrangement is a holiday
+                  let, or the occupier is a company, stop and use an agreement designed for
+                  that arrangement.
                 </p>
               </div>
             </div>
@@ -574,7 +573,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                     as an afterthought. Registration, deposit handling, safety requirements,
                     and property-condition obligations all form part of the real-world context
                     in which the agreement will operate. The agreement itself does not replace
-                    those wider obligations, but it should sit inside a Scottish-compliant
+                    those wider obligations, but it should sit inside a Scotland-specific
                     letting process rather than feeling disconnected from it.
                   </p>
                   <p className="leading-relaxed text-gray-700">
@@ -591,14 +590,14 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                   <p className="mb-4 leading-relaxed text-gray-700">
                     Shared households, couples with changing occupancy plans, student lets,
                     guarantor-backed arrangements, and HMO-style occupation patterns often
-                    need more thought before the landlord chooses a route. These scenarios are
-                    one of the main reasons premium drafting exists. The page should help users
-                    recognise that complexity early rather than leaving them to discover it
-                    after they have already committed to the leanest possible product.
+                    need additional checks before the landlord starts. The wizard asks about
+                    occupancy and property status so an incompatible arrangement is blocked
+                    rather than pushed through the standard PRT.
                   </p>
                   <p className="leading-relaxed text-gray-700">
-                    In short, the document choice should reflect how the tenancy will actually
-                    operate, not just the cheapest visible button on the page.
+                    The agreement must reflect how the tenancy will actually operate, so the
+                    answers entered in the wizard are retained in the review, payment snapshot,
+                    and final documents.
                   </p>
                 </div>
               </div>
@@ -711,12 +710,12 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                       2
                     </div>
                     <h3 className="text-lg font-semibold text-gray-900">
-                      Decide between standard and premium
+                      Confirm the standard PRT fits
                     </h3>
                   </div>
                   <p className="leading-relaxed text-gray-700">
-                    Think about the property, household, guarantors, sharers, operational
-                    detail, and whether the tenancy is genuinely straightforward or not.
+                    Confirm the arrangement is a private residential tenancy and not a lodger,
+                    holiday-let, company-let, or unsupported specialist arrangement.
                   </p>
                 </div>
 
@@ -816,12 +815,11 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
 
                 <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
                   <h3 className="mb-3 text-xl font-semibold text-gray-900">
-                    Hiding the real standard vs premium difference
+                    Hiding product limitations
                   </h3>
                   <p className="leading-relaxed text-gray-700">
-                    If the page does not explain who premium is for, the user assumes it is
-                    just a pricing ladder. A stronger page helps landlords self-select based on
-                    tenancy complexity, not just on whether one card has a nicer badge on it.
+                    A useful page explains what the standard PRT covers and which arrangements
+                    require another route. The wizard then enforces those boundaries.
                   </p>
                 </div>
 
@@ -843,9 +841,9 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                   Have questions about your Scottish tenancy setup?
                 </h3>
                 <p className="mb-4 leading-relaxed text-purple-900/90">
-                  Every letting arrangement is different. If you are unsure whether your
-                  tenancy looks straightforward enough for standard or whether it belongs on
-                  the premium route, use Ask Heaven for free landlord Q&amp;A.
+                  Every letting arrangement is different. If you are unsure whether the
+                  standard PRT fits your property and occupiers, use Ask Heaven for general
+                  landlord Q&amp;A before starting.
                 </p>
                 <Link
                   href="/ask-heaven"
@@ -869,7 +867,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                 pagePath={PAGE_PATH}
                 jurisdiction="scotland"
                 title="Create your Scottish PRT now"
-                description={`Choose the standard route for a straightforward let or premium for a more complex Scottish tenancy. Start from ${standardPrice}.`}
+                description={`Create the standard Scotland PRT, preview it before payment, and receive the official supporting notes. ${standardPrice}.`}
               />
             </div>
           </div>
@@ -908,7 +906,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                     <ul className="space-y-2 text-gray-700">
                         <li>- Use the Scotland route if the property is in Scotland</li>
                         <li>- Use a jurisdiction-specific page for England, Wales, or NI</li>
-                        <li>- Choose premium where the household or property is more complex</li>
+                        <li>- Stop if the arrangement needs a different or specialist agreement</li>
                         <li>- Use the correct follow-on notice or enforcement page if the tenancy problem is no longer "create an agreement"</li>
                     </ul>
                   </div>

@@ -30,6 +30,7 @@ import {
 import { validateComplianceTiming } from '@/lib/documents/court-ready-validator';
 import { buildComplianceTimingDataFromFacts } from '@/lib/documents/compliance-timing-facts';
 import { selectActiveCaseOrder } from '@/lib/payments/active-order';
+import { resolveStoragePath } from '@/lib/documents/download';
 
 type PaidOrderRow = {
   id: string;
@@ -252,13 +253,8 @@ export async function POST(request: Request) {
         // Extract storage paths from URLs and delete from storage
         const storagePaths: string[] = [];
         for (const doc of existingDocs) {
-          if (doc.pdf_url) {
-            // URL format: https://xxx.supabase.co/storage/v1/object/public/documents/userId/caseId/filename.pdf
-            const match = doc.pdf_url.match(/\/documents\/(.+)$/);
-            if (match && match[1]) {
-              storagePaths.push(match[1]);
-            }
-          }
+          const storagePath = resolveStoragePath(doc.pdf_url);
+          if (storagePath) storagePaths.push(storagePath);
         }
 
         // Delete from storage (batch delete)

@@ -7,7 +7,6 @@ import { buildMerchantOffer } from '@/lib/seo/structured-data';
 import {
   PRODUCT_PRICE_AMOUNT_STRINGS,
   PRODUCTS,
-  TENANCY_AGREEMENT_FROM_PRICE,
 } from '@/lib/pricing/products';
 import { isNonEnglandStandardTenancyPubliclyEnabled } from '@/lib/tenancy/non-england-rollout';
 
@@ -53,7 +52,7 @@ export default function NorthernIrelandTenancyPage() {
         name: 'What changed in Northern Ireland tenancy law in 2025?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'From 1 April 2025, key changes include: Electrical Installation Condition Reports (EICR) are now mandatory for all private tenancies, rent increases limited to once per year with 12-month gap, 3 months notice required for rent increases, and length-based notice periods for ending tenancies (28/56/84 days).',
+          text: 'From 1 April 2025, key changes include electrical installation checks, a minimum 12-month gap between rent increases, and three months’ written notice of a rent increase. Landlord and tenant Notice to Quit scales are shown separately in the agreement.',
         },
       },
       {
@@ -134,6 +133,10 @@ export default function NorthernIrelandTenancyPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
 
       <div className="min-h-screen bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-20">
         {/* Breadcrumb Navigation */}
@@ -184,31 +187,31 @@ export default function NorthernIrelandTenancyPage() {
         {/* 2025 Legal Updates Highlight */}
         <section className="container mx-auto px-4 py-12">
           <div className="max-w-4xl mx-auto bg-primary text-white rounded-xl shadow-lg p-8">
-            <h2 className="text-3xl font-bold mb-4">?? 2025 Legal Updates for Northern Ireland</h2>
+            <h2 className="text-3xl font-bold mb-4">2025 legal updates for Northern Ireland</h2>
             <p className="text-lg mb-6">
               Important changes came into effect on <strong>1 April 2025</strong> affecting all private tenancies in Northern Ireland:
             </p>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white/10 backdrop-blur rounded-lg p-6">
-                <h3 className="text-xl font-semibold mb-2">? Mandatory EICR Certificates</h3>
+                <h3 className="text-xl font-semibold mb-2">Electrical installation reports</h3>
                 <p className="text-sm">
                   All private rental properties must have a valid <strong>Electrical Installation Condition Report (EICR)</strong> conducted by a qualified electrician. Required every 5 years or at each change of tenancy.
                 </p>
               </div>
               <div className="bg-white/10 backdrop-blur rounded-lg p-6">
-                <h3 className="text-xl font-semibold mb-2">?? Rent Increase Restrictions</h3>
+                <h3 className="text-xl font-semibold mb-2">Rent increase restrictions</h3>
                 <p className="text-sm">
                   Rent increases limited to <strong>once per year</strong> with a minimum <strong>12-month gap</strong> between increases. Landlords must give <strong>3 months' written notice</strong> of any increase.
                 </p>
               </div>
               <div className="bg-white/10 backdrop-blur rounded-lg p-6">
-                <h3 className="text-xl font-semibold mb-2">?? Length-Based Notice Periods</h3>
+                <h3 className="text-xl font-semibold mb-2">Length-based notice periods</h3>
                 <p className="text-sm">
-                  Notice to Quit periods now based on tenancy length: <strong>28 days</strong> (under 1 year), <strong>56 days</strong> (1-10 years), <strong>84 days</strong> (10+ years).
+                  Landlord Notice to Quit minimums depend on tenancy length: <strong>4 weeks</strong> (not more than 12 months), <strong>8 weeks</strong> (more than 12 months but not more than 10 years), and <strong>12 weeks</strong> (more than 10 years).
                 </p>
               </div>
               <div className="bg-white/10 backdrop-blur rounded-lg p-6">
-                <h3 className="text-xl font-semibold mb-2">??? Enhanced Tenant Protections</h3>
+                <h3 className="text-xl font-semibold mb-2">Tenant protections</h3>
                 <p className="text-sm">
                   Stronger protections against retaliatory evictions, improved complaint procedures, and clearer requirements for landlord obligations and property standards.
                 </p>
@@ -235,8 +238,8 @@ export default function NorthernIrelandTenancyPage() {
                   <li><strong>Deposit Protection:</strong> Maximum one month's rent, protected within 28 days with prescribed information given within 35 days</li>
                   <li><strong>EICR Mandatory (2025):</strong> Electrical safety certificates required from 1 April 2025</li>
                   <li><strong>Rent Increase Limits (2025):</strong> Once per year, 12-month gap, 3 months' notice</li>
-                  <li><strong>Length-Based Notice:</strong> Notice periods vary by tenancy duration (28/56/84 days)</li>
-                  <li><strong>Landlord Registration:</strong> Not currently required in NI (unlike Scotland)</li>
+                  <li><strong>Separate notice scales:</strong> The agreement shows the landlord and tenant minimums separately</li>
+                  <li><strong>Landlord Registration:</strong> All private landlords must register before letting a new tenancy</li>
                 </ul>
               </div>
               <div className="bg-blue-50 border-l-4 border-blue-600 p-6 my-6">
@@ -282,7 +285,7 @@ export default function NorthernIrelandTenancyPage() {
                       • <strong>Mandatory EICR from 1 April 2025</strong><br />
                       • Rent increases limited to once per year with 12-month gap<br />
                       • 3 months' written notice required for rent increases<br />
-                      • Length-based notice periods (28/56/84 days)<br />
+                      • Separate landlord and tenant Notice to Quit periods<br />
                       • Enhanced tenant protections against retaliatory eviction
                     </td>
                   </tr>
@@ -333,7 +336,7 @@ export default function NorthernIrelandTenancyPage() {
                   </tr>
                   <tr>
                     <td className="border border-gray-300 px-4 py-3 font-semibold">
-                      Smoke Alarm Regulations (Northern Ireland) 2012
+                      Smoke, Heat and Carbon Monoxide Alarms for Private Tenancies Regulations (Northern Ireland) 2024
                     </td>
                     <td className="border border-gray-300 px-4 py-3">
                       • Working smoke alarms required on every floor<br />
@@ -407,7 +410,7 @@ export default function NorthernIrelandTenancyPage() {
                 </p>
                 <ul className="list-disc list-inside text-gray-700 space-y-1 ml-4">
                   <li><strong>Flexibility:</strong> Either party can end with proper notice</li>
-                  <li><strong>Notice Periods:</strong> Length-based (28/56/84 days depending on tenancy duration)</li>
+                  <li><strong>Notice Periods:</strong> Separate landlord and tenant scales based on tenancy duration</li>
                   <li><strong>Continuous:</strong> Same terms as original fixed-term agreement continue</li>
                 </ul>
               </div>
@@ -437,17 +440,17 @@ export default function NorthernIrelandTenancyPage() {
               </div>
 
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
-                <h3 className="text-xl font-semibold text-blue-900 mb-3">Notice Periods: 2025 Length-Based Rules</h3>
+                <h3 className="text-xl font-semibold text-blue-900 mb-3">Current Notice to Quit minimums</h3>
                 <p className="text-gray-700 mb-3">
-                  From 2025, Notice to Quit periods in Northern Ireland are based on how long the tenancy has lasted:
+                  The minimum notice the landlord must give is:
                 </p>
                 <ul className="list-disc list-inside text-gray-700 space-y-2">
-                  <li><strong>Under 1 year:</strong> Minimum <strong>28 days</strong> notice</li>
-                  <li><strong>1 to 10 years:</strong> Minimum <strong>56 days</strong> notice (8 weeks)</li>
-                  <li><strong>Over 10 years:</strong> Minimum <strong>84 days</strong> notice (12 weeks)</li>
+                  <li><strong>Not more than 12 months:</strong> at least <strong>4 weeks</strong></li>
+                  <li><strong>More than 12 months but not more than 10 years:</strong> at least <strong>8 weeks</strong></li>
+                  <li><strong>More than 10 years:</strong> at least <strong>12 weeks</strong></li>
                 </ul>
                 <p className="text-gray-700 mt-3">
-                  These apply to landlords ending periodic tenancies. Tenants generally need to give notice as specified in the agreement (commonly 1 month).
+                  The tenant minimum is separate: at least <strong>4 weeks</strong> where the tenancy has not existed for more than 10 years, and at least <strong>12 weeks</strong> where it has existed for more than 10 years.
                 </p>
               </div>
             </div>
@@ -461,15 +464,13 @@ export default function NorthernIrelandTenancyPage() {
 
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-red-600">
-                <div className="text-4xl mb-4">??</div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">2025 Legal Compliance</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">Current-law questions</h3>
                 <p className="text-gray-700">
-                  Our agreements are fully updated for 2025, including mandatory EICR requirements, rent increase restrictions, and length-based notice periods. Demonstrates full compliance with current NI law.
+                  The wizard captures the current EICR, rent-increase, registration, deposit, alarm, and separate notice-period facts used to generate the agreement and supporting documents.
                 </p>
               </div>
 
               <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-green-600">
-                <div className="text-4xl mb-4">??</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Financial Clarity</h3>
                 <p className="text-gray-700">
                   Clear terms on rent amount, payment dates, deposit (maximum one month's rent), permitted charges, and rent increase procedures (once per year, 12-month gap, 3 months' notice).
@@ -477,7 +478,6 @@ export default function NorthernIrelandTenancyPage() {
               </div>
 
               <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-purple-600">
-                <div className="text-4xl mb-4">??</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Dispute Evidence</h3>
                 <p className="text-gray-700">
                   Written agreements provide clear evidence for courts, deposit protection schemes, and the Northern Ireland Housing Executive. Essential for resolving disputes about rent, repairs, or deposit deductions.
@@ -485,7 +485,6 @@ export default function NorthernIrelandTenancyPage() {
               </div>
 
               <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-orange-600">
-                <div className="text-4xl mb-4">??</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Deposit Protection</h3>
                 <p className="text-gray-700">
                   Clearly states the deposit amount (maximum one month's rent), chosen protection scheme (TDS NI or MyDeposits NI), and procedures for deductions. Protects both landlord and tenant interests.
@@ -493,15 +492,13 @@ export default function NorthernIrelandTenancyPage() {
               </div>
 
               <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-blue-600">
-                <div className="text-4xl mb-4">??</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Property Standards</h3>
                 <p className="text-gray-700">
-                  Documents compliance with safety requirements: gas safety certificate, EICR (from 2025), EPC, smoke alarms. Clarifies landlord's repair and maintenance obligations.
+                  Records the selected safety-document and alarm facts, including gas safety, EICR, EPC, smoke and carbon-monoxide information, without claiming that a missing document exists.
                 </p>
               </div>
 
               <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-indigo-600">
-                <div className="text-4xl mb-4">??</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Professional Standard</h3>
                 <p className="text-gray-700">
                   A comprehensive, professional agreement builds tenant confidence, demonstrates professionalism, and sets clear expectations for a positive landlord-tenant relationship.
@@ -519,31 +516,31 @@ export default function NorthernIrelandTenancyPage() {
             <div className="space-y-8">
               <div className="flex items-start gap-4">
                 <div className="shrink-0 w-16 h-16 bg-red-100 rounded-full flex items-center justify-center text-3xl">
-                  ??
+                  NI
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">Private Landlords in Northern Ireland</h3>
                   <p className="text-gray-700">
-                    Individual property owners renting out residential properties in NI. Our agreements ensure compliance with the Private Tenancies Act 2022 and all 2025 updates including mandatory EICR requirements.
+                    Individual property owners renting out residential properties in NI. The wizard uses NI-specific questions derived from the Private Tenancies Act 2022 framework and the 2025 operational changes.
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-4">
                 <div className="shrink-0 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-3xl">
-                  ??
+                  AG
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">Letting Agents and Property Managers</h3>
                   <p className="text-gray-700">
-                    Agents managing properties on behalf of landlords need up-to-date, compliant agreements. Our templates include all 2025 legal requirements and can be used across your portfolio.
+                    Agents managing properties on behalf of landlords can use the same standard NI workflow across a portfolio, with each agreement generated from that property’s answers.
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-4">
                 <div className="shrink-0 w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center text-3xl">
-                  ??
+                  1
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">First-Time Landlords</h3>
@@ -555,7 +552,7 @@ export default function NorthernIrelandTenancyPage() {
 
               <div className="flex items-start gap-4">
                 <div className="shrink-0 w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center text-3xl">
-                  ??
+                  PL
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">Portfolio Landlords</h3>
@@ -704,7 +701,7 @@ export default function NorthernIrelandTenancyPage() {
                     <div className="shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">14</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Notice Periods</h4>
-                      <p className="text-sm text-gray-600">Length-based notice (28/56/84 days), tenant notice period, break clause details</p>
+                      <p className="text-sm text-gray-600">Separate landlord and tenant notice minimums, plus any valid break-clause details</p>
                     </div>
                   </div>
                 </div>
@@ -718,12 +715,12 @@ export default function NorthernIrelandTenancyPage() {
                 <div className="bg-white/10 backdrop-blur rounded-lg p-6">
                   <h4 className="text-xl font-bold mb-3">{`Standard - ${standardPrice}`}</h4>
                   <ul className="space-y-2 text-sm">
-                    <li>? All legal essentials for NI tenancies</li>
-                    <li>? 2025 legal updates (EICR, rent restrictions)</li>
-                    <li>? Length-based notice periods</li>
-                    <li>? Deposit protection clauses</li>
-                    <li>? Standard terms & conditions</li>
-                    <li>? Clear, professional formatting</li>
+                    <li>NI-specific tenancy terms</li>
+                    <li>2025 operational updates (EICR and rent restrictions)</li>
+                    <li>Separate landlord and tenant notice-period rows</li>
+                    <li>Deposit protection clauses</li>
+                    <li>Standard terms and conditions</li>
+                    <li>Clear, professional formatting</li>
                   </ul>
                   <Link
                     href="/wizard?product=ast_standard&jurisdiction=northern-ireland&src=ni_tenancy_hub&topic=tenancy"
@@ -840,9 +837,9 @@ export default function NorthernIrelandTenancyPage() {
                   <div className="border-l-4 border-red-600 pl-4">
                     <h4 className="font-semibold text-gray-900">2025 Length-Based Notice</h4>
                     <ul className="text-sm text-gray-700 space-y-1 mt-2">
-                      <li>• <strong>Under 1 year:</strong> 28 days minimum</li>
-                      <li>• <strong>1-10 years:</strong> 56 days minimum</li>
-                      <li>• <strong>Over 10 years:</strong> 84 days minimum</li>
+                      <li>• <strong>Not more than 12 months:</strong> 4 weeks minimum</li>
+                      <li>• <strong>More than 12 months to 10 years:</strong> 8 weeks minimum</li>
+                      <li>• <strong>More than 10 years:</strong> 12 weeks minimum</li>
                     </ul>
                   </div>
 
@@ -891,7 +888,7 @@ export default function NorthernIrelandTenancyPage() {
               <div className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
                 <h3 className="text-xl font-semibold text-red-600 mb-2">Notice to Quit</h3>
                 <p className="text-gray-700 text-sm mb-3">
-                  Official notice from landlord to end a tenancy, with length-based notice periods (28/56/84 days).
+                  Formal notice used to end a tenancy. The applicable minimum depends on who gives notice and how long the tenancy has existed.
                 </p>
                 <Link href="/products/notice-only" className="text-red-600 hover:underline text-sm font-semibold">
                   Learn More ?
@@ -936,7 +933,7 @@ export default function NorthernIrelandTenancyPage() {
             },
             {
               question: "What changed in Northern Ireland tenancy law in 2025?",
-              answer: "From 1 April 2025, key changes include: Mandatory EICR (all private rentals must have an Electrical Installation Condition Report renewed every 5 years), Rent Increase Limits (once per year maximum, 12-month gap between increases), 3-Month Notice required for all rent increases, and Length-Based Notice Periods (28/56/84 days depending on tenancy duration)."
+              answer: "From 1 April 2025, key changes include electrical installation checks, a minimum 12-month gap between rent increases, and three months' written notice of a rent increase. The agreement shows landlord and tenant Notice to Quit minimums separately."
             },
             {
               question: "What is the maximum deposit I can charge in Northern Ireland?",
@@ -956,7 +953,7 @@ export default function NorthernIrelandTenancyPage() {
             },
             {
               question: "What are the length-based notice periods?",
-              answer: "From 2025, when landlords end a periodic tenancy, notice periods are based on how long the tenancy has lasted: Under 1 year (minimum 28 days' notice), 1 to 10 years (minimum 56 days' notice / 8 weeks), Over 10 years (minimum 84 days' notice / 12 weeks). Tenants typically give notice as specified in the agreement (commonly 1 month)."
+              answer: "A landlord must give at least 4 weeks where the tenancy has existed for not more than 12 months, 8 weeks where it has existed for more than 12 months but not more than 10 years, and 12 weeks after 10 years. A tenant must give at least 4 weeks where the tenancy has not existed for more than 10 years and at least 12 weeks after 10 years."
             },
             {
               question: "Can tenants have pets?",
@@ -1007,7 +1004,7 @@ export default function NorthernIrelandTenancyPage() {
           <div className="max-w-4xl mx-auto bg-primary rounded-2xl shadow-2xl p-12 text-center text-white">
             <h2 className="text-4xl font-bold mb-4">Ready to Create Your Tenancy Agreement?</h2>
             <p className="text-xl mb-8 opacity-90">
-              Join Northern Ireland landlords who trust Landlord Heaven for 2025-compliant, professional tenancy agreements.
+              Create a professional Northern Ireland agreement from your property, party, payment, deposit, inventory, and safety answers.
             </p>
             <div className="flex gap-6 justify-center flex-wrap">
               <Link

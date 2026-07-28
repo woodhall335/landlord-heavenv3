@@ -10,11 +10,11 @@ describe('tenancy product pages', () => {
   it('/products/ast acts as the England comparison owner page', () => {
     const source = readSource('src/app/(marketing)/products/ast/page.tsx');
 
-    expect(source).toContain('Choose the agreement that fits the let');
-    expect(source).toContain('Compare the five England agreement workflows.');
+    expect(source).toContain('Choose by how the property is let');
+    expect(source).toContain('Compare the five England agreement options.');
     expect(source).toContain('Choose the agreement before you start');
     expect(source).toContain('Common landlord questions before choosing an England tenancy agreement');
-    expect(source).toContain('Standard, Premium, Student, HMO / Shared House, and Lodger');
+    expect(source).toContain('Standard, Premium, Student, HMO, and Lodger');
     expect(source).toContain('pricingItemListSchema');
   });
 
@@ -77,7 +77,7 @@ describe('tenancy product pages', () => {
     const premiumSource = readSource('src/app/premium-tenancy-agreement/page.tsx');
 
     expect(standardSource).toContain('PRODUCT_OWNER_METADATA.standardTenancy.title');
-    expect(standardSource).toContain('Standard Tenancy Agreement for England Landlords');
+    expect(standardSource).toContain('Standard Periodic Tenancy Agreement');
     expect(standardSource).toContain('assured periodic');
     expect(standardSource).toContain('Renters Rights Act tenancy agreement');
     expect(standardSource).toContain('Build my validated Standard pack');
@@ -85,10 +85,10 @@ describe('tenancy product pages', () => {
     expect(standardSource).toContain('legacyNotice=');
 
     expect(premiumSource).toContain('PRODUCT_OWNER_METADATA.premiumTenancy.title');
-    expect(premiumSource).toContain('Premium Periodic Tenancy Agreement for England Landlords');
+    expect(premiumSource).toContain('Premium Periodic Tenancy Agreement');
     expect(premiumSource).toContain('assured periodic');
     expect(premiumSource).toContain('Renters Rights Act tenancy agreement');
-    expect(premiumSource).toContain('Build my validated Premium pack');
+    expect(premiumSource).toContain('Build the validated Premium tenancy pack');
     expect(premiumSource).toContain('not a static form');
     expect(premiumSource).toContain('england tenancy agreement management schedule');
     expect(premiumSource).toContain('you want a stronger pack with a management schedule and handover records');

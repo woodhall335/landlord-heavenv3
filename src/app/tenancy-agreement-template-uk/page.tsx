@@ -4,33 +4,46 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { Container } from '@/components/ui/Container';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
+import { TENANCY_AGREEMENT_REGISTRY } from '@/lib/tenancy/agreement-registry';
 
 const pagePath = '/tenancy-agreement-template-uk';
 const canonicalUrl = getCanonicalUrl(pagePath);
 
-const jurisdictions = [
-  {
-    name: 'England',
-    href: '/tenancy-agreement-template',
+const JURISDICTION_LABELS = {
+  england: 'England',
+  wales: 'Wales',
+  scotland: 'Scotland',
+  'northern-ireland': 'Northern Ireland',
+} as const;
+
+const JURISDICTION_SUMMARIES = {
+  england:
+    'Compare the supported England agreement routes and choose the agreement that matches the let.',
+  wales:
+    'Choose a fixed-term or periodic standard occupation contract for a property in Wales.',
+  scotland:
+    'Create the standard Scotland Private Residential Tenancy and receive the supporting notes.',
+  'northern-ireland':
+    'Create the standard Northern Ireland private tenancy pack with its prescribed supporting documents.',
+} as const;
+
+const jurisdictions = Object.keys(JURISDICTION_LABELS).map((jurisdiction) => {
+  const entry = TENANCY_AGREEMENT_REGISTRY.find(
+    (candidate) => candidate.jurisdiction === jurisdiction
+  );
+  if (!entry) {
+    throw new Error(`Missing tenancy agreement registry entry for ${jurisdiction}`);
+  }
+  return {
+    name: JURISDICTION_LABELS[jurisdiction as keyof typeof JURISDICTION_LABELS],
+    href: entry.detailsRoute,
     summary:
-      'Use the England agreement example page for the sample agreement preview and the Standard / Premium journey.',
-  },
-  {
-    name: 'Wales',
-    href: '/wales-tenancy-agreement-template',
-    summary: 'Use the Wales route if the property uses the Welsh occupation-contract framework.',
-  },
-  {
-    name: 'Scotland',
-    href: '/private-residential-tenancy-agreement-template',
-    summary: 'Use the Scotland route for private residential tenancy agreement wording.',
-  },
-  {
-    name: 'Northern Ireland',
-    href: '/northern-ireland-tenancy-agreement-template',
-    summary: 'Use the Northern Ireland route for private tenancy wording and local compliance.',
-  },
-];
+      JURISDICTION_SUMMARIES[
+        jurisdiction as keyof typeof JURISDICTION_SUMMARIES
+      ],
+    releaseStatus: entry.releaseStatus,
+  };
+});
 
 export const metadata: Metadata = {
   title: 'Tenancy Agreement Template UK | Choose Your Jurisdiction',
@@ -79,6 +92,11 @@ export default function TenancyAgreementTemplateUkPage() {
                   {jurisdiction.name}
                 </p>
                 <p className="mt-4 text-base leading-7 text-[#556177]">{jurisdiction.summary}</p>
+                <p className="mt-3 text-sm font-medium text-[#237A57]">
+                  {jurisdiction.releaseStatus === 'available'
+                    ? 'Available'
+                    : 'Not currently available'}
+                </p>
                 <Link
                   href={jurisdiction.href}
                   className="mt-6 inline-flex items-center text-sm font-semibold text-[#4A46C8] transition hover:text-[#2F2BA6]"

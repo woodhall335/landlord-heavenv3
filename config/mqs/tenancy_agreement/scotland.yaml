@@ -1255,20 +1255,21 @@ questions:
     inputType: group
     helperText: "Helps us generate the inventory and cleaning clauses."
     fields:
-      - id: inventory_attached
-        label: "Will you attach an inventory schedule?"
-        inputType: yes_no
-        validation:
-          required: true
-        width: half
       - id: inventory_delivery_method
-        label: "How will the inventory be supplied?"
+        label: "When will the completed inventory be supplied?"
         inputType: select
         options:
-          - value: "attached"
-            label: "Attached as Schedule 1"
           - value: "later"
-            label: "Supplied no later than the tenancy start date"
+            label: "Separately, no later than the tenancy start date"
+        validation:
+          required: true
+        width: full
+      - id: inventory_due_date
+        label: "Date the completed inventory will be supplied"
+        inputType: date
+        dependsOn:
+          questionId: inventory_delivery_method
+          value: "later"
         validation:
           required: true
         width: half
@@ -1293,8 +1294,8 @@ questions:
         inputType: text
         width: full
     maps_to:
-      - inventory_attached
       - inventory_delivery_method
+      - inventory_due_date
       - professional_cleaning_required
       - decoration_condition
       - property_description

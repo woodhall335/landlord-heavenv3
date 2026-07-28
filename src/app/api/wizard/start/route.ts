@@ -85,6 +85,7 @@ const startWizardSchema = z.object({
   case_type: z.enum(['eviction', 'money_claim', 'tenancy_agreement', 'rent_increase']).optional(),
   product_variant: z.string().optional(),
   requested_product: z.string().optional(),
+  contract_type: z.enum(['fixed', 'periodic']).optional(),
 });
 
 type StartProduct =
@@ -136,6 +137,7 @@ const resolveProductTier = (
 
   switch (product) {
     case 'ast_standard':
+      if (jurisdiction === 'wales') return 'Standard Occupation Contract';
       if (jurisdiction === 'scotland')
         return 'Standard Scottish Private Residential Tenancy';
       if (jurisdiction === 'northern-ireland') return 'Standard NI Private Tenancy';
@@ -202,6 +204,7 @@ export async function POST(request: Request) {
       validator_key,
       product_variant,
       requested_product,
+      contract_type,
     } =
       validationResult.data;
 
@@ -241,6 +244,23 @@ export async function POST(request: Request) {
     if (
       !case_id &&
       effectiveJurisdiction !== 'england' &&
+      resolvedCaseType === 'tenancy_agreement' &&
+      product === 'ast_premium'
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            'Only the standard tenancy agreement is sold for Wales, Scotland and Northern Ireland.',
+          reason: 'standard_only_jurisdiction',
+          redirect_to: `/wizard?product=ast_standard&jurisdiction=${effectiveJurisdiction}`,
+        },
+        { status: 409 }
+      );
+    }
+
+    if (
+      !case_id &&
+      effectiveJurisdiction !== 'england' &&
       !allowedNonEnglandStandardTenancy
     ) {
       return NextResponse.json(
@@ -253,7 +273,11 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!case_id && !isPubliclyStartableProduct(storedProduct)) {
+    if (
+      !case_id &&
+      !allowedNonEnglandStandardTenancy &&
+      !isPubliclyStartableProduct(storedProduct)
+    ) {
       return NextResponse.json(
         {
           error: 'This product is not publicly startable.',
@@ -441,6 +465,9 @@ export async function POST(request: Request) {
         ...(tierLabel ? { product_tier: tierLabel } : {}),
         property_country: effectiveJurisdiction,
         jurisdiction: effectiveJurisdiction,
+        ...(effectiveJurisdiction === 'wales' && contract_type
+          ? { is_fixed_term: contract_type === 'fixed' }
+          : {}),
         ...(resolvedCaseType === 'rent_increase'
           ? {
               section13: createEmptySection13State(
@@ -514,6 +541,9 @@ export async function POST(request: Request) {
         ...(tierLabel ? { product_tier: tierLabel } : {}),
         property_country: facts.property_country ?? effectiveJurisdiction,
         jurisdiction: facts.jurisdiction ?? effectiveJurisdiction,
+        ...(effectiveJurisdiction === 'wales' && contract_type
+          ? { is_fixed_term: contract_type === 'fixed' }
+          : {}),
         ...(resolvedCaseType === 'rent_increase'
           ? {
               section13:

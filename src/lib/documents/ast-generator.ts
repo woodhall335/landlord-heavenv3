@@ -997,6 +997,9 @@ export interface ASTData {
   inventory_provided?: boolean;
   inventory_delivery_method?: 'attached' | 'later';
   inventory_due_date?: string;
+  inventory?: { rooms?: unknown[] };
+  inventory_rooms?: unknown[];
+  inspection_rooms?: unknown[];
   professional_cleaning_required?: boolean;
   decoration_condition?: string;
   inventory_schedule_notes?: string;
@@ -1299,6 +1302,14 @@ export function validateASTData(data: ASTData): string[] {
     data.inventory_attached === false
   ) {
     errors.push('inventory attachment facts are contradictory');
+  }
+  if (
+    data.inventory_delivery_method === 'attached' &&
+    !detectInventoryData(data as unknown as Record<string, unknown>)
+  ) {
+    errors.push(
+      'inventory_delivery_method cannot be attached without a completed structured inventory'
+    );
   }
   if (
     data.inventory_delivery_method === 'later' &&
@@ -1947,14 +1958,22 @@ export async function generateStandardASTDocuments(
     throw err;
   }
 
-  // DOCUMENT 2: Standalone Inventory & Schedule of Condition (blank template for standard tier)
+  // DOCUMENT 2: Standalone Inventory & Schedule of Condition. A completed
+  // inventory is only rendered when structured rows exist; otherwise this is
+  // clearly a blank completion aid and is never appended as an attachment.
   try {
+    const hasInventoryData = detectInventoryData(
+      data as unknown as Record<string, unknown>
+    );
+    const structuredInventory =
+      data.inventory ??
+      (Array.isArray(data.inventory_rooms) ? { rooms: data.inventory_rooms } : null) ??
+      (Array.isArray(data.inspection_rooms) ? { rooms: data.inspection_rooms } : null);
     const inventoryDoc = await generateDocument({
       templatePath: config.templatePaths.inventoryStandalone,
       data: {
         ...enrichedData,
-        // Standard tier always uses blank template (no wizard data)
-        inventory: null,
+        inventory: hasInventoryData ? structuredInventory : null,
         case_id: caseId || documentId,
         timestamp: Date.now(),
       },
@@ -1963,7 +1982,9 @@ export async function generateStandardASTDocuments(
     });
     documents.push({
       title: 'Inventory & Schedule of Condition',
-      description: 'Blank inventory template for manual completion at check-in',
+      description: hasInventoryData
+        ? 'Completed inventory generated from the wizard information'
+        : 'Blank inventory template for manual completion before it is supplied to the tenant',
       category: 'schedule',
       document_type: config.inventoryDocumentType,
       html: inventoryDoc.html,

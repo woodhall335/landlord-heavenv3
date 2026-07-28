@@ -6,6 +6,7 @@ import {
   normalizeIsoDateString,
 } from '@/lib/tenancy/england-reform';
 import { isEnglandModernTenancyProductSku } from '@/lib/tenancy/england-product-model';
+import { detectInventoryData } from '@/lib/tenancy/product-tier';
 
 export const REQUIRED_TENANCY_FIELDS = [
   'landlord_full_name',
@@ -323,6 +324,12 @@ export function validateTenancyRequiredFacts(
       inventoryDeliveryMethod !== 'later'
     ) {
       missing.add('inventory_delivery_method');
+    } else if (
+      inventoryDeliveryMethod === 'attached' &&
+      !detectInventoryData(wizardFacts)
+    ) {
+      invalid.add('inventory_delivery_method');
+      missing.add('inventory_rooms');
     } else if (
       inventoryDeliveryMethod === 'later' &&
       !hasValidDate(wizardFacts.inventory_due_date)
@@ -686,6 +693,12 @@ export function validateTenancyRequiredFacts(
   }
 
   if (jurisdiction === 'wales') {
+    if (wizardFacts.inventory_delivery_method !== 'later') {
+      missing.add('inventory_delivery_method');
+    }
+    if (!hasValidDate(wizardFacts.inventory_due_date)) {
+      missing.add('inventory_due_date');
+    }
     if (isBlankString(wizardFacts.first_payment)) missing.add('first_payment');
     if (!hasValidDate(wizardFacts.first_payment_date)) {
       if (isBlankString(wizardFacts.first_payment_date)) {
@@ -735,6 +748,19 @@ export function validateTenancyRequiredFacts(
     requiredModelFields.forEach((field) => {
       if (isBlankString(wizardFacts[field])) missing.add(field);
     });
+    if (
+      wizardFacts.inventory_delivery_method === 'attached' &&
+      !detectInventoryData(wizardFacts)
+    ) {
+      invalid.add('inventory_delivery_method');
+      missing.add('inventory_rooms');
+    }
+    if (
+      wizardFacts.inventory_delivery_method === 'later' &&
+      !hasValidDate(wizardFacts.inventory_due_date)
+    ) {
+      missing.add('inventory_due_date');
+    }
 
     const rawTenants = wizardFacts.tenants;
     if (Array.isArray(rawTenants)) {

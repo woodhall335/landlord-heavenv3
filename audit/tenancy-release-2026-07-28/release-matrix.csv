@@ -1,0 +1,6 @@
+jurisdiction,public_product,premium_sale,registry_status,wizard_start,checkout,inventory_mode
+wales,Fixed-Term Standard Occupation Contract,disabled,available,enabled,enabled,separate completed inventory by stated date
+wales,Periodic Standard Occupation Contract,disabled,available,enabled,enabled,separate completed inventory by stated date
+scotland,Private Residential Tenancy,disabled,available,enabled,enabled,separate completed inventory no later than tenancy start
+northern-ireland,Private Tenancy Agreement,disabled,available,enabled,enabled,separate completed inventory by stated date
+

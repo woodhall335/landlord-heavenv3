@@ -12,13 +12,14 @@ const JURISDICTIONS: TenancyJurisdiction[] = [
 ];
 
 describe('Tenancy premium commercial proof points', () => {
-  it('sells one premium tenancy product across all jurisdictions', () => {
+  it('sells premium only in England and standard in every supported jurisdiction', () => {
     expect(PRODUCTS.ast_premium).toBeDefined();
     expect(PRODUCTS.ast_premium.label.toLowerCase()).toContain('premium');
-    expect(REGIONAL_PRODUCT_AVAILABILITY.ast_premium.available).toEqual(JURISDICTIONS);
+    expect(REGIONAL_PRODUCT_AVAILABILITY.ast_premium.available).toEqual(['england']);
+    expect(REGIONAL_PRODUCT_AVAILABILITY.ast_standard.available).toEqual(JURISDICTIONS);
   });
 
-  it.each(JURISDICTIONS)('premium tier is materially broader in %s pack contents', (jurisdiction) => {
+  it.each(JURISDICTIONS)('legacy premium generation remains materially distinct in %s', (jurisdiction) => {
     const docs = getASTDocuments(jurisdiction, 'premium', { hasInventoryData: true });
     const agreement = docs[0];
 

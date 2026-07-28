@@ -1898,8 +1898,9 @@ export async function POST(request: Request) {
         );
       }
 
-      const { data: publicUrlData } = adminClient.storage.from('documents').getPublicUrl(fileName);
-      pdfUrl = publicUrlData.publicUrl;
+      // Store the private bucket object key. The document API verifies
+      // ownership and creates a short-lived signed URL for downloads.
+      pdfUrl = fileName;
     }
 
     // Save document record. Use explicit update-or-insert rather than Supabase

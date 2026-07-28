@@ -30,6 +30,7 @@ import {
 } from '@/lib/public-retirements';
 import { productSamplePagePaths } from '@/lib/marketing/product-sample-pages';
 import { getPublicCatalogProducts, getPublicTenancyProducts } from '@/lib/public-products';
+import { TENANCY_AGREEMENT_REGISTRY } from '@/lib/tenancy/agreement-registry';
 import sitemapAllowlist from '../../scripts/seo-sitemap-allowlist.json';
 
 const NON_ENGLAND_PUBLIC_DISCOVERY_PATTERNS = [
@@ -157,6 +158,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   const requestedIndexablePages = [
+    ...TENANCY_AGREEMENT_REGISTRY
+      .filter(
+        (entry) =>
+          entry.jurisdiction !== 'england' &&
+          entry.indexable &&
+          entry.sitemapEligible &&
+          entry.releaseStatus === 'available'
+      )
+      .map((entry) => ({
+        path: entry.detailsRoute,
+        priority: 0.85,
+        changeFrequency: 'weekly' as const,
+      })),
     { path: '/eviction-cost-uk', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/eviction-process-uk', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/eviction-timeline-uk', priority: 0.85, changeFrequency: 'weekly' as const },
@@ -260,12 +274,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/assured-periodic-tenancy-agreement', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/renters-rights-act-information-sheet-2026', priority: 0.82, changeFrequency: 'weekly' as const },
     { path: '/joint-tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
-    // Tenancy Agreement SEO Pages - Wales (Q1 2026)
-    { path: '/wales-tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
-    // Tenancy Agreement SEO Pages - Scotland (Q1 2026)
-    { path: '/private-residential-tenancy-agreement-template', priority: 0.85, changeFrequency: 'weekly' as const },
-    // Tenancy Agreement SEO Pages - Northern Ireland (Q1 2026)
-    { path: '/northern-ireland-tenancy-agreement-template', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/notice-to-quit-northern-ireland-guide', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/ni-tenancy-agreement-template-free', priority: 0.8, changeFrequency: 'weekly' as const },
     // Tenancy Agreement SEO Landing Pages - England (Jan 2026)

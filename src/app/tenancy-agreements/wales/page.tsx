@@ -7,13 +7,28 @@ import { buildMerchantOffer } from '@/lib/seo/structured-data';
 import {
   PRODUCT_PRICE_AMOUNT_STRINGS,
   PRODUCTS,
-  TENANCY_AGREEMENT_FROM_PRICE,
 } from '@/lib/pricing/products';
 import { isNonEnglandStandardTenancyPubliclyEnabled } from '@/lib/tenancy/non-england-rollout';
+import { TENANCY_AGREEMENT_REGISTRY } from '@/lib/tenancy/agreement-registry';
 
 const PRICE_VALID_UNTIL = '2026-12-31';
 const standardPrice = PRODUCTS.ast_standard.displayPrice;
 const isPubliclyEnabled = isNonEnglandStandardTenancyPubliclyEnabled('wales');
+const fixedContractEntry = TENANCY_AGREEMENT_REGISTRY.find(
+  (entry) =>
+    entry.jurisdiction === 'wales' &&
+    entry.agreementType === 'fixed_term_standard_occupation_contract'
+);
+const periodicContractEntry = TENANCY_AGREEMENT_REGISTRY.find(
+  (entry) =>
+    entry.jurisdiction === 'wales' &&
+    entry.agreementType === 'periodic_standard_occupation_contract'
+);
+if (!fixedContractEntry || !periodicContractEntry) {
+  throw new Error('Wales standard occupation-contract registry entries are missing');
+}
+const fixedContractHref = `${fixedContractEntry.startRoute}&src=wales_tenancy_hub&topic=tenancy`;
+const periodicContractHref = `${periodicContractEntry.startRoute}&src=wales_tenancy_hub&topic=tenancy`;
 
 export const metadata: Metadata = {
   title: 'Wales Occupation Contract 2026 | Template',
@@ -161,6 +176,10 @@ export default function WalesOccupationContractPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
 
       <div className="min-h-screen bg-gradient-to-br from-red-50 via-red-100 to-red-50 pt-20 text-gray-900">
         {/* Breadcrumb Navigation */}
@@ -186,7 +205,7 @@ export default function WalesOccupationContractPage() {
             </div>
 
             <div className="inline-flex items-center rounded-full bg-red-100 px-4 py-2 text-sm font-semibold text-red-800 mb-5">
-              Updated for 2026 • Renting Homes (Wales) Act 2016 compliant
+              Updated for 2026 • Based on the current Welsh model written statements
             </div>
 
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
@@ -194,8 +213,8 @@ export default function WalesOccupationContractPage() {
             </h1>
 
             <p className="text-xl text-gray-700 mb-4 max-w-4xl mx-auto">
-              Create a <strong>Wales tenancy agreement template</strong> that complies with the{' '}
-              <strong>Renting Homes (Wales) Act 2016</strong>, including the{' '}
+              Create a <strong>Wales occupation contract</strong> based on the{' '}
+              <strong>Renting Homes (Wales) Act 2016</strong> framework and the{' '}
               <strong>written statement</strong> wording required for Welsh landlords.
             </p>
 
@@ -206,10 +225,16 @@ export default function WalesOccupationContractPage() {
 
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&jurisdiction=wales&src=wales_tenancy_hub&topic=tenancy"
+                href={fixedContractHref}
                 className="inline-flex items-center justify-center rounded-lg border-2 border-red-600 bg-white px-6 py-3 font-semibold text-red-600 shadow-sm transition-colors hover:bg-red-50"
               >
-                {`Create Standard Contract - ${standardPrice}`}
+                {`Create Fixed-Term Contract - ${standardPrice}`}
+              </Link>
+              <Link
+                href={periodicContractHref}
+                className="inline-flex items-center justify-center rounded-lg border-2 border-red-600 bg-white px-6 py-3 font-semibold text-red-600 shadow-sm transition-colors hover:bg-red-50"
+              >
+                {`Create Periodic Contract - ${standardPrice}`}
               </Link>
             </div>
 
@@ -300,8 +325,8 @@ export default function WalesOccupationContractPage() {
               <div className="rounded-lg border border-gray-200 p-6">
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Letting agents</h3>
                 <p>
-                  Useful for agents who need compliant Welsh tenancy paperwork with the correct
-                  Occupation Contract wording and written statement structure.
+                  Useful for agents who need Welsh tenancy paperwork based on the correct
+                  Occupation Contract model and written statement structure.
                 </p>
               </div>
 
@@ -604,18 +629,26 @@ export default function WalesOccupationContractPage() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Standard Contract</h3>
                 <p className="text-4xl font-bold text-red-600 mb-4">{standardPrice}</p>
                 <ul className="space-y-2 text-gray-700 mb-6">
-                  <li>? Renting Homes (Wales) Act 2016 compliant wording</li>
-                  <li>? Written statement included</li>
-                  <li>? Fundamental and supplementary terms</li>
-                  <li>? Deposit wording</li>
-                  <li>? Suitable for most private Welsh landlords</li>
+                  <li>Renting Homes (Wales) Act 2016 model-based wording</li>
+                  <li>Written statement included</li>
+                  <li>Fundamental and supplementary terms</li>
+                  <li>Deposit wording</li>
+                  <li>Designed for standard private Welsh occupation contracts</li>
                 </ul>
-                <Link
-                  href="/wizard?product=ast_standard&jurisdiction=wales&src=wales_tenancy_hub&topic=tenancy"
-                  className="block text-center bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
-                >
-                  Create Standard Contract
-                </Link>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <Link
+                    href={fixedContractHref}
+                    className="block text-center bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
+                  >
+                    Fixed-Term
+                  </Link>
+                  <Link
+                    href={periodicContractHref}
+                    className="block text-center bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
+                  >
+                    Periodic
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
@@ -754,10 +787,16 @@ export default function WalesOccupationContractPage() {
             </p>
             <div className="flex gap-6 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&jurisdiction=wales&src=wales_tenancy_hub&topic=tenancy"
+                href={fixedContractHref}
                 className="bg-white text-red-600 px-8 py-4 rounded-lg font-semibold hover:bg-red-50 transition-colors text-lg shadow-lg"
               >
-                {`Standard Contract - ${standardPrice}`}
+                {`Fixed-Term - ${standardPrice}`}
+              </Link>
+              <Link
+                href={periodicContractHref}
+                className="bg-white text-red-600 px-8 py-4 rounded-lg font-semibold hover:bg-red-50 transition-colors text-lg shadow-lg"
+              >
+                {`Periodic - ${standardPrice}`}
               </Link>
             </div>
             <p className="mt-6 text-sm text-red-100">

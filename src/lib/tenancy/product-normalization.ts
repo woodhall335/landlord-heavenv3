@@ -58,9 +58,9 @@ export type ProductTier = 'standard' | 'premium';
  */
 export const VALID_SKUS_BY_JURISDICTION: Record<CanonicalJurisdiction, TenancyDisplaySku[]> = {
   england: ['ast_standard', 'ast_premium'],
-  wales: ['occupation_standard', 'occupation_premium'],
-  scotland: ['prt_standard', 'prt_premium'],
-  'northern-ireland': ['ni_standard', 'ni_premium'],
+  wales: ['occupation_standard'],
+  scotland: ['prt_standard'],
+  'northern-ireland': ['ni_standard'],
 };
 
 /**
@@ -150,9 +150,9 @@ export function isValidSkuForJurisdiction(
     return true;
   }
 
-  // Also accept the base ast_standard/ast_premium for any jurisdiction
-  // (they get normalized to jurisdiction-specific display)
-  if (sku === 'ast_standard' || sku === 'ast_premium') {
+  // Generic standard is accepted for every jurisdiction. Premium is an
+  // England-only public product; historical paid cases are handled separately.
+  if (sku === 'ast_standard' || (sku === 'ast_premium' && jurisdiction === 'england')) {
     return true;
   }
 
@@ -209,14 +209,17 @@ export function normalizeProductForJurisdiction(params: {
   }
 
   // Check if entitled to premium through entitlements
-  const hasPremiumEntitlement = (entitlements || []).some(
+  const hasPremiumEntitlement = jurisdiction === 'england' && (entitlements || []).some(
     (e) => e === 'ast_premium' || e.includes('premium')
   );
 
   // Priority 2: Use requested SKU if provided
   let tier: ProductTier = 'standard';
   if (requestedSku) {
-    tier = extractTierFromSku(requestedSku);
+    tier =
+      jurisdiction === 'england'
+        ? extractTierFromSku(requestedSku)
+        : 'standard';
   } else if (hasPremiumEntitlement) {
     tier = 'premium';
   }
@@ -253,7 +256,7 @@ export function getDisplaySkuForUrl(
   jurisdiction: CanonicalJurisdiction,
   sku: string | null | undefined
 ): TenancyDisplaySku {
-  const tier = extractTierFromSku(sku);
+  const tier = jurisdiction === 'england' ? extractTierFromSku(sku) : 'standard';
   const paymentSku: TenancyProductSku = tier === 'premium' ? 'ast_premium' : 'ast_standard';
   return PAYMENT_TO_DISPLAY_SKU[jurisdiction][paymentSku];
 }
@@ -322,11 +325,14 @@ export function validateUrlProduct(
 
   // Check if it's a payment SKU that needs conversion
   if (urlProduct === 'ast_standard' || urlProduct === 'ast_premium') {
-    return PAYMENT_TO_DISPLAY_SKU[jurisdiction][urlProduct];
+    const paymentSku =
+      jurisdiction === 'england' ? urlProduct : 'ast_standard';
+    return PAYMENT_TO_DISPLAY_SKU[jurisdiction][paymentSku];
   }
 
   // Check if it's a different jurisdiction's SKU - normalize it
-  const tier = extractTierFromSku(urlProduct);
+  const tier =
+    jurisdiction === 'england' ? extractTierFromSku(urlProduct) : 'standard';
   const paymentSku: TenancyProductSku = tier === 'premium' ? 'ast_premium' : 'ast_standard';
   return PAYMENT_TO_DISPLAY_SKU[jurisdiction][paymentSku];
 }

@@ -2,8 +2,9 @@
  * Wizard Flow Page
  *
  * The main structured wizard experience.
- * Public starts are England-only; hidden legacy resumes can still carry
- * historic non-England jurisdiction context through direct case access.
+ * Public starts include released standard tenancy products for Wales,
+ * Scotland and Northern Ireland. Other non-England public combinations remain
+ * blocked; historical cases can still resume through direct case access.
  */
 
 'use client';
@@ -46,6 +47,10 @@ import {
   getPublicProductOwnerHref,
   isPubliclyStartableProduct,
 } from '@/lib/public-products';
+import {
+  isNonEnglandStandardTenancyPubliclyEnabled,
+  isStandardTenancyEntryProduct,
+} from '@/lib/tenancy/non-england-rollout';
 import {
   RENT_CHECKER_HANDOFF_STORAGE_KEY,
   getSection13WizardDraftStorageKey,
@@ -180,8 +185,15 @@ function WizardFlowContent() {
     .map((field) => field.trim())
     .filter(Boolean)
     .map((field) => TENANCY_FIELD_TO_SECTION[field] || field);
+  const allowedNonEnglandStandardTenancy =
+    !editCaseId &&
+    type === 'tenancy_agreement' &&
+    isStandardTenancyEntryProduct(product) &&
+    isNonEnglandStandardTenancyPubliclyEnabled(rawJurisdiction);
   const publicJurisdictionBlocked =
-    !editCaseId && Boolean(rawJurisdiction && rawJurisdiction !== 'england');
+    !editCaseId &&
+    Boolean(rawJurisdiction && rawJurisdiction !== 'england') &&
+    !allowedNonEnglandStandardTenancy;
   const jurisdiction = (editCaseId ? rawJurisdiction : rawJurisdiction ?? 'england') as Jurisdiction;
 
   // SAFETY GUARD: For editing paid cases, use order's product_type to prevent downgrade
@@ -260,7 +272,13 @@ function WizardFlowContent() {
       return;
     }
 
-    if (!editCaseId && product && product !== 'tenancy_agreement' && !isPubliclyStartableProduct(product)) {
+    if (
+      !editCaseId &&
+      product &&
+      product !== 'tenancy_agreement' &&
+      !allowedNonEnglandStandardTenancy &&
+      !isPubliclyStartableProduct(product)
+    ) {
       router.replace(getPublicProductOwnerHref(product, type));
       return;
     }
@@ -268,7 +286,15 @@ function WizardFlowContent() {
     if (!hasRequiredParams) {
       router.push('/wizard');
     }
-  }, [editCaseId, hasRequiredParams, product, publicJurisdictionBlocked, router, type]);
+  }, [
+    allowedNonEnglandStandardTenancy,
+    editCaseId,
+    hasRequiredParams,
+    product,
+    publicJurisdictionBlocked,
+    router,
+    type,
+  ]);
 
   // Normalize product for Ask Heaven / wizard - use effectiveProduct (order-aware)
   const isPaidLegacyEnglandTenancy =
@@ -492,6 +518,7 @@ function WizardFlowContent() {
           product: startProduct,
           jurisdiction,
           requested_product: rawProduct || startProduct,
+          contract_type: searchParams.get('contract_type') || undefined,
         }),
       });
 

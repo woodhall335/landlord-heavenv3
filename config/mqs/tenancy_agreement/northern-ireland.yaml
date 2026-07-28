@@ -1101,8 +1101,6 @@ questions:
         label: "How will the inventory be supplied?"
         inputType: select
         options:
-          - value: "attached"
-            label: "Attach the completed inventory to this pack now"
           - value: "later"
             label: "Supply a completed inventory separately by a stated date"
         validation:

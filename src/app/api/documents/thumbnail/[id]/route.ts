@@ -15,6 +15,7 @@
 
 import { getServerUser, tryCreateServerSupabaseClient } from '@/lib/supabase/server';
 import { pdfToPreviewThumbnail, getBrowserDiagnostics } from '@/lib/documents/generator';
+import { resolveStoragePath } from '@/lib/documents/download';
 import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
@@ -217,21 +218,16 @@ export async function GET(
 
       let pdfAccessUrl = docRecord.pdf_url;
       let usedSignedUrl = false;
-      let storagePath: string | null = null;
-
-      // Extract storage path for logging
-      const publicMarker = '/storage/v1/object/public/documents/';
-      const publicIndex = docRecord.pdf_url.indexOf(publicMarker);
-      if (publicIndex !== -1) {
-        storagePath = docRecord.pdf_url.substring(publicIndex + publicMarker.length);
-      }
+      const storagePath = resolveStoragePath(docRecord.pdf_url);
 
       // Debug log: PDF generation start
       debugLog('PDF_START', {
         documentId: docRecord.id,
         docType: docRecord.document_type,
         storagePath,
-        originalUrlHostname: new URL(docRecord.pdf_url).hostname,
+        originalUrlHostname: docRecord.pdf_url.startsWith('http')
+          ? new URL(docRecord.pdf_url).hostname
+          : null,
         usingAdminClient,
       });
 

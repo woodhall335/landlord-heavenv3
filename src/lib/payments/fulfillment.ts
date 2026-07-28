@@ -339,8 +339,6 @@ async function persistGeneratedDocuments(
       throw uploadError;
     }
 
-    const { data: publicUrlData } = supabase.storage.from('documents').getPublicUrl(fileName);
-
     const documentPayload = {
       user_id: userId,
       case_id: caseId,
@@ -351,7 +349,9 @@ async function persistGeneratedDocuments(
       document_title: doc.title,
       jurisdiction,
       html_content: doc.html || null,
-      pdf_url: publicUrlData.publicUrl,
+      // The documents bucket is private. Persist only the object key; customer
+      // downloads are issued through the authenticated signed-URL endpoint.
+      pdf_url: fileName,
       is_preview: false,
       qa_passed: true,
       metadata: {
@@ -363,6 +363,7 @@ async function persistGeneratedDocuments(
         tenancy_output_snapshot_id: tenancyOutputSnapshot?.id || null,
         tenancy_output_snapshot_sha256: tenancyOutputSnapshot?.content_sha256 || null,
         tenancy_output_snapshot_source_version: tenancyOutputSnapshot?.source_version || null,
+        storage_path: fileName,
         ...(metadata || {}),
       },
     };

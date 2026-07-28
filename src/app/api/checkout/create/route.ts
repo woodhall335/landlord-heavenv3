@@ -60,14 +60,17 @@ function normalizeToPaymentSku(productType: string): string {
     tenancy_agreement: 'ast_standard',
     // Jurisdiction-specific display SKUs
     prt_standard: 'ast_standard',
-    prt_premium: 'ast_premium',
     occupation_standard: 'ast_standard',
-    occupation_premium: 'ast_premium',
     ni_standard: 'ast_standard',
-    ni_premium: 'ast_premium',
   };
   return displayToPayment[productType] || productType;
 }
+
+const RETIRED_NON_ENGLAND_PREMIUM_SKUS = new Set([
+  'prt_premium',
+  'occupation_premium',
+  'ni_premium',
+]);
 
 function isTenancyAgreementProductSku(productType: string): boolean {
   return (
@@ -81,11 +84,8 @@ function isLegacyOnlyPublicCheckoutSku(productType: string): boolean {
   return [
     'sc_money_claim',
     'prt_standard',
-    'prt_premium',
     'occupation_standard',
-    'occupation_premium',
     'ni_standard',
-    'ni_premium',
   ].includes(productType);
 }
 
@@ -126,11 +126,8 @@ const PRODUCT_TO_PRICE_ID: Record<string, string> = {
   tenancy_agreement: PRICE_IDS.STANDARD_AST, // Generic tenancy agreement defaults to standard
   // Jurisdiction-specific display SKUs - map to same prices as AST
   prt_standard: PRICE_IDS.STANDARD_AST,      // Scotland
-  prt_premium: PRICE_IDS.PREMIUM_AST,        // Scotland
   occupation_standard: PRICE_IDS.STANDARD_AST, // Wales
-  occupation_premium: PRICE_IDS.PREMIUM_AST,   // Wales
   ni_standard: PRICE_IDS.STANDARD_AST,       // Northern Ireland
-  ni_premium: PRICE_IDS.PREMIUM_AST,         // Northern Ireland
 };
 
 /**
@@ -181,9 +178,9 @@ const createCheckoutSchema = z.object({
     'section8_assisted_prep', 'money_claim_assisted_prep', 'possession_claim_assisted_prep',
     'tenancy_agreement', // Generic tenancy agreement (defaults to standard tier)
     // Jurisdiction-specific display SKUs
-    'prt_standard', 'prt_premium',           // Scotland
-    'occupation_standard', 'occupation_premium', // Wales
-    'ni_standard', 'ni_premium',             // Northern Ireland
+    'prt_standard',                          // Scotland
+    'occupation_standard',                   // Wales
+    'ni_standard',                           // Northern Ireland
     ...PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS,
   ]),
   add_ons: z.array(z.string()).optional().default([]),
@@ -304,6 +301,20 @@ export async function POST(request: Request) {
   try {
     const user = await requireServerAuth();
     const body = await request.json();
+    if (
+      typeof body?.product_type === 'string' &&
+      RETIRED_NON_ENGLAND_PREMIUM_SKUS.has(body.product_type)
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            'Only the standard tenancy agreement is sold for Wales, Scotland and Northern Ireland.',
+          code: 'PRODUCT_NOT_AVAILABLE_IN_REGION',
+          available_product: 'ast_standard',
+        },
+        { status: 400 }
+      );
+    }
 
     // Validate input
     const validationResult = createCheckoutSchema.safeParse(body);
@@ -646,8 +657,8 @@ export async function POST(request: Request) {
             return NextResponse.json(
               {
                 error:
-                  'This jurisdiction is still held behind legal approval and is not available for purchase.',
-                code: 'TENANCY_LEGAL_APPROVAL_REQUIRED',
+                  'This jurisdiction is not currently enabled for public purchase.',
+                code: 'TENANCY_RELEASE_NOT_ENABLED',
               },
               { status: 409 }
             );
