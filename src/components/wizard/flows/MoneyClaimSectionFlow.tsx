@@ -59,6 +59,7 @@ type Jurisdiction = 'england' | 'wales' | 'scotland';
 interface MoneyClaimSectionFlowProps {
   caseId: string;
   jurisdiction: Jurisdiction;
+  initialStep?: string | null;
   /**
    * Optional: Topic from URL param (e.g. 'arrears').
    * Used to pre-select claim reasons when starting a new wizard.
@@ -450,6 +451,7 @@ function MoneyClaimRoadmapPanel({
 export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
   caseId,
   jurisdiction,
+  initialStep,
   topic,
   reason,
 }) => {
@@ -476,6 +478,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pendingFactsRef = useRef<any>(null);
   const saveResetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const initialStepAppliedRef = useRef(false);
 
   // Load existing facts on mount
   useEffect(() => {
@@ -519,6 +522,15 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
       return section.isVisible(facts);
     });
   }, [facts]);
+
+  useEffect(() => {
+    if (!initialStep || initialStepAppliedRef.current) return;
+    const requestedIndex = visibleSections.findIndex((section) => section.id === initialStep);
+    if (requestedIndex >= 0) {
+      setCurrentSectionIndex(requestedIndex);
+      initialStepAppliedRef.current = true;
+    }
+  }, [initialStep, visibleSections]);
 
   const currentSection = visibleSections[currentSectionIndex];
   useWizardStepViewTracking({

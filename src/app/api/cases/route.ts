@@ -9,6 +9,7 @@
 import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { deriveDisplayStatus } from '@/lib/case-status';
+import { deriveCaseProductType } from '@/lib/cases/recovery';
 
 export async function GET(request: Request) {
   try {
@@ -67,17 +68,22 @@ export async function GET(request: Request) {
     const { data: orders } = caseIds.length > 0
       ? await supabase
           .from('orders')
-          .select('case_id, payment_status, fulfillment_status')
+          .select('case_id, product_type, payment_status, fulfillment_status')
           .in('case_id', caseIds)
       : { data: [] };
 
     // Create a map of case_id to order info (use most recent paid order if multiple)
-    const orderMap = new Map<string, { payment_status: string; fulfillment_status: string }>();
+    const orderMap = new Map<string, {
+      product_type: string | null;
+      payment_status: string;
+      fulfillment_status: string;
+    }>();
     for (const order of orders || []) {
       const existing = orderMap.get(order.case_id);
       // Prefer paid orders over unpaid
       if (!existing || order.payment_status === 'paid') {
         orderMap.set(order.case_id, {
+          product_type: order.product_type || null,
           payment_status: order.payment_status,
           fulfillment_status: order.fulfillment_status,
         });
@@ -135,6 +141,7 @@ export async function GET(request: Request) {
         payment_status: orderInfo?.payment_status || null,
         fulfillment_status: orderInfo?.fulfillment_status || null,
         has_final_documents: hasFinalDocuments,
+        resume_product: deriveCaseProductType(c, orderInfo || null),
         // Derived display status
         display_status: displayStatusInfo.status,
         display_label: displayStatusInfo.label,

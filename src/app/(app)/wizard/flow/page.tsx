@@ -676,6 +676,7 @@ function WizardFlowContent() {
       <MoneyClaimSectionFlow
         caseId={caseId}
         jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland'}
+        initialStep={step}
         topic={topicParam}
         reason={reasonParam}
       />

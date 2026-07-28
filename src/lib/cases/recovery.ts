@@ -96,6 +96,14 @@ export function deriveCaseProductType(caseItem: CaseLike, order?: OrderLike): st
 
   if (caseItem.case_type === 'money_claim') return 'money_claim';
   if (caseItem.case_type === 'rent_increase') return 'section13_standard';
+  if (caseItem.case_type === 'eviction') {
+    return firstString(facts.pack_type) === 'complete_pack' ? 'complete_pack' : 'notice_only';
+  }
+  if (caseItem.case_type === 'tenancy_agreement') {
+    return caseItem.jurisdiction === 'england'
+      ? 'england_standard_tenancy_agreement'
+      : 'ast_standard';
+  }
   return null;
 }
 

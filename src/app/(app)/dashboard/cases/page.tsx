@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { RiFileTextLine, RiCalendarLine, RiLoginBoxLine } from 'react-icons/ri';
 import { useAuthCheck } from '@/hooks/useAuthCheck';
+import { getDashboardCaseActions } from '@/lib/cases/dashboard-actions';
 
 interface Case {
   id: string;
@@ -30,6 +31,7 @@ interface Case {
   display_badge_variant?: 'neutral' | 'warning' | 'success';
   has_paid_order?: boolean;
   has_fulfilled_order?: boolean;
+  resume_product?: string | null;
 }
 
 type FilterStatus = 'all' | 'draft' | 'in_progress' | 'completed';
@@ -347,7 +349,7 @@ export default function CasesListPage() {
                 {/* Progress Bar */}
                 <div className="mb-4">
                   <div className="flex items-center justify-between text-sm mb-2">
-                    <span className="text-gray-600">Progress</span>
+                    <span className="text-gray-600">Answer progress</span>
                     <span className="font-medium text-charcoal">
                       {caseItem.wizard_progress}%
                     </span>
@@ -369,6 +371,34 @@ export default function CasesListPage() {
                   <span>•</span>
                   <div>Updated {formatDate(caseItem.updated_at)}</div>
                 </div>
+
+                {(() => {
+                  const actions = getDashboardCaseActions(caseItem);
+                  return (
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      <Button
+                        variant="primary"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          router.push(actions.primaryHref);
+                        }}
+                      >
+                        {actions.primaryLabel}
+                      </Button>
+                      {actions.editHref && actions.editLabel && (
+                        <Button
+                          variant="secondary"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            router.push(actions.editHref!);
+                          }}
+                        >
+                          {actions.editLabel}
+                        </Button>
+                      )}
+                    </div>
+                  );
+                })()}
               </Card>
             ))}
           </div>

@@ -18,6 +18,7 @@ import { RiFileTextLine, RiBookOpenLine, RiCustomerService2Line, RiLoginBoxLine 
 import { useAuthCheck } from '@/hooks/useAuthCheck';
 import { ASK_HEAVEN_CTA } from '@/constants/askHeavenCta';
 import type { OrderBySessionResponse } from '@/app/api/orders/by-session/route';
+import { getDashboardCaseActions } from '@/lib/cases/dashboard-actions';
 
 interface Case {
   id: string;
@@ -31,6 +32,7 @@ interface Case {
   display_label?: string;
   display_badge_variant?: 'neutral' | 'warning' | 'success';
   has_paid_order?: boolean;
+  resume_product?: string | null;
 }
 
 export default function DashboardPage() {
@@ -292,10 +294,37 @@ export default function DashboardPage() {
                         </Badge>
                       </div>
                       <div className="flex items-center gap-4 text-xs text-gray-500">
-                        <span>Progress: {caseItem.wizard_progress}%</span>
+                        <span>Answer progress: {caseItem.wizard_progress}%</span>
                         <span>•</span>
                         <span>{formatDate(caseItem.created_at)}</span>
                       </div>
+                      {(() => {
+                        const actions = getDashboardCaseActions(caseItem);
+                        return (
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            <Button
+                              variant="primary"
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                router.push(actions.primaryHref);
+                              }}
+                            >
+                              {actions.primaryLabel}
+                            </Button>
+                            {actions.editHref && actions.editLabel && (
+                              <Button
+                                variant="secondary"
+                                onClick={(event) => {
+                                  event.stopPropagation();
+                                  router.push(actions.editHref!);
+                                }}
+                              >
+                                {actions.editLabel}
+                              </Button>
+                            )}
+                          </div>
+                        );
+                      })()}
                     </div>
                   ))}
                 </div>

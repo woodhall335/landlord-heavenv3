@@ -1123,6 +1123,61 @@ export default function CaseDetailPage() {
     router.push(`/wizard/flow?type=${caseDetails?.case_type}&jurisdiction=${jurisdiction}&case_id=${caseId}${productParam}${upgradeParams}`);
   };
 
+  const handleReviewOrAddPeople = () => {
+    if (!caseDetails) return;
+
+    if (caseDetails.case_type === 'money_claim') {
+      router.push(
+        `/wizard/flow?type=money_claim&jurisdiction=${caseDetails.jurisdiction || 'england'}&case_id=${caseId}&product=money_claim&step=claimant`
+      );
+      return;
+    }
+
+    if (caseDetails.case_type === 'eviction') {
+      const params = getProductAndParams();
+      const productParam = params?.product ? `&product=${params.product}` : '';
+      router.push(
+        `/wizard/flow?type=eviction&jurisdiction=${caseDetails.jurisdiction || 'england'}&case_id=${caseId}${productParam}&step=parties`
+      );
+      return;
+    }
+
+    if (caseDetails.case_type !== 'tenancy_agreement') {
+      handleContinueWizard();
+      return;
+    }
+
+    const params = getProductAndParams();
+    const jurisdiction = (caseDetails.jurisdiction || 'england') as CanonicalJurisdiction;
+    const rawProduct = params?.product || '';
+    const normalizedProduct = rawProduct
+      ? (isResidentialLettingProductSku(rawProduct)
+          ? rawProduct
+          : validateUrlProduct(rawProduct, jurisdiction))
+      : '';
+    const productParam = normalizedProduct ? `&product=${normalizedProduct}` : '';
+
+    router.push(
+      `/wizard/flow?type=tenancy_agreement&jurisdiction=${jurisdiction}&case_id=${caseId}${productParam}&highlight_sections=landlord,tenants`
+    );
+  };
+
+  const handleContinueToPayment = () => {
+    const params = getProductAndParams();
+    if (!params?.product) {
+      handleContinueWizard();
+      return;
+    }
+
+    const previewParams = new URLSearchParams();
+    previewParams.set('product', params.product);
+    if (params.jurisdiction) {
+      previewParams.set('jurisdiction', params.jurisdiction);
+    }
+
+    router.push(`/wizard/preview/${caseId}?${previewParams.toString()}`);
+  };
+
   const handleDeleteCase = async () => {
     setIsDeleting(true);
     try {
@@ -1218,7 +1273,7 @@ export default function CaseDetailPage() {
           {/* Progress Bar */}
           <div className="mb-4">
             <div className="flex items-center justify-between text-sm mb-2">
-              <span className="text-gray-600 font-medium">Overall Progress</span>
+              <span className="text-gray-600 font-medium">Answer progress</span>
               <span className="font-semibold text-charcoal">
                 {caseDetails.wizard_progress}%
               </span>
@@ -1276,6 +1331,29 @@ export default function CaseDetailPage() {
             </div>
           )}
 
+          {caseDetails.wizard_progress >= 100 && !orderStatus?.paid && (
+            <div className="mb-4 rounded-xl border border-primary/20 bg-primary/5 p-4">
+              <h2 className="font-semibold text-charcoal">Ready to review and pay</h2>
+              <p className="mt-1 text-sm text-gray-700">
+                Your answers are saved. Review the document preview, then continue to secure
+                payment. Your final downloadable documents will be generated and unlocked after
+                payment succeeds.
+              </p>
+              {caseDetails.case_type === 'tenancy_agreement' && (
+                <p className="mt-2 text-sm font-medium text-primary-dark">
+                  Need to add a joint landlord or another tenant? Choose “Review or add people”
+                  before paying.
+                </p>
+              )}
+              {caseDetails.case_type === 'money_claim' && (
+                <p className="mt-2 text-sm font-medium text-primary-dark">
+                  Need to add a joint landlord as a second claimant? Choose “Edit claimants or case
+                  details” before paying.
+                </p>
+              )}
+            </div>
+          )}
+
           {/* Action Buttons - Simplified for clarity */}
           <div className="flex flex-wrap gap-3">
             {/* Primary action: Continue wizard if not complete, or update answers if paid and edit window open */}
@@ -1286,6 +1364,23 @@ export default function CaseDetailPage() {
               >
                 Continue Wizard
               </Button>
+            )}
+
+            {/* Completed but unpaid: make the route to preview/payment explicit and preserve editing. */}
+            {caseDetails.wizard_progress >= 100 && !orderStatus?.paid && (
+              <>
+                <Button variant="primary" onClick={handleContinueToPayment}>
+                  Review documents &amp; pay
+                </Button>
+                <Button variant="secondary" onClick={handleReviewOrAddPeople}>
+                  <RiEditLine className="w-4 h-4 mr-2" />
+                  {caseDetails.case_type === 'tenancy_agreement'
+                    ? 'Review or add people'
+                    : caseDetails.case_type === 'money_claim'
+                      ? 'Edit claimants or case details'
+                    : 'Review or edit answers'}
+                </Button>
+              </>
             )}
 
             {/* Update Answers - only if paid and edit window open */}
@@ -1846,8 +1941,23 @@ export default function CaseDetailPage() {
                           Retry Generation
                         </Button>
                       </div>
+                    ) : caseDetails.wizard_progress >= 100 ? (
+                      <div className="space-y-3">
+                        <p className="font-medium text-charcoal">
+                          Your answers are complete.
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          Your final downloadable documents will appear here after successful
+                          payment.
+                        </p>
+                        <Button variant="primary" onClick={handleContinueToPayment}>
+                          Review documents &amp; pay
+                        </Button>
+                      </div>
                     ) : (
-                      <p className="text-gray-600">No documents generated yet.</p>
+                      <p className="text-gray-600">
+                        Complete the remaining answers to prepare your document preview.
+                      </p>
                     )}
                   </div>
                 ) : (
