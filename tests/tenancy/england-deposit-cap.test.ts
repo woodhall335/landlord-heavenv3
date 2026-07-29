@@ -53,8 +53,9 @@ describe('England deposit step copy contract', () => {
     expect(source).toContain('England deposit cap:');
     expect(source).toContain('Deposit exceeds the England legal cap');
     expect(source).toContain(
-      'You must give the tenant the prescribed deposit information within 30 days of receiving the deposit.'
+      'You must give the {terms.occupierSingular} the prescribed deposit',
     );
+    expect(source).toContain('information within 30 days of receiving the deposit.');
     expect(source).toContain('pay compensation of up to 3 times the deposit');
     expect(source).not.toContain('1-3x the deposit amount');
     expect(source).not.toContain('other enforcement or possession risks');

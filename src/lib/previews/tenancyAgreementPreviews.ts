@@ -215,7 +215,7 @@ const PREVIEW_DOCS: Record<
         filename: 'compliance-checklist-preview.webp',
       },
       {
-        key: 'easy_read_notes_scotland',
+        key: 'prt_statutory_terms_supporting_notes_scotland',
         title: 'Easy Read Notes',
         description: 'Plain-language guidance included with the Scotland tenancy pack.',
         filename: 'easy-read-notes-preview.webp',
@@ -241,7 +241,7 @@ const PREVIEW_DOCS: Record<
         filename: 'compliance-checklist-preview.webp',
       },
       {
-        key: 'easy_read_notes_scotland',
+        key: 'prt_statutory_terms_supporting_notes_scotland',
         title: 'Easy Read Notes',
         description: 'Plain-language guidance included with the Scotland tenancy pack.',
         filename: 'easy-read-notes-preview.webp',

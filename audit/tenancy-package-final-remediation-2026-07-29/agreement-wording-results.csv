@@ -1,0 +1,5 @@
+﻿pack,agreement_type,inventory_state,signature_state,inventory_id_referenced,no_false_completed_or_signed_claim,status
+northern-ireland-private-tenancy-branded-sample-pack,Private Tenancy Agreement,template_included,unsigned,True,True,pass
+scotland-prt-branded-sample-pack,Private Residential Tenancy Agreement,template_included,unsigned,True,True,pass
+wales-fixed-branded-sample-pack,Fixed Term Standard Occupation Contract,template_included,unsigned,True,True,pass
+wales-periodic-branded-sample-pack,Periodic Standard Occupation Contract,template_included,unsigned,True,True,pass

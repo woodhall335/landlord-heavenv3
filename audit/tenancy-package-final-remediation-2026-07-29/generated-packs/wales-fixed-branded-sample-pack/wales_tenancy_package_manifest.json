@@ -1,0 +1,53 @@
+{
+  "manifest_version": "tenancy-package-manifest.v2",
+  "case_id": "CERT-wales-fixed-branded-sample",
+  "document_id": "CERT-WALES-FIXED-BRANDED-SAMPLE",
+  "jurisdiction": "wales",
+  "agreement_type": "Fixed Term Standard Occupation Contract",
+  "tenancy_start_date": "2026-09-01",
+  "canonical_snapshot_id": "CERT-WALES-FIXED-BRANDED-SAMPLE",
+  "canonical_snapshot_hash": "406a4a333524166e73240b46038091ad95a0d3dfe49c4c4e2bfed05021221e93",
+  "source_version": "2026-07-29",
+  "inventory": {
+    "lifecycle_state": "template_included",
+    "signature_state": "unsigned",
+    "due_delivery_date": null,
+    "agreement_schedule_appended": false,
+    "separate_inventory_file_included": true,
+    "canonical_inventory_id": "CERT-WALES-FIXED-BRANDED-SAMPLE-INV-74461A65D056",
+    "canonical_inventory_hash": "74461a65d05640a6ee7b2cd63d07dfc78b1f40a66593164dd53d6a6dc6e03c00"
+  },
+  "deposit": {
+    "lifecycle": "expected",
+    "prescribed_information_supplied": false
+  },
+  "documents": [
+    {
+      "title": "Fixed Term Standard Occupation Contract",
+      "document_type": "soc_agreement",
+      "file_name": "tenancy_agreement.pdf",
+      "bytes": 550316,
+      "page_count": 26,
+      "sha256": "9e3c5316ab2be8644d943aaa911e07d8fd9b0bf5129e9c15bc34c8848d1dcdf3",
+      "open_check": "passed"
+    },
+    {
+      "title": "Inventory Template & Schedule of Condition",
+      "document_type": "inventory_schedule",
+      "file_name": "inventory_schedule.pdf",
+      "bytes": 413399,
+      "page_count": 9,
+      "sha256": "83c9fd743d459bfb5fc40113d62cce1d7b36fbdd93567bbaf712b51d52e0a9eb",
+      "open_check": "passed"
+    },
+    {
+      "title": "Pre-Tenancy Compliance Checklist (Wales)",
+      "document_type": "pre_tenancy_checklist_wales",
+      "file_name": "compliance_checklist.pdf",
+      "bytes": 305179,
+      "page_count": 4,
+      "sha256": "c4a83714d114e74dfea51abe5b56c89b34d70407cf4807923598f7c558971147",
+      "open_check": "passed"
+    }
+  ]
+}

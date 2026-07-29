@@ -197,21 +197,21 @@ describe('How to Rent Guide - Scotland Exclusion', () => {
   });
 });
 
-describe('England "How to Rent" - Regression Tests', () => {
-  it('England AST templates still reference "How to Rent" guide', () => {
+describe('England current written-information regime - Regression Tests', () => {
+  it('England templates reference the current statutory written information', () => {
     const englandHmo = readFileSync(
       join(TEMPLATES_DIR, 'england/templates/premium_ast_formatted.hbs'),
       'utf-8'
     );
-    expect(englandHmo.toLowerCase()).toContain('how to rent');
+    expect(englandHmo).toContain("Renters' Rights Act Information Sheet 2026");
   });
 
-  it('England pre-tenancy checklist includes "How to Rent"', () => {
+  it('England pre-tenancy checklist includes the 2026 information sheet route', () => {
     const englandChecklist = readFileSync(
       join(process.cwd(), 'config/jurisdictions/_shared/compliance/pre_tenancy_checklist_england.hbs'),
       'utf-8'
     );
-    expect(englandChecklist.toLowerCase()).toContain('how to rent');
+    expect(englandChecklist).toContain("Renters' Rights Act Information Sheet 2026");
   });
 });
 

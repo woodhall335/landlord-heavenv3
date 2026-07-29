@@ -1,9 +1,18 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const { mockGenerateDocument } = vi.hoisted(() => ({
-  mockGenerateDocument: vi.fn(async ({ templatePath }: { templatePath: string }) => ({
-    html: `<html data-template="${templatePath}"></html>`,
-    pdf: Buffer.from(templatePath),
+  mockGenerateDocument: vi.fn(async ({
+    templatePath,
+    data,
+  }: {
+    templatePath: string;
+    data?: Record<string, unknown>;
+  }) => ({
+    html: `<html data-template="${templatePath}">${JSON.stringify(data || {})}</html>`,
+    pdf: Buffer.from(
+      'JVBERi0xLjcKJYGBgYEKCjUgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL1R5cGUgL09ialN0bQovTiA0Ci9GaXJzdCAyMAovTGVuZ3RoIDI1OQo+PgpzdHJlYW0KeJzVUk1LxDAQvedXzFFPmU7TpJVS0H5cRFgWT8oewjYsBdlI2oL+eyfNqngQzxIeyeS9ySR5kwECgVKQgylBQZET1LWQj++vDuTOntws5P00zvDMLMIeDkK2fj0vkImmEd/a1i72xZ9ESoIsij8Vu+DH9egC1EM/DIgGEbViaETqeG4ZFYM4Zo5KXjOMuoD3TI6Y3zI3JGiTciK/aYtLfs8za3XUdEmryhR/1Y21+nQG/XWfqhHywY+dXRxcdTeEpNFQRahUoZ+u+TuCs4v/v4/b7j/5868v/OFztDeaHFzsgc1luXezX8ORbWddE//LjZO982/cNcgjw4RDJD8AS/iN4AplbmRzdHJlYW0KZW5kb2JqCgo2IDAgb2JqCjw8Ci9TaXplIDcKL1Jvb3QgMiAwIFIKL0luZm8gMyAwIFIKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL1R5cGUgL1hSZWYKL0xlbmd0aCAzNAovVyBbIDEgMiAyIF0KL0luZGV4IFsgMCA3IF0KPj4Kc3RyZWFtCnicFcQxDgAgCASwHsbd7/p6CB2K7nLZstV24pF8BkOGAq0KZW5kc3RyZWFtCmVuZG9iagoKc3RhcnR4cmVmCjM3NwolJUVPRg==',
+      'base64'
+    ),
     metadata: {
       templateUsed: templatePath,
       generatedAt: new Date().toISOString(),
@@ -19,7 +28,12 @@ vi.mock('../generator', async () => {
   return {
     ...actual,
     generateDocument: mockGenerateDocument,
-    htmlToPdf: vi.fn().mockResolvedValue(Buffer.from('pdf')),
+    htmlToPdf: vi.fn().mockResolvedValue(
+      Buffer.from(
+        'JVBERi0xLjcKJYGBgYEKCjUgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL1R5cGUgL09ialN0bQovTiA0Ci9GaXJzdCAyMAovTGVuZ3RoIDI1OQo+PgpzdHJlYW0KeJzVUk1LxDAQvedXzFFPmU7TpJVS0H5cRFgWT8oewjYsBdlI2oL+eyfNqngQzxIeyeS9ySR5kwECgVKQgylBQZET1LWQj++vDuTOntws5P00zvDMLMIeDkK2fj0vkImmEd/a1i72xZ9ESoIsij8Vu+DH9egC1EM/DIgGEbViaETqeG4ZFYM4Zo5KXjOMuoD3TI6Y3zI3JGiTciK/aYtLfs8za3XUdEmryhR/1Y21+nQG/XWfqhHywY+dXRxcdTeEpNFQRahUoZ+u+TuCs4v/v4/b7j/5868v/OFztDeaHFzsgc1luXezX8ORbWddE//LjZO982/cNcgjw4RDJD8AS/iN4AplbmRzdHJlYW0KZW5kb2JqCgo2IDAgb2JqCjw8Ci9TaXplIDcKL1Jvb3QgMiAwIFIKL0luZm8gMyAwIFIKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL1R5cGUgL1hSZWYKL0xlbmd0aCAzNAovVyBbIDEgMiAyIF0KL0luZGV4IFsgMCA3IF0KPj4Kc3RyZWFtCnicFcQxDgAgCASwHsbd7/p6CB2K7nLZstV24pF8BkOGAq0KZW5kc3RyZWFtCmVuZG9iagoKc3RhcnR4cmVmCjM3NwolJUVPRg==',
+        'base64'
+      )
+    ),
   };
 });
 
@@ -53,6 +67,7 @@ function createBaseASTData(jurisdiction: TenancyJurisdiction): ASTData {
     deposit_amount: 1450,
     deposit_scheme_name: 'DPS',
     inventory_delivery_method: 'later',
+    inventory_due_date: '2026-06-15',
   } as ASTData;
 
   if (jurisdiction === 'wales') {
@@ -143,8 +158,8 @@ describe('AST document pack generation', () => {
   it('adds the premium support documents to every premium jurisdiction pack', async () => {
     const expectedCounts = {
       england: 8,
-      wales: 6,
-      scotland: 7,
+      wales: 7,
+      scotland: 8,
       'northern-ireland': 10,
     } as const;
 
@@ -163,7 +178,7 @@ describe('AST document pack generation', () => {
       }
 
       if (jurisdiction === 'scotland') {
-        expect(documentTypes).toContain('easy_read_notes_scotland');
+        expect(documentTypes).toContain('prt_statutory_terms_supporting_notes_scotland');
       }
     }
   });
@@ -172,7 +187,7 @@ describe('AST document pack generation', () => {
     const standardPack = await generateStandardASTDocuments(createBaseASTData('scotland'), 'scotland-standard-pack');
     const premiumPack = await generatePremiumASTDocuments(createBaseASTData('scotland'), 'scotland-premium-pack');
 
-    expect(standardPack.documents.map((document) => document.document_type)).toContain('easy_read_notes_scotland');
-    expect(premiumPack.documents.map((document) => document.document_type)).toContain('easy_read_notes_scotland');
+    expect(standardPack.documents.map((document) => document.document_type)).toContain('prt_statutory_terms_supporting_notes_scotland');
+    expect(premiumPack.documents.map((document) => document.document_type)).toContain('prt_statutory_terms_supporting_notes_scotland');
   });
 });

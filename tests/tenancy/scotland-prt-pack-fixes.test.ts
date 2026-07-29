@@ -229,7 +229,7 @@ describe('Scotland PRT Pack Fixes', () => {
       });
 
       // Find Easy Read Notes
-      const easyReadNotes = packContents.find((item) => item.key === 'easy_read_notes_scotland');
+      const easyReadNotes = packContents.find((item) => item.key === 'prt_statutory_terms_supporting_notes_scotland');
 
       expect(easyReadNotes).toBeDefined();
       expect(easyReadNotes?.title).toContain('Statutory Terms Supporting Notes');
@@ -245,7 +245,7 @@ describe('Scotland PRT Pack Fixes', () => {
         jurisdiction: 'scotland',
       });
 
-      const easyReadNotes = packContents.find((item) => item.key === 'easy_read_notes_scotland');
+      const easyReadNotes = packContents.find((item) => item.key === 'prt_statutory_terms_supporting_notes_scotland');
 
       expect(easyReadNotes).toBeDefined();
       expect(easyReadNotes?.title).toContain('Statutory Terms Supporting Notes');
@@ -259,7 +259,7 @@ describe('Scotland PRT Pack Fixes', () => {
         jurisdiction: 'england',
       });
 
-      const easyReadNotes = packContents.find((item) => item.key === 'easy_read_notes_scotland');
+      const easyReadNotes = packContents.find((item) => item.key === 'prt_statutory_terms_supporting_notes_scotland');
 
       // England should not have Scotland Easy Read Notes
       expect(easyReadNotes).toBeUndefined();
@@ -272,7 +272,7 @@ describe('Scotland PRT Pack Fixes', () => {
 
       expect(config.templatePaths.easyReadNotes).toBeDefined();
       expect(config.templatePaths.easyReadNotes).toContain('easy_read_notes');
-      expect(config.easyReadNotesDocumentType).toBe('easy_read_notes_scotland');
+      expect(config.easyReadNotesDocumentType).toBe('prt_statutory_terms_supporting_notes_scotland');
     });
 
     it('should verify Easy Read Notes template exists', async () => {
@@ -304,10 +304,10 @@ describe('Scotland PRT Pack Fixes', () => {
       expect(keys).toContain('prt_agreement');
       expect(keys).toContain('inventory_schedule');
       expect(keys).toContain('pre_tenancy_checklist_scotland');
-      expect(keys).toContain('easy_read_notes_scotland');
+      expect(keys).toContain('prt_statutory_terms_supporting_notes_scotland');
     });
 
-    it('Scotland premium pack should have 4 documents including Easy Read Notes', async () => {
+    it('retains the historical internal Scotland premium composition for paid-order compatibility', async () => {
       const { getPackContents } = await import('@/lib/products/pack-contents');
 
       const packContents = getPackContents({
@@ -315,13 +315,16 @@ describe('Scotland PRT Pack Fixes', () => {
         jurisdiction: 'scotland',
       });
 
-      expect(packContents.length).toBe(4);
+      expect(packContents.length).toBe(7);
 
       const keys = packContents.map((item) => item.key);
       expect(keys).toContain('prt_agreement_hmo');
       expect(keys).toContain('inventory_schedule');
       expect(keys).toContain('pre_tenancy_checklist_scotland');
-      expect(keys).toContain('easy_read_notes_scotland');
+      expect(keys).toContain('prt_statutory_terms_supporting_notes_scotland');
+      expect(keys).toContain('key_schedule');
+      expect(keys).toContain('property_maintenance_guide');
+      expect(keys).toContain('checkout_procedure');
     });
 
     it('worst-case facts test - long names and missing bank fields should use placeholders', async () => {

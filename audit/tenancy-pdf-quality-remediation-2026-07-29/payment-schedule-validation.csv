@@ -1,0 +1,5 @@
+﻿document,expected_rent,expected_first_payment,expected_deposit,rent_present,first_payment_present,deposit_present,unexplained_zero_present,status
+northern-ireland,900.00,900.00,900.00,True,True,True,False,pass
+scotland,1050.00,1050.00,1050.00,True,True,True,False,pass
+wales-fixed,1150.00,1150.00,1150.00,True,True,True,False,pass
+wales-periodic,1150.00,1150.00,1150.00,True,True,True,False,pass

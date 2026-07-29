@@ -1,0 +1,5 @@
+﻿document,pages,rendered_pages,a4_pages,blank_pages,nearly_empty_pages,page_number_hits,title_present,execution_present,status
+northern-ireland,25,25,25,,,16,True,True,pass
+scotland,27,27,27,,,18,True,True,pass
+wales-fixed,35,35,35,,,26,True,True,pass
+wales-periodic,40,40,40,,,31,True,True,pass

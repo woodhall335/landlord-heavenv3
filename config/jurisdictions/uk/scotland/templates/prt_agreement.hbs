@@ -5,6 +5,7 @@
 * { box-sizing: border-box; }
 body { margin: 0; color: #172033; font: 10.2pt/1.46 Georgia, "Times New Roman", serif; }
 h1, h2, h3 { font-family: Arial, Helvetica, sans-serif; break-after: avoid; }
+h1 + p, h2 + p, h3 + p, h1 + table, h2 + table, h3 + table { break-before: avoid; }
 h1 { font-size: 21pt; letter-spacing: .35pt; text-align: center; text-transform: uppercase; }
 h2 { margin: 20pt 0 9pt; padding-bottom: 4pt; border-bottom: 1.2pt solid #243b53; font-size: 13pt; }
 h3 { margin: 13pt 0 6pt; font-size: 10.8pt; }
@@ -16,6 +17,8 @@ p { margin: 0 0 7pt; orphans: 3; widows: 3; text-align: justify; }
 .page-break { break-before: page; page-break-before: always; }
 .section { margin: 12pt 0; }
 .data-table, .signature-table { width: 100%; margin: 9pt 0 14pt; border-collapse: collapse; break-inside: avoid; }
+.data-table thead, .signature-table thead { display: table-header-group; }
+.data-table tr, .signature-table tr { break-inside: avoid; break-after: auto; }
 .data-table th, .data-table td, .signature-table th, .signature-table td { border: .65pt solid #829ab1; padding: 6pt 7pt; vertical-align: top; }
 .data-table th { width: 34%; background: #edf3f7; font: 700 8.6pt Arial, sans-serif; text-align: left; text-transform: uppercase; }
 .tenant-card { margin: 8pt 0; padding: 8pt; border: .65pt solid #bcccdc; break-inside: avoid; }
@@ -107,7 +110,7 @@ p { margin: 0 0 7pt; orphans: 3; widows: 3; text-align: justify; }
     <tr><th>Included areas</th><td>{{included_areas}}</td></tr>
     <tr><th>Shared areas</th><td>{{shared_areas}}</td></tr>
     <tr><th>Excluded areas</th><td>{{excluded_areas}}</td></tr>
-    <tr><th>Rent control area status</th><td>{{scotland_rent_control_area_status}}</td></tr>
+    <tr><th>Rent control area status</th><td>{{display_label scotland_rent_control_area_status}}</td></tr>
     <tr><th>House in Multiple Occupation</th><td>{{#if is_hmo}}Yes{{else}}No{{/if}}</td></tr>
     {{#if permitted_residents}}<tr><th>Permitted residents</th><td>{{permitted_residents}}</td></tr>{{/if}}
     {{#if maximum_occupancy}}<tr><th>Maximum occupancy</th><td>{{maximum_occupancy}} people</td></tr>{{/if}}
@@ -368,7 +371,13 @@ p { margin: 0 0 7pt; orphans: 3; widows: 3; text-align: justify; }
 </ul>
 <p class="legal-paragraph">The Tenant agrees to remove all of his or her belongings when the Tenancy ends. The Tenant’s belongings may include personal effects, foodstuffs and consumables, belongings, and any other contents brought in to the Let Property by the Tenant.</p>
 <h3 class="term-heading"><span class="term-number">25.</span>Contents and condition</h3>
-<p class="legal-paragraph">The Tenant agrees that the signed Inventory and Record of Condition, {{#if_eq inventory_delivery_method "later"}}which will be supplied to the Tenant no later than the start date of the tenancy{{else}}attached as Schedule 1 to this Agreement{{/if_eq}}, is a full and accurate record of the contents and condition of the Let Property at the start date of the tenancy. The Tenant has 7 days from the start date to notify the Landlord in writing of discrepancies; otherwise the Tenant will be deemed satisfied with it.</p>
+{{#if (eq inventory_lifecycle_state "attached_completed")}}
+<p class="legal-paragraph">The completed Inventory and Record of Condition is supplied as the separately identified document <strong>{{inventory_document_id}}</strong>. Its recorded signature status is <strong>{{display_label inventory_signature_state}}</strong>. The Tenant has 7 days from the start date to notify the Landlord in writing of discrepancies; otherwise the Tenant will be deemed satisfied with it.</p>
+{{else if (eq inventory_lifecycle_state "separate_later")}}
+<p class="legal-paragraph">The completed Inventory and Record of Condition will be supplied separately by <strong>{{format_date inventory_due_date}}</strong>. The inventory document in this package is a completion tool only and is not represented as inspected, completed or signed. The Tenant should check the completed record and notify the Landlord in writing of discrepancies within 7 days of receipt.</p>
+{{else}}
+<p class="legal-paragraph">Inventory template <strong>{{inventory_document_id}}</strong> is supplied separately with this Agreement for inspection, completion and signature at handover. It is not yet a completed, agreed or signed record of the contents and condition of the Let Property. Once completed, the Tenant has 7 days from the start date to notify the Landlord in writing of discrepancies.</p>
+{{/if}}
 <p class="legal-paragraph">The Tenant agrees to replace or repair (or, at the option of the Landlord, to pay the reasonable cost of repairing or replacing) any of the contents which are destroyed, damaged, removed or lost during the tenancy, fair wear and tear excepted, where this was caused wilfully or negligently by the Tenant, anyone living with the Tenant or an invited visitor to the Let Property (see clause above on ‘Reasonable care’).</p>
 <p class="legal-paragraph">Items to be replaced by the Tenant will be replaced by items of equivalent value and quality.</p>
 <h3 class="term-heading"><span class="term-number">26.</span>Local authority taxes/charges</h3>

@@ -1,0 +1,29 @@
+Tenancy PDF quality remediation validation
+Run date: 2026-07-29
+
+PASS - TypeScript: npx tsc --noEmit
+PASS - Focused remediation/unit/jurisdiction/snapshot suite: 72 passed, 0 failed, 0 skipped (7 files)
+PASS - Generated PDF structural/text/payment/visual/consistency audit: 4 documents, 20 category checks passed
+PASS - Supporting-document manifest: every generated pack asset exists and its SHA-256 matches
+PASS - YAML configuration: 40 files validated
+PASS - ESLint: 0 errors, 736 pre-existing warnings
+PASS - git diff --check
+PASS - Next.js 16.1.1 production build (--webpack): compilation, TypeScript, page-data collection and 518-page static generation completed; stderr empty
+
+KNOWN RED BASELINE - Full tenancy compliance collection:
+- 501 passed
+- 23 failed
+- 0 skipped
+- 524 total tests
+- 146 passed suites
+- 22 failed suites
+- 168 total suites
+
+The 23 failures are existing expectation drift outside this PDF remediation:
+- 11 expect retired Scotland/Wales regional Premium SKUs, contrary to the current standard-only regional product scope.
+- 8 expect deprecated inventory boolean flags rather than structured inventory proof or identical cross-jurisdiction pack shapes.
+- 2 expect retired England "How to Rent" copy.
+- 1 expects an obsolete four-document Scotland Premium pack.
+- 1 expects earlier England deposit-warning wording.
+
+No focused remediation, non-England legal-drift, standard-release, snapshot, routing, display-label, currency, or first-payment test failed.

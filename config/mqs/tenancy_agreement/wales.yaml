@@ -47,7 +47,7 @@ questions:
     section: Property Details
     question: "Rental property address"
     inputType: group
-    helperText: "Exactly as it should appear in the tenancy agreement."
+    helperText: "Exactly as it should appear in the occupation contract."
     fields:
       - id: property_address_line1
         label: "Building and street"
@@ -59,14 +59,14 @@ questions:
       - id: property_address_town
         label: "Town / City"
         inputType: text
-        placeholder: "London"
+        placeholder: "Cardiff"
         validation:
           required: true
         width: half
       - id: property_address_postcode
         label: "Postcode"
         inputType: text
-        placeholder: "SW1A 1AA"
+        placeholder: "CF10 1AA"
         validation:
           required: true
         width: half
@@ -148,7 +148,8 @@ questions:
         label: "Who maintains the garden?"
         inputType: select
         options:
-          - "Tenant"
+          - value: "Tenant"
+            label: "Contract-holder"
           - "Landlord"
           - "Shared responsibility"
         dependsOn:
@@ -208,14 +209,14 @@ questions:
       - id: landlord_address_town
         label: "Town / City"
         inputType: text
-        placeholder: "London"
+        placeholder: "Cardiff"
         validation:
           required: true
         width: half
       - id: landlord_address_postcode
         label: "Postcode"
         inputType: text
-        placeholder: "W1A 2BB"
+        placeholder: "CF11 9AB"
         validation:
           required: true
         width: half
@@ -413,10 +414,10 @@ questions:
       - agent_phone
       - agent_signs
 
-  # 3. Tenants
+  # 3. Contract-holders
   - id: number_of_tenants
-    section: Tenants
-    question: "How many tenants are on the agreement?"
+    section: Contract-holders
+    question: "How many contract-holders are on the occupation contract?"
     inputType: select
     options:
       - "1"
@@ -430,10 +431,10 @@ questions:
       - number_of_tenants
 
   - id: tenant_1
-    section: Tenants
-    question: "Lead tenant"
+    section: Contract-holders
+    question: "Lead contract-holder"
     inputType: group
-    helperText: "Primary tenant who will receive notices"
+    helperText: "Primary contract-holder who will receive notices"
     fields:
       - id: full_name
         label: "Full name"
@@ -466,8 +467,8 @@ questions:
       - tenants.0.phone
 
   - id: tenant_2
-    section: Tenants
-    question: "Tenant 2"
+    section: Contract-holders
+    question: "Contract-holder 2"
     inputType: group
     dependsOn:
       questionId: number_of_tenants
@@ -504,8 +505,8 @@ questions:
       - tenants.1.phone
 
   - id: tenant_3
-    section: Tenants
-    question: "Tenant 3"
+    section: Contract-holders
+    question: "Contract-holder 3"
     inputType: group
     dependsOn:
       questionId: number_of_tenants
@@ -542,8 +543,8 @@ questions:
       - tenants.2.phone
 
   - id: tenant_4
-    section: Tenants
-    question: "Tenant 4"
+    section: Contract-holders
+    question: "Contract-holder 4"
     inputType: group
     dependsOn:
       questionId: number_of_tenants
@@ -580,8 +581,8 @@ questions:
       - tenants.3.phone
 
   - id: tenant_5
-    section: Tenants
-    question: "Tenant 5"
+    section: Contract-holders
+    question: "Contract-holder 5"
     inputType: group
     dependsOn:
       questionId: number_of_tenants
@@ -631,7 +632,7 @@ questions:
           required: true
         width: half
       - id: is_fixed_term
-        label: "Is this a fixed term tenancy?"
+        label: "Is this a fixed-term occupation contract?"
         inputType: yes_no
         validation:
           required: true
@@ -922,13 +923,14 @@ questions:
     section: Bills & Utilities
     question: "Who pays which bills?"
     inputType: group
-    helperText: "We include this in the tenant responsibilities section."
+    helperText: "We include this in the contract-holder responsibilities section."
     fields:
       - id: council_tax_responsibility
         label: "Council tax"
         inputType: select
         options:
-          - "Tenant"
+          - value: "Tenant"
+            label: "Contract-holder"
           - "Landlord"
           - "Included in rent"
         validation:
@@ -938,7 +940,8 @@ questions:
         label: "Gas/Electric/Water"
         inputType: select
         options:
-          - "Tenant"
+          - value: "Tenant"
+            label: "Contract-holder"
           - "Landlord"
           - "Included in rent"
         validation:
@@ -948,7 +951,8 @@ questions:
         label: "Internet/Broadband"
         inputType: select
         options:
-          - "Tenant"
+          - value: "Tenant"
+            label: "Contract-holder"
           - "Landlord"
           - "Included in rent"
         validation:
@@ -984,7 +988,8 @@ questions:
         label: "Who arranges utility account transfers?"
         inputType: select
         options:
-          - "Tenant"
+          - value: "Tenant"
+            label: "Contract-holder"
           - "Landlord"
           - "Agent"
         validation:
@@ -1136,7 +1141,7 @@ questions:
         placeholder: "Structural issues, boilers, white goods, etc."
         width: full
       - id: repairs_reporting_method
-        label: "How should tenants report repairs?"
+        label: "How should contract-holders report repairs?"
         inputType: select
         options:
           - "Email"
@@ -1236,7 +1241,7 @@ questions:
           required: true
         width: third
       - id: end_of_tenancy_viewings
-        label: "Allow end-of-tenancy viewings?"
+        label: "Allow viewings near the end of the occupation contract?"
         inputType: yes_no
         validation:
           required: true
@@ -1303,7 +1308,7 @@ questions:
           required: true
         width: half
       - id: guarantor_relationship
-        label: "Relationship to tenant"
+        label: "Relationship to contract-holder"
         inputType: text
         validation:
           required: true
@@ -1323,7 +1328,7 @@ questions:
     dependsOn:
       questionId: occupation_contract_tier
       value: "Premium Occupation Contract"
-    helperText: "Recommended when there is more than one tenant."
+    helperText: "Recommended when there is more than one contract-holder."
     maps_to:
       - joint_and_several_liability
 
@@ -1373,7 +1378,8 @@ questions:
         inputType: select
         options:
           - "Professional cleaner"
-          - "Tenants share"
+          - value: "Tenants share"
+            label: "Contract-holders share"
           - "Landlord"
           - "Not applicable"
         width: half
@@ -1388,7 +1394,7 @@ questions:
 
   - id: tenant_insurance_requirements
     section: Premium Protections
-    question: "Tenant insurance requirements"
+    question: "Contract-holder insurance requirements"
     inputType: select
     dependsOn:
       questionId: occupation_contract_tier
@@ -1471,7 +1477,7 @@ questions:
     dependsOn:
       questionId: occupation_contract_tier
       value: "Premium Occupation Contract"
-    helperText: "Record all keys and access cards provided to tenant."
+    helperText: "Record all keys and access cards provided to the contract-holder."
     fields:
       - id: number_of_front_door_keys
         label: "Front door keys (quantity)"
@@ -1554,7 +1560,7 @@ questions:
           required: true
         width: half
       - id: tenant_presence_required
-        label: "Must tenant be present?"
+        label: "Must the contract-holder be present?"
         inputType: yes_no
         validation:
           required: true
@@ -1656,7 +1662,8 @@ questions:
         inputType: select
         options:
           - "Landlord"
-          - "Tenant"
+          - value: "Tenant"
+            label: "Contract-holder"
           - "Agent"
         validation:
           required: true
@@ -1676,7 +1683,8 @@ questions:
         inputType: select
         options:
           - "Landlord"
-          - "Tenant"
+          - value: "Tenant"
+            label: "Contract-holder"
           - "Agent"
         validation:
           required: true
@@ -1688,7 +1696,8 @@ questions:
           - "Monthly"
           - "Quarterly"
           - "Bi-annual"
-          - "Tenant responsibility"
+          - value: "Tenant responsibility"
+            label: "Contract-holder responsibility"
         width: half
       - id: appliance_maintenance_notes
         label: "Appliance maintenance notes"
@@ -1719,7 +1728,8 @@ questions:
           - "Weekly in growing season"
           - "Fortnightly in growing season"
           - "Monthly"
-          - "Tenant discretion"
+          - value: "Tenant discretion"
+            label: "Contract-holder discretion"
           - "N/A - No lawn"
         width: half
       - id: lawn_mowing_responsibility
@@ -1727,16 +1737,19 @@ questions:
         inputType: select
         options:
           - "Landlord"
-          - "Tenant"
+          - value: "Tenant"
+            label: "Contract-holder"
           - "Professional gardener (landlord pays)"
-          - "Professional gardener (tenant pays)"
+          - value: "Professional gardener (tenant pays)"
+            label: "Professional gardener (contract-holder pays)"
         width: half
       - id: hedge_trimming_responsibility
         label: "Hedge/shrub trimming responsibility"
         inputType: select
         options:
           - "Landlord"
-          - "Tenant"
+          - value: "Tenant"
+            label: "Contract-holder"
           - "Shared"
           - "N/A"
         width: half
@@ -1745,7 +1758,8 @@ questions:
         inputType: select
         options:
           - "Landlord"
-          - "Tenant"
+          - value: "Tenant"
+            label: "Contract-holder"
           - "N/A"
         width: half
       - id: outdoor_furniture_notes
@@ -1767,10 +1781,10 @@ questions:
     dependsOn:
       questionId: occupation_contract_tier
       value: "Premium Occupation Contract"
-    helperText: "Define pre-tenancy and move-in requirements."
+    helperText: "Define pre-contract and move-in requirements."
     fields:
       - id: pre_tenancy_meeting_required
-        label: "Pre-tenancy property viewing required?"
+        label: "Pre-contract property viewing required?"
         inputType: yes_no
         validation:
           required: true
@@ -1788,7 +1802,7 @@ questions:
           required: true
         width: half
       - id: tenant_handbook_provided
-        label: "Tenant handbook provided?"
+        label: "Contract-holder handbook provided?"
         inputType: yes_no
         validation:
           required: true
@@ -1797,7 +1811,8 @@ questions:
         label: "Utility transfer deadline"
         inputType: select
         options:
-          - "Day 1 of tenancy"
+          - value: "Day 1 of tenancy"
+            label: "Occupation date"
           - "Within 7 days"
           - "Within 14 days"
         validation:
@@ -1807,7 +1822,8 @@ questions:
         label: "Council tax registration deadline"
         inputType: select
         options:
-          - "Day 1 of tenancy"
+          - value: "Day 1 of tenancy"
+            label: "Occupation date"
           - "Within 7 days"
           - "Within 14 days"
         validation:
@@ -1828,7 +1844,7 @@ questions:
     dependsOn:
       questionId: occupation_contract_tier
       value: "Premium Occupation Contract"
-    helperText: "Define end-of-tenancy requirements and procedures."
+    helperText: "Define end-of-contract requirements and procedures."
     fields:
       - id: checkout_inspection_required
         label: "Joint checkout inspection required?"
@@ -1867,10 +1883,14 @@ questions:
         label: "Key return deadline"
         inputType: select
         options:
-          - "Last day of tenancy by noon"
-          - "Last day of tenancy by 5pm"
-          - "Within 24 hours of tenancy end"
-          - "Within 48 hours of tenancy end"
+          - value: "Last day of tenancy by noon"
+            label: "Last day of the occupation contract by noon"
+          - value: "Last day of tenancy by 5pm"
+            label: "Last day of the occupation contract by 5pm"
+          - value: "Within 24 hours of tenancy end"
+            label: "Within 24 hours after the occupation contract ends"
+          - value: "Within 48 hours of tenancy end"
+            label: "Within 48 hours after the occupation contract ends"
         validation:
           required: true
         width: half
@@ -1907,7 +1927,7 @@ questions:
     dependsOn:
       questionId: occupation_contract_tier
       value: "Premium Occupation Contract"
-    helperText: "Define expected cleaning standards during and at end of tenancy."
+    helperText: "Define expected cleaning standards during and at the end of the occupation contract."
     fields:
       - id: regular_cleaning_expectations
         label: "Regular cleaning expectations"
@@ -1938,7 +1958,7 @@ questions:
         label: "Estimated professional cleaning costs (£)"
         inputType: number
         placeholder: "e.g., 250"
-        helperText: "For tenant's reference if they choose professional cleaning"
+        helperText: "For the contract-holder's reference if they choose professional cleaning"
         width: half
     maps_to:
       - regular_cleaning_expectations
@@ -1949,12 +1969,12 @@ questions:
   # Evidence uploads
   - id: evidence_uploads
     section: Evidence
-    question: "Upload tenancy proof and optional supporting documents"
+    question: "Upload occupation-contract proof and optional supporting documents"
     inputType: upload
-    helperText: "Upload the signed tenancy agreement, inventory, ID checks or other proof to keep everything with your case."
+    helperText: "Upload the signed occupation contract, inventory, ID checks or other proof to keep everything with your case."
     validation:
       required: false
-    suggestion_prompt: "Confirm the right file categories are selected (tenancy agreement, inventory/photos, ID checks, other)."
+    suggestion_prompt: "Confirm the right file categories are selected (occupation contract, inventory/photos, ID checks, other)."
     maps_to:
       - evidence.tenancy_agreement_uploaded
       - evidence.other_evidence_uploaded

@@ -6,75 +6,13 @@ import { PDFDocument } from 'pdf-lib';
 import type { ASTData } from '../src/lib/documents/ast-generator';
 import { generateStandardASTDocuments } from '../src/lib/documents/ast-generator';
 import { mapWizardToASTData } from '../src/lib/documents/ast-wizard-mapper';
+import { deriveCanonicalInventoryState } from '../src/lib/tenancy/inventory-state';
 import type { WizardFacts } from '../src/lib/case-facts/schema';
 
-const generatedOn = '2026-07-28';
-const outputRoot = path.join(process.cwd(), 'output', 'pdf');
-const sampleInventory = {
-  rooms: [
-    {
-      name: 'Living room',
-      items: [
-        {
-          name: 'Walls and ceiling',
-          condition: 'Good',
-          notes: 'Fresh neutral paint with one small filled mark beside the window.',
-        },
-        {
-          name: 'Flooring',
-          condition: 'Good',
-          notes: 'Clean laminate with light wear at the doorway.',
-        },
-      ],
-    },
-    {
-      name: 'Kitchen',
-      items: [
-        {
-          name: 'Cupboards and worktops',
-          condition: 'Good',
-          notes: 'Clean, secure and free from chips or burns.',
-        },
-        {
-          name: 'Oven and hob',
-          condition: 'Good',
-          notes: 'Clean and tested at check-in.',
-        },
-      ],
-    },
-    {
-      name: 'Main bedroom',
-      items: [
-        {
-          name: 'Walls and flooring',
-          condition: 'Good',
-          notes: 'Clean with light wear consistent with normal use.',
-        },
-        {
-          name: 'Window and blind',
-          condition: 'Good',
-          notes: 'Window opens and locks; blind operates correctly.',
-        },
-      ],
-    },
-    {
-      name: 'Bathroom',
-      items: [
-        {
-          name: 'Bath, shower and sealant',
-          condition: 'Good',
-          notes: 'Clean with intact sealant and no visible leaks.',
-        },
-        {
-          name: 'Flooring and extractor',
-          condition: 'Good',
-          notes: 'Floor dry and extractor tested.',
-        },
-      ],
-    },
-  ],
-};
-
+const generatedOn = '2026-07-29';
+const outputRoot = process.env.TENANCY_SAMPLE_OUTPUT_ROOT
+  ? path.resolve(process.env.TENANCY_SAMPLE_OUTPUT_ROOT)
+  : path.join(process.cwd(), 'output', 'pdf');
 function sha256(value: Buffer): string {
   return createHash('sha256').update(value).digest('hex');
 }
@@ -91,6 +29,12 @@ async function writePack(
   const mappedData = mapWizardToASTData(data as unknown as WizardFacts, {
     canonicalJurisdiction: data.jurisdiction,
   });
+  mappedData.generation_timestamp = `${generatedOn}T12:00:00.000Z`;
+  mappedData.document_id = `CERT-${sampleKey.toUpperCase()}`;
+  const inventoryState = deriveCanonicalInventoryState(
+    mappedData as unknown as Record<string, unknown>,
+    { documentSeed: mappedData.document_id }
+  );
   const pack = await generateStandardASTDocuments(mappedData, `CERT-${sampleKey}`);
   const agreement = pack.documents.find((document) => document.category === 'agreement');
   if (!agreement?.pdf) throw new Error(`Agreement PDF missing for ${sampleKey}`);
@@ -133,8 +77,12 @@ async function writePack(
     generatedOn,
     jurisdiction: mappedData.jurisdiction,
     tenancyStartDate: mappedData.tenancy_start_date,
-    inventoryMode: mappedData.inventory_delivery_method,
-    agreementIncludesAppendedSchedule1: mappedData.inventory_delivery_method === 'attached',
+    inventoryLifecycleState: inventoryState.lifecycleState,
+    inventorySignatureState: inventoryState.signatureState,
+    inventoryDocumentId: inventoryState.inventoryDocumentId,
+    inventoryContentHash: inventoryState.inventoryContentHash,
+    agreementIncludesAppendedInventory: false,
+    separateInventoryFileIncluded: true,
     documents: manifestDocuments,
   };
   await writeFile(
@@ -190,7 +138,6 @@ const walesCommon: Omit<ASTData, 'jurisdiction' | 'is_fixed_term'> = {
   deposit_already_protected: false,
   deposit_payer: 'Eleri Hughes',
   inventory_delivery_method: 'attached',
-  inventory: sampleInventory,
   communication_method: 'email',
   tenant_utility_accounts: 'electricity, gas, water, broadband and council tax',
   gas_safety_certificate: true,
@@ -259,7 +206,6 @@ const scotland: ASTData = {
     'Repayment must be requested through SafeDeposits Scotland. Either party may use the scheme dispute-resolution service if the proposed allocation is disputed.',
   prescribed_information_served: false,
   inventory_delivery_method: 'attached',
-  inventory: sampleInventory,
   scotland_rent_control_area_status: 'not_designated',
   communication_method: 'email',
   tenant_utility_accounts: 'gas, electricity, broadband and council tax',
@@ -319,7 +265,6 @@ const northernIreland: ASTData = {
   deposit_lifecycle: 'expected',
   deposit_is_expected: true,
   inventory_delivery_method: 'attached',
-  inventory: sampleInventory,
   communication_method: 'email',
   tenant_utility_accounts: 'electricity, gas, water and broadband',
   gas_safety_certificate: true,

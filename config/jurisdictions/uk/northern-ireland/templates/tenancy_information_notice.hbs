@@ -91,7 +91,7 @@
 
   <h2>Inventory and additional terms</h2>
   <table>
-    <tr><th>Signed inventory supplied?</th><td>{{#if_eq inventory_delivery_method "attached"}}Yes — attached to the agreement{{else}}No — to be supplied by {{format_date inventory_due_date}}{{/if_eq}}</td></tr>
+    <tr><th>Inventory supplied?</th><td>{{inventory_customer_status}}</td></tr>
     <tr><th>Additional information</th><td>{{additional_terms}}</td></tr>
   </table>
   <table>

@@ -314,7 +314,7 @@ describe('getPackContents', () => {
       expect(items.find(i => i.key === 'prt_agreement')).toBeDefined();
       expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
       expect(items.find(i => i.key === 'pre_tenancy_checklist_scotland')).toBeDefined();
-      expect(items.find(i => i.key === 'easy_read_notes_scotland')).toBeDefined();
+      expect(items.find(i => i.key === 'prt_statutory_terms_supporting_notes_scotland')).toBeDefined();
     });
 
     it('returns agreement, inventory, checklist, and prescribed documents for Northern Ireland', () => {
@@ -390,7 +390,7 @@ describe('getPackContents', () => {
       expect(items.find(i => i.key === 'prt_agreement_hmo')).toBeDefined();
       expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
       expect(items.find(i => i.key === 'pre_tenancy_checklist_scotland')).toBeDefined();
-      expect(items.find(i => i.key === 'easy_read_notes_scotland')).toBeDefined();
+      expect(items.find(i => i.key === 'prt_statutory_terms_supporting_notes_scotland')).toBeDefined();
       expect(items.find(i => i.key === 'key_schedule')).toBeDefined();
       expect(items.find(i => i.key === 'property_maintenance_guide')).toBeDefined();
       expect(items.find(i => i.key === 'checkout_procedure')).toBeDefined();
@@ -453,8 +453,8 @@ describe('getPackContents', () => {
         } else if (jur === 'scotland') {
           expect(standardItems.length).toBe(4);
           expect(premiumItems.length).toBe(7);
-          expect(standardItems.find(i => i.key === 'easy_read_notes_scotland')).toBeDefined();
-          expect(premiumItems.find(i => i.key === 'easy_read_notes_scotland')).toBeDefined();
+          expect(standardItems.find(i => i.key === 'prt_statutory_terms_supporting_notes_scotland')).toBeDefined();
+          expect(premiumItems.find(i => i.key === 'prt_statutory_terms_supporting_notes_scotland')).toBeDefined();
         } else if (jur === 'northern-ireland') {
           expect(standardItems.length).toBe(5);
           expect(premiumItems.length).toBe(8);

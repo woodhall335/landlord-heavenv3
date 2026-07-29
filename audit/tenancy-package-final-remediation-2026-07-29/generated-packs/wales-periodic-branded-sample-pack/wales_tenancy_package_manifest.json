@@ -1,0 +1,53 @@
+{
+  "manifest_version": "tenancy-package-manifest.v2",
+  "case_id": "CERT-wales-periodic-branded-sample",
+  "document_id": "CERT-WALES-PERIODIC-BRANDED-SAMPLE",
+  "jurisdiction": "wales",
+  "agreement_type": "Periodic Standard Occupation Contract",
+  "tenancy_start_date": "2026-09-01",
+  "canonical_snapshot_id": "CERT-WALES-PERIODIC-BRANDED-SAMPLE",
+  "canonical_snapshot_hash": "d8d4256734465cc677da31c670de0107009e6aa952b14875133775aa4ec1ae81",
+  "source_version": "2026-07-29",
+  "inventory": {
+    "lifecycle_state": "template_included",
+    "signature_state": "unsigned",
+    "due_delivery_date": null,
+    "agreement_schedule_appended": false,
+    "separate_inventory_file_included": true,
+    "canonical_inventory_id": "CERT-WALES-PERIODIC-BRANDED-SAMPLE-INV-74461A65D056",
+    "canonical_inventory_hash": "74461a65d05640a6ee7b2cd63d07dfc78b1f40a66593164dd53d6a6dc6e03c00"
+  },
+  "deposit": {
+    "lifecycle": "expected",
+    "prescribed_information_supplied": false
+  },
+  "documents": [
+    {
+      "title": "Periodic Standard Occupation Contract",
+      "document_type": "soc_agreement",
+      "file_name": "tenancy_agreement.pdf",
+      "bytes": 650039,
+      "page_count": 31,
+      "sha256": "5929372d63e0083ca629c1365888789d6c3ccdfd7528e55afb3e176f7384e2ef",
+      "open_check": "passed"
+    },
+    {
+      "title": "Inventory Template & Schedule of Condition",
+      "document_type": "inventory_schedule",
+      "file_name": "inventory_schedule.pdf",
+      "bytes": 411959,
+      "page_count": 9,
+      "sha256": "cf108c06f1dd5c193896aee1ac4e3b00ddad2fa38beea48d795f5df3cef954f2",
+      "open_check": "passed"
+    },
+    {
+      "title": "Pre-Tenancy Compliance Checklist (Wales)",
+      "document_type": "pre_tenancy_checklist_wales",
+      "file_name": "compliance_checklist.pdf",
+      "bytes": 303960,
+      "page_count": 4,
+      "sha256": "c25b66acf37e6884b1444f4099d2b37c025131d87948fd28123853bffef56597",
+      "open_check": "passed"
+    }
+  ]
+}

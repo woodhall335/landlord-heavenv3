@@ -42,6 +42,7 @@ function completeAgreementData(jurisdiction: 'wales' | 'scotland' | 'northern-ir
     deposit_amount: 0,
     deposit_scheme_name: 'TDS' as const,
     inventory_delivery_method: 'later' as const,
+    inventory_due_date: '2026-08-01',
   };
 
   if (jurisdiction === 'wales') {

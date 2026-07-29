@@ -137,7 +137,7 @@ export const TENANCY_AGREEMENT_REGISTRY: readonly TenancyAgreementRegistryEntry[
     supportingDocuments: [
       'inventory_schedule',
       'pre_tenancy_checklist_scotland',
-      'easy_read_notes_scotland',
+      'prt_statutory_terms_supporting_notes_scotland',
     ],
     seo: {
       title: 'Private Residential Tenancy Agreement Scotland',

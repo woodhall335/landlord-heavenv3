@@ -1068,16 +1068,18 @@
   <div class="schedule">
     <div class="schedule-title">Schedule 4 - Inventory and Condition</div>
 
-    {{#if inventory_attached}}
-    <p>A detailed inventory and condition report is attached to this Agreement and forms part of it.</p>
+    {{#if (eq inventory_lifecycle_state "attached_completed")}}
+    <p>A completed inventory and condition report is supplied as the separately identified document <strong>{{inventory_document_id}}</strong>. Signature status: <strong>{{display_label inventory_signature_state}}</strong>.</p>
     <div class="legal-notice">
       <div class="legal-notice-title">Important</div>
       <p>The Tenant should check the inventory carefully and notify the Landlord in writing within <strong>7 days</strong> of any inaccuracies. The inventory will be used at the end of the tenancy to assess whether there is any damage beyond fair wear and tear.</p>
     </div>
-    {{else}}
+    {{else if (eq inventory_lifecycle_state "separate_later")}}
     <p>The completed inventory and condition report is not attached to this pack. It must be
     provided separately to the Tenant by <strong>{{formatUKDate inventory_due_date}}</strong>.
     This Agreement does not represent that a later inventory is already attached or completed.</p>
+    {{else}}
+    <p>Inventory template <strong>{{inventory_document_id}}</strong> is included as a separate completion tool. It must be completed after inspection and signed at handover. It is not yet a detailed, completed or signed condition record.</p>
     {{/if}}
   </div>
 

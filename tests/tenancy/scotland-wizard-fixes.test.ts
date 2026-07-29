@@ -15,7 +15,6 @@ import {
   validateUrlProduct,
   extractTierFromSku,
   isValidSkuForJurisdiction,
-  getDisplaySkuForUrl,
   buildWizardFlowUrl,
   VALID_SKUS_BY_JURISDICTION,
   PRODUCT_DISPLAY_LABELS,
@@ -35,16 +34,16 @@ describe('Product Normalization for Scotland', () => {
       expect(result.paymentSku).toBe('ast_standard');
     });
 
-    it('should convert ast_premium to prt_premium for Scotland', () => {
+    it('should fail closed to the only public Scotland product when premium is requested', () => {
       const result = normalizeProductForJurisdiction({
         jurisdiction: 'scotland',
         requestedSku: 'ast_premium',
       });
 
-      expect(result.displaySku).toBe('prt_premium');
-      expect(result.displayLabel).toBe('Premium PRT');
-      expect(result.tier).toBe('premium');
-      expect(result.paymentSku).toBe('ast_premium');
+      expect(result.displaySku).toBe('prt_standard');
+      expect(result.displayLabel).toBe('Standard PRT');
+      expect(result.tier).toBe('standard');
+      expect(result.paymentSku).toBe('ast_standard');
     });
 
     it('should prioritize purchased product over requested SKU', () => {
@@ -67,14 +66,14 @@ describe('Product Normalization for Scotland', () => {
       expect(result.tier).toBe('standard');
     });
 
-    it('should handle entitlements for premium upgrade', () => {
+    it('should not turn a generic premium entitlement into an unsupported regional product', () => {
       const result = normalizeProductForJurisdiction({
         jurisdiction: 'scotland',
         entitlements: ['ast_premium'],
       });
 
-      expect(result.displaySku).toBe('prt_premium');
-      expect(result.tier).toBe('premium');
+      expect(result.displaySku).toBe('prt_standard');
+      expect(result.tier).toBe('standard');
     });
   });
 
@@ -105,7 +104,7 @@ describe('Product Normalization for Scotland', () => {
     });
 
     it('should return correct labels for other jurisdictions', () => {
-      expect(getProductDisplayLabel('england', 'ast_standard')).toBe('Standard AST');
+      expect(getProductDisplayLabel('england', 'ast_standard')).toBe('Standard Assured Periodic Tenancy Agreement');
       expect(getProductDisplayLabel('wales', 'ast_standard')).toBe('Standard Occupation Contract');
       expect(getProductDisplayLabel('northern-ireland', 'ast_standard')).toBe('Standard NI Private Tenancy');
     });
@@ -116,16 +115,16 @@ describe('Product Normalization for Scotland', () => {
       expect(validateUrlProduct('ast_standard', 'scotland')).toBe('prt_standard');
     });
 
-    it('should normalize ast_premium to prt_premium for Scotland URLs', () => {
-      expect(validateUrlProduct('ast_premium', 'scotland')).toBe('prt_premium');
+    it('should normalize an unsupported premium request to Scotland standard', () => {
+      expect(validateUrlProduct('ast_premium', 'scotland')).toBe('prt_standard');
     });
 
     it('should accept prt_standard for Scotland', () => {
       expect(validateUrlProduct('prt_standard', 'scotland')).toBe('prt_standard');
     });
 
-    it('should accept prt_premium for Scotland', () => {
-      expect(validateUrlProduct('prt_premium', 'scotland')).toBe('prt_premium');
+    it('should not expose prt_premium for Scotland', () => {
+      expect(validateUrlProduct('prt_premium', 'scotland')).toBe('prt_standard');
     });
 
     it('should default to prt_standard for null/undefined in Scotland', () => {
@@ -138,7 +137,7 @@ describe('Product Normalization for Scotland', () => {
     });
 
     it('should handle cross-jurisdiction SKUs by extracting tier', () => {
-      expect(validateUrlProduct('occupation_premium', 'scotland')).toBe('prt_premium');
+      expect(validateUrlProduct('occupation_premium', 'scotland')).toBe('prt_standard');
       expect(validateUrlProduct('ni_standard', 'scotland')).toBe('prt_standard');
     });
   });
@@ -164,14 +163,14 @@ describe('Product Normalization for Scotland', () => {
   });
 
   describe('isValidSkuForJurisdiction', () => {
-    it('should accept prt_standard and prt_premium for Scotland', () => {
+    it('should accept only the public Scotland standard SKU', () => {
       expect(isValidSkuForJurisdiction('prt_standard', 'scotland')).toBe(true);
-      expect(isValidSkuForJurisdiction('prt_premium', 'scotland')).toBe(true);
+      expect(isValidSkuForJurisdiction('prt_premium', 'scotland')).toBe(false);
     });
 
-    it('should accept ast_standard and ast_premium for any jurisdiction (they get normalized)', () => {
+    it('should accept generic standard but reject generic premium for Scotland', () => {
       expect(isValidSkuForJurisdiction('ast_standard', 'scotland')).toBe(true);
-      expect(isValidSkuForJurisdiction('ast_premium', 'scotland')).toBe(true);
+      expect(isValidSkuForJurisdiction('ast_premium', 'scotland')).toBe(false);
     });
 
     it('should accept tenancy_agreement for any jurisdiction', () => {
@@ -210,7 +209,7 @@ describe('Product Normalization for Scotland', () => {
 describe('Valid SKUs by Jurisdiction', () => {
   it('should have correct valid SKUs for Scotland', () => {
     expect(VALID_SKUS_BY_JURISDICTION['scotland']).toContain('prt_standard');
-    expect(VALID_SKUS_BY_JURISDICTION['scotland']).toContain('prt_premium');
+    expect(VALID_SKUS_BY_JURISDICTION['scotland']).not.toContain('prt_premium');
     expect(VALID_SKUS_BY_JURISDICTION['scotland']).not.toContain('ast_standard');
     expect(VALID_SKUS_BY_JURISDICTION['scotland']).not.toContain('ast_premium');
   });
@@ -222,7 +221,7 @@ describe('Valid SKUs by Jurisdiction', () => {
 
   it('should have correct valid SKUs for Wales', () => {
     expect(VALID_SKUS_BY_JURISDICTION['wales']).toContain('occupation_standard');
-    expect(VALID_SKUS_BY_JURISDICTION['wales']).toContain('occupation_premium');
+    expect(VALID_SKUS_BY_JURISDICTION['wales']).not.toContain('occupation_premium');
   });
 });
 
@@ -341,11 +340,11 @@ describe('Edit Answers URL Generation', () => {
     expect(url).not.toContain('product=ast_standard');
   });
 
-  it('should preserve premium tier when normalizing for Scotland', () => {
+  it('should route an unpaid premium-shaped Scotland URL to the supported standard product', () => {
     const product = 'ast_premium';
     const normalizedProduct = validateUrlProduct(product, 'scotland');
 
-    expect(normalizedProduct).toBe('prt_premium');
+    expect(normalizedProduct).toBe('prt_standard');
   });
 
   it('should handle already-normalized Scotland products', () => {

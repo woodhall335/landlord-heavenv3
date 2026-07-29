@@ -13,6 +13,10 @@ import puppeteerCore from 'puppeteer-core';
 import { SITE_CONFIG } from '@/lib/site-config';
 import { formatDateUK, normalizeDatesForRender, sanitizeISODatesInHTML, validateHtmlForPdfTextLayer } from './date-normalizer';
 import { applyPreviewLockToPdfBytes } from '@/lib/previews/preview-lock-rendering';
+import {
+  formatDocumentCurrency,
+  formatDocumentDisplayValue,
+} from './customer-display';
 
 const DEBUG_GOLDEN_PACKS =
   process.env.DEBUG_GOLDEN_PACKS === 'true' ||
@@ -144,7 +148,7 @@ async function getBrowser(): Promise<BrowserInstance> {
         });
         // Cast to our type - the APIs are compatible at runtime
         return browser as unknown as BrowserInstance;
-      } catch (e) {
+      } catch {
         throw new Error(
           'No Chrome browser found. Please install Chrome or set PUPPETEER_EXECUTABLE_PATH environment variable.'
         );
@@ -221,6 +225,10 @@ export interface DocumentGenerationOptions {
     /** Additional template files to list (besides templatePath) */
     additionalTemplates?: string[];
   };
+  documentChrome?: {
+    headerText: string;
+    footerText: string;
+  };
 }
 
 export interface GeneratedDocument {
@@ -288,11 +296,7 @@ function registerHandlebarsHelpers() {
     return s[(v - 20) % 10] || s[v] || s[0];
   });
 
-  // Format currency
-  Handlebars.registerHelper('currency', function (amount) {
-    if (typeof amount !== 'number') return '£0.00';
-    return `£${amount.toFixed(2)}`;
-  });
+  Handlebars.registerHelper('currency', formatDocumentCurrency);
 
   // Format number for MCOL (Money Claim Online) - 2 decimal places, no £ symbol
   // Used in Filing Guide Step 5 where MCOL requires plain numbers only
@@ -302,11 +306,7 @@ function registerHandlebarsHelpers() {
     return amount.toFixed(2);
   });
 
-  // Override currency formatting with a clean pound symbol for HTML, PDF, and pack artifacts.
-  Handlebars.registerHelper('currency', function (amount) {
-    if (typeof amount !== 'number') return '£0.00';
-    return `£${amount.toFixed(2)}`;
-  });
+  Handlebars.registerHelper('display_label', formatDocumentDisplayValue);
 
   // Format date (UK format: DD/MM/YYYY or "D Month YYYY" for long format)
   // UPDATED: Now handles pre-normalized UK dates (e.g., "1 January 2026") gracefully
@@ -1393,6 +1393,10 @@ export async function htmlToPdf(
     watermark?: string;
     pageSize?: 'A4' | 'Letter';
     margins?: { top: string; right: string; bottom: string; left: string };
+    documentChrome?: {
+      headerText: string;
+      footerText: string;
+    };
   }
 ): Promise<Buffer> {
   let browser;
@@ -1592,6 +1596,33 @@ ${sanitizedInputHtml}
       preferCSSPageSize: isFullHtml,
     };
 
+    if (options?.documentChrome) {
+      const escapeChromeText = (value: string): string =>
+        value
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      const headerText = escapeChromeText(options.documentChrome.headerText);
+      const footerText = escapeChromeText(options.documentChrome.footerText);
+      pdfOptions.displayHeaderFooter = true;
+      pdfOptions.headerTemplate = `
+        <div style="box-sizing:border-box;width:100%;margin:0 18mm;padding:0 0 2mm;
+                    border-bottom:0.3pt solid #d8d3e8;color:#4a405f;
+                    font:8px Arial,Helvetica,sans-serif;letter-spacing:.02em;">
+          ${headerText}
+        </div>`;
+      pdfOptions.footerTemplate = `
+        <div style="box-sizing:border-box;width:100%;margin:0 18mm;padding:2mm 0 0;
+                    border-top:0.3pt solid #d8d3e8;color:#5d566b;
+                    font:8px Arial,Helvetica,sans-serif;display:flex;
+                    justify-content:space-between;">
+          <span>${footerText}</span>
+          <span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span>
+        </div>`;
+    }
+
     // For non-full-HTML, the injected @page rules handle margins via CSS,
     // so we still don't need to pass Puppeteer margin options.
     // The @page CSS rules are already in the finalHtml.
@@ -1616,7 +1647,14 @@ ${sanitizedInputHtml}
 export async function generateDocument(
   options: DocumentGenerationOptions
 ): Promise<GeneratedDocument> {
-  const { templatePath, data, isPreview = false, outputFormat = 'both', debugStamp } = options;
+  const {
+    templatePath,
+    data,
+    isPreview = false,
+    outputFormat = 'both',
+    debugStamp,
+    documentChrome,
+  } = options;
 
   // Load template
   const templateContent = loadTemplate(templatePath);
@@ -1699,7 +1737,7 @@ export async function generateDocument(
       // WATERMARK REMOVED - Simplified UX Change
       // All PDFs are now generated without watermarks (preview and final)
       // See docs/pdf-watermark-audit.md for details
-      pdf = await htmlToPdf(html, {});
+      pdf = await htmlToPdf(html, { documentChrome });
     } catch (error: any) {
       console.warn(`⚠️  PDF generation skipped: ${error.message}`);
       console.warn('   HTML output will still be generated.');
@@ -1754,8 +1792,6 @@ export async function htmlToPreviewThumbnail(
     watermarkText?: string;
   }
 ): Promise<Buffer> {
-  const width = options?.width || 400;
-  const height = options?.height || 566; // A4 aspect ratio (1:1.414)
   const quality = options?.quality || 80;
   const watermarkText = options?.watermarkText || 'PREVIEW';
 
@@ -2318,7 +2354,7 @@ export async function pdfToPreviewThumbnail(
     if (browser) {
       try {
         await browser.close();
-      } catch (e) {
+      } catch {
         // Ignore cleanup errors
       }
     }
@@ -2631,7 +2667,7 @@ export async function pdfBytesToPreviewThumbnail(
     if (browser) {
       try {
         await browser.close();
-      } catch (e) {
+      } catch {
         // Ignore cleanup errors
       }
     }

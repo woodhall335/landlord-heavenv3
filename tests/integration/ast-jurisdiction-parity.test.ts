@@ -240,7 +240,7 @@ describe('Pack-Contents AST Document Keys', () => {
         'prt_agreement',
         'inventory_schedule',
         'pre_tenancy_checklist_scotland',
-        'easy_read_notes_scotland',
+        'prt_statutory_terms_supporting_notes_scotland',
       ],
       'northern-ireland': [
         'private_tenancy_agreement',
@@ -288,7 +288,7 @@ describe('Pack-Contents AST Document Keys', () => {
         'prt_agreement_hmo',
         'inventory_schedule',
         'pre_tenancy_checklist_scotland',
-        'easy_read_notes_scotland',
+        'prt_statutory_terms_supporting_notes_scotland',
         'key_schedule',
         'property_maintenance_guide',
         'checkout_procedure',

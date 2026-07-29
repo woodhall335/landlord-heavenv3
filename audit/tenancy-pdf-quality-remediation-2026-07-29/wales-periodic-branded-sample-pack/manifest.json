@@ -1,0 +1,40 @@
+{
+  "sample": "wales-periodic-branded-sample.pdf",
+  "generatedOn": "2026-07-29",
+  "jurisdiction": "wales",
+  "tenancyStartDate": "2026-09-01",
+  "inventoryMode": "attached",
+  "agreementIncludesAppendedSchedule1": true,
+  "documents": [
+    {
+      "title": "Standard Occupation Contract",
+      "category": "agreement",
+      "documentType": "soc_agreement",
+      "fileName": "tenancy_agreement.pdf",
+      "bytes": 702504,
+      "pages": 40,
+      "sha256": "9bffc8e0f03c7a54f727ee27c1f901a8599ac4d66c5501445431d176a58077c4",
+      "openCheck": "passed"
+    },
+    {
+      "title": "Inventory & Schedule of Condition",
+      "category": "schedule",
+      "documentType": "inventory_schedule",
+      "fileName": "inventory_schedule.pdf",
+      "bytes": 359414,
+      "pages": 9,
+      "sha256": "6c85979707f43ed0c88feca895facd2b84914979d1bd512c1f52430fba4f5220",
+      "openCheck": "passed"
+    },
+    {
+      "title": "Pre-Tenancy Compliance Checklist (Wales)",
+      "category": "checklist",
+      "documentType": "pre_tenancy_checklist_wales",
+      "fileName": "compliance_checklist.pdf",
+      "bytes": 245964,
+      "pages": 3,
+      "sha256": "b353a7afa4d011c7960952f65d082dc29e2018adce2311be7bc0ffb32bcef7da",
+      "openCheck": "passed"
+    }
+  ]
+}

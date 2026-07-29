@@ -1,0 +1,55 @@
+{
+  "manifest_version": "tenancy-package-manifest.v1",
+  "case_id": "CERT-northern-ireland-private-tenancy-branded-sample",
+  "document_id": "CERT-NORTHERN-IRELAND-PRIVATE-TENANCY-BRANDED-SAMPLE",
+  "jurisdiction": "northern-ireland",
+  "source_version": "2026-07-27",
+  "inventory": {
+    "status": "attached",
+    "due_date": null,
+    "included": true,
+    "agreement_contains_appended_inventory": true
+  },
+  "deposit": {
+    "lifecycle": "expected",
+    "prescribed_information_supplied": false
+  },
+  "documents": [
+    {
+      "title": "Private Tenancy Agreement",
+      "document_type": "private_tenancy_agreement",
+      "file_name": "tenancy_agreement.pdf",
+      "sha256": "84f8989eeb986fbf8943ff916489f3a0109d84376a08e053664fa97272357234"
+    },
+    {
+      "title": "Inventory & Schedule of Condition",
+      "document_type": "inventory_schedule",
+      "file_name": "inventory_schedule.pdf",
+      "sha256": "0db8cb11b3cce3f3248b6a22466cfb88ab694446ebe8896d0e41b2d594e07de6"
+    },
+    {
+      "title": "Pre-Tenancy Compliance Checklist (Northern Ireland)",
+      "document_type": "pre_tenancy_checklist_northern_ireland",
+      "file_name": "compliance_checklist.pdf",
+      "sha256": "a30e81a5965e4e2aae0ca7d0e0bde87e78869fb61a89651e886f2a8407cb4b3e"
+    },
+    {
+      "title": "Northern Ireland Rent Book",
+      "document_type": "rent_book_northern_ireland",
+      "file_name": "northern_ireland_rent_book.pdf",
+      "sha256": "0c4656274e1dedd8f49c0db9ed5e9602dd0e3f6ca3b8728cd25330704cfb10f6"
+    },
+    {
+      "title": "Landlord’s Notice Relating to the Granting of a Private Tenancy",
+      "document_type": "tenancy_information_notice_northern_ireland",
+      "file_name": "northern_ireland_tenancy_information_notice.pdf",
+      "sha256": "df0ce6d043520b8ed90594af89dc9be9b3494bf01f4fa97364e3861f7556d105"
+    },
+    {
+      "title": "Tenancy Information Notice Completion Guidance",
+      "document_type": "tenancy_information_notice_guidance_northern_ireland",
+      "file_name": "northern_ireland_tenancy_information_notice_guidance.pdf",
+      "sha256": "c9f46ddc973d838a4aa0e32724f8dd74b1c7ec04eb17d85c02fa667949dca94b"
+    }
+  ]
+}

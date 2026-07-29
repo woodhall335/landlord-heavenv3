@@ -81,7 +81,9 @@ describe('branded official-model-derived standard agreements', () => {
       Array.from({ length: 33 }, (_, index) => index + 7)
     );
     expect(scotland).toContain('{{tenant_utility_accounts}}');
-    expect(scotland).toContain('inventory_delivery_method "later"');
+    expect(scotland).toContain('inventory_lifecycle_state "separate_later"');
+    expect(scotland).toContain('inventory_lifecycle_state "attached_completed"');
+    expect(scotland).toContain('{{inventory_document_id}}');
     expect(scotland).toContain('{{communication_method}}');
     expect(scotland).toContain('Protection completed:');
     expect(scotland).toContain('Protection pending:');
@@ -89,7 +91,9 @@ describe('branded official-model-derived standard agreements', () => {
     expect(scotland).toContain('{{deposit_scheme_contact_details}}');
     expect(scotland).toContain('{{deposit_deduction_circumstances}}');
     expect(scotland).toContain('{{deposit_repayment_dispute_information}}');
-    expect(scotland).toContain('{{scotland_rent_control_area_status}}');
+    expect(scotland).toContain(
+      '{{display_label scotland_rent_control_area_status}}'
+    );
     for (const protectedCharacteristic of [
       'age',
       'disability',
@@ -105,15 +109,15 @@ describe('branded official-model-derived standard agreements', () => {
     }
   });
 
-  it('physically appends an inventory whenever the agreement says it is attached', () => {
+  it('uses one separately identified inventory for regional Standard packs', () => {
     expect(generator).toContain(
       'appendInventoryScheduleToAgreementWhenClaimed'
     );
-    expect(generator).toContain("data.inventory_delivery_method === 'attached'");
+    expect(generator).toContain("detectJurisdiction(data) !== 'england'");
     expect(generator).toContain('PDFDocument.load');
-    expect(generator).toContain(
-      'Inventory is marked attached, but the agreement or Schedule 1 inventory PDF is missing'
-    );
+    expect(generator).toContain('agreement_schedule_appended: false');
+    expect(generator).toContain('separate_inventory_file_included: true');
+    expect(generator).toContain('canonical_inventory_id');
   });
 
   it('generates the prescribed Northern Ireland pack data and current notice periods', () => {

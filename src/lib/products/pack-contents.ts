@@ -1359,7 +1359,7 @@ function getScotlandPRTContents(tier: 'standard' | 'premium', hasInventoryData?:
 
   // Official statutory supporting notes for a landlord-drafted Scottish PRT.
   items.push({
-    key: 'easy_read_notes_scotland',
+    key: 'prt_statutory_terms_supporting_notes_scotland',
     title: 'Scottish Government PRT Statutory Terms Supporting Notes',
     description: 'Exact April 2024 Scottish Government supporting notes for a landlord-drafted Private Residential Tenancy agreement',
     category: 'Guidance',

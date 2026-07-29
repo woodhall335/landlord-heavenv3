@@ -3,6 +3,7 @@ import {
   ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
   ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
 } from './england-agreement-constants';
+import { hasCompletedStructuredInventory } from './inventory-completeness';
 
 export type TenancyJurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland';
 
@@ -163,14 +164,5 @@ export function isPremiumSku(sku: TenancyProductSku | string | null | undefined)
  * @returns true if inventory data was provided via the wizard
  */
 export function detectInventoryData(facts: Record<string, any> | null | undefined): boolean {
-  if (!facts) return false;
-
-  const inventoryData = facts.inventory || {};
-  return Boolean(
-    // Only structured, renderable rows count as a completed inventory. Boolean
-    // attachment flags describe delivery state; they are not inventory content.
-    (Array.isArray(inventoryData.rooms) && inventoryData.rooms.length > 0) ||
-    (Array.isArray(facts.inventory_rooms) && facts.inventory_rooms.length > 0) ||
-    (Array.isArray(facts.inspection_rooms) && facts.inspection_rooms.length > 0)
-  );
+  return facts ? hasCompletedStructuredInventory(facts) : false;
 }

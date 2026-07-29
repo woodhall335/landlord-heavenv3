@@ -1,0 +1,80 @@
+{
+  "manifest_version": "tenancy-package-manifest.v2",
+  "case_id": "CERT-northern-ireland-private-tenancy-branded-sample",
+  "document_id": "CERT-NORTHERN-IRELAND-PRIVATE-TENANCY-BRANDED-SAMPLE",
+  "jurisdiction": "northern-ireland",
+  "agreement_type": "Private Tenancy Agreement",
+  "tenancy_start_date": "2026-09-01",
+  "canonical_snapshot_id": "CERT-NORTHERN-IRELAND-PRIVATE-TENANCY-BRANDED-SAMPLE",
+  "canonical_snapshot_hash": "4e2983b0a3a7d78b46e2a98f5a73f4dea7dd3100348b64c08ae251afb890e118",
+  "source_version": "2026-07-29",
+  "inventory": {
+    "lifecycle_state": "template_included",
+    "signature_state": "unsigned",
+    "due_delivery_date": null,
+    "agreement_schedule_appended": false,
+    "separate_inventory_file_included": true,
+    "canonical_inventory_id": "CERT-NORTHERN-IRELAND-PRIVATE-TENANCY-BRANDED-SAMPLE-INV-82AEF0C0251C",
+    "canonical_inventory_hash": "82aef0c0251c864b2a8dfab06578254d6d0c4ae7165b0fa41e80c887054d31f1"
+  },
+  "deposit": {
+    "lifecycle": "expected",
+    "prescribed_information_supplied": false
+  },
+  "documents": [
+    {
+      "title": "Private Tenancy Agreement",
+      "document_type": "private_tenancy_agreement",
+      "file_name": "tenancy_agreement.pdf",
+      "bytes": 476894,
+      "page_count": 16,
+      "sha256": "f3fe14d486f8d8b4cc59bbd44f419c31120be2269ef1214221fc6406f346a41f",
+      "open_check": "passed"
+    },
+    {
+      "title": "Inventory Template & Schedule of Condition",
+      "document_type": "inventory_schedule",
+      "file_name": "inventory_schedule.pdf",
+      "bytes": 413464,
+      "page_count": 9,
+      "sha256": "6326e1b19a03e96fd08bed248428b1d97a6e51ea448e1d9bc39f8b391abfe3e7",
+      "open_check": "passed"
+    },
+    {
+      "title": "Pre-Tenancy Compliance Checklist (Northern Ireland)",
+      "document_type": "pre_tenancy_checklist_northern_ireland",
+      "file_name": "compliance_checklist.pdf",
+      "bytes": 298803,
+      "page_count": 4,
+      "sha256": "770f3b0596ae7aac7fb88172ba89bc2d6ee03e9ab3fcef8456714566753a0d0b",
+      "open_check": "passed"
+    },
+    {
+      "title": "Northern Ireland Rent Book",
+      "document_type": "rent_book_northern_ireland",
+      "file_name": "northern_ireland_rent_book.pdf",
+      "bytes": 203281,
+      "page_count": 2,
+      "sha256": "1fe939a12a8573b690220090885df0b58531b6b565c63da35b772764fc681af7",
+      "open_check": "passed"
+    },
+    {
+      "title": "Landlord’s Notice Relating to the Granting of a Private Tenancy",
+      "document_type": "tenancy_information_notice_northern_ireland",
+      "file_name": "northern_ireland_tenancy_information_notice.pdf",
+      "bytes": 265125,
+      "page_count": 6,
+      "sha256": "61d4b18221a34c5c9b3e9aa3b2fca3d9b045fd3729a72bae7406db227e7f1a26",
+      "open_check": "passed"
+    },
+    {
+      "title": "Tenancy Information Notice Completion Guidance",
+      "document_type": "tenancy_information_notice_guidance_northern_ireland",
+      "file_name": "northern_ireland_tenancy_information_notice_guidance.pdf",
+      "bytes": 96386,
+      "page_count": 4,
+      "sha256": "c9f46ddc973d838a4aa0e32724f8dd74b1c7ec04eb17d85c02fa667949dca94b",
+      "open_check": "passed"
+    }
+  ]
+}

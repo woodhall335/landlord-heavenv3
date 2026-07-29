@@ -1,0 +1,5 @@
+﻿pack,expected_types,missing_types,status
+northern-ireland-private-tenancy-branded-sample-pack,inventory_schedule;pre_tenancy_checklist_northern_ireland;rent_book_northern_ireland;tenancy_information_notice_guidance_northern_ireland;tenancy_information_notice_northern_ireland,,pass
+scotland-prt-branded-sample-pack,inventory_schedule;pre_tenancy_checklist_scotland;prt_statutory_terms_supporting_notes_scotland,,pass
+wales-fixed-branded-sample-pack,inventory_schedule;pre_tenancy_checklist_wales,,pass
+wales-periodic-branded-sample-pack,inventory_schedule;pre_tenancy_checklist_wales,,pass

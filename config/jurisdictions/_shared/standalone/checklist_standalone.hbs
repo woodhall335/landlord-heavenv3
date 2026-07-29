@@ -246,6 +246,41 @@
     <p>It is a practical file tool, not the agreement itself. If a requirement is unusual, disputed, or unclear, verify the point before relying on the file as complete.</p>
   </div>
 
+  <h2>Wizard-Recorded Setup Information</h2>
+  <p class="guidance-text">These entries repeat information supplied during the wizard. They are not independent proof of compliance. Check each entry against the underlying certificate, registration, licence or other evidence before marking the summary complete.</p>
+  <table class="summary-table">
+    <tr>
+      <th style="width: 32%">Item</th>
+      <th style="width: 38%">Wizard record</th>
+      <th style="width: 30%">Evidence checked</th>
+    </tr>
+    <tr>
+      <td>Inventory</td>
+      <td>{{inventory_customer_status}}{{#if inventory_document_id}}<br>ID: {{inventory_document_id}}{{/if}}</td>
+      <td>&#9744; Confirmed<br>Reference: __________</td>
+    </tr>
+    <tr>
+      <td>Deposit</td>
+      <td>{{#if deposit_taken}}Deposit recorded as taken{{else}}No deposit recorded as taken{{/if}}{{#if deposit_scheme}}<br>Scheme: {{deposit_scheme}}{{/if}}</td>
+      <td>&#9744; Confirmed<br>&#9744; Exception recorded</td>
+    </tr>
+    <tr>
+      <td>Energy and electrical records</td>
+      <td>EPC: {{#if epc_rating}}{{epc_rating}}{{else}}not recorded{{/if}}<br>EICR: {{#if eicr_status}}{{eicr_status}}{{else}}not recorded{{/if}}</td>
+      <td>&#9744; Confirmed<br>&#9744; Exception recorded</td>
+    </tr>
+    <tr>
+      <td>Gas safety</td>
+      <td>{{#if gas_safety_status}}{{gas_safety_status}}{{else}}not recorded{{/if}}{{#if gas_safety_certificate_date}}<br>Date: {{formatUKDate gas_safety_certificate_date}}{{/if}}</td>
+      <td>&#9744; Confirmed<br>&#9744; Not applicable, reason recorded</td>
+    </tr>
+    <tr>
+      <td>Registration / licensing</td>
+      <td>{{#if landlord_registration_number}}Landlord: {{landlord_registration_number}}{{else}}Landlord number not recorded{{/if}}{{#if rent_smart_wales_licence_number}}<br>Rent Smart Wales licence: {{rent_smart_wales_licence_number}}{{/if}}</td>
+      <td>&#9744; Confirmed<br>&#9744; Exception recorded</td>
+    </tr>
+  </table>
+
   {{!-- ENGLAND CHECKLIST --}}
   {{#if (eq jurisdiction "england")}}
   <h3>1. Deposit Protection (Mandatory)</h3>
@@ -750,23 +785,23 @@
     {{#unless (eq jurisdiction "england")}}
     <tr>
       <td>{{#if (eq jurisdiction "wales")}}Rent Smart Wales registration{{else}}Landlord registration{{/if}}</td>
-      <td>&#9744; Yes &nbsp; &#9744; N/A</td>
+      <td>&#9744; Confirmed &nbsp; &#9744; Exception recorded</td>
       <td>______________</td>
     </tr>
     {{/unless}}
     <tr>
       <td>Deposit protected</td>
-      <td>&#9744; Yes &nbsp; &#9744; N/A</td>
+      <td>&#9744; Confirmed &nbsp; &#9744; Not taken</td>
       <td>______________</td>
     </tr>
     <tr>
       <td>{{#if (eq jurisdiction "england")}}Prescribed Information{{else}}Deposit info{{/if}} provided</td>
-      <td>&#9744; Yes &nbsp; &#9744; N/A</td>
+      <td>&#9744; Confirmed &nbsp; &#9744; Not required, reason recorded</td>
       <td>______________</td>
     </tr>
     <tr>
       <td>Gas Safety Certificate provided</td>
-      <td>&#9744; Yes &nbsp; &#9744; N/A</td>
+      <td>&#9744; Confirmed &nbsp; &#9744; No gas, evidence recorded</td>
       <td>______________</td>
     </tr>
     <tr>
@@ -815,12 +850,12 @@
     </tr>
     <tr>
       <td>CO alarms tested (if applicable)</td>
-      <td>&#9744; Yes &nbsp; &#9744; N/A</td>
+      <td>&#9744; Confirmed &nbsp; &#9744; Not applicable, reason recorded</td>
       <td>______________</td>
     </tr>
     <tr>
       <td>HMO licence (if applicable)</td>
-      <td>&#9744; Yes &nbsp; &#9744; N/A</td>
+      <td>&#9744; Confirmed &nbsp; &#9744; Not applicable, reason recorded</td>
       <td>______________</td>
     </tr>
   </table>

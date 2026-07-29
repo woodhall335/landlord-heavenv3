@@ -5,6 +5,7 @@
 * { box-sizing: border-box; }
 body { margin: 0; color: #172033; font: 10.2pt/1.46 Georgia, "Times New Roman", serif; }
 h1, h2, h3 { font-family: Arial, Helvetica, sans-serif; break-after: avoid; }
+h1 + p, h2 + p, h3 + p, h1 + table, h2 + table, h3 + table { break-before: avoid; }
 h1 { font-size: 21pt; letter-spacing: .35pt; text-align: center; text-transform: uppercase; }
 h2 { margin: 20pt 0 9pt; padding-bottom: 4pt; border-bottom: 1.2pt solid #243b53; font-size: 13pt; }
 h3 { margin: 13pt 0 6pt; font-size: 10.8pt; }
@@ -16,6 +17,8 @@ p { margin: 0 0 7pt; orphans: 3; widows: 3; text-align: justify; }
 .page-break { break-before: page; page-break-before: always; }
 .section { margin: 12pt 0; }
 .data-table, .signature-table { width: 100%; margin: 9pt 0 14pt; border-collapse: collapse; break-inside: avoid; }
+.data-table thead, .signature-table thead { display: table-header-group; }
+.data-table tr, .signature-table tr { break-inside: avoid; break-after: auto; }
 .data-table th, .data-table td, .signature-table th, .signature-table td { border: .65pt solid #829ab1; padding: 6pt 7pt; vertical-align: top; }
 .data-table th { width: 34%; background: #edf3f7; font: 700 8.6pt Arial, sans-serif; text-align: left; text-transform: uppercase; }
 .tenant-card { margin: 8pt 0; padding: 8pt; border: .65pt solid #bcccdc; break-inside: avoid; }
@@ -92,6 +95,15 @@ p { margin: 0 0 7pt; orphans: 3; widows: 3; text-align: justify; }
     <tr><th>First payment</th><td>{{currency first_payment}} on {{format_date first_payment_date}}</td></tr>
     <tr><th>Further payments</th><td>{{rent_due_day}} of each {{rent_period}}</td></tr>
     <tr><th>Deposit</th><td>{{currency deposit_amount}} — {{deposit_scheme_name}}</td></tr>
+    <tr><th>Inventory document</th><td>
+      {{#if (eq inventory_lifecycle_state "attached_completed")}}
+      A completed inventory is supplied as the separately identified document {{inventory_document_id}}. Signature status: {{display_label inventory_signature_state}}.
+      {{else if (eq inventory_lifecycle_state "separate_later")}}
+      The completed inventory will be supplied separately by {{format_date inventory_due_date}}. The inventory file in this package is a completion tool, not the completed condition record.
+      {{else}}
+      Inventory template {{inventory_document_id}} is included for inspection, completion and signature. It is not yet the completed condition record.
+      {{/if}}
+    </td></tr>
     <tr><th>Rent Smart Wales registration</th><td>Status: {{#if rent_smart_wales_registered}}registered{{else}}not recorded as registered{{/if}}<br>Number: {{rent_smart_wales_registration_number}}{{#if rent_smart_wales_registration_expiry}}<br>Expiry: {{format_date rent_smart_wales_registration_expiry}}{{/if}}</td></tr>
     <tr><th>Landlord licence</th><td>{{#if rent_smart_wales_licensed}}Licensed{{#if rent_smart_wales_licence_number}} — {{rent_smart_wales_licence_number}}{{/if}}{{#if rent_smart_wales_licence_expiry}} (expires {{format_date rent_smart_wales_licence_expiry}}){{/if}}{{else}}No landlord licence recorded; registration alone does not authorise regulated letting or management work{{/if}}</td></tr>
     <tr><th>Managing-agent licence</th><td>{{#if managing_agent_rsw_licensed}}Licensed{{#if managing_agent_rsw_licence_number}} — {{managing_agent_rsw_licence_number}}{{/if}}{{else}}No licensed managing agent recorded{{/if}}</td></tr>

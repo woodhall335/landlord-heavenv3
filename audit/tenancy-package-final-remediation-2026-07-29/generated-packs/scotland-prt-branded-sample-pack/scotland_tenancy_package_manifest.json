@@ -1,0 +1,62 @@
+{
+  "manifest_version": "tenancy-package-manifest.v2",
+  "case_id": "CERT-scotland-prt-branded-sample",
+  "document_id": "CERT-SCOTLAND-PRT-BRANDED-SAMPLE",
+  "jurisdiction": "scotland",
+  "agreement_type": "Private Residential Tenancy Agreement",
+  "tenancy_start_date": "2026-09-01",
+  "canonical_snapshot_id": "CERT-SCOTLAND-PRT-BRANDED-SAMPLE",
+  "canonical_snapshot_hash": "96f2263690d9adef1014a5b6cc0b897d669df20f48a80f2d47646805936a9218",
+  "source_version": "2026-07-29",
+  "inventory": {
+    "lifecycle_state": "template_included",
+    "signature_state": "unsigned",
+    "due_delivery_date": null,
+    "agreement_schedule_appended": false,
+    "separate_inventory_file_included": true,
+    "canonical_inventory_id": "CERT-SCOTLAND-PRT-BRANDED-SAMPLE-INV-33A2D349BB1C",
+    "canonical_inventory_hash": "33a2d349bb1ceb2782f214c97023d945f034c6845a251af65c3348abd987415f"
+  },
+  "deposit": {
+    "lifecycle": "expected",
+    "prescribed_information_supplied": false
+  },
+  "documents": [
+    {
+      "title": "Private Residential Tenancy Agreement",
+      "document_type": "prt_agreement",
+      "file_name": "tenancy_agreement.pdf",
+      "bytes": 754496,
+      "page_count": 18,
+      "sha256": "42f985f68850383abb2fde134b44a5aa4bea6dbe69a0b680df50ab4b8fcf928a",
+      "open_check": "passed"
+    },
+    {
+      "title": "Inventory Template & Schedule of Condition",
+      "document_type": "inventory_schedule",
+      "file_name": "inventory_schedule.pdf",
+      "bytes": 410341,
+      "page_count": 9,
+      "sha256": "331d7613f7a86776c127150a950a19ab029a3b80ec36043f83c0437b2ff7bd6a",
+      "open_check": "passed"
+    },
+    {
+      "title": "Pre-Tenancy Compliance Checklist (Scotland)",
+      "document_type": "pre_tenancy_checklist_scotland",
+      "file_name": "compliance_checklist.pdf",
+      "bytes": 296820,
+      "page_count": 4,
+      "sha256": "b8e1432e4c0f4cc12d3ea64a2636365e3e7a5fc7a638e60c3e27f05cc14595e7",
+      "open_check": "passed"
+    },
+    {
+      "title": "Private Residential Tenancy Statutory Terms Supporting Notes",
+      "document_type": "prt_statutory_terms_supporting_notes_scotland",
+      "file_name": "scotland_prt_statutory_terms_supporting_notes_april_2024.pdf",
+      "bytes": 354633,
+      "page_count": 42,
+      "sha256": "6f8891bf2488d433e98665352e67a6f06e70e211b330052bf17be582d6d82876",
+      "open_check": "passed"
+    }
+  ]
+}

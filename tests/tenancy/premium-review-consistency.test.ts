@@ -17,11 +17,9 @@ import {
   isPremiumSku,
   detectInventoryData,
   TENANCY_PRICING,
-  type TenancyProductSku,
 } from '@/lib/tenancy/product-tier';
 import {
   inferTenancySkuFromFacts,
-  getTenancyTierLabelFromFacts,
 } from '@/lib/tenancy/product-tier';
 
 describe('Premium Tenancy Agreement Review Consistency', () => {
@@ -185,10 +183,15 @@ describe('Inventory Data Detection', () => {
       expect(detectInventoryData({})).toBe(false);
     });
 
-    it('returns true when inventory.rooms has items', () => {
+    it('returns true when inventory rooms contain meaningful item condition data', () => {
       expect(
         detectInventoryData({
-          inventory: { rooms: [{ name: 'Living Room' }] },
+          inventory: {
+            rooms: [{
+              name: 'Living Room',
+              items: [{ name: 'Walls', condition: 'Good' }],
+            }],
+          },
         })
       ).toBe(true);
     });
@@ -201,20 +204,20 @@ describe('Inventory Data Detection', () => {
       ).toBe(false);
     });
 
-    it('returns true when inventory_attached is true', () => {
+    it('does not trust legacy inventory_attached without structured evidence', () => {
       expect(
         detectInventoryData({
           inventory_attached: true,
         })
-      ).toBe(true);
+      ).toBe(false);
     });
 
-    it('returns true when inventory_provided is true', () => {
+    it('does not trust legacy inventory_provided without structured evidence', () => {
       expect(
         detectInventoryData({
           inventory_provided: true,
         })
-      ).toBe(true);
+      ).toBe(false);
     });
 
     it('returns false when inventory_attached is false', () => {
@@ -230,7 +233,12 @@ describe('Inventory Data Detection', () => {
       // All conditions present
       expect(
         detectInventoryData({
-          inventory: { rooms: [{ name: 'Kitchen' }] },
+          inventory: {
+            rooms: [{
+              name: 'Kitchen',
+              items: [{ name: 'Worktop', condition: 'Good' }],
+            }],
+          },
           inventory_attached: true,
           inventory_provided: true,
         })
@@ -239,18 +247,23 @@ describe('Inventory Data Detection', () => {
       // Only rooms present
       expect(
         detectInventoryData({
-          inventory: { rooms: [{ name: 'Kitchen' }] },
+          inventory: {
+            rooms: [{
+              name: 'Kitchen',
+              items: [{ name: 'Worktop', condition: 'Good' }],
+            }],
+          },
           inventory_attached: false,
         })
       ).toBe(true);
 
-      // Only flag present, no rooms
+      // Only flag present, no structured rows: fail closed.
       expect(
         detectInventoryData({
           inventory: { rooms: [] },
           inventory_attached: true,
         })
-      ).toBe(true);
+      ).toBe(false);
     });
   });
 });
@@ -336,7 +349,14 @@ describe('Document Generation Consistency', () => {
 
     it('Inventory type depends on wizard completion for Premium', () => {
       // With inventory data: wizard-completed
-      const withData = detectInventoryData({ inventory: { rooms: [{}] } });
+      const withData = detectInventoryData({
+        inventory: {
+          rooms: [{
+            name: 'Bedroom',
+            items: [{ name: 'Carpet', condition: 'Good' }],
+          }],
+        },
+      });
       expect(withData).toBe(true);
 
       // Without inventory data: blank fallback

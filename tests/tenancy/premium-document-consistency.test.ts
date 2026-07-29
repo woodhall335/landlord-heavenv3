@@ -9,7 +9,7 @@
  * @see https://github.com/woodhall335/landlord-heavenv3/issues/premium-document-consistency
  */
 
-import { describe, expect, it, vi, beforeEach } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { getASTDocuments, getProductMeta } from '@/lib/documents/document-configs';
 import { detectInventoryData } from '@/lib/tenancy/product-tier';
 
@@ -153,7 +153,14 @@ describe('Product Meta Pricing', () => {
 describe('Inventory Consistency Between Claims and Generation', () => {
   describe('Premium tier inventory behavior', () => {
     it('Premium with wizard data claims wizard-completed inventory', () => {
-      const facts = { inventory: { rooms: [{ name: 'Living Room', condition: 'Good' }] } };
+      const facts = {
+        inventory: {
+          rooms: [{
+            name: 'Living Room',
+            items: [{ name: 'Walls', condition: 'Good' }],
+          }],
+        },
+      };
       const hasData = detectInventoryData(facts);
 
       expect(hasData).toBe(true);
@@ -197,18 +204,18 @@ describe('Cross-Jurisdiction Consistency', () => {
   const jurisdictions = ['england', 'wales', 'scotland', 'northern-ireland'] as const;
   const tiers = ['standard', 'premium'] as const;
 
-  describe('All jurisdictions have same document structure', () => {
+  describe('Jurisdiction packs share a core while retaining required regional documents', () => {
     tiers.forEach((tier) => {
-      it(`${tier} tier has consistent document IDs across jurisdictions`, () => {
+      it(`${tier} tier includes the shared agreement, inventory and checklist roles`, () => {
         const docIdsByJurisdiction = jurisdictions.map((j) => {
           const docs = getASTDocuments(j, tier, { hasInventoryData: false });
           return docs.map((d) => d.id).sort();
         });
 
-        // All jurisdictions should have the same document IDs
-        const referenceIds = docIdsByJurisdiction[0];
-        docIdsByJurisdiction.forEach((ids, index) => {
-          expect(ids).toEqual(referenceIds);
+        docIdsByJurisdiction.forEach((ids) => {
+          expect(ids).toContain('inventory-schedule');
+          expect(ids).toContain('compliance-checklist');
+          expect(ids.some((id) => id.includes('agreement'))).toBe(true);
         });
       });
     });
@@ -226,14 +233,14 @@ describe('Cross-Jurisdiction Consistency', () => {
       expect(detectInventoryData(facts)).toBe(true);
     });
 
-    it('detects inventory from legacy format (inventory_attached)', () => {
+    it('fails closed for legacy inventory_attached without structured rows', () => {
       const facts = { inventory_attached: true };
-      expect(detectInventoryData(facts)).toBe(true);
+      expect(detectInventoryData(facts)).toBe(false);
     });
 
-    it('detects inventory from legacy format (inventory_provided)', () => {
+    it('fails closed for legacy inventory_provided without structured rows', () => {
       const facts = { inventory_provided: true };
-      expect(detectInventoryData(facts)).toBe(true);
+      expect(detectInventoryData(facts)).toBe(false);
     });
 
     it('handles mixed formats correctly', () => {
@@ -241,7 +248,7 @@ describe('Cross-Jurisdiction Consistency', () => {
         inventory: { rooms: [] }, // Empty rooms
         inventory_attached: true, // But flag is set
       };
-      expect(detectInventoryData(facts)).toBe(true);
+      expect(detectInventoryData(facts)).toBe(false);
     });
   });
 });
@@ -259,7 +266,12 @@ describe('REGRESSION: Previous Bug Scenarios', () => {
     it('Premium inventory claim matches hasInventoryData detection', () => {
       // Scenario 1: User completed inventory wizard
       const factsWithInventory = {
-        inventory: { rooms: [{ name: 'Room 1' }] },
+        inventory: {
+          rooms: [{
+            name: 'Room 1',
+            items: [{ name: 'Walls', condition: 'Good' }],
+          }],
+        },
       };
       const hasData1 = detectInventoryData(factsWithInventory);
       const docs1 = getASTDocuments('england', 'premium', { hasInventoryData: hasData1 });

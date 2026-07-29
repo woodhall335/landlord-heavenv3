@@ -27,6 +27,11 @@ import {
   ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
   ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
 } from '@/lib/tenancy/england-agreement-constants';
+import {
+  getTenancyAgreementLabel,
+  getTenancyWizardWelcomeMessage,
+  type TenancyWizardJurisdiction,
+} from '@/lib/tenancy/wizard-copy';
 
 // Extend the base WizardQuestion type with optional fields that come from MQS/backend
 type WizardQuestion = BaseWizardQuestion & {
@@ -42,7 +47,11 @@ type WizardQuestion = BaseWizardQuestion & {
 };
 
 // Helper function to get product display name
-function getDocumentTypeName(caseType: string, product?: string): string {
+function getDocumentTypeName(
+  caseType: string,
+  product: string | undefined,
+  jurisdiction: TenancyWizardJurisdiction
+): string {
   // If product parameter is provided, use it for specific naming
   if (product) {
     switch (product) {
@@ -53,9 +62,13 @@ function getDocumentTypeName(caseType: string, product?: string): string {
       case 'money_claim':
         return 'Money Claim Pack';
       case 'ast_standard':
-        return ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL;
+        return jurisdiction === 'england'
+          ? ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL
+          : getTenancyAgreementLabel(jurisdiction);
       case 'ast_premium':
-        return ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL;
+        return jurisdiction === 'england'
+          ? ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL
+          : getTenancyAgreementLabel(jurisdiction);
       default:
         break;
     }
@@ -68,7 +81,7 @@ function getDocumentTypeName(caseType: string, product?: string): string {
     case 'money_claim':
       return 'Money Claim';
     case 'tenancy_agreement':
-      return 'Tenancy Agreement';
+      return getTenancyAgreementLabel(jurisdiction);
     default:
       return 'Document';
   }
@@ -170,7 +183,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
       case 'money_claim':
         return `Hi. I will help you prepare a money claim for ${jurName}.\n\nWe will set out who owes what, why it is owed, what you have already done to chase it, and what evidence supports the claim.\n\nLet's begin.`;
       case 'tenancy_agreement':
-        return `Hi. I will help you prepare a tenancy agreement for ${jurName}.\n\nWe will check the property, occupiers, rent, deposit, and any special setup details so the paperwork matches the tenancy you are creating.\n\nShall we start?`;
+        return getTenancyWizardWelcomeMessage(jur as TenancyWizardJurisdiction);
       default:
         return "Hi. Let's get started.";
     }
@@ -925,7 +938,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                   <div className="flex-1">
                     <div className="text-sm font-medium text-charcoal">Document Type</div>
                     <div className="text-sm text-gray-600">
-                      {getDocumentTypeName(caseType, product)}
+                      {getDocumentTypeName(caseType, product, jurisdiction)}
                     </div>
                   </div>
                 </div>

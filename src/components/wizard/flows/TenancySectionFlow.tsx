@@ -156,6 +156,9 @@ const getJurisdictionTerminology = (jurisdiction: Jurisdiction) => {
     case 'wales':
       return {
         agreementType: 'Occupation Contract',
+        agreementReference: 'occupation contract',
+        occupierSingular: 'contract-holder',
+        occupierPlural: 'contract-holders',
         standardTier: 'Standard Occupation Contract',
         premiumTier: 'Legacy Premium Occupation Contract',
         standardDescription: 'Simple, straightforward occupation contract for most lets.',
@@ -164,6 +167,9 @@ const getJurisdictionTerminology = (jurisdiction: Jurisdiction) => {
     case 'scotland':
       return {
         agreementType: 'Private Residential Tenancy',
+        agreementReference: 'tenancy agreement',
+        occupierSingular: 'tenant',
+        occupierPlural: 'tenants',
         standardTier: 'Standard PRT',
         premiumTier: 'Legacy Premium PRT',
         standardDescription: 'Simple, straightforward PRT for most lets.',
@@ -172,6 +178,9 @@ const getJurisdictionTerminology = (jurisdiction: Jurisdiction) => {
     case 'northern-ireland':
       return {
         agreementType: 'Private Tenancy',
+        agreementReference: 'tenancy agreement',
+        occupierSingular: 'tenant',
+        occupierPlural: 'tenants',
         standardTier: 'Standard NI Private Tenancy',
         premiumTier: 'Legacy Premium NI Private Tenancy',
         standardDescription: 'Simple, straightforward private tenancy for most lets.',
@@ -181,6 +190,9 @@ const getJurisdictionTerminology = (jurisdiction: Jurisdiction) => {
     default:
       return {
         agreementType: 'Assured Periodic Tenancy Agreement',
+        agreementReference: 'tenancy agreement',
+        occupierSingular: 'tenant',
+        occupierPlural: 'tenants',
         standardTier: 'Standard Assured Periodic Tenancy Agreement',
         premiumTier: 'Premium Assured Periodic Tenancy Agreement',
         standardDescription: 'A straightforward England assured periodic tenancy agreement for most standard lets.',
@@ -188,6 +200,35 @@ const getJurisdictionTerminology = (jurisdiction: Jurisdiction) => {
       };
   }
 };
+
+function getSectionPresentation(section: WizardSection, jurisdiction: Jurisdiction) {
+  if (jurisdiction !== 'wales') return section;
+
+  if (section.id === 'tenants') {
+    return {
+      ...section,
+      label: 'Contract-holders',
+      description: 'Who will occupy the dwelling and be named on the occupation contract',
+    };
+  }
+
+  if (section.id === 'tenancy') {
+    return {
+      ...section,
+      label: 'Contract',
+      description: 'Occupation date and contract-term details',
+    };
+  }
+
+  if (section.id === 'property') {
+    return {
+      ...section,
+      description: 'The dwelling address and key details',
+    };
+  }
+
+  return section;
+}
 
 
 function getTenancyValidationBlockers(facts: Record<string, unknown>, jurisdiction: Jurisdiction): string[] {
@@ -833,7 +874,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
 
       setCurrentSectionIndex(currentSectionIndex + 1);
     }
-  }, [currentSectionIndex, visibleSections, facts, jurisdiction, product]);
+  }, [caseId, currentSectionIndex, visibleSections, facts, jurisdiction, product]);
 
   // Navigate to previous section
   const handleBack = useCallback(() => {
@@ -916,7 +957,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
       case 'deposit':
         return <DepositSection facts={facts} onUpdate={handleUpdate} jurisdiction={jurisdiction} />;
       case 'bills':
-        return <BillsSection facts={facts} onUpdate={handleUpdate} />;
+        return <BillsSection facts={facts} onUpdate={handleUpdate} jurisdiction={jurisdiction} />;
       case 'compliance':
         return <ComplianceSection facts={facts} onUpdate={handleUpdate} jurisdiction={jurisdiction} />;
       case 'terms':
@@ -951,7 +992,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
       progress={progress}
       tabs={visibleSections.map((section, index) => ({
         id: section.id,
-        label: section.label,
+        label: getSectionPresentation(section, jurisdiction).label,
         isCurrent: index === currentSectionIndex,
         isComplete: section.isComplete(facts),
         hasIssue:
@@ -959,8 +1000,14 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
           (highlightedSectionSet.has(section.id) && !section.isComplete(facts)),
         onClick: () => setCurrentSectionIndex(index),
       }))}
-      sectionTitle={currentSection?.label ?? ''}
-      sectionDescription={currentSection?.description}
+      sectionTitle={
+        currentSection ? getSectionPresentation(currentSection, jurisdiction).label : ''
+      }
+      sectionDescription={
+        currentSection
+          ? getSectionPresentation(currentSection, jurisdiction).description
+          : undefined
+      }
       product={product}
       jurisdiction={jurisdiction}
       currentStepId={currentSection?.id}
@@ -1197,13 +1244,15 @@ const ProductSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
 };
 
 // Property Section
-const PropertySection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
+const PropertySection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction = 'england' }) => {
+  const terms = getJurisdictionTerminology(jurisdiction);
+
   return (
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-4">Property Address</h3>
         <p className="text-sm text-gray-500 mb-4">
-          Exactly as it should appear in the tenancy agreement.
+          Exactly as it should appear in the {terms.agreementReference}.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="md:col-span-2">
@@ -1456,7 +1505,13 @@ const LandlordSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction
 };
 
 // Tenants Section - with HMO signal detection
-const TenantsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
+const TenantsSection: React.FC<SectionProps> = ({
+  facts,
+  onUpdate,
+  jurisdiction = 'england',
+}) => {
+  const terms = getJurisdictionTerminology(jurisdiction);
+  const isWales = jurisdiction === 'wales';
   const numTenants = parseInt(facts.number_of_tenants || '1', 10);
   const tenants = facts.tenants || [];
 
@@ -1476,7 +1531,7 @@ const TenantsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
     <div className="space-y-6">
       <div>
         <SelectField
-          label="How many tenants are on the agreement?"
+          label={`How many ${terms.occupierPlural} are on the ${terms.agreementReference}?`}
           value={facts.number_of_tenants}
           onChange={(v) => onUpdate({ number_of_tenants: v })}
           options={['1', '2', '3', '4', '5', '6+']}
@@ -1488,11 +1543,11 @@ const TenantsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
       {showHMOSignalQuestions && (
         <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg space-y-4">
           <p className="text-sm text-blue-800 font-medium">
-            A few questions to help us recommend the right agreement:
+            A few questions to help us prepare the right {terms.agreementReference}:
           </p>
 
           <YesNoField
-            label="Are the tenants related to each other (e.g., family, partners)?"
+            label={`Are the ${terms.occupierPlural} related to each other (e.g., family, partners)?`}
             value={facts.tenants_related}
             onChange={(v) => {
               // If not related, set unrelated_tenants flag
@@ -1501,22 +1556,22 @@ const TenantsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
                 unrelated_tenants: v === false,
               });
             }}
-            helperText="Unrelated tenants may indicate an HMO arrangement"
+            helperText={`Unrelated ${terms.occupierPlural} may indicate an HMO arrangement`}
             required
           />
 
           {numTenants >= 3 && (
             <YesNoField
-              label="Will tenants share kitchen, bathroom or living space?"
+              label={`Will ${terms.occupierPlural} share kitchen, bathroom or living space?`}
               value={facts.shared_facilities}
               onChange={(v) => onUpdate({ shared_facilities: v })}
-              helperText="Shared facilities with 3+ unrelated tenants commonly requires HMO licensing"
+              helperText={`Shared facilities with 3+ unrelated ${terms.occupierPlural} commonly require HMO licensing`}
               required
             />
           )}
 
           <YesNoField
-            label="Will each tenant pay rent separately (rather than one joint payment)?"
+            label={`Will each ${terms.occupierSingular} pay rent separately (rather than one joint payment)?`}
             value={facts.separate_rent_payments}
             onChange={(v) => onUpdate({ separate_rent_payments: v })}
             helperText="Separate payments may indicate room-by-room letting"
@@ -1524,7 +1579,7 @@ const TenantsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
           />
 
           <YesNoField
-            label="Is this a room-by-room let (each tenant has exclusive use of specific room)?"
+            label={`Is this a room-by-room let (each ${terms.occupierSingular} has exclusive use of a specific room)?`}
             value={facts.room_by_room_let}
             onChange={(v) => onUpdate({ room_by_room_let: v })}
             helperText="Room-by-room lets may require different clauses"
@@ -1532,7 +1587,7 @@ const TenantsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
           />
 
           <SelectField
-            label="What type of tenants?"
+            label={`What type of ${terms.occupierPlural}?`}
             value={facts.tenant_type}
             onChange={(v) => onUpdate({ tenant_type: v })}
             options={['Working professionals', 'Students', 'Mixed', 'Family', 'Other']}
@@ -1543,10 +1598,14 @@ const TenantsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
       {Array.from({ length: Math.min(numTenants, 6) }, (_, i) => (
         <div key={i} className="border-t border-gray-200 pt-6">
           <h3 className="text-lg font-medium text-gray-900 mb-4">
-            {i === 0 ? 'Lead Tenant' : `Tenant ${i + 1}`}
+            {i === 0
+              ? `Lead ${isWales ? 'Contract-holder' : 'Tenant'}`
+              : `${isWales ? 'Contract-holder' : 'Tenant'} ${i + 1}`}
           </h3>
           {i === 0 && (
-            <p className="text-sm text-gray-500 mb-4">Main tenant contact for routine notices and updates</p>
+            <p className="text-sm text-gray-500 mb-4">
+              Main {terms.occupierSingular} contact for routine notices and updates
+            </p>
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="md:col-span-2">
@@ -1595,7 +1654,11 @@ const TenancySection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-4">
-          {isEngland ? 'Tenancy Start Date' : 'Tenancy Start and Term'}
+          {isEngland
+            ? 'Tenancy Start Date'
+            : jurisdiction === 'wales'
+            ? 'Occupation Date and Contract Term'
+            : 'Tenancy Start and Term'}
         </h3>
 
         {/* Scotland PRT Informational Banner */}
@@ -1643,7 +1706,11 @@ const TenancySection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
           {/* Fixed term question - NOT shown for Scotland or England */}
           {!isScotland && !isEngland && (
             <YesNoField
-              label="Is this a fixed term tenancy?"
+              label={
+                jurisdiction === 'wales'
+                  ? 'Is this a fixed-term occupation contract?'
+                  : 'Is this a fixed-term tenancy?'
+              }
               value={facts.is_fixed_term}
               onChange={(v) => onUpdate({ is_fixed_term: v })}
               required
@@ -1765,6 +1832,8 @@ const RentSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
 const DepositSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction }) => {
   const isScotland = jurisdiction === 'scotland';
   const isEngland = jurisdiction === 'england';
+  const isWales = jurisdiction === 'wales';
+  const terms = getJurisdictionTerminology(jurisdiction || 'england');
   const englandDepositCap = getEnglandDepositCapResult({ ...facts, __meta: { ...(facts.__meta || {}), jurisdiction } });
   const hasDeposit = hasPositiveDepositAmount({ ...facts, __meta: { ...(facts.__meta || {}), jurisdiction } });
   const depositAmount = toFiniteNumber(facts.deposit_amount);
@@ -1849,8 +1918,8 @@ const DepositSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
         {depositAmount === 0 ? (
           <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
             <p className="text-sm text-slate-700">
-              No deposit will be taken for this tenancy, so the scheme fields and prescribed information
-              steps are not needed for this pack.
+              No deposit will be taken for this {isWales ? 'occupation contract' : 'tenancy'}, so the
+              scheme fields and prescribed-information steps are not needed for this pack.
             </p>
           </div>
         ) : null}
@@ -1870,7 +1939,7 @@ const DepositSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
         <InlineSectionHeaderV3
           title="Prescribed Information"
           iconSlug="deposit"
-          subtitle="Record the deposit information you will give the tenant and keep proof that it was provided."
+          subtitle={`Record the deposit information you will give the ${terms.occupierSingular} and keep proof that it was provided.`}
         />
         {hasDeposit ? (
           <>
@@ -1885,7 +1954,7 @@ const DepositSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
                   </>
                 ) : (
                   <>
-                    <strong>Statutory requirement:</strong> You must give the tenant the prescribed deposit
+                    <strong>Statutory requirement:</strong> You must give the {terms.occupierSingular} the prescribed deposit
                     information within 30 days of receiving the deposit. If you do not, a court can order you
                     to repay or protect the deposit and pay compensation of up to 3 times the deposit. Keep
                     evidence that this was done.
@@ -1914,15 +1983,24 @@ const DepositSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
 };
 
 // Bills Section
-const BillsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
-  const options = ['Tenant', 'Landlord', 'Included in rent'];
+const BillsSection: React.FC<SectionProps> = ({
+  facts,
+  onUpdate,
+  jurisdiction = 'england',
+}) => {
+  const isWales = jurisdiction === 'wales';
+  const terms = getJurisdictionTerminology(jurisdiction);
+  const occupierOption: SelectOption = isWales
+    ? { value: 'Tenant', label: 'Contract-holder' }
+    : 'Tenant';
+  const options: SelectOption[] = [occupierOption, 'Landlord', 'Included in rent'];
 
   return (
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-4">Who Pays Which Bills?</h3>
         <p className="text-sm text-gray-500 mb-4">
-          We include this in the tenant responsibilities section.
+          We include this in the {terms.occupierSingular} responsibilities section.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <SelectField
@@ -1977,7 +2055,7 @@ const BillsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
             label="Who arranges utility account transfers?"
             value={facts.utility_transfer_responsibility}
             onChange={(v) => onUpdate({ utility_transfer_responsibility: v })}
-            options={['Tenant', 'Landlord', 'Agent']}
+            options={[occupierOption, 'Landlord', 'Agent']}
             required
           />
         </div>
@@ -2097,6 +2175,8 @@ const ComplianceSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdicti
 // Terms Section - with Ask Heaven inline enhancement for narrative text fields
 const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate, caseId, jurisdiction = 'england' }) => {
   const isEngland = jurisdiction === 'england';
+  const isWales = jurisdiction === 'wales';
+  const terms = getJurisdictionTerminology(jurisdiction);
 
   useEffect(() => {
     if (!isEngland) return;
@@ -2196,7 +2276,13 @@ const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate, caseId, jurisdi
             required
           />
           <YesNoField
-            label={isEngland ? 'Allow viewings once the tenancy is ending?' : 'Allow end-of-tenancy viewings?'}
+            label={
+              isEngland
+                ? 'Allow viewings once the tenancy is ending?'
+                : isWales
+                ? 'Allow viewings near the end of the occupation contract?'
+                : 'Allow end-of-tenancy viewings?'
+            }
             value={facts.end_of_tenancy_viewings}
             onChange={(v) => onUpdate({ end_of_tenancy_viewings: v })}
             required
@@ -2209,7 +2295,7 @@ const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate, caseId, jurisdi
         <InlineSectionHeaderV3
           title="Repairs and Maintenance"
           iconSlug="property"
-          subtitle="What the landlord handles, how tenants report repairs, and who to contact out of hours."
+          subtitle={`What the landlord handles, how ${terms.occupierPlural} report repairs, and who to contact out of hours.`}
         />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="md:col-span-2 space-y-2">
@@ -2231,7 +2317,7 @@ const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate, caseId, jurisdi
             />
           </div>
           <SelectField
-            label="How should tenants report repairs?"
+            label={`How should ${terms.occupierPlural} report repairs?`}
             value={facts.repairs_reporting_method}
             onChange={(v) => onUpdate({ repairs_reporting_method: v })}
             options={['Email', 'Phone', 'Online portal']}
@@ -2334,7 +2420,7 @@ const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate, caseId, jurisdi
           <AskHeavenInlineEnhancer
             caseId={caseId}
             questionId="additional_terms"
-            questionText="Additional bespoke terms for the tenancy agreement"
+            questionText={`Additional bespoke terms for the ${terms.agreementReference}`}
             answer={facts.additional_terms || ''}
             onApply={(newText) => onUpdate({ additional_terms: newText })}
             context={{ jurisdiction, product: 'tenancy_agreement' }}
@@ -3326,7 +3412,10 @@ const ResidentialDocumentDetailsSection: React.FC<SectionProps> = ({ facts, onUp
 };
 
 // Review Section
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ReviewSection: React.FC<SectionProps> = ({ facts }) => {
+  const reviewJurisdiction = (facts.__meta?.jurisdiction || 'england') as Jurisdiction;
+  const terminology = getJurisdictionTerminology(reviewJurisdiction);
   // Calculate completion status (jurisdiction-agnostic check)
   const completedSections = SECTIONS.filter((s) => {
     if (s.premiumOnly && !isPremiumTier(facts.product_tier)) return true;
@@ -3362,7 +3451,9 @@ const ReviewSection: React.FC<SectionProps> = ({ facts }) => {
           <span className="text-sm font-medium">{facts.landlord_full_name || 'Not entered'}</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-sm text-gray-600">Tenants</span>
+          <span className="text-sm text-gray-600">
+            {reviewJurisdiction === 'wales' ? 'Contract-holders' : 'Tenants'}
+          </span>
           <span className="text-sm font-medium">
             {facts.tenants?.[0]?.full_name || 'Not entered'}
             {facts.number_of_tenants > 1 && ` + ${parseInt(facts.number_of_tenants) - 1} more`}
@@ -3403,7 +3494,8 @@ const ReviewSection: React.FC<SectionProps> = ({ facts }) => {
         <div className={isWizardUiV3Enabled ? "bg-violet-50 border border-violet-200 rounded-lg p-4" : "bg-green-50 border border-green-200 rounded-lg p-4"}>
           <h4 className={isWizardUiV3Enabled ? "font-medium text-violet-900 mb-2" : "font-medium text-green-800 mb-2"}>Ready for preview</h4>
           <p className={isWizardUiV3Enabled ? "text-sm text-violet-700" : "text-sm text-green-700"}>
-        All sections are complete. Continue to the document preview to check your tenancy agreement before payment.
+        All sections are complete. Continue to the document preview to check your{' '}
+        {terminology.agreementReference} before payment.
           </p>
         </div>
       )}
@@ -3412,18 +3504,19 @@ const ReviewSection: React.FC<SectionProps> = ({ facts }) => {
 };
 
 const PremiumReviewSection: React.FC<SectionProps> = ({ facts }) => {
+  const reviewJurisdiction = (facts.__meta?.jurisdiction || 'england') as Jurisdiction;
   const isProductLocked = Boolean(
     facts.__meta?.purchased_product || (facts.__meta?.entitlements || []).length > 0
   );
   const visibleSections = getVisibleSectionsForFacts(facts, isProductLocked);
   const residentialProduct = getResidentialStandaloneProduct(facts);
-  const terminology = getJurisdictionTerminology(facts.__meta?.jurisdiction || 'england');
+  const terminology = getJurisdictionTerminology(reviewJurisdiction);
   const allComplete = visibleSections
     .filter((section) => section.id !== 'review')
     .every((section) => section.isComplete(facts));
   const incompleteSections = visibleSections
     .filter((section) => section.id !== 'review' && !section.isComplete(facts))
-    .map((section) => section.label);
+    .map((section) => getSectionPresentation(section, reviewJurisdiction).label);
   const includedDocuments = residentialProduct
     ? [
         RESIDENTIAL_LETTING_PRODUCTS[residentialProduct].label,
@@ -3434,8 +3527,10 @@ const PremiumReviewSection: React.FC<SectionProps> = ({ facts }) => {
         isPremiumTier(facts.product_tier) ? terminology.premiumTier : terminology.standardTier,
         hasPositiveDepositAmount(facts)
           ? 'Prescribed information pack and deposit certificate'
+          : reviewJurisdiction === 'wales'
+          ? 'No-deposit occupation-contract wording and file checks'
           : 'No-deposit tenancy wording and file checks',
-        'Pre-tenancy checklist',
+        reviewJurisdiction === 'wales' ? 'Pre-contract checklist' : 'Pre-tenancy checklist',
         'Supporting handover records',
       ];
   const tenantCount = Number.parseInt(facts.number_of_tenants || '0', 10);
@@ -3458,7 +3553,7 @@ const PremiumReviewSection: React.FC<SectionProps> = ({ facts }) => {
       value: facts.landlord_full_name || 'Not entered',
     },
     {
-      label: 'Tenants',
+      label: reviewJurisdiction === 'wales' ? 'Contract-holders' : 'Tenants',
       value:
         facts.tenants?.[0]?.full_name
           ? `${facts.tenants[0].full_name}${tenantCount > 1 ? ` + ${tenantCount - 1} more` : ''}`
@@ -3497,7 +3592,7 @@ const PremiumReviewSection: React.FC<SectionProps> = ({ facts }) => {
         }`}
       >
         <p className={`text-[11px] font-semibold uppercase tracking-[0.16em] ${allComplete ? 'text-violet-700' : 'text-amber-700'}`}>
-          Review your tenancy documents
+          Review your {reviewJurisdiction === 'wales' ? 'occupation-contract' : 'tenancy'} documents
         </p>
         <h3 className={`mt-2 text-xl font-semibold tracking-tight ${allComplete ? 'text-violet-950' : 'text-amber-950'}`}>
           {allComplete ? 'Everything is ready for preview' : 'You still need to finish a few sections before the documents are ready'}
@@ -3589,8 +3684,10 @@ interface FieldProps {
   type?: string;
   min?: number;
   max?: number;
-  options?: string[];
+  options?: SelectOption[];
 }
+
+type SelectOption = string | { value: string; label: string };
 
 const LEGACY_TENANCY_LABEL_CLASS = 'block text-sm font-medium text-gray-700 mb-2';
 const LEGACY_TENANCY_HELPER_CLASS = 'text-sm text-gray-500 mb-2';
@@ -3726,8 +3823,11 @@ const SelectField: React.FC<FieldProps> = ({
     >
       <option value="">-- Select --</option>
       {options.map((opt) => (
-        <option key={opt} value={opt}>
-          {opt}
+        <option
+          key={typeof opt === 'string' ? opt : opt.value}
+          value={typeof opt === 'string' ? opt : opt.value}
+        >
+          {typeof opt === 'string' ? opt : opt.label}
         </option>
       ))}
     </select>

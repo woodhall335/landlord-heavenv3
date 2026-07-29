@@ -1,0 +1,5 @@
+﻿document,contact_sheet,all_pages_rendered,blank_pages,manual_clipping_review,manual_overlap_review,manual_hierarchy_review,legal_structure_preservation,populated_data_accuracy,readability,visual_hierarchy,pagination,consistency,customer_trust,supporting_document_completeness,production_readiness,status
+northern-ireland,audit/tenancy-pdf-quality-remediation-2026-07-29/contact-sheets/northern-ireland.png,True,,pass,pass,pass,9,9,9,9,8,9,9,9,9,pass
+scotland,audit/tenancy-pdf-quality-remediation-2026-07-29/contact-sheets/scotland.png,True,,pass,pass,pass,9,9,8,8,8,9,9,9,9,pass
+wales-fixed,audit/tenancy-pdf-quality-remediation-2026-07-29/contact-sheets/wales-fixed.png,True,,pass,pass,pass,9,9,8,8,8,9,9,9,9,pass
+wales-periodic,audit/tenancy-pdf-quality-remediation-2026-07-29/contact-sheets/wales-periodic.png,True,,pass,pass,pass,9,9,8,8,8,9,9,9,9,pass

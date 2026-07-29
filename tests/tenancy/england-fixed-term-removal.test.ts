@@ -99,7 +99,9 @@ describe('England tenancy step copy contract', () => {
     expect(source).toContain(
       "For new England tenancies from 1 May 2026, the agreement is created as an assured periodic tenancy. Enter the tenancy start date below.",
     );
-    expect(source).toContain("{isEngland ? 'Tenancy Start Date' : 'Tenancy Start and Term'}");
+    expect(source).toContain("? 'Tenancy Start Date'");
+    expect(source).toContain("? 'Occupation Date and Contract Term'");
+    expect(source).toContain(": 'Tenancy Start and Term'");
     expect(source).toContain('!isScotland && !isEngland && (');
   });
 });

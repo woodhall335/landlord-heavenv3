@@ -114,6 +114,19 @@
       border: 1pt solid #dee2e6;
     }
 
+    .state-banner {
+      margin: 10pt 0 14pt;
+      padding: 10pt;
+      border: 1.5pt solid #2c5282;
+      background: #ebf8ff;
+      font-size: 9pt;
+    }
+
+    .state-banner.template {
+      border-color: #b7791f;
+      background: #fffaf0;
+    }
+
     /* ===== TABLES ===== */
     table {
       width: 100%;
@@ -275,18 +288,58 @@
 
   <!-- ===== DOCUMENT HEADER ===== -->
   <div class="doc-header">
-    <h1>Inventory &amp; Schedule of Condition</h1>
+    {{#if (eq inventory_lifecycle_state "attached_completed")}}
+    <h1>Completed Inventory &amp; Schedule of Condition</h1>
+    {{else}}
+    <h1>Inventory Template &amp; Schedule of Condition</h1>
+    {{/if}}
     <p class="doc-subtitle">Property Contents and Condition Record - {{jurisdiction_name}}</p>
     {{#if property_address}}
     <div class="property-address">{{property_address}}</div>
     {{/if}}
   </div>
 
+  {{#if (eq inventory_lifecycle_state "attached_completed")}}
+  <div class="state-banner">
+    <p><strong>COMPLETED INVENTORY RECORD</strong></p>
+    <p>This separate document contains wizard-recorded room and item condition data. Signature status: <strong>{{inventory_signature_state}}</strong>. It is not appended to the agreement; use the Inventory Document ID below to keep the correct documents together.</p>
+  </div>
+  {{else}}
+  <div class="state-banner template">
+    <p><strong>NOT A COMPLETED OR SIGNED CONDITION RECORD</strong></p>
+    {{#if (eq inventory_lifecycle_state "separate_later")}}
+    <p>This is a completion tool. The completed inventory is to be prepared and supplied separately by <strong>{{formatUKDate inventory_due_date}}</strong>.</p>
+    {{else}}
+    <p>This is a blank completion tool supplied with the tenancy package. Inspect the property, record its contents and condition, add photograph references, then have the parties review and sign it at handover.</p>
+    {{/if}}
+  </div>
+  {{/if}}
+
   <div class="instructions">
     <p><strong>Instructions:</strong> This inventory should be checked carefully against the property, contents, fixtures, fittings, and photographs at the inspection. The landlord (or agent) and tenant should sign and date it and keep copies with the tenancy records.</p>
     <p>The tenant should review the document promptly and return any written comments or corrections as soon as reasonably practicable, ideally within 7 calendar days of check-in or receipt.</p>
     <p>This document may later be used as evidential material when considering condition, cleanliness, missing items, damage, fair wear and tear, and any proposed deposit deductions.</p>
   </div>
+
+  <h2>Document Control</h2>
+  <table class="data-table">
+    <tr>
+      <td class="label">Inventory Document ID</td>
+      <td class="value">{{inventory_document_id}}</td>
+    </tr>
+    <tr>
+      <td class="label">Lifecycle state</td>
+      <td class="value">{{inventory_lifecycle_state}}</td>
+    </tr>
+    <tr>
+      <td class="label">Signature state</td>
+      <td class="value">{{inventory_signature_state}}</td>
+    </tr>
+    <tr>
+      <td class="label">Content hash</td>
+      <td class="value">{{inventory_content_hash}}</td>
+    </tr>
+  </table>
 
   {{#if document_facts_rows.length}}
   <h2>Document Facts</h2>
@@ -317,7 +370,7 @@
     </tr>
     <tr>
       <td class="label">Inspection / Inventory Date</td>
-      <td class="value">{{#if inspection_date}}{{formatUKDate inspection_date}}{{else}}{{#if tenancy_start_date}}{{formatUKDate tenancy_start_date}}{{else}}______ / ______ / ______{{/if}}{{/if}}</td>
+      <td class="value">{{#if inspection_date}}{{formatUKDate inspection_date}}{{else}}To be completed at inspection: ______ / ______ / ______{{/if}}</td>
     </tr>
     <tr>
       <td class="label">Inspection Clerk</td>
@@ -728,7 +781,11 @@
 
   <!-- ===== PART F: SIGNATURES ===== -->
   <h2 class="page-break-before">Part G: Signatures</h2>
-  <p>By signing below, the parties confirm that this inventory has been inspected and is intended to record the condition and contents of the property at the relevant inspection date, subject to any written comments attached or sent shortly afterwards.</p>
+  {{#if (eq inventory_lifecycle_state "attached_completed")}}
+  <p>The recorded signature state at generation is <strong>{{inventory_signature_state}}</strong>. Any blank signature lines below remain available for signatures still required; they do not themselves prove that a party has signed.</p>
+  {{else}}
+  <p>This template is unsigned. Sign only after the property has been inspected and the completed entries and referenced evidence have been checked. Blank signature lines do not mean that either party has approved the inventory.</p>
+  {{/if}}
 
   <table class="signature-table" style="margin-top: 16pt;">
     <tr>
@@ -777,7 +834,7 @@
   </div>
 
   <p class="small-text" style="margin-top: 12pt; text-align: center;">
-    Generated on {{#if current_date}}{{formatUKDate current_date}}{{else}}Not stated{{/if}} | Document ID: INV-{{#if case_id}}{{case_id}}{{else}}{{timestamp}}{{/if}}
+    Generated on {{#if current_date}}{{formatUKDate current_date}}{{else}}Not stated{{/if}} | Inventory Document ID: {{inventory_document_id}}
   </p>
 
 </body>

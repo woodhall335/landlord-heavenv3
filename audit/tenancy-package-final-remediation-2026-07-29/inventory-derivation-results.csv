@@ -1,0 +1,9 @@
+﻿fixture,expected,actual,status
+blank,template_included,template_included,pass
+partial-empty,template_included,template_included,pass
+whitespace-only,template_included,template_included,pass
+meter-only,template_included,template_included,pass
+keys-only,template_included,template_included,pass
+structured-condition,attached_completed,attached_completed,pass
+separate-with-date,separate_later,separate_later,pass
+legacy-boolean-only,template_included,template_included,pass

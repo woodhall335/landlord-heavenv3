@@ -106,7 +106,12 @@ export const DOCUMENT_PREVIEW_TYPE_MAPPING: Record<string, string[]> = {
   'renters-rights-information-sheet-2026': ['renters_rights_information_sheet_2026'],
   'deposit-protection-certificate': ['deposit_protection_certificate'],
   'prescribed-information-pack': ['tenancy_deposit_information'],
-  'easy-read-notes-scotland': ['easy_read_notes_scotland'],
+  // The old "easy read" key remains a resolver alias for previously stored
+  // customer documents; new packs use the legally accurate supporting-notes type.
+  'easy-read-notes-scotland': [
+    'prt_statutory_terms_supporting_notes_scotland',
+    'easy_read_notes_scotland',
+  ],
   'key-schedule': ['key_schedule'],
   'property-maintenance-guide': ['property_maintenance_guide'],
   'checkout-procedure': ['checkout_procedure'],

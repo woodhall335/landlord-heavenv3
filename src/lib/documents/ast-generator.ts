@@ -22,8 +22,15 @@
  */
 
 import { compileAndMergeTemplates, GeneratedDocument, htmlToPdf } from './generator';
-import { runtimeTenancyVariantsSelfCheck, assertTenancyVariantsInvariant, createFileSystemTemplateGetter } from '../products/tenancy-variant-validator';
+import { runtimeTenancyVariantsSelfCheck } from '../products/tenancy-variant-validator';
 import { detectInventoryData } from '../tenancy/product-tier';
+import {
+  deriveCanonicalInventoryState,
+  inventoryCustomerStatus,
+  type CanonicalInventoryState,
+  type InventoryLifecycleState,
+  type InventorySignatureState,
+} from '../tenancy/inventory-state';
 import {
   ENGLAND_ASSURED_PERIODIC_AGREEMENT_TITLE,
   ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
@@ -223,7 +230,7 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
     jurisdictionLabel: 'Scotland',
     inventoryDocumentType: 'inventory_schedule',
     checklistDocumentType: 'pre_tenancy_checklist_scotland',
-    easyReadNotesDocumentType: 'easy_read_notes_scotland',
+    easyReadNotesDocumentType: 'prt_statutory_terms_supporting_notes_scotland',
     scotlandStatutorySupportingNotesPath:
       'mqs/tenancy_agreement/scotland_prt_statutory_terms_supporting_notes_april_2024.pdf',
     templatePaths: {
@@ -629,10 +636,14 @@ async function appendNorthernIrelandPrescribedDocuments(
     data: {
       ...enrichedData,
       case_id: caseId,
-      timestamp: Date.now(),
+      timestamp: enrichedData.generation_timestamp,
     },
     isPreview: false,
     outputFormat: 'both',
+    documentChrome: {
+      headerText: 'Northern Ireland Rent Book',
+      footerText: `Landlord Heaven - ${enrichedData.document_id}`,
+    },
   });
   documents.push({
     title: 'Northern Ireland Rent Book',
@@ -650,10 +661,14 @@ async function appendNorthernIrelandPrescribedDocuments(
     data: {
       ...enrichedData,
       case_id: caseId,
-      timestamp: Date.now(),
+      timestamp: enrichedData.generation_timestamp,
     },
     isPreview: false,
     outputFormat: 'both',
+    documentChrome: {
+      headerText: 'Northern Ireland Tenancy Information Notice',
+      footerText: `Landlord Heaven - ${enrichedData.document_id}`,
+    },
   });
   documents.push({
     title: 'Landlord’s Notice Relating to the Granting of a Private Tenancy',
@@ -692,34 +707,53 @@ async function appendNorthernIrelandPrescribedDocuments(
   });
 }
 
-function appendNorthernIrelandPackageManifest(
+async function appendTenancyPackageManifest(
   documents: ASTPackDocument[],
   config: JurisdictionConfig,
-  data: ASTData,
-  caseId: string
-): void {
-  if (config.jurisdiction !== 'northern-ireland') return;
+  data: Record<string, any>,
+  caseId: string,
+  inventoryState: CanonicalInventoryState,
+  agreementType: string
+): Promise<void> {
+  if (config.jurisdiction === 'england') return;
 
-  const includedDocuments = documents.map((document) => ({
-    title: document.title,
-    document_type: document.document_type,
-    file_name: document.file_name,
-    sha256: document.pdf
-      ? createHash('sha256').update(document.pdf).digest('hex')
-      : null,
-  }));
+  const includedDocuments = await Promise.all(
+    documents.map(async (document) => ({
+      title: document.title,
+      document_type: document.document_type,
+      file_name: document.file_name,
+      bytes: document.pdf?.length ?? 0,
+      page_count:
+        document.pdf && document.file_name.toLowerCase().endsWith('.pdf')
+          ? (await PDFDocument.load(document.pdf)).getPageCount()
+          : null,
+      sha256: document.pdf
+        ? createHash('sha256').update(document.pdf).digest('hex')
+        : null,
+      open_check: document.pdf ? 'passed' : 'missing',
+    }))
+  );
+  const snapshotHash = createHash('sha256')
+    .update(JSON.stringify(data))
+    .digest('hex');
   const manifest = {
-    manifest_version: 'tenancy-package-manifest.v1',
+    manifest_version: 'tenancy-package-manifest.v2',
     case_id: caseId,
     document_id: data.document_id,
     jurisdiction: config.jurisdiction,
-    source_version: '2026-07-27',
+    agreement_type: agreementType,
+    tenancy_start_date: data.tenancy_start_date,
+    canonical_snapshot_id: data.document_id,
+    canonical_snapshot_hash: snapshotHash,
+    source_version: '2026-07-29',
     inventory: {
-      status: data.inventory_delivery_method,
-      due_date: data.inventory_due_date || null,
-      included: data.inventory_delivery_method === 'attached',
-      agreement_contains_appended_inventory:
-        data.inventory_delivery_method === 'attached',
+      lifecycle_state: inventoryState.lifecycleState,
+      signature_state: inventoryState.signatureState,
+      due_delivery_date: inventoryState.dueDeliveryDate,
+      agreement_schedule_appended: false,
+      separate_inventory_file_included: true,
+      canonical_inventory_id: inventoryState.inventoryDocumentId,
+      canonical_inventory_hash: inventoryState.inventoryContentHash,
     },
     deposit: {
       lifecycle: data.deposit_lifecycle,
@@ -731,40 +765,131 @@ function appendNorthernIrelandPackageManifest(
   const json = `${JSON.stringify(manifest, null, 2)}\n`;
 
   documents.push({
-    title: 'Northern Ireland Tenancy Package Manifest',
+    title: `${agreementType} Package Manifest`,
     description:
       'Machine-readable list of the generated pack contents, attachment states and SHA-256 document hashes.',
     category: 'guidance',
-    document_type: 'tenancy_package_manifest_northern_ireland',
+    document_type: `tenancy_package_manifest_${config.jurisdiction}`,
     html: `<pre>${json}</pre>`,
     pdf: Buffer.from(json, 'utf8'),
-    file_name: 'northern_ireland_tenancy_package_manifest.json',
+    file_name: `${config.jurisdiction}_tenancy_package_manifest.json`,
     contentType: 'application/json',
   });
 }
 
+export function validateGeneratedTenancyPackage(
+  documents: ASTPackDocument[],
+  jurisdiction: TenancyJurisdiction,
+  inventoryState: CanonicalInventoryState
+): string[] {
+  const errors: string[] = [];
+  const agreement = documents.find((document) => document.category === 'agreement');
+  const inventory = documents.find(
+    (document) => document.document_type === 'inventory_schedule'
+  );
+  if (!agreement?.pdf) errors.push('PACKAGE_AGREEMENT_MISSING');
+  if (!inventory?.pdf) errors.push('PACKAGE_INVENTORY_MISSING');
+  errors.push(...inventoryState.blockingErrors);
+
+  const agreementText = agreement?.html || '';
+  if (
+    inventoryState.lifecycleState !== 'attached_completed' &&
+    /detailed inventory and condition report is attached|signed Inventory and Record of Condition/i.test(
+      agreementText
+    )
+  ) {
+    errors.push('PACKAGE_INVENTORY_COMPLETION_CLAIM_MISMATCH');
+  }
+  if (
+    inventoryState.signatureState !== 'fully_signed' &&
+    /completed and signed inventory supplied/i.test(agreementText)
+  ) {
+    errors.push('PACKAGE_INVENTORY_SIGNATURE_CLAIM_MISMATCH');
+  }
+  if (
+    jurisdiction !== 'england' &&
+    agreement?.pdf &&
+    !agreementText.includes(inventoryState.inventoryDocumentId)
+  ) {
+    errors.push('PACKAGE_INVENTORY_ID_REFERENCE_MISMATCH');
+  }
+
+  const inventoryText = inventory?.html || '';
+  if (
+    jurisdiction !== 'england' &&
+    inventory?.pdf &&
+    (!inventoryText.includes(inventoryState.inventoryDocumentId) ||
+      !inventoryText.includes(inventoryState.lifecycleState) ||
+      !inventoryText.includes(inventoryState.signatureState))
+  ) {
+    errors.push('PACKAGE_INVENTORY_DOCUMENT_CONTROL_MISMATCH');
+  }
+
+  const expectedInventoryStatus = inventoryCustomerStatus(inventoryState);
+  const checklist = documents.find((document) => document.category === 'checklist');
+  if (
+    jurisdiction !== 'england' &&
+    checklist?.pdf &&
+    (!checklist.html.includes(expectedInventoryStatus) ||
+      !checklist.html.includes(inventoryState.inventoryDocumentId))
+  ) {
+    errors.push('PACKAGE_CHECKLIST_INVENTORY_STATE_MISMATCH');
+  }
+  if (
+    jurisdiction === 'scotland' &&
+    !documents.some(
+      (document) =>
+        document.document_type ===
+        'prt_statutory_terms_supporting_notes_scotland'
+    )
+  ) {
+    errors.push('PACKAGE_SCOTLAND_SUPPORTING_NOTES_MISSING');
+  }
+  if (jurisdiction === 'northern-ireland') {
+    for (const requiredType of [
+      'rent_book_northern_ireland',
+      'tenancy_information_notice_northern_ireland',
+      'tenancy_information_notice_guidance_northern_ireland',
+    ]) {
+      if (!documents.some((document) => document.document_type === requiredType)) {
+        errors.push('PACKAGE_NI_SUPPORTING_DOCUMENT_MISSING');
+      }
+    }
+    const notice = documents.find(
+      (document) =>
+        document.document_type === 'tenancy_information_notice_northern_ireland'
+    );
+    if (notice?.pdf && !notice.html.includes(expectedInventoryStatus)) {
+      errors.push('PACKAGE_NI_NOTICE_INVENTORY_STATE_MISMATCH');
+    }
+  }
+  return [...new Set(errors)];
+}
+
+// England Premium remains on the existing embedded-inventory behaviour. The
+// regional Standard packs use one separately identified inventory document.
 async function appendInventoryScheduleToAgreementWhenClaimed(
   documents: ASTPackDocument[],
   data: ASTData
 ): Promise<void> {
-  if (data.inventory_delivery_method !== 'attached') return;
-
+  if (
+    detectJurisdiction(data) !== 'england' ||
+    data.inventory_delivery_method !== 'attached'
+  ) {
+    return;
+  }
   const agreement = documents.find((document) => document.category === 'agreement');
   const inventory = documents.find(
     (document) => document.document_type === 'inventory_schedule'
   );
   if (!agreement?.pdf || !inventory?.pdf) {
-    throw new Error(
-      '[AST Generator] Inventory is marked attached, but the agreement or Schedule 1 inventory PDF is missing'
-    );
+    throw new Error('PACKAGE_INVENTORY_ATTACHMENT_MISSING');
   }
-
   const destination = await PDFDocument.load(agreement.pdf);
   const source = await PDFDocument.load(inventory.pdf);
   const pages = await destination.copyPages(source, source.getPageIndices());
   for (const page of pages) destination.addPage(page);
   agreement.pdf = Buffer.from(await destination.save());
-  agreement.description = `${agreement.description} Schedule 1 inventory appended to this agreement.`;
 }
 
 const PREMIUM_SUPPORT_DOCUMENTS = [
@@ -997,6 +1122,15 @@ export interface ASTData {
   inventory_provided?: boolean;
   inventory_delivery_method?: 'attached' | 'later';
   inventory_due_date?: string;
+  inventory_lifecycle_state?: InventoryLifecycleState;
+  inventory_signature_state?: InventorySignatureState;
+  inventory_completion_date?: string;
+  inventory_landlord_signature?: string;
+  inventory_landlord_signature_date?: string;
+  inventory_tenant_signature?: string;
+  inventory_tenant_signature_date?: string;
+  inventory_document_id?: string;
+  inventory_content_hash?: string;
   inventory?: { rooms?: unknown[] };
   inventory_rooms?: unknown[];
   inspection_rooms?: unknown[];
@@ -1297,26 +1431,10 @@ export function validateASTData(data: ASTData): string[] {
   ) {
     errors.push('inventory_delivery_method must be attached or later');
   }
-  if (
-    data.inventory_delivery_method === 'attached' &&
-    data.inventory_attached === false
-  ) {
-    errors.push('inventory attachment facts are contradictory');
-  }
-  if (
-    data.inventory_delivery_method === 'attached' &&
-    !detectInventoryData(data as unknown as Record<string, unknown>)
-  ) {
-    errors.push(
-      'inventory_delivery_method cannot be attached without a completed structured inventory'
-    );
-  }
-  if (
-    data.inventory_delivery_method === 'later' &&
-    data.inventory_attached === true
-  ) {
-    errors.push('inventory cannot be marked attached when delivery mode is later');
-  }
+  const inventoryState = deriveCanonicalInventoryState(
+    data as unknown as Record<string, unknown>
+  );
+  errors.push(...inventoryState.blockingErrors);
 
   if (jurisdiction === 'scotland' && data.deposit_amount > 0) {
     if (!data.deposit_payer) errors.push('deposit_payer is required for Scotland');
@@ -1502,14 +1620,21 @@ export async function generateStandardAST(
     data.break_clause_notice_period = undefined;
   }
 
-  const generationTimestamp = new Date().toISOString();
-  const documentId = `${jurisdiction.toUpperCase()}-STD-${Date.now()}`;
+  const generationTimestamp = data.generation_timestamp || new Date().toISOString();
+  const documentId =
+    data.document_id || `${jurisdiction.toUpperCase()}-STD-${Date.now()}`;
   const renderedAgreementTitle = getRenderedAgreementTitle(
     config,
     jurisdiction,
     data.tenancy_start_date,
     data.england_tenancy_purpose
   );
+  const standardAgreementTitle =
+    jurisdiction === 'wales'
+      ? data.is_fixed_term
+        ? 'Fixed Term Standard Occupation Contract'
+        : 'Periodic Standard Occupation Contract'
+      : renderedAgreementTitle;
 
   // Add metadata flags
   const enrichedData = {
@@ -1521,7 +1646,7 @@ export async function generateStandardAST(
       data.product_tier ||
       (jurisdiction === 'england'
         ? ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL
-        : `Standard ${renderedAgreementTitle}`),
+        : standardAgreementTitle),
     generation_timestamp: data.generation_timestamp || generationTimestamp,
     document_id: data.document_id || documentId,
     jurisdiction_name: config.jurisdictionLabel,
@@ -1805,7 +1930,6 @@ export function getDocumentKey(
   tier: TenancyTier
 ): string {
   validateTenancyTier(tier);
-  const config = getJurisdictionConfig(jurisdiction);
 
   // Document keys by jurisdiction and tier
   const keyMap: Record<TenancyJurisdiction, Record<TenancyTier, string>> = {
@@ -1889,14 +2013,26 @@ export async function generateStandardASTDocuments(
     data.break_clause_notice_period = undefined;
   }
 
-  const generationTimestamp = new Date().toISOString();
-  const documentId = `${jurisdiction.toUpperCase()}-STD-${Date.now()}`;
+  const generationTimestamp = data.generation_timestamp || new Date().toISOString();
+  const documentId =
+    data.document_id || `${jurisdiction.toUpperCase()}-STD-${Date.now()}`;
+  const inventoryState = deriveCanonicalInventoryState(
+    data as unknown as Record<string, unknown>,
+    { documentSeed: documentId }
+  );
   const renderedAgreementTitle = getRenderedAgreementTitle(
     config,
     jurisdiction,
     data.tenancy_start_date,
     data.england_tenancy_purpose
   );
+
+  const standardAgreementTitle =
+    jurisdiction === 'wales'
+      ? data.is_fixed_term
+        ? 'Fixed Term Standard Occupation Contract'
+        : 'Periodic Standard Occupation Contract'
+      : renderedAgreementTitle;
 
   const enrichedData = {
     ...data,
@@ -1907,7 +2043,7 @@ export async function generateStandardASTDocuments(
       data.product_tier ||
       (jurisdiction === 'england'
         ? ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL
-        : `Standard ${renderedAgreementTitle}`),
+        : standardAgreementTitle),
     generation_timestamp: generationTimestamp,
     document_id: documentId,
     jurisdiction_name: config.jurisdictionLabel,
@@ -1919,7 +2055,17 @@ export async function generateStandardASTDocuments(
       data.tenancy_start_date,
       data.england_tenancy_purpose
     ),
-    current_date: new Date().toISOString().split('T')[0],
+    current_date: generationTimestamp.split('T')[0],
+    inventory_lifecycle_state: inventoryState.lifecycleState,
+    inventory_signature_state: inventoryState.signatureState,
+    inventory_included_in_agreement: inventoryState.includedInAgreement,
+    inventory_separate_file_included:
+      inventoryState.separateInventoryFileIncluded,
+    inventory_document_id: inventoryState.inventoryDocumentId,
+    inventory_content_hash: inventoryState.inventoryContentHash,
+    inventory_due_date: inventoryState.dueDeliveryDate,
+    inventory_customer_status: inventoryCustomerStatus(inventoryState),
+    inventory_structured_data_complete: inventoryState.structuredDataComplete,
   };
 
   const documents: ASTPackDocument[] = [];
@@ -1938,14 +2084,19 @@ export async function generateStandardASTDocuments(
       data: enrichedData,
       isPreview: false,
       outputFormat: 'both',
+      documentChrome:
+        jurisdiction === 'england'
+          ? undefined
+          : {
+              headerText: `${standardAgreementTitle} · ${config.jurisdictionLabel}`,
+              footerText: `Landlord Heaven · ${documentId}`,
+            },
     });
     documents.push({
       title:
         jurisdiction === 'england'
           ? ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL
-          : jurisdiction === 'wales' && data.is_fixed_term
-            ? 'Fixed Term Standard Occupation Contract'
-            : renderedAgreementTitle,
+          : standardAgreementTitle,
       description: config.agreementDescription,
       category: 'agreement',
       document_type: config.agreementDocumentType, // jurisdiction-specific key
@@ -1977,16 +2128,34 @@ export async function generateStandardASTDocuments(
         landlord_name: data.landlord_full_name,
         tenant_names: data.tenants.map((tenant) => tenant.full_name).join(', '),
         case_id: caseId || documentId,
-        timestamp: Date.now(),
+        timestamp: generationTimestamp,
+        inventory_lifecycle_state: inventoryState.lifecycleState,
+        inventory_signature_state: inventoryState.signatureState,
+        inventory_document_id: inventoryState.inventoryDocumentId,
+        inventory_content_hash: inventoryState.inventoryContentHash,
+        inventory_due_date: inventoryState.dueDeliveryDate,
       },
       isPreview: false,
       outputFormat: 'both',
+      documentChrome:
+        jurisdiction === 'england'
+          ? undefined
+          : {
+              headerText: `Inventory - ${config.jurisdictionLabel}`,
+              footerText: `Landlord Heaven - ${inventoryState.inventoryDocumentId}`,
+            },
     });
     documents.push({
-      title: 'Inventory & Schedule of Condition',
-      description: hasInventoryData
-        ? 'Completed inventory generated from the wizard information'
-        : 'Blank inventory template for manual completion before it is supplied to the tenant',
+      title:
+        inventoryState.lifecycleState === 'attached_completed'
+          ? 'Completed Inventory & Schedule of Condition'
+          : 'Inventory Template & Schedule of Condition',
+      description:
+        inventoryState.lifecycleState === 'attached_completed'
+          ? `Completed inventory convenience copy (${inventoryState.signatureState})`
+          : inventoryState.lifecycleState === 'separate_later'
+            ? `Inventory completion tool; completed inventory due ${inventoryState.dueDeliveryDate}`
+            : 'Inventory template for inspection, completion and signature; not a completed condition record',
       category: 'schedule',
       document_type: config.inventoryDocumentType,
       html: inventoryDoc.html,
@@ -2006,10 +2175,17 @@ export async function generateStandardASTDocuments(
       data: {
         ...enrichedData,
         case_id: caseId || documentId,
-        timestamp: Date.now(),
+        timestamp: generationTimestamp,
       },
       isPreview: false,
       outputFormat: 'both',
+      documentChrome:
+        jurisdiction === 'england'
+          ? undefined
+          : {
+              headerText: `Pre-Tenancy Compliance Checklist - ${config.jurisdictionLabel}`,
+              footerText: `Landlord Heaven - ${documentId}`,
+            },
     });
     documents.push({
       title: `Pre-Tenancy Compliance Checklist (${config.jurisdictionLabel})`,
@@ -2037,7 +2213,6 @@ export async function generateStandardASTDocuments(
     documentId
   );
 
-  await appendInventoryScheduleToAgreementWhenClaimed(documents, data);
   await appendScotlandStatutorySupportingNotes(documents, config);
   await appendNorthernIrelandPrescribedDocuments(
     documents,
@@ -2045,11 +2220,24 @@ export async function generateStandardASTDocuments(
     enrichedData,
     caseId || documentId
   );
-  appendNorthernIrelandPackageManifest(
+  const packageErrors = validateGeneratedTenancyPackage(
+    documents,
+    jurisdiction,
+    inventoryState
+  );
+  if (packageErrors.length) {
+    throw new Error(
+      `[AST Generator] Package consistency validation failed: ${packageErrors.join(', ')}`
+    );
+  }
+  await appendTenancyPackageManifest(
     documents,
     config,
-    data,
-    caseId || documentId
+    enrichedData,
+    caseId || documentId,
+    inventoryState,
+    documents.find((document) => document.category === 'agreement')?.title ||
+      renderedAgreementTitle
   );
 
   console.log(`✅ Generated ${documents.length} documents for ${config.jurisdictionLabel} Standard pack`);
@@ -2281,11 +2469,18 @@ export async function generatePremiumASTDocuments(
     caseId || documentId,
     documentId
   );
-  appendNorthernIrelandPackageManifest(
+  const premiumInventoryState = deriveCanonicalInventoryState(
+    data as unknown as Record<string, unknown>,
+    { documentSeed: data.document_id || documentId }
+  );
+  await appendTenancyPackageManifest(
     documents,
     config,
     data,
-    caseId || documentId
+    caseId || documentId,
+    premiumInventoryState,
+    documents.find((document) => document.category === 'agreement')?.title ||
+      renderedAgreementTitle
   );
 
   return {

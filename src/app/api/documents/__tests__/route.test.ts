@@ -107,6 +107,12 @@ vi.mock('@/lib/supabase/server', () => ({
   })),
 }));
 
+vi.mock('@/lib/supabase/admin', () => ({
+  createSupabaseAdminClient: vi.fn(() => ({
+    from: (table: string) => createQuery(table),
+  })),
+}));
+
 describe('GET /api/documents', () => {
   beforeEach(() => {
     vi.clearAllMocks();

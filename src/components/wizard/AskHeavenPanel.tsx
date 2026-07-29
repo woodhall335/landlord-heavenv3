@@ -5,6 +5,11 @@ import { Button, Card } from '@/components/ui';
 import { RiSparklingLine, RiChat1Line, RiLoader4Line, RiErrorWarningLine } from 'react-icons/ri';
 import type { Jurisdiction } from '@/lib/jurisdiction/types';
 import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
+import {
+  getTenancyAgreementLabel,
+  getTenancyAskHeavenPlaceholder,
+  type TenancyWizardJurisdiction,
+} from '@/lib/tenancy/wizard-copy';
 
 type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement';
 type Product = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement' | 'ast_standard' | 'ast_premium';
@@ -56,6 +61,9 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
       'northern-ireland': 'Northern Ireland',
     }[jurisdiction] || 'your area';
 
+  const tenancyJurisdiction = jurisdiction as TenancyWizardJurisdiction;
+  const isTenancyProduct =
+    product === 'tenancy_agreement' || product === 'ast_standard' || product === 'ast_premium';
   const productLabel: string =
     product === 'complete_pack'
       ? 'Eviction Pack'
@@ -63,7 +71,10 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
       ? 'Notice Only'
       : product === 'money_claim'
       ? 'Money Claim Pack'
-      : 'Tenancy Agreement';
+      : getTenancyAgreementLabel(tenancyJurisdiction);
+  const questionPlaceholder = isTenancyProduct
+    ? getTenancyAskHeavenPlaceholder(tenancyJurisdiction)
+    : 'E.g. "What happens after the court issues the claim?"';
 
   /**
    * Q&A helper – let the user ask free-form questions about the process.
@@ -158,7 +169,7 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
                 ? "w-full rounded-lg border border-violet-200 bg-white px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-violet-300 focus:border-violet-500"
                 : "w-full rounded-md border border-gray-300 px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-transparent"
             }
-            placeholder='E.g. "Do I need to attach the tenancy agreement?" or "What happens after the court issues the claim?"'
+            placeholder={questionPlaceholder}
           />
           <Button
             type="button"

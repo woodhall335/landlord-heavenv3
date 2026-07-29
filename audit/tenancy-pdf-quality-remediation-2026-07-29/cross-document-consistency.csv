@@ -1,0 +1,5 @@
+﻿document,document_id_present,jurisdiction_title_present,rent_first_payment_match,snapshot_values_present,status
+northern-ireland,True,True,True,True,pass
+scotland,True,True,True,True,pass
+wales-fixed,True,True,True,True,pass
+wales-periodic,True,True,True,True,pass

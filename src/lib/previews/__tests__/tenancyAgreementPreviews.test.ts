@@ -27,8 +27,8 @@ describe('getTenancyAgreementPreviewData', () => {
     expect(previews.england.premium.some((doc) => doc.key === 'key_schedule')).toBe(true);
     expect(previews.england.premium.some((doc) => doc.key === 'property_maintenance_guide')).toBe(true);
     expect(previews.england.premium.some((doc) => doc.key === 'checkout_procedure')).toBe(true);
-    expect(previews.scotland.standard.some((doc) => doc.key === 'easy_read_notes_scotland')).toBe(true);
-    expect(previews.scotland.premium.some((doc) => doc.key === 'easy_read_notes_scotland')).toBe(true);
+    expect(previews.scotland.standard.some((doc) => doc.key === 'prt_statutory_terms_supporting_notes_scotland')).toBe(true);
+    expect(previews.scotland.premium.some((doc) => doc.key === 'prt_statutory_terms_supporting_notes_scotland')).toBe(true);
   });
 
   it('resolves to preview assets that exist on disk and always provides descriptions', async () => {

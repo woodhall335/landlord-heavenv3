@@ -22,6 +22,7 @@ import {
   deriveNorthernIrelandDepositLifecycle,
   deriveNorthernIrelandRatesLiability,
 } from '@/lib/tenancy/northern-ireland-rules';
+import { normalizeSentenceFragment } from './customer-display';
 
 type AnyRecord = Record<string, any>;
 
@@ -540,9 +541,8 @@ export function mapWizardToASTData(
     deposit_scheme_address: getValueAtPath(wizardFacts, 'deposit_scheme_address'),
     deposit_scheme_contact_details: getValueAtPath(wizardFacts, 'deposit_scheme_contact_details'),
     deposit_scheme_type: getValueAtPath(wizardFacts, 'deposit_scheme_type'),
-    deposit_deduction_circumstances: getValueAtPath(
-      wizardFacts,
-      'deposit_deduction_circumstances'
+    deposit_deduction_circumstances: normalizeSentenceFragment(
+      getValueAtPath(wizardFacts, 'deposit_deduction_circumstances')
     ),
     deposit_repayment_dispute_information: getValueAtPath(
       wizardFacts,

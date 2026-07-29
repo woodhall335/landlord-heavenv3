@@ -7,6 +7,7 @@ import {
 } from '@/lib/tenancy/england-reform';
 import { isEnglandModernTenancyProductSku } from '@/lib/tenancy/england-product-model';
 import { detectInventoryData } from '@/lib/tenancy/product-tier';
+import { validateFirstPayment } from '@/lib/tenancy/first-payment';
 
 export const REQUIRED_TENANCY_FIELDS = [
   'landlord_full_name',
@@ -40,10 +41,6 @@ function isBlankString(value: unknown): boolean {
 
 function hasValidDate(value: unknown): boolean {
   return normalizeIsoDateString(value) !== undefined;
-}
-
-function isIsoDate(value: unknown): value is string {
-  return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value.trim());
 }
 
 function toFiniteNumber(value: unknown): number | null {
@@ -699,7 +696,15 @@ export function validateTenancyRequiredFacts(
     if (!hasValidDate(wizardFacts.inventory_due_date)) {
       missing.add('inventory_due_date');
     }
-    if (isBlankString(wizardFacts.first_payment)) missing.add('first_payment');
+    const firstPaymentValidation = validateFirstPayment(
+      wizardFacts.first_payment,
+      wizardFacts.rent_amount
+    );
+    if (firstPaymentValidation.code === 'missing') {
+      missing.add('first_payment');
+    } else if (!firstPaymentValidation.valid) {
+      invalid.add('first_payment');
+    }
     if (!hasValidDate(wizardFacts.first_payment_date)) {
       if (isBlankString(wizardFacts.first_payment_date)) {
         missing.add('first_payment_date');
@@ -748,6 +753,16 @@ export function validateTenancyRequiredFacts(
     requiredModelFields.forEach((field) => {
       if (isBlankString(wizardFacts[field])) missing.add(field);
     });
+    const firstPaymentValidation = validateFirstPayment(
+      wizardFacts.first_payment,
+      wizardFacts.rent_amount
+    );
+    if (
+      firstPaymentValidation.code !== 'missing' &&
+      !firstPaymentValidation.valid
+    ) {
+      invalid.add('first_payment');
+    }
     if (
       wizardFacts.inventory_delivery_method === 'attached' &&
       !detectInventoryData(wizardFacts)
