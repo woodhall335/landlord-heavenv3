@@ -43,9 +43,7 @@ export const REGIONAL_PRICING = {
   },
   tenancy_agreement_premium: {
     england: SEO_PRICES.tenancyPremium.amount,
-    wales: SEO_PRICES.tenancyPremium.amount,
-    scotland: SEO_PRICES.tenancyPremium.amount,
-    northern_ireland: SEO_PRICES.tenancyPremium.amount,
+    // Wales, Scotland and Northern Ireland use the released Standard product only.
   },
 } as const;
 
@@ -57,7 +55,7 @@ export const PRODUCT_AVAILABILITY = {
   complete_pack: ['england'],
   money_claim: ['england'],
   tenancy_agreement: ['england', 'wales', 'scotland', 'northern_ireland'],
-  tenancy_agreement_premium: ['england', 'wales', 'scotland', 'northern_ireland'],
+  tenancy_agreement_premium: ['england'],
 } as const;
 
 /**

@@ -72,15 +72,18 @@ describe('tenancy product pages', () => {
     );
   });
 
-  it('Standard and Premium pages lead with searched product terms while keeping current England wording', () => {
+  it('the Standard selector covers all regions while Premium remains England-only', () => {
     const standardSource = readSource('src/app/standard-tenancy-agreement/page.tsx');
     const premiumSource = readSource('src/app/premium-tenancy-agreement/page.tsx');
 
-    expect(standardSource).toContain('PRODUCT_OWNER_METADATA.standardTenancy.title');
+    expect(standardSource).toContain('PRODUCT_OWNER_METADATA.standardTenancy.description');
+    expect(standardSource).toContain('England, Wales, Scotland and Northern Ireland');
+    expect(standardSource).toContain('One UK selector, four different legal frameworks');
+    expect(standardSource).toContain('The detailed comparison below is for England.');
     expect(standardSource).toContain('Standard Periodic Tenancy Agreement');
     expect(standardSource).toContain('assured periodic');
     expect(standardSource).toContain('Renters Rights Act tenancy agreement');
-    expect(standardSource).toContain('Build my validated Standard pack');
+    expect(standardSource).toContain('Build the validated Standard tenancy pack');
     expect(standardSource).toContain('not a static form to adapt alone');
     expect(standardSource).toContain('legacyNotice=');
 

@@ -77,7 +77,7 @@ export default function UpdatePrtTenancyAgreementScotlandPage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/products/ast' },
+          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/standard-tenancy-agreement' },
           {
             name: 'Update PRT Scotland',
             url: 'https://landlordheaven.co.uk/update-prt-tenancy-agreement-scotland',

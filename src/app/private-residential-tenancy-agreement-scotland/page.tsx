@@ -11,6 +11,7 @@ import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { prtTenancyAgreementFAQs } from '@/data/faqs';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { getReleasedStandardTenancyEntry } from '@/lib/tenancy/agreement-registry';
 import {
   CheckCircle,
   Clock,
@@ -31,7 +32,9 @@ const PAGE_PATH = '/private-residential-tenancy-agreement-scotland';
 const PAGE_TITLE = 'Private Residential Tenancy Agreement Scotland';
 const PAGE_TYPE = 'tenancy' as const;
 
-const astProductHref = '/products/ast';
+const astProductHref = `${getReleasedStandardTenancyEntry(
+  'scotland'
+).startRoute}&src=private_residential_tenancy_page&topic=tenancy`;
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -78,7 +81,7 @@ export default function PrivateResidentialTenancyAgreementScotlandPage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/products/ast' },
+          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/standard-tenancy-agreement' },
           {
             name: 'PRT Scotland',
             url: 'https://landlordheaven.co.uk/private-residential-tenancy-agreement-scotland',
@@ -114,8 +117,8 @@ export default function PrivateResidentialTenancyAgreementScotlandPage() {
             href: astProductHref,
           }}
           secondaryCta={{
-            label: 'View tenancy agreement options',
-            href: astProductHref,
+            label: 'Read the Scotland PRT guide',
+            href: '/tenancy-agreements/scotland',
           }}
         >
           {/* Trust Signals */}
@@ -126,7 +129,7 @@ export default function PrivateResidentialTenancyAgreementScotlandPage() {
             </span>
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-green-500" />
-              Tribunal-Ready
+              Scotland-specific supporting documents
             </span>
             <span className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-green-500" />

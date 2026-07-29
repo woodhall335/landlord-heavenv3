@@ -186,5 +186,16 @@ describe('Pricing Consistency', () => {
       expect(getRegionalPrice('tenancy_agreement', 'scotland')).toBe(14.99);
       expect(getRegionalPrice('tenancy_agreement', 'northern_ireland')).toBe(14.99);
     });
+
+    it('tenancy_agreement_premium should only have England pricing', () => {
+      expect(getRegionalPrice('tenancy_agreement_premium', 'england')).toBe(24.99);
+      expect(getRegionalPrice('tenancy_agreement_premium', 'wales')).toBeNull();
+      expect(getRegionalPrice('tenancy_agreement_premium', 'scotland')).toBeNull();
+      expect(getRegionalPrice('tenancy_agreement_premium', 'northern_ireland')).toBeNull();
+      expect(isProductAvailable('tenancy_agreement_premium', 'england')).toBe(true);
+      expect(isProductAvailable('tenancy_agreement_premium', 'wales')).toBe(false);
+      expect(isProductAvailable('tenancy_agreement_premium', 'scotland')).toBe(false);
+      expect(isProductAvailable('tenancy_agreement_premium', 'northern_ireland')).toBe(false);
+    });
   });
 });

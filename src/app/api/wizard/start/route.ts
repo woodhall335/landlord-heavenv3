@@ -252,7 +252,7 @@ export async function POST(request: Request) {
           error:
             'Only the standard tenancy agreement is sold for Wales, Scotland and Northern Ireland.',
           reason: 'standard_only_jurisdiction',
-          redirect_to: `/wizard?product=ast_standard&jurisdiction=${effectiveJurisdiction}`,
+          redirect_to: `/wizard/flow?type=tenancy_agreement&product=ast_standard&jurisdiction=${effectiveJurisdiction}`,
         },
         { status: 409 }
       );
@@ -302,7 +302,7 @@ export async function POST(request: Request) {
             [product]: ['england'],
             tenancy_agreement: ['england', 'wales', 'scotland', 'northern-ireland'],
           },
-          redirect_to: '/products/ast',
+          redirect_to: '/standard-tenancy-agreement#choose-jurisdiction',
           blocking_issues: [],
           warnings: [],
         },

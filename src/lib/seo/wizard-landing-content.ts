@@ -609,7 +609,7 @@ export const astStandardContent: WizardLandingContent = {
     'Jurisdiction-specific agreements with current England wording and the correct terminology for Wales, Scotland, and Northern Ireland.',
 
   product: 'ast_standard',
-  wizardUrl: '/wizard?product=ast_standard&src=product_page&topic=tenancy',
+  wizardUrl: '/standard-tenancy-agreement#choose-jurisdiction',
   price: SEO_PRICES.tenancyStandard.display,
 
   jurisdictions: ['England', 'Wales', 'Scotland', 'Northern Ireland'],
@@ -757,7 +757,7 @@ export const astStandardContent: WizardLandingContent = {
     {
       question: 'Do I need Premium instead?',
       answer:
-        'For England, Premium is now the fuller ordinary-residential route, while Student, HMO / Shared House, and Lodger have their own dedicated products. In other jurisdictions, Premium still represents the broader tiered product.',
+        'Premium is an England-only option for an ordinary residential let that needs fuller management drafting. Wales, Scotland and Northern Ireland currently have one released Standard product; Wales provides separate fixed-term and periodic Standard Occupation Contract choices.',
     },
     {
       question: 'Is this agreement legally compliant?',
@@ -781,30 +781,30 @@ export const astStandardContent: WizardLandingContent = {
     },
   ],
 
-  relatedProducts: ['ast_premium', 'notice_only'],
+  relatedProducts: ['notice_only'],
   relatedTools: ['hmo-checker', 'deposit-calculator'],
   relatedBlogPosts: ['assured-shorthold-tenancy-agreement', 'occupation-contract-wales', 'prt-scotland'],
 };
 
 /**
-* AST PREMIUM - Enhanced tenancy agreements across the shared UK offering.
- * England Premium is now the fuller ordinary-residential route, while the
- * England Student, HMO / Shared House, and Lodger products sit separately.
+ * AST PREMIUM - England-only fuller ordinary-residential agreement.
+ * Student, HMO / Shared House, and Lodger products sit separately.
  */
 export const astPremiumContent: WizardLandingContent = {
   slug: 'premium-tenancy-agreement',
   title: `Premium Tenancy Agreement 2026 | Fuller Residential Drafting | ${SEO_PRICES.tenancyPremium.display}`,
   description:
-    'Premium tenancy agreements with fuller drafting, inventory support, and compliance guidance. In England, Premium is the fuller ordinary residential option, while Student, HMO / Shared House, and Lodger have their own separate products.',
+    'Premium England tenancy agreement with fuller drafting, inventory support, and management guidance for ordinary residential lets.',
   h1: 'Premium Tenancy Agreement',
   subheading:
     'Fuller drafting, inventory support, and more day-to-day detail for landlords who want more than a basic agreement.',
 
   product: 'ast_premium',
-  wizardUrl: '/wizard?product=ast_premium&src=product_page&topic=tenancy',
+  wizardUrl:
+    '/wizard/flow?type=tenancy_agreement&product=england_premium_tenancy_agreement&jurisdiction=england&src=product_page&topic=tenancy',
   price: SEO_PRICES.tenancyPremium.display,
 
-  jurisdictions: ['England', 'Wales', 'Scotland', 'Northern Ireland'],
+  jurisdictions: ['England'],
 
   jurisdictionCoverage: [
     {
@@ -821,45 +821,6 @@ export const astPremiumContent: WizardLandingContent = {
         'Anti-subletting and short-let prohibition',
       ],
     },
-    {
-      name: 'Wales',
-      flag: 'Wales',
-      agreementType: 'Standard Occupation Contract - Premium',
-      legalBasis: 'Renting Homes (Wales) Act 2016 + Housing Act 2004',
-      keyFeatures: [
-        'All Standard Occupation Contract clauses',
-        'Joint contract-holder provisions',
-        'Shared accommodation rules',
-        'Guarantor provisions for Wales',
-        'Enhanced repair and maintenance schedules',
-      ],
-    },
-    {
-      name: 'Scotland',
-      flag: 'Scotland',
-      agreementType: 'Private Residential Tenancy (PRT) - Premium',
-      legalBasis: 'Private Housing (Tenancies) (Scotland) Act 2016',
-      keyFeatures: [
-        'All Standard PRT clauses',
-        'HMO licensing compliance (Civic Government Act 1982)',
-        'Joint tenant provisions',
-        'Guarantor clauses for Scotland',
-        'Fire safety and shared facilities rules',
-      ],
-    },
-    {
-      name: 'Northern Ireland',
-      flag: 'Northern Ireland',
-      agreementType: 'Private Tenancy Agreement - Premium',
-      legalBasis: 'Private Tenancies Act (Northern Ireland) 2022',
-      keyFeatures: [
-        'All Standard NI clauses',
-        'HMO provisions (HMO Act NI 2016)',
-        'Joint tenant liability',
-        'Guarantor provisions',
-        'Enhanced compliance schedules',
-      ],
-    },
   ],
 
   whatYouGet: [
@@ -867,9 +828,9 @@ export const astPremiumContent: WizardLandingContent = {
     'Enhanced operational wording for ordinary residential lets',
     'Guarantor-friendly drafting where selected in the supported flow',
     'Inventory and schedule of condition completed through the wizard where supported',
-    'Compliance checklist for jurisdiction-specific pre-tenancy requirements',
+    'Compliance checklist for the England pre-tenancy requirements captured by the flow',
     'Tenant notes and guidance explaining obligations clearly',
-    'Rent review and operational wording suited to the selected jurisdiction',
+    'Rent review and operational wording suited to the England route',
     'Anti-subletting clause and short-let prohibition',
     'Late payment provisions with reasonable charges',
     'Enhanced house rules and property-management detail',
@@ -894,31 +855,31 @@ export const astPremiumContent: WizardLandingContent = {
     'Includes fuller drafting rather than only the baseline standard wording',
     'Includes guarantor-friendly wording where selected in the supported flow',
     'Generates inventory and schedule of condition with the wizard instead of leaving it blank',
-    'Creates jurisdiction-specific compliance checklist for pre-tenancy requirements',
+    'Creates an England compliance checklist for the pre-tenancy requirements captured by the flow',
     'Includes tenant guidance notes explaining obligations',
     'Adds rent review mechanisms, anti-subletting provisions, and late payment clauses',
-    'All in the correct agreement type for your jurisdiction',
+    'Built specifically for the England tenancy-agreement route',
   ],
 
   legalValidationExplainer: {
     whatItMeans: [
-      'Generates the correct agreement type for your jurisdiction with Premium additions',
-      'Keeps premium drafting aligned with the jurisdiction-specific agreement type',
+      'Generates the Premium agreement for a supported England residential let',
+      'Keeps the fuller drafting aligned with the England agreement type',
       'Structures guarantor provisions with clear liability scope',
       'Creates the inventory and schedule of condition through the wizard',
-      'Builds a compliance checklist specific to the selected jurisdiction',
+      'Builds an England-specific compliance checklist',
       'Applies all Standard validation plus Premium-specific provisions',
     ],
     disclaimer:
-      'This is systematic procedural validation, not legal advice. Premium agreements are drafted for the supported residential use cases in each jurisdiction. For complex arrangements such as commercial HMOs, licence agreements, or unusual guarantee structures, consult a qualified solicitor.',
+      'This is systematic procedural validation, not legal advice. The Premium agreement is drafted for supported ordinary residential use cases in England. For complex arrangements such as commercial mixed use, licences, or unusual guarantee structures, consult a qualified solicitor.',
   },
 
   howValidationWorks: [
-    'Jurisdiction-specific drafting: premium wording stays aligned with the selected nation',
-    'Cross-jurisdiction safety: the selected jurisdiction keeps the right terminology and compliance framing',
+    'England-specific drafting: Premium wording stays aligned with the England agreement route',
+    'Jurisdiction safety: the Premium route is not offered for properties outside England',
     'Guarantor validation: ensures guarantor details and liability scope are captured',
     'Inventory support: converts guided answers into a usable schedule of condition',
-    'Compliance checklist: highlights the main pre-tenancy requirements for the chosen jurisdiction',
+    'Compliance checklist: highlights the main England pre-tenancy requirements captured by the flow',
     'Premium terms: keeps enhanced clauses aligned with the core agreement details',
   ],
 
@@ -949,7 +910,7 @@ export const astPremiumContent: WizardLandingContent = {
     {
       question: 'Is Premium required for HMOs?',
       answer:
-        'For England, no. HMOs now have their own dedicated HMO / Shared House product. In other jurisdictions the premium tier may still be the broader enhanced route.',
+        'No. England HMOs now have their own dedicated HMO / Shared House product. Premium is for supported ordinary residential lets in England and is not sold for Wales, Scotland or Northern Ireland.',
     },
     {
       question: 'What is joint and several liability?',
@@ -962,9 +923,9 @@ export const astPremiumContent: WizardLandingContent = {
         'The inventory and schedule of condition help with evidence, while clearer tenant obligations, guarantor wording, and shared-house rules reduce ambiguity when problems arise.',
     },
     {
-      question: 'Which laws apply to each jurisdiction?',
+      question: 'Where is the Premium agreement available?',
       answer:
-        'England uses current England tenancy agreement wording in the current public flow. Wales follows the Renting Homes (Wales) Act 2016. Scotland follows the Private Housing (Tenancies) (Scotland) Act 2016. Northern Ireland follows the Private Tenancies Act (NI) 2022 and related HMO rules where relevant.',
+        'Premium is available for supported ordinary residential lets in England only. Wales, Scotland and Northern Ireland each have one released Standard product, and Wales separates fixed-term and periodic Standard Occupation Contracts.',
     },
     {
       question: 'Do Premium agreements work for single tenants?',

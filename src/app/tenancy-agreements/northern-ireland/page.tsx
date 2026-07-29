@@ -11,11 +11,13 @@ import {
   PRODUCTS,
 } from '@/lib/pricing/products';
 import { isNonEnglandStandardTenancyPubliclyEnabled } from '@/lib/tenancy/non-england-rollout';
+import { getReleasedStandardTenancyEntry } from '@/lib/tenancy/agreement-registry';
 
 const PRICE_VALID_UNTIL = '2026-12-31';
 const standardPrice = PRODUCTS.ast_standard.displayPrice;
 const isPubliclyEnabled =
   isNonEnglandStandardTenancyPubliclyEnabled('northern-ireland');
+const standardWizardHref = `${getReleasedStandardTenancyEntry('northern-ireland').startRoute}&src=ni_tenancy_hub&topic=tenancy`;
 
 export const metadata: Metadata = {
   title: 'Private Tenancy Agreement Northern Ireland',
@@ -114,7 +116,7 @@ export default function NorthernIrelandTenancyPage() {
         '@type': 'ListItem',
         position: 2,
         name: 'Tenancy Agreements',
-        item: getCanonicalUrl('/products/ast'),
+        item: getCanonicalUrl('/standard-tenancy-agreement'),
       },
       {
         '@type': 'ListItem',
@@ -149,7 +151,7 @@ export default function NorthernIrelandTenancyPage() {
           subtitle="Create a Northern Ireland-specific private tenancy agreement with wizard questions covering landlord registration, deposit handling, electrical safety, rent changes and the prescribed tenancy-information workflow."
           primaryCta={{
             label: `Create Private Tenancy Agreement - ${standardPrice}`,
-            href: '/wizard?product=ast_standard&jurisdiction=northern-ireland&src=ni_tenancy_hub&topic=tenancy',
+            href: standardWizardHref,
           }}
           secondaryCta={{
             label: 'Compare UK jurisdictions',
@@ -708,7 +710,7 @@ export default function NorthernIrelandTenancyPage() {
                     <li>Clear, professional formatting</li>
                   </ul>
                   <Link
-                    href="/wizard?product=ast_standard&jurisdiction=northern-ireland&src=ni_tenancy_hub&topic=tenancy"
+                  href={standardWizardHref}
                     className="mt-4 block text-center bg-white text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-50 transition-colors"
                   >
                     Create Standard
@@ -914,7 +916,7 @@ export default function NorthernIrelandTenancyPage() {
           faqs={[
             {
               question: "Is a Private Tenancy Agreement legally valid in Northern Ireland?",
-              answer: "Yes. Our Private Tenancy Agreements are drafted to comply with the Private Tenancies Order (Northern Ireland) 2006, Private Tenancies Act (Northern Ireland) 2022, and all 2025 legal updates including mandatory EICR requirements from 1 April 2025."
+              answer: "Landlord Heaven provides one Northern Ireland-specific Standard Private Tenancy Agreement. The pack also includes the prescribed Tenancy Information Notice as a separate document for the landlord to complete and sign; registration, deposit, safety and other statutory duties still need to be completed separately."
             },
             {
               question: "What changed in Northern Ireland tenancy law in 2025?",
@@ -993,7 +995,7 @@ export default function NorthernIrelandTenancyPage() {
             </p>
             <div className="flex gap-6 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&jurisdiction=northern-ireland&src=ni_tenancy_hub&topic=tenancy"
+                href={standardWizardHref}
                 className="bg-white text-red-600 px-8 py-4 rounded-lg font-semibold hover:bg-red-50 transition-colors text-lg shadow-lg"
               >
                 {`Standard - ${standardPrice}`}

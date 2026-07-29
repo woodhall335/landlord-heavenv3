@@ -134,16 +134,22 @@ describe('WhatsIncludedInteractive tenancy mode', () => {
 
     expect(screen.getByText("What's included in your tenancy agreement pack")).toBeInTheDocument();
     expect(screen.getByText('Assured Periodic Tenancy Agreement')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Start my standard tenancy pack ->' }).getAttribute('href')).toContain(
-      'product=ast_standard'
+    expect(
+      screen.getByRole('link', { name: 'Start England Standard Tenancy Agreement' })
+    ).toHaveAttribute(
+      'href',
+      expect.stringContaining('product=england_standard_tenancy_agreement')
     );
 
     fireEvent.click(screen.getByRole('button', { name: /Premium/i }));
 
     expect(screen.getByText('Premium Assured Periodic Tenancy Agreement')).toBeInTheDocument();
     expect(screen.getByText('Key Receipt & Handover Schedule')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Start my premium tenancy pack ->' }).getAttribute('href')).toContain(
-      'product=ast_premium'
+    expect(
+      screen.getByRole('link', { name: 'Start England Premium Tenancy Agreement' })
+    ).toHaveAttribute(
+      'href',
+      expect.stringContaining('product=england_premium_tenancy_agreement')
     );
   });
 
@@ -154,5 +160,26 @@ describe('WhatsIncludedInteractive tenancy mode', () => {
 
     expect(screen.getByText('Standard Occupation Contract')).toBeInTheDocument();
     expect(screen.getByText('Core pack for straightforward Welsh occupation contracts.')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Premium/i })).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Choose Fixed-Term or Periodic Wales Contract' })
+    ).toHaveAttribute('href', '/standard-tenancy-agreement#choose-jurisdiction');
+  });
+
+  it('keeps Scotland and Northern Ireland on their Standard-only direct flows', () => {
+    render(<WhatsIncludedInteractive product="ast" previews={previews} />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Scotland' }));
+    expect(screen.queryByRole('button', { name: /Premium/i })).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Start Scotland Standard PRT' })).toHaveAttribute(
+      'href',
+      expect.stringContaining('jurisdiction=scotland')
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Northern Ireland' }));
+    expect(screen.queryByRole('button', { name: /Premium/i })).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Start Northern Ireland Standard Agreement' })
+    ).toHaveAttribute('href', expect.stringContaining('jurisdiction=northern-ireland'));
   });
 });

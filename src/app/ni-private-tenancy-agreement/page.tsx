@@ -20,11 +20,16 @@ import { tenancyAgreementNILinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { getReleasedStandardTenancyEntry } from '@/lib/tenancy/agreement-registry';
+
+const standardWizardHref = `${getReleasedStandardTenancyEntry(
+  'northern-ireland'
+).startRoute}&src=ni_private_tenancy_page&topic=tenancy`;
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Northern Ireland Private Tenancy Agreement 2026 | Legally Validated',
+  title: 'Northern Ireland Private Tenancy Agreement 2026 | Standard NI Pack',
   description: 'Plain-English landlord guide to Northern Ireland private tenancy agreements, including what the 2022 Act requires and how to start with the right agreement.',
   keywords: [
     'private tenancy agreement NI',
@@ -42,7 +47,7 @@ export const metadata: Metadata = {
     canonical: getCanonicalUrl('/ni-private-tenancy-agreement'),
   },
   openGraph: {
-    title: 'Northern Ireland Private Tenancy Agreement 2026 | Legally Validated',
+    title: 'Northern Ireland Private Tenancy Agreement 2026 | Standard NI Pack',
     description: 'Landlord guide to Northern Ireland private tenancy agreements and the key 2022 Act obligations behind them.',
     type: 'article',
     url: getCanonicalUrl('/ni-private-tenancy-agreement'),
@@ -92,7 +97,7 @@ const faqs = [
   },
   {
     question: 'Is there a model tenancy agreement for Northern Ireland?',
-    answer: 'Unlike England and Wales, the Northern Ireland Housing Executive has not published an official model tenancy agreement. However, the Private Tenancies Act 2022 prescribes what must be included. Our template incorporates all prescribed terms and requirements, effectively serving as a comprehensive model agreement that ensures legal compliance while protecting both landlord and tenant interests.'
+    answer: 'Northern Ireland does not use the England, Wales or Scotland model-agreement routes. Landlord Heaven sells one Northern Ireland Standard Private Tenancy Agreement and includes the prescribed Tenancy Information Notice as a separate document. The landlord must complete and sign that notice and still follow registration, deposit, safety and other statutory duties.'
   },
   {
     question: 'What happens at the end of a fixed-term tenancy in Northern Ireland?',
@@ -115,7 +120,7 @@ export default function NIPrivateTenancyAgreementPage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: '/' },
-          { name: 'Tenancy Agreements', url: '/products/ast' },
+          { name: 'Tenancy Agreements', url: '/standard-tenancy-agreement' },
           { name: 'Northern Ireland', url: '/northern-ireland-tenancy-agreement-template' },
           { name: 'Private Tenancy Agreement', url: '/ni-private-tenancy-agreement' },
         ])}
@@ -127,7 +132,7 @@ export default function NIPrivateTenancyAgreementPage() {
         <UniversalHero
           title="Northern Ireland Private Tenancy Agreement"
           subtitle="If you are letting in Northern Ireland, this guide explains what a private tenancy agreement needs to cover, what the 2022 Act changed, and why the paperwork matters before problems arise."
-          primaryCta={{ label: 'Create your agreement', href: '/products/ast' }}
+          primaryCta={{ label: 'Create your agreement', href: standardWizardHref }}
           showTrustPositioningBar
           hideMedia
         />
@@ -137,7 +142,7 @@ export default function NIPrivateTenancyAgreementPage() {
             <ol className="flex items-center space-x-2 text-sm text-slate-600">
               <li><Link href="/" className="hover:text-emerald-600">Home</Link></li>
               <li className="text-slate-400">/</li>
-              <li><Link href="/products/ast" className="hover:text-emerald-600">Tenancy Agreements</Link></li>
+              <li><Link href="/standard-tenancy-agreement" className="hover:text-emerald-600">Tenancy Agreements</Link></li>
               <li className="text-slate-400">/</li>
               <li><Link href="/northern-ireland-tenancy-agreement-template" className="hover:text-emerald-600">Northern Ireland</Link></li>
               <li className="text-slate-400">/</li>
@@ -162,7 +167,7 @@ export default function NIPrivateTenancyAgreementPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                href="/products/ast"
+                href={standardWizardHref}
                 className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
               >
                 <RiFileTextLine className="w-5 h-5" />
@@ -186,7 +191,7 @@ export default function NIPrivateTenancyAgreementPage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               <div>
                 <div className="text-2xl font-bold text-slate-900">2022 Act</div>
-                <div className="text-sm text-slate-600">Fully Compliant</div>
+                <div className="text-sm text-slate-600">Northern Ireland-specific</div>
               </div>
               <div>
                 <div className="text-2xl font-bold text-slate-900">NI Only</div>
@@ -448,7 +453,7 @@ export default function NIPrivateTenancyAgreementPage() {
               you a clearer paper trail from the first day of the tenancy.
             </p>
             <Link
-              href="/products/ast"
+              href={standardWizardHref}
               className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
             >
               <RiDownloadLine className="w-5 h-5" />

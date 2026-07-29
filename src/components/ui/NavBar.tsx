@@ -54,12 +54,15 @@ const evictionNoticeLinks: NavItem[] = [
 ];
 
 const tenancyAgreementLinks: NavItem[] = [
+  { href: '/standard-tenancy-agreement', label: 'Choose by Property Jurisdiction' },
   { href: '/products/ast', label: 'England Tenancy Agreements' },
-  { href: '/standard-tenancy-agreement', label: 'Standard Tenancy Agreement' },
-  { href: '/premium-tenancy-agreement', label: 'Premium Tenancy Agreement' },
-  { href: '/student-tenancy-agreement', label: 'Student Tenancy Agreement' },
-  { href: '/hmo-shared-house-tenancy-agreement', label: 'HMO / Shared House Tenancy Agreement' },
-  { href: '/lodger-agreement', label: 'Room Let / Lodger Agreement & Shared Home Pack' },
+  { href: '/tenancy-agreements/wales', label: 'Wales Standard Occupation Contracts' },
+  { href: '/tenancy-agreements/scotland', label: 'Scotland Standard PRT' },
+  { href: '/tenancy-agreements/northern-ireland', label: 'Northern Ireland Standard Agreement' },
+  { href: '/premium-tenancy-agreement', label: 'England Premium Tenancy Agreement' },
+  { href: '/student-tenancy-agreement', label: 'England Student Tenancy Agreement' },
+  { href: '/hmo-shared-house-tenancy-agreement', label: 'England HMO / Shared House Agreement' },
+  { href: '/lodger-agreement', label: 'England Room Let / Lodger Agreement' },
 ];
 
 const freeToolsLinks: NavItem[] = [
@@ -336,7 +339,7 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
 
             <div className="relative" onMouseEnter={() => setShowTenancyAgreements(true)} onMouseLeave={() => setShowTenancyAgreements(false)}>
               <Link
-                href="/products/ast"
+                href="/standard-tenancy-agreement"
                 className={clsx(
                   'relative flex min-h-[2.75rem] w-[8.5rem] items-center justify-center gap-1 px-2 py-2 text-center text-sm font-semibold leading-tight transition-colors',
                   isTenancyMenuActive

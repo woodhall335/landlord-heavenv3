@@ -61,12 +61,12 @@ export default function StandardTenancyAgreementPage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: getCanonicalUrl('/') },
-          { name: 'Standard Periodic Tenancy Agreement', url: canonicalUrl },
+          { name: 'Standard Tenancy Agreements by Jurisdiction', url: canonicalUrl },
         ])}
       />
       <StructuredData
         data={productSchema({
-          name: 'Standard Periodic Tenancy Agreement',
+          name: 'Standard Tenancy Agreement by Property Jurisdiction',
           description: PRODUCT_OWNER_METADATA.standardTenancy.description,
           price: PRODUCTS.england_standard_tenancy_agreement.price.toFixed(2),
           url: canonicalUrl,
@@ -85,7 +85,75 @@ export default function StandardTenancyAgreementPage() {
         heroTrustText="Released standard agreement routes for England, Wales, Scotland and Northern Ireland."
         heroFeature="Wales includes separate Fixed-Term and Periodic Standard Occupation Contract choices."
         showHeroTrustPositioningBar={false}
-        afterHero={<TenancyJurisdictionSelector />}
+        afterHero={
+          <>
+            <TenancyJurisdictionSelector />
+            <section
+              aria-labelledby="jurisdiction-explainer-heading"
+              className="border-b border-[#E8E1F8] bg-white py-12 md:py-16"
+            >
+              <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div className="max-w-4xl">
+                  <p className="text-sm font-bold uppercase tracking-[0.12em] text-[#6D28D9]">
+                    The correct agreement depends on location
+                  </p>
+                  <h2
+                    id="jurisdiction-explainer-heading"
+                    className="mt-3 text-3xl font-bold tracking-tight text-[#17142B] md:text-4xl"
+                  >
+                    One UK selector, four different legal frameworks
+                  </h2>
+                  <p className="mt-4 text-base leading-8 text-[#56506A] md:text-lg">
+                    “Tenancy agreement” is a useful general description, but the document name,
+                    legal framework and wizard questions change with the location of the rental
+                    property. Choose the property jurisdiction above before entering any case
+                    details.
+                  </p>
+                </div>
+
+                <div className="mt-8 grid gap-5 md:grid-cols-2">
+                  {[
+                    {
+                      title: 'England',
+                      body:
+                        'Standard Assured Periodic Tenancy Agreement for a straightforward whole-property residential let.',
+                    },
+                    {
+                      title: 'Wales',
+                      body:
+                        'Choose either a Fixed-Term or Periodic Standard Occupation Contract under the Welsh framework.',
+                    },
+                    {
+                      title: 'Scotland',
+                      body:
+                        'Private Residential Tenancy agreement for the open-ended Scottish PRT framework.',
+                    },
+                    {
+                      title: 'Northern Ireland',
+                      body:
+                        'Northern Ireland Private Tenancy Agreement with the jurisdiction-specific supporting-document workflow.',
+                    },
+                  ].map((item) => (
+                    <article
+                      key={item.title}
+                      className="rounded-2xl border border-[#E5DDF7] bg-[#FCFBFF] p-5"
+                    >
+                      <h3 className="text-xl font-semibold text-[#241C38]">{item.title}</h3>
+                      <p className="mt-2 leading-7 text-[#655D75]">{item.body}</p>
+                    </article>
+                  ))}
+                </div>
+
+                <div className="mt-8 rounded-2xl border border-[#DDD4F4] bg-[#F7F2FF] p-5 text-[#3F3652]">
+                  <strong>The detailed comparison below is for England.</strong> Wales, Scotland
+                  and Northern Ireland currently offer one standard agreement route (with Wales
+                  split into fixed-term and periodic choices). Regional Premium products are not
+                  offered.
+                </div>
+              </div>
+            </section>
+          </>
+        }
         workflowImageLink={{
           href: standardWizardHref,
           desktopSrc: '/images/standard-tenancy-desktop.webp',
@@ -94,8 +162,8 @@ export default function StandardTenancyAgreementPage() {
           width: 1086,
           height: 1448,
         }}
-        legacyNotice="If you were searching for a standard tenancy agreement, basic tenancy agreement, updated AST replacement, or current England tenancy agreement, this is the standard periodic tenancy agreement route for a straightforward whole-property let."
-        introTitle="For a straightforward standard periodic tenancy"
+        legacyNotice="England route: if you were searching for a standard tenancy agreement, basic tenancy agreement, updated AST replacement, or current England tenancy agreement, this is the standard periodic tenancy agreement route for a straightforward whole-property let. For Wales, Scotland or Northern Ireland, use the jurisdiction selector above."
+        introTitle="England standard agreement details"
         introBody={[
           'This is the standard periodic tenancy agreement workflow for a new England tenancy where the property is being let as an ordinary whole-property home. Use this route when you want current wording built around your property, occupiers, rent, deposit, and management facts, not a static form to adapt alone.',
           'The pack keeps the setup practical and proportionate: the main agreement plus the key supporting documents, validation checks, and preview-before-payment workflow, without making a simple tenancy feel more complicated than it needs to be.',

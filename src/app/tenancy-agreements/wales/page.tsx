@@ -157,7 +157,7 @@ export default function WalesOccupationContractPage() {
         '@type': 'ListItem',
         position: 2,
         name: 'Tenancy Agreements',
-        item: getCanonicalUrl('/products/ast'),
+        item: getCanonicalUrl('/standard-tenancy-agreement'),
       },
       {
         '@type': 'ListItem',

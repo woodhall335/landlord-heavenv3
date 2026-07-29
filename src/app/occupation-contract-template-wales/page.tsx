@@ -11,6 +11,7 @@ import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { occupationContractTemplateFAQs } from '@/data/faqs';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { getReleasedStandardTenancyEntry } from '@/lib/tenancy/agreement-registry';
 import {
   CheckCircle,
   Clock,
@@ -29,7 +30,15 @@ const PAGE_PATH = '/occupation-contract-template-wales';
 const PAGE_TITLE = 'Occupation Contract Template Wales';
 const PAGE_TYPE = 'tenancy' as const;
 
-const astProductHref = '/products/ast';
+const fixedContractHref = `${getReleasedStandardTenancyEntry(
+  'wales',
+  'fixed_term_standard_occupation_contract'
+).startRoute}&src=occupation_contract_template_page&topic=tenancy`;
+const periodicContractHref = `${getReleasedStandardTenancyEntry(
+  'wales',
+  'periodic_standard_occupation_contract'
+).startRoute}&src=occupation_contract_template_page&topic=tenancy`;
+const astProductHref = fixedContractHref;
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -77,7 +86,7 @@ export default function OccupationContractTemplateWalesPage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/products/ast' },
+          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/standard-tenancy-agreement' },
           {
             name: 'Occupation Contract Template Wales',
             url: 'https://landlordheaven.co.uk/occupation-contract-template-wales',
@@ -113,8 +122,8 @@ export default function OccupationContractTemplateWalesPage() {
             href: astProductHref,
           }}
           secondaryCta={{
-            label: 'Premium Template with Extra Clauses',
-            href: astProductHref,
+            label: 'Create Periodic Standard Contract',
+            href: periodicContractHref,
           }}
         >
           {/* Trust Signals */}
@@ -157,8 +166,8 @@ export default function OccupationContractTemplateWalesPage() {
                 <p>
                   An <strong>occupation contract template</strong> is a pre-drafted document
                   that you can customise with your property and contract-holder details to
-                  create a legally valid tenancy agreement for Wales. The template must comply
-                  with the Renting Homes (Wales) Act 2016, which replaced the Housing Act 1988
+                  create a Wales-specific occupation contract. The wizard follows the Welsh
+                  framework under the Renting Homes (Wales) Act 2016, which replaced the Housing Act 1988
                   for Welsh properties from 1 December 2022.
                 </p>
                 <p>
@@ -392,7 +401,7 @@ export default function OccupationContractTemplateWalesPage() {
                     </li>
                     <li className="flex items-start gap-2 text-gray-600">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Court-ready if disputes arise</span>
+                        <span>Clear records if a dispute arises</span>
                     </li>
                   </ul>
                 </div>
@@ -518,20 +527,20 @@ export default function OccupationContractTemplateWalesPage() {
           </div>
         </section>
 
-        {/* Standard vs Premium Section */}
+        {/* Released Wales standard contract choices */}
         <section className="py-16 lg:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Standard vs Premium Template
+                Fixed-term or periodic Standard Occupation Contract
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Choose the template that best fits your Welsh letting situation.
+                Choose the released standard contract type that fits your Welsh letting.
               </p>
 
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="bg-white rounded-2xl p-6 border-2 border-gray-200 shadow-sm">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Standard Template</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Fixed-Term Standard Contract</h3>
                   <p className="text-2xl font-bold text-primary mb-4">
                     {PRODUCTS.ast_standard.displayPrice}
                   </p>
@@ -565,53 +574,52 @@ export default function OccupationContractTemplateWalesPage() {
                     href={astProductHref}
                     className="block w-full text-center bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
                   >
-                    Get Standard Template
+                    Create Fixed-Term Contract
                   </Link>
                 </div>
 
                 <div className="bg-white rounded-2xl p-6 border-2 border-primary shadow-lg relative">
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-white text-sm px-3 py-1 rounded-full">
-                    Recommended
+                    Standard option
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Premium Template</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Periodic Standard Contract</h3>
                   <p className="text-2xl font-bold text-primary mb-4">
-                    {PRODUCTS.ast_premium.displayPrice}
+                    {PRODUCTS.ast_standard.displayPrice}
                   </p>
                   <p className="text-gray-600 mb-6">
-                    Enhanced template with additional clauses for complex lettings and
-                    extra protection.
+                    The Welsh standard contract for a periodic arrangement without a fixed end date.
                   </p>
                   <ul className="space-y-3 mb-6">
                     <li className="flex items-start gap-2 text-gray-600">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Everything in Standard</span>
+                      <span>Welsh standard-contract wording</span>
                     </li>
                     <li className="flex items-start gap-2 text-gray-600">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Break clause options</span>
+                      <span>No fixed end date</span>
                     </li>
                     <li className="flex items-start gap-2 text-gray-600">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Guarantor agreement included</span>
+                      <span>Jurisdiction-specific wizard questions</span>
                     </li>
                     <li className="flex items-start gap-2 text-gray-600">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Detailed pet policy clauses</span>
+                      <span>Agreement generated from the supplied facts</span>
                     </li>
                     <li className="flex items-start gap-2 text-gray-600">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Garden and parking terms</span>
+                      <span>Preview before payment</span>
                     </li>
                     <li className="flex items-start gap-2 text-gray-600">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Professional cleaning requirements</span>
+                      <span>Welsh supporting-document workflow</span>
                     </li>
                   </ul>
                   <Link
-                    href={astProductHref}
+                    href={periodicContractHref}
                     className="block w-full text-center bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
                   >
-                    Get Premium Template
+                    Create Periodic Contract
                   </Link>
                 </div>
               </div>

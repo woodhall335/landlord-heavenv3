@@ -48,7 +48,8 @@ export async function POST(request: Request) {
         {
           error: 'Only tenancy agreement flows are available for Northern Ireland.',
           code: 'PRODUCT_NOT_AVAILABLE_IN_REGION',
-          redirect_to: `/wizard?product=ast_standard&jurisdiction=northern-ireland&src=product_page&topic=tenancy`,
+          redirect_to:
+            '/wizard/flow?type=tenancy_agreement&product=ast_standard&jurisdiction=northern-ireland&src=product_page&topic=tenancy',
         },
         { status: 400 }
       );

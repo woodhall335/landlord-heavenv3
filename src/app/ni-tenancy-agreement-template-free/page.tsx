@@ -23,14 +23,18 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { PRODUCTS, TENANCY_AGREEMENT_FROM_PRICE } from '@/lib/pricing/products';
+import { getReleasedStandardTenancyEntry } from '@/lib/tenancy/agreement-registry';
 
 const standardPrice = PRODUCTS.ast_standard.displayPrice;
+const standardWizardHref = `${getReleasedStandardTenancyEntry(
+  'northern-ireland'
+).startRoute}&src=ni_free_template_guide&topic=tenancy`;
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Northern Ireland Tenancy Agreement 2026 | Legally Validated',
-  description: 'Compare options and generate a Northern Ireland tenancy agreement with solicitor-grade, compliance-checked wording and current NI clauses.',
+  title: 'Northern Ireland Tenancy Agreement 2026 | Free Template Guide',
+  description: 'Compare generic free files with the released Standard Northern Ireland tenancy-agreement pack and start the NI-specific wizard.',
   keywords: [
     'free NI tenancy agreement',
     'Northern Ireland tenancy template free',
@@ -47,8 +51,8 @@ export const metadata: Metadata = {
     canonical: getCanonicalUrl('/ni-tenancy-agreement-template-free'),
   },
   openGraph: {
-    title: 'Northern Ireland Tenancy Agreement 2026 | Legally Validated',
-    description: 'Legally validated NI tenancy agreement with compliance-checked drafting.',
+    title: 'Northern Ireland Tenancy Agreement 2026 | Free Template Guide',
+    description: 'Understand the limits of generic free files and start the released Standard NI agreement.',
     type: 'article',
     url: getCanonicalUrl('/ni-tenancy-agreement-template-free'),
   },
@@ -57,19 +61,19 @@ export const metadata: Metadata = {
 const faqs = [
   {
     question: 'Are free Northern Ireland tenancy agreement templates safe to use?',
-    answer: 'Most free NI tenancy agreement templates found online are not safe to use as-is. They often fail to include all prescribed terms required by the Private Tenancies Act (NI) 2022, use outdated legislation references, or are generic UK templates that don\'t account for NI-specific requirements like landlord registration numbers. Using a non-compliant template is a criminal offence under NI law.'
+    answer: 'A free file may be incomplete, outdated or written for another jurisdiction. Check that it matches Northern Ireland law and that you separately complete every prescribed notice, registration, deposit and safety requirement.'
   },
   {
     question: 'What makes a NI tenancy agreement template legally compliant?',
-    answer: 'A legally compliant NI tenancy agreement must include all prescribed information under the Private Tenancies Act 2022: full names and addresses of parties, property address, rent amount and payment details, deposit amount and protection scheme, landlord registration number, tenancy start date, repair responsibilities, notice provisions, and tenant rights information. It must also avoid unfair terms under consumer protection law.'
+    answer: 'A useful NI agreement should accurately record the parties, property, rent, deposit, dates and responsibilities. The landlord must also complete the prescribed Tenancy Information Notice and comply with registration, deposit, safety and consumer-law duties; the agreement does not replace those steps.'
   },
   {
     question: 'Can I download a free NI tenancy agreement from government websites?',
-    answer: 'Unlike England and Wales, the Northern Ireland Housing Executive has not published an official model tenancy agreement for private tenancies. The government provides guidance on required terms but not a complete template. This means landlords must either create their own compliant agreement or use a professional template service that understands NI law.'
+    answer: 'Government guidance and prescribed notices are not the same thing as a completed agreement tailored to the tenancy. Check the current official guidance and use the prescribed Tenancy Information Notice alongside any agreement you prepare.'
   },
   {
     question: 'What are the risks of using a free generic tenancy agreement in NI?',
-    answer: 'The risks are severe: using a non-compliant template is a criminal offence with fines up to £2,500; you cannot serve a valid Notice to Quit without proper documentation; deposit deductions may be unenforceable; tenants can challenge unfair terms in court; and you may face civil claims for any losses caused by missing terms. The cost of getting it wrong far exceeds paying for a proper template.'
+    answer: 'A generic file can omit NI-specific information, use the wrong deposit language or confuse later notice and enforcement steps. Separate failures to provide prescribed information or meet statutory duties can also lead to enforcement action.'
   },
   {
     question: 'Do I need different agreements for fixed-term vs periodic tenancies in NI?',
@@ -77,11 +81,11 @@ const faqs = [
   },
   {
     question: 'Can I use an English AST template for a property in Northern Ireland?',
-    answer: 'No, absolutely not. An English AST (Assured Shorthold Tenancy) template is legally worthless in Northern Ireland. NI has completely different tenancy legislation (Private Tenancies Act 2022 vs Housing Act 1988), different deposit rules (2 months vs 5 weeks), mandatory landlord registration, different notice periods, and different eviction grounds. Using an English template could constitute failure to provide a valid written statement.'
+    answer: 'No. An English tenancy agreement is not the correct document for a Northern Ireland property. Use the NI-specific agreement and prescribed-information workflow instead.'
   },
   {
     question: 'What is the Private Tenancies Act (NI) 2022?',
-    answer: 'The Private Tenancies Act (Northern Ireland) 2022 is the main legislation governing private rentals in NI. It introduced mandatory written tenancy agreements (criminal offence if missing), enhanced deposit protection rules, tiered notice periods based on tenancy length, landlord registration requirements, and restrictions on rent increases. All NI tenancy agreements must comply with this Act.'
+    answer: 'The Private Tenancies Act (Northern Ireland) 2022 amended important parts of the private-renting framework. Landlords should use current NI guidance for prescribed tenancy information, deposits, electrical safety, rent changes and notices rather than relying on an England template.'
   },
   {
     question: 'How do I know if a free starter document includes all prescribed terms?',
@@ -93,15 +97,15 @@ const faqs = [
   },
   {
     question: 'What happens if my tenancy agreement is missing prescribed terms?',
-    answer: 'If your tenancy agreement is missing prescribed terms, you commit a criminal offence under the Private Tenancies Act 2022. Consequences include: fixed penalty notice of £500; prosecution with fines up to £2,500; inability to serve valid Notice to Quit; potential deposit penalties of up to 3x the deposit amount; and civil liability for tenant losses. It\'s essential to get this right from the start.'
+    answer: 'Missing or inaccurate information can create disputes and may indicate that a separate prescribed-information duty has not been completed. Review the agreement, complete the Tenancy Information Notice and correct any registration, deposit or safety gaps promptly.'
   },
   {
     question: 'Should I pay for a Northern Ireland tenancy agreement template?',
-    answer: 'Yes, paying for a properly drafted NI-specific template is strongly recommended. The cost (typically £10-50) is negligible compared to: £2,500+ in potential fines; months of delayed eviction; deposit penalty claims; or civil liability. Professional templates are regularly updated for law changes, include all prescribed terms, and may offer guidance or support. It\'s a business expense that protects your investment.'
+    answer: 'Choose a route that is specific to Northern Ireland, clearly states what is included and keeps the agreement separate from the landlord’s prescribed-notice and compliance duties. Landlord Heaven currently sells one Standard NI agreement pack.'
   },
   {
     question: 'Can a free starter document be updated for the Private Tenancies Act 2022?',
-    answer: 'While you could theoretically update a free starter document yourself, this requires detailed knowledge of the Private Tenancies Act 2022, subsequent regulations, and case law interpretations. Most landlords lack this expertise. It\'s safer and more cost-effective to use a template specifically designed for the 2022 Act and regularly maintained by legal professionals who track NI tenancy law changes.'
+    answer: 'You can edit a starter document, but you remain responsible for ensuring that it matches the tenancy and current NI requirements. A jurisdiction-specific guided route reduces the risk of carrying across England, Wales or Scotland wording.'
   }
 ];
 
@@ -114,13 +118,13 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
           description: 'Looking for a free NI tenancy agreement template? Compare free vs professional options and understand the legal risks under the Private Tenancies Act 2022.',
           url: getCanonicalUrl('/ni-tenancy-agreement-template-free'),
           datePublished: '2024-04-01',
-          dateModified: '2025-01-20',
+          dateModified: '2026-07-29',
         })}
       />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: '/' },
-          { name: 'Tenancy Agreements', url: '/products/ast' },
+          { name: 'Tenancy Agreements', url: '/standard-tenancy-agreement' },
           { name: 'Northern Ireland', url: '/northern-ireland-tenancy-agreement-template' },
           { name: 'Free Starter Document Comparison', url: '/ni-tenancy-agreement-template-free' },
         ])}
@@ -131,8 +135,8 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
       <main className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
         <UniversalHero
           title="Northern Ireland Tenancy Agreement"
-          subtitle="Create a legally validated NI tenancy agreement with solicitor-grade terms and compliance checks."
-          primaryCta={{ label: "Start now", href: "/products/ast" }}
+          subtitle="Create the released Standard Northern Ireland tenancy agreement through NI-specific questions and preview the pack before payment."
+          primaryCta={{ label: `Start Standard NI Agreement — ${standardPrice}`, href: standardWizardHref }}
           showTrustPositioningBar
           hideMedia
         />
@@ -142,7 +146,7 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
             <ol className="flex items-center space-x-2 text-sm text-slate-600">
               <li><Link href="/" className="hover:text-amber-600">Home</Link></li>
               <li className="text-slate-400">/</li>
-              <li><Link href="/products/ast" className="hover:text-amber-600">Tenancy Agreements</Link></li>
+              <li><Link href="/standard-tenancy-agreement" className="hover:text-amber-600">Tenancy Agreements</Link></li>
               <li className="text-slate-400">/</li>
               <li><Link href="/northern-ireland-tenancy-agreement-template" className="hover:text-amber-600">Northern Ireland</Link></li>
               <li className="text-slate-400">/</li>
@@ -163,11 +167,12 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
             </h2>
             <p className="text-xl text-amber-100 mb-8 max-w-2xl">
               Before you download that free Northern Ireland tenancy agreement, understand the legal risks.
-              Non-compliance with the Private Tenancies Act 2022 is a criminal offence with fines up to £2,500.
+              A generic file can miss NI-specific information and does not replace the prescribed
+              tenancy-information, registration, deposit and safety steps.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                href="/products/ast"
+                href={standardWizardHref}
                 className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
               >
                 <RiShieldCheckLine className="w-5 h-5" />
@@ -191,11 +196,11 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
             <div className="flex items-start gap-4">
               <RiAlertLine className="w-10 h-10 text-red-600 shrink-0" />
               <div>
-                <h2 className="text-lg font-bold text-red-900">Criminal Liability Warning</h2>
+                <h2 className="text-lg font-bold text-red-900">Northern Ireland compliance warning</h2>
                 <p className="text-red-800 mt-2">
-                  Under the Private Tenancies Act (NI) 2022, failing to provide a compliant written tenancy agreement
-                  within 28 days is a <strong>criminal offence</strong>. Using an inadequate free starter document can result
-                  in fixed penalty notices (£500), prosecution (up to £2,500), and prevent you from ever evicting your tenant legally.
+                  An agreement does not replace the prescribed Tenancy Information Notice or the
+                  landlord&apos;s registration, deposit and safety duties. A generic free file may
+                  omit NI-specific information and create avoidable problems later.
                 </p>
               </div>
             </div>
@@ -363,31 +368,31 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
           <section className="mb-12">
             <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
               <RiMoneyPoundCircleLine className="w-6 h-6 text-emerald-600" />
-              The True Cost of "Free"
+              The practical cost of using the wrong file
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-red-50 border border-red-200 rounded-xl p-6">
-                <h3 className="font-semibold text-red-900 mb-4">Potential Costs of Non-Compliance</h3>
+                <h3 className="font-semibold text-red-900 mb-4">Common consequences of missing steps</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
-                    <span className="font-semibold text-red-700 w-20">£500</span>
-                    <span className="text-red-800">Fixed penalty notice</span>
+                    <span className="font-semibold text-red-700 w-20">Notice</span>
+                    <span className="text-red-800">Prescribed information may still be incomplete</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="font-semibold text-red-700 w-20">£2,500</span>
-                    <span className="text-red-800">Court prosecution fine</span>
+                    <span className="font-semibold text-red-700 w-20">Deposit</span>
+                    <span className="text-red-800">Protection or information errors may need correction</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="font-semibold text-red-700 w-20">3x deposit</span>
-                    <span className="text-red-800">Protection failure penalty</span>
+                    <span className="font-semibold text-red-700 w-20">Terms</span>
+                    <span className="text-red-800">Generic clauses may not match NI law or the tenancy</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="font-semibold text-red-700 w-20">£1,000+</span>
-                    <span className="text-red-800">Failed eviction costs</span>
+                    <span className="font-semibold text-red-700 w-20">Disputes</span>
+                    <span className="text-red-800">Unclear wording creates extra administration</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="font-semibold text-red-700 w-20">6+ months</span>
-                    <span className="text-red-800">Delayed possession</span>
+                    <span className="font-semibold text-red-700 w-20">Delay</span>
+                    <span className="text-red-800">Missing records can complicate later action</span>
                   </li>
                 </ul>
                 <div className="mt-4 pt-4 border-t border-red-300">
@@ -406,7 +411,7 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="font-semibold text-emerald-700 w-20">{standardPrice}</span>
-                    <span className="text-emerald-800">Premium with extras</span>
+                    <span className="text-emerald-800">NI supporting documents included</span>
                   </li>
                 </ul>
                 <div className="mt-8 pt-4 border-t border-emerald-300">
@@ -497,11 +502,12 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
               Get a Properly Compliant NI Tenancy Agreement
             </h2>
             <p className="text-emerald-100 mb-6 max-w-xl mx-auto">
-              For less than the cost of a council fixed penalty notice, protect yourself with a fully
-              compliant Northern Ireland tenancy agreement. Our wizard ensures every prescribed term is included.
+              Create the released Standard Northern Ireland agreement and supporting pack through
+              NI-specific questions. Complete the prescribed Tenancy Information Notice and the
+              landlord’s other statutory duties alongside the agreement.
             </p>
             <Link
-              href="/products/ast"
+              href={standardWizardHref}
               className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
             >
               <RiDownloadLine className="w-5 h-5" />

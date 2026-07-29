@@ -157,25 +157,25 @@ const getJurisdictionTerminology = (jurisdiction: Jurisdiction) => {
       return {
         agreementType: 'Occupation Contract',
         standardTier: 'Standard Occupation Contract',
-        premiumTier: 'Premium Occupation Contract',
+        premiumTier: 'Legacy Premium Occupation Contract',
         standardDescription: 'Simple, straightforward occupation contract for most lets.',
-        premiumDescription: 'Advanced features: guarantor clauses, HMO support, rent reviews, detailed schedules.',
+        premiumDescription: 'Legacy case label only. Premium is not sold for new Wales agreements.',
       };
     case 'scotland':
       return {
         agreementType: 'Private Residential Tenancy',
         standardTier: 'Standard PRT',
-        premiumTier: 'Premium PRT',
+        premiumTier: 'Legacy Premium PRT',
         standardDescription: 'Simple, straightforward PRT for most lets.',
-        premiumDescription: 'Advanced features: guarantor clauses, HMO support, detailed maintenance schedules.',
+        premiumDescription: 'Legacy case label only. Premium is not sold for new Scotland agreements.',
       };
     case 'northern-ireland':
       return {
         agreementType: 'Private Tenancy',
         standardTier: 'Standard NI Private Tenancy',
-        premiumTier: 'Premium NI Private Tenancy',
+        premiumTier: 'Legacy Premium NI Private Tenancy',
         standardDescription: 'Simple, straightforward private tenancy for most lets.',
-        premiumDescription: 'Advanced features: guarantor clauses, HMO support, detailed maintenance schedules.',
+        premiumDescription: 'Legacy case label only. Premium is not sold for new Northern Ireland agreements.',
       };
     case 'england':
     default:
@@ -1088,6 +1088,7 @@ interface SectionProps {
 // Product Section - jurisdiction-aware terminology with Premium recommendation
 const ProductSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction = 'england' }) => {
   const terms = getJurisdictionTerminology(jurisdiction);
+  const isEngland = jurisdiction === 'england';
 
   // Detect if Premium should be recommended based on collected facts
   const recommendation = useMemo(() => {
@@ -1121,7 +1122,7 @@ const ProductSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
   return (
     <div className="space-y-6">
       {/* Premium Recommendation Banner - Non-blocking */}
-      {recommendation.isRecommended && (
+      {isEngland && recommendation.isRecommended && (
         <PremiumRecommendationBanner
           recommendation={recommendation}
           jurisdiction={jurisdiction}
@@ -1135,11 +1136,11 @@ const ProductSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
           Which {jurisdiction === 'wales' ? 'occupation contract' : 'tenancy agreement'} do you need? <RequiredPill required />
         </label>
         <p className="text-sm text-gray-500 mb-4">
-          {jurisdiction === 'england'
+          {isEngland
             ? 'Standard covers straightforward ordinary residential lets. Premium adds fuller drafting, guarantor support, rent review, and tighter controls. Student, HMO / Shared House, and Lodger now have dedicated England products.'
-            : 'Standard covers simple lets. Premium adds guarantor, HMO, rent review and tighter controls.'}
+            : 'One Standard agreement is sold for this jurisdiction. The wizard keeps the questions, terminology and generated pack specific to the property location.'}
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className={`grid grid-cols-1 gap-4 ${isEngland ? 'md:grid-cols-2' : ''}`}>
           <button
             onClick={() => handleTierSelect(terms.standardTier)}
             className={`p-4 rounded-lg border-2 text-left transition-colors ${
@@ -1153,31 +1154,33 @@ const ProductSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
               {terms.standardDescription}
             </p>
           </button>
-          <button
-            onClick={() => handleTierSelect(terms.premiumTier)}
-            className={`p-4 rounded-lg border-2 text-left transition-colors relative ${
-              facts.product_tier === terms.premiumTier
-                ? 'border-[#7C3AED] bg-purple-50'
-                : recommendation.isRecommended
-                ? 'border-purple-300 hover:border-purple-400 bg-purple-50/30'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
-          >
-            {recommendation.isRecommended && facts.product_tier !== terms.premiumTier && (
-              <span className="absolute -top-2 -right-2 px-2 py-0.5 text-xs font-semibold bg-primary text-white rounded-full">
-                Recommended
-              </span>
-            )}
-            <h3 className="font-semibold text-gray-900">{terms.premiumTier}</h3>
-            <p className="text-sm text-gray-600 mt-1">
-              {terms.premiumDescription}
-            </p>
-          </button>
+          {isEngland ? (
+            <button
+              onClick={() => handleTierSelect(terms.premiumTier)}
+              className={`p-4 rounded-lg border-2 text-left transition-colors relative ${
+                facts.product_tier === terms.premiumTier
+                  ? 'border-[#7C3AED] bg-purple-50'
+                  : recommendation.isRecommended
+                  ? 'border-purple-300 hover:border-purple-400 bg-purple-50/30'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              {recommendation.isRecommended && facts.product_tier !== terms.premiumTier && (
+                <span className="absolute -top-2 -right-2 px-2 py-0.5 text-xs font-semibold bg-primary text-white rounded-full">
+                  Recommended
+                </span>
+              )}
+              <h3 className="font-semibold text-gray-900">{terms.premiumTier}</h3>
+              <p className="text-sm text-gray-600 mt-1">
+                {terms.premiumDescription}
+              </p>
+            </button>
+          ) : null}
         </div>
       </div>
 
       {/* Clause Diff Preview - Compact version for wizard */}
-      {facts.product_tier !== terms.premiumTier && (
+      {isEngland && facts.product_tier !== terms.premiumTier && (
         <div className="border-t border-gray-200 pt-6">
           <ClauseDiffPreview
             jurisdiction={jurisdiction}

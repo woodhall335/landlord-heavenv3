@@ -11,6 +11,7 @@ import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { prtTemplateFAQs } from '@/data/faqs';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { getReleasedStandardTenancyEntry } from '@/lib/tenancy/agreement-registry';
 import {
   CheckCircle,
   Clock,
@@ -33,14 +34,16 @@ const PAGE_PATH = '/prt-tenancy-agreement-template-scotland';
 const PAGE_TITLE = 'PRT Tenancy Agreement Template Scotland';
 const PAGE_TYPE = 'tenancy' as const;
 
-const astProductHref = '/products/ast';
+const astProductHref = `${getReleasedStandardTenancyEntry(
+  'scotland'
+).startRoute}&src=prt_template_page&topic=tenancy`;
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title: 'Scotland PRT Agreement Template 2026 | Create Online',
   description:
-    'Plain-English landlord guide to creating a Scotland PRT agreement template online, with current 2016 Act wording and a tribunal-ready structure.',
+    'Plain-English guide to creating the released Standard Scotland PRT through jurisdiction-specific questions and preview before payment.',
   keywords: [
     'prt tenancy agreement template',
     'tenancy agreement template scotland',
@@ -57,7 +60,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'PRT Tenancy Agreement Template Scotland 2026 | Landlord Heaven',
     description:
-      'Landlord guide to creating a Scotland PRT template with current 2016 Act wording and a tribunal-ready structure.',
+      'Create the released Standard Scotland PRT with guided questions and supporting documents.',
     type: 'website',
     url: 'https://landlordheaven.co.uk/prt-tenancy-agreement-template-scotland',
   },
@@ -69,7 +72,7 @@ export default function PrtTenancyAgreementTemplateScotlandPage() {
     '@type': 'WebPage',
     name: 'PRT Tenancy Agreement Template Scotland',
     description:
-      'Download a legally valid Private Residential Tenancy template for Scotland. Compliant with the Private Housing (Tenancies) (Scotland) Act 2016.',
+      'Create the released Standard Private Residential Tenancy agreement for a suitable Scottish let.',
     url: 'https://landlordheaven.co.uk/prt-tenancy-agreement-template-scotland',
   };
 
@@ -79,7 +82,7 @@ export default function PrtTenancyAgreementTemplateScotlandPage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/products/ast' },
+          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/standard-tenancy-agreement' },
           {
             name: 'PRT Template Scotland',
             url: 'https://landlordheaven.co.uk/prt-tenancy-agreement-template-scotland',
@@ -115,23 +118,23 @@ export default function PrtTenancyAgreementTemplateScotlandPage() {
             href: astProductHref,
           }}
           secondaryCta={{
-            label: 'Premium Template with Extras',
-            href: astProductHref,
+            label: 'Read the Scotland PRT guide',
+            href: '/tenancy-agreements/scotland',
           }}
         >
           {/* Trust Signals */}
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
             <span className="flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-green-500" />
-              2016 Act Compliant
+              Scotland-specific PRT wording
             </span>
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-green-500" />
-              Tribunal-Ready
+              Supporting notes included
             </span>
             <span className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-green-500" />
-              Instant Download
+              Preview before payment
             </span>
           </div>
         </UniversalHero>
@@ -158,9 +161,9 @@ export default function PrtTenancyAgreementTemplateScotlandPage() {
               <div className="prose prose-lg max-w-none text-gray-600">
                 <p>
                   A <strong>PRT tenancy agreement template</strong> is a pre-drafted document that
-                  you can customise with your property and tenant details to create a legally valid
-                  Private Residential Tenancy agreement for Scotland. The template contains all the
-                  mandatory terms required by the Private Housing (Tenancies) (Scotland) Act 2016,
+                  you can customise with your property and tenant details to create a
+                  Scotland-specific Private Residential Tenancy agreement. The wizard gathers the
+                  facts used in the agreement and provides the supporting notes,
                   plus additional protective clauses that safeguard your position as a landlord.
                 </p>
                 <p>
@@ -452,7 +455,7 @@ export default function PrtTenancyAgreementTemplateScotlandPage() {
                 pagePath={PAGE_PATH}
                 jurisdiction="scotland"
                 title="Create Your PRT Template Now"
-                description="Legally compliant. All mandatory terms included. Additional protective clauses. Ready in minutes."
+            description="One released Standard Scotland PRT with guided questions and supporting documents."
               />
             </div>
           </div>
@@ -667,7 +670,7 @@ export default function PrtTenancyAgreementTemplateScotlandPage() {
                 pagePath={PAGE_PATH}
                 jurisdiction="scotland"
                 title="Download Your PRT Template Today"
-                description="Legally valid. Tribunal-ready. Compliant with the 2016 Act. Ready in minutes."
+            description="Create the Standard Scotland PRT, review the generated pack, then pay and download."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />

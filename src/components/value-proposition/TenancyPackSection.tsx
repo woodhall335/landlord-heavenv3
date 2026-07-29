@@ -72,7 +72,7 @@ export async function TenancyPackSection({
           previews={previews}
           showIntro={false}
           titleOverride={subtitle}
-          subtitleOverride="Select your jurisdiction and product level, then preview every document in the pack."
+          subtitleOverride="Select the property jurisdiction, then preview the available pack. England also offers a Premium option."
           ctaHref={ctaHref}
           ctaLabel={ctaLabel}
         />

@@ -75,7 +75,7 @@ export function WhyLandlordHeaven({
       icon: <Globe className="h-5 w-5 text-primary" />,
       text: 'Use documents that match the rules where your property is',
       description:
-        'England, Wales, and Scotland are covered. Northern Ireland is tenancy agreements only.',
+        'Standard tenancy agreements cover England, Wales, Scotland and Northern Ireland. England also has Premium, Student, HMO / Shared House and Lodger products; the other three jurisdictions currently offer Standard agreements only.',
     });
   }
 

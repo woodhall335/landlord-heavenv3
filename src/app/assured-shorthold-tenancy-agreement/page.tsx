@@ -6,8 +6,10 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/assured-shorthold-tenancy-agreement');
-const wizardHref = '/wizard?product=ast_standard&src=assured_shorthold_tenancy_agreement&topic=tenancy';
-const premiumWizardHref = '/wizard?product=ast_premium&src=assured_shorthold_tenancy_agreement&topic=tenancy';
+const wizardHref =
+  '/wizard/flow?type=tenancy_agreement&product=england_standard_tenancy_agreement&jurisdiction=england&src=assured_shorthold_tenancy_agreement&topic=tenancy';
+const premiumWizardHref =
+  '/wizard/flow?type=tenancy_agreement&product=england_premium_tenancy_agreement&jurisdiction=england&src=assured_shorthold_tenancy_agreement&topic=tenancy';
 
 export const metadata: Metadata = {
   title: 'Assured Shorthold Tenancy Agreement 2026 | England Agreement Updated',

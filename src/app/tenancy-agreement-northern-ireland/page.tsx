@@ -24,6 +24,7 @@ import {
   XCircle,
 } from 'lucide-react';
 import { PRODUCTS, TENANCY_AGREEMENT_FROM_PRICE } from '@/lib/pricing/products';
+import { getReleasedStandardTenancyEntry } from '@/lib/tenancy/agreement-registry';
 
 // Page constants for analytics
 const PAGE_PATH = '/tenancy-agreement-northern-ireland';
@@ -40,13 +41,9 @@ const standardPrice =
   productMap.ast_standard?.displayPrice ??
   PRODUCTS.ast_standard.displayPrice;
 
-const premiumPrice =
-  productMap.tenancy_agreement_premium?.displayPrice ??
-  productMap.tenancy_agreement_plus?.displayPrice ??
-  productMap.ast_premium?.displayPrice ??
-  PRODUCTS.ast_premium.displayPrice;
-
-const astProductHref = '/products/ast';
+const standardWizardHref = `${getReleasedStandardTenancyEntry(
+  'northern-ireland'
+).startRoute}&src=ni_tenancy_page&topic=tenancy`;
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -134,7 +131,7 @@ export default function TenancyAgreementNorthernIrelandPage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/products/ast' },
+          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/standard-tenancy-agreement' },
           {
             name: 'Tenancy Agreement Northern Ireland',
             url: 'https://landlordheaven.co.uk/tenancy-agreement-northern-ireland',
@@ -163,11 +160,11 @@ export default function TenancyAgreementNorthernIrelandPage() {
           }
           primaryCta={{
             label: `Create Standard Agreement — ${standardPrice}`,
-            href: astProductHref,
+            href: standardWizardHref,
           }}
           secondaryCta={{
-            label: `Create Premium Agreement — ${premiumPrice}`,
-            href: astProductHref,
+            label: 'See what the standard pack includes',
+            href: '#standard-ni-pack',
           }}
           variant="pastel"
         >
@@ -590,14 +587,15 @@ export default function TenancyAgreementNorthernIrelandPage() {
           </div>
         </section>
 
-        <section className="py-16 lg:py-20">
+        <section id="standard-ni-pack" className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Standard vs Premium NI Tenancy Agreement
+                One standard Northern Ireland tenancy-agreement pack
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
-                Choose the level of protection and detail that suits your letting situation.
+                Northern Ireland currently has one released standard product. The wizard keeps
+                the agreement and supporting documents within the NI-specific route.
               </p>
 
               <div className="grid md:grid-cols-2 gap-8">
@@ -630,7 +628,7 @@ export default function TenancyAgreementNorthernIrelandPage() {
                     </li>
                   </ul>
                   <Link
-                    href={astProductHref}
+                    href={standardWizardHref}
                     className="block w-full text-center bg-red-600 text-white py-3 rounded-lg font-medium hover:bg-red-700 transition-colors"
                   >
                     Create Standard Agreement
@@ -639,40 +637,40 @@ export default function TenancyAgreementNorthernIrelandPage() {
 
                 <div className="bg-white rounded-2xl p-6 border-2 border-red-200 shadow-lg relative text-gray-900">
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-red-600 text-white text-sm px-3 py-1 rounded-full">
-                    Recommended
+                    Included in the same pack
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Premium Agreement</h3>
-                  <p className="text-2xl font-bold text-red-700 mb-4">{premiumPrice}</p>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">NI Supporting Documents</h3>
+                  <p className="text-2xl font-bold text-red-700 mb-4">Included</p>
                   <p className="text-gray-700 mb-6">
-                    More detailed protection for landlords who want broader coverage and extra clauses.
+                    The same standard purchase includes the NI-specific supporting-document workflow.
                   </p>
                   <ul className="space-y-3 mb-6">
                     <li className="flex items-start gap-2 text-gray-700">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Everything in Standard</span>
+                      <span>Tenancy Information Notice workflow</span>
                     </li>
                     <li className="flex items-start gap-2 text-gray-700">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Added flexibility and extra clauses</span>
+                      <span>Rent book supporting document</span>
                     </li>
                     <li className="flex items-start gap-2 text-gray-700">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Better suited to more complex lettings</span>
+                      <span>Pre-tenancy checklist</span>
                     </li>
                     <li className="flex items-start gap-2 text-gray-700">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Useful where more detailed landlord controls are needed</span>
+                      <span>Inventory schedule</span>
                     </li>
                     <li className="flex items-start gap-2 text-gray-700">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Stronger drafting for real-world letting scenarios</span>
+                      <span>Preview before payment</span>
                     </li>
                   </ul>
                   <Link
-                    href={astProductHref}
+                    href={standardWizardHref}
                     className="block w-full text-center bg-red-700 text-white py-3 rounded-lg font-medium hover:bg-red-800 transition-colors"
                   >
-                    Create Premium Agreement
+                    Start the Standard NI Pack
                   </Link>
                 </div>
               </div>

@@ -5,14 +5,14 @@ import { getCanonicalUrl } from '@/lib/seo';
 export const metadata: Metadata = {
   title: 'Tenancy Agreement Redirect | Landlord Heaven',
   description:
-    'Legacy tenancy agreement route retained to redirect landlords to the current England agreement example page and the right tenancy pack.',
+    'Choose the property jurisdiction before starting the correct tenancy agreement for England, Wales, Scotland or Northern Ireland.',
   keywords: [
     'tenancy agreement redirect',
     'tenancy agreement template',
     'legacy tenancy agreement route',
   ],
   alternates: {
-    canonical: getCanonicalUrl('/tenancy-agreement-template'),
+    canonical: getCanonicalUrl('/standard-tenancy-agreement'),
   },
   robots: {
     index: false,
@@ -21,5 +21,5 @@ export const metadata: Metadata = {
 };
 
 export default function TenancyAgreementPage() {
-  permanentRedirect('/tenancy-agreement-template');
+  permanentRedirect('/standard-tenancy-agreement#choose-jurisdiction');
 }

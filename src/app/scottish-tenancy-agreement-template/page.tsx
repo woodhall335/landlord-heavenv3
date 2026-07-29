@@ -9,15 +9,18 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { getReleasedStandardTenancyEntry } from '@/lib/tenancy/agreement-registry';
 
 const standardPrice = PRODUCTS.ast_standard.displayPrice;
-const premiumPrice = PRODUCTS.ast_premium.displayPrice;
+const standardWizardHref = `${getReleasedStandardTenancyEntry(
+  'scotland'
+).startRoute}&src=scottish_tenancy_template_page&topic=tenancy`;
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Scottish Tenancy Agreement 2026 | Legally Validated PRT',
-  description: 'Create a Scottish tenancy agreement (PRT) with solicitor-grade drafting and compliance checks for landlord requirements.',
+  title: 'Scottish Tenancy Agreement 2026 | Standard PRT',
+  description: 'Create the released Standard Scottish Private Residential Tenancy agreement through the Scotland-specific wizard.',
   keywords: [
     'Scottish tenancy agreement template',
     'Scotland tenancy agreement',
@@ -34,8 +37,8 @@ export const metadata: Metadata = {
     canonical: getCanonicalUrl('/scottish-tenancy-agreement-template'),
   },
   openGraph: {
-    title: 'Scottish Tenancy Agreement 2026 | Legally Validated PRT',
-    description: 'Legally validated Scottish tenancy agreement (PRT) with compliance-checked clauses.',
+    title: 'Scottish Tenancy Agreement 2026 | Standard PRT',
+    description: 'Scotland-specific Standard Private Residential Tenancy agreement with guided questions and supporting documents.',
     type: 'article',
     url: getCanonicalUrl('/scottish-tenancy-agreement-template'),
   },
@@ -44,11 +47,11 @@ export const metadata: Metadata = {
 const faqs = [
   {
     question: 'What type of tenancy agreement do I need for Scotland?',
-    answer: 'For properties in Scotland, you need a Private Residential Tenancy (PRT) agreement. Since December 2017, the PRT is the only type of private residential tenancy available in Scotland. The previous Assured Tenancy and Short Assured Tenancy types no longer apply to new lettings. Our Scottish tenancy agreement template generates a fully compliant PRT.',
+    answer: 'For most new private residential lets in Scotland, the correct agreement is a Private Residential Tenancy (PRT). Older Assured and Short Assured Tenancies can continue in limited legacy situations, but they are not the new self-serve product sold here.',
   },
   {
     question: 'Can I use an English tenancy agreement for a Scottish property?',
-    answer: 'No. English ASTs (Assured Shorthold Tenancies) are not valid in Scotland, and Scottish PRTs are not valid in England. The legal frameworks are completely different - Scotland has open-ended tenancies with no-fault eviction abolished, while England has fixed terms with Section 21 no-fault eviction (for now). Using the wrong agreement could leave you unable to enforce terms or evict.',
+    answer: 'No. An England tenancy agreement is not the correct document for a Scottish property. Scotland uses its own PRT framework and terminology, so start the Scotland-specific wizard.',
   },
   {
     question: 'Is there a minimum tenancy period in Scotland?',
@@ -84,7 +87,7 @@ const faqs = [
   },
   {
     question: 'Does the template work for shared properties/HMOs?',
-    answer: `Our Premium PRT (${premiumPrice}) includes HMO-specific provisions for properties with 3+ unrelated tenants. Scotland has its own HMO licensing requirements through local councils - you need both an HMO licence and landlord registration. The Premium template covers shared area responsibilities and room allocation.`,
+    answer: 'The released Scotland product is one Standard PRT for suitable private residential lets. HMO licensing and property-management requirements are separate, so confirm the setup and local council requirements before using a standard agreement.',
   },
   {
     question: 'What happens to existing Short Assured Tenancies?',
@@ -98,7 +101,7 @@ export default function ScottishTenancyAgreementTemplatePage() {
       <StructuredData
         data={articleSchema({
           headline: 'Scottish Tenancy Agreement Template 2026',
-          description: 'Get a legally compliant Scottish tenancy agreement (PRT) template.',
+          description: 'Create the released Standard Scotland Private Residential Tenancy agreement.',
           url: getCanonicalUrl('/scottish-tenancy-agreement-template'),
           datePublished: '2026-01-01',
           dateModified: '2026-01-25',
@@ -107,7 +110,7 @@ export default function ScottishTenancyAgreementTemplatePage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/products/ast' },
+          { name: 'Tenancy Agreements', url: getCanonicalUrl('/standard-tenancy-agreement') },
           { name: 'Scottish Tenancy Agreement', url: 'https://landlordheaven.co.uk/scottish-tenancy-agreement-template' },
         ])}
       />
@@ -117,8 +120,8 @@ export default function ScottishTenancyAgreementTemplatePage() {
       <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
         <UniversalHero
           title="Scottish Tenancy Agreement"
-          subtitle="Generate a legally validated Scottish tenancy agreement with solicitor-grade, compliance-checked PRT terms."
-          primaryCta={{ label: "Start now", href: "/products/ast" }}
+          subtitle="Create the released Standard Scotland PRT through jurisdiction-specific questions, preview the pack before payment, and keep the completed documents in your account."
+          primaryCta={{ label: `Start Standard Scotland PRT — ${standardPrice}`, href: standardWizardHref }}
           showTrustPositioningBar
           hideMedia
         />
@@ -127,7 +130,7 @@ export default function ScottishTenancyAgreementTemplatePage() {
           <nav className="text-sm text-gray-600">
             <Link href="/" className="hover:text-blue-600">Home</Link>
             <span className="mx-2">/</span>
-            <Link href="/products/ast" className="hover:text-blue-600">Tenancy Agreements</Link>
+            <Link href="/standard-tenancy-agreement" className="hover:text-blue-600">Tenancy Agreements</Link>
             <span className="mx-2">/</span>
             <span className="text-gray-900">Scottish Tenancy Agreement</span>
           </nav>
@@ -147,21 +150,21 @@ export default function ScottishTenancyAgreementTemplatePage() {
             </h2>
             <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
               Looking for a <strong>tenancy agreement for Scotland</strong>? Our Scottish tenancy template
-              generates a fully compliant <strong>Private Residential Tenancy (PRT)</strong> — the only
-              type of private tenancy available in Scotland since 2017.
+              creates the released Standard <strong>Private Residential Tenancy (PRT)</strong> for
+              suitable new private residential lets.
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/products/ast"
+                href={standardWizardHref}
                 className="inline-flex items-center gap-2 bg-white border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
               >
                 {`Standard PRT — ${standardPrice}`}
               </Link>
               <Link
-                href="/products/ast"
+                href="/tenancy-agreements/scotland"
                 className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
               >
-                {`Premium PRT — ${premiumPrice}`}
+                Read the Scotland PRT guide
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-500">Private Housing (Tenancies) Act 2016 compliant • Instant PDF</p>
@@ -276,13 +279,13 @@ export default function ScottishTenancyAgreementTemplatePage() {
               </div>
               <div className="p-6 rounded-xl border-2 border-blue-200 bg-blue-50">
                 <div className="inline-block bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold mb-3">
-                  RECOMMENDED
+                  INCLUDED
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">{`Premium PRT (${premiumPrice})`}</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Standard PRT supporting pack</h3>
                 <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
-                    <span><strong>Everything in Standard plus:</strong></span>
+                    <span><strong>Included with the Standard route:</strong></span>
                   </li>
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
@@ -294,7 +297,7 @@ export default function ScottishTenancyAgreementTemplatePage() {
                   </li>
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
-                    <span>HMO-compatible clauses</span>
+                    <span>Easy Read Notes and Scotland-specific setup guidance</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
@@ -313,7 +316,7 @@ export default function ScottishTenancyAgreementTemplatePage() {
           variant="section"
           jurisdiction="scotland"
           title="Get Your Scottish Tenancy Agreement"
-          description="Generate a fully compliant PRT for your Scottish property in minutes."
+          description="Create the released Standard PRT for a suitable Scottish private residential let."
         />
 
         {/* FAQ */}

@@ -74,7 +74,8 @@ export const TENANCY_AGREEMENT_REGISTRY: readonly TenancyAgreementRegistryEntry[
     price: PRODUCTS.ast_standard.price,
     standardAvailable: true,
     premiumAvailable: false,
-    startRoute: '/wizard?product=ast_standard&jurisdiction=wales&contract_type=fixed',
+    startRoute:
+      '/wizard/flow?type=tenancy_agreement&product=ast_standard&jurisdiction=wales&contract_type=fixed',
     detailsRoute: '/wales-tenancy-agreement-template',
     previewSupport: true,
     supportingDocuments: [
@@ -101,7 +102,8 @@ export const TENANCY_AGREEMENT_REGISTRY: readonly TenancyAgreementRegistryEntry[
     price: PRODUCTS.ast_standard.price,
     standardAvailable: true,
     premiumAvailable: false,
-    startRoute: '/wizard?product=ast_standard&jurisdiction=wales&contract_type=periodic',
+    startRoute:
+      '/wizard/flow?type=tenancy_agreement&product=ast_standard&jurisdiction=wales&contract_type=periodic',
     detailsRoute: '/wales-tenancy-agreement-template',
     previewSupport: true,
     supportingDocuments: [
@@ -128,7 +130,8 @@ export const TENANCY_AGREEMENT_REGISTRY: readonly TenancyAgreementRegistryEntry[
     price: PRODUCTS.ast_standard.price,
     standardAvailable: true,
     premiumAvailable: false,
-    startRoute: '/wizard?product=ast_standard&jurisdiction=scotland',
+    startRoute:
+      '/wizard/flow?type=tenancy_agreement&product=ast_standard&jurisdiction=scotland',
     detailsRoute: '/private-residential-tenancy-agreement-template',
     previewSupport: true,
     supportingDocuments: [
@@ -155,7 +158,8 @@ export const TENANCY_AGREEMENT_REGISTRY: readonly TenancyAgreementRegistryEntry[
     price: PRODUCTS.ast_standard.price,
     standardAvailable: true,
     premiumAvailable: false,
-    startRoute: '/wizard?product=ast_standard&jurisdiction=northern-ireland',
+    startRoute:
+      '/wizard/flow?type=tenancy_agreement&product=ast_standard&jurisdiction=northern-ireland',
     detailsRoute: '/northern-ireland-tenancy-agreement-template',
     previewSupport: true,
     supportingDocuments: [

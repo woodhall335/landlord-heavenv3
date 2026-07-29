@@ -76,7 +76,7 @@ export default function JointTenancyAgreementNorthernIrelandPage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/products/ast' },
+          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/standard-tenancy-agreement' },
           {
             name: 'Joint Tenancy NI',
             url: 'https://landlordheaven.co.uk/joint-tenancy-agreement-northern-ireland',

@@ -33,9 +33,9 @@ export const PRODUCT_OWNER_METADATA = {
   },
   standardTenancy: {
     path: '/standard-tenancy-agreement',
-    title: 'England Tenancy Agreement Pack | Standard Periodic | £14.99',
+    title: 'Standard Tenancy Agreements by Jurisdiction | £14.99',
     description:
-      'Create an England standard periodic tenancy agreement pack with current wording, setup records, validation checks, and preview before payment.',
+      'Choose England, Wales, Scotland or Northern Ireland, then create its Standard agreement with jurisdiction-specific questions and preview before payment.',
   },
   premiumTenancy: {
     path: '/premium-tenancy-agreement',

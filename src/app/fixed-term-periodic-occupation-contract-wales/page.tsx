@@ -123,7 +123,7 @@ export default function FixedTermPeriodicOccupationContractWalesPage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/products/ast' },
+          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/standard-tenancy-agreement' },
           {
             name: 'Fixed Term vs Periodic Wales',
             url: 'https://landlordheaven.co.uk/fixed-term-periodic-occupation-contract-wales',

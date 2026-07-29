@@ -78,7 +78,7 @@ export default function JointPrtTenancyAgreementScotlandPage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/products/ast' },
+          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/standard-tenancy-agreement' },
           {
             name: 'Joint PRT Scotland',
             url: 'https://landlordheaven.co.uk/joint-prt-tenancy-agreement-scotland',

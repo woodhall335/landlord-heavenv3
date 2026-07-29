@@ -17,6 +17,7 @@ import { getCanonicalUrl } from '@/lib/seo/urls';
 import { tenancyAgreementScotlandLinks } from '@/lib/seo/internal-links';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { isNonEnglandStandardTenancyPubliclyEnabled } from '@/lib/tenancy/non-england-rollout';
+import { getReleasedStandardTenancyEntry } from '@/lib/tenancy/agreement-registry';
 import {
   AlertTriangle,
   ArrowRight,
@@ -39,7 +40,7 @@ const canonicalUrl = getCanonicalUrl(PAGE_PATH);
 const standardPrice = PRODUCTS.ast_standard.displayPrice;
 const isPubliclyEnabled = isNonEnglandStandardTenancyPubliclyEnabled('scotland');
 
-const standardWizardHref = '/wizard?product=ast_standard&jurisdiction=scotland&src=tenancy_hub&topic=tenancy';
+const standardWizardHref = `${getReleasedStandardTenancyEntry('scotland').startRoute}&src=tenancy_hub&topic=tenancy`;
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -155,7 +156,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: getCanonicalUrl('/') },
-          { name: 'Tenancy Agreement Packs', url: getCanonicalUrl('/products/ast') },
+          { name: 'Tenancy Agreement Packs', url: getCanonicalUrl('/standard-tenancy-agreement') },
           { name: 'Private Residential Tenancy Agreement', url: canonicalUrl },
         ])}
       />

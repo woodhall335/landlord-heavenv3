@@ -138,7 +138,7 @@ const expectedProductMetaDescriptions = {
   section13Defence:
     'Prepare for a Section 13 rent challenge with Form 4A, market evidence, response wording, legal briefing, and tribunal bundle support.',
   standardTenancy:
-    'Create an England standard periodic tenancy agreement pack with current wording, setup records, validation checks, and preview before payment.',
+    'Choose England, Wales, Scotland or Northern Ireland, then create its Standard agreement with jurisdiction-specific questions and preview before payment.',
   premiumTenancy:
     'Create a premium England periodic tenancy agreement pack with stronger wording for access, repairs, keys, handover, and management control.',
   studentTenancy:

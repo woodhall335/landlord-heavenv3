@@ -465,9 +465,9 @@ export function auditMetadata(config: SEOMetadataConfig): SEOAuditResult {
  * Default metadata for the site
  */
 export const defaultMetadata: Metadata = {
-  title: "Court-Ready UK Landlord Documents | Landlord Heaven",
+  title: "Landlord Documents & Tenancy Agreements | Landlord Heaven",
   description:
-    "Create court-ready Section 21 notices, Section 8 notices, money claim packs, and tenancy agreements for UK landlords in minutes.",
+    "Create guided England eviction, rent-increase and money-claim packs, plus Standard tenancy agreements for England, Wales, Scotland and Northern Ireland.",
   keywords: [
     "section 21 notice",
     "section 8 notice",
@@ -503,24 +503,24 @@ export const defaultMetadata: Metadata = {
     locale: 'en_GB',
     url: SITE_ORIGIN,
     siteName: SITE_NAME,
-    title: "Court-Ready UK Landlord Documents | Landlord Heaven",
+    title: "Landlord Documents & Tenancy Agreements | Landlord Heaven",
     description:
-      "Create court-ready Section 21 notices, Section 8 notices, money claim packs, and tenancy agreements for UK landlords in minutes.",
+      "Create guided England eviction, rent-increase and money-claim packs, plus Standard tenancy agreements for England, Wales, Scotland and Northern Ireland.",
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: "Court-Ready UK Landlord Documents | Landlord Heaven",
+        alt: "Landlord Documents & Tenancy Agreements | Landlord Heaven",
         type: 'image/png',
       }
     ]
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Court-Ready UK Landlord Documents | Landlord Heaven",
+    title: "Landlord Documents & Tenancy Agreements | Landlord Heaven",
     description:
-      "Create court-ready Section 21 notices, Section 8 notices, money claim packs, and tenancy agreements for UK landlords in minutes.",
+      "Create guided England eviction, rent-increase and money-claim packs, plus Standard tenancy agreements for England, Wales, Scotland and Northern Ireland.",
     images: ['/og-image.png'],
     creator: '@LandlordHeaven',
     site: '@LandlordHeaven',

@@ -9,16 +9,19 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { getReleasedStandardTenancyEntry } from '@/lib/tenancy/agreement-registry';
 
 const standardPrice = PRODUCTS.ast_standard.displayPrice;
-const premiumPrice = PRODUCTS.ast_premium.displayPrice;
 const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
+const standardWizardHref = `${getReleasedStandardTenancyEntry(
+  'scotland'
+).startRoute}&src=prt_template_scotland_page&topic=tenancy`;
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'PRT Agreement Scotland 2026 | Legally Validated',
-  description: 'Generate a Scotland PRT agreement with solicitor-grade drafting and compliance checks under the Private Housing (Tenancies) Act 2016.',
+  title: 'PRT Agreement Scotland 2026 | Standard Scotland PRT',
+  description: 'Create the released Standard Scotland PRT through a jurisdiction-specific wizard with supporting notes and preview before payment.',
   keywords: [
     'PRT template Scotland',
     'Scotland PRT download',
@@ -35,8 +38,8 @@ export const metadata: Metadata = {
     canonical: getCanonicalUrl('/prt-template-scotland'),
   },
   openGraph: {
-    title: 'PRT Agreement Scotland 2026 | Legally Validated',
-    description: 'Legally validated Scotland PRT agreement with compliance-checked terms.',
+    title: 'PRT Agreement Scotland 2026 | Standard Scotland PRT',
+    description: 'Scotland-specific Standard PRT agreement with guided questions and supporting documents.',
     type: 'article',
     url: getCanonicalUrl('/prt-template-scotland'),
   },
@@ -89,7 +92,7 @@ const faqs = [
   },
   {
     question: 'Does the PRT template work for HMOs in Scotland?',
-    answer: `Our Premium PRT (${premiumPrice}) includes HMO-specific provisions for properties with 3+ unrelated tenants. Scotland has its own HMO licensing requirements through local councils. You need both an HMO licence and landlord registration. The Premium template includes shared area responsibilities and room allocation terms.`,
+    answer: 'The released Scotland product is a standard PRT for suitable private residential tenancies. An HMO may require licensing and additional property-management checks, so confirm the setup and local council requirements before relying on a standard agreement.',
   },
 ];
 
@@ -99,7 +102,7 @@ export default function PrtTemplateScotlandPage() {
       <StructuredData
         data={articleSchema({
           headline: 'PRT Template Scotland 2026',
-          description: 'Download a PRT template for Scotland compliant with Private Housing (Tenancies) Act 2016.',
+          description: 'Create the released Standard PRT for a suitable Scottish private residential let.',
           url: getCanonicalUrl('/prt-template-scotland'),
           datePublished: '2026-01-01',
           dateModified: '2026-01-25',
@@ -108,7 +111,7 @@ export default function PrtTemplateScotlandPage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/products/ast' },
+          { name: 'Tenancy Agreements', url: getCanonicalUrl('/standard-tenancy-agreement') },
           { name: 'PRT Template Scotland', url: 'https://landlordheaven.co.uk/prt-template-scotland' },
         ])}
       />
@@ -118,8 +121,8 @@ export default function PrtTemplateScotlandPage() {
       <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-blue-50">
         <UniversalHero
           title="PRT Agreement Scotland"
-          subtitle="Generate a legally validated PRT agreement with solicitor-grade drafting and Scotland compliance checks."
-          primaryCta={{ label: "Start now", href: "/products/ast" }}
+          subtitle="Create the released Standard Scotland PRT through jurisdiction-specific questions and preview the pack before payment."
+          primaryCta={{ label: 'Start the standard Scotland PRT', href: standardWizardHref }}
           showTrustPositioningBar
           hideMedia
         />
@@ -128,7 +131,7 @@ export default function PrtTemplateScotlandPage() {
           <nav className="text-sm text-gray-600">
             <Link href="/" className="hover:text-blue-600">Home</Link>
             <span className="mx-2">/</span>
-            <Link href="/products/ast" className="hover:text-blue-600">Tenancy Agreements</Link>
+            <Link href="/standard-tenancy-agreement" className="hover:text-blue-600">Tenancy Agreements</Link>
             <span className="mx-2">/</span>
             <span className="text-gray-900">PRT Template Scotland</span>
           </nav>
@@ -153,19 +156,19 @@ export default function PrtTemplateScotlandPage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/products/ast"
+                href={standardWizardHref}
                 className="inline-flex items-center gap-2 bg-white border-2 border-indigo-600 text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors"
               >
                 {`Standard PRT — ${standardPrice}`}
               </Link>
               <Link
-                href="/products/ast"
+                href="/tenancy-agreements/scotland"
                 className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
               >
-                {`Premium PRT — ${premiumPrice}`}
+                Read the Scotland PRT guide
               </Link>
             </div>
-            <p className="mt-4 text-sm text-gray-500">10-minute wizard • Instant download • Tribunal-ready</p>
+            <p className="mt-4 text-sm text-gray-500">Guided wizard • Preview before payment • Scotland-specific pack</p>
           </div>
         </section>
 
@@ -241,7 +244,7 @@ export default function PrtTemplateScotlandPage() {
           variant="section"
           jurisdiction="scotland"
           title="Create Your Scotland PRT Now"
-          description="Generate a compliant Private Residential Tenancy in minutes. No legal expertise required."
+          description="Create the released Standard Private Residential Tenancy through the Scotland-specific wizard."
         />
 
         {/* Cross-sell */}
@@ -257,10 +260,10 @@ export default function PrtTemplateScotlandPage() {
                 <p className="text-sm text-gray-600 mb-2">All 18 grounds with correct notice periods</p>
                 <span className="text-indigo-600 font-medium">{noticeOnlyPrice}</span>
               </Link>
-              <Link href="/products/ast" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Premium PRT</h3>
+              <Link href="/standard-tenancy-agreement" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                <h3 className="font-semibold text-gray-900">Standard Scotland PRT</h3>
                 <p className="text-sm text-gray-600 mb-2">HMO-ready clauses and enhanced protections</p>
-                <span className="text-indigo-600 font-medium">{premiumPrice}</span>
+                <span className="text-indigo-600 font-medium">{standardPrice}</span>
               </Link>
               <Link href="/ask-heaven" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Ask Heaven for Scotland</h3>

@@ -11,7 +11,7 @@ const canonicalUrl = getCanonicalUrl(pagePath);
 export const metadata: Metadata = {
   title: 'Tenancy Agreement Template UK | Choose Your Jurisdiction',
   description:
-    'Pick the correct UK jurisdiction before choosing a tenancy agreement template. England, Wales, Scotland, and Northern Ireland use different frameworks.',
+    'Choose a Standard tenancy agreement for England, Wales, Scotland or Northern Ireland. England also offers Premium and specialist agreement products.',
   alternates: { canonical: canonicalUrl },
   robots: {
     index: true,
@@ -41,7 +41,7 @@ export default function TenancyAgreementTemplateUkPage() {
         <UniversalHero
           preTitleLabel="UK tenancy agreement routing"
           title="Choose the tenancy agreement for the property jurisdiction"
-          subtitle="England, Wales, Scotland and Northern Ireland use different agreement frameworks. Choose the property location first so the correct standard product and wizard questions are used."
+          subtitle="Standard agreements are available for England, Wales, Scotland and Northern Ireland. England also offers Premium, Student, HMO / Shared House and Lodger products; choose the property location first so the correct framework and wizard questions are used."
           primaryCta={{
             label: 'Choose property jurisdiction',
             href: '#choose-jurisdiction',
@@ -50,7 +50,7 @@ export default function TenancyAgreementTemplateUkPage() {
             label: 'View standard agreement overview',
             href: '/standard-tenancy-agreement',
           }}
-          trustText="Released standard agreement routes are selected from the canonical product registry."
+          trustText="Wales, Scotland and Northern Ireland currently offer Standard agreements only. England has additional agreement options."
           feature="Wales offers separate Fixed-Term and Periodic Standard Occupation Contract routes."
           mediaSrc="/images/wizard-standard-tenancy-agreement.webp"
           mediaAlt="Preview of the guided tenancy agreement workflow"

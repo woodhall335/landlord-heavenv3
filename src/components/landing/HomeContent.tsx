@@ -178,11 +178,11 @@ const routeSelectionCards: RouteCard[] = [
     title: 'Need a tenancy agreement',
     eyebrow: 'Tenancy agreement',
     description:
-      'Start here if you are setting up a new tenancy or replacing old paperwork and need the agreement to match the property, occupiers, and let type.',
+      'Standard agreements cover England, Wales, Scotland and Northern Ireland. England also offers Premium, Student, HMO / Shared House and Lodger products.',
     whyRoute:
       'This fits when you need the right agreement before the tenancy starts, rather than a generic template that may not match the let.',
     ctaLabel: 'Choose my tenancy agreement',
-    href: PUBLIC_PRODUCT_DESCRIPTORS.ast.landingHref,
+    href: '/standard-tenancy-agreement#choose-jurisdiction',
     imageSrc: '/images/tenancy-agreement-selector.webp',
     imageAlt: 'Need a tenancy agreement situation card',
     accent: 'lavender',

@@ -9,9 +9,9 @@ import { generateMetadata } from '@/lib/seo';
 import { StructuredData, websiteSchema } from '@/lib/seo/structured-data';
 
 export const metadata = generateMetadata({
-  title: 'Landlord Documents England | Eviction, Rent & Tenancy',
+  title: 'Landlord Documents & UK Tenancy Agreements',
   description:
-    'Use Landlord Heaven to handle eviction notices, court paperwork, rent increases, money claims, and tenancy agreements for landlords with property in England.',
+    'Create England eviction, rent-increase and money-claim packs, plus Standard tenancy agreements for England, Wales, Scotland and Northern Ireland.',
   path: '/',
   keywords: [
     'landlord documents england',
@@ -24,6 +24,9 @@ export const metadata = generateMetadata({
     'section 13 rent increase',
     'form 4a rent increase pack',
     'tenancy agreement england',
+    'occupation contract wales',
+    'private residential tenancy scotland',
+    'northern ireland tenancy agreement',
     'assured periodic tenancy agreement',
     'court-ready landlord documents',
   ],

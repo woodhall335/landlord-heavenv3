@@ -76,7 +76,7 @@ export default function FixedTermTenancyAgreementNorthernIrelandPage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/products/ast' },
+          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/standard-tenancy-agreement' },
           {
             name: 'Fixed Term Tenancy NI',
             url: 'https://landlordheaven.co.uk/fixed-term-tenancy-agreement-northern-ireland',

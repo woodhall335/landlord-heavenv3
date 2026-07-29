@@ -88,8 +88,9 @@ export default function RefundsPage() {
             </h3>
             <ul className="list-disc pl-6 mb-4 text-gray-700 space-y-2">
               <li>
-                <strong>One-Time Products:</strong> Notice Only, Complete Eviction Pack, Money Claim Pack, Standard
-                Residential Tenancy Agreement, Premium Residential Tenancy Agreement - all documents are instantly delivered
+                <strong>One-Time Products:</strong> Notice Only, Complete Eviction Pack, Money Claim Pack,
+                jurisdiction-specific Standard tenancy agreements, and the England Premium and specialist
+                tenancy agreements - completed documents are delivered digitally
               </li>
               <li>
                 <strong>HMO Pro Subscriptions:</strong> You can cancel anytime, but we don't refund partial months (see

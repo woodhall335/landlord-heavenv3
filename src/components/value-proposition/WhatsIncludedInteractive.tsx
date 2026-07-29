@@ -156,11 +156,6 @@ const TENANCY_CONFIG: Record<TenancyPreviewJurisdiction, TenancyJurisdictionConf
         label: 'Standard',
         description: 'Core pack for straightforward Welsh occupation contracts.',
       },
-      {
-        key: 'premium',
-        label: 'Premium',
-        description: 'Core pack plus support documents for more complex Welsh lets.',
-      },
     ],
   },
   scotland: {
@@ -172,11 +167,6 @@ const TENANCY_CONFIG: Record<TenancyPreviewJurisdiction, TenancyJurisdictionConf
         label: 'Standard',
         description: 'Core pack including Easy Read Notes for straightforward Scottish lets.',
       },
-      {
-        key: 'premium',
-        label: 'Premium',
-        description: 'Core Scottish pack plus support documents for more complex lets.',
-      },
     ],
   },
   'northern-ireland': {
@@ -187,11 +177,6 @@ const TENANCY_CONFIG: Record<TenancyPreviewJurisdiction, TenancyJurisdictionConf
         key: 'standard',
         label: 'Standard',
         description: 'Core pack for straightforward Northern Ireland lets.',
-      },
-      {
-        key: 'premium',
-        label: 'Premium',
-        description: 'Core pack plus support documents for more complex Northern Ireland lets.',
       },
     ],
   },
@@ -234,7 +219,7 @@ const getDefaultSubtitle = (product: WhatsIncludedInteractiveProps['product']) =
     return 'Preview the current England notice-to-claim workflow before you buy.';
   }
   if (product === 'ast') {
-    return 'Select your jurisdiction and product level, then preview every document in the pack.';
+    return 'Select the property jurisdiction, then preview the available agreement pack. England also offers a Premium option.';
   }
   return 'Preview every document before you buy.';
 };
@@ -421,9 +406,26 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
     defaultCtaHref = 'https://landlordheaven.co.uk/wizard?product=complete_pack&src=product_page&topic=eviction';
     defaultCtaLabel = 'Start Complete Eviction Pack';
   } else if (product === 'ast') {
-    defaultCtaHref = `https://landlordheaven.co.uk/wizard?product=${selectedTenancyTier === 'premium' ? 'ast_premium' : 'ast_standard'}&jurisdiction=${selectedJurisdiction}&src=product_page&topic=tenancy`;
-    defaultCtaLabel =
-      selectedTenancyTier === 'premium' ? 'Start Premium Tenancy Agreement' : 'Start Standard Tenancy Agreement';
+    if (selectedJurisdiction === 'england') {
+      const englandProduct =
+        selectedTenancyTier === 'premium'
+          ? 'england_premium_tenancy_agreement'
+          : 'england_standard_tenancy_agreement';
+      defaultCtaHref = `/wizard/flow?type=tenancy_agreement&product=${englandProduct}&jurisdiction=england&src=product_page&topic=tenancy`;
+      defaultCtaLabel =
+        selectedTenancyTier === 'premium'
+          ? 'Start England Premium Tenancy Agreement'
+          : 'Start England Standard Tenancy Agreement';
+    } else if (selectedJurisdiction === 'wales') {
+      defaultCtaHref = '/standard-tenancy-agreement#choose-jurisdiction';
+      defaultCtaLabel = 'Choose Fixed-Term or Periodic Wales Contract';
+    } else {
+      defaultCtaHref = `/wizard/flow?type=tenancy_agreement&product=ast_standard&jurisdiction=${selectedJurisdiction}&src=product_page&topic=tenancy`;
+      defaultCtaLabel =
+        selectedJurisdiction === 'scotland'
+          ? 'Start Scotland Standard PRT'
+          : 'Start Northern Ireland Standard Agreement';
+    }
   }
 
   const ctaHref = props.ctaHref ?? defaultCtaHref;
@@ -479,7 +481,12 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                               : 'border-gray-200 bg-white text-gray-700 hover:border-[#7c3aed]/35'
                           }`}
                           aria-pressed={isActive}
-                          onClick={() => setSelectedJurisdiction(jurisdiction)}
+                          onClick={() => {
+                            setSelectedJurisdiction(jurisdiction);
+                            if (jurisdiction !== 'england') {
+                              setSelectedTenancyTier('standard');
+                            }
+                          }}
                         >
                           {NOTICE_ONLY_CONFIG[jurisdiction].label}
                         </button>
@@ -550,8 +557,14 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
 
               {isAst ? (
                 <div>
-                  <h3 className="text-sm font-semibold uppercase tracking-wide text-[#5b4b7a]">Product level</h3>
-                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                  <h3 className="text-sm font-semibold uppercase tracking-wide text-[#5b4b7a]">
+                    {selectedJurisdiction === 'england' ? 'England product level' : 'Available product'}
+                  </h3>
+                  <div
+                    className={`mt-3 grid gap-3 ${
+                      (tenancyConfig?.tierOptions.length ?? 0) > 1 ? 'sm:grid-cols-2' : ''
+                    }`}
+                  >
                     {tenancyConfig?.tierOptions.map((tier) => {
                       const isActive = selectedTenancyTier === tier.key;
                       return (

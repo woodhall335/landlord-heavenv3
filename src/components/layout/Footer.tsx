@@ -35,13 +35,12 @@ export function Footer() {
               />
             </div>
             <p className="mb-4 text-sm leading-relaxed text-[#bdbdbd]">
-              Landlord document workflows for properties in England, covering
-              Section 8 notices, court possession, debt recovery, rent increases,
-              and tenancy agreements.
+              England landlord workflows for eviction, court possession, debt recovery and rent
+              increases, plus Standard tenancy agreements for England, Wales, Scotland and
+              Northern Ireland.
             </p>
             <div className="flex items-center gap-2 text-xs text-[#bdbdbd]">
-              <Image src="/gb-eng.svg" alt="England" width={16} height={16} className="h-3 w-4" />
-              <span>Built for landlords with property in England.</span>
+              <span>Choose products by the jurisdiction of the rental property.</span>
             </div>
           </div>
 
@@ -89,33 +88,33 @@ export function Footer() {
             </h2>
             <ul className="space-y-2.5">
               <li>
-                <Link href="/products/ast" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
-                  England agreement hub
+                <Link href="/standard-tenancy-agreement" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                  Choose by jurisdiction
                 </Link>
               </li>
               <li>
-                <Link href="/standard-tenancy-agreement" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
-                  Standard
+                <Link href="/products/ast" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                  England agreements
+                </Link>
+              </li>
+              <li>
+                <Link href="/tenancy-agreements/wales" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                  Wales Standard Occupation Contracts
+                </Link>
+              </li>
+              <li>
+                <Link href="/tenancy-agreements/scotland" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                  Scotland Standard PRT
+                </Link>
+              </li>
+              <li>
+                <Link href="/tenancy-agreements/northern-ireland" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                  Northern Ireland Standard Agreement
                 </Link>
               </li>
               <li>
                 <Link href="/premium-tenancy-agreement" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
-                  Premium
-                </Link>
-              </li>
-              <li>
-                <Link href="/student-tenancy-agreement" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
-                  Student
-                </Link>
-              </li>
-              <li>
-                <Link href="/hmo-shared-house-tenancy-agreement" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
-                  HMO / Shared House
-                </Link>
-              </li>
-              <li>
-                <Link href="/lodger-agreement" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
-                  Lodger
+                  England Premium
                 </Link>
               </li>
             </ul>
@@ -210,7 +209,7 @@ export function Footer() {
             </p>
 
             <div className="flex items-center gap-6 text-sm text-[#bdbdbd]">
-              <span className="font-medium">For Landlords in England</span>
+              <span className="font-medium">Jurisdiction-specific landlord documents</span>
               <span>&bull;</span>
               <span className="font-medium">Guided Document Workflows</span>
               <span>&bull;</span>

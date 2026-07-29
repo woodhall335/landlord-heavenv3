@@ -11,6 +11,7 @@ import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { niTenancyTemplateFAQs } from '@/data/faqs';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { getReleasedStandardTenancyEntry } from '@/lib/tenancy/agreement-registry';
 import {
   CheckCircle,
   Clock,
@@ -29,7 +30,9 @@ const PAGE_PATH = '/tenancy-agreement-template-northern-ireland';
 const PAGE_TITLE = 'Tenancy Agreement Template Northern Ireland';
 const PAGE_TYPE = 'tenancy' as const;
 
-const astProductHref = '/products/ast';
+const astProductHref = `${getReleasedStandardTenancyEntry(
+  'northern-ireland'
+).startRoute}&src=ni_tenancy_template_page&topic=tenancy`;
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -75,7 +78,7 @@ export default function TenancyAgreementTemplateNorthernIrelandPage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/products/ast' },
+          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/standard-tenancy-agreement' },
           {
             name: 'NI Tenancy Template',
             url: 'https://landlordheaven.co.uk/tenancy-agreement-template-northern-ireland',
@@ -183,7 +186,7 @@ export default function TenancyAgreementTemplateNorthernIrelandPage() {
                     termination, and tenant obligations
                   </li>
                   <li>
-                    <strong>Court-ready:</strong> Structured to stand up if you need to enforce terms
+                    <strong>Clear records:</strong> Structured to make the agreed terms easier to review if a dispute arises
                     through the NI courts
                   </li>
                 </ul>

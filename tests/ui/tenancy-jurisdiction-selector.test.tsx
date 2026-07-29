@@ -58,6 +58,8 @@ describe('TenancyJurisdictionSelector', () => {
       'href',
       expect.stringContaining('jurisdiction=wales&contract_type=periodic')
     );
+    expect(fixed).toHaveAttribute('href', expect.stringContaining('/wizard/flow?'));
+    expect(periodic).toHaveAttribute('href', expect.stringContaining('type=tenancy_agreement'));
     expect(fixed.getAttribute('href')).not.toBe(periodic.getAttribute('href'));
   });
 
@@ -69,10 +71,20 @@ describe('TenancyJurisdictionSelector', () => {
     ).toHaveAttribute('href', expect.stringContaining('england_standard_tenancy_agreement'));
     expect(
       screen.getByRole('link', { name: /Scotland Private Residential Tenancy/ })
-    ).toHaveAttribute('href', expect.stringContaining('jurisdiction=scotland'));
+    ).toHaveAttribute(
+      'href',
+      expect.stringMatching(
+        /^\/wizard\/flow\?.*type=tenancy_agreement.*jurisdiction=scotland/
+      )
+    );
     expect(
       screen.getByRole('link', { name: /Northern Ireland Private Tenancy Agreement/ })
-    ).toHaveAttribute('href', expect.stringContaining('jurisdiction=northern-ireland'));
+    ).toHaveAttribute(
+      'href',
+      expect.stringMatching(
+        /^\/wizard\/flow\?.*type=tenancy_agreement.*jurisdiction=northern-ireland/
+      )
+    );
     expect(container.textContent).not.toMatch(/Premium/i);
   });
 
