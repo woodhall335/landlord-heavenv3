@@ -6,6 +6,10 @@ const pageSource = fs.readFileSync(
   path.join(process.cwd(), 'src/app/(marketing)/paid/section-8-notice/page.tsx'),
   'utf8'
 );
+const illustrationSource = fs.readFileSync(
+  path.join(process.cwd(), 'config/marketing-illustrations.ts'),
+  'utf8'
+);
 
 describe('paid Section 8 landing page', () => {
   it('keeps the paid page aligned with the canonical product owner and relevant search intent', () => {
@@ -24,6 +28,35 @@ describe('paid Section 8 landing page', () => {
     expect(pageSource).toContain('product=notice_only');
     expect(pageSource).toContain('ctaPosition="hero"');
     expect(pageSource).toContain('ctaPosition="final"');
+  });
+
+  it('uses one cohesive watercolor illustration system', () => {
+    expect(pageSource).toContain('/images/section8-paid-hero-watercolor-v2.webp');
+    expect(pageSource).toContain('/images/section8-legal-checks-watercolor-v2.webp');
+    expect(pageSource).toContain('/images/section8-workspace-watercolor-v2.webp');
+    expect(pageSource).not.toContain('/images/tenant-is-not-paying-rent.webp');
+    expect(pageSource).toContain('MARKETING_ILLUSTRATIONS.section8');
+    expect(illustrationSource).toContain("section8-process-guided-questions");
+    expect(illustrationSource).toContain("section8-stage-court-possession");
+    expect(illustrationSource).toContain("site-tenancy-northern-ireland");
+    expect(illustrationSource).toContain("site-compliance-protection");
+  });
+
+  it('restores the desktop review pill immediately inside the hero', () => {
+    expect(pageSource).toContain('data-testid="hero-review-pill-desktop"');
+    expect(pageSource).toContain('data-testid="hero-review-pill-trust"');
+    expect(pageSource).toContain('4.8/5 | 2095 reviews');
+  });
+
+  it('keeps every reusable illustration in the optimized public asset library', () => {
+    const filenames = [...illustrationSource.matchAll(/illustration\('([^']+)'/g)].map((match) => match[1]);
+    expect(filenames).toHaveLength(66);
+    for (const filename of filenames) {
+      expect(
+        fs.existsSync(path.join(process.cwd(), 'public/images/illustrations/landlord-documents', `${filename}.webp`)),
+        `${filename}.webp should exist`
+      ).toBe(true);
+    }
   });
 
   it('avoids absolute legal-outcome claims in the sales copy', () => {

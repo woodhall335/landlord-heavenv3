@@ -9,6 +9,7 @@ import { Sources } from '@/components/blog/Sources';
 import { BlogCard } from '@/components/blog/BlogCard';
 import { CategoryPage } from '@/components/blog/CategoryPage';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { getUniversalHeroImageForPath } from '@/config/universal-hero-images';
 import { Reveal, StaggerReveal } from '@/components/marketing/PremiumMotion';
 import { blogPosts, getBlogPost } from '@/lib/blog/posts';
 import { BlogPost } from '@/lib/blog/types';
@@ -734,32 +735,35 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
           trustText={`${post.category} landlord guide`}
           ariaLabel={`${seoConfig.metaTitle} hero`}
           showUsageCounter={false}
+          variant="pastel"
+          backgroundImageSrc={getUniversalHeroImageForPath(`/blog/${post.slug}`)}
+          backgroundImageAlt="Watercolour illustration for this landlord guide"
         >
           <div className="mt-6 max-w-4xl space-y-4 text-left">
-            <nav className="flex flex-wrap items-center gap-1.5 text-xs text-white/70 sm:text-sm">
-              <Link href="/" className="text-white/80 transition-colors hover:text-white">Home</Link>
+            <nav className="flex flex-wrap items-center gap-1.5 text-xs text-[#746d82] sm:text-sm">
+              <Link href="/" className="text-[#5b3bb5] transition-colors hover:text-[#3e197e]">Home</Link>
               <span>/</span>
-              <Link href="/blog" className="text-white/80 transition-colors hover:text-white">Landlord Guides</Link>
+              <Link href="/blog" className="text-[#5b3bb5] transition-colors hover:text-[#3e197e]">Landlord Guides</Link>
               {regionConfig && (
                 <>
                   <span>/</span>
-                  <Link href={`/blog/${postRegion}`} className="text-white/80 transition-colors hover:text-white">
+                  <Link href={`/blog/${postRegion}`} className="text-[#5b3bb5] transition-colors hover:text-[#3e197e]">
                     {regionConfig.name}
                   </Link>
                 </>
               )}
               <span>/</span>
-              <span className="max-w-[220px] truncate text-white">{seoConfig.metaTitle}</span>
+              <span className="max-w-[220px] truncate text-[#2b2045]">{seoConfig.metaTitle}</span>
             </nav>
 
-            <div className="flex flex-wrap items-center gap-2 text-sm text-white/80">
-              <span className="rounded-full border border-white/20 bg-white/15 px-3 py-1 font-medium text-white">
+            <div className="flex flex-wrap items-center gap-2 text-sm text-[#5f5871]">
+              <span className="rounded-full border border-[#ddd2f4] bg-white/80 px-3 py-1 font-medium text-[#4d2b92]">
                 {post.category}
               </span>
               {regionConfig && (
                 <Link
                   href={`/blog/${postRegion}`}
-                  className="rounded-full border border-white/20 bg-white/10 px-3 py-1 font-medium text-white transition-colors hover:bg-white/20"
+                  className="rounded-full border border-[#ddd2f4] bg-white/70 px-3 py-1 font-medium text-[#4d2b92] transition-colors hover:bg-white"
                 >
                   {regionConfig.name}
                 </Link>
@@ -773,7 +777,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 })}
               </span>
               {post.updatedDate && post.updatedDate !== post.date && (
-                <span className="flex items-center gap-1.5 font-medium text-emerald-100">
+                <span className="flex items-center gap-1.5 font-medium text-emerald-700">
                   <RefreshCw className="w-4 h-4" />
                   Updated: {new Date(post.updatedDate).toLocaleDateString('en-GB', {
                     day: 'numeric',
@@ -789,16 +793,16 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
             </div>
 
             <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide">
-              <span className="rounded-full border border-white/20 bg-white/15 px-3 py-1 text-white">Landlord guide</span>
-              <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-white/85">{post.author.role}</span>
+              <span className="rounded-full border border-[#ddd2f4] bg-white/80 px-3 py-1 text-[#4d2b92]">Landlord guide</span>
+              <span className="rounded-full border border-[#ddd2f4] bg-white/70 px-3 py-1 text-[#5f5871]">{post.author.role}</span>
             </div>
 
             {post.reviewer && (
-              <div className="flex items-center gap-2 text-sm text-white/80">
-                <CheckCircle className="w-4 h-4 text-emerald-100" />
+              <div className="flex items-center gap-2 text-sm text-[#5f5871]">
+                <CheckCircle className="w-4 h-4 text-emerald-600" />
                 <span>
-                  Reviewed: <span className="font-medium text-white">{post.reviewer.name}</span>
-                  {post.reviewer.role && <span className="text-white/70"> ({post.reviewer.role})</span>}
+                  Reviewed: <span className="font-medium text-[#2b2045]">{post.reviewer.name}</span>
+                  {post.reviewer.role && <span className="text-[#746d82]"> ({post.reviewer.role})</span>}
                 </span>
               </div>
             )}
@@ -807,7 +811,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm text-white/85"
+                  className="inline-flex items-center gap-1 rounded-full border border-[#ddd2f4] bg-white/70 px-3 py-1 text-sm text-[#5f5871]"
                 >
                   <Tag className="w-3 h-3" />
                   {tag}
@@ -815,11 +819,11 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               ))}
             </div>
 
-            <div className="rounded-2xl border border-white/20 bg-white/10 p-4 text-white shadow-sm backdrop-blur-sm sm:p-5">
-              <p className="text-xs font-semibold uppercase tracking-wide text-white/80">
+            <div className="rounded-2xl border border-[#ddd2f4] bg-white/78 p-4 text-[#2b2045] shadow-sm backdrop-blur-sm sm:p-5">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#7040d1]">
                 What this guide will help with
               </p>
-              <p className="mt-2 text-sm text-white/85">
+              <p className="mt-2 text-sm text-[#5f5871]">
                 For landlords searching for {post.targetKeyword}, this guide gives the short answer first,
                 explains the evidence or compliance checks, and points you toward the next sensible
                 document, tool, or guide.

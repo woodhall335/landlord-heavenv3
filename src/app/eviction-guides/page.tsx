@@ -8,6 +8,7 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { EVICTION_CLUSTERS } from '@/lib/seo/eviction-authority';
 import { getCanonicalUrl } from '@/lib/seo';
 import { currentEnglandFrameworkLinks } from '@/lib/seo/internal-links';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 
 const canonical = getCanonicalUrl('/eviction-guides');
 
@@ -97,20 +98,18 @@ export default function EvictionGuidesPage() {
         ])}
       />
 
-      <section className="py-14 bg-white border-b border-[#E6DBFF]">
-        <Container>
-          <div className="mx-auto max-w-6xl">
-            <h1 className="text-4xl font-bold text-charcoal">Eviction guides for landlords</h1>
-            <p className="mt-4 max-w-4xl text-gray-700">
-              Use this guide index to navigate tenant problems, eviction notices, court process, rent arrears, and possession enforcement pages.
-              Start with <Link href="/how-to-evict-tenant" className="text-primary hover:underline">how to evict a tenant legally</Link>, follow the <Link href="/eviction-process-uk" className="text-primary hover:underline">eviction process in the UK</Link>, and use the <Link href="/section-21-ban-uk" className="text-primary hover:underline">Section 21 ending in 2026 transition guide</Link> for the England post-ban route.
-            </p>
-            <p className="mt-4 max-w-4xl text-gray-700">
-              If the property is in England and you need the live post-1 May 2026 route, start with the current England eviction framework below. That bundle is the main authority path for the current rules, Section 8, Form 3A, landlord action steps, and the England possession timeline.
-            </p>
-          </div>
-        </Container>
-      </section>
+      <UniversalHero
+        variant="pastel"
+        preset="content_index"
+        preTitleLabel="Landlord guide hub"
+        title="Eviction guides for landlords"
+        highlightTitle="From notice to possession."
+        subtitle="Navigate tenant problems, eviction notices, court process, rent arrears and possession enforcement using the current England framework."
+        primaryCta={{ label: 'Start with the eviction process', href: '/how-to-evict-tenant' }}
+        secondaryCta={{ label: 'Create a Section 8 notice', href: '/products/notice-only' }}
+        trustText="Current England landlord guidance for notice, service, court and enforcement"
+        hideMedia
+      />
 
       <section className="bg-white pb-10">
         <Container>

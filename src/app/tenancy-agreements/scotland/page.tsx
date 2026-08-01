@@ -187,6 +187,9 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
           }}
           showTrustPositioningBar
           variant="pastel"
+          backgroundImageKey="tenancyScotland"
+          backgroundImageAlt="Watercolour illustration of a Scottish private residential tenancy and Edinburgh landmarks"
+          hideMedia
         >
           <div className="mt-4 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-700">
             <span className="flex items-center gap-2">

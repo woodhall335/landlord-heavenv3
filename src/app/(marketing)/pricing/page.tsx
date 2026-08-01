@@ -51,66 +51,84 @@ const packageImages: Record<
   { src: string; alt: string; accent: keyof typeof accentByProduct }
 > = {
   notice_only: {
-    src: '/images/section-8-eviction-notice-generator.webp',
+    src: '/images/illustrations/pricing-cards/notice-only.webp',
     alt: 'Eviction notice generator preview',
     accent: 'notice_only',
   },
   complete_pack: {
-    src: '/images/complete-eviction-pack.webp',
+    src: '/images/illustrations/pricing-cards/complete-pack.webp',
     alt: 'Complete eviction pack preview',
     accent: 'complete_pack',
   },
   money_claim: {
-    src: '/images/money-claim-pack.webp',
+    src: '/images/illustrations/pricing-cards/money-claim.webp',
     alt: 'Money claim pack preview',
     accent: 'money_claim',
   },
   section13_standard: {
-    src: '/images/standard-section-13.webp',
+    src: '/images/illustrations/pricing-cards/rent-increase.webp',
     alt: 'Section 13 rent increase pack preview',
     accent: 'section13_standard',
   },
   section13_defensive: {
-    src: '/images/defence-section-13.webp',
+    src: '/images/illustrations/pricing-cards/rent-challenge.webp',
     alt: 'Section 13 defence pack preview',
     accent: 'section13_defensive',
   },
   ast_standard: {
-    src: '/images/standard-tenancy.webp',
+    src: '/images/illustrations/pricing-cards/tenancy-england-standard.webp',
     alt: 'Standard tenancy agreement preview',
     accent: 'tenancy',
   },
   ast_premium: {
-    src: '/images/premium-tenancy.webp',
+    src: '/images/illustrations/pricing-cards/tenancy-england-premium.webp',
     alt: 'Premium tenancy agreement preview',
     accent: 'tenancy',
   },
   england_standard_tenancy_agreement: {
-    src: '/images/standard-tenancy.webp',
+    src: '/images/illustrations/pricing-cards/tenancy-england-standard.webp',
     alt: 'Standard tenancy agreement preview',
     accent: 'tenancy',
   },
   england_premium_tenancy_agreement: {
-    src: '/images/premium-tenancy.webp',
+    src: '/images/illustrations/pricing-cards/tenancy-england-premium.webp',
     alt: 'Premium tenancy agreement preview',
     accent: 'tenancy',
   },
   england_student_tenancy_agreement: {
-    src: '/images/wizard-student-tenancy-agreement.webp',
+    src: '/images/illustrations/pricing-cards/tenancy-student.webp',
     alt: 'Student tenancy agreement preview',
     accent: 'tenancy',
   },
   england_hmo_shared_house_tenancy_agreement: {
-    src: '/images/wizard-hmo-agreement.webp',
+    src: '/images/illustrations/pricing-cards/tenancy-hmo-shared.webp',
     alt: 'HMO shared house tenancy agreement preview',
     accent: 'tenancy',
   },
   england_lodger_agreement: {
-    src: '/images/wizard-lodger-agreement.webp',
+    src: '/images/illustrations/pricing-cards/tenancy-lodger.webp',
     alt: 'Lodger agreement preview',
     accent: 'tenancy',
   },
 };
+
+const jurisdictionPricingImages = {
+  '/tenancy-agreements/wales': {
+    src: '/images/illustrations/pricing-cards/tenancy-wales.webp',
+    alt: 'Wales Standard Occupation Contract preview',
+    accent: 'tenancy' as const,
+  },
+  '/tenancy-agreements/scotland': {
+    src: '/images/illustrations/pricing-cards/tenancy-scotland.webp',
+    alt: 'Scotland Standard PRT preview',
+    accent: 'tenancy' as const,
+  },
+  '/tenancy-agreements/northern-ireland': {
+    src: '/images/illustrations/pricing-cards/tenancy-northern-ireland.webp',
+    alt: 'Northern Ireland Standard Tenancy Agreement preview',
+    accent: 'tenancy' as const,
+  },
+} satisfies Record<string, { src: string; alt: string; accent: 'tenancy' }>;
 
 const solicitorComparison = [
   {
@@ -173,8 +191,8 @@ export default function PricingPage() {
         mediaAlt="Landlord Heaven pricing and product previews"
         showTrustPositioningBar
       >
-        <p className="mt-3 text-sm text-white/88">All prices are one-time payments.</p>
-        <p className="mt-2 max-w-3xl text-sm leading-7 text-white/76">
+        <p className="mt-3 text-sm font-medium text-[#443a59]">All prices are one-time payments.</p>
+        <p className="mt-2 max-w-3xl text-sm leading-7 text-[#5f5871]">
           Prices below are for landlords in England who need the right paperwork before they serve, file, or issue anything.
         </p>
         <TrustPillRow
@@ -208,7 +226,12 @@ export default function PricingPage() {
 
           <StaggerReveal className="grid gap-6 xl:grid-cols-2">
             {visiblePricingPackageCards.map((card) => {
-              const image = packageImages[card.productSku] ?? packageImages.england_standard_tenancy_agreement;
+              const image =
+                jurisdictionPricingImages[
+                  card.href as keyof typeof jurisdictionPricingImages
+                ] ??
+                packageImages[card.productSku] ??
+                packageImages.england_standard_tenancy_agreement;
               const accent = getPublicCardAccentClasses(accentByProduct[image.accent]);
 
               return (

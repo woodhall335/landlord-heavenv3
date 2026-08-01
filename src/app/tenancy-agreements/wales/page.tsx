@@ -186,6 +186,10 @@ export default function WalesOccupationContractPage() {
 
       <main className="min-h-screen bg-gradient-to-br from-red-50 via-red-100 to-red-50 text-gray-900">
         <UniversalHero
+          variant="pastel"
+          backgroundImageKey="tenancyWales"
+          backgroundImageAlt="Watercolour illustration of a Welsh occupation contract and Cardiff landmarks"
+          hideMedia
           preTitleLabel="Wales tenancy agreements"
           trustText="Standard occupation-contract routes based on the current Welsh model written statements."
           title="Standard Occupation Contracts for Wales"
@@ -205,8 +209,6 @@ export default function WalesOccupationContractPage() {
             href: periodicContractHref,
           }}
           feature="For Welsh residential property. Do not use an English tenancy agreement for a Welsh let."
-          mediaSrc="/images/tenancy_agreements.webp"
-          mediaAlt="Wales standard occupation contract documents"
           showTrustPositioningBar
         />
 

@@ -3,12 +3,17 @@
 import { useEffect, type ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { BadgeCheck, FileDown, Headphones } from 'lucide-react';
 import { RiCheckLine, RiShieldCheckFill } from 'react-icons/ri';
 import { PremiumParallax, StaggerReveal } from '@/components/marketing/PremiumMotion';
 import { TrustPositioningBar } from '@/components/marketing/TrustPositioningBar';
 import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
 import type { PositioningPreset } from '@/lib/marketing/positioning';
 import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats';
+import { getUniversalHeroImage, type UniversalHeroImageKey } from '@/config/universal-hero-images';
+import { getUniversalHeroImageForPath } from '@/config/universal-hero-images';
+import { findUniversalHeroForPath } from '@/config/universal-hero-library';
 import {
   PUBLIC_HERO_PRESET_STYLES,
   type PublicHeroPreset,
@@ -23,13 +28,52 @@ type HeroCta = {
 // DO NOT MODIFY WITHOUT UPDATING TESTS: these classes define the mobile hero layout contract
 // that keeps subtitle readability, right-edge media bleed, and CTA placement stable across pages.
 const SECTION_WRAP_CLASSES =
-  'relative isolate overflow-visible pt-28 pb-10 sm:pt-32 sm:pb-12 lg:overflow-hidden lg:pt-36 lg:pb-16';
+  'relative isolate flex min-h-[100svh] overflow-hidden pb-10 pt-28 sm:pb-12 sm:pt-32 lg:min-h-[100dvh] lg:items-center lg:pb-16 lg:pt-36';
 const MOBILE_MEDIA_WRAP_CLASSES =
   'relative z-0 float-right mr-0 ml-4 mt-3 mb-5 w-[58%] max-w-[500px] pt-0 sm:w-[58%] lg:hidden';
 const SUBTITLE_CLASSES =
-  'relative z-10 mt-4 px-0 py-0 text-lg leading-relaxed text-white/85 sm:max-w-[52ch] sm:text-xl';
+  'relative z-10 mt-4 px-0 py-0 text-lg leading-relaxed sm:max-w-[52ch] sm:text-xl';
 const CTA_WRAP_CLASSES = 'mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center';
 const REVIEW_STARS = '\u2605\u2605\u2605\u2605\u2605';
+
+const HERO_BENEFITS = [
+  { label: 'Legally valid', Icon: BadgeCheck },
+  { label: 'Instant download', Icon: FileDown },
+  { label: 'Expert support', Icon: Headphones },
+] as const;
+
+function HeroBenefitGrid() {
+  return (
+    <div
+      className="mt-6 grid w-full grid-cols-4 gap-2 sm:max-w-[40rem] sm:gap-3 lg:hidden"
+      aria-label="Purchase benefits"
+      data-testid="hero-benefit-grid"
+    >
+      {HERO_BENEFITS.map(({ label, Icon }) => (
+        <div
+          key={label}
+          className="flex min-h-[5.8rem] flex-col items-center justify-center rounded-2xl border border-[#e5ddf7] bg-white/88 px-1.5 py-3 text-center shadow-[0_12px_30px_rgba(64,35,119,0.07)] backdrop-blur-sm sm:min-h-[6.4rem] sm:px-3"
+        >
+          <Icon className="h-6 w-6 text-[#6333d5] sm:h-7 sm:w-7" strokeWidth={1.8} aria-hidden="true" />
+          <span className="mt-2 text-[0.7rem] font-semibold leading-tight text-[#21153d] sm:text-sm">
+            {label}
+          </span>
+        </div>
+      ))}
+      <div className="flex min-h-[5.8rem] flex-col items-center justify-center rounded-2xl border border-[#e5ddf7] bg-white/88 px-1.5 py-3 text-center shadow-[0_12px_30px_rgba(64,35,119,0.07)] backdrop-blur-sm sm:min-h-[6.4rem] sm:px-3">
+        <span
+          className="text-xl font-black tracking-[-0.06em] text-[#6333d5] sm:text-2xl"
+          aria-label="Stripe"
+        >
+          stripe
+        </span>
+        <span className="mt-2 text-[0.7rem] font-semibold leading-tight text-[#21153d] sm:text-sm">
+          Secure payment
+        </span>
+      </div>
+    </div>
+  );
+}
 
 export type UniversalHeroProps = {
   preset?: PublicHeroPreset;
@@ -61,6 +105,8 @@ export type UniversalHeroProps = {
   showReviewPill?: boolean;
   showUsageCounter?: boolean;
   backgroundImageSrc?: string;
+  backgroundImageKey?: UniversalHeroImageKey;
+  backgroundImageAlt?: string;
   showTrustPositioningBar?: boolean;
   trustPositioningPreset?: PositioningPreset;
   trustPositioningHeadline?: string;
@@ -84,6 +130,7 @@ function warnOnce(message: string) {
 
 export function UniversalHero({
   preset = 'product_owner',
+  variant,
   preTitleLabel,
   trustText,
   title,
@@ -108,12 +155,15 @@ export function UniversalHero({
   actionsSlot,
   showReviewPill,
   showUsageCounter,
-  backgroundImageSrc = '/images/bg.webp',
+  backgroundImageSrc,
+  backgroundImageKey,
+  backgroundImageAlt = 'Watercolor illustration for Landlord Heaven landlord documents',
   showTrustPositioningBar = false,
   trustPositioningPreset = 'default',
   trustPositioningHeadline,
   reviewPillLayout = 'auto',
 }: UniversalHeroProps) {
+  const pathname = usePathname() ?? '/';
   const isValidHeading = headingAs === 'h1' || headingAs === 'h2';
   const HeadingTag = isValidHeading ? headingAs : 'h1';
   const reviewCount = getDynamicReviewCount();
@@ -122,8 +172,11 @@ export function UniversalHero({
   const resolvedMediaAlt =
     mediaAlt ?? mascotAlt ?? 'Laptop showing landlord document dashboard';
   const shouldRenderHeading = Boolean(title || highlightTitle);
-  const shouldShowReviewPill = showReviewPill ?? true;
-  const shouldShowUsageCounter = showUsageCounter ?? Boolean(trustText);
+  // The new public hero contract keeps proof and live usage visible everywhere.
+  // Legacy wrappers may still pass false while they are migrated; retain the
+  // props for API compatibility but apply the site-wide presentation here.
+  const shouldShowReviewPill = true;
+  const shouldShowUsageCounter = true;
   const resolvedTrustText =
     trustText ?? 'Guided landlord document preparation with preview before payment.';
   const trustTextLooksLikeReview = Boolean(
@@ -139,6 +192,18 @@ export function UniversalHero({
         : showTrustDescriptor && resolvedTrustText.trim().length > 60;
   const isCenter = align === 'center';
   const shouldRenderMedia = !hideMedia && mediaSrc !== null;
+  void variant;
+  void showReviewPill;
+  void showUsageCounter;
+  const isPastel = true;
+  const routeHero = findUniversalHeroForPath(pathname);
+  const resolvedBackgroundImageSrc =
+    routeHero?.src ??
+    backgroundImageSrc ??
+    (backgroundImageKey
+      ? getUniversalHeroImage(backgroundImageKey)
+      : getUniversalHeroImageForPath(pathname));
+  const resolvedBackgroundImageAlt = routeHero?.alt ?? backgroundImageAlt;
 
   useEffect(() => {
     if (!isValidHeading) {
@@ -169,45 +234,49 @@ export function UniversalHero({
       aria-label={ariaLabel}
       id={id}
       data-universal-hero="true"
+      data-hero-variant={isPastel ? 'pastel' : 'standard'}
     >
       <div className="pointer-events-none absolute inset-0 -z-20" aria-hidden="true">
         <Image
-          src={backgroundImageSrc}
-          alt="Purple sky background with clouds"
+          src={resolvedBackgroundImageSrc}
+          alt={resolvedBackgroundImageAlt}
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center"
+          className="object-cover object-[72%_bottom] lg:object-center"
         />
       </div>
-      <div className={clsx('pointer-events-none absolute inset-0 -z-10', presetStyles.overlay)} aria-hidden="true" />
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-32 bg-[linear-gradient(180deg,rgba(15,6,31,0)_0%,rgba(15,6,31,0.24)_100%)]"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(255,255,255,0.99)_0%,rgba(255,255,255,0.98)_50%,rgba(255,255,255,0.72)_67%,rgba(255,255,255,0.08)_100%)] lg:bg-[linear-gradient(90deg,rgba(255,255,255,0.99)_0%,rgba(255,255,255,0.96)_47%,rgba(255,255,255,0.44)_62%,rgba(255,255,255,0.04)_100%)]"
+        aria-hidden="true"
+      />
+      <div
+        className={clsx('pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-32', isPastel ? 'bg-[linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(244,239,255,0.62)_100%)]' : 'bg-[linear-gradient(180deg,rgba(15,6,31,0)_0%,rgba(15,6,31,0.24)_100%)]')}
         aria-hidden="true"
       />
 
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto my-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div
           className={clsx(
-            'block gap-8 lg:grid lg:items-center lg:gap-10',
-            shouldRenderMedia && 'lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]'
+            'block gap-8 lg:grid lg:grid-cols-2 lg:items-center lg:gap-10'
           )}
         >
           <StaggerReveal
             className={clsx(
               'relative z-10 w-full min-w-0',
               isCenter ? 'text-center lg:text-center' : 'text-left',
-              hideMedia && 'max-w-3xl mx-auto'
+              hideMedia && !isPastel && 'max-w-3xl mx-auto'
             )}
           >
             {shouldShowReviewPill && (
               <p
+                data-testid="hero-review-pill-mobile"
                 className={clsx(
-                  'mb-3 flex w-full items-center gap-2 text-sm font-semibold text-white lg:hidden',
+                  'mb-4 inline-flex w-fit max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[#e5ddf7] bg-white/90 px-3 py-2 text-xs font-semibold text-[#271b45] shadow-sm backdrop-blur-sm lg:hidden',
                   isCenter ? 'justify-center text-center' : 'justify-start text-left'
                 )}
               >
-                <RiCheckLine className="h-5 w-5" aria-hidden="true" />
+                <RiCheckLine className="h-4 w-4 text-[#6333d5]" aria-hidden="true" />
                 <span>Rated</span>
                 <span className="text-[#facc15]" aria-hidden="true">
                   {REVIEW_STARS}
@@ -225,6 +294,7 @@ export function UniversalHero({
                   className={clsx(
                     'hidden w-full max-w-[46rem] rounded-full border border-white/80 bg-white/85 px-4 py-2.5 text-sm font-semibold shadow-sm backdrop-blur-sm lg:block',
                     presetStyles.reviewPill,
+                    'text-[#271b45]',
                     isCenter ? 'mx-auto text-center' : 'text-left'
                   )}
                 >
@@ -261,6 +331,7 @@ export function UniversalHero({
                   className={clsx(
                     'hidden w-full max-w-2xl items-center gap-3 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-sm font-semibold shadow-sm backdrop-blur-sm lg:flex',
                     presetStyles.reviewPill,
+                    'text-[#271b45]',
                     isCenter ? 'mx-auto justify-center text-center' : 'justify-start text-left'
                   )}
                 >
@@ -299,8 +370,9 @@ export function UniversalHero({
               <HeadingTag
                 className={clsx(
                   preTitleLabel
-                    ? 'mt-3 text-[2.125rem] font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl'
-                    : 'mt-5 text-[2.125rem] font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl',
+                    ? 'mt-3 text-[2.125rem] font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl'
+                    : 'mt-5 text-[2.125rem] font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl',
+                  isPastel ? 'text-[#17112f]' : 'text-white',
                   shouldRenderMedia ? 'max-w-none' : 'max-w-[18ch] lg:max-w-none'
                 )}
               >
@@ -308,7 +380,7 @@ export function UniversalHero({
                 {highlightTitle && (
                   <>
                     {' '}
-                    <span className="block text-white">{highlightTitle}</span>
+                    <span className={clsx('block', isPastel ? 'text-[#6333d5]' : 'text-white')}>{highlightTitle}</span>
                   </>
                 )}
               </HeadingTag>
@@ -335,7 +407,8 @@ export function UniversalHero({
             {subtitle && !shouldRenderMedia && (
               <p
                 className={clsx(
-                  'mt-4 px-0 py-0 text-lg leading-relaxed text-white/85 sm:max-w-[52ch] sm:text-xl',
+                  'mt-4 px-0 py-0 text-lg leading-relaxed sm:max-w-[52ch] sm:text-xl',
+                  isPastel ? 'text-[#5f5871]' : 'text-white/85',
                   shouldRenderMedia ? 'w-auto lg:w-full' : 'w-full',
                   isCenter && 'sm:mx-auto'
                 )}
@@ -345,7 +418,7 @@ export function UniversalHero({
             )}
 
             {subtitle && shouldRenderMedia && (
-              <p className={clsx(SUBTITLE_CLASSES, isCenter && 'sm:mx-auto')}>{subtitle}</p>
+              <p className={clsx(SUBTITLE_CLASSES, isPastel && 'text-[#5f5871]', isCenter && 'sm:mx-auto')}>{subtitle}</p>
             )}
 
             {(primaryCta || secondaryCta || actionsSlot) && (
@@ -382,9 +455,9 @@ export function UniversalHero({
             )}
 
             {feature && (
-              <div className="mt-6 flex w-full items-start gap-2 text-base font-medium text-white/85 sm:text-lg">
-                <RiCheckLine className="mt-0.5 h-5 w-5 flex-none text-white" aria-hidden="true" />
-                <span className="text-white/85">{feature}</span>
+              <div className={clsx('mt-6 flex w-full items-start gap-2 text-base font-medium sm:text-lg', isPastel ? 'text-[#443a59]' : 'text-white/85')}>
+                <RiCheckLine className={clsx('mt-0.5 h-5 w-5 flex-none', isPastel ? 'text-[#6333d5]' : 'text-white')} aria-hidden="true" />
+                <span>{feature}</span>
               </div>
             )}
 
@@ -398,8 +471,10 @@ export function UniversalHero({
 
             {children}
 
+            <HeroBenefitGrid />
+
             {shouldShowUsageCounter && (
-              <div className={clsx('mt-5 w-full', presetStyles.usageText)}>
+              <div className="mt-5 w-full text-[#271b45]">
                 <UsageTodayCounter />
               </div>
             )}

@@ -15,6 +15,7 @@ import {
 } from '@/lib/seo/eviction-authority';
 import { CommercialSeoNextStep } from '@/components/seo/CommercialSeoNextStep';
 import { Reveal, StaggerReveal } from '@/components/marketing/PremiumMotion';
+import { getUniversalHeroImageForPath } from '@/config/universal-hero-images';
 
 export interface IntentSection {
   title: string;
@@ -88,6 +89,9 @@ export function HighIntentPageShell(props: HighIntentPageShellProps) {
       <StructuredData data={howToSchema} />
 
       <UniversalHero
+        variant="pastel"
+        backgroundImageSrc={getUniversalHeroImageForPath(`/${props.slug}`)}
+        hideMedia
         title={props.heroTitle}
         subtitle={props.heroSubtitle}
         primaryCta={props.primaryCta}
@@ -97,12 +101,12 @@ export function HighIntentPageShell(props: HighIntentPageShellProps) {
         showReviewPill
         showTrustPositioningBar
       >
-        <ul className="mt-6 space-y-2 text-sm text-white/90 md:text-base">
+        <ul className="mt-6 space-y-2 text-sm text-[#443a59] md:text-base">
           {props.heroBullets.map((bullet) => (
             <li key={bullet} className="flex items-start gap-3">
               <span
                 aria-hidden="true"
-                className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-white/90"
+                className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-[#7040d1]"
               />
               <span>{bullet}</span>
             </li>

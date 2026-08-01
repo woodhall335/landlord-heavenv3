@@ -2,6 +2,7 @@ import { Container } from "@/components/ui";
 import { generateMetadata } from "@/lib/seo";
 import { StructuredData, breadcrumbSchema } from "@/lib/seo/structured-data";
 import { AlertTriangle } from "lucide-react";
+import { UniversalHero } from "@/components/landing/UniversalHero";
 
 export const metadata = generateMetadata({
   title: "Terms and Conditions | Landlord Heaven Services",
@@ -25,20 +26,15 @@ export default function TermsPage() {
           { name: "Terms and Conditions", url: "/terms" },
         ])}
       />
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">Legal</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Terms & Conditions</h1>
-            <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              Please read these terms carefully before using our services
-            </p>
-          </div>
-        </Container>
-      </section>
+      <UniversalHero
+        variant="pastel"
+        preset="content_index"
+        preTitleLabel="Legal"
+        title="Terms & Conditions"
+        subtitle="Please read these terms carefully before using our services."
+        trustText="Clear terms for accounts, checkout, document delivery and permitted use"
+        hideMedia
+      />
 
       <Container size="medium" className="py-12">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 md:p-12">

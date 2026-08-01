@@ -20,6 +20,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
 import { CommercialSeoTrackedCta } from '@/components/seo/CommercialSeoTrackedCta';
+import { MARKETING_ILLUSTRATIONS } from '@/config/marketing-illustrations';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import { getProductSamplePageByPackKey } from '@/lib/marketing/product-sample-pages';
 import { PRODUCTS } from '@/lib/pricing/products';
@@ -59,10 +60,10 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: getCanonicalUrl('/images/section-8-hero.webp'),
-        width: 1024,
-        height: 1024,
-        alt: 'Section 8 notice preparation pack for England landlords',
+        url: getCanonicalUrl('/images/section8-paid-hero-watercolor-v2.webp'),
+        width: 1823,
+        height: 863,
+        alt: 'Section 8 notice preparation for England landlords',
       },
     ],
   },
@@ -70,7 +71,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Section 8 Notice Generator for England Landlords',
     description: 'Preview your Form 3A notice and service file before paying £39.99.',
-    images: [getCanonicalUrl('/images/section-8-hero.webp')],
+    images: [getCanonicalUrl('/images/section8-paid-hero-watercolor-v2.webp')],
   },
 };
 
@@ -145,38 +146,54 @@ const grounds = [
     code: '8',
     title: 'Serious rent arrears',
     copy: 'For arrears that meet the current mandatory threshold when the notice is served and at the hearing.',
-    image: '/images/tenant-is-not-paying-rent.webp',
-    imageAlt: 'Landlord reviewing evidence of unpaid rent',
+    image: MARKETING_ILLUSTRATIONS.section8.grounds.seriousArrears,
   },
   {
     code: '10',
     title: 'Rent remains unpaid',
     copy: 'A discretionary rent-arrears ground that may apply even where the mandatory threshold is not met.',
-    image: '/images/the-court-looks-at-the-notice-first.webp',
-    imageAlt: 'Court review of a landlord possession notice',
+    image: MARKETING_ILLUSTRATIONS.section8.grounds.unpaidRent,
   },
   {
     code: '11',
     title: 'Persistent rent arrears',
     copy: 'For an evidenced history of repeatedly delayed rent payments or recurring arrears.',
-    image: '/images/tenant-keeps-paying-late.webp',
-    imageAlt: 'Landlord reviewing a history of late rent payments',
+    image: MARKETING_ILLUSTRATIONS.section8.grounds.persistentArrears,
   },
   {
     code: '12',
     title: 'Breach of tenancy',
     copy: 'For a supported breach of a tenancy obligation other than the obligation to pay rent.',
-    image: '/images/tenant-has-broken-the-tenancy-or-caused-damage.webp',
-    imageAlt: 'Evidence of a broken tenancy term or property damage',
+    image: MARKETING_ILLUSTRATIONS.section8.grounds.breachOfTenancy,
   },
   {
     code: '14',
     title: 'Antisocial behaviour',
     copy: 'For evidenced nuisance, annoyance, illegal use or antisocial behaviour connected with the property.',
-    image: '/images/specialist-housing-or-employment-case.webp',
-    imageAlt: 'Landlord reviewing an antisocial behaviour case',
+    image: MARKETING_ILLUSTRATIONS.section8.grounds.antisocialBehaviour,
   },
 ];
+
+const noticeProcessSteps = [
+  {
+    number: '01',
+    title: 'Answer guided questions',
+    copy: 'Tell us about the tenancy, the issue, the grounds you are considering and the facts behind them.',
+    image: MARKETING_ILLUSTRATIONS.section8.process.guidedQuestions,
+  },
+  {
+    number: '02',
+    title: 'Review the legal checks',
+    copy: 'Check the dates, grounds, particulars, arrears figures and service assumptions before proceeding.',
+    image: MARKETING_ILLUSTRATIONS.section8.process.legalChecks,
+  },
+  {
+    number: '03',
+    title: 'Preview, pay and serve',
+    copy: 'Review the watermarked file before checkout, then download the purchased documents and follow the service guidance.',
+    image: MARKETING_ILLUSTRATIONS.section8.process.previewAndServe,
+  },
+] as const;
 
 const faqs: FAQItem[] = [
   {
@@ -229,8 +246,17 @@ export default function EvictionNoticePaidLandingPage() {
       <HeaderConfig mode="solid" />
 
       <div className="overflow-hidden bg-white text-[#17112f]">
-        <section className="relative border-b border-[#e9e2f7] bg-[linear-gradient(135deg,#ffffff_0%,#fbf9ff_48%,#f2ecff_100%)]">
-          <div className="pointer-events-none absolute inset-0 opacity-70 [background-image:radial-gradient(circle_at_82%_18%,rgba(136,91,255,0.16),transparent_30%),radial-gradient(circle_at_60%_80%,rgba(202,183,255,0.20),transparent_34%)]" />
+        <section className="relative border-b border-[#e9e2f7] bg-white">
+          <Image
+            src="/images/section8-paid-hero-watercolor-v2.webp"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="pointer-events-none object-cover object-center opacity-80"
+            aria-hidden
+          />
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.98)_0%,rgba(255,255,255,0.94)_38%,rgba(255,255,255,0.62)_57%,rgba(255,255,255,0.05)_100%)]" />
           <div className="relative mx-auto max-w-7xl px-5 pb-12 pt-6 md:px-8 md:pb-16 lg:pb-20">
             <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-[#6b647c]">
               <Link href="/" className="transition hover:text-primary">Home</Link>
@@ -240,7 +266,21 @@ export default function EvictionNoticePaidLandingPage() {
               <span className="font-medium text-[#2d2447]">Section 8 notice</span>
             </nav>
 
-            <div className="mt-8 grid items-center gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:gap-8">
+            <p
+              data-testid="hero-review-pill-desktop"
+              className="mt-4 hidden w-full max-w-[46rem] rounded-full border border-white/55 bg-white/92 px-4 py-2.5 text-left text-sm font-semibold text-[#271b45] shadow-[0_24px_60px_rgba(30,13,64,0.18)] backdrop-blur-md lg:block"
+            >
+              <span className="flex items-start justify-start gap-3 leading-5">
+                <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#7c3aed]" aria-hidden />
+                <span data-testid="hero-review-pill-trust">England landlord documents checked before you serve, file, or raise rent</span>
+              </span>
+              <span data-testid="hero-review-pill-meta" className="mt-1.5 flex items-center gap-3 pl-8 leading-5">
+                <span className="shrink-0 text-[#facc15]" aria-hidden>★★★★★</span>
+                <span className="shrink-0 font-medium text-[#2b253d]">4.8/5 | 2095 reviews</span>
+              </span>
+            </p>
+
+            <div className="mt-6 grid items-center gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:gap-8">
               <div className="relative z-10">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#6941c6]">
                   England Form 3A notice and service file
@@ -363,15 +403,16 @@ export default function EvictionNoticePaidLandingPage() {
               <p className="mt-4 text-lg leading-8 text-[#655e72]">Unpaid rent, damage and repeated breaches can become more expensive while nothing changes. The answer is not rushed paperwork—it is a notice built around the facts you can support.</p>
             </div>
             <div className="mt-12 grid gap-5 md:grid-cols-3">
-              {[
-                ['01', 'Answer guided questions', 'Tell us about the tenancy, the issue, the grounds you are considering and the facts behind them.'],
-                ['02', 'Review the legal checks', 'Check the dates, grounds, particulars, arrears figures and service assumptions before proceeding.'],
-                ['03', 'Preview, pay and serve', 'Review the watermarked file before checkout, then download the purchased documents and follow the service guidance.'],
-              ].map(([number, title, copy]) => (
-                <article key={number} className="relative rounded-2xl border border-[#e4dcf5] bg-[#fcfbff] p-6 shadow-[0_12px_36px_rgba(76,29,149,0.06)]">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#efe8ff] text-sm font-bold text-[#6534c7]">{number}</span>
-                  <h3 className="mt-5 text-xl font-bold text-[#21173c]">{title}</h3>
-                  <p className="mt-3 leading-7 text-[#686174]">{copy}</p>
+              {noticeProcessSteps.map(({ number, title, copy, image }) => (
+                <article key={number} className="group relative overflow-hidden rounded-2xl border border-[#e4dcf5] bg-[#fcfbff] shadow-[0_12px_36px_rgba(76,29,149,0.06)]">
+                  <div className="relative aspect-[4/3] overflow-hidden border-b border-[#eee8f8] bg-white">
+                    <Image src={image.src} alt={image.alt} fill className="object-contain p-2 transition duration-500 group-hover:scale-[1.025]" sizes="(max-width: 768px) 92vw, 31vw" />
+                  </div>
+                  <div className="p-6">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#efe8ff] text-sm font-bold text-[#6534c7]">{number}</span>
+                    <h3 className="mt-5 text-xl font-bold text-[#21173c]">{title}</h3>
+                    <p className="mt-3 leading-7 text-[#686174]">{copy}</p>
+                  </div>
                 </article>
               ))}
             </div>
@@ -429,31 +470,74 @@ export default function EvictionNoticePaidLandingPage() {
               <h2 id="grounds-title" className="mt-3 text-3xl font-bold tracking-[-0.035em] md:text-4xl">Build the eviction notice around the facts you can prove.</h2>
               <p className="mt-4 text-lg leading-8 text-[#655e72]">The generator explains common grounds and helps you record the particulars and evidence. Select a ground only where the current facts support it.</p>
             </div>
-            <div className="mt-9 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-              {grounds.map((ground) => (
-                <article key={ground.code} className="group overflow-hidden rounded-2xl border border-[#e4dcf5] bg-white shadow-[0_12px_36px_rgba(76,29,149,0.06)]">
-                  <Image src={ground.image} alt={ground.imageAlt} width={768} height={512} className="aspect-[16/9] w-full object-cover transition duration-500 group-hover:scale-[1.025]" />
-                  <div className="p-5">
-                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#7040d1]">Ground {ground.code}</p>
-                    <h3 className="mt-2 text-xl font-bold text-[#21173c]">{ground.title}</h3>
-                    <p className="mt-2 min-h-[72px] text-sm leading-6 text-[#6c6579]">{ground.copy}</p>
-                    <CommercialSeoTrackedCta
-                      href={ctaHref(ground.code)}
-                      label={`Start Ground ${ground.code} notice`}
-                      className="mt-4 inline-flex items-center font-bold text-[#6031bf] transition hover:text-[#441b99]"
-                      variant="secondary"
-                      sourcePage={sourcePage}
-                      pageType="paid_landing_page"
-                      intent={`section_8_ground_${ground.code}`}
-                      ctaPosition="grounds"
-                      recommendedProduct="notice_only"
-                    >
-                      Start with Ground {ground.code}<ArrowRight className="ml-1.5 h-4 w-4" aria-hidden />
-                    </CommercialSeoTrackedCta>
-                  </div>
-                </article>
-              ))}
+            <div className="mt-9 grid items-center gap-8 lg:grid-cols-[1.08fr_0.92fr]">
+              <div className="overflow-hidden rounded-2xl border border-[#e4dcf5] bg-white shadow-[0_16px_42px_rgba(76,29,149,0.07)]">
+                {grounds.map((ground, index) => (
+                  <article key={ground.code} className={index ? 'border-t border-[#eee8f8] p-5 sm:p-6' : 'p-5 sm:p-6'}>
+                    <div className="flex gap-4">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#d8cafa] bg-[#f3efff] text-sm font-bold text-[#6031bf]">{ground.code}</span>
+                      <div className="relative hidden h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-[#eee8f8] bg-[#fcfbff] sm:block">
+                        <Image src={ground.image.src} alt={ground.image.alt} fill className="object-contain p-1" sizes="80px" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                          <h3 className="text-lg font-bold text-[#21173c]">{ground.title}</h3>
+                          <CommercialSeoTrackedCta
+                            href={ctaHref(ground.code)}
+                            label={`Start Ground ${ground.code} notice`}
+                            className="inline-flex shrink-0 items-center text-sm font-bold text-[#6031bf] transition hover:text-[#441b99]"
+                            variant="secondary"
+                            sourcePage={sourcePage}
+                            pageType="paid_landing_page"
+                            intent={`section_8_ground_${ground.code}`}
+                            ctaPosition="grounds"
+                            recommendedProduct="notice_only"
+                          >Start Ground {ground.code}<ArrowRight className="ml-1.5 h-4 w-4" aria-hidden /></CommercialSeoTrackedCta>
+                        </div>
+                        <p className="mt-2 text-sm leading-6 text-[#6c6579]">{ground.copy}</p>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="relative mx-auto w-full max-w-[520px]">
+                <Image
+                  src="/images/section8-legal-checks-watercolor-v2.webp"
+                  alt="Illustration of a checked possession notice, rental property, key and service evidence"
+                  width={1254}
+                  height={1254}
+                  className="h-auto w-full"
+                  sizes="(max-width: 1024px) 90vw, 42vw"
+                />
+                <div className="mx-auto -mt-6 max-w-sm rounded-2xl border border-[#e0d7f1] bg-white/90 p-4 text-center shadow-[0_14px_36px_rgba(76,29,149,0.08)] backdrop-blur">
+                  <p className="font-bold text-[#2b2045]">Grounds still depend on your facts.</p>
+                  <p className="mt-1 text-sm leading-6 text-[#6c6579]">The workflow helps organise the particulars and checks; it does not guarantee that a court will grant possession.</p>
+                </div>
+              </div>
             </div>
+          </div>
+        </section>
+
+        <section className="border-y border-[#eee8f8] bg-white py-14 md:py-16">
+          <div className="mx-auto grid max-w-7xl items-center gap-8 px-5 md:px-8 lg:grid-cols-[0.78fr_1.22fr]">
+            <div className="max-w-xl">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#7040d1]">Your notice-stage workspace</p>
+              <h2 className="mt-3 text-3xl font-bold tracking-[-0.035em] md:text-4xl">Your file stays organised from first answer to service.</h2>
+              <p className="mt-4 text-lg leading-8 text-[#655e72]">Answers, grounds, dates, arrears and documents stay together in one case so you can review the position before the notice goes to the tenant.</p>
+              <ul className="mt-6 space-y-3">
+                {['Return to the saved case and update your answers', 'Keep the notice, service record and arrears figures aligned', 'Review the watermarked output before checkout', 'Download the purchased file from your dashboard'].map((item) => (
+                  <li key={item} className="flex gap-3 text-[#3f3750]"><CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-[#7040d1]" aria-hidden />{item}</li>
+                ))}
+              </ul>
+            </div>
+            <Image
+              src="/images/section8-workspace-watercolor-v2.webp"
+              alt="Illustration of an organised landlord document workspace with an England rental property"
+              width={1821}
+              height={864}
+              className="h-auto w-full"
+              sizes="(max-width: 1024px) 94vw, 58vw"
+            />
           </div>
         </section>
 
@@ -480,6 +564,9 @@ export default function EvictionNoticePaidLandingPage() {
                 <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#7040d1]">Stage 1</p>
                 <h3 className="mt-3 text-2xl font-bold">Notice & Service Pack</h3>
                 <p className="mt-3 text-4xl font-bold text-[#5322b3]">{PRODUCTS.notice_only.displayPrice}</p>
+                <div className="relative mt-5 aspect-[16/8] overflow-hidden rounded-2xl border border-[#eee8f8] bg-[#fcfbff]">
+                  <Image src={MARKETING_ILLUSTRATIONS.section8.stages.noticeAndService.src} alt={MARKETING_ILLUSTRATIONS.section8.stages.noticeAndService.alt} fill className="object-contain p-2" sizes="(max-width: 1024px) 92vw, 44vw" />
+                </div>
                 <p className="mt-4 leading-7 text-[#655e72]">Choose this when your immediate job is preparing and serving the Section 8 notice correctly.</p>
                 <ul className="mt-5 space-y-3 text-sm text-[#3f3750]">
                   {['Form 3A notice and selected grounds', 'N215 service record and instructions', 'Arrears schedule, checks and case summary', 'Watermarked preview before checkout'].map((item) => <li key={item} className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" aria-hidden />{item}</li>)}
@@ -501,6 +588,9 @@ export default function EvictionNoticePaidLandingPage() {
                 <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#746d82]">Stage 2</p>
                 <h3 className="mt-3 text-2xl font-bold">Court & Possession Pack</h3>
                 <p className="mt-3 text-4xl font-bold text-[#21173c]">{PRODUCTS.complete_pack.displayPrice}</p>
+                <div className="relative mt-5 aspect-[16/8] overflow-hidden rounded-2xl border border-[#eee8f8] bg-[#fcfbff]">
+                  <Image src={MARKETING_ILLUSTRATIONS.section8.stages.courtAndPossession.src} alt={MARKETING_ILLUSTRATIONS.section8.stages.courtAndPossession.alt} fill className="object-contain p-2" sizes="(max-width: 1024px) 92vw, 44vw" />
+                </div>
                 <p className="mt-4 leading-7 text-[#655e72]">Choose this if you already expect a possession claim and want the notice plus N5, N119 and court-stage file.</p>
                 <ul className="mt-5 space-y-3 text-sm text-[#3f3750]">
                   {['Everything in the notice stage', 'N5 and N119 possession claim forms', 'Witness statement and evidence support', 'Court bundle and hearing preparation'].map((item) => <li key={item} className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-[#7040d1]" aria-hidden />{item}</li>)}
@@ -520,23 +610,28 @@ export default function EvictionNoticePaidLandingPage() {
         <section className="px-5 pb-16 md:px-8 md:pb-20">
           <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[1.75rem] bg-[linear-gradient(135deg,#24124f,#4c1f8f_58%,#6f2bd1)] px-6 py-10 text-white shadow-[0_24px_60px_rgba(45,17,91,0.24)] md:px-10 md:py-12">
             <div className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-violet-300/20 blur-3xl" />
-            <div className="relative flex flex-col gap-7 lg:flex-row lg:items-center lg:justify-between">
+            <div className="relative grid gap-8 lg:grid-cols-[1fr_21rem] lg:items-center">
               <div className="max-w-3xl">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#d9c9ff]">Make the next move with a clearer file</p>
                 <h2 className="mt-3 text-3xl font-bold tracking-[-0.035em] md:text-4xl">Do not let avoidable paperwork mistakes add to the delay.</h2>
                 <p className="mt-4 text-lg leading-8 text-white/80">Prepare the Section 8 notice, supporting checks and service record together. Preview the generated file before paying {PRODUCTS.notice_only.displayPrice}.</p>
               </div>
-              <CommercialSeoTrackedCta
-                href={ctaHref()}
-                label="Start my notice — preview first"
-                className="inline-flex min-h-14 shrink-0 items-center justify-center rounded-xl bg-white px-6 py-3.5 font-bold text-[#3e197e] shadow-lg transition hover:-translate-y-0.5 hover:bg-[#f7f2ff]"
-                variant="primary"
-                sourcePage={sourcePage}
-                pageType="paid_landing_page"
-                intent="section_8_eviction_notice"
-                ctaPosition="final"
-                recommendedProduct="notice_only"
-              >Start my notice — preview first<ArrowRight className="ml-2 h-5 w-5" aria-hidden /></CommercialSeoTrackedCta>
+              <div>
+                <div className="relative mb-4 aspect-[16/9] overflow-hidden rounded-2xl border border-white/20 bg-white/95 shadow-xl">
+                  <Image src={MARKETING_ILLUSTRATIONS.section8.finalClearerFile.src} alt={MARKETING_ILLUSTRATIONS.section8.finalClearerFile.alt} fill className="object-contain p-2" sizes="(max-width: 1024px) 92vw, 336px" />
+                </div>
+                <CommercialSeoTrackedCta
+                  href={ctaHref()}
+                  label="Start my notice — preview first"
+                  className="inline-flex min-h-14 w-full items-center justify-center rounded-xl bg-white px-6 py-3.5 font-bold text-[#3e197e] shadow-lg transition hover:-translate-y-0.5 hover:bg-[#f7f2ff]"
+                  variant="primary"
+                  sourcePage={sourcePage}
+                  pageType="paid_landing_page"
+                  intent="section_8_eviction_notice"
+                  ctaPosition="final"
+                  recommendedProduct="notice_only"
+                >Start my notice — preview first<ArrowRight className="ml-2 h-5 w-5" aria-hidden /></CommercialSeoTrackedCta>
+              </div>
             </div>
             <p className="relative mt-6 border-t border-white/15 pt-5 text-sm leading-6 text-white/65">Important: this is procedural document preparation, not legal advice. Take legal advice before serving where the facts are disputed, the tenancy is unusual or you expect a defence.</p>
           </div>

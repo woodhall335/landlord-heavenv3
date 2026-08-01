@@ -6,6 +6,7 @@ import { RiArrowRightLine, RiCheckLine } from 'react-icons/ri';
 import { ProductPageTracker } from '@/components/analytics/ProductPageTracker';
 import { ProductPrimaryActions } from '@/components/analytics/ProductPrimaryActions';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { getUniversalHeroImageForPath } from '@/config/universal-hero-images';
 import { FAQSection } from '@/components/seo/FAQSection';
 import type {
   ProductSalesCard,
@@ -452,6 +453,9 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
 
       <UniversalHero
         {...content.hero}
+        variant="pastel"
+        backgroundImageSrc={content.hero.backgroundImageSrc ?? getUniversalHeroImageForPath(analytics?.pagePath ?? '')}
+        hideMedia
         primaryCta={analytics?.pageType === 'product_page' ? undefined : content.hero.primaryCta}
         secondaryCta={analytics?.pageType === 'product_page' ? undefined : content.hero.secondaryCta}
         showTrustPositioningBar={

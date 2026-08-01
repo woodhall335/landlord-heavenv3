@@ -145,6 +145,10 @@ export default function NorthernIrelandTenancyPage() {
 
       <main className="min-h-screen bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <UniversalHero
+          variant="pastel"
+          backgroundImageKey="tenancyNorthernIreland"
+          backgroundImageAlt="Watercolour illustration of a Northern Ireland tenancy agreement and Belfast landmarks"
+          hideMedia
           preTitleLabel="Northern Ireland tenancy agreements"
           trustText="One released standard Private Tenancy Agreement route for Northern Ireland landlords."
           title="Private Tenancy Agreement for Northern Ireland"
@@ -158,8 +162,6 @@ export default function NorthernIrelandTenancyPage() {
             href: '/standard-tenancy-agreement#choose-jurisdiction',
           }}
           feature="For Northern Ireland property. England, Wales and Scotland use different agreement routes."
-          mediaSrc="/images/tenancy_agreements.webp"
-          mediaAlt="Northern Ireland private tenancy agreement documents"
           showTrustPositioningBar
         />
 

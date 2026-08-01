@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 describe('pricing page product mapping', () => {
-  it('shows the full current 10-product catalogue', () => {
+  it('shows the full current 13-card catalogue across products and jurisdictions', () => {
     expect(PRICING_PACKAGE_CARDS.map((card) => card.productSku)).toEqual([
       'notice_only',
       'complete_pack',
@@ -13,6 +13,9 @@ describe('pricing page product mapping', () => {
       'section13_defensive',
       'england_standard_tenancy_agreement',
       'england_premium_tenancy_agreement',
+      'ast_standard',
+      'ast_standard',
+      'ast_standard',
       'england_student_tenancy_agreement',
       'england_hmo_shared_house_tenancy_agreement',
       'england_lodger_agreement',

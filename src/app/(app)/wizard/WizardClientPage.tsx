@@ -326,6 +326,10 @@ export default function WizardClientPage() {
         {...wizardHeroConfig}
         ariaLabel={WIZARD_ENTRY_TITLE}
         showUsageCounter={false}
+        variant="pastel"
+        backgroundImageKey="wizardDashboard"
+        backgroundImageAlt="Watercolour illustration of a guided landlord document workspace"
+        hideMedia
       >
         <p className="sr-only">{WIZARD_ENTRY_SUBTITLE}</p>
       </UniversalHero>

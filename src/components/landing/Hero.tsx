@@ -19,6 +19,10 @@ export function Hero() {
   return (
     <UniversalHero
       {...heroProps}
+      variant="pastel"
+      backgroundImageKey="homepage"
+      backgroundImageAlt="Watercolour illustration of UK landlord documents and Westminster"
+      hideMedia
       actionsSlot={
         primaryCta ? (
           <div className="w-full sm:w-auto">

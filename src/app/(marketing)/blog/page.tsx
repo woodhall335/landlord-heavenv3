@@ -128,7 +128,12 @@ export default function BlogPage() {
       <StructuredData data={blogSchema} />
 
       <main className="overflow-x-clip">
-        <UniversalHero {...blogHeroConfig} />
+        <UniversalHero
+          {...blogHeroConfig}
+          variant="pastel"
+          backgroundImageKey="blogEviction"
+          backgroundImageAlt="Watercolour illustration of landlord eviction guides and court-ready documents"
+        />
 
         <section className="border-b border-[#ede2ff] bg-[#f8f1ff]/70 py-8 lg:py-11">
           <div className="container mx-auto px-4">
