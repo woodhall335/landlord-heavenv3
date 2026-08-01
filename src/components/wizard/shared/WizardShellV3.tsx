@@ -120,8 +120,8 @@ export function WizardShellV3({
         </div>
       ) : null}
       {artwork.right ? (
-        <div className="pointer-events-none absolute bottom-0 right-[-5rem] top-[calc(var(--wizard-topbar-height)+2rem)] hidden w-[clamp(260px,25vw,400px)] 2xl:block" aria-hidden="true">
-          <Image src={artwork.right} alt="" fill sizes="400px" className="object-contain object-right opacity-55 2xl:opacity-70" priority />
+        <div className="pointer-events-none absolute bottom-0 right-[-3.5rem] top-[calc(var(--wizard-topbar-height)+1rem)] hidden w-[clamp(250px,24vw,390px)] xl:block" aria-hidden="true">
+          <Image src={artwork.right} alt="" fill sizes="390px" className="object-contain object-right opacity-60 2xl:opacity-72" priority />
         </div>
       ) : null}
 
