@@ -94,7 +94,7 @@ export function WizardShellV3({
 
   return (
     <div
-      className="wizard-ui-v3 relative min-h-screen overflow-hidden"
+      className="wizard-ui-v3 relative min-h-screen overflow-x-clip"
       style={{
         backgroundColor: '#f8f4ff',
         backgroundImage:
@@ -120,8 +120,11 @@ export function WizardShellV3({
         </div>
       ) : null}
       {artwork.right ? (
-        <div className="pointer-events-none absolute bottom-0 right-[-3.5rem] top-[calc(var(--wizard-topbar-height)+1rem)] hidden w-[clamp(250px,24vw,390px)] xl:block" aria-hidden="true">
-          <Image src={artwork.right} alt="" fill sizes="390px" className="object-contain object-right opacity-60 2xl:opacity-72" priority />
+        <div
+          className="pointer-events-none fixed bottom-[-4rem] right-[-10rem] top-[calc(var(--site-header-height)+var(--s21-banner-height)+var(--wizard-topbar-height)-1rem)] hidden w-[clamp(520px,43vw,760px)] xl:block"
+          aria-hidden="true"
+        >
+          <Image src={artwork.right} alt="" fill sizes="760px" className="object-contain object-right opacity-65 2xl:opacity-75" priority />
         </div>
       ) : null}
 
@@ -150,7 +153,7 @@ export function WizardShellV3({
         </WizardMainCardV3>
 
         <aside className="hidden w-full min-h-0 shrink-0 lg:block lg:self-start lg:w-[260px]">
-          <div className="lg:sticky lg:top-[calc(var(--site-header-height)+var(--s21-banner-height)+var(--wizard-topbar-height)+8px)]">
+          <div className="lg:sticky lg:top-[calc(var(--site-header-height)+var(--s21-banner-height)+var(--wizard-topbar-height)+16px)]">
             {resolvedGuidancePanel}
           </div>
         </aside>

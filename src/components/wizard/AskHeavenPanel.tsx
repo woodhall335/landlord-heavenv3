@@ -125,11 +125,12 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
   const renderPanelContent = () => (
     <Card
       padding="none"
-      className="ask-heaven-panel rounded-2xl border border-[#e4d8fa] bg-white/95 shadow-[0_14px_36px_rgba(76,29,149,0.10)] backdrop-blur"
+      className="ask-heaven-panel relative overflow-hidden rounded-[1.5rem] border border-[#e4dcf5] bg-white/95 shadow-[0_18px_55px_rgba(76,29,149,0.09)] backdrop-blur-sm"
       style={{ padding: '16px' }}
     >
+      <div className="pointer-events-none absolute inset-[1px] rounded-[inherit] border border-white/70" />
       {/* Header */}
-      <div className="flex items-start gap-3">
+      <div className="relative z-10 flex items-start gap-3">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-violet-50 ring-1 ring-violet-100">
           <RiSparklingLine className="h-5 w-5 text-violet-600" />
         </div>
@@ -142,7 +143,7 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
       </div>
 
       {/* Q&A helper */}
-      <div className="mt-3 border-t border-violet-100 pt-3">
+      <div className="relative z-10 mt-3 border-t border-[#eee8f8] pt-3">
         <div className="hidden">
           <RiChat1Line className="h-3.5 w-3.5 text-violet-600" />
           <span>Ask questions</span>
