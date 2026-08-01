@@ -95,7 +95,7 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
 
   useEffect(() => {
     if (isWizardFlowRoute) {
-      setEffectiveHeaderState('transparent');
+      setEffectiveHeaderState('solid');
       return;
     }
 
@@ -226,9 +226,9 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
 
   const user = clientUser;
 
-  const useWizardDarkHeader = isWizardFlowRoute;
+  const useWizardDarkHeader = false;
   const presentationHeaderState = open ? mobileMenuState : effectiveHeaderState;
-  const isSolid = presentationHeaderState === 'solid' && !useWizardDarkHeader;
+  const isSolid = presentationHeaderState === 'solid' || isWizardFlowRoute;
   const mobileMenuUsesLightSurface = !useWizardDarkHeader;
   const mobileMenuPanelClassName = mobileMenuUsesLightSurface
     ? 'border-gray-200 bg-white'
@@ -287,7 +287,9 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
         useWizardDarkHeader
           ? 'bg-[rgba(20,8,48,0.84)] border-b border-white/15 backdrop-blur-md'
           : isSolid
-            ? 'bg-white/96 border-b border-[#efe5ff] backdrop-blur-md'
+            ? isWizardFlowRoute
+              ? 'bg-[#ffffffdb] border-b border-[#e9e2f7] backdrop-blur-xl'
+              : 'bg-white/96 border-b border-[#efe5ff] backdrop-blur-md'
             : 'bg-transparent border-b border-transparent',
       )}
     >

@@ -6,8 +6,6 @@ interface WizardMainCardV3Props {
   sectionTitle: string;
   sectionDescription?: string;
   stepIconPath?: string;
-  stepNumber?: number;
-  totalSteps?: number;
   stepMotionKey?: string;
   banner?: React.ReactNode;
   showStepCarryForwardHint?: boolean;
@@ -20,8 +18,6 @@ export function WizardMainCardV3({
   sectionTitle,
   sectionDescription,
   stepIconPath,
-  stepNumber,
-  totalSteps,
   stepMotionKey,
   banner,
   children,
@@ -30,41 +26,31 @@ export function WizardMainCardV3({
   return (
     <main className="min-w-0 flex flex-1 flex-col lg:max-w-[860px]">
       {banner}
-      <div className="relative flex flex-col overflow-hidden rounded-[1.7rem] border border-[#e6dcff] bg-[linear-gradient(180deg,rgba(255,255,255,0.985),rgba(249,244,255,0.965))] shadow-[0_30px_90px_rgba(76,29,149,0.11)] backdrop-blur-sm md:rounded-[2rem]">
+      <div className="relative flex flex-col overflow-hidden rounded-2xl border border-[#e4dcf5] bg-white/95 shadow-[0_18px_55px_rgba(76,29,149,0.09)] backdrop-blur-sm md:rounded-[1.5rem]">
         <div className="pointer-events-none absolute inset-[1px] rounded-[inherit] border border-white/70" />
-        <div className="z-10 border-b border-[#eee6ff] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,242,255,0.97))] px-4 pb-5 pt-4 shadow-[0_12px_28px_rgba(76,29,149,0.05)] sm:px-5 sm:pb-6 sm:pt-5 md:px-8 md:pb-6 md:pt-6">
+        <div className="z-10 border-b border-[#eee8f8] bg-white/90 px-4 py-4 sm:px-5 md:px-7 md:py-5">
           {shellTitle ? (
-            <div className="mb-3 flex flex-wrap items-center gap-2.5">
+            <div className="mb-2 flex flex-wrap items-center gap-2.5">
               <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#7650cd] sm:text-[11px]">
                 {shellTitle}
               </div>
-              <span className="rounded-full border border-[#e4d8ff] bg-white/90 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#6944bf] shadow-sm">
-                Premium flow
+              <span className="rounded-full border border-[#e4d8ff] bg-[#faf8ff] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#6944bf]">
+                Guided flow
               </span>
             </div>
           ) : null}
-          <div className="mb-4 flex flex-wrap items-center gap-2.5">
-            {stepNumber && totalSteps ? (
-              <div className="inline-flex rounded-full border border-[#ddd1ff] bg-white/92 px-3 py-1.5 text-[11px] font-semibold text-[#5b36b3] shadow-sm sm:px-3.5 sm:text-xs">
-                Step {stepNumber} of {totalSteps}
-              </div>
-            ) : null}
-            <span className="inline-flex rounded-full border border-[#ece3ff] bg-[#fbf8ff] px-3 py-1.5 text-[11px] font-medium text-[#746b90] shadow-sm sm:text-xs">
-              Saved as you go
-            </span>
-          </div>
           <div key={`${stepMotionKey || sectionTitle}-header`} className="wizard-step-fade">
             <StepHeaderV3 title={sectionTitle} description={sectionDescription} iconPath={stepIconPath} />
           </div>
         </div>
 
-        <div className="min-h-0 px-4 pb-7 pt-5 sm:px-5 sm:pb-8 sm:pt-6 md:px-8 md:pb-9 md:pt-7">
-          <div key={stepMotionKey || sectionTitle} className="wizard-step-fade min-h-0 overflow-visible space-y-6">
+        <div className="min-h-0 px-4 py-4 sm:px-5 md:px-7 md:py-5">
+          <div key={stepMotionKey || sectionTitle} className="wizard-step-content wizard-step-fade min-h-0 overflow-visible space-y-4">
             {children}
           </div>
         </div>
 
-        <div className="sticky bottom-0 z-20 shrink-0 bg-[linear-gradient(180deg,rgba(252,249,255,0.72),rgba(247,241,255,0.985))] px-4 pb-[max(0.9rem,env(safe-area-inset-bottom))] pt-4 shadow-[0_-16px_40px_rgba(76,29,149,0.11)] backdrop-blur-xl sm:px-5 sm:pt-5 md:px-8">
+        <div className="sticky bottom-0 z-20 shrink-0 border-t border-[#eee8f8] bg-white/92 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 shadow-[0_-10px_28px_rgba(76,29,149,0.07)] backdrop-blur-xl sm:px-5 md:px-7">
           {navigation}
         </div>
       </div>

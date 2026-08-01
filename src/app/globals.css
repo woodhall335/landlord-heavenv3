@@ -814,8 +814,82 @@ div.ask-heaven-panel,
 
 :root {
   --site-header-height: 80px;
-  --wizard-topbar-height: 64px;
+  --wizard-topbar-height: 72px;
   --s21-banner-height: 0px;
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --wizard-topbar-height: 104px;
+  }
+}
+
+/* Shared wizard density, typography and form rhythm. */
+.wizard-ui-v3 {
+  color: #20103f;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.wizard-ui-v3 :where(label) {
+  color: #2d2342;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+}
+
+.wizard-ui-v3 :where(input:not([type='checkbox']):not([type='radio']):not([type='file']), select) {
+  min-height: 44px;
+  border-color: #ded5f2;
+  background-color: rgba(255, 255, 255, 0.96);
+  color: #201735;
+  font-size: 0.875rem;
+}
+
+.wizard-ui-v3 :where(textarea) {
+  border-color: #ded5f2;
+  background-color: rgba(255, 255, 255, 0.96);
+  color: #201735;
+  font-size: 0.875rem;
+  line-height: 1.35rem;
+}
+
+.wizard-ui-v3 :where(input, select, textarea):focus {
+  border-color: #7c3aed;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.13);
+}
+
+.wizard-ui-v3 .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 1rem !important;
+}
+
+.wizard-ui-v3 .gap-6 {
+  gap: 1rem !important;
+}
+
+.wizard-stepper-scroll {
+  scrollbar-width: none;
+}
+
+.wizard-stepper-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.wizard-ui-legacy {
+  background-color: #faf8ff !important;
+  background-image: linear-gradient(90deg, rgba(250, 248, 255, 0.9), rgba(255, 255, 255, 0.98)),
+    url('/images/wizard-northern-ireland-jurisdiction.webp') !important;
+  background-position: center, left bottom !important;
+  background-repeat: no-repeat !important;
+  background-size: cover, min(30vw, 380px) auto !important;
+}
+
+@media (max-width: 1279px) {
+  .wizard-ui-legacy {
+    background-image: linear-gradient(180deg, #faf8ff, #fff) !important;
+  }
 }
 
 /* When banner is visible, set the height variable */

@@ -3161,7 +3161,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   })();
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className={`wizard-ui-v3 wizard-ui-legacy min-h-screen bg-gray-50 wizard-jurisdiction-${jurisdiction || 'england'}`}>
       {/* Header with progress - sticky like section-based flows */}
       <header className="bg-white border-b border-gray-200 sticky top-20 z-10">
         <div className="max-w-5xl mx-auto px-4 py-4">

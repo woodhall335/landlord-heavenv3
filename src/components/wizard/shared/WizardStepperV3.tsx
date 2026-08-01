@@ -76,7 +76,7 @@ export function WizardStepperV3({ tabs, variant = 'surface' }: WizardStepperV3Pr
   }, [currentStepIndex, tabs.length]);
 
   return (
-    <div ref={containerRef} className="overflow-x-auto pb-1">
+    <div ref={containerRef} className="wizard-stepper-scroll overflow-x-auto pb-0.5">
       <ol className="flex min-w-max items-center">
         {tabs.map((tab, index) => {
           const isCurrent = tab.isCurrent;
@@ -105,17 +105,17 @@ export function WizardStepperV3({ tabs, variant = 'surface' }: WizardStepperV3Pr
                 aria-current={isCurrent ? 'step' : undefined}
                 data-step-id={tab.id}
                 className={[
-                  'group inline-flex items-center gap-2 text-left transition focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-300',
+                  'group inline-flex items-center gap-1.5 text-left transition focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-300',
                   isHeader
                     ? isCurrent
-                      ? 'rounded-full border border-[#ddceff] bg-white/88 px-2.5 py-1.5 shadow-sm'
-                      : 'rounded-full border border-transparent px-2.5 py-1.5 hover:border-[#e5dbff] hover:bg-white/55'
+                      ? 'rounded-lg border border-[#ddceff] bg-white/88 px-2 py-1 shadow-sm'
+                      : 'rounded-lg border border-transparent px-2 py-1 hover:border-[#e5dbff] hover:bg-white/55'
                     : 'rounded-xl px-2 py-1.5',
                 ].join(' ')}
               >
                 <span
                   className={[
-                    'inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold transition',
+                    'inline-flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-semibold transition',
                     isCurrent
                       ? 'bg-[linear-gradient(180deg,#7c3aed_0%,#5b21b6_100%)] text-white ring-2 ring-[#d7c6ff]'
                       : isComplete
@@ -138,7 +138,7 @@ export function WizardStepperV3({ tabs, variant = 'surface' }: WizardStepperV3Pr
                 <span
                   className={[
                     'max-w-[156px] truncate font-medium',
-                    isHeader ? 'text-sm' : 'text-sm',
+                    isHeader ? 'text-xs xl:text-[13px]' : 'text-sm',
                   isCurrent
                     ? isHeader
                         ? 'text-[#231246]'
@@ -157,7 +157,7 @@ export function WizardStepperV3({ tabs, variant = 'surface' }: WizardStepperV3Pr
               </button>
 
               {index < tabs.length - 1 ? (
-                <span className={`mx-2 h-px w-8 ${connectorClass}`} aria-hidden="true" />
+                <span className={`mx-1.5 h-px w-5 xl:w-7 ${connectorClass}`} aria-hidden="true" />
               ) : null}
             </li>
           );

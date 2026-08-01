@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { Button, Card } from '@/components/ui';
 import { RiSparklingLine, RiChat1Line, RiLoader4Line, RiErrorWarningLine } from 'react-icons/ri';
 import type { Jurisdiction } from '@/lib/jurisdiction/types';
-import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
 import {
   getTenancyAgreementLabel,
   getTenancyAskHeavenPlaceholder,
@@ -126,35 +125,29 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
   const renderPanelContent = () => (
     <Card
       padding="none"
-      className={
-        isWizardThemeV2
-          ? "ask-heaven-panel rounded-xl shadow-[0_10px_26px_rgba(76,29,149,0.08)] border border-violet-200/70 bg-white/95 backdrop-blur"
-          : "ask-heaven-panel shadow-xl border border-primary/20 bg-white/95 backdrop-blur"
-      }
-      style={{ paddingTop: '48px', paddingLeft: '24px', paddingRight: '24px', paddingBottom: '24px' }}
+      className="ask-heaven-panel rounded-2xl border border-[#e4d8fa] bg-white/95 shadow-[0_14px_36px_rgba(76,29,149,0.10)] backdrop-blur"
+      style={{ padding: '16px' }}
     >
       {/* Header */}
-      <div className="flex items-start gap-3 mb-4">
-        <div className="mt-0.5">
+      <div className="flex items-start gap-3">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-violet-50 ring-1 ring-violet-100">
           <RiSparklingLine className="h-5 w-5 text-violet-600" />
         </div>
-        <div>
-          <h3 className="text-sm font-semibold text-violet-950">Ask Heaven</h3>
-          <p className="text-xs text-violet-800/80">
-            Your AI co-pilot for the {productLabel.toLowerCase()} in {jurisdictionLabel}. Ask
-            questions about the process, documents, or legal procedures. It&apos;s guidance only
-            and not a substitute for advice from a regulated legal professional.
+        <div className="min-w-0">
+          <h3 className="text-[15px] font-semibold text-[#20103f]">Ask Heaven</h3>
+          <p className="mt-0.5 text-xs leading-4 text-[#665d7d]">
+            Need help with this step? Ask about your {productLabel.toLowerCase()}.
           </p>
         </div>
       </div>
 
       {/* Q&A helper */}
-      <div className={isWizardThemeV2 ? 'mt-3 border-t border-violet-100 pt-3' : 'mt-3 border-t border-gray-100 pt-3'}>
-        <div className="flex items-center gap-2 mb-1">
+      <div className="mt-3 border-t border-violet-100 pt-3">
+        <div className="hidden">
           <RiChat1Line className="h-3.5 w-3.5 text-violet-600" />
-          <span className={isWizardThemeV2 ? 'text-xs font-semibold text-violet-900' : 'text-xs font-semibold text-gray-800'}>Ask questions</span>
+          <span>Ask questions</span>
         </div>
-        <p className={isWizardThemeV2 ? 'text-xs text-violet-800/80 mb-2' : 'text-xs text-gray-500 mb-2'}>
+        <p className="sr-only">
           Ask quick questions about this step, the documents we&apos;re generating, or procedure in{' '}
           {jurisdictionLabel}. Answers are general guidance only – not personalised legal advice.
         </p>
@@ -163,19 +156,15 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
           <textarea
             value={qaInput}
             onChange={(e) => setQaInput(e.target.value)}
-            rows={3}
-            className={
-              isWizardThemeV2
-                ? "w-full rounded-lg border border-violet-200 bg-white px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-violet-300 focus:border-violet-500"
-                : "w-full rounded-md border border-gray-300 px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-transparent"
-            }
+            rows={2}
+            className="w-full resize-none rounded-xl border border-violet-200 bg-white px-3 py-2 text-xs leading-4 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
             placeholder={questionPlaceholder}
           />
           <Button
             type="button"
-            variant={isWizardThemeV2 ? "primary" : "secondary"}
+            variant="primary"
             size="small"
-            className={isWizardThemeV2 ? 'w-full justify-center shadow-sm hover:shadow-md' : 'w-full justify-center'}
+            className="w-full justify-center shadow-sm hover:shadow-md"
             onClick={handleAskQuestion}
             disabled={qaLoading || !qaInput.trim()}
           >
@@ -186,7 +175,7 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
               </>
             ) : (
               <>
-                <RiChat1Line className={isWizardThemeV2 ? 'mr-2 h-3.5 w-3.5 text-white' : 'mr-2 h-3.5 w-3.5 text-violet-600'} />
+                <RiChat1Line className="mr-2 h-3.5 w-3.5 text-white" />
                 Ask a question
               </>
             )}
@@ -201,7 +190,7 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
         )}
 
         {qaMessages.length > 0 && (
-          <div className={isWizardThemeV2 ? 'mt-3 max-h-40 overflow-y-auto rounded-md bg-violet-50/65 border border-violet-100 px-2.5 py-2 space-y-1.5' : 'mt-3 max-h-40 overflow-y-auto rounded-md bg-gray-50 px-2.5 py-2 space-y-1.5'}>
+          <div className="mt-3 max-h-40 space-y-1.5 overflow-y-auto rounded-lg border border-violet-100 bg-violet-50/65 px-2.5 py-2">
             {qaMessages.map((m, idx) => (
               <div
                 key={idx}
@@ -217,6 +206,12 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
             ))}
           </div>
         )}
+        <details className="mt-3 text-[11px] leading-4 text-[#746b87]">
+          <summary className="cursor-pointer font-medium text-[#5b36b3]">About this guidance</summary>
+          <p className="mt-1.5">
+            Answers are general guidance for {jurisdictionLabel} and are not a substitute for advice from a regulated legal professional.
+          </p>
+        </details>
       </div>
     </Card>
   );
@@ -225,9 +220,7 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
     <>
       {/* Desktop / large screens – sticky in the wizard column only */}
       <div className="hidden lg:block">
-        <div className="sticky top-32">
-          {renderPanelContent()}
-        </div>
+        {renderPanelContent()}
       </div>
 
       {/* Mobile / small screens – inline below the wizard content */}
