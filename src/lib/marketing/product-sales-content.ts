@@ -10,6 +10,8 @@ export interface ProductSalesBreakdownItem {
   landlordOutcome: string;
   includedByDefault: boolean;
   conditionalLabel?: string;
+  imageSrc?: string;
+  imageAlt?: string;
 }
 
 export interface ProductSalesRouteCard {

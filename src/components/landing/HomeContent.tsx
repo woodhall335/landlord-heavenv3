@@ -104,7 +104,7 @@ const accentIconByType = {
 
 const routeSelectionCards: RouteCard[] = [
   {
-    title: 'Section 8 notice',
+    title: 'Section 8 Notice',
     eyebrow: 'Possession & eviction',
     description:
       'If rent is unpaid and you have not served notice yet, start here. Prepare the Section 8 notice, proof of service, and arrears record before anything goes to the tenant.',
@@ -127,7 +127,7 @@ const routeSelectionCards: RouteCard[] = [
     filters: ['possession_eviction', 'rent_arrears'],
   },
   {
-    title: 'Section 8 notice + rent arrears',
+    title: 'Complete Eviction Pack',
     eyebrow: 'Notice and court pack',
     description:
       'Use this if the case is likely to need court papers, or if notice has already been served and the tenant still has not left.',
@@ -150,7 +150,7 @@ const routeSelectionCards: RouteCard[] = [
     filters: ['possession_eviction', 'rent_arrears'],
   },
   {
-    title: 'Money claim',
+    title: 'Money Claim',
     eyebrow: 'Money claim',
     description:
       'Use this when your main goal is getting money back, whether the tenant is still in the property or has already left.',
@@ -173,7 +173,7 @@ const routeSelectionCards: RouteCard[] = [
     filters: ['rent_arrears', 'money_claims'],
   },
   {
-    title: 'Section 13 rent increase',
+    title: 'Increase Rent',
     eyebrow: 'Rent increase',
     description:
       'Use this when you want to increase the rent for an England assured tenancy and need the notice, dates, and supporting paperwork handled carefully.',
@@ -196,7 +196,7 @@ const routeSelectionCards: RouteCard[] = [
     filters: ['tenancy_changes'],
   },
   {
-    title: 'Tenancy agreement',
+    title: 'Tenancy Agreement',
     eyebrow: 'Tenancy agreement',
     description:
       'Standard agreements cover England, Wales, Scotland and Northern Ireland. England also offers Premium, Student, HMO / Shared House and Lodger products.',

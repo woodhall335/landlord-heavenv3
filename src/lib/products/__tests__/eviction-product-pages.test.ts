@@ -18,7 +18,9 @@ describe('Section 8 eviction product pages', () => {
     expect(source).toContain('8-document Review-ready Section 8 notice and service file');
     expect(source).toContain('Form 3A Section 8 notice, N215 certificate of service, rent arrears schedule, service instructions, validity checklist, compliance declaration, case summary, and what-happens-next guide');
     expect(source).toContain('Stage 1 covers preparing and serving the notice');
-    expect(source).toContain("imageSrc: '/images/notice-only-pack.webp'");
+    expect(source).toContain(
+      "imageSrc: '/images/generated/notice-only/notice-only-pack-watercolour.webp'",
+    );
     expect(source).toContain("imageSrc: '/images/section-8-notice.webp'");
     expect(source).toContain("imageSrc: '/images/section-8-court-paperwork.webp'");
     expect(source).toContain("imageSrc: '/images/how-it-works-notice-only.webp'");
@@ -59,9 +61,9 @@ describe('Section 8 eviction product pages', () => {
   it('keeps the shared public descriptors aligned with the combined-pack positioning', () => {
     const source = readSource('src/lib/public-products.ts');
 
-    expect(source).toContain("proofLabel: 'Review-ready notice and service file'");
+    expect(source).toContain("proofLabel: 'Solicitor-approved notice and service file'");
     expect(source).toContain(
-      "proofLabel: 'Review-ready court and possession file'"
+      "proofLabel: 'Solicitor-approved court and possession file'"
     );
   });
 

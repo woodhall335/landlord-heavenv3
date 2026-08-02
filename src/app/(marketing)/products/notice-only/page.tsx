@@ -166,7 +166,7 @@ export default function NoticeOnlyPage() {
       priceLabel: product.displayPrice,
       valueSummary:
         'Prepare the notice file properly before anything goes to the tenant. You can check the actual Section 8 notice and service file before you pay. This is procedural document preparation, not legal advice.',
-      imageSrc: '/images/notice-only-pack.webp',
+      imageSrc: '/images/generated/notice-only/notice-only-pack-watercolour.webp',
       imageAlt: 'Preview of the Stage 1 Section 8 notice-only pack',
       imageHref: descriptor.wizardHref,
       mobileImageFirstFullBleed: true,
@@ -196,6 +196,8 @@ export default function NoticeOnlyPage() {
           landlordOutcome:
             'Helps the eviction route start with the right legal notice in place.',
           includedByDefault: true,
+          imageSrc: '/images/generated/notice-only/form-3a.webp',
+          imageAlt: 'Watercolour illustration of a Form 3A Section 8 notice and rental property',
         },
         {
           name: 'Rent Arrears Schedule',
@@ -208,6 +210,8 @@ export default function NoticeOnlyPage() {
           landlordOutcome:
             'Gives the notice file a clearer rent record if the case later goes to court.',
           includedByDefault: true,
+          imageSrc: '/images/generated/notice-only/rent-arrears-schedule.webp',
+          imageAlt: 'Watercolour illustration of a rent arrears schedule, calendar and rental property',
         },
         {
           name: 'N215 Certificate of Service',
@@ -220,6 +224,8 @@ export default function NoticeOnlyPage() {
           landlordOutcome:
             'Gives you a clearer service record from the first step.',
           includedByDefault: true,
+          imageSrc: '/images/generated/notice-only/n215-certificate.webp',
+          imageAlt: 'Watercolour illustration of a certificate, served envelope and dated service record',
         },
         {
           name: 'Service Instructions',
@@ -232,6 +238,8 @@ export default function NoticeOnlyPage() {
           landlordOutcome:
             'Reduces the risk of the notice being challenged because of a service mistake.',
           includedByDefault: true,
+          imageSrc: '/images/generated/notice-only/service-instructions.webp',
+          imageAlt: 'Watercolour illustration of step-by-step notice service instructions',
         },
         {
           name: 'Validity Checklist',
@@ -244,6 +252,8 @@ export default function NoticeOnlyPage() {
           landlordOutcome:
             'Gives you a cleaner file before the tenant or the court looks closely at the notice.',
           includedByDefault: true,
+          imageSrc: '/images/generated/notice-only/validity-checklist.webp',
+          imageAlt: 'Watercolour illustration of a notice validity checklist and date review',
         },
         {
           name: 'Compliance Declaration',
@@ -256,6 +266,8 @@ export default function NoticeOnlyPage() {
           landlordOutcome:
             'Helps the file look prepared rather than improvised.',
           includedByDefault: true,
+          imageSrc: '/images/generated/notice-only/compliance-declaration.webp',
+          imageAlt: 'Watercolour illustration of a signed compliance declaration and supporting records',
         },
         {
           name: 'Case Summary',
@@ -268,6 +280,8 @@ export default function NoticeOnlyPage() {
           landlordOutcome:
             'Makes it easier to move into court papers later if you need them.',
           includedByDefault: true,
+          imageSrc: '/images/generated/notice-only/case-summary.webp',
+          imageAlt: 'Watercolour illustration of an organised Section 8 case summary file',
         },
         {
           name: 'What Happens Next Guide',
@@ -280,6 +294,8 @@ export default function NoticeOnlyPage() {
           landlordOutcome:
             'Keeps the next step clear once the notice has gone to the tenant.',
           includedByDefault: true,
+          imageSrc: '/images/generated/notice-only/what-happens-next.webp',
+          imageAlt: 'Watercolour illustration of the steps after serving a Section 8 notice',
         },
       ],
       sampleProof: sampleProof ? (
@@ -394,7 +410,7 @@ export default function NoticeOnlyPage() {
           title: 'Different from a blank form',
           body:
             'A blank form gives you the shell. Notice Only gives you Form 3A, N215, arrears schedule, service instructions, validity checklist, compliance declaration, case summary, and next-step guide in one file.',
-          imageSrc: '/images/notice-only-pack.webp',
+          imageSrc: '/images/generated/notice-only/notice-only-pack-watercolour.webp',
           imageAlt: 'Section 8 notice and service file preview',
         },
       ],

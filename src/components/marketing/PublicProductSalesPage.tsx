@@ -251,28 +251,46 @@ function BreakdownList({ whatYouGet }: { whatYouGet: ProductSalesPageContent['wh
       {whatYouGet.items && whatYouGet.items.length > 0 ? (
         <div className="mt-10 grid gap-5 md:grid-cols-2">
           {whatYouGet.items.map((item) => (
-            <article key={item.name} className="rounded-lg border border-[#E8E1F8] bg-white p-5 shadow-sm">
-              <div className="flex items-start justify-between gap-4">
-                <h3 className="text-lg font-bold text-[#17142B]">{item.name}</h3>
-                <span className="rounded-md bg-[#F4F0FF] px-2.5 py-1 text-xs font-semibold text-[#5B21B6]">
-                  {item.includedByDefault ? 'Included' : item.conditionalLabel || 'Conditional'}
-                </span>
+            <article
+              key={item.name}
+              className={`overflow-hidden rounded-2xl border border-[#E8E1F8] bg-white shadow-[0_14px_34px_rgba(41,25,78,0.07)] ${
+                item.imageSrc ? 'sm:grid sm:grid-cols-[minmax(0,1fr)_11rem]' : ''
+              }`}
+            >
+              <div className="p-5 sm:p-6">
+                <div className="flex items-start justify-between gap-4">
+                  <h3 className="text-lg font-bold leading-snug text-[#17142B]">{item.name}</h3>
+                  <span className="shrink-0 rounded-md bg-[#F4F0FF] px-2.5 py-1 text-xs font-semibold text-[#5B21B6]">
+                    {item.includedByDefault ? 'Included' : item.conditionalLabel || 'Conditional'}
+                  </span>
+                </div>
+                <p className="mt-3 text-sm leading-6 text-[#4B5565]">{item.plainEnglish}</p>
+                <dl className="mt-4 space-y-3 text-sm leading-6 text-[#4B5565]">
+                  <div>
+                    <dt className="font-semibold text-[#17142B]">Function</dt>
+                    <dd>{item.function}</dd>
+                  </div>
+                  <div>
+                    <dt className="font-semibold text-[#17142B]">Risk if missing</dt>
+                    <dd>{item.riskIfMissing}</dd>
+                  </div>
+                  <div>
+                    <dt className="font-semibold text-[#17142B]">Landlord outcome</dt>
+                    <dd>{item.landlordOutcome}</dd>
+                  </div>
+                </dl>
               </div>
-              <p className="mt-3 text-sm leading-6 text-[#4B5565]">{item.plainEnglish}</p>
-              <dl className="mt-4 space-y-3 text-sm leading-6 text-[#4B5565]">
-                <div>
-                  <dt className="font-semibold text-[#17142B]">Function</dt>
-                  <dd>{item.function}</dd>
+              {item.imageSrc ? (
+                <div className="relative min-h-48 border-t border-[#EEE8FA] bg-[#FCFAFF] sm:min-h-full sm:border-l sm:border-t-0">
+                  <Image
+                    src={item.imageSrc}
+                    alt={item.imageAlt || ''}
+                    fill
+                    sizes="(max-width: 639px) 100vw, 176px"
+                    className="object-contain p-3 sm:p-2"
+                  />
                 </div>
-                <div>
-                  <dt className="font-semibold text-[#17142B]">Risk if missing</dt>
-                  <dd>{item.riskIfMissing}</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold text-[#17142B]">Landlord outcome</dt>
-                  <dd>{item.landlordOutcome}</dd>
-                </div>
-              </dl>
+              ) : null}
             </article>
           ))}
         </div>
