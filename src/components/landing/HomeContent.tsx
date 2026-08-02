@@ -7,10 +7,10 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
-import { PremiumImageFrame, Reveal, StaggerReveal, TrustPillRow } from '@/components/marketing/PremiumMotion';
+import { PremiumImageFrame, Reveal, StaggerReveal } from '@/components/marketing/PremiumMotion';
 import { Container } from '@/components/ui';
 import { Hero, TrustBar } from '@/components/landing';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
@@ -47,7 +47,15 @@ type RouteCard = {
   accent: keyof typeof accentIconByType;
   routeIntent: string;
   product: string;
+  filters: RouteFilter[];
 };
+
+type RouteFilter =
+  | 'possession_eviction'
+  | 'rent_arrears'
+  | 'money_claims'
+  | 'tenancy_changes'
+  | 'not_sure';
 
 type RouteSelectionCardProps = RouteCard & {
   className?: string;
@@ -77,6 +85,15 @@ const reviewCount = getDynamicReviewCount();
 const formattedReviewCount = reviewCount.toLocaleString('en-GB');
 const reviewStars = '\u2605\u2605\u2605\u2605\u2605';
 
+const routeFilters: Array<{ id: 'all' | RouteFilter; label: string }> = [
+  { id: 'all', label: 'All situations' },
+  { id: 'possession_eviction', label: 'Possession & eviction' },
+  { id: 'rent_arrears', label: 'Rent arrears' },
+  { id: 'money_claims', label: 'Money claims' },
+  { id: 'tenancy_changes', label: 'Tenancy changes' },
+  { id: 'not_sure', label: 'Not sure' },
+];
+
 const accentIconByType = {
   amethyst: RiFileTextLine,
   plum: RiScales3Line,
@@ -87,8 +104,8 @@ const accentIconByType = {
 
 const routeSelectionCards: RouteCard[] = [
   {
-    title: 'Tenant not paying rent',
-    eyebrow: 'Usually the first step',
+    title: 'Section 8 notice',
+    eyebrow: 'Possession & eviction',
     description:
       'If rent is unpaid and you have not served notice yet, start here. Prepare the Section 8 notice, proof of service, and arrears record before anything goes to the tenant.',
     whyRoute:
@@ -102,15 +119,16 @@ const routeSelectionCards: RouteCard[] = [
       'Updated for the England possession rules from 1 May 2026, including notice wording, timing, and service checks.',
     ctaLabel: 'Create my Section 8 notice',
     href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.landingHref,
-    imageSrc: '/images/section-8-notice.webp',
+    imageSrc: '/images/generated/homepage-situations/section-8-notice.webp',
     imageAlt: 'Tenant not paying rent situation card',
     accent: 'amethyst',
     routeIntent: 'tenant_not_paying_rent',
     product: 'notice_only',
+    filters: ['possession_eviction', 'rent_arrears'],
   },
   {
-    title: 'Tenant will not leave',
-    eyebrow: 'When notice is not the whole job',
+    title: 'Section 8 notice + rent arrears',
+    eyebrow: 'Notice and court pack',
     description:
       'Use this if the case is likely to need court papers, or if notice has already been served and the tenant still has not left.',
     whyRoute:
@@ -124,14 +142,15 @@ const routeSelectionCards: RouteCard[] = [
       'Keeps the notice, service details, and court forms consistent with the England process from 1 May 2026.',
     ctaLabel: 'Prepare my court papers',
     href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.landingHref,
-    imageSrc: '/images/section-8-court-paperwork.webp',
+    imageSrc: '/images/generated/homepage-situations/section-8-rent-arrears.webp',
     imageAlt: 'Tenant will not leave situation card',
     accent: 'plum',
     routeIntent: 'tenant_will_not_leave',
     product: 'complete_pack',
+    filters: ['possession_eviction', 'rent_arrears'],
   },
   {
-    title: 'Need to recover unpaid rent, bills, or damage',
+    title: 'Money claim',
     eyebrow: 'Money claim',
     description:
       'Use this when your main goal is getting money back, whether the tenant is still in the property or has already left.',
@@ -146,14 +165,15 @@ const routeSelectionCards: RouteCard[] = [
       'Helps keep rent, damage, bills, and other tenant debt clear before you make a claim.',
     ctaLabel: 'Prepare my money claim',
     href: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.landingHref,
-    imageSrc: '/images/money-claim-selector.webp',
+    imageSrc: '/images/generated/homepage-situations/money-claim.webp',
     imageAlt: 'Recover unpaid rent bills or damage situation card',
     accent: 'emerald',
     routeIntent: 'recover_debt',
     product: 'money_claim',
+    filters: ['rent_arrears', 'money_claims'],
   },
   {
-    title: 'Need to increase the rent',
+    title: 'Section 13 rent increase',
     eyebrow: 'Rent increase',
     description:
       'Use this when you want to increase the rent for an England assured tenancy and need the notice, dates, and supporting paperwork handled carefully.',
@@ -168,14 +188,15 @@ const routeSelectionCards: RouteCard[] = [
       'Updated for the England assured tenancy rent increase process in force from 1 May 2026.',
     ctaLabel: 'Create my rent increase notice',
     href: '/rent-increase',
-    imageSrc: '/images/section-13-selector.webp',
+    imageSrc: '/images/generated/homepage-situations/rent-increase.webp',
     imageAlt: 'Increase the rent situation card',
     accent: 'amber',
     routeIntent: 'increase_rent',
     product: 'section13_standard',
+    filters: ['tenancy_changes'],
   },
   {
-    title: 'Need a tenancy agreement',
+    title: 'Tenancy agreement',
     eyebrow: 'Tenancy agreement',
     description:
       'Standard agreements cover England, Wales, Scotland and Northern Ireland. England also offers Premium, Student, HMO / Shared House and Lodger products.',
@@ -183,11 +204,33 @@ const routeSelectionCards: RouteCard[] = [
       'This fits when you need the right agreement before the tenancy starts, rather than a generic template that may not match the let.',
     ctaLabel: 'Choose my tenancy agreement',
     href: '/standard-tenancy-agreement#choose-jurisdiction',
-    imageSrc: '/images/tenancy-agreement-selector.webp',
+    imageSrc: '/images/generated/homepage-situations/tenancy-agreement.webp',
     imageAlt: 'Need a tenancy agreement situation card',
     accent: 'lavender',
     routeIntent: 'tenancy_agreement',
     product: 'ast',
+    filters: ['tenancy_changes'],
+  },
+  {
+    title: 'Ask Heaven',
+    eyebrow: 'Not sure where to start?',
+    description:
+      'Ask a landlord question in plain English and get guidance towards the most relevant next step, document, or support page.',
+    whyRoute:
+      'Use Ask Heaven when you need to understand the route before choosing a product or starting a guided workflow.',
+    includes: [
+      'Plain-English answers to landlord questions',
+      'Relevant next-step and document suggestions',
+      'Links to detailed guides and suitable workflows',
+    ],
+    ctaLabel: 'Ask a question',
+    href: '/ask-heaven',
+    imageSrc: '/images/generated/homepage-situations/ask-heaven.webp',
+    imageAlt: 'Ask Heaven landlord guidance assistant',
+    accent: 'lavender',
+    routeIntent: 'ask_heaven',
+    product: 'ask_heaven',
+    filters: ['not_sure'],
   },
 ];
 
@@ -317,23 +360,28 @@ function RouteSelectionCard({
       routeIntent={routeIntent}
       product={product}
       className={clsx(
-        'group overflow-hidden rounded-[2rem] border transition duration-200',
+        'group min-w-0 overflow-hidden rounded-2xl border transition duration-200 lg:rounded-[2rem]',
         className,
         accentStyles.card,
         accentStyles.borderGlow,
         PUBLIC_LAYOUT_CLASSES.card
       )}
     >
-      <div className="relative aspect-[16/11] overflow-hidden border-b border-black/5 bg-gradient-to-br from-[#F7F1FF] via-[#FCFAFF] to-[#EEE3FF]">
+      <div className="relative aspect-square overflow-hidden border-b border-black/5 bg-gradient-to-br from-[#F7F1FF] via-[#FCFAFF] to-[#EEE3FF] lg:aspect-[16/10]">
         <Image
           src={imageSrc}
           alt={imageAlt}
           fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-          className="object-cover transition duration-300 group-hover:scale-[1.03]"
+          sizes="(max-width: 1023px) 33vw, 33vw"
+          className="object-cover object-center transition duration-300 group-hover:scale-[1.03]"
         />
       </div>
-      <div className="p-6">
+      <div className="px-2 py-3 text-center lg:hidden">
+        <h3 className="text-[0.7rem] font-bold leading-[1.2] text-[#21153d] sm:text-sm">
+          {title}
+        </h3>
+      </div>
+      <div className="hidden p-6 lg:block">
         <div className="flex items-start justify-between gap-4">
           <div>
             <span className={clsx('inline-flex rounded-full px-3 py-1 text-xs font-semibold tracking-[0.16em] uppercase', accentStyles.chip)}>
@@ -381,6 +429,11 @@ function RouteSelectionCard({
 }
 
 export default function HomeContent() {
+  const [activeRouteFilter, setActiveRouteFilter] = useState<'all' | RouteFilter>('all');
+  const visibleRouteCards = activeRouteFilter === 'all'
+    ? routeSelectionCards
+    : routeSelectionCards.filter((card) => card.filters.includes(activeRouteFilter));
+
   useEffect(() => {
     trackHomepageSelectorView({ pagePath: '/' });
   }, []);
@@ -393,44 +446,59 @@ export default function HomeContent() {
 
       <section id="homepage-route-selector" className="py-14 md:py-18">
         <Container>
-          <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'public-subtle-grid px-6 py-8 md:px-10 md:py-10')}>
-            <StaggerReveal className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'public-subtle-grid px-4 py-7 sm:px-6 md:px-10 md:py-10')}>
+            <StaggerReveal className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
               <div className="max-w-3xl">
-                <span className="public-eyebrow">Choose the right next step</span>
+                <span className="public-eyebrow">Solutions for landlords</span>
                 <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
                   What situation are you dealing with?
                 </h2>
                 <p className="mt-4 text-lg leading-8 text-[#5d5672]">
-                  Tell us what's happening and we'll show you the next step.
-                </p>
-                <p className="mt-3 text-sm font-medium leading-7 text-[#6a6280]">
-                  Pick the situation that matches your problem. We will take you
-                  to the right next step without making you decode legal jargon first.
+                  Tell us what you need help with and we&apos;ll guide you to the right documents and support.
                 </p>
               </div>
-                <div className="public-stat-card px-5 py-4">
-                  <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#6b3fd1]">
-                    Landlords rate us
-                  </p>
-                  <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-2xl font-bold text-[#1c1431]">
+                <div className="public-stat-card hidden px-5 py-4 sm:block">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-2xl font-bold text-[#1c1431]">
                     <span className="text-[#facc15]" aria-hidden="true">
                       {reviewStars}
                     </span>
                     <span>{REVIEW_RATING}/5</span>
                   </div>
                   <p className="mt-1 text-sm text-[#5d5672]">
-                    {formattedReviewCount} live reviews across the product.
+                    Rated by {formattedReviewCount} landlords
                   </p>
                 </div>
             </StaggerReveal>
 
-            <TrustPillRow
-              className="mt-6 hidden sm:flex"
-              items={['For landlords in England', 'Updated for May 2026', 'Preview before payment', 'Fixed price']}
-            />
+            <div className="mt-7 flex flex-wrap gap-2" role="group" aria-label="Filter landlord situations">
+              {routeFilters.map((filter) => {
+                const isActive = filter.id === activeRouteFilter;
 
-            <StaggerReveal className="mt-8 grid gap-6 xl:grid-cols-3 md:grid-cols-2">
-              {routeSelectionCards.map((card) => (
+                return (
+                  <button
+                    key={filter.id}
+                    type="button"
+                    aria-pressed={isActive}
+                    onClick={() => setActiveRouteFilter(filter.id)}
+                    className={clsx(
+                      'rounded-xl border px-3 py-2 text-xs font-semibold transition sm:px-4 sm:py-2.5 sm:text-sm',
+                      isActive
+                        ? 'border-[#7c3aed] bg-white text-[#4f1fb8] shadow-[0_8px_24px_rgba(109,40,217,0.12)]'
+                        : 'border-[#e5ddf7] bg-white/75 text-[#625a73] hover:border-[#cbb8f4] hover:text-[#4f1fb8]'
+                    )}
+                  >
+                    {filter.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            <StaggerReveal
+              key={activeRouteFilter}
+              className="mt-6 grid grid-cols-3 gap-2.5 sm:gap-4 lg:mt-8 lg:gap-6"
+              aria-live="polite"
+            >
+              {visibleRouteCards.map((card) => (
                 <RouteSelectionCard key={card.title} {...card} />
               ))}
             </StaggerReveal>
