@@ -425,7 +425,7 @@ export default function HomeContent() {
             </StaggerReveal>
 
             <TrustPillRow
-              className="mt-6"
+              className="mt-6 hidden sm:flex"
               items={['For landlords in England', 'Updated for May 2026', 'Preview before payment', 'Fixed price']}
             />
 
@@ -444,33 +444,58 @@ export default function HomeContent() {
         </Container>
       </section>
 
-      <section className="pb-16 pt-4 md:pb-20">
-        <Reveal>
-          <PremiumImageFrame className="mx-auto max-w-[1672px] rounded-none border-x-0 md:rounded-[2rem] md:border-x">
-            <TrackedLink
-              href="/wizard"
-              pagePath="/"
-              pageType="homepage"
-              ctaLabel="Clarity section"
-              ctaPosition="section"
-              eventName="homepage_primary_cta_click"
-              routeIntent="wizard"
-              className="block w-full"
-            >
-              <picture>
-                <source media="(max-width: 767px)" srcSet="/images/clarity-mobile.webp" />
-                <Image
-                  src="/images/clarity-desktop.webp"
-                  alt="Clarity first. Legal detail second."
-                  width={1672}
-                  height={941}
-                  className="h-auto w-full"
-                  sizes="100vw"
-                />
-              </picture>
-            </TrackedLink>
-          </PremiumImageFrame>
-        </Reveal>
+      <section className="pb-16 pt-4 md:pb-20" aria-labelledby="clarity-first-heading">
+        <Container>
+          <Reveal>
+            <div className="overflow-hidden rounded-[2rem] border border-[#e4d8fb] bg-[linear-gradient(135deg,#fbf9ff_0%,#f4edff_55%,#ffffff_100%)] shadow-[0_24px_70px_rgba(70,39,130,0.1)]">
+              <div className="grid gap-8 p-6 md:p-10 lg:grid-cols-[1.02fr_0.98fr] lg:items-center">
+                <div>
+                  <p className="public-eyebrow">Clarity first. Legal detail second.</p>
+                  <h2 id="clarity-first-heading" className="mt-4 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
+                    Start with the problem. Finish with a clearer document file.
+                  </h2>
+                  <p className="mt-4 max-w-2xl text-lg leading-8 text-[#5d5672]">
+                    Tell us what is happening in plain English. The guided workflow asks the relevant questions, runs the checks, and builds the documents around your answers.
+                  </p>
+                  <div className="mt-7 grid gap-4 sm:grid-cols-3">
+                    {[
+                      ['1', 'Describe the situation', 'Choose the landlord problem you need to solve.'],
+                      ['2', 'Follow tailored questions', 'Answer only the facts relevant to that route.'],
+                      ['3', 'Preview before payment', 'Review the generated file before checkout.'],
+                    ].map(([step, title, body]) => (
+                      <article key={step} className="rounded-2xl border border-[#e4d8fb] bg-white/90 p-4">
+                        <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#6d28d9] text-sm font-bold text-white">{step}</span>
+                        <h3 className="mt-3 font-semibold text-[#21153d]">{title}</h3>
+                        <p className="mt-2 text-sm leading-6 text-[#625a73]">{body}</p>
+                      </article>
+                    ))}
+                  </div>
+                  <TrackedLink
+                    href="/wizard"
+                    pagePath="/"
+                    pageType="homepage"
+                    ctaLabel="Find the right document"
+                    ctaPosition="section"
+                    eventName="homepage_primary_cta_click"
+                    routeIntent="wizard"
+                    className="hero-btn-primary mt-7 inline-flex justify-center"
+                  >
+                    Find the right document
+                  </TrackedLink>
+                </div>
+                <div className="relative min-h-[20rem] overflow-hidden rounded-[1.5rem] border border-white bg-white/75 md:min-h-[28rem]">
+                  <Image
+                    src="/images/generated/samples/tenancy-agreements.png"
+                    alt="Illustrated landlord documents for England, Wales, Scotland and Northern Ireland"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 45vw"
+                    className="object-contain object-center"
+                  />
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </Container>
       </section>
 
       <section className="pb-16 pt-4 md:pb-20">

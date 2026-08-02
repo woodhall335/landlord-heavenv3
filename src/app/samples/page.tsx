@@ -21,28 +21,28 @@ const sampleDirectoryGroups = [
   {
     title: 'Eviction and possession',
     body: 'Notice-stage and court-stage packs for rent arrears possession work.',
-    imageSrc: '/images/sample-eviction-possession.webp',
+    imageSrc: '/images/generated/samples/eviction-possession.png',
     imageAlt: 'Eviction and possession sample documents',
     slugs: ['section-8-notice-example', 'complete-eviction-pack-example'],
   },
   {
     title: 'Debt recovery',
     body: 'Pre-action and claim documents for unpaid rent after the tenancy route is clear.',
-    imageSrc: '/images/sample-debt-recovery.webp',
+    imageSrc: '/images/generated/samples/debt-recovery.png',
     imageAlt: 'Debt recovery sample documents',
     slugs: ['money-claim-online-example'],
   },
   {
     title: 'Rent increase',
     body: 'Section 13 Form 4A and tribunal-ready evidence samples for England rent increases.',
-    imageSrc: '/images/sample-increase-rent.webp',
+    imageSrc: '/images/generated/samples/rent-increase.png',
     imageAlt: 'Rent increase sample documents',
     slugs: ['form-4a-example', 'section-13-defence-pack-example'],
   },
   {
     title: 'Tenancy agreements',
     body: 'Agreement samples for standard, premium, student, HMO/shared house, and lodger lets.',
-    imageSrc: '/images/sample-tenancy-agreements.webp',
+    imageSrc: '/images/generated/samples/tenancy-agreements.png',
     imageAlt: 'Tenancy agreement sample documents',
     slugs: [
       'standard-tenancy-agreement-example',
@@ -51,6 +51,37 @@ const sampleDirectoryGroups = [
       'hmo-tenancy-agreement-example',
       'lodger-agreement-example',
     ],
+  },
+] as const;
+
+const regionalTenancySamples = [
+  {
+    jurisdiction: 'Wales',
+    title: 'Fixed-term Standard Occupation Contract',
+    description: 'Preview the generated Wales fixed-term contract before starting the Wales-specific wizard.',
+    sampleHref: '/samples/regional/wales-fixed-standard-occupation-contract-sample.pdf',
+    productHref: '/tenancy-agreements/wales',
+  },
+  {
+    jurisdiction: 'Wales',
+    title: 'Periodic Standard Occupation Contract',
+    description: 'Preview the generated Wales periodic contract and its jurisdiction-specific structure.',
+    sampleHref: '/samples/regional/wales-periodic-standard-occupation-contract-sample.pdf',
+    productHref: '/tenancy-agreements/wales',
+  },
+  {
+    jurisdiction: 'Scotland',
+    title: 'Standard Private Residential Tenancy',
+    description: 'Preview the generated open-ended Scotland PRT and supporting structure.',
+    sampleHref: '/samples/regional/scotland-prt-sample.pdf',
+    productHref: '/tenancy-agreements/scotland',
+  },
+  {
+    jurisdiction: 'Northern Ireland',
+    title: 'Standard Private Tenancy Agreement',
+    description: 'Preview the generated Northern Ireland agreement before using the regional wizard.',
+    sampleHref: '/samples/regional/northern-ireland-tenancy-agreement-sample.pdf',
+    productHref: '/tenancy-agreements/northern-ireland',
   },
 ] as const;
 
@@ -213,6 +244,38 @@ export default function SamplesPage() {
                 </article>
               );
             })}
+          </div>
+        </section>
+      </Container>
+
+      <Container className="py-10 md:py-12">
+        <section className="overflow-hidden rounded-[2rem] border border-[#d8c8ff] bg-[linear-gradient(135deg,#f8f3ff_0%,#ffffff_100%)] p-6 shadow-[0_18px_48px_rgba(67,44,126,0.08)] md:p-8" aria-labelledby="regional-tenancy-samples-heading">
+          <div className="grid gap-8 lg:grid-cols-[0.75fr_1.25fr] lg:items-center">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#6d28d9]">Regional tenancy samples</p>
+              <h2 id="regional-tenancy-samples-heading" className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
+                See the actual agreement style for each jurisdiction
+              </h2>
+              <p className="mt-4 text-base leading-8 text-[#546075]">
+                These are generated sample PDFs, not blank official forms. Open the relevant agreement, then use the matching regional wizard to build it around the property, landlord, occupiers, rent and deposit facts.
+              </p>
+              <div className="relative mt-6 aspect-[16/10] overflow-hidden rounded-2xl border border-[#e4d8fb] bg-white">
+                <Image src="/images/generated/samples/tenancy-agreements.png" alt="Illustrated tenancy agreements for the four UK jurisdictions" fill className="object-contain object-center" sizes="(max-width: 1024px) 100vw, 38vw" />
+              </div>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {regionalTenancySamples.map((sample) => (
+                <article key={sample.sampleHref} className="flex h-full flex-col rounded-2xl border border-[#e4d8fb] bg-white p-5 shadow-[0_12px_30px_rgba(67,44,126,0.06)]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6d28d9]">{sample.jurisdiction}</p>
+                  <h3 className="mt-2 text-xl font-bold leading-tight text-[#1c1431]">{sample.title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-[#5d5672]">{sample.description}</p>
+                  <div className="mt-auto flex flex-wrap gap-2 pt-5">
+                    <Link href={sample.sampleHref} target="_blank" className="inline-flex items-center justify-center rounded-lg bg-[#6d28d9] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#5b21b6]">Open sample PDF</Link>
+                    <Link href={sample.productHref} className="inline-flex items-center justify-center rounded-lg border border-[#cbb7f5] px-4 py-2.5 text-sm font-semibold text-[#5b21b6] hover:bg-[#f7f2ff]">Create agreement</Link>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
       </Container>

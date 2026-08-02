@@ -56,7 +56,7 @@ export const homeHeroConfig: HeroConfig = {
   ...withPreset('home'),
   preset: 'home',
   trustText: 'England landlord documents checked before you serve, file, or raise rent',
-  title: 'England landlord documents',
+  title: 'Landlord documents',
   highlightTitle: 'without the solicitor bill.',
   subtitle: (
     <>

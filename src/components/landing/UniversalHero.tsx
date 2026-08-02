@@ -28,12 +28,12 @@ type HeroCta = {
 // DO NOT MODIFY WITHOUT UPDATING TESTS: these classes define the mobile hero layout contract
 // that keeps subtitle readability, right-edge media bleed, and CTA placement stable across pages.
 const SECTION_WRAP_CLASSES =
-  'relative isolate flex min-h-[100svh] overflow-hidden pb-10 pt-28 sm:pb-12 sm:pt-32 lg:min-h-[100dvh] lg:items-center lg:pb-16 lg:pt-36';
-const CTA_WRAP_CLASSES = 'mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center';
+  'relative isolate flex min-h-[100svh] overflow-hidden pb-[34svh] pt-28 sm:pb-[30svh] sm:pt-32 lg:min-h-[100dvh] lg:items-center lg:pb-16 lg:pt-36';
+const CTA_WRAP_CLASSES = 'mt-8 flex w-full flex-col gap-3 sm:mt-9 sm:flex-row sm:items-center lg:mt-6';
 const REVIEW_STARS = '\u2605\u2605\u2605\u2605\u2605';
 
 const HERO_BENEFITS = [
-  { label: 'Legally valid', Icon: BadgeCheck },
+  { label: 'Solicitor approved', Icon: BadgeCheck },
   { label: 'Instant download', Icon: FileDown },
   { label: 'Expert support', Icon: Headphones },
 ] as const;
@@ -183,7 +183,10 @@ export function UniversalHero({
       : reviewPillLayout === 'inline'
         ? false
         : showTrustDescriptor && resolvedTrustText.trim().length > 60;
-  const isCenter = align === 'center';
+  // The universal visual contract is left-aligned on both mobile and desktop.
+  // Keep the legacy prop accepted while older wrappers are migrated.
+  const isCenter = false;
+  void align;
   // Universal heroes use one route-specific watercolor background only.
   // Keep legacy media props in the API while wrappers are migrated, but never
   // render a competing laptop/product image inside the universal hero.
@@ -239,11 +242,11 @@ export function UniversalHero({
           fill
           priority
           sizes="100vw"
-          className="object-cover object-[72%_bottom] lg:object-center"
+          className="object-cover object-[60%_bottom] lg:object-center"
         />
       </div>
       <div
-        className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(255,255,255,0.99)_0%,rgba(255,255,255,0.98)_50%,rgba(255,255,255,0.72)_67%,rgba(255,255,255,0.08)_100%)] lg:bg-[linear-gradient(90deg,rgba(255,255,255,0.99)_0%,rgba(255,255,255,0.96)_47%,rgba(255,255,255,0.44)_62%,rgba(255,255,255,0.04)_100%)]"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(255,255,255,0.995)_0%,rgba(255,255,255,0.985)_48%,rgba(255,255,255,0.82)_58%,rgba(255,255,255,0.04)_74%,rgba(255,255,255,0)_100%)] lg:bg-[linear-gradient(90deg,rgba(255,255,255,0.99)_0%,rgba(255,255,255,0.96)_47%,rgba(255,255,255,0.44)_62%,rgba(255,255,255,0.04)_100%)]"
         aria-hidden="true"
       />
       <div
@@ -260,7 +263,7 @@ export function UniversalHero({
           <StaggerReveal
             className={clsx(
               'relative z-10 w-full min-w-0',
-              isCenter ? 'text-center lg:text-center' : 'text-left',
+              'text-left',
               hideMedia && !isPastel && 'max-w-3xl mx-auto'
             )}
           >
@@ -269,7 +272,7 @@ export function UniversalHero({
                 data-testid="hero-review-pill-mobile"
                 className={clsx(
                   'mb-4 inline-flex w-fit max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[#e5ddf7] bg-white/90 px-3 py-2 text-xs font-semibold text-[#271b45] shadow-sm backdrop-blur-sm lg:hidden',
-                  isCenter ? 'justify-center text-center' : 'justify-start text-left'
+                  'justify-start text-left'
                 )}
               >
                 <RiCheckLine className="h-4 w-4 text-[#6333d5]" aria-hidden="true" />
@@ -355,7 +358,7 @@ export function UniversalHero({
               <p
                 className={clsx(
                   'mt-5 inline-flex items-center rounded-full border border-[#9F7AEA] bg-[#7c3aed] px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-white shadow-[0_12px_30px_rgba(124,58,237,0.35)] backdrop-blur-sm',
-                  isCenter && 'mx-auto'
+                  isCenter && 'lg:mx-auto'
                 )}
               >
                 {preTitleLabel}
@@ -388,7 +391,7 @@ export function UniversalHero({
                   'mt-4 px-0 py-0 text-lg leading-relaxed sm:max-w-[52ch] sm:text-xl',
                   isPastel ? 'text-[#5f5871]' : 'text-white/85',
                   'w-full',
-                  isCenter && 'sm:mx-auto'
+                  isCenter && 'lg:mx-auto'
                 )}
               >
                 {subtitle}
@@ -399,7 +402,7 @@ export function UniversalHero({
               <div
                 className={clsx(
                   CTA_WRAP_CLASSES,
-                  isCenter && 'sm:justify-center'
+                  isCenter && 'lg:justify-center'
                 )}
               >
                 {primaryCta && (

@@ -1,11 +1,10 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import Link from 'next/link';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout';
 import { Container } from '@/components/ui/Container';
-import { RiAlertLine, RiInformationLine, RiExternalLinkLine } from 'react-icons/ri';
+import { RiInformationLine, RiExternalLinkLine } from 'react-icons/ri';
 import { useEmailGate } from '@/hooks/useEmailGate';
 import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
 import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
@@ -462,30 +461,7 @@ export default function RentDemandLetterGenerator() {
         showUsageCounter
         primaryCta={{ label: 'Create my rent demand letter', href: '#generator' }}
         secondaryCta={{ label: 'Prepare my claim pack', href: '/products/notice-only?product=demand_letter' }}
-      >
-        <p className="mt-4 text-sm text-white/90">
-          Instant download • Clear wording • Built for landlords chasing arrears • Need examples? See our{' '}
-          <Link href="/rent-arrears-letter-template" className="underline font-semibold">
-            rent arrears letter template guide
-          </Link>
-        </p>
-      </UniversalHero>
-
-      <div className="border-b-2 border-warning-500 bg-warning-50 py-4">
-        <Container>
-          <div className="flex items-start gap-3">
-            <RiAlertLine className="mt-1 h-6 w-6 shrink-0 text-[#7C3AED]" />
-            <div>
-              <p className="text-sm font-semibold text-warning-900">Legal Disclaimer</p>
-              <p className="text-sm text-warning-800">
-                This free version gives you a basic demand letter for general guidance only. It is not
-                legal advice, and it does not replace a fully prepared claim pack if you need to move
-                into formal recovery action.
-              </p>
-            </div>
-          </div>
-        </Container>
-      </div>
+      />
 
       <div className="py-20 md:py-24">
         <Container>

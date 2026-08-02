@@ -107,7 +107,7 @@ describe('UniversalHero review pill', () => {
       '4.8/5 | 1061 reviews'
     );
     const benefits = screen.getByTestId('hero-benefit-grid');
-    expect(benefits).toHaveTextContent('Legally valid');
+    expect(benefits).toHaveTextContent('Solicitor approved');
     expect(benefits).toHaveTextContent('Instant download');
     expect(benefits).toHaveTextContent('Expert support');
     expect(benefits).toHaveTextContent('stripe');

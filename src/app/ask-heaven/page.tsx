@@ -312,14 +312,14 @@ export default async function AskHeavenPage({
       />
 
       {/* SSR Content Section - below the main chat for SEO */}
-      <div className="bg-white py-16">
+      <div className="bg-[linear-gradient(180deg,#fcfbff_0%,#f7f2ff_52%,#ffffff_100%)] py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <NextStepWidget location="ask_heaven_hub" />
 
             {/* Intro section */}
             <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
+              <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary mb-4">
                 Free UK Landlord Advice
               </div>
               <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">

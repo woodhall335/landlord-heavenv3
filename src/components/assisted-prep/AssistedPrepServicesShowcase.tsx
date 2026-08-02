@@ -38,7 +38,7 @@ const assistedPrepCards: AssistedPrepShowcaseCard[] = [
     service: 'section8',
     product: 'notice_only',
     ctaLabel: 'Book Section 8 assisted prep',
-    imageSrc: '/images/illustrations/pricing-cards/assisted-section8.webp',
+    imageSrc: '/images/generated/assisted-prep/section8-assisted-prep.png',
     imageAlt: 'Landlord checking compliance questions before taking action',
     routeIntent: 'section8_assisted_prep',
   },
@@ -51,7 +51,7 @@ const assistedPrepCards: AssistedPrepShowcaseCard[] = [
     service: 'possession',
     product: 'complete_pack',
     ctaLabel: 'Book possession claim assisted prep',
-    imageSrc: '/images/illustrations/pricing-cards/assisted-possession.webp',
+    imageSrc: '/images/generated/assisted-prep/possession-assisted-prep.png',
     imageAlt: 'Landlord preparing urgent possession claim documents',
     routeIntent: 'possession_assisted_prep',
   },
@@ -64,7 +64,7 @@ const assistedPrepCards: AssistedPrepShowcaseCard[] = [
     service: 'money_claim',
     product: 'money_claim',
     ctaLabel: 'Book money claim assisted prep',
-    imageSrc: '/images/illustrations/pricing-cards/assisted-money-claim.webp',
+    imageSrc: '/images/generated/assisted-prep/money-claim-assisted-prep.png',
     imageAlt: 'Landlord organising tenancy records and claim evidence',
     routeIntent: 'money_claim_assisted_prep',
   },
@@ -80,17 +80,17 @@ export function AssistedPrepServicesShowcase({
   return (
     <section
       className={clsx(
-        'mt-10 rounded-[2rem] border border-white/15 bg-[linear-gradient(135deg,#241447_0%,#4c1d95_55%,#2f174f_100%)] p-6 shadow-[0_24px_70px_rgba(24,10,52,0.24)] md:p-8',
+        'mt-10 rounded-[2rem] border border-[#d8c8ff] bg-[linear-gradient(135deg,#7c5ce0_0%,#9b70e8_52%,#7546c8_100%)] p-6 shadow-[0_24px_70px_rgba(74,45,137,0.18)] md:p-8',
         className
       )}
       aria-label="Assisted preparation services"
     >
-      <div className="mb-5 max-w-3xl">
+      <div className="mb-7 max-w-5xl">
         <p className="public-eyebrow">Prefer us to prepare it with you?</p>
-        <h2 className="mt-3 text-2xl font-bold tracking-tight text-white md:text-3xl">
+        <h2 className="mt-3 max-w-4xl text-2xl font-bold tracking-tight text-white md:text-3xl lg:text-[2rem]">
           Assisted prep for landlords who want the file checked before they act
         </h2>
-        <p className="mt-3 text-base leading-7 text-white/78">
+        <p className="mt-3 max-w-4xl text-base leading-7 text-white/90">
           Short callback, focused document preparation, and a clear pack for you to approve before serving or filing.
         </p>
       </div>
@@ -101,13 +101,13 @@ export function AssistedPrepServicesShowcase({
             key={card.title}
             className="group overflow-hidden rounded-[1.4rem] border border-white/14 bg-white shadow-[0_18px_50px_rgba(9,4,25,0.22)]"
           >
-            <div className="relative aspect-[16/10] overflow-hidden bg-[#f7f3ff]">
+            <div className="relative aspect-[16/10] overflow-hidden bg-white">
               <Image
                 src={card.imageSrc}
                 alt={card.imageAlt}
                 fill
                 sizes="(max-width: 1024px) 100vw, 31vw"
-                className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                className="object-contain object-center transition duration-500 group-hover:scale-[1.025]"
               />
             </div>
             <div className="flex min-h-[18rem] flex-col p-5">
@@ -134,7 +134,7 @@ export function AssistedPrepServicesShowcase({
                 eventName={pageType === 'homepage' ? 'homepage_primary_cta_click' : 'entry_page_primary_cta_click'}
                 routeIntent={card.routeIntent}
                 product={card.product}
-                className="mt-auto inline-flex items-center justify-center gap-2 rounded-xl bg-[#6d28d9] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#5b21b6]"
+                className="mt-8 inline-flex items-center justify-center gap-2 rounded-xl bg-[#6d28d9] px-4 py-3.5 text-sm font-semibold text-white transition hover:bg-[#5b21b6] lg:mt-auto"
               >
                 {card.ctaLabel}
                 <RiArrowRightLine className="h-4 w-4" />

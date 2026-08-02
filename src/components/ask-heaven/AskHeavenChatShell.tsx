@@ -614,7 +614,7 @@ export default function AskHeavenChatShell({
       {/* Hero background image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: 'url(/images/bg.webp)' }}
+        style={{ backgroundImage: 'linear-gradient(180deg, #fcfbff 0%, #f3edff 55%, #ffffff 100%)' }}
       />
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-8">
@@ -901,7 +901,7 @@ export default function AskHeavenChatShell({
                 {/* Mascot positioned on the right */}
                 <div className="absolute -right-4 md:-right-8 bottom-0 w-32 md:w-56 pointer-events-none">
                   <Image
-                    src="/images/heromascot.png"
+                    src="/images/generated/ask-heaven-mascot.png"
                     alt="Ask Heaven Mascot"
                     width={224}
                     height={280}
