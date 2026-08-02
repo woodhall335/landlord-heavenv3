@@ -81,21 +81,37 @@ describe('UniversalHero', () => {
     expect(screen.queryByRole('heading', { level: 1 })).not.toBeInTheDocument();
   });
 
-  it('marks the mobile mascot as decorative by default', () => {
+  it('does not render legacy mascot media', () => {
     const { container } = render(<UniversalHero {...baseProps} />);
-    const mascotImages = Array.from(
-      container.querySelectorAll(`img[src="${baseProps.mascotSrc}"]`),
+    expect(container.querySelector(`img[src="${baseProps.mascotSrc}"]`)).toBeNull();
+  });
+
+  it('does not render legacy secondary media such as the laptop preview', () => {
+    const { container } = render(
+      <UniversalHero
+        {...baseProps}
+        mediaSrc="/images/laptop.webp"
+        mediaAlt="Legacy laptop preview"
+      />,
     );
-    const mobileMascot = mascotImages.find(
-      (image) => image.getAttribute('aria-hidden') === 'true',
+
+    expect(container.querySelector('img[src="/images/laptop.webp"]')).toBeNull();
+  });
+
+  it('lets a page-specific universal image override a route-family default', () => {
+    const { container } = render(
+      <UniversalHero
+        {...baseProps}
+        backgroundImageSrc="/images/heroes/library/hero-guide-court-hearing-v2.webp"
+        backgroundImageAlt="Route-specific guide artwork"
+      />,
     );
-    const desktopMascot = mascotImages.find(
-      (image) => image.getAttribute('aria-hidden') !== 'true',
-    );
-    expect(mobileMascot).toBeTruthy();
-    expect(mobileMascot).toHaveAttribute('alt', '');
-    expect(desktopMascot).toBeTruthy();
-    expect(desktopMascot).toHaveAttribute('alt', baseProps.mascotAlt);
+
+    expect(
+      container.querySelector(
+        'img[src="/images/heroes/library/hero-guide-court-hearing-v2.webp"]',
+      ),
+    ).toHaveAttribute('alt', 'Route-specific guide artwork');
   });
 
   it('preserves a word boundary between the plain and highlighted H1 text', () => {
@@ -125,39 +141,10 @@ describe('UniversalHero', () => {
     expect(container.querySelector('section')).toHaveAttribute('id', 'hero-section');
   });
 
-  it('renders the desktop mascot as decorative when mascotDecorativeOnDesktop is true', () => {
-    const { container } = render(
-      <UniversalHero {...baseProps} mascotDecorativeOnDesktop />,
-    );
-    const mascotImages = Array.from(
-      container.querySelectorAll(`img[src="${baseProps.mascotSrc}"]`),
-    );
-    expect(mascotImages).toHaveLength(2);
-    const decorativeImages = mascotImages.filter(
-      (image) => image.getAttribute('aria-hidden') === 'true',
-    );
-    expect(decorativeImages.length).toBeGreaterThan(0);
-    decorativeImages.forEach((image) => {
-      expect(image).toHaveAttribute('alt', '');
-      expect(image.closest('div')).toHaveAttribute('aria-hidden', 'true');
-    });
-  });
-
   it('does not render an empty heading when title is blank', () => {
     render(<UniversalHero {...baseProps} title="" highlightTitle={undefined} />);
     expect(screen.queryByRole('heading', { level: 1 })).not.toBeInTheDocument();
     expect(screen.getByText(baseProps.subtitle)).toBeInTheDocument();
-  });
-
-  it('warns when mascotAlt is empty while the desktop mascot is not decorative', () => {
-    const previousEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = 'development';
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
-    render(<UniversalHero {...baseProps} mascotAlt="   " />);
-    expect(warnSpy).toHaveBeenCalledWith(
-      expect.stringContaining('mediaAlt should be non-empty when media is not decorative'),
-    );
-    process.env.NODE_ENV = previousEnv;
   });
 
   it('renders the trust positioning bar when requested without bringing back the old badge', () => {

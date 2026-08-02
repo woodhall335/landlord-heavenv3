@@ -1,4 +1,5 @@
-import { Container, TealHero } from "@/components/ui";
+import { Container } from "@/components/ui";
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { generateMetadata } from "@/lib/seo";
 import { StructuredData, breadcrumbSchema } from "@/lib/seo/structured-data";
 import Link from "next/link";
@@ -26,8 +27,17 @@ export default function CookiesPage() {
           { name: "Cookie Policy", url: "/cookies" },
         ])}
       />
-      <TealHero title="Cookie Policy" subtitle="How we use cookies to provide the best experience." eyebrow="Compliance" />
-      <Container size="medium" className="py-12">
+      <UniversalHero
+        preset="content_index"
+        preTitleLabel="Compliance"
+        title="Cookie Policy"
+        highlightTitle="Your choices stay clear."
+        subtitle="How Landlord Heaven uses essential, functional, analytics and marketing cookies, and how you can manage your preferences."
+        primaryCta={{ label: 'Read the cookie policy', href: '#cookie-policy' }}
+        secondaryCta={{ label: 'View privacy policy', href: '/privacy' }}
+        trustText="Clear information about site preferences and account privacy"
+      />
+      <Container id="cookie-policy" size="medium" className="scroll-mt-28 py-12">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 md:p-12">
           <p className="text-sm text-gray-500 mb-8">Last updated: November 22, 2025</p>
 

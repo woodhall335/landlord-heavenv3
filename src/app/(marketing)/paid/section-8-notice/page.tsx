@@ -25,6 +25,7 @@ import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import { getProductSamplePageByPackKey } from '@/lib/marketing/product-sample-pages';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getCanonicalUrl } from '@/lib/seo';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 
 const sourcePage = '/paid/section-8-notice';
 const noticeHref =
@@ -246,7 +247,21 @@ export default function EvictionNoticePaidLandingPage() {
       <HeaderConfig mode="solid" />
 
       <div className="overflow-hidden bg-white text-[#17112f]">
-        <section className="relative border-b border-[#e9e2f7] bg-white">
+        <UniversalHero
+          preset="product_owner"
+          preTitleLabel="England Form 3A notice and service file"
+          title="Stop losing rent money."
+          highlightTitle="Prepare your Section 8 notice today."
+          subtitle="When talking has not fixed the arrears or tenancy breach, build your Section 8 eviction notice, Form 3A, service record and supporting file from one guided process. Preview the generated paperwork before you pay."
+          primaryCta={{ label: `Start my notice — ${PRODUCTS.notice_only.displayPrice}`, href: ctaHref() }}
+          secondaryCta={{ label: 'Preview the pack', href: '#preview' }}
+          trustText="England landlord documents checked before you serve, file, or raise rent"
+          backgroundImageSrc="/images/section8-paid-hero-watercolor-v2.webp"
+          backgroundImageAlt="Watercolor illustration of Westminster and an organised Section 8 notice file"
+          showTrustPositioningBar
+          trustPositioningHeadline="One-off purchase with a protected preview before payment"
+        />
+        {false ? <section className="relative border-b border-[#e9e2f7] bg-white">
           <Image
             src="/images/section8-paid-hero-watercolor-v2.webp"
             alt=""
@@ -374,7 +389,7 @@ export default function EvictionNoticePaidLandingPage() {
               </div>
             </div>
           </div>
-        </section>
+        </section> : null}
 
         <section className="border-b border-[#e9e2f7] bg-white" aria-label="Product assurances">
           <div className="mx-auto grid max-w-7xl divide-y divide-[#eee8f8] px-5 md:grid-cols-4 md:divide-x md:divide-y-0 md:px-8">

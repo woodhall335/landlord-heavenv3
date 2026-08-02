@@ -4,6 +4,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
 import { StructuredData, articleSchema, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 
 export type HROverlapSection = {
   heading: string;
@@ -69,45 +70,24 @@ export function HROverlapArticleShell({
       <StructuredData data={faqPageSchema(faqs)} />
 
       <main className="bg-[#fbf9ff] text-[#20143b]">
-        <section className="border-b border-[#e8ddff] bg-[linear-gradient(135deg,#1f123f_0%,#4c1d95_58%,#2f174f_100%)] px-4 py-20 text-white">
-          <Container>
-            <div className="max-w-4xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#d9c8ff]">
-                {eyebrow}
-              </p>
-              <h1 className="mt-5 text-4xl font-bold tracking-tight md:text-6xl">{title}</h1>
-              <div className="mt-6 max-w-3xl text-lg leading-8 text-white/82">{intro}</div>
-              <dl className="mt-8 grid max-w-3xl gap-3 text-sm text-white/78 sm:grid-cols-2 lg:grid-cols-4">
-                <div className="rounded-xl border border-white/18 bg-white/8 px-4 py-3">
-                  <dt className="font-semibold text-white">Author</dt>
-                  <dd>Landlord Heaven editorial team</dd>
-                </div>
-                <div className="rounded-xl border border-white/18 bg-white/8 px-4 py-3">
-                  <dt className="font-semibold text-white">Reviewed</dt>
-                  <dd>25 June 2026</dd>
-                </div>
-                <div className="rounded-xl border border-white/18 bg-white/8 px-4 py-3">
-                  <dt className="font-semibold text-white">Updated</dt>
-                  <dd>25 June 2026</dd>
-                </div>
-                <div className="rounded-xl border border-white/18 bg-white/8 px-4 py-3">
-                  <dt className="font-semibold text-white">Reading time</dt>
-                  <dd>{readingTime}</dd>
-                </div>
-              </dl>
-              {primaryCta ? (
-                <Link
-                  href={primaryCta.href}
-                  className="mt-8 inline-flex rounded-xl bg-white px-5 py-3 text-sm font-semibold text-[#4c1d95] shadow-lg transition hover:bg-[#f3edff]"
-                >
-                  {primaryCta.label}
-                </Link>
-              ) : null}
-            </div>
-          </Container>
-        </section>
+        <UniversalHero
+          preset="content_index"
+          preTitleLabel={eyebrow}
+          title={title}
+          subtitle={intro}
+          primaryCta={primaryCta}
+          secondaryCta={{ label: 'Read the guide', href: '#guide-content' }}
+          trustText="Practical landlord guidance reviewed for the current England route"
+        >
+          <dl className="mt-6 grid max-w-3xl grid-cols-2 gap-2 text-xs text-[#443a59] sm:grid-cols-4 sm:text-sm">
+            <div className="rounded-xl border border-[#e5ddf7] bg-white/88 px-3 py-2"><dt className="font-semibold text-[#21153d]">Author</dt><dd>Editorial team</dd></div>
+            <div className="rounded-xl border border-[#e5ddf7] bg-white/88 px-3 py-2"><dt className="font-semibold text-[#21153d]">Reviewed</dt><dd>25 June 2026</dd></div>
+            <div className="rounded-xl border border-[#e5ddf7] bg-white/88 px-3 py-2"><dt className="font-semibold text-[#21153d]">Updated</dt><dd>25 June 2026</dd></div>
+            <div className="rounded-xl border border-[#e5ddf7] bg-white/88 px-3 py-2"><dt className="font-semibold text-[#21153d]">Reading time</dt><dd>{readingTime}</dd></div>
+          </dl>
+        </UniversalHero>
 
-        <Container className="py-12">
+        <Container id="guide-content" className="scroll-mt-28 py-12">
           <article className="mx-auto max-w-4xl rounded-[1.5rem] border border-[#e8ddff] bg-white p-6 shadow-sm md:p-10">
             <div className="space-y-10 text-base leading-8 text-[#4d4365]">
               {sections.map((section) => (

@@ -1,4 +1,6 @@
 import manifest from '../../../public/images/blog/blog-image-manifest.json';
+import { UNIVERSAL_HERO_LIBRARY } from '../../../config/universal-hero-library';
+import { UNIVERSAL_HERO_IMAGES } from '../../../config/universal-hero-images';
 
 type BlogImageInput = {
   slug: string;
@@ -8,7 +10,7 @@ type BlogImageInput = {
   tags?: string[];
 };
 
-type ImageStrategy = 'explicit' | 'rotated' | 'placeholder';
+type ImageStrategy = 'explicit' | 'rotated' | 'placeholder' | 'universal';
 
 type BlogImageResolution = {
   hero: string;
@@ -85,11 +87,31 @@ const SLUG_IMAGE_OVERRIDES = new Map([
   [
     'do-landlords-need-a-new-tenancy-agreement-after-1-may-2026',
     {
-      hero: '/images/blog/heroes/lh-blog-tenancy-agreements-v1.webp',
-      og: '/images/blog/og/lh-blog-tenancy-agreements-v1-og.webp',
+      hero: '/images/heroes/library/hero-tenancy-england-standard-v2.webp',
+      og: '/images/heroes/library/hero-tenancy-england-standard-v2.webp',
     },
   ],
 ]);
+
+const UNIVERSAL_BLOG_HERO_POOL = Array.from(
+  new Set([
+    ...UNIVERSAL_HERO_LIBRARY.filter((entry) =>
+      ['guide', 'hub', 'tenancy', 'product'].includes(entry.category)
+    ).map((entry) => entry.src),
+    UNIVERSAL_HERO_IMAGES.blogEviction,
+    UNIVERSAL_HERO_IMAGES.blogTenancy,
+    UNIVERSAL_HERO_IMAGES.blogMoneyClaims,
+    UNIVERSAL_HERO_IMAGES.tenantNotPaying,
+    UNIVERSAL_HERO_IMAGES.section8Notice,
+    UNIVERSAL_HERO_IMAGES.completeEviction,
+    UNIVERSAL_HERO_IMAGES.moneyClaim,
+    UNIVERSAL_HERO_IMAGES.rentIncrease,
+    UNIVERSAL_HERO_IMAGES.tenancyEngland,
+    UNIVERSAL_HERO_IMAGES.tenancyWales,
+    UNIVERSAL_HERO_IMAGES.tenancyScotland,
+    UNIVERSAL_HERO_IMAGES.tenancyNorthernIreland,
+  ])
+);
 
 const placeholderVariants = manifest.placeholders
   .map((entry) => ({ file: entry.file, path: toPublicPath(entry.path) }))
@@ -150,6 +172,19 @@ function getRotatedTemplateKey(input: BlogImageInput) {
 }
 
 export function resolveBlogImageSet(input: BlogImageInput): BlogImageResolution {
+  const universalHero =
+    UNIVERSAL_BLOG_HERO_POOL[stableHash(input.slug) % UNIVERSAL_BLOG_HERO_POOL.length];
+
+  if (universalHero) {
+    return {
+      hero: universalHero,
+      og: universalHero,
+      placeholder: getPlaceholderBySlug(input.slug).hero,
+      strategy: 'universal',
+      templateKey: `universal:${input.slug}`,
+    };
+  }
+
   const slugOverride = SLUG_IMAGE_OVERRIDES.get(input.slug);
   if (slugOverride) {
     return {

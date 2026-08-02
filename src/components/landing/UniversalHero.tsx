@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { BadgeCheck, FileDown, Headphones } from 'lucide-react';
 import { RiCheckLine, RiShieldCheckFill } from 'react-icons/ri';
-import { PremiumParallax, StaggerReveal } from '@/components/marketing/PremiumMotion';
+import { StaggerReveal } from '@/components/marketing/PremiumMotion';
 import { TrustPositioningBar } from '@/components/marketing/TrustPositioningBar';
 import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
 import type { PositioningPreset } from '@/lib/marketing/positioning';
@@ -29,10 +29,6 @@ type HeroCta = {
 // that keeps subtitle readability, right-edge media bleed, and CTA placement stable across pages.
 const SECTION_WRAP_CLASSES =
   'relative isolate flex min-h-[100svh] overflow-hidden pb-10 pt-28 sm:pb-12 sm:pt-32 lg:min-h-[100dvh] lg:items-center lg:pb-16 lg:pt-36';
-const MOBILE_MEDIA_WRAP_CLASSES =
-  'relative z-0 float-right mr-0 ml-4 mt-3 mb-5 w-[58%] max-w-[500px] pt-0 sm:w-[58%] lg:hidden';
-const SUBTITLE_CLASSES =
-  'relative z-10 mt-4 px-0 py-0 text-lg leading-relaxed sm:max-w-[52ch] sm:text-xl';
 const CTA_WRAP_CLASSES = 'mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center';
 const REVIEW_STARS = '\u2605\u2605\u2605\u2605\u2605';
 
@@ -168,9 +164,6 @@ export function UniversalHero({
   const HeadingTag = isValidHeading ? headingAs : 'h1';
   const reviewCount = getDynamicReviewCount();
   const presetStyles = PUBLIC_HERO_PRESET_STYLES[preset];
-  const resolvedMediaSrc = mediaSrc ?? mascotSrc ?? '/images/laptop.webp';
-  const resolvedMediaAlt =
-    mediaAlt ?? mascotAlt ?? 'Laptop showing landlord document dashboard';
   const shouldRenderHeading = Boolean(title || highlightTitle);
   // The new public hero contract keeps proof and live usage visible everywhere.
   // Legacy wrappers may still pass false while they are migrated; retain the
@@ -191,19 +184,31 @@ export function UniversalHero({
         ? false
         : showTrustDescriptor && resolvedTrustText.trim().length > 60;
   const isCenter = align === 'center';
-  const shouldRenderMedia = !hideMedia && mediaSrc !== null;
+  // Universal heroes use one route-specific watercolor background only.
+  // Keep legacy media props in the API while wrappers are migrated, but never
+  // render a competing laptop/product image inside the universal hero.
+  void hideMedia;
+  void mediaSrc;
+  void mediaAlt;
+  void mediaPriority;
+  void mascotSrc;
+  void mascotAlt;
+  void mascotDecorativeOnMobile;
+  void mascotDecorativeOnDesktop;
   void variant;
   void showReviewPill;
   void showUsageCounter;
   const isPastel = true;
   const routeHero = findUniversalHeroForPath(pathname);
   const resolvedBackgroundImageSrc =
-    routeHero?.src ??
     backgroundImageSrc ??
+    routeHero?.src ??
     (backgroundImageKey
       ? getUniversalHeroImage(backgroundImageKey)
       : getUniversalHeroImageForPath(pathname));
-  const resolvedBackgroundImageAlt = routeHero?.alt ?? backgroundImageAlt;
+  const resolvedBackgroundImageAlt = backgroundImageSrc
+    ? backgroundImageAlt
+    : routeHero?.alt ?? backgroundImageAlt;
 
   useEffect(() => {
     if (!isValidHeading) {
@@ -214,18 +219,9 @@ export function UniversalHero({
       warnOnce('UniversalHero: ariaLabel should be non-empty when provided.');
     }
 
-    if (
-      (!mascotDecorativeOnDesktop || !mascotDecorativeOnMobile) &&
-      resolvedMediaAlt.trim() === ''
-    ) {
-      warnOnce('UniversalHero: mediaAlt should be non-empty when media is not decorative.');
-    }
   }, [
     ariaLabel,
     isValidHeading,
-    mascotDecorativeOnDesktop,
-    mascotDecorativeOnMobile,
-    resolvedMediaAlt,
   ]);
 
   return (
@@ -373,7 +369,7 @@ export function UniversalHero({
                     ? 'mt-3 text-[2.125rem] font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl'
                     : 'mt-5 text-[2.125rem] font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl',
                   isPastel ? 'text-[#17112f]' : 'text-white',
-                  shouldRenderMedia ? 'max-w-none' : 'max-w-[18ch] lg:max-w-none'
+                  'max-w-[18ch] lg:max-w-none'
                 )}
               >
                 {title}
@@ -386,30 +382,12 @@ export function UniversalHero({
               </HeadingTag>
             )}
 
-            {shouldRenderMedia && (
-              <div
-                className={MOBILE_MEDIA_WRAP_CLASSES}
-                aria-hidden={mascotDecorativeOnMobile ? 'true' : undefined}
-              >
-                <Image
-                  src={resolvedMediaSrc}
-                  alt={mascotDecorativeOnMobile ? '' : resolvedMediaAlt}
-                  aria-hidden={mascotDecorativeOnMobile ? 'true' : undefined}
-                  width={980}
-                  height={650}
-                  priority={mediaPriority}
-                  sizes="(max-width: 1024px) 95vw, 46vw"
-                  className="relative z-0 h-auto w-full rounded-[1.2rem]"
-                />
-              </div>
-            )}
-
-            {subtitle && !shouldRenderMedia && (
+            {subtitle && (
               <p
                 className={clsx(
                   'mt-4 px-0 py-0 text-lg leading-relaxed sm:max-w-[52ch] sm:text-xl',
                   isPastel ? 'text-[#5f5871]' : 'text-white/85',
-                  shouldRenderMedia ? 'w-auto lg:w-full' : 'w-full',
+                  'w-full',
                   isCenter && 'sm:mx-auto'
                 )}
               >
@@ -417,15 +395,10 @@ export function UniversalHero({
               </p>
             )}
 
-            {subtitle && shouldRenderMedia && (
-              <p className={clsx(SUBTITLE_CLASSES, isPastel && 'text-[#5f5871]', isCenter && 'sm:mx-auto')}>{subtitle}</p>
-            )}
-
             {(primaryCta || secondaryCta || actionsSlot) && (
               <div
                 className={clsx(
                   CTA_WRAP_CLASSES,
-                  shouldRenderMedia && 'clear-both lg:clear-none',
                   isCenter && 'sm:justify-center'
                 )}
               >
@@ -479,30 +452,6 @@ export function UniversalHero({
               </div>
             )}
           </StaggerReveal>
-
-          {shouldRenderMedia && (
-            <div
-              className="relative z-10 hidden h-full items-center justify-end lg:flex"
-              aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
-            >
-              <PremiumParallax
-                intensity={12}
-                className="w-full max-w-[680px]"
-                aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
-              >
-                <Image
-                  src={resolvedMediaSrc}
-                  alt={mascotDecorativeOnDesktop ? '' : resolvedMediaAlt}
-                  aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
-                  width={980}
-                  height={650}
-                  priority={mediaPriority}
-                  sizes="(max-width: 1024px) 92vw, 46vw"
-                  className="h-auto w-full rounded-[1.5rem]"
-                />
-              </PremiumParallax>
-            </div>
-          )}
         </div>
       </div>
     </section>

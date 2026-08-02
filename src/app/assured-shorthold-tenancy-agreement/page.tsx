@@ -4,6 +4,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { getCanonicalUrl } from '@/lib/seo';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 
 const canonicalUrl = getCanonicalUrl('/assured-shorthold-tenancy-agreement');
 const wizardHref =
@@ -109,50 +110,16 @@ export default function AssuredShortholdTenancyAgreementPage() {
       />
 
       <main>
-        <section className="bg-gradient-to-br from-red-50 via-white to-red-50 pt-24 pb-16">
-          <div className="container mx-auto px-4">
-            <div className="max-w-5xl mx-auto text-center">
-              <div className="inline-flex items-center rounded-full bg-red-100 px-4 py-2 text-sm font-semibold text-red-800 mb-5">
-                Updated England route for assured shorthold tenancy agreement searches
-              </div>
-
-              <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-                Assured Shorthold Tenancy Agreement 2026
-              </h1>
-
-              <p className="text-xl text-gray-700 max-w-4xl mx-auto mb-4">
-                If you are searching for an <strong>assured shorthold tenancy agreement</strong>,
-                this is the updated England route. Landlord Heaven now positions the live product as
-                the <strong>England Tenancy Agreement 2026</strong> with{' '}
-                <strong>Renters&apos; Rights compliant</strong> wording.
-              </p>
-
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
-                This page keeps legacy AST search demand while moving landlords into the newer England
-                agreement flow with clearer landlord guidance and a more up-to-date 2026 landing page.
-              </p>
-
-              <div className="flex gap-4 justify-center flex-wrap">
-                <Link
-                  href={wizardHref}
-                  className="inline-flex items-center justify-center rounded-lg bg-red-600 px-6 py-3 font-semibold text-white shadow-sm transition-colors hover:bg-red-700"
-                >
-                  Start updated England agreement
-                </Link>
-                <Link
-                  href={premiumWizardHref}
-                  className="inline-flex items-center justify-center rounded-lg border-2 border-red-600 bg-white px-6 py-3 font-semibold text-red-600 shadow-sm transition-colors hover:bg-red-50"
-                >
-                  Use premium agreement
-                </Link>
-              </div>
-
-              <p className="mt-4 text-sm text-gray-600">
-                Legacy AST query capture | Updated England wording | Modern landlord flow
-              </p>
-            </div>
-          </div>
-        </section>
+        <UniversalHero
+          preset="content_index"
+          preTitleLabel="Updated England tenancy agreement route"
+          title="Assured Shorthold Tenancy Agreement 2026"
+          highlightTitle="Use the current England agreement."
+          subtitle="If you searched for an assured shorthold tenancy agreement, this page explains the updated England route and moves you into the current agreement flow with clearer 2026 landlord guidance."
+          primaryCta={{ label: 'Start updated England agreement', href: wizardHref }}
+          secondaryCta={{ label: 'Use the premium agreement', href: premiumWizardHref }}
+          trustText="Current England tenancy setup with preview before payment"
+        />
 
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">

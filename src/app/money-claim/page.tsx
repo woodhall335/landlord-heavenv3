@@ -17,6 +17,7 @@ import { Container } from '@/components/ui/Container';
 import { getMoneyClaimPreviewData } from '@/lib/previews/moneyClaimPreviews';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getCanonicalUrl } from '@/lib/seo';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import {
   blogLinks,
   guideLinks,
@@ -143,34 +144,20 @@ export default async function MoneyClaimPage() {
       <HeaderConfig mode="autoOnScroll" />
 
       <main>
-        <section className="border-b border-[#E6DBFF] bg-white py-12 md:py-16">
-          <Container>
-            <div className="mx-auto max-w-5xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#692ed4]">
-                England landlord debt-recovery guide
-              </p>
-              <h1 className="mt-4 text-4xl font-bold tracking-tight text-[#2a2161] md:text-5xl">
-                Money Claim for Landlords (England)
-              </h1>
-              <div className="mt-6 max-w-3xl space-y-4 text-lg leading-8 text-gray-700">
-                <p>
-                  This page is built to satisfy broad money-claim intent first. It shows what a
-                  landlord claim file actually looks like, explains the supporting routes that sit
-                  underneath this guide, and only then hands the user into the transactional claim-pack
-                  workflow.
-                </p>
-                <p>
-                  The core job is route clarity before issue. Broad users usually do not need a
-                  product pitch first. They need to understand the pre-action step, the evidence
-                  structure, the difference between MCOL and N1, and what changes depending on
-                  whether the claim is for rent, bills, guarantor liability, or damage.
-                </p>
-              </div>
-            </div>
-          </Container>
-        </section>
+        <UniversalHero
+          preset="content_index"
+          preTitleLabel="England landlord debt-recovery guide"
+          title="Money claims for landlords"
+          highlightTitle="Build the right evidence file first."
+          subtitle="Understand the pre-action step, evidence structure, MCOL and N1 routes, and what changes when the claim covers rent, bills, guarantor liability or property damage."
+          primaryCta={{ label: 'Prepare my money claim', href: '/products/money-claim' }}
+          secondaryCta={{ label: 'See the claim-file preview', href: '#money-claim-preview' }}
+          trustText="England landlord debt-recovery documents with preview before payment"
+        />
 
+        <div id="money-claim-preview" className="scroll-mt-28">
         <EnglandMoneyClaimPreview previews={previews} />
+        </div>
 
         <section className="bg-[#F8F4FF] py-12 md:py-16">
           <Container>

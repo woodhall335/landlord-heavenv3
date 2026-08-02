@@ -3,7 +3,7 @@ import { Container } from '@/components/ui';
 import { freeTools } from '@/lib/tools/tools';
 import { generateMetadata } from '@/lib/seo';
 import { StructuredData, websiteSchema } from '@/lib/seo/structured-data';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { StaggerReveal, TrustPillRow } from '@/components/marketing/PremiumMotion';
 import { CommercialWizardLinks } from '@/components/seo/CommercialWizardLinks';
 import { analyzeContent } from '@/lib/seo/commercial-linking';
@@ -46,12 +46,13 @@ export default function ToolsHubPage() {
   return (
     <div className="min-h-screen public-page-shell">
       <StructuredData data={websiteSchema()} />
-      <StandardHero
-        badge="Free Tools"
+      <UniversalHero
+        preTitleLabel="Free tools"
         title="Free Tools for UK Landlords"
         subtitle="Use our free calculators, letter builders, and checks to understand your position quickly, then move into a full landlord pack if you need the paperwork for the next step."
-        primaryCTA={{ label: 'Explore free tools', href: '#featured-tools' }}
-        secondaryCTA={{ label: 'Ask Heaven', href: '/ask-heaven' }}
+        primaryCta={{ label: 'Explore free tools', href: '#featured-tools' }}
+        secondaryCta={{ label: 'Ask Heaven', href: '/ask-heaven' }}
+        trustText="Free landlord checks with a clear route into the right documents"
         variant="pastel"
       />
 

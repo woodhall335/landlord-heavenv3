@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 
 type SeoSection = {
   title: string;
@@ -30,43 +31,18 @@ export function RentCheckerSeoPage(props: RentCheckerSeoPageProps) {
     <>
       <HeaderConfig mode="solid" />
       <main className="bg-slate-50 pb-20">
+        <UniversalHero
+          preset="content_index"
+          preTitleLabel={eyebrow}
+          title={title}
+          subtitle={intro}
+          primaryCta={primaryCta}
+          secondaryCta={secondaryCta}
+          trustText="Free England rent-increase guidance before you prepare Form 4A"
+        />
         <section className="mx-auto max-w-6xl px-4 pt-12 sm:px-6 lg:px-8">
           <div className="overflow-hidden rounded-[32px] border border-slate-200 bg-white shadow-[0_30px_80px_rgba(15,23,42,0.08)]">
-            <div className="grid gap-10 px-6 py-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(320px,0.8fr)] lg:px-10 lg:py-12">
-              <div>
-                <div className="inline-flex rounded-full border border-violet-200 bg-violet-50 px-4 py-2 text-sm font-semibold text-violet-700">
-                  {eyebrow}
-                </div>
-                <h1 className="mt-5 max-w-3xl text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
-                  {title}
-                </h1>
-                <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">{intro}</p>
-                <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600">
-                  Use this page when you need the search intent answered before you open the
-                  checker: what the rent increase tool checks, where the limits are, which evidence
-                  matters, and which paid Section 13 route usually fits next. The aim is to make the
-                  decision useful before you touch Form 4A or a tribunal-ready response, especially
-                  where the tenant may challenge the figure or the comparables need explaining in
-                  writing before any notice is served.
-                </p>
-
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <Link
-                    href={primaryCta.href}
-                    data-testid="hero-primary-cta"
-                    className="inline-flex items-center justify-center rounded-2xl bg-violet-600 px-6 py-4 text-base font-semibold text-white transition hover:bg-violet-700"
-                  >
-                    {primaryCta.label}
-                  </Link>
-                  <Link
-                    href={secondaryCta.href}
-                    className="inline-flex items-center justify-center rounded-2xl border border-slate-200 px-6 py-4 text-base font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
-                  >
-                    {secondaryCta.label}
-                  </Link>
-                </div>
-              </div>
-
+            <div className="px-6 py-8 lg:px-10 lg:py-10">
               <aside className="rounded-[28px] border border-slate-200 bg-slate-50 p-6">
                 <h2 className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">
                   Use This Page To

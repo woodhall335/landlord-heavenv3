@@ -39567,7 +39567,7 @@ const allBlogPosts: BlogPost[] = [
       name: 'Landlord Heaven Editorial Team',
       role: 'Housing document specialists',
     },
-    heroImage: '/images/blog/heroes/lh-blog-tenancy-agreements-v1.webp',
+    heroImage: '/images/heroes/library/hero-tenancy-england-standard-v2.webp',
     heroImageAlt: 'England landlord reviewing tenancy agreement after 1 May 2026',
     showUrgencyBanner: false,
     targetKeyword: 'new tenancy agreement after 1 May 2026',
@@ -39617,7 +39617,7 @@ const allBlogPosts: BlogPost[] = [
         </p>
 
         <ImagePlaceholder
-          src="/images/blog/heroes/lh-blog-tenancy-agreements-v1.webp"
+          src="/images/heroes/library/hero-tenancy-england-standard-v2.webp"
           alt="England tenancy agreement review after 1 May 2026"
           caption="A current tenancy agreement review is often safer than relying on an old template with familiar wording"
           aspectRatio="hero"

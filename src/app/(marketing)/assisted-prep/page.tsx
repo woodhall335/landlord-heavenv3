@@ -3,6 +3,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { AssistedPrepAllServiceDetails } from '@/components/assisted-prep/AssistedPrepServiceDetails';
 import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { ASSISTED_PREP_PROMISE } from '@/lib/assisted-prep';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 
 export const metadata: Metadata = {
   title: 'Assisted Landlord Document Prep | Landlord Heaven',
@@ -32,25 +33,25 @@ export default function AssistedPrepHubPage() {
     <>
       <HeaderConfig mode="solid" />
       <main className="bg-slate-50">
-        <section className="mx-auto max-w-6xl px-4 py-16 md:py-24">
-          <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-violet-700">
-              Assisted prep
-            </p>
-            <h1 className="mt-3 text-4xl font-bold tracking-tight text-slate-950 md:text-5xl">
-              {ASSISTED_PREP_PROMISE}
-            </h1>
-            <p className="mt-5 text-lg leading-8 text-slate-700">
-              Choose this when you do not want to work through the document pack alone. We collect the essentials, you pay securely, then we prepare the pack with you on a callback.
-            </p>
-          </div>
-
+        <UniversalHero
+          preset="product_owner"
+          preTitleLabel="Assisted landlord document preparation"
+          title={ASSISTED_PREP_PROMISE}
+          subtitle="Choose this when you do not want to work through the document pack alone. We collect the essentials, you pay securely, then prepare the pack with you on a focused callback."
+          primaryCta={{ label: 'Choose an assisted service', href: '#assisted-prep-services' }}
+          secondaryCta={{ label: 'See what is included', href: '#assisted-prep-details' }}
+          trustText="England landlord document preparation with a clear scope and secure checkout"
+          showTrustPositioningBar
+        />
+        <section id="assisted-prep-services" className="mx-auto max-w-6xl scroll-mt-28 px-4 py-16 md:py-24">
           <AssistedPrepServicesShowcase
             pagePath="/assisted-prep"
             pageType="entry_page"
             src="assisted_prep_hub"
           />
-          <AssistedPrepAllServiceDetails className="mt-10" />
+          <div id="assisted-prep-details" className="scroll-mt-28">
+            <AssistedPrepAllServiceDetails className="mt-10" />
+          </div>
         </section>
       </main>
     </>

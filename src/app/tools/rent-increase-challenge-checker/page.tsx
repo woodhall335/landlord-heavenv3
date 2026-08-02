@@ -7,6 +7,7 @@ import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import { getProductSamplePageByPackKey } from '@/lib/marketing/product-sample-pages';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, softwareApplicationSchema } from '@/lib/seo/structured-data';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 
 const canonicalUrl = getCanonicalUrl('/tools/rent-increase-challenge-checker');
 
@@ -39,24 +40,19 @@ export default function RentIncreaseChallengeCheckerPage() {
     <>
       <HeaderConfig mode="solid" />
       <StructuredData data={softwareApplicationSchema()} />
-      <section className="bg-slate-50 px-4 pt-12 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-5xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-violet-600">
-            Free Section 13 tool
-          </p>
-          <h1 className="mt-3 max-w-3xl text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">
-            Section 13 Rent Increase Checker for England Landlords
-          </h1>
-          <p className="mt-4 max-w-3xl text-lg leading-8 text-slate-600">
-            Check the market range, evidence strength, and challenge risk before you serve
-            Form 4A or choose the Standard or Tribunal-Ready rent increase pack.
-          </p>
-          <h2 className="mt-8 text-2xl font-semibold text-slate-950">
-            Check market evidence before choosing a rent increase route
-          </h2>
-        </div>
-      </section>
+      <UniversalHero
+        preset="content_index"
+        preTitleLabel="Free Section 13 tool"
+        title="Section 13 Rent Increase Checker"
+        highlightTitle="for England landlords"
+        subtitle="Check the market range, evidence strength and challenge risk before you serve Form 4A or choose the Standard or Tribunal-Ready rent increase pack."
+        primaryCta={{ label: 'Run the free rent checker', href: '#rent-increase-checker' }}
+        secondaryCta={{ label: 'Compare Section 13 routes', href: '/rent-increase' }}
+        trustText="Free market-rent evidence check before you prepare Form 4A"
+      />
+      <div id="rent-increase-checker" className="scroll-mt-28">
       <RentIncreaseChallengeChecker />
+      </div>
       {sampleProof ? (
         <section className="bg-white py-12 md:py-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

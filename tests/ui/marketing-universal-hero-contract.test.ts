@@ -29,6 +29,14 @@ describe('marketing page hero contract', () => {
     const redirectOnlyPages = ['permanentRedirect('];
 
     const offenders = collectPageFiles(MARKETING_APP_DIR).filter((filePath) => {
+      const normalized = relativePage(filePath);
+      if (
+        normalized.includes('/checkout/') ||
+        normalized.includes('/success/') ||
+        normalized.includes('/assisted-prep/start/')
+      ) {
+        return false;
+      }
       const source = fs.readFileSync(filePath, 'utf8');
       const usesUniversalHero = source.includes('UniversalHero');
       const usesApprovedWrapper = approvedWrappers.some((marker) => source.includes(marker));

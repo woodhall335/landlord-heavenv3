@@ -9,7 +9,6 @@ import { Sources } from '@/components/blog/Sources';
 import { BlogCard } from '@/components/blog/BlogCard';
 import { CategoryPage } from '@/components/blog/CategoryPage';
 import { UniversalHero } from '@/components/landing/UniversalHero';
-import { getUniversalHeroImageForPath } from '@/config/universal-hero-images';
 import { Reveal, StaggerReveal } from '@/components/marketing/PremiumMotion';
 import { blogPosts, getBlogPost } from '@/lib/blog/posts';
 import { BlogPost } from '@/lib/blog/types';
@@ -736,7 +735,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
           ariaLabel={`${seoConfig.metaTitle} hero`}
           showUsageCounter={false}
           variant="pastel"
-          backgroundImageSrc={getUniversalHeroImageForPath(`/blog/${post.slug}`)}
+          backgroundImageSrc={heroSrc}
           backgroundImageAlt="Watercolour illustration for this landlord guide"
         >
           <div className="mt-6 max-w-4xl space-y-4 text-left">
