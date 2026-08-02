@@ -1,0 +1,44 @@
+{
+  "key": "scotland_standard_prt",
+  "displayName": "Scotland Standard Private Residential Tenancy Sample Pack",
+  "outputDir": "scotland_standard_prt",
+  "documentCount": 4,
+  "documents": [
+    {
+      "title": "Private Residential Tenancy Agreement",
+      "description": "Generated open-ended Scotland Private Residential Tenancy Agreement.",
+      "category": "agreement",
+      "documentType": "scotland_private_residential_tenancy_agreement",
+      "fileName": "tenancy_agreement.pdf",
+      "files": { "pdf": "scotland_standard_prt/tenancy_agreement.pdf" },
+      "extraction": { "pageCount": 27, "method": "pypdf" }
+    },
+    {
+      "title": "Statutory Terms Supporting Notes (April 2024)",
+      "description": "Scottish Government supporting notes supplied with the PRT sample pack.",
+      "category": "guidance",
+      "documentType": "scotland_prt_statutory_terms_supporting_notes",
+      "fileName": "scotland_prt_statutory_terms_supporting_notes_april_2024.pdf",
+      "files": { "pdf": "scotland_standard_prt/scotland_prt_statutory_terms_supporting_notes_april_2024.pdf" },
+      "extraction": { "pageCount": 42, "method": "pypdf" }
+    },
+    {
+      "title": "Inventory & Schedule of Condition (Scotland)",
+      "description": "Property contents and condition record supplied with the Scotland sample pack.",
+      "category": "schedule",
+      "documentType": "scotland_inventory_schedule",
+      "fileName": "inventory_schedule.pdf",
+      "files": { "pdf": "scotland_standard_prt/inventory_schedule.pdf" },
+      "extraction": { "pageCount": 9, "method": "pypdf" }
+    },
+    {
+      "title": "Pre-Tenancy Compliance Checklist (Scotland)",
+      "description": "Scotland-specific setup checklist covering registration and the principal pre-tenancy actions.",
+      "category": "checklist",
+      "documentType": "scotland_compliance_checklist",
+      "fileName": "compliance_checklist.pdf",
+      "files": { "pdf": "scotland_standard_prt/compliance_checklist.pdf" },
+      "extraction": { "pageCount": 3, "method": "pypdf" }
+    }
+  ]
+}

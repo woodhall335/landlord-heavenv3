@@ -50,7 +50,7 @@ export const metadata: Metadata = {
 const routeCards: ProductSalesRouteCard[] = [
   {
     name: 'Standard Tenancy Agreement',
-    imageSrc: '/images/wizard-standard-tenancy-agreement.webp',
+    imageSrc: '/images/generated/product-cards/standard-tenancy-agreement.webp',
     imageAlt: 'Standard tenancy agreement preview',
     priceLabel:
       tenancyProducts.find((product) => product.key === 'england_standard_tenancy_agreement')
@@ -68,7 +68,7 @@ const routeCards: ProductSalesRouteCard[] = [
   },
   {
     name: 'Premium Tenancy Agreement',
-    imageSrc: '/images/wizard-premium-tenancy-agreement.webp',
+    imageSrc: '/images/generated/product-cards/premium-tenancy-agreement.webp',
     imageAlt: 'Premium tenancy agreement preview',
     priceLabel:
       tenancyProducts.find((product) => product.key === 'england_premium_tenancy_agreement')
@@ -86,7 +86,7 @@ const routeCards: ProductSalesRouteCard[] = [
   },
   {
     name: 'Student Tenancy Agreement',
-    imageSrc: '/images/wizard-student-tenancy-agreement.webp',
+    imageSrc: '/images/generated/product-cards/student-tenancy-agreement.webp',
     imageAlt: 'Student tenancy agreement preview',
     priceLabel:
       tenancyProducts.find((product) => product.key === 'england_student_tenancy_agreement')
@@ -103,7 +103,7 @@ const routeCards: ProductSalesRouteCard[] = [
   },
   {
     name: 'HMO / Shared House Tenancy Agreement',
-    imageSrc: '/images/wizard-hmo-agreement.webp',
+    imageSrc: '/images/generated/product-cards/hmo-shared-house-agreement.webp',
     imageAlt: 'HMO shared house tenancy agreement preview',
     priceLabel:
       tenancyProducts.find(
@@ -121,7 +121,7 @@ const routeCards: ProductSalesRouteCard[] = [
   },
   {
     name: 'Lodger Agreement',
-    imageSrc: '/images/wizard-lodger-agreement.webp',
+    imageSrc: '/images/generated/product-cards/lodger-agreement.webp',
     imageAlt: 'Lodger agreement preview',
     priceLabel:
       tenancyProducts.find((product) => product.key === 'england_lodger_agreement')?.priceLabel,

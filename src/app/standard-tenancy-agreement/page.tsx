@@ -212,7 +212,7 @@ export default function StandardTenancyAgreementPage() {
               'The current England agreement for a straightforward whole-property let, with setup records, key clauses, and practical landlord wording.',
             href: '/standard-tenancy-agreement',
             ctaLabel: 'Build my Standard pack',
-            imageSrc: '/images/wizard-standard-tenancy-agreement.webp',
+            imageSrc: '/images/generated/product-cards/standard-tenancy-agreement.webp',
             imageAlt: 'Standard tenancy agreement preview',
             price: PRODUCTS.england_standard_tenancy_agreement.displayPrice,
             details: [
@@ -243,7 +243,7 @@ export default function StandardTenancyAgreementPage() {
               'The fuller current England option for ordinary residential lets that need stronger management wording.',
             href: '/premium-tenancy-agreement',
             ctaLabel: 'Build my Premium pack',
-            imageSrc: '/images/wizard-premium-tenancy-agreement.webp',
+            imageSrc: '/images/generated/product-cards/premium-tenancy-agreement.webp',
             imageAlt: 'Premium tenancy agreement preview',
             price: PRODUCTS.england_premium_tenancy_agreement.displayPrice,
             details: [
@@ -275,7 +275,7 @@ export default function StandardTenancyAgreementPage() {
               'The dedicated agreement for student households in England.',
             href: '/student-tenancy-agreement',
             ctaLabel: 'Build my validated Student pack',
-            imageSrc: '/images/wizard-student-tenancy-agreement.webp',
+            imageSrc: '/images/generated/product-cards/student-tenancy-agreement.webp',
             imageAlt: 'Student tenancy agreement preview',
             price: PRODUCTS.england_student_tenancy_agreement.displayPrice,
             details: [
@@ -306,7 +306,7 @@ export default function StandardTenancyAgreementPage() {
               'The shared-house agreement for occupiers living together and using communal areas.',
             href: '/hmo-shared-house-tenancy-agreement',
             ctaLabel: 'Build my validated HMO pack',
-            imageSrc: '/images/wizard-hmo-agreement.webp',
+            imageSrc: '/images/generated/product-cards/hmo-shared-house-agreement.webp',
             imageAlt: 'HMO shared house tenancy agreement preview',
             price: PRODUCTS.england_hmo_shared_house_tenancy_agreement.displayPrice,
             details: [
@@ -338,7 +338,7 @@ export default function StandardTenancyAgreementPage() {
               'The room-let agreement for a landlord who lives in the property.',
             href: '/lodger-agreement',
             ctaLabel: 'Build my validated Lodger pack',
-            imageSrc: '/images/wizard-lodger-agreement.webp',
+            imageSrc: '/images/generated/product-cards/lodger-agreement.webp',
             imageAlt: 'Lodger agreement preview',
             price: PRODUCTS.england_lodger_agreement.displayPrice,
             details: [

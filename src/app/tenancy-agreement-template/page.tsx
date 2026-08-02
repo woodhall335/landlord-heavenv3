@@ -343,7 +343,7 @@ export default function TenancyAgreementTemplatePage() {
         <UniversalHero
           preset="content_index"
           trustText="Premium golden-pack sample | real England tenancy agreement preview"
-          mediaSrc="/images/wizard-premium-tenancy-agreement.webp"
+          mediaSrc="/images/generated/product-cards/premium-tenancy-agreement.webp"
           mediaAlt="Preview of Premium Tenancy Agreement documents"
           title="Premium Tenancy Agreement Sample"
           highlightTitle="(England)"

@@ -1,0 +1,35 @@
+{
+  "key": "wales_fixed_standard_occupation_contract",
+  "displayName": "Wales Fixed-Term Standard Occupation Contract Sample Pack",
+  "outputDir": "wales_fixed_standard_occupation_contract",
+  "documentCount": 3,
+  "documents": [
+    {
+      "title": "Fixed-Term Standard Occupation Contract",
+      "description": "Generated Wales fixed-term Standard Occupation Contract for a term of less than seven years.",
+      "category": "agreement",
+      "documentType": "wales_fixed_standard_occupation_contract",
+      "fileName": "tenancy_agreement.pdf",
+      "files": { "pdf": "wales_fixed_standard_occupation_contract/tenancy_agreement.pdf" },
+      "extraction": { "pageCount": 35, "method": "pypdf" }
+    },
+    {
+      "title": "Inventory & Schedule of Condition (Wales)",
+      "description": "Property contents and condition record supplied with the fixed-term sample pack.",
+      "category": "schedule",
+      "documentType": "wales_fixed_inventory_schedule",
+      "fileName": "inventory_schedule.pdf",
+      "files": { "pdf": "wales_fixed_standard_occupation_contract/inventory_schedule.pdf" },
+      "extraction": { "pageCount": 9, "method": "pypdf" }
+    },
+    {
+      "title": "Pre-Tenancy Compliance Checklist (Wales)",
+      "description": "Wales-specific setup checklist covering the principal pre-contract compliance actions.",
+      "category": "checklist",
+      "documentType": "wales_fixed_compliance_checklist",
+      "fileName": "compliance_checklist.pdf",
+      "files": { "pdf": "wales_fixed_standard_occupation_contract/compliance_checklist.pdf" },
+      "extraction": { "pageCount": 3, "method": "pypdf" }
+    }
+  ]
+}

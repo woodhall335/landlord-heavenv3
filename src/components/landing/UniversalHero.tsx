@@ -7,7 +7,6 @@ import { usePathname } from 'next/navigation';
 import { BadgeCheck, FileDown, Headphones } from 'lucide-react';
 import { RiCheckLine, RiShieldCheckFill } from 'react-icons/ri';
 import { StaggerReveal } from '@/components/marketing/PremiumMotion';
-import { TrustPositioningBar } from '@/components/marketing/TrustPositioningBar';
 import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
 import type { PositioningPreset } from '@/lib/marketing/positioning';
 import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats';
@@ -28,7 +27,7 @@ type HeroCta = {
 // DO NOT MODIFY WITHOUT UPDATING TESTS: these classes define the mobile hero layout contract
 // that keeps subtitle readability, right-edge media bleed, and CTA placement stable across pages.
 const SECTION_WRAP_CLASSES =
-  'relative isolate flex min-h-[100svh] overflow-hidden pb-[34svh] pt-28 sm:pb-[30svh] sm:pt-32 lg:min-h-[100dvh] lg:items-center lg:pb-16 lg:pt-36';
+  'relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-white pt-28 sm:pt-32 lg:min-h-[100dvh] lg:items-center lg:justify-center lg:pb-16 lg:pt-36';
 const CTA_WRAP_CLASSES = 'mt-8 flex w-full flex-col gap-3 sm:mt-9 sm:flex-row sm:items-center lg:mt-6';
 const REVIEW_STARS = '\u2605\u2605\u2605\u2605\u2605';
 
@@ -201,6 +200,9 @@ export function UniversalHero({
   void variant;
   void showReviewPill;
   void showUsageCounter;
+  void showTrustPositioningBar;
+  void trustPositioningPreset;
+  void trustPositioningHeadline;
   const isPastel = true;
   const routeHero = findUniversalHeroForPath(pathname);
   const resolvedBackgroundImageSrc =
@@ -235,18 +237,18 @@ export function UniversalHero({
       data-universal-hero="true"
       data-hero-variant={isPastel ? 'pastel' : 'standard'}
     >
-      <div className="pointer-events-none absolute inset-0 -z-20" aria-hidden="true">
+      <div className="pointer-events-none absolute inset-0 -z-20 hidden lg:block" aria-hidden="true">
         <Image
           src={resolvedBackgroundImageSrc}
           alt={resolvedBackgroundImageAlt}
           fill
           priority
           sizes="100vw"
-          className="object-cover object-[60%_bottom] lg:object-center"
+          className="object-cover object-center"
         />
       </div>
       <div
-        className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(255,255,255,0.995)_0%,rgba(255,255,255,0.985)_48%,rgba(255,255,255,0.82)_58%,rgba(255,255,255,0.04)_74%,rgba(255,255,255,0)_100%)] lg:bg-[linear-gradient(90deg,rgba(255,255,255,0.99)_0%,rgba(255,255,255,0.96)_47%,rgba(255,255,255,0.44)_62%,rgba(255,255,255,0.04)_100%)]"
+        className="pointer-events-none absolute inset-0 -z-10 hidden bg-[linear-gradient(90deg,rgba(255,255,255,0.99)_0%,rgba(255,255,255,0.96)_47%,rgba(255,255,255,0.44)_62%,rgba(255,255,255,0.04)_100%)] lg:block"
         aria-hidden="true"
       />
       <div
@@ -254,7 +256,7 @@ export function UniversalHero({
         aria-hidden="true"
       />
 
-      <div className="mx-auto my-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:my-auto lg:px-8">
         <div
           className={clsx(
             'block gap-8 lg:grid lg:grid-cols-2 lg:items-center lg:gap-10'
@@ -437,14 +439,6 @@ export function UniversalHero({
               </div>
             )}
 
-            {showTrustPositioningBar ? (
-              <TrustPositioningBar
-                preset={trustPositioningPreset}
-                headline={trustPositioningHeadline}
-                className={isCenter ? 'mx-auto max-w-5xl text-left' : undefined}
-              />
-            ) : null}
-
             {children}
 
             <HeroBenefitGrid />
@@ -456,6 +450,22 @@ export function UniversalHero({
             )}
           </StaggerReveal>
         </div>
+      </div>
+
+      <div
+        className="relative z-0 -mt-5 h-[44svh] min-h-[22rem] max-h-[32rem] w-full shrink-0 sm:-mt-8 sm:h-[46svh] lg:hidden"
+        aria-hidden="true"
+        data-testid="hero-mobile-artwork"
+      >
+        <Image
+          src={resolvedBackgroundImageSrc}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-bottom"
+        />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-white via-white/55 to-transparent" />
       </div>
     </section>
   );

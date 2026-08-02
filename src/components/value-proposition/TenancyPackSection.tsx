@@ -1,4 +1,9 @@
 import { WhatsIncludedInteractive } from './WhatsIncludedInteractive';
+import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
+import {
+  getGoldenPackProofData,
+  type GoldenPackKey,
+} from '@/lib/marketing/golden-pack-proof';
 import { getTenancyAgreementPreviewData, type TenancyPreviewJurisdiction } from '@/lib/previews/tenancyAgreementPreviews';
 
 type BenefitCard = {
@@ -44,6 +49,58 @@ const getDefaultIntro = (jurisdiction?: TenancyPreviewJurisdiction) => {
   return 'You get more than a tenancy agreement. Landlord Heaven builds a practical tenancy document pack for the property, tenancy setup, and jurisdiction you choose.';
 };
 
+const REGIONAL_SAMPLE_PACKS: Partial<
+  Record<TenancyPreviewJurisdiction, Array<{ key: GoldenPackKey; title: string; description: string }>>
+> = {
+  wales: [
+    {
+      key: 'wales_fixed_standard_occupation_contract',
+      title: 'Fixed-Term Standard Occupation Contract sample',
+      description: 'Inspect the generated 35-page fixed-term contract and its Wales-specific inventory and compliance documents.',
+    },
+    {
+      key: 'wales_periodic_standard_occupation_contract',
+      title: 'Periodic Standard Occupation Contract sample',
+      description: 'Inspect the generated 40-page periodic contract and its Wales-specific inventory and compliance documents.',
+    },
+  ],
+  scotland: [
+    {
+      key: 'scotland_standard_prt',
+      title: 'Scotland Standard PRT sample',
+      description: 'Inspect the generated PRT, official supporting notes, inventory, and Scotland compliance checklist.',
+    },
+  ],
+  'northern-ireland': [
+    {
+      key: 'northern_ireland_standard_tenancy_agreement',
+      title: 'Northern Ireland Standard Agreement sample',
+      description: 'Inspect the generated agreement, populated Tenancy Information Notice, rent book, guidance, inventory, and compliance checklist.',
+    },
+  ],
+};
+
+function getRegionalCta(jurisdiction: TenancyPreviewJurisdiction) {
+  if (jurisdiction === 'wales') {
+    return {
+      href: '/standard-tenancy-agreement#choose-jurisdiction',
+      label: 'Choose Fixed-Term or Periodic Wales Contract',
+    };
+  }
+
+  if (jurisdiction === 'scotland') {
+    return {
+      href: '/wizard/flow?type=tenancy_agreement&product=ast_standard&jurisdiction=scotland&src=product_page&topic=tenancy',
+      label: 'Start Scotland Standard PRT',
+    };
+  }
+
+  return {
+    href: '/wizard/flow?type=tenancy_agreement&product=ast_standard&jurisdiction=northern-ireland&src=product_page&topic=tenancy',
+    label: 'Start Northern Ireland Standard Agreement',
+  };
+}
+
 export async function TenancyPackSection({
   title = "What's included",
   subtitle = "What's included in your tenancy agreement pack",
@@ -55,6 +112,13 @@ export async function TenancyPackSection({
   ctaLabel,
 }: TenancyPackSectionProps) {
   const previews = await getTenancyAgreementPreviewData();
+  const regionalPackConfigs = lockJurisdiction
+    ? REGIONAL_SAMPLE_PACKS[defaultJurisdiction] ?? []
+    : [];
+  const regionalSamplePacks = regionalPackConfigs
+    .map((config) => ({ ...config, data: getGoldenPackProofData(config.key) }))
+    .filter((pack) => Boolean(pack.data));
+  const regionalCta = getRegionalCta(defaultJurisdiction);
 
   return (
     <>
@@ -63,20 +127,53 @@ export async function TenancyPackSection({
         <p className="mt-3 text-gray-700">{intro ?? getDefaultIntro(lockJurisdiction ? defaultJurisdiction : undefined)}</p>
       </div>
 
-      <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-[#E6DBFF] bg-white shadow-[0_14px_36px_rgba(15,23,42,0.06)]">
-        <WhatsIncludedInteractive
-          product="ast"
-          defaultJurisdiction={defaultJurisdiction}
-          defaultTier="standard"
-          lockJurisdiction={lockJurisdiction}
-          previews={previews}
-          showIntro={false}
-          titleOverride={subtitle}
-          subtitleOverride="Select the property jurisdiction, then preview the available pack. England also offers a Premium option."
-          ctaHref={ctaHref}
-          ctaLabel={ctaLabel}
-        />
-      </div>
+      {regionalSamplePacks.length ? (
+        <div className="mx-auto max-w-6xl space-y-8">
+          {regionalSamplePacks.map((pack) => (
+            <section key={pack.key} aria-labelledby={`${pack.key}-heading`}>
+              <div className="mb-4 rounded-2xl border border-[#e5ddf7] bg-[#faf8ff] px-5 py-4 md:px-6">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6f54c8]">
+                  Real generated sample pack
+                </p>
+                <h3 id={`${pack.key}-heading`} className="mt-2 text-2xl font-bold text-[#261544]">
+                  {pack.title}
+                </h3>
+                <p className="mt-2 text-sm leading-7 text-[#5e498e] md:text-base">
+                  {pack.description}
+                </p>
+              </div>
+              <GoldenPackProof data={pack.data} />
+            </section>
+          ))}
+
+          <div className="rounded-2xl border border-[#e5ddf7] bg-white px-5 py-6 text-center shadow-sm md:px-8">
+            <h3 className="text-xl font-semibold text-[#2f0d68] md:text-2xl">Ready to create your agreement?</h3>
+            <p className="mt-2 text-sm text-[#5b4b7a] md:text-base">
+              Continue to the jurisdiction-specific wizard after reviewing the real sample PDFs.
+            </p>
+            <div className="mt-5">
+              <a href={ctaHref ?? regionalCta.href} className="hero-btn-primary">
+                {ctaLabel ?? regionalCta.label}
+              </a>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-[#E6DBFF] bg-white shadow-[0_14px_36px_rgba(15,23,42,0.06)]">
+          <WhatsIncludedInteractive
+            product="ast"
+            defaultJurisdiction={defaultJurisdiction}
+            defaultTier="standard"
+            lockJurisdiction={lockJurisdiction}
+            previews={previews}
+            showIntro={false}
+            titleOverride={subtitle}
+            subtitleOverride="Select the property jurisdiction, then preview the available pack. England also offers a Premium option."
+            ctaHref={ctaHref}
+            ctaLabel={ctaLabel}
+          />
+        </div>
+      )}
 
       {showWhyBetter ? (
         <div className="mx-auto mt-8 max-w-6xl">

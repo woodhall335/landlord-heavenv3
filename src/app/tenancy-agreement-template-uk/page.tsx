@@ -52,7 +52,7 @@ export default function TenancyAgreementTemplateUkPage() {
           }}
           trustText="Wales, Scotland and Northern Ireland currently offer Standard agreements only. England has additional agreement options."
           feature="Wales offers separate Fixed-Term and Periodic Standard Occupation Contract routes."
-          mediaSrc="/images/wizard-standard-tenancy-agreement.webp"
+          mediaSrc="/images/generated/product-cards/standard-tenancy-agreement.webp"
           mediaAlt="Preview of the guided tenancy agreement workflow"
           ariaLabel="Choose a UK tenancy agreement jurisdiction"
         />

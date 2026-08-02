@@ -1,0 +1,35 @@
+{
+  "key": "wales_periodic_standard_occupation_contract",
+  "displayName": "Wales Periodic Standard Occupation Contract Sample Pack",
+  "outputDir": "wales_periodic_standard_occupation_contract",
+  "documentCount": 3,
+  "documents": [
+    {
+      "title": "Periodic Standard Occupation Contract",
+      "description": "Generated Wales periodic Standard Occupation Contract using the current periodic framework.",
+      "category": "agreement",
+      "documentType": "wales_periodic_standard_occupation_contract",
+      "fileName": "tenancy_agreement.pdf",
+      "files": { "pdf": "wales_periodic_standard_occupation_contract/tenancy_agreement.pdf" },
+      "extraction": { "pageCount": 40, "method": "pypdf" }
+    },
+    {
+      "title": "Inventory & Schedule of Condition (Wales)",
+      "description": "Property contents and condition record supplied with the periodic sample pack.",
+      "category": "schedule",
+      "documentType": "wales_periodic_inventory_schedule",
+      "fileName": "inventory_schedule.pdf",
+      "files": { "pdf": "wales_periodic_standard_occupation_contract/inventory_schedule.pdf" },
+      "extraction": { "pageCount": 9, "method": "pypdf" }
+    },
+    {
+      "title": "Pre-Tenancy Compliance Checklist (Wales)",
+      "description": "Wales-specific setup checklist covering the principal pre-contract compliance actions.",
+      "category": "checklist",
+      "documentType": "wales_periodic_compliance_checklist",
+      "fileName": "compliance_checklist.pdf",
+      "files": { "pdf": "wales_periodic_standard_occupation_contract/compliance_checklist.pdf" },
+      "extraction": { "pageCount": 3, "method": "pypdf" }
+    }
+  ]
+}

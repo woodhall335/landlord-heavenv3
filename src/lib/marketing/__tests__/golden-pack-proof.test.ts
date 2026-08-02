@@ -16,6 +16,10 @@ const EXPECTED_GOLDEN_PACK_KEYS = [
   'england_student_tenancy_agreement',
   'england_hmo_shared_house_tenancy_agreement',
   'england_lodger_agreement',
+  'wales_fixed_standard_occupation_contract',
+  'wales_periodic_standard_occupation_contract',
+  'scotland_standard_prt',
+  'northern_ireland_standard_tenancy_agreement',
 ] as const;
 
 describe('getGoldenPackProofData', () => {
@@ -57,9 +61,13 @@ describe('getGoldenPackProofData', () => {
     expect(isGoldenPackKey('england_student_tenancy_agreement')).toBe(true);
     expect(isGoldenPackKey('england_hmo_shared_house_tenancy_agreement')).toBe(true);
     expect(isGoldenPackKey('england_lodger_agreement')).toBe(true);
+    expect(isGoldenPackKey('wales_fixed_standard_occupation_contract')).toBe(true);
+    expect(isGoldenPackKey('wales_periodic_standard_occupation_contract')).toBe(true);
+    expect(isGoldenPackKey('scotland_standard_prt')).toBe(true);
+    expect(isGoldenPackKey('northern_ireland_standard_tenancy_agreement')).toBe(true);
   });
 
-  it('loads proof data for every supported England golden pack', () => {
+  it('loads proof data for every supported golden pack', () => {
     for (const key of EXPECTED_GOLDEN_PACK_KEYS) {
       const data = getGoldenPackProofData(key);
 
@@ -78,6 +86,31 @@ describe('getGoldenPackProofData', () => {
         `${key} should expose embedded sample previews`
       ).toBe(true);
     }
+  });
+
+  it('keeps each regional sample pack mapped to its real jurisdiction-specific PDFs', () => {
+    const walesFixed = getGoldenPackProofData('wales_fixed_standard_occupation_contract');
+    const walesPeriodic = getGoldenPackProofData('wales_periodic_standard_occupation_contract');
+    const scotland = getGoldenPackProofData('scotland_standard_prt');
+    const northernIreland = getGoldenPackProofData('northern_ireland_standard_tenancy_agreement');
+
+    expect(walesFixed?.featuredEntries[0]).toMatchObject({
+      title: 'Fixed-Term Standard Occupation Contract',
+      pageCount: 35,
+    });
+    expect(walesPeriodic?.featuredEntries[0]).toMatchObject({
+      title: 'Periodic Standard Occupation Contract',
+      pageCount: 40,
+    });
+    expect(scotland?.featuredEntries.map((entry) => entry.title)).toContain(
+      'Statutory Terms Supporting Notes (April 2024)'
+    );
+    expect(northernIreland?.featuredEntries.map((entry) => entry.title)).toContain(
+      'Tenancy Information Notice'
+    );
+    expect(northernIreland?.featuredEntries.map((entry) => entry.title)).toContain(
+      'Northern Ireland Rent Book'
+    );
   });
 
   it('resolves a whitelisted sample PDF asset from the golden pack manifest', () => {

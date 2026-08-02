@@ -207,11 +207,11 @@ const routeCardOverridesByProduct: Record<string, Partial<RouteCard>> = {
 
 const previewCards: PreviewCard[] = [
   {
-    title: 'Section 8 notice file ready to review',
+    title: 'A Section 8 notice file you can review before serving',
     body:
-      'If notice is the next step, prepare the Section 8 notice, service record, and arrears support without piecing them together yourself.',
-    imageSrc: '/images/Section-8-notie-file-ready-to-review.webp',
-    imageAlt: 'Section 8 notice file ready to review',
+      'Prepare the notice, service record, arrears evidence, and next-step guidance as one organised file.',
+    imageSrc: '/images/generated/product-cards/section-8-notice-file.webp',
+    imageAlt: 'Watercolor Section 8 notice file with service and date-checking documents',
     bullets: [
       'Form 3A and N215 service record',
       'Arrears schedule and checks before service',
@@ -223,11 +223,11 @@ const previewCards: PreviewCard[] = [
     product: 'notice_only',
   },
   {
-    title: 'Court possession paperwork in one file',
+    title: 'Court possession papers kept with the evidence',
     body:
-      'When the tenant still has not left, prepare the court forms and supporting evidence as one file.',
-    imageSrc: '/images/Court-possession-paperwork-in-one-file.webp',
-    imageAlt: 'Court possession paperwork in one file',
+      'When notice has not resolved the case, build the court forms, witness material, and filing records together.',
+    imageSrc: '/images/generated/product-cards/court-possession-file.webp',
+    imageAlt: 'Watercolor court possession file with evidence bundle and court motif',
     bullets: [
       'Section 8 notice file plus N5 and N119 together',
       'Witness statement, evidence checklist, and court bundle index',
@@ -239,11 +239,11 @@ const previewCards: PreviewCard[] = [
     product: 'complete_pack',
   },
   {
-    title: 'Debt, rent, and tenancy paperwork from the same account',
+    title: 'The rest of the landlord paperwork in one place',
     body:
-      'You can also prepare money claims, rent increase notices, and tenancy agreements from the same account.',
-    imageSrc: '/images/Debt-rent-and-tenancy-paperwork-from-the-same-account.webp',
-    imageAlt: 'Debt, rent, and tenancy paperwork from the same account',
+      'Prepare debt recovery, supported rent increases, and the right tenancy agreement without starting again elsewhere.',
+    imageSrc: '/images/generated/product-cards/money-rent-tenancy-files.webp',
+    imageAlt: 'Watercolor money, rent increase, and tenancy document files',
     bullets: [
       'Money claims for rent, damage, and bills',
       'Section 13 / Form 4A rent increase paperwork',
@@ -478,7 +478,7 @@ export default function HomeContent() {
                     ctaPosition="section"
                     eventName="homepage_primary_cta_click"
                     routeIntent="wizard"
-                    className="hero-btn-primary mt-7 inline-flex justify-center"
+                    className="hero-btn-primary mt-7 inline-flex justify-center lg:mx-auto lg:flex lg:w-fit"
                   >
                     Find the right document
                   </TrackedLink>
@@ -501,21 +501,20 @@ export default function HomeContent() {
       <section className="pb-16 pt-4 md:pb-20">
         <Container>
           <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'px-6 py-8 md:px-10 md:py-10')}>
-            <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-              <div>
-                <span className="public-eyebrow">What you get</span>
+            <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-center">
+              <div className="rounded-[1.7rem] border border-[#e9e0f8] bg-[linear-gradient(145deg,#fbf9ff_0%,#f5efff_100%)] p-6 md:p-8">
+                <span className="public-eyebrow">Built around the job in front of you</span>
                 <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
-                  See what you will actually get
+                  See the file you are building before you pay
                 </h2>
                 <p className="mt-4 text-lg leading-8 text-[#5d5672]">
-                  Each page should make it clear what problem it solves, what you
-                  get, and what to do next.
+                  Each guided route keeps the forms, evidence, records, and practical next steps together. You can inspect the generated documents before checkout.
                 </p>
                 <div className="mt-6 space-y-4">
                   {[
-                    'Section 8 notice and service files with the key checks up front',
-                    'Court and possession files when the case needs to move beyond notice',
-                    'Money claim, rent increase, and tenancy paperwork for the rest of the landlord job',
+                    'Serve a Section 8 notice with the dates, grounds, service record, and arrears evidence kept together',
+                    'Move to court with the possession forms, witness material, evidence checklist, and filing guidance in one file',
+                    'Handle money claims, rent increases, and tenancy setup through dedicated landlord workflows',
                   ].map((item) => (
                     <div key={item} className="flex items-start gap-3 text-[#2c2143]">
                       <RiCheckLine className="mt-1 h-5 w-5 shrink-0 text-[#7c3aed]" />
@@ -542,13 +541,13 @@ export default function HomeContent() {
                       PUBLIC_LAYOUT_CLASSES.card
                     )}
                   >
-                    <div className="relative aspect-[16/12] overflow-hidden border-b border-[#efe5ff]">
+                    <div className="relative aspect-[16/10] overflow-hidden border-b border-[#efe5ff] bg-[#faf8ff]">
                       <Image
                         src={card.imageSrc}
                         alt={card.imageAlt}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 30vw"
-                        className="object-cover transition duration-300 group-hover:scale-[1.03]"
+                        className="object-cover object-center transition duration-300 group-hover:scale-[1.03]"
                       />
                     </div>
                     <div className="p-5">

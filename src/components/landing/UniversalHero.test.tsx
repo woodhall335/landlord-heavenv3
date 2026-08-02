@@ -57,6 +57,11 @@ describe('UniversalHero review pill', () => {
       )
     ).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Wales agreement' })).toHaveClass('text-[#17112f]');
+    expect(screen.getByTestId('hero-mobile-artwork')).toHaveClass('lg:hidden');
+    expect(screen.getByTestId('hero-mobile-artwork').querySelector('img')).toHaveAttribute(
+      'src',
+      '/images/heroes/universal/hero-tenancy-wales.webp'
+    );
   });
 
   it('uses the compact desktop pill for shorter trust text', () => {
@@ -100,6 +105,7 @@ describe('UniversalHero review pill', () => {
         subtitle="Supporting copy"
         showReviewPill={false}
         showUsageCounter={false}
+        showTrustPositioningBar
       />
     );
 
@@ -112,5 +118,8 @@ describe('UniversalHero review pill', () => {
     expect(benefits).toHaveTextContent('Expert support');
     expect(benefits).toHaveTextContent('stripe');
     expect(benefits).toHaveClass('lg:hidden');
+    expect(
+      screen.queryByText(/Build the notice, service file, court pack/i)
+    ).not.toBeInTheDocument();
   });
 });

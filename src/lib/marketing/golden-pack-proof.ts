@@ -14,7 +14,11 @@ export type GoldenPackKey =
   | 'england_premium_tenancy_agreement'
   | 'england_student_tenancy_agreement'
   | 'england_hmo_shared_house_tenancy_agreement'
-  | 'england_lodger_agreement';
+  | 'england_lodger_agreement'
+  | 'wales_fixed_standard_occupation_contract'
+  | 'wales_periodic_standard_occupation_contract'
+  | 'scotland_standard_prt'
+  | 'northern_ireland_standard_tenancy_agreement';
 
 export type GoldenPackAssetKind = 'pdf' | 'html' | 'text';
 
@@ -90,6 +94,10 @@ const GOLDEN_PACK_KEYS: GoldenPackKey[] = [
   'england_student_tenancy_agreement',
   'england_hmo_shared_house_tenancy_agreement',
   'england_lodger_agreement',
+  'wales_fixed_standard_occupation_contract',
+  'wales_periodic_standard_occupation_contract',
+  'scotland_standard_prt',
+  'northern_ireland_standard_tenancy_agreement',
 ];
 
 const CATEGORY_LABELS: Record<string, string> = {

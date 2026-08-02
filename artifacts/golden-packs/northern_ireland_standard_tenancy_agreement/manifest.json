@@ -1,0 +1,62 @@
+{
+  "key": "northern_ireland_standard_tenancy_agreement",
+  "displayName": "Northern Ireland Standard Private Tenancy Sample Pack",
+  "outputDir": "northern_ireland_standard_tenancy_agreement",
+  "documentCount": 6,
+  "documents": [
+    {
+      "title": "Private Tenancy Agreement",
+      "description": "Generated Northern Ireland Standard Private Tenancy Agreement.",
+      "category": "agreement",
+      "documentType": "northern_ireland_private_tenancy_agreement",
+      "fileName": "tenancy_agreement.pdf",
+      "files": { "pdf": "northern_ireland_standard_tenancy_agreement/tenancy_agreement.pdf" },
+      "extraction": { "pageCount": 25, "method": "pypdf" }
+    },
+    {
+      "title": "Tenancy Information Notice",
+      "description": "Populated prescribed notice relating to the granting of the Northern Ireland private tenancy.",
+      "category": "notice",
+      "documentType": "northern_ireland_tenancy_information_notice",
+      "fileName": "northern_ireland_tenancy_information_notice.pdf",
+      "files": { "pdf": "northern_ireland_standard_tenancy_agreement/northern_ireland_tenancy_information_notice.pdf" },
+      "extraction": { "pageCount": 6, "method": "pypdf" }
+    },
+    {
+      "title": "Tenancy Information Notice Guidance",
+      "description": "Completion guidance supplied with the prescribed Northern Ireland tenancy information notice.",
+      "category": "guidance",
+      "documentType": "northern_ireland_tenancy_information_notice_guidance",
+      "fileName": "northern_ireland_tenancy_information_notice_guidance.pdf",
+      "files": { "pdf": "northern_ireland_standard_tenancy_agreement/northern_ireland_tenancy_information_notice_guidance.pdf" },
+      "extraction": { "pageCount": 4, "method": "pypdf" }
+    },
+    {
+      "title": "Northern Ireland Rent Book",
+      "description": "Generated rent book recording the prescribed tenancy particulars and payment information.",
+      "category": "schedule",
+      "documentType": "northern_ireland_rent_book",
+      "fileName": "northern_ireland_rent_book.pdf",
+      "files": { "pdf": "northern_ireland_standard_tenancy_agreement/northern_ireland_rent_book.pdf" },
+      "extraction": { "pageCount": 2, "method": "pypdf" }
+    },
+    {
+      "title": "Inventory & Schedule of Condition (Northern Ireland)",
+      "description": "Property contents and condition record supplied with the Northern Ireland sample pack.",
+      "category": "schedule",
+      "documentType": "northern_ireland_inventory_schedule",
+      "fileName": "inventory_schedule.pdf",
+      "files": { "pdf": "northern_ireland_standard_tenancy_agreement/inventory_schedule.pdf" },
+      "extraction": { "pageCount": 9, "method": "pypdf" }
+    },
+    {
+      "title": "Pre-Tenancy Compliance Checklist (Northern Ireland)",
+      "description": "Northern Ireland-specific setup checklist covering registration, deposits and property standards.",
+      "category": "checklist",
+      "documentType": "northern_ireland_compliance_checklist",
+      "fileName": "compliance_checklist.pdf",
+      "files": { "pdf": "northern_ireland_standard_tenancy_agreement/compliance_checklist.pdf" },
+      "extraction": { "pageCount": 3, "method": "pypdf" }
+    }
+  ]
+}
