@@ -1,11 +1,10 @@
 'use client';
 
-import { FormEvent, useMemo, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { getSessionTokenHeaders } from '@/lib/session-token';
 import {
   ASSISTED_PREP_PROMISE,
-  buildAssistedPrepSuccessHref,
   getAssistedPrepConfig,
   normalizeAssistedPrepService,
   type AssistedPrepService,
@@ -143,9 +142,6 @@ export function AssistedPrepIntakeForm() {
   const [error, setError] = useState<string | null>(null);
   const sourceCaseId = searchParams.get('case_id');
 
-  const commonFieldCount = 6;
-  const totalFieldCount = useMemo(() => commonFieldCount + 2, []);
-
   function setForm(next: Partial<FormState>) {
     setFormState((prev) => ({ ...prev, ...next }));
   }
@@ -201,32 +197,7 @@ export function AssistedPrepIntakeForm() {
         await uploadFiles(intake.case_id);
       }
 
-      const baseUrl = window.location.origin;
-      const checkoutResponse = await fetch('/api/checkout/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          product_type: intake.product_type,
-          case_id: intake.case_id,
-          landing_path: window.location.pathname,
-          referrer: document.referrer || null,
-          success_url: `${baseUrl}${buildAssistedPrepSuccessHref({ service, caseId: intake.case_id })}`,
-          cancel_url: `${baseUrl}/assisted-prep/start?service=${service}&case_id=${intake.case_id}&payment=cancelled`,
-        }),
-      });
-
-      const checkout = await checkoutResponse.json();
-      if (!checkoutResponse.ok) {
-        throw new Error(checkout.error || 'Unable to start checkout.');
-      }
-
-      const url = checkout.checkout_url || checkout.session_url;
-      if (url) {
-        window.location.href = url;
-        return;
-      }
-
-      throw new Error('Checkout did not return a payment link.');
+      router.push(`/assisted-prep/consultation?service=${service}&case_id=${intake.case_id}`);
     } catch (err: any) {
       setError(err?.message || 'Unable to continue. Please try again.');
       setSubmitting(false);
@@ -237,11 +208,11 @@ export function AssistedPrepIntakeForm() {
     <form onSubmit={handleSubmit} className="mx-auto max-w-3xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
       <div className="mb-6">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-violet-700">
-          {config.priceLabel} assisted prep
+          Free consultation
         </p>
         <h1 className="mt-2 text-3xl font-bold text-slate-950">{config.label}</h1>
         <p className="mt-3 text-sm leading-6 text-slate-700">
-          {ASSISTED_PREP_PROMISE} This short form has {totalFieldCount} essentials so we can match your payment and callback to the right case.
+          {ASSISTED_PREP_PROMISE} Complete the essentials, then book a free consultation. We only send a Stripe payment link if we confirm we can help.
         </p>
         {sourceCaseId ? (
           <p className="mt-3 rounded-lg bg-violet-50 px-3 py-2 text-sm font-medium text-violet-800">
@@ -325,7 +296,7 @@ export function AssistedPrepIntakeForm() {
         disabled={submitting}
         className="mt-6 w-full rounded-lg bg-violet-700 px-5 py-3 text-sm font-semibold text-white hover:bg-violet-800 disabled:cursor-wait disabled:bg-violet-400"
       >
-        {submitting ? 'Saving and opening checkout...' : `Continue to secure checkout - ${config.priceLabel}`}
+        {submitting ? 'Saving your request...' : 'Continue to book free consultation'}
       </button>
     </form>
   );

@@ -46,6 +46,8 @@ export function AssistedPrepCTA({
   src = 'assisted_cta',
   className,
 }: AssistedPrepCTAProps) {
+  if (service === 'money_claim') return null;
+
   const config = getAssistedPrepConfig(service);
   const href = buildAssistedPrepStartHref({
     service,
@@ -60,6 +62,7 @@ export function AssistedPrepCTA({
 
   if (compact) {
     const copy = sidebarCopy[service];
+    const consultationBullets = ['Free consultation', 'No obligation to proceed', 'Pay only if we can help'];
 
     return (
       <section
@@ -80,7 +83,7 @@ export function AssistedPrepCTA({
         <div className="p-4">
           <p className="text-sm leading-6 text-[#4f4665]">{copy.body}</p>
           <div className="mt-4 grid gap-2">
-            {copy.bullets.map((bullet) => (
+            {consultationBullets.map((bullet) => (
               <div
                 key={bullet}
                 className="rounded-xl border border-[#eee5ff] bg-[#fbf8ff] px-3 py-2 text-xs font-semibold text-[#4b1fa3]"
@@ -93,7 +96,7 @@ export function AssistedPrepCTA({
             href={href}
             className="mt-4 flex w-full items-center justify-center rounded-xl bg-[#6d28d9] px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-[#5b21b6]"
           >
-            Get assisted prep
+            Book free consultation
           </Link>
         </div>
       </section>
@@ -120,14 +123,14 @@ export function AssistedPrepCTA({
             {config.callbackHeadline}
           </h3>
           <p className={clsx('mt-2 text-slate-700', compact ? 'text-sm' : 'text-sm leading-6')}>
-            {ASSISTED_PREP_PROMISE} {config.duration}. {config.priceLabel}.
+            {ASSISTED_PREP_PROMISE} Start with a free consultation. We only send a payment link if we confirm we can help.
           </p>
         </div>
         <Link
           href={href}
           className="inline-flex shrink-0 items-center justify-center rounded-lg bg-violet-700 px-4 py-3 text-sm font-semibold text-white hover:bg-violet-800"
         >
-          {config.primaryCta}
+          Book free consultation
         </Link>
       </div>
     </section>

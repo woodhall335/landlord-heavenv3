@@ -379,6 +379,18 @@ export async function POST(request: Request) {
     const adminSupabase = createAdminClient();
 
     const normalizedProductType = normalizeToPaymentSku(String(product_type));
+    if (
+      [
+        'section8_assisted_prep',
+        'money_claim_assisted_prep',
+        'possession_claim_assisted_prep',
+      ].includes(normalizedProductType)
+    ) {
+      return NextResponse.json(
+        { error: 'Assisted preparation is arranged after a free consultation, not through online checkout.' },
+        { status: 410 }
+      );
+    }
     const assistedService = getAssistedPrepServiceFromSku(normalizedProductType);
     const isAssistedCheckout = Boolean(assistedService);
     const normalizedUpgradeFromProduct = upgrade_from_product

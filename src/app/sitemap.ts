@@ -140,7 +140,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const assistedPrepPages = [
     { path: '/assisted-prep', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/section-8-notice-assisted-prep', priority: 0.86, changeFrequency: 'weekly' as const },
-    { path: '/money-claim-assisted-prep', priority: 0.86, changeFrequency: 'weekly' as const },
     { path: '/possession-claim-assisted-prep', priority: 0.86, changeFrequency: 'weekly' as const },
   ];
 
@@ -497,7 +496,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/pricing',
     '/assisted-prep',
     '/section-8-notice-assisted-prep',
-    '/money-claim-assisted-prep',
     '/possession-claim-assisted-prep',
     '/samples',
     '/form-3-section-8',

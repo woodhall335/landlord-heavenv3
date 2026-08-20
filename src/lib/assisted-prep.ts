@@ -2,6 +2,7 @@ import { PRODUCTS, type ProductSku } from '@/lib/pricing/products';
 import { EvidenceCategory, EVIDENCE_CATEGORY_LABELS } from '@/lib/evidence/schema';
 
 export type AssistedPrepService = 'section8' | 'money_claim' | 'possession';
+export type PublicAssistedPrepService = Exclude<AssistedPrepService, 'money_claim'>;
 export type AssistedPrepSku =
   | 'section8_assisted_prep'
   | 'money_claim_assisted_prep'
@@ -159,6 +160,15 @@ export const ASSISTED_PREP_CONFIGS: Record<AssistedPrepService, AssistedPrepConf
 };
 
 export const ASSISTED_PREP_SERVICES = Object.values(ASSISTED_PREP_CONFIGS);
+
+// Keep legacy money-claim records readable, but do not expose that service for new enquiries.
+export const PUBLIC_ASSISTED_PREP_SERVICES: PublicAssistedPrepService[] = ['section8', 'possession'];
+
+export function isPublicAssistedPrepService(
+  value: string | null | undefined
+): value is PublicAssistedPrepService {
+  return Boolean(value && (PUBLIC_ASSISTED_PREP_SERVICES as string[]).includes(value));
+}
 
 export const ASSISTED_PREP_SKUS = ASSISTED_PREP_SERVICES.map((service) => service.sku) as AssistedPrepSku[];
 

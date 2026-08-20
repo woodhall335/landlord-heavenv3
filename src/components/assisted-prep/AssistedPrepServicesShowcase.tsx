@@ -37,7 +37,7 @@ const assistedPrepCards: AssistedPrepShowcaseCard[] = [
     price: '£149',
     service: 'section8',
     product: 'notice_only',
-    ctaLabel: 'Book Section 8 assisted prep',
+    ctaLabel: 'Book free consultation',
     imageSrc: '/images/generated/assisted-prep/section8-assisted-prep.png',
     imageAlt: 'Landlord checking compliance questions before taking action',
     routeIntent: 'section8_assisted_prep',
@@ -50,7 +50,7 @@ const assistedPrepCards: AssistedPrepShowcaseCard[] = [
     price: '£399',
     service: 'possession',
     product: 'complete_pack',
-    ctaLabel: 'Book possession claim assisted prep',
+    ctaLabel: 'Book free consultation',
     imageSrc: '/images/generated/assisted-prep/possession-assisted-prep.png',
     imageAlt: 'Landlord preparing urgent possession claim documents',
     routeIntent: 'possession_assisted_prep',
@@ -88,15 +88,15 @@ export function AssistedPrepServicesShowcase({
       <div className="mb-7 max-w-5xl">
         <p className="public-eyebrow">Prefer us to prepare it with you?</p>
         <h2 className="mt-3 max-w-4xl text-2xl font-bold tracking-tight text-white md:text-3xl lg:text-[2rem]">
-          Assisted prep for landlords who want the file checked before they act
+          Free consultation before any assisted eviction preparation is agreed
         </h2>
         <p className="mt-3 max-w-4xl text-base leading-7 text-white/90">
-          Short callback, focused document preparation, and a clear pack for you to approve before serving or filing.
+          We discuss the facts first. If we can help, we confirm the scope and send a secure Stripe payment link afterwards.
         </p>
       </div>
 
-      <StaggerReveal className="grid gap-5 lg:grid-cols-3">
-        {assistedPrepCards.map((card) => (
+      <StaggerReveal className="grid gap-5 lg:grid-cols-2">
+        {assistedPrepCards.filter((card) => card.service !== 'money_claim').map((card) => (
           <article
             key={card.title}
             className="group overflow-hidden rounded-[1.4rem] border border-white/14 bg-white shadow-[0_18px_50px_rgba(9,4,25,0.22)]"
@@ -111,13 +111,10 @@ export function AssistedPrepServicesShowcase({
               />
             </div>
             <div className="flex min-h-[18rem] flex-col p-5">
-              <div className="flex items-start justify-between gap-3">
+              <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6b3fd1]">
                   {card.eyebrow}
                 </p>
-                <span className="shrink-0 rounded-full bg-[#f1eaff] px-3 py-1 text-sm font-bold text-[#4b1fa3]">
-                  {card.price}
-                </span>
               </div>
               <h3 className="mt-3 text-xl font-bold leading-tight text-[#1c1431]">
                 {card.title}

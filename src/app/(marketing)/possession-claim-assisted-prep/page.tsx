@@ -8,11 +8,12 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 const service = getAssistedPrepConfig('possession');
 
 export const metadata: Metadata = {
-  title: 'Possession Claim Assisted Prep | Landlord Heaven',
+  title: 'Assisted Eviction Service | Possession Claim Preparation',
   description:
-    'Book possession claim assisted prep for England landlords. We help prepare or check the N5, N119, notice evidence, bundle steps, and filing pack.',
+    'Book a free consultation for assisted possession-claim preparation in England. We confirm whether we can help before sending any payment link.',
   keywords: [
-    'possession claim assisted prep',
+    'assisted eviction service',
+    'assisted possession claim preparation',
     'n5 n119 assisted prep',
     'possession claim pack help',
     'landlord court pack preparation',
@@ -36,12 +37,12 @@ export default function PossessionClaimAssistedPrepPage() {
       <HeaderConfig mode="solid" />
       <main className="bg-slate-50">
         <UniversalHero
-          preTitleLabel={`${service.priceLabel} assisted prep`}
-          title={service.label}
-          subtitle={`${ASSISTED_PREP_PROMISE} Use this when you want help preparing or checking N5, N119, notice evidence, and the filing pack.`}
-          primaryCta={{ label: 'Start assisted prep', href: service.startHref }}
+          preTitleLabel="Assisted eviction service"
+          title="Check the possession claim file before you pay"
+          subtitle={`${ASSISTED_PREP_PROMISE} Book a free consultation for N5, N119, notice evidence, bundle steps, and the filing pack. This is document preparation, not legal representation.`}
+          primaryCta={{ label: 'Book free consultation', href: service.startHref }}
           secondaryCta={{ label: 'See service details', href: '#service-details' }}
-          trustText="Focused possession-claim preparation for England landlords"
+          trustText="Pay only if we confirm the preparation service is suitable"
         />
         <div id="service-details" className="mx-auto max-w-5xl scroll-mt-28 space-y-8 px-4 py-12 md:py-16">
           <AssistedPrepServiceDetails service="possession" />

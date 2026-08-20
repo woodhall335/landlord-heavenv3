@@ -10,7 +10,7 @@ import { logger } from '@/lib/logger';
 export const runtime = 'nodejs';
 
 const intakeSchema = z.object({
-  service: z.enum(['section8', 'money_claim', 'possession']),
+  service: z.enum(['section8', 'possession']),
   source_case_id: z.string().uuid().nullable().optional(),
   src: z.string().max(120).nullable().optional(),
   product: z.string().max(120).nullable().optional(),
@@ -26,8 +26,6 @@ const intakeSchema = z.object({
   responsibility_confirmed: z.boolean(),
   section8_reason: z.string().trim().max(400).optional().default(''),
   section8_notice_already_served: z.enum(['yes', 'no', 'not_sure']).optional(),
-  money_claim_amount: z.string().trim().max(80).optional().default(''),
-  money_claim_lba_sent: z.enum(['yes', 'no', 'not_sure']).optional(),
   possession_notice_served: z.enum(['yes', 'no', 'not_sure']).optional(),
   possession_notice_date: z.string().trim().max(40).optional().default(''),
 });
@@ -37,13 +35,6 @@ function buildServiceFacts(input: z.infer<typeof intakeSchema>) {
     return {
       reason_for_notice: input.section8_reason,
       notice_already_served: input.section8_notice_already_served || 'not_sure',
-    };
-  }
-
-  if (input.service === 'money_claim') {
-    return {
-      amount_claimed: input.money_claim_amount,
-      letter_before_claim_sent: input.money_claim_lba_sent || 'not_sure',
     };
   }
 
@@ -141,14 +132,10 @@ export async function POST(request: Request) {
         status: 'in_progress',
         collected_facts: collectedFacts,
         wizard_progress: 5,
-        workflow_status: 'assisted_intake',
+        workflow_status: 'consultation_requested',
         workflow_status_updated_at: new Date().toISOString(),
         recommended_route:
-          service === 'money_claim'
-            ? 'money_claim_assisted_prep'
-            : service === 'possession'
-              ? 'possession_claim_assisted_prep'
-              : 'section8_assisted_prep',
+          service === 'possession' ? 'possession_claim_assisted_prep' : 'section8_assisted_prep',
       })
       .select('id')
       .single();

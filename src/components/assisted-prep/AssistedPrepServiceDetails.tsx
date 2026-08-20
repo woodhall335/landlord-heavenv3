@@ -31,13 +31,13 @@ const serviceDetails: Record<AssistedPrepService, Detail> = {
     stressCopy:
       'Instead of trying to work out whether the date, ground, or wording is wrong after the tenant has received it, we slow the file down before service and help you prepare it in the right order.',
     processSteps: [
-      'Complete the short intake and pay securely.',
-      'Book your callback and upload any tenancy, rent, notice, or correspondence records you already have.',
-      'We work through the grounds, notice date, service method, and evidence position with you.',
-      'We prepare the notice pack for you to check before you serve it.',
+      'Complete the short consultation request and book a free callback.',
+      'We review the facts, documents, grounds, notice date, service method, and evidence position with you.',
+      'If we can help, we confirm the scope and send a secure Stripe payment link after the consultation.',
+      'Only after payment do we prepare the notice pack for you to check before you serve it.',
     ],
     blockerCopy:
-      'If the facts point to a different route, a date problem, missing tenant details, or another issue that means the notice should not be served yet, we will explain it plainly. If the pack is unsuitable or we cannot reasonably proceed, we offer the full refund promised above.',
+      'If the facts point to a different route, a date problem, missing tenant details, or another issue that means the notice should not be served yet, we will explain it plainly before any paid work is agreed.',
     faqs: [
       {
         question: 'Do I need to know the exact Section 8 ground before booking?',
@@ -117,13 +117,13 @@ const serviceDetails: Record<AssistedPrepService, Detail> = {
     stressCopy:
       'Possession claims are stressful when the notice says one thing, the evidence says another, and the forms are prepared in a rush. We help join the file together before you approve and file.',
     processSteps: [
-      'Complete the short intake and tell us whether a notice has already been served.',
-      'Book your callback and upload the notice, proof of service, tenancy, rent records, and key correspondence where available.',
+      'Complete the short consultation request and tell us whether a notice has already been served.',
+      'Book a free callback and upload the notice, proof of service, tenancy, rent records, and key correspondence where available.',
       'We check the notice route, expiry, service evidence, court-form facts, and supporting documents with you.',
-      'We prepare the possession claim pack for you to check before you file it.',
+      'If we can help, we confirm the scope and send a secure Stripe payment link before preparing the possession claim pack.',
     ],
     blockerCopy:
-      'If the notice has not expired, service evidence is weak, the wrong claim route was chosen, or the pack is not ready for court, we will explain what needs to happen next. If the assisted pack is unsuitable or we cannot reasonably proceed, we offer the full refund promised above.',
+      'If the notice has not expired, service evidence is weak, the wrong claim route was chosen, or the pack is not ready for court, we will explain what needs to happen next before any paid work is agreed.',
     faqs: [
       {
         question: 'Do I need to have served a notice before booking?',
@@ -149,6 +149,34 @@ const serviceDetails: Record<AssistedPrepService, Detail> = {
   },
 };
 
+const serviceScope: Record<AssistedPrepService, { checks: string[]; diyRisks: string[] }> = {
+  section8: {
+    checks: [
+      'The tenant names, property details, practical reason, notice form, dates, and service documents line up.',
+      'The information and evidence prompts are organised before the notice is approved for service.',
+      'The landlord has a clear service and post-service record to complete using the actual facts.',
+    ],
+    diyRisks: [
+      'Using the wrong form, names, ground, or notice date can mean the notice needs to be corrected or re-served.',
+      'Serving without a clear record makes it harder to show the court what was given and when.',
+      'Preparing the notice before the facts and documents have been checked can create inconsistencies later.',
+    ],
+  },
+  possession: {
+    checks: [
+      'The notice, expiry date, service evidence, N5, N119, and supporting bundle tell a consistent story.',
+      'The court-stage evidence is grouped so missing documents and factual gaps are identified early.',
+      'The landlord has practical filing and hearing prompts for the next stage of the process.',
+    ],
+    diyRisks: [
+      'Court forms that do not match the notice or evidence can create avoidable questions, delay, or a need to restart.',
+      'Weak proof of service or an unexpired notice can prevent the claim from being ready to issue.',
+      'Leaving witness evidence and the bundle until the last minute makes factual errors more likely.',
+    ],
+  },
+  money_claim: { checks: [], diyRisks: [] },
+};
+
 export function AssistedPrepServiceDetails({
   service,
   className,
@@ -160,6 +188,7 @@ export function AssistedPrepServiceDetails({
 }) {
   const config = getAssistedPrepConfig(service);
   const detail = serviceDetails[service];
+  const scope = serviceScope[service];
 
   return (
     <section
@@ -167,7 +196,7 @@ export function AssistedPrepServiceDetails({
       aria-label={`${config.label} details`}
     >
       <div className="max-w-3xl">
-        <p className="public-eyebrow">{config.priceLabel} assisted prep</p>
+          <p className="public-eyebrow">Free consultation before paid preparation</p>
         <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#1c1431]">
           {detail.headline}
         </h2>
@@ -194,11 +223,10 @@ export function AssistedPrepServiceDetails({
             {ASSISTED_PREP_PROMISE}
           </p>
           <div className="mt-5 rounded-2xl border border-[#d8c6ff] bg-white p-4">
-            <h4 className="text-sm font-bold text-[#20103f]">Money-back guarantee</h4>
+            <h4 className="text-sm font-bold text-[#20103f]">No obligation to proceed</h4>
             <p className="mt-2 text-sm leading-6 text-[#5d5672]">
-              If we decide during assisted prep that this pack is unsuitable for your situation,
-              or we cannot reasonably proceed because of a blocker we cannot overcome, we will
-              offer you a full refund.
+              The consultation is free. We only offer paid preparation where the service is suitable
+              for the facts and scope discussed with you.
             </p>
           </div>
           {showCta ? (
@@ -206,7 +234,7 @@ export function AssistedPrepServiceDetails({
               href={config.startHref}
               className="mt-5 inline-flex rounded-xl bg-[#6d28d9] px-5 py-3 text-sm font-semibold text-white hover:bg-[#5b21b6]"
             >
-              {config.primaryCta}
+              Book a free consultation
             </Link>
           ) : null}
         </div>
@@ -214,7 +242,7 @@ export function AssistedPrepServiceDetails({
 
       <div className="mt-6 grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
         <div className="rounded-2xl border border-[#eee5ff] bg-white p-5">
-          <h3 className="text-xl font-semibold text-[#20103f]">How it works after payment</h3>
+          <h3 className="text-xl font-semibold text-[#20103f]">How the free consultation works</h3>
           <ol className="mt-4 space-y-3 text-sm leading-6 text-[#5d5672]">
             {detail.processSteps.map((step, index) => (
               <li key={step} className="flex gap-3">
@@ -232,6 +260,42 @@ export function AssistedPrepServiceDetails({
           <p className="mt-4 text-sm leading-7 text-[#5d5672]">{detail.blockerCopy}</p>
         </div>
       </div>
+
+      <div className="mt-6 grid gap-5 lg:grid-cols-2">
+        <section className="rounded-2xl border border-[#eee5ff] bg-white p-5">
+          <h3 className="text-xl font-semibold text-[#20103f]">What we help you check</h3>
+          <ul className="mt-4 space-y-3 text-sm leading-6 text-[#5d5672]">
+            {scope.checks.map((item) => (
+              <li key={item} className="flex items-start gap-2">
+                <RiCheckLine className="mt-0.5 h-4 w-4 shrink-0 text-[#6d28d9]" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="rounded-2xl border border-amber-200 bg-amber-50 p-5">
+          <h3 className="text-xl font-semibold text-[#20103f]">Risks of doing it alone</h3>
+          <p className="mt-3 text-sm leading-6 text-[#5d5672]">
+            Many straightforward cases can be managed directly. The risk is usually not effort alone, but an avoidable mismatch between the facts, the notice, the service record, and later court papers.
+          </p>
+          <ul className="mt-4 space-y-3 text-sm leading-6 text-[#5d5672]">
+            {scope.diyRisks.map((item) => (
+              <li key={item} className="flex items-start gap-2">
+                <RiCheckLine className="mt-0.5 h-4 w-4 shrink-0 text-amber-700" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
+
+      <section className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5">
+        <h3 className="text-xl font-semibold text-[#20103f]">Clear scope</h3>
+        <p className="mt-3 text-sm leading-7 text-[#5d5672]">
+          We provide assisted document preparation based on the information you give us. We are not a firm of solicitors, do not represent you in court, do not serve notices or file claims for you, and cannot guarantee a possession order or any court outcome. You remain responsible for checking, approving, signing, serving, and filing your documents.
+        </p>
+      </section>
 
       <div className="mt-6 rounded-2xl border border-[#eee5ff] bg-white p-5">
         <h3 className="text-xl font-semibold text-[#20103f]">Common questions</h3>
@@ -255,7 +319,6 @@ export function AssistedPrepAllServiceDetails({ className }: { className?: strin
     <div className={clsx('space-y-6', className)}>
       <AssistedPrepServiceDetails service="section8" />
       <AssistedPrepServiceDetails service="possession" />
-      <AssistedPrepServiceDetails service="money_claim" />
     </div>
   );
 }

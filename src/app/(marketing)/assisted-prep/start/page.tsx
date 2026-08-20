@@ -1,23 +1,25 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
+import { redirect } from 'next/navigation';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { AssistedPrepIntakeForm } from '@/components/assisted-prep/AssistedPrepIntakeForm';
 import { AssistedPrepServiceDetails } from '@/components/assisted-prep/AssistedPrepServiceDetails';
 import {
   ASSISTED_PREP_PROMISE,
-  type AssistedPrepService,
   getAssistedPrepConfig,
+  isPublicAssistedPrepService,
+  type PublicAssistedPrepService,
 } from '@/lib/assisted-prep';
 
 type StartPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
-const startSeo: Record<AssistedPrepService, { title: string; description: string; keywords: string[] }> = {
+const startSeo: Record<PublicAssistedPrepService, { title: string; description: string; keywords: string[] }> = {
   section8: {
-    title: 'Start Section 8 Assisted Prep | Landlord Heaven',
+    title: 'Book Free Assisted Eviction Notice Consultation | Landlord Heaven',
     description:
-      'Start Section 8 assisted prep for an England Form 3A notice. Short intake, secure payment, callback, and notice file preparation support.',
+      'Book a free consultation for assisted eviction notice preparation in England. Pay only if we confirm we can help.',
     keywords: [
       'start section 8 assisted prep',
       'section 8 notice callback',
@@ -33,29 +35,10 @@ const startSeo: Record<AssistedPrepService, { title: string; description: string
       'england section 8 help',
     ],
   },
-  money_claim: {
-    title: 'Start Money Claim Assisted Prep | Landlord Heaven',
-    description:
-      'Start money claim assisted prep for rent, damage, bills, or tenancy debt. Short intake, secure payment, callback, and claim pack preparation support.',
-    keywords: [
-      'start money claim assisted prep',
-      'money claim callback',
-      'landlord money claim help',
-      'rent arrears claim help',
-      'tenant debt claim support',
-      'letter before claim help',
-      'particulars of claim support',
-      'mcol preparation help',
-      'claim unpaid rent help',
-      'damage claim landlord',
-      'debt evidence checklist',
-      'england landlord claim prep',
-    ],
-  },
   possession: {
-    title: 'Start Possession Claim Assisted Prep | Landlord Heaven',
+    title: 'Book Free Assisted Eviction Consultation | Landlord Heaven',
     description:
-      'Start possession claim assisted prep for N5, N119, notice evidence, bundle steps, and the court filing pack. Short intake and callback support.',
+      'Book a free consultation for assisted possession-claim preparation in England. Pay only if we confirm we can help.',
     keywords: [
       'start possession claim assisted prep',
       'possession claim callback',
@@ -73,15 +56,14 @@ const startSeo: Record<AssistedPrepService, { title: string; description: string
   },
 };
 
-function normaliseService(value: string | string[] | undefined): AssistedPrepService {
+function normaliseService(value: string | string[] | undefined): PublicAssistedPrepService | null {
   const raw = Array.isArray(value) ? value[0] : value;
-  if (raw === 'money_claim' || raw === 'possession' || raw === 'section8') return raw;
-  return 'section8';
+  return isPublicAssistedPrepService(raw) ? raw : null;
 }
 
 export async function generateMetadata({ searchParams }: StartPageProps): Promise<Metadata> {
   const params = await searchParams;
-  const service = normaliseService(params?.service);
+  const service = normaliseService(params?.service) || 'section8';
   const seo = startSeo[service];
 
   return {
@@ -101,6 +83,7 @@ export async function generateMetadata({ searchParams }: StartPageProps): Promis
 export default async function AssistedPrepStartPage({ searchParams }: StartPageProps) {
   const params = await searchParams;
   const service = normaliseService(params?.service);
+  if (!service) redirect('/assisted-prep');
   const config = getAssistedPrepConfig(service);
 
   return (
@@ -109,13 +92,13 @@ export default async function AssistedPrepStartPage({ searchParams }: StartPageP
       <main className="bg-slate-50 px-4 py-12 md:py-16">
         <section className="mx-auto mb-8 max-w-5xl rounded-[2rem] bg-white p-6 shadow-sm md:p-8">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-violet-700">
-            {config.priceLabel} assisted prep
+            Free consultation
           </p>
           <h1 className="mt-3 text-4xl font-bold tracking-tight text-slate-950 md:text-5xl">
             {config.label}
           </h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-700">
-            {ASSISTED_PREP_PROMISE} Complete the short intake below so we can match your payment and callback to the right case.
+            {ASSISTED_PREP_PROMISE} Complete the short intake below, then book a free consultation. We only send a Stripe payment link if we confirm we can help.
           </p>
         </section>
         <div className="mx-auto mb-8 max-w-5xl">
