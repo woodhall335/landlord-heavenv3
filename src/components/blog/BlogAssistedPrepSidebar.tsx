@@ -29,7 +29,32 @@ const SIDEBAR_CONFIG_BY_SLUG: Record<string, AssistedPrepSidebarConfig> = {
 };
 
 export function getBlogAssistedPrepSidebarConfig(slug: string): AssistedPrepSidebarConfig | null {
-  return SIDEBAR_CONFIG_BY_SLUG[slug] || null;
+  const specificConfig = SIDEBAR_CONFIG_BY_SLUG[slug];
+  if (specificConfig) return specificConfig;
+
+  if (slug.startsWith('england-section-8-ground-')) {
+    return {
+      title: 'Need help preparing your Section 8 notice?',
+      description:
+        'Start with a free consultation. If suitable, we can help prepare the Form 3A notice, service record and supporting evidence before you serve it.',
+      href: `/assisted-prep/start?service=section8&product=notice_only&src=blog_${slug}_sidebar`,
+      imageSrc: '/images/heroes/library/hero-assisted-section8-v2.webp',
+      imageAlt: 'Landlord reviewing a Section 8 assisted preparation file',
+    };
+  }
+
+  if (slug.startsWith('scotland-eviction-ground-')) {
+    return {
+      title: 'Want a second pair of eyes before you act?',
+      description:
+        'Book a free consultation and we will review the route and documents with you. We only confirm paid assisted preparation if we can help.',
+      href: `/assisted-prep?src=blog_${slug}_sidebar`,
+      imageSrc: '/images/heroes/library/hero-assisted-prep-overview-v2.webp',
+      imageAlt: 'Landlord reviewing eviction paperwork during a free consultation',
+    };
+  }
+
+  return null;
 }
 
 export function BlogAssistedPrepSidebar({
