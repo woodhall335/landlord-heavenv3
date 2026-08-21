@@ -23,18 +23,18 @@ type AssistedPrepCTAProps = {
 
 const sidebarCopy: Record<AssistedPrepService, { title: string; body: string; bullets: string[] }> = {
   section8: {
-    title: 'Need help with this notice?',
-    body: 'We can prepare the Form 3A notice with you, check the dates, and keep the service file clearer.',
+    title: 'Want help before you serve?',
+    body: 'Tell us what has happened. We can check the dates and prepare the Form 3A notice and service record with you.',
     bullets: ['20-minute callback', '£149', 'Full refund if unsuitable'],
   },
   money_claim: {
-    title: 'Want us to shape the claim?',
-    body: 'We can help turn the debt, evidence, and pre-action position into a clearer money claim pack.',
+    title: 'Want help preparing your claim?',
+    body: 'Tell us about the debt and the evidence you have. We will explain what paperwork may be needed next.',
     bullets: ['30-minute callback', '£249', 'Full refund if unsuitable'],
   },
   possession: {
-    title: 'Need the court pack checked?',
-    body: 'We can prepare the N5, N119, notice evidence, and bundle steps with you before you file.',
+    title: 'Want help with the court papers?',
+    body: 'We can review your notice stage and prepare the N5, N119, service evidence and bundle steps with you.',
     bullets: ['45-minute callback', '£399', 'Full refund if unsuitable'],
   },
 };
@@ -134,7 +134,7 @@ export function AssistedPrepCTA({
             {config.callbackHeadline}
           </h3>
           <p className={clsx('mt-2 text-slate-700', compact ? 'text-sm' : 'text-sm leading-6')}>
-            {ASSISTED_PREP_PROMISE} Start with a free consultation. We only send a payment link if we confirm we can help.
+            {ASSISTED_PREP_PROMISE} Start with a free consultation. We will talk through your case and explain what we can prepare. If we can help, we agree the scope before sending a payment link.
           </p>
         </div>
         <TrackedLink

@@ -57,11 +57,11 @@ export function ToolUpsellCard({
             </span>
           )}
           <h3 className="mt-3 text-2xl font-semibold text-gray-900">
-            Prepare the full landlord pack
+            Ready to prepare your documents?
           </h3>
           <p className="mt-2 text-sm text-gray-600">
             {description ??
-              'Turn your free tool result into the paid pack with the right forms, checks, and next steps.'}
+              'Your result helps with the timing. The next step is to prepare the notice or court papers using the same facts and dates.'}
           </p>
         </div>
         <Link
@@ -76,7 +76,7 @@ export function ToolUpsellCard({
 
       <StaggerReveal className="mt-5 grid gap-4 md:grid-cols-2">
         <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Free tool includes</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Your free result</p>
           <ul className="mt-3 space-y-2 text-sm text-gray-700">
             {freeIncludes.map((item) => (
               <li key={item}>- {item}</li>
@@ -85,7 +85,7 @@ export function ToolUpsellCard({
         </div>
         <div className="rounded-xl border border-purple-200 bg-purple-50 p-4 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-wide text-purple-700">
-            Paid pack includes
+            What the document pack includes
           </p>
           <ul className="mt-3 space-y-2 text-sm text-purple-900">
             {paidIncludes.map((item) => (

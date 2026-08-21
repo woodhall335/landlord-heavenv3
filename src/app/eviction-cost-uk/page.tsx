@@ -6,7 +6,6 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import {
   evictionCostRelatedLinks,
 } from '@/lib/seo/internal-links';
-import { StandardHero } from '@/components/marketing/StandardHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
@@ -16,10 +15,8 @@ import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { PRODUCTS } from '@/lib/pricing/products';
 import {
   CheckCircle,
-  Clock,
   ArrowRight,
   PoundSterling,
-  Shield,
   FileText,
   Gavel,
   Users,
@@ -129,34 +126,6 @@ export default function EvictionCostUkPage() {
           showTrustPositioningBar
           hideMedia
         />
-
-        {/* Hero Section */}
-        <StandardHero
-          badge="2026 Prices"
-          badgeIcon={<PoundSterling className="w-4 h-4" />}
-          titleAs="h2"
-          title="How Much Does Eviction Cost UK?"
-          subtitle={<>Budget between <strong>£500 and £3,000+</strong> depending on the route you take. This guide breaks down the real costs landlords usually face from notice through to enforcement.</>}
-          primaryCTA={{ label: 'Start Complete Eviction Pack', href: completePackProductHref }}
-          secondaryCTA={{ label: 'Tenant already left? Start Money Claim', href: moneyClaimProductHref }}
-          variant="pastel"
-        >
-          {/* Trust Signals */}
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
-            <span className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-500" />
-              Often far cheaper than solicitors
-            </span>
-            <span className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-green-500" />
-              Clear route comparison
-            </span>
-            <span className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-green-500" />
-              Faster decision-making
-            </span>
-          </div>
-        </StandardHero>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

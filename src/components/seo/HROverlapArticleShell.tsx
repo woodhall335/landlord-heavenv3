@@ -29,7 +29,12 @@ export type HROverlapArticleShellProps = {
   relatedResources: HROverlapRelatedResource[];
   conclusion: ReactNode;
   disclaimer?: ReactNode;
+  assistedPrepCta?: ReactNode;
   primaryCta?: {
+    href: string;
+    label: string;
+  };
+  secondaryCta?: {
     href: string;
     label: string;
   };
@@ -47,7 +52,9 @@ export function HROverlapArticleShell({
   relatedResources,
   conclusion,
   disclaimer,
+  assistedPrepCta,
   primaryCta,
+  secondaryCta,
 }: HROverlapArticleShellProps) {
   return (
     <>
@@ -76,7 +83,7 @@ export function HROverlapArticleShell({
           title={title}
           subtitle={intro}
           primaryCta={primaryCta}
-          secondaryCta={{ label: 'Read the guide', href: '#guide-content' }}
+          secondaryCta={secondaryCta ?? { label: 'Read the guide', href: '#guide-content' }}
           trustText="Practical landlord guidance reviewed for the current England route"
         >
           <dl className="mt-6 grid max-w-3xl grid-cols-2 gap-2 text-xs text-[#443a59] sm:grid-cols-4 sm:text-sm">
@@ -87,6 +94,11 @@ export function HROverlapArticleShell({
           </dl>
         </UniversalHero>
 
+        {assistedPrepCta ? (
+          <section className="border-b border-[#e8ddff] bg-white py-8">
+            <Container>{assistedPrepCta}</Container>
+          </section>
+        ) : null}
         <Container id="guide-content" className="scroll-mt-28 py-12">
           <article className="mx-auto max-w-4xl rounded-[1.5rem] border border-[#e8ddff] bg-white p-6 shadow-sm md:p-10">
             <div className="space-y-10 text-base leading-8 text-[#4d4365]">

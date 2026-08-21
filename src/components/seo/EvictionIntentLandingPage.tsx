@@ -36,6 +36,21 @@ const PRODUCT_CTA_LABELS = {
   '/products/ast': 'Start your tenancy agreement',
 } as const;
 
+const PLAIN_ENGLISH_TEMPLATE_RISKS: Record<string, string> = {
+  'Generic templates rarely validate route fit':
+    'A generic template may not match your tenancy or the reason you need possession.',
+  'Most free pages do not explain what happens if the case goes to court':
+    'A free template may not show you what to do if the case reaches court.',
+  'No integrated checklist for evidence quality':
+    'Without a checklist, it is easy to miss evidence you may need later.',
+  'Higher chance of avoidable rework and delay':
+    'You may have to correct paperwork later, which can delay your case.',
+};
+
+function plainEnglishTemplateRisk(risk: string): string {
+  return PLAIN_ENGLISH_TEMPLATE_RISKS[risk] || risk;
+}
+
 function getProductCtaLabel(route: string) {
   return PRODUCT_CTA_LABELS[route as keyof typeof PRODUCT_CTA_LABELS] ?? 'Start here';
 }
@@ -449,10 +464,10 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
         <Container>
           <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1.2fr_0.8fr]">
             <div className="rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-8">
-              <h2 className="text-3xl font-bold text-charcoal">Why landlords get notices wrong</h2>
-              <p className="mt-4 text-gray-700">Most notices fail for simple reasons: the wrong notice, the wrong dates, missing records, or service that cannot be proved later. Generic template sites rarely stop you before those mistakes happen.</p>
+              <h2 className="text-3xl font-bold text-charcoal">Avoid the mistakes that can delay your case</h2>
+              <p className="mt-4 text-gray-700">Most notice problems come down to simple issues: the wrong notice, wrong dates, missing records, or service you cannot prove later. Check these points before you serve.</p>
               <ul className="mt-4 space-y-2 text-gray-700">
-                {config.templateRisks.map((risk) => <li key={risk}>• {risk}</li>)}
+                {config.templateRisks.map((risk) => <li key={risk}>• {plainEnglishTemplateRisk(risk)}</li>)}
               </ul>
               <p className="mt-6 text-gray-700">
                 For historical Section 21 search intent, use the <Link href="/section-21-notice" className="text-primary hover:underline">Section 21 transition guide</Link>.

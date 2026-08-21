@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { clsx } from 'clsx';
 import { RiArrowRightLine } from 'react-icons/ri';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
+import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
 import { StaggerReveal } from '@/components/marketing/PremiumMotion';
 import type { MarketingCtaPosition, MarketingPageType } from '@/lib/analytics';
 
@@ -66,6 +67,14 @@ const assistedPrepCards: AssistedPrepShowcaseCard[] = [
   },
 ];
 
+export function getGroundCodeFromPath(pagePath: string, src: string) {
+  if (src !== 'seo_ground_assisted_cta') {
+    return null;
+  }
+
+  return pagePath.match(/ground-(1a|7a|\d+)\/?$/i)?.[1]?.toLowerCase() ?? null;
+}
+
 export function AssistedPrepServicesShowcase({
   className,
   pagePath = '/',
@@ -73,6 +82,21 @@ export function AssistedPrepServicesShowcase({
   ctaPosition = 'section',
   src = 'assisted_showcase',
 }: AssistedPrepServicesShowcaseProps) {
+  const groundCode = getGroundCodeFromPath(pagePath, src);
+
+  if (groundCode) {
+    return (
+      <AssistedPrepCTA
+        service="section8"
+        product="notice_only"
+        caseType="eviction"
+        src={`seo_ground_${groundCode}_assisted_prep`}
+        variant="banner"
+        className={className}
+      />
+    );
+  }
+
   return (
     <section
       className={clsx(

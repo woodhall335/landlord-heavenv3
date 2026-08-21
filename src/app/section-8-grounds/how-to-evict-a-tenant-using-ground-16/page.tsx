@@ -2,13 +2,15 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { HROverlapArticleShell, type HROverlapSection } from '@/components/seo/HROverlapArticleShell';
 import type { FAQItem } from '@/components/seo/FAQSection';
+import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
+import { enhanceSection8GroundMetadata } from '@/lib/seo/section8-ground-guide';
 
 const canonical = 'https://landlordheaven.co.uk/section-8-grounds/how-to-evict-a-tenant-using-ground-16';
 const title = 'How to Evict a Tenant Using Ground 16: Employment-Linked Accommodation';
 const description =
   'A landlord guide to Ground 16 for employment-linked accommodation, covering when the ground fits, what evidence is needed, notice preparation, and court risks.';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = enhanceSection8GroundMetadata({
   title: 'Ground 16 Eviction: Employment-Linked Accommodation | Landlord Heaven',
   description,
   keywords: [
@@ -26,7 +28,7 @@ export const metadata: Metadata = {
   alternates: { canonical },
   openGraph: { title, description, url: canonical, siteName: 'Landlord Heaven', type: 'article' },
   twitter: { card: 'summary_large_image', title, description },
-};
+}, '16');
 
 const sections: HROverlapSection[] = [
   {
@@ -297,7 +299,9 @@ export default function Ground16EmploymentLinkedAccommodationPage() {
           </p>
         </>
       }
+      assistedPrepCta={<AssistedPrepCTA service="section8" product="notice_only" caseType="eviction" src="seo_ground_16_assisted_prep" variant="banner" />}
       primaryCta={{ href: '/products/notice-only?route=section-8&ground=16&src=seo_ground_16', label: 'Create a Ground 16 notice pack' }}
+      secondaryCta={{ href: '/assisted-prep/start?service=section8&product=notice_only&src=section8_ground_16_hero', label: 'Book a free consultation' }}
     />
   );
 }

@@ -60,12 +60,11 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
   const frameworkLinksBlock = (
     <article className="rounded-3xl border border-[#cab6ff] bg-[#f8f4ff] p-6 md:p-8">
       <h2 className="text-3xl font-bold text-[#2a2161]">
-        Current England eviction framework
+        England eviction rules: choose your next step
       </h2>
       <p className="mt-4 max-w-3xl leading-8 text-gray-700">
-        Use this England authority bundle to move from the current rule summary into the
-        exact notice, Form 3A, landlord action guide, and possession-process pages that
-        fit the post-1 May 2026 route.
+        Use these guides to move from the rules that apply now to the next practical step:
+        checking your notice, preparing Form 3A, or getting ready for a possession claim.
       </p>
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         {frameworkLinks.map((link) => (

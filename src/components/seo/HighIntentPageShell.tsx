@@ -137,10 +137,9 @@ export function HighIntentPageShell(props: HighIntentPageShellProps) {
               What to do next
             </p>
             <p className="mt-1 text-gray-700">
-              Use this guide when the problem on the page is the landlord task in front of you and
-              you need to decide between reading, using a free tool, or starting the document route.
-              It is written to make the route fit, evidence checks, compliance risk, and commercial
-              next step visible before you click into a product.
+              Use this guide to understand what you need to do next. It will help you decide whether
+              you need more information, a free tool, or help preparing the paperwork. You will also
+              see the evidence and timing points to check before you pay for a document pack.
             </p>
             <ol className="mt-3 list-decimal space-y-2 pl-5 text-gray-700">
               <li>Check the tenancy facts and be clear about what has gone wrong.</li>

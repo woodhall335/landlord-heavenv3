@@ -13,6 +13,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { Reveal, StaggerReveal } from '@/components/marketing/PremiumMotion';
+import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
 import { ToolUpsellCard } from '@/components/tools/ToolUpsellCard';
 import {
   SECTION8_NOTICE_GROUND_OPTIONS,
@@ -476,22 +477,31 @@ export function Section8NoticeDateCalculator() {
                 </div>
               </Reveal>
             ) : (
-              <ToolUpsellCard
-                toolName="Section 8 Notice Date Calculator"
-                toolType="calculator"
-                productName={result.nextStep.productName}
-                ctaLabel={result.nextStep.label}
-                ctaHref={result.nextStep.href}
-                jurisdiction="england"
-                jurisdictionLabel="England Form 3A route"
-                description={result.nextStep.description}
-                freeIncludes={[
-                  'Notice period and deemed service date',
-                  'Earliest court-paper date',
-                  'Ground-led risk notes and evidence checklist',
-                ]}
-                paidIncludes={result.nextStep.paidIncludes}
-              />
+              <>
+                <ToolUpsellCard
+                  toolName="Section 8 Notice Date Calculator"
+                  toolType="calculator"
+                  productName={result.nextStep.productName}
+                  ctaLabel={result.nextStep.label}
+                  ctaHref={result.nextStep.href}
+                  jurisdiction="england"
+                  jurisdictionLabel="England Form 3A route"
+                  description={result.nextStep.description}
+                  freeIncludes={[
+                    'Notice period and deemed service date',
+                    'Earliest court-paper date',
+                    'Ground-led risk notes and evidence checklist',
+                  ]}
+                  paidIncludes={result.nextStep.paidIncludes}
+                />
+                <AssistedPrepCTA
+                  service={noticeStatus === 'expired_tenant_still_there' ? 'possession' : 'section8'}
+                  product={noticeStatus === 'expired_tenant_still_there' ? 'complete_pack' : 'notice_only'}
+                  caseType="eviction"
+                  src={`section8_notice_date_calculator_${noticeStatus}_assisted_prep`}
+                  variant="banner"
+                />
+              </>
             )}
 
             <Reveal className="rounded-[1.5rem] border border-[#eadcff] bg-white/85 p-4">

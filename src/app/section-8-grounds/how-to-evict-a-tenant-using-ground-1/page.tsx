@@ -5,8 +5,9 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { Container } from '@/components/ui/Container';
 import { ChecklistPreview } from '@/components/seo/ChecklistPreview';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
-import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
+import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
 import { StructuredData, articleSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { enhanceSection8GroundMetadata } from '@/lib/seo/section8-ground-guide';
 
 const canonical = "https://landlordheaven.co.uk/section-8-grounds/how-to-evict-a-tenant-using-ground-1";
 const groundCode = "1";
@@ -18,7 +19,7 @@ const checklistPdf = "/checklists/ground-1.pdf";
 const checklistAlt = "Ground 1 evidence checklist preview";
 const checklistPdfText = "Download the ungated Ground 1 PDF checklist.";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = enhanceSection8GroundMetadata({
   title: "Ground 1 Eviction: Landlord or Family Moving In | LandlordHeaven",
   description: "Evict using Ground 1 when you or close family need the home. Check the 4-month notice, occupation evidence, mistakes, and next steps before serving.",
   keywords: [
@@ -43,7 +44,7 @@ export const metadata: Metadata = {
     siteName: 'LandlordHeaven',
     type: 'article',
   },
-};
+}, groundCode);
 
 const fitCases = [
   "You or a qualifying family member genuinely need the property as a home.",
@@ -134,29 +135,29 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-[#fcfaff]">
       <HeaderConfig mode="autoOnScroll" />
-      <StructuredData data={articleSchema({ headline: "How to Evict a Tenant Using Ground 1 - Landlord or Family Moving In", description: metadata.description as string, url: canonical, datePublished: '2026-05-13', dateModified: '2026-05-14' })} />
+      <StructuredData data={articleSchema({ headline: "Section 8 Ground 1: Landlord or Family Moving In", description: metadata.description as string, url: canonical, image: checklistImage, datePublished: '2026-05-13', dateModified: '2026-08-21' })} />
       <StructuredData data={breadcrumbSchema([{ name: 'Home', url: 'https://landlordheaven.co.uk' }, { name: 'Section 8 grounds', url: 'https://landlordheaven.co.uk/section-8-grounds-explained' }, { name: "Ground 1", url: canonical }])} />
       <header className="bg-gradient-to-br from-[#2a2161] via-[#4c2f91] to-[#16213d] pb-14 pt-28 text-white">
         <Container>
           <nav aria-label="Breadcrumb" className="mb-6 text-sm text-white/80"><Link href="/" className="hover:text-white">Home</Link><span className="mx-2">/</span><Link href="/section-8-grounds-explained" className="hover:text-white">Section 8 grounds</Link><span className="mx-2">/</span><span>{groundLabel}</span></nav>
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#d9c9ff]">England Form 3A full guide</p>
           <h2 className="mt-4 max-w-4xl text-4xl font-bold leading-tight md:text-5xl">How to Evict a Tenant Using Ground 1 - Landlord or Family Moving In</h2>
-          <p className="mt-5 max-w-3xl text-lg leading-8 text-white/85">Use this landlord guide to check what {groundLabel} means, the current post-May 2026 notice period, the evidence to gather, the mistakes to avoid, and the safest next document step before serving Form 3A.</p>
+          <p className="mt-5 max-w-3xl text-lg leading-8 text-white/85">Use this guide to check whether {groundLabel} fits your situation, what evidence you need, and what to do before you serve Form 3A.</p>
           <div className="mt-8 flex flex-wrap gap-3"><Link href={noticeOnlyHref} className="rounded-lg bg-white px-5 py-3 font-semibold text-[#2a2161] shadow-sm hover:bg-[#f3edff]">Create my Section 8 notice for {groundLabel}</Link><Link href={completePackHref} className="rounded-lg border border-white/40 px-5 py-3 font-semibold text-white hover:bg-white/10">Prepare my court pack</Link></div>
         </Container>
       </header>
       <main>
-        <section className="border-b border-[#E6DBFF] bg-white py-6"><Container><div className="grid gap-4 md:grid-cols-3"><div className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-4"><p className="text-sm font-semibold text-primary">Ground meaning</p><p className="mt-2 text-sm text-gray-700">Ground 1 is for the situation where the landlord, their spouse, civil partner, or another qualifying close family member needs to live in the property as a home.</p></div><div className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-4"><p className="text-sm font-semibold text-primary">Mandatory or discretionary status</p><p className="mt-2 text-sm text-gray-700">{groundLabel} is <strong>mandatory</strong>.</p></div><div className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-4"><p className="text-sm font-semibold text-primary">Current notice period</p><p className="mt-2 text-sm text-gray-700">The current post-May 2026 notice period is <strong>4 months</strong>.</p></div></div></Container></section>
-        <section className="border-b border-[#E6DBFF] bg-[#FCFAFF] py-8"><Container><AssistedPrepServicesShowcase pagePath={new URL(canonical).pathname} pageType="entry_page" src="seo_ground_assisted_cta" /></Container></section>
+        <section className="border-b border-[#E6DBFF] bg-white py-6"><Container><div className="grid gap-4 md:grid-cols-3"><div className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-4"><p className="text-sm font-semibold text-primary">When you can use it</p><p className="mt-2 text-sm text-gray-700">Use Ground 1 if you, your spouse or civil partner, or another qualifying close family member needs to live in the property as a home.</p></div><div className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-4"><p className="text-sm font-semibold text-primary">What the court decides</p><p className="mt-2 text-sm text-gray-700">{groundLabel} is <strong>mandatory</strong> if you prove the legal test.</p></div><div className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-4"><p className="text-sm font-semibold text-primary">Notice period</p><p className="mt-2 text-sm text-gray-700">The current post-May 2026 notice period is <strong>4 months</strong>.</p></div></div></Container></section>
+        <section className="border-b border-[#E6DBFF] bg-[#FCFAFF] py-8"><Container><AssistedPrepCTA service="section8" product="notice_only" caseType="eviction" src="seo_ground_1_assisted_prep" variant="banner" /></Container></section>
         <section className="py-12"><Container size="medium"><div className="space-y-8">
-          <SectionCard title="What Ground 1 means for landlords"><p>Ground 1 is for the situation where the landlord, their spouse, civil partner, or another qualifying close family member needs to live in the property as a home.</p><p>Ground 1 is mandatory, so the judge must make a possession order if the legal test is proved. The landlord still has to show the occupation plan is genuine, the notice is valid, and the timing rules have been met.</p><p><Link href="/samples/notice-only" className="font-semibold text-primary hover:underline">See a real Form 3A notice with sample Ground {groundCode} evidence</Link>.</p></SectionCard>
+          <SectionCard title="What Ground 1 means for you"><p>You can use Ground 1 when you, your spouse or civil partner, or another qualifying close family member genuinely needs to live in the property as a home.</p><p>Ground 1 is mandatory. If you prove the legal test, the judge must make a possession order. You still need to show that the occupation plan is genuine, the notice is valid and the timing rules have been met.</p><p><Link href="/samples/notice-only" className="font-semibold text-primary hover:underline">See a Form 3A example with sample Ground {groundCode} evidence</Link>.</p></SectionCard>
           <SectionCard title="When this ground fits and when it does not"><div className="grid gap-6 md:grid-cols-2"><div><h3 className="font-semibold text-[#2a2161]">Use this ground when</h3><div className="mt-3"><BulletList items={fitCases} /></div></div><div><h3 className="font-semibold text-[#2a2161]">Do not rely on it when</h3><div className="mt-3"><BulletList items={notFitCases} /></div></div></div></SectionCard>
-          <SectionCard title="What the landlord must prove"><p>The notice must set out the substance of the ground and the reasons relied on. If the tenant does not leave, the landlord must prove the same facts at court with documents, service records, and witness evidence.</p><BulletList items={proofPoints} /></SectionCard>
-          <SectionCard title="Step-by-step landlord workflow before serving Form 3A"><ol className="list-decimal space-y-2 pl-5">{workflowSteps.map((step) => <li key={step}>{step}</li>)}</ol></SectionCard>
+          <SectionCard title="What you need to show"><p>Your notice needs to explain the ground and the reasons you rely on. If your tenant does not leave, you will need to prove those same facts at court with documents, service records and a witness statement.</p><BulletList items={proofPoints} /></SectionCard>
+          <SectionCard title="What to do before you serve Form 3A"><ol className="list-decimal space-y-2 pl-5">{workflowSteps.map((step) => <li key={step}>{step}</li>)}</ol></SectionCard>
           <SectionCard title="Post-May 2026 compliance note"><p>For post-May 2026 England cases, use Form 3A or a form substantially to the same effect, give the right notice period, and write out the ground and reasons clearly. Keep deposit compliance, prescribed information, notice service, and court proof ready unless a ground-specific exception applies.</p><p>Current GOV.UK guidance says the court can dismiss or delay a claim if the notice is incomplete, inaccurate, or unsupported by evidence. Treat the notice, checklist, and evidence bundle as one consistent file from the start.</p></SectionCard>
           <SectionCard title={"Ground 1 evidence checklist"}><div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start"><div><p>Ground 1 evidence should make the occupation plan concrete, dated, and easy for a judge to follow.</p><BulletList items={evidenceItems} /></div><ChecklistPreview imageSrc={checklistImage} pdfHref={checklistPdf} pdfText={checklistPdfText} alt={checklistAlt} /></div></SectionCard>
           <SectionCard title={"Common mistakes with Ground 1"}><BulletList items={mistakes} /></SectionCard>
-          <SectionCard title="Court progression and Complete Pack next step"><p>If the tenant does not leave after the notice, the court stage needs a claim form, particulars of claim, a copy of the notice, proof of service, and evidence proving the ground.</p><BulletList items={courtPoints} /><div className="mt-5 flex flex-wrap gap-3"><Link href={noticeOnlyHref} className="rounded-lg bg-primary px-5 py-3 font-semibold text-white hover:bg-[#5424aa]">Create my Section 8 notice</Link><Link href={completePackHref} className="rounded-lg border border-primary px-5 py-3 font-semibold text-primary hover:bg-[#F8F4FF]">Prepare my court pack</Link></div></SectionCard>
+          <SectionCard title="If your tenant does not leave"><p>For the court stage, you need a claim form, particulars of claim, a copy of the notice, proof of service and evidence that proves Ground 1.</p><BulletList items={courtPoints} /><div className="mt-5 flex flex-wrap gap-3"><Link href={noticeOnlyHref} className="rounded-lg bg-primary px-5 py-3 font-semibold text-white hover:bg-[#5424aa]">Create my Section 8 notice</Link><Link href={completePackHref} className="rounded-lg border border-primary px-5 py-3 font-semibold text-primary hover:bg-[#F8F4FF]">Prepare my court papers</Link></div></SectionCard>
           {relatedGrounds.length > 0 ? (<SectionCard title="Related grounds"><div className="grid gap-3 sm:grid-cols-2">{relatedGrounds.map((ground) => (<Link key={ground.href} href={ground.href} className="rounded-lg border border-[#E6DBFF] bg-[#FCFAFF] p-4 font-semibold text-primary hover:bg-[#F8F4FF]">Ground {ground.code}: {ground.label}</Link>))}</div></SectionCard>) : null}
         </div></Container></section>
         <FAQSection id="faqs" title={"Ground 1 FAQs"} intro={"Answers to common landlord questions about using Ground 1 in England."} faqs={faqs} variant="white" showContactCTA={false} />

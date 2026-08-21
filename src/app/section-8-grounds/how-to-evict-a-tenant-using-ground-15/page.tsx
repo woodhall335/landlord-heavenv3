@@ -7,6 +7,7 @@ import { ChecklistPreview } from '@/components/seo/ChecklistPreview';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
 import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { StructuredData, articleSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { enhanceSection8GroundMetadata } from '@/lib/seo/section8-ground-guide';
 
 const canonical = "https://landlordheaven.co.uk/section-8-grounds/how-to-evict-a-tenant-using-ground-15";
 const groundCode = "15";
@@ -18,7 +19,7 @@ const checklistPdf = "/checklists/ground-15.pdf";
 const checklistAlt = "Ground 15 evidence checklist preview";
 const checklistPdfText = "Download the ungated Ground 15 PDF checklist.";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = enhanceSection8GroundMetadata({
   title: "Ground 15 Eviction: Furniture Deterioration | LandlordHeaven",
   description: "Evict using Ground 15 for furniture deterioration. Check the 2-week notice, inventory evidence, fair wear risks, court proof, and next steps.",
   keywords: [
@@ -43,7 +44,7 @@ export const metadata: Metadata = {
     siteName: 'LandlordHeaven',
     type: 'article',
   },
-};
+}, groundCode);
 
 const fitCases = [
   "Furniture supplied by the landlord has deteriorated beyond fair wear and tear.",
@@ -125,7 +126,7 @@ const relatedGrounds = [
 function SectionCard({ id, title, children }: { id?: string; title: string; children: ReactNode }) {
   return (
     <section id={id} className="scroll-mt-24 rounded-2xl border border-[#E6DBFF] bg-white p-6 shadow-sm md:p-8">
-      <h2 className="text-2xl font-semibold text-[#2a2161]">{title}</h2>
+      <h2 className="text-2xl font-semibold text-[#2a2161]">{title.replace(/ for landlords$/, ' for you')}</h2>
       <div className="mt-4 space-y-4 leading-7 text-gray-700">{children}</div>
     </section>
   );
@@ -139,7 +140,7 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-[#fcfaff]">
       <HeaderConfig mode="autoOnScroll" />
-      <StructuredData data={articleSchema({ headline: "How to Evict a Tenant Using Ground 15 - Furniture Deterioration", description: metadata.description as string, url: canonical, datePublished: '2026-05-13', dateModified: '2026-05-14' })} />
+      <StructuredData data={articleSchema({ headline: "Section 8 Ground 15: Furniture Deterioration", description: metadata.description as string, url: canonical, image: checklistImage, datePublished: '2026-05-13', dateModified: '2026-08-21' })} />
       <StructuredData data={breadcrumbSchema([{ name: 'Home', url: 'https://landlordheaven.co.uk' }, { name: 'Section 8 grounds', url: 'https://landlordheaven.co.uk/section-8-grounds-explained' }, { name: "Ground 15", url: canonical }])} />
       <header className="bg-gradient-to-br from-[#2a2161] via-[#4c2f91] to-[#16213d] pb-14 pt-28 text-white">
         <Container>
@@ -156,12 +157,12 @@ export default function Page() {
         <section className="py-12"><Container size="medium"><div className="space-y-8">
           <SectionCard title="What Ground 15 means for landlords"><p>Ground 15 is for deterioration of furniture provided with the tenancy, caused by the tenant, household, or visitors.</p><p>Ground 15 is discretionary. The court considers the evidence, the seriousness of the deterioration, fair wear and tear, and whether possession is reasonable.</p><p><Link href="/samples/notice-only" className="font-semibold text-primary hover:underline">See a real Form 3A notice with sample Ground {groundCode} evidence</Link>.</p></SectionCard>
           <SectionCard title="When this ground fits and when it does not"><div className="grid gap-6 md:grid-cols-2"><div><h3 className="font-semibold text-[#2a2161]">Use this ground when</h3><div className="mt-3"><BulletList items={fitCases} /></div></div><div><h3 className="font-semibold text-[#2a2161]">Do not rely on it when</h3><div className="mt-3"><BulletList items={notFitCases} /></div></div></div></SectionCard>
-          <SectionCard title="What the landlord must prove"><p>The notice must set out the substance of the ground and the reasons relied on. If the tenant does not leave, the landlord must prove the same facts at court with documents, service records, and witness evidence.</p><BulletList items={proofPoints} /></SectionCard>
-          <SectionCard title="Step-by-step landlord workflow before serving Form 3A"><ol className="list-decimal space-y-2 pl-5">{workflowSteps.map((step) => <li key={step}>{step}</li>)}</ol></SectionCard>
+          <SectionCard title="What you need to show"><p>Your notice needs to explain the ground and the reasons you rely on. If your tenant does not leave, you will need to prove those same facts at court with documents, service records and a witness statement.</p><BulletList items={proofPoints} /></SectionCard>
+          <SectionCard title="What to do before you serve Form 3A"><ol className="list-decimal space-y-2 pl-5">{workflowSteps.map((step) => <li key={step}>{step}</li>)}</ol></SectionCard>
           <SectionCard title="Post-May 2026 compliance note"><p>For post-May 2026 England cases, use Form 3A or a form substantially to the same effect, give the right notice period, and write out the ground and reasons clearly. Keep deposit compliance, prescribed information, notice service, and court proof ready unless a ground-specific exception applies.</p><p>Current GOV.UK guidance says the court can dismiss or delay a claim if the notice is incomplete, inaccurate, or unsupported by evidence. Treat the notice, checklist, and evidence bundle as one consistent file from the start.</p></SectionCard>
           <SectionCard title={"Ground 15 evidence checklist"}><div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start"><div><p>Ground 15 evidence should identify the furniture item, its starting condition, and the deterioration complained of.</p><BulletList items={evidenceItems} /></div><ChecklistPreview imageSrc={checklistImage} pdfHref={checklistPdf} pdfText={checklistPdfText} alt={checklistAlt} /></div></SectionCard>
           <SectionCard title={"Common mistakes with Ground 15"}><BulletList items={mistakes} /></SectionCard>
-          <SectionCard title="Court progression and Complete Pack next step"><p>If the tenant does not leave after the notice, the court stage needs a claim form, particulars of claim, a copy of the notice, proof of service, and evidence proving the ground.</p><BulletList items={courtPoints} /><div className="mt-5 flex flex-wrap gap-3"><Link href={noticeOnlyHref} className="rounded-lg bg-primary px-5 py-3 font-semibold text-white hover:bg-[#5424aa]">Create my Section 8 notice</Link><Link href={completePackHref} className="rounded-lg border border-primary px-5 py-3 font-semibold text-primary hover:bg-[#F8F4FF]">Prepare my court pack</Link></div></SectionCard>
+          <SectionCard title="If your tenant does not leave"><p>For the court stage, you need a claim form, particulars of claim, a copy of the notice, proof of service and evidence that proves this ground.</p><BulletList items={courtPoints} /><div className="mt-5 flex flex-wrap gap-3"><Link href={noticeOnlyHref} className="rounded-lg bg-primary px-5 py-3 font-semibold text-white hover:bg-[#5424aa]">Create my Section 8 notice</Link><Link href={completePackHref} className="rounded-lg border border-primary px-5 py-3 font-semibold text-primary hover:bg-[#F8F4FF]">Prepare my court papers</Link></div></SectionCard>
           {relatedGrounds.length > 0 ? (<SectionCard title="Related grounds"><div className="grid gap-3 sm:grid-cols-2">{relatedGrounds.map((ground) => (<Link key={ground.href} href={ground.href} className="rounded-lg border border-[#E6DBFF] bg-[#FCFAFF] p-4 font-semibold text-primary hover:bg-[#F8F4FF]">Ground {ground.code}: {ground.label}</Link>))}</div></SectionCard>) : null}
         </div></Container></section>
         <FAQSection id="faqs" title={"Ground 15 FAQs"} intro={"Answers to common landlord questions about using Ground 15 in England."} faqs={faqs} variant="white" showContactCTA={false} />
