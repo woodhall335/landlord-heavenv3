@@ -10,6 +10,7 @@ import {
   type AssistedPrepService,
 } from '@/lib/assisted-prep';
 import { trackEvent } from '@/lib/analytics';
+import { clsx } from 'clsx';
 
 type FormState = {
   name: string;
@@ -131,7 +132,7 @@ function serviceSpecificFields(service: AssistedPrepService, form: FormState, se
   );
 }
 
-export function AssistedPrepIntakeForm() {
+export function AssistedPrepIntakeForm({ className }: { className?: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname() || '/assisted-prep/start';
@@ -225,7 +226,7 @@ export function AssistedPrepIntakeForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mx-auto max-w-3xl rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+    <form onSubmit={handleSubmit} className={clsx('w-full rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8', className)}>
       <div className="mb-6">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-violet-700">
           Free consultation

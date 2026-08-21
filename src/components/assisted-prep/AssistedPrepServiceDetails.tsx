@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { RiCheckLine } from 'react-icons/ri';
 import type { AssistedPrepService } from '@/lib/assisted-prep';
 import { ASSISTED_PREP_PROMISE, getAssistedPrepConfig } from '@/lib/assisted-prep';
@@ -15,6 +16,29 @@ type Detail = {
     question: string;
     answer: string;
   }>;
+};
+
+const processIllustrations: Partial<Record<AssistedPrepService, {
+  imageSrc: string;
+  imageAlt: string;
+  eyebrow: string;
+  title: string;
+  body: string;
+}>> = {
+  section8: {
+    imageSrc: '/images/generated/assisted-prep/assisted-section8-process-watercolor-v1.png',
+    imageAlt: 'Watercolour illustration of a Section 8 notice, notice date calendar and proof of service',
+    eyebrow: 'From notice to service',
+    title: 'Keep the notice steps in the right order',
+    body: 'The notice, date calculation and proof of service need to match the facts of your case. We help you organise those stages before you serve anything.',
+  },
+  possession: {
+    imageSrc: '/images/generated/assisted-prep/assisted-possession-process-watercolor-v1.png',
+    imageAlt: 'Watercolour illustration of a served notice, evidence bundle and possession hearing calendar',
+    eyebrow: 'From notice to court file',
+    title: 'Build a possession file a judge can follow',
+    body: 'If your tenant stays, the served notice, service proof, claim forms and evidence should all support the same reason for possession.',
+  },
 };
 
 const serviceDetails: Record<AssistedPrepService, Detail> = {
@@ -189,6 +213,7 @@ export function AssistedPrepServiceDetails({
   const config = getAssistedPrepConfig(service);
   const detail = serviceDetails[service];
   const scope = serviceScope[service];
+  const processIllustration = processIllustrations[service];
 
   return (
     <section
@@ -239,6 +264,27 @@ export function AssistedPrepServiceDetails({
           ) : null}
         </div>
       </div>
+
+      {processIllustration ? (
+        <section className="mt-6 overflow-hidden rounded-2xl border border-[#e3d7ff] bg-[#fcfaff]">
+          <div className="grid lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+            <div className="p-5 md:p-7">
+              <p className="public-eyebrow">{processIllustration.eyebrow}</p>
+              <h3 className="mt-3 text-2xl font-semibold text-[#20103f]">{processIllustration.title}</h3>
+              <p className="mt-3 text-sm leading-7 text-[#5d5672]">{processIllustration.body}</p>
+            </div>
+            <div className="relative min-h-[15rem] border-t border-[#e3d7ff] bg-white lg:min-h-[18rem] lg:border-l lg:border-t-0">
+              <Image
+                src={processIllustration.imageSrc}
+                alt={processIllustration.imageAlt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 58vw"
+                className="object-cover object-center"
+              />
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       <div className="mt-6 grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
         <div className="rounded-2xl border border-[#eee5ff] bg-white p-5">

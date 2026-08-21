@@ -28,6 +28,8 @@ type HeroCta = {
 // that keeps subtitle readability, right-edge media bleed, and CTA placement stable across pages.
 const SECTION_WRAP_CLASSES =
   'relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-white pt-28 sm:pt-32 lg:min-h-[100dvh] lg:items-center lg:justify-center lg:pb-16 lg:pt-36';
+const TOP_ALIGNED_SECTION_WRAP_CLASSES =
+  'relative isolate flex min-h-[44rem] flex-col overflow-hidden bg-white pt-20 sm:pt-24 lg:min-h-[44rem] lg:items-start lg:justify-start lg:pb-20 lg:pt-16';
 const CTA_WRAP_CLASSES = 'mt-8 flex w-full flex-col gap-3 sm:mt-9 sm:flex-row sm:items-center lg:mt-6';
 const REVIEW_STARS = '\u2605\u2605\u2605\u2605\u2605';
 
@@ -106,6 +108,7 @@ export type UniversalHeroProps = {
   trustPositioningPreset?: PositioningPreset;
   trustPositioningHeadline?: string;
   reviewPillLayout?: 'auto' | 'inline' | 'stacked';
+  verticalAlign?: 'center' | 'top';
 };
 
 const warnedMessages = new Set<string>();
@@ -157,6 +160,7 @@ export function UniversalHero({
   trustPositioningPreset = 'default',
   trustPositioningHeadline,
   reviewPillLayout = 'auto',
+  verticalAlign = 'center',
 }: UniversalHeroProps) {
   const pathname = usePathname() ?? '/';
   const isValidHeading = headingAs === 'h1' || headingAs === 'h2';
@@ -231,7 +235,10 @@ export function UniversalHero({
 
   return (
     <section
-      className={clsx(SECTION_WRAP_CLASSES, presetStyles.section)}
+      className={clsx(
+        verticalAlign === 'top' ? TOP_ALIGNED_SECTION_WRAP_CLASSES : SECTION_WRAP_CLASSES,
+        presetStyles.section
+      )}
       aria-label={ariaLabel}
       id={id}
       data-universal-hero="true"
@@ -256,7 +263,12 @@ export function UniversalHero({
         aria-hidden="true"
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:my-auto lg:px-8">
+      <div
+        className={clsx(
+          'relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8',
+          verticalAlign === 'top' ? 'lg:my-0' : 'lg:my-auto'
+        )}
+      >
         <div
           className={clsx(
             'block gap-8 lg:grid lg:grid-cols-2 lg:items-center lg:gap-10'

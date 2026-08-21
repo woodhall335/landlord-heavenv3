@@ -81,6 +81,19 @@ describe('UniversalHero review pill', () => {
     expect(desktopPill).toHaveTextContent('4.8/5 | 1061 reviews');
   });
 
+  it('can keep conversion-page content aligned below the navigation', () => {
+    const { container } = render(
+      <UniversalHero
+        title="Assisted prep"
+        subtitle="Supporting copy"
+        verticalAlign="top"
+      />
+    );
+
+    expect(screen.getByRole('region')).toHaveClass('lg:items-start', 'lg:justify-start');
+    expect(container.querySelector('.lg\\:my-0')).toBeInTheDocument();
+  });
+
   it('uses the stacked desktop pill for longer trust text and keeps the review row visible', () => {
     render(
       <UniversalHero

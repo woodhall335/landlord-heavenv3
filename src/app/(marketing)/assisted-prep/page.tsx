@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { AssistedPrepAllServiceDetails } from '@/components/assisted-prep/AssistedPrepServiceDetails';
 import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
+import { AssistedPrepVisualExplainer } from '@/components/assisted-prep/AssistedPrepVisualExplainer';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 
 export const metadata: Metadata = {
@@ -37,6 +38,9 @@ export default function AssistedPrepHubPage() {
           secondaryCta={{ label: 'See what is included', href: '#assisted-prep-details' }}
           trustText="Clear document-preparation scope before any paid work begins"
           showTrustPositioningBar
+          verticalAlign="top"
+          backgroundImageSrc="/images/heroes/library/hero-assisted-prep-overview-v2.webp"
+          backgroundImageAlt="Watercolour illustration of landlord document preparation and property keys"
         />
         <section id="assisted-prep-services" className="mx-auto max-w-7xl scroll-mt-28 px-4 py-14 sm:px-6 md:py-20 lg:px-8">
           <AssistedPrepServicesShowcase
@@ -45,6 +49,9 @@ export default function AssistedPrepHubPage() {
             pageType="entry_page"
             src="assisted_prep_hub"
           />
+          <div className="mt-10">
+            <AssistedPrepVisualExplainer service="overview" />
+          </div>
           <div id="assisted-prep-details" className="scroll-mt-28">
             <AssistedPrepAllServiceDetails className="mt-10" />
           </div>

@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { AssistedPrepIntakeForm } from '@/components/assisted-prep/AssistedPrepIntakeForm';
 import { AssistedPrepServiceDetails } from '@/components/assisted-prep/AssistedPrepServiceDetails';
+import { AssistedPrepVisualExplainer } from '@/components/assisted-prep/AssistedPrepVisualExplainer';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import {
   isPublicAssistedPrepService,
@@ -59,18 +60,24 @@ const heroContent: Record<PublicAssistedPrepService, {
   preTitleLabel: string;
   title: string;
   subtitle: string;
+  imageSrc: string;
+  imageAlt: string;
 }> = {
   section8: {
     preTitleLabel: 'Landlord Section 8 notice assistance',
     title: 'Get your Section 8 notice prepared with confidence',
     subtitle:
       'Start with a free consultation. We review the grounds, tenant details, notice dates, and service evidence before any paid document preparation is agreed.',
+    imageSrc: '/images/heroes/library/hero-assisted-section8-v2.webp',
+    imageAlt: 'Watercolour illustration of Section 8 notice documents, a calendar and property keys',
   },
   possession: {
     preTitleLabel: 'Landlord eviction assistance service',
     title: 'Prepare your possession claim with the right documents',
     subtitle:
       'Start with a free consultation. We review your served notice, expiry date, service evidence, and court paperwork before any paid document preparation is agreed.',
+    imageSrc: '/images/heroes/library/hero-assisted-possession-v2.webp',
+    imageAlt: 'Watercolour illustration of possession claim papers, court documents and property keys',
   },
 };
 
@@ -117,15 +124,21 @@ export default async function AssistedPrepStartPage({ searchParams }: StartPageP
           secondaryCta={{ label: "See what's included", href: '#whats-included' }}
           trustText="Free consultation first — pay only if we confirm we can help"
           showTrustPositioningBar
+          verticalAlign="top"
+          backgroundImageSrc={hero.imageSrc}
+          backgroundImageAlt={hero.imageAlt}
         />
         <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 md:py-20 lg:px-8">
           <div id="whats-included" className="scroll-mt-28">
-            <AssistedPrepServiceDetails service={service} className="mx-auto max-w-5xl" showCta={false} />
+            <AssistedPrepServiceDetails service={service} className="mx-auto max-w-7xl" showCta={false} />
           </div>
-          <div id="consultation-form" className="mt-10 scroll-mt-28">
-            <Suspense fallback={<div className="mx-auto max-w-3xl rounded-[2rem] bg-white p-6 shadow-sm md:p-8">Loading assisted prep...</div>}>
+          <div id="consultation-form" className="mt-10 grid scroll-mt-28 gap-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(20rem,0.65fr)] lg:items-start">
+            <Suspense fallback={<div className="rounded-[2rem] bg-white p-6 shadow-sm md:p-8">Loading assisted prep...</div>}>
               <AssistedPrepIntakeForm />
             </Suspense>
+            <div className="lg:sticky lg:top-28">
+              <AssistedPrepVisualExplainer service={service} compact />
+            </div>
           </div>
         </section>
       </main>
