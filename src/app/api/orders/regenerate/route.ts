@@ -30,7 +30,13 @@ import {
 import { validateComplianceTiming } from '@/lib/documents/court-ready-validator';
 import { buildComplianceTimingDataFromFacts } from '@/lib/documents/compliance-timing-facts';
 import { selectActiveCaseOrder } from '@/lib/payments/active-order';
-import { resolveStoragePath } from '@/lib/documents/download';
+import {
+  getTenancyOutputSnapshotByOrderId,
+  isTenancyOutputProductSku,
+  prepareTenancyOutputSnapshotForRegeneration,
+  toTenancyOutputSnapshotJurisdiction,
+} from '@/lib/tenancy/output-snapshot.server';
+import { deleteFinalDocumentsForOrder } from '@/lib/payments/order-document-cleanup';
 
 type PaidOrderRow = {
   id: string;
@@ -226,83 +232,73 @@ export async function POST(request: Request) {
       return NextResponse.json(response, { status: 422 });
     }
 
-    // Get existing FINAL documents to delete (NOT previews)
-    const { data: existingDocs, error: docsError } = await adminClient
-      .from('documents')
-      .select('id, pdf_url')
-      .eq('case_id', case_id)
-      .eq('is_preview', false);
+    const fulfillmentProduct =
+      resolveFulfillmentProductForCase({
+        productType: product || order.product_type,
+        order: {
+          product_type: order.product_type,
+          metadata: extractOrderMetadata(order),
+        },
+        jurisdiction: caseData.jurisdiction,
+        caseType: caseData.case_type,
+      }) || order.product_type;
 
-    if (docsError) {
-      console.error('Failed to fetch existing documents:', docsError);
+    const { data: processingOrder, error: processingError } = await adminClient
+      .from('orders')
+      .update({ fulfillment_status: 'processing' })
+      .eq('id', order.id)
+      .neq('fulfillment_status', 'processing')
+      .select('id')
+      .maybeSingle();
+
+    if (processingError) {
       return NextResponse.json(
-        { ok: false, error: 'Failed to fetch existing documents' },
+        { ok: false, error: 'Unable to start document regeneration. Please try again.' },
         { status: 500 }
       );
     }
+    if (!processingOrder) {
+      return NextResponse.json(
+        { ok: false, error: 'Document regeneration is already in progress.' },
+        { status: 409 }
+      );
+    }
 
-    // Set order status to processing
-    await adminClient
-      .from('orders')
-      .update({ fulfillment_status: 'processing' })
-      .eq('id', order.id);
+    let tenancyOutputSnapshotId: string | null = null;
+    let shouldRemoveFailedRevision = false;
 
     try {
-      // Delete existing final documents from storage and database
-      if (existingDocs && existingDocs.length > 0) {
-        // Extract storage paths from URLs and delete from storage
-        const storagePaths: string[] = [];
-        for (const doc of existingDocs) {
-          const storagePath = resolveStoragePath(doc.pdf_url);
-          if (storagePath) storagePaths.push(storagePath);
-        }
-
-        // Delete from storage (batch delete)
-        if (storagePaths.length > 0) {
-          const { error: storageError } = await adminClient.storage
-            .from('documents')
-            .remove(storagePaths);
-
-          if (storageError) {
-            console.warn('Failed to delete some storage files:', storageError);
-            // Continue anyway - orphaned files are better than blocking regeneration
-          }
-        }
-
-        // Delete document records from database
-        const docIds = existingDocs.map((d) => d.id);
-        const { error: deleteError } = await adminClient
-          .from('documents')
-          .delete()
-          .in('id', docIds);
-
-        if (deleteError) {
-          console.error('Failed to delete document records:', deleteError);
-          // Throw to trigger error handling
-          throw new Error('Failed to delete existing documents before regeneration');
-        }
-      }
-
-      // Now regenerate using the fulfillment logic
-      const fulfillmentProduct =
-        resolveFulfillmentProductForCase({
-          productType: product || order.product_type,
-          order: {
-            product_type: order.product_type,
-            metadata: extractOrderMetadata(order),
-          },
-          jurisdiction: caseData.jurisdiction,
+      if (isTenancyOutputProductSku(fulfillmentProduct)) {
+        const previousSnapshot = await getTenancyOutputSnapshotByOrderId(adminClient, order.id);
+        const tenancySnapshot = await prepareTenancyOutputSnapshotForRegeneration(adminClient, {
+          orderId: order.id,
+          caseId: case_id,
+          userId: resolvedUserId,
+          productType: fulfillmentProduct,
+          jurisdiction: toTenancyOutputSnapshotJurisdiction(caseData.jurisdiction),
+          wizardAnswers: wizardFacts || {},
           caseType: caseData.case_type,
-        }) || order.product_type;
+        });
+        tenancyOutputSnapshotId = tenancySnapshot.id;
+        shouldRemoveFailedRevision = previousSnapshot?.id !== tenancySnapshot.id;
+      }
 
       const result = await fulfillOrder({
         orderId: order.id,
         caseId: case_id,
         productType: fulfillmentProduct,
         userId: resolvedUserId,
+        tenancyOutputSnapshotId,
       });
 
       if (result.status === 'incomplete' || result.status === 'requires_action') {
+        if (tenancyOutputSnapshotId && shouldRemoveFailedRevision) {
+          await deleteFinalDocumentsForOrder(adminClient, {
+            caseId: case_id,
+            orderId: order.id,
+            tenancyOutputSnapshotId,
+          });
+        }
         const response: RegenerateOrderResponse = {
           ok: false,
           error:
@@ -315,12 +311,31 @@ export async function POST(request: Request) {
         return NextResponse.json(response, { status: 409 });
       }
 
-      // Get the newly created document IDs
-      const { data: newDocs } = await adminClient
+      if (tenancyOutputSnapshotId) {
+        try {
+          await deleteFinalDocumentsForOrder(adminClient, {
+            caseId: case_id,
+            orderId: order.id,
+            exceptTenancyOutputSnapshotId: tenancyOutputSnapshotId,
+          });
+        } catch (cleanupError) {
+          console.error('Failed to remove superseded tenancy documents:', cleanupError);
+        }
+      }
+
+      let newDocumentsQuery = adminClient
         .from('documents')
         .select('id')
         .eq('case_id', case_id)
+        .eq('order_id', order.id)
         .eq('is_preview', false);
+      if (tenancyOutputSnapshotId) {
+        newDocumentsQuery = newDocumentsQuery.eq(
+          'tenancy_output_snapshot_id',
+          tenancyOutputSnapshotId
+        );
+      }
+      const { data: newDocs } = await newDocumentsQuery;
 
       return NextResponse.json(
         {
@@ -331,6 +346,17 @@ export async function POST(request: Request) {
         { status: 200 }
       );
     } catch (fulfillmentError: any) {
+      if (tenancyOutputSnapshotId && shouldRemoveFailedRevision) {
+        try {
+          await deleteFinalDocumentsForOrder(adminClient, {
+            caseId: case_id,
+            orderId: order.id,
+            tenancyOutputSnapshotId,
+          });
+        } catch (cleanupError) {
+          console.error('Failed to remove incomplete tenancy revision:', cleanupError);
+        }
+      }
       // Mark order as failed
       await adminClient
         .from('orders')

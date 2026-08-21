@@ -2,7 +2,10 @@ import { describe, expect, it } from 'vitest';
 import {
   assertTenancySnapshotInputConsistency,
   assertTenancyOutputSnapshotIntegrity,
+  doesTenancySnapshotMatchInput,
   hashTenancySnapshotPayload,
+  isTenancyOutputProductSku,
+  toTenancyOutputSnapshotJurisdiction,
   type TenancyOutputSnapshot,
 } from '../output-snapshot.server';
 
@@ -25,12 +28,26 @@ function snapshot(): TenancyOutputSnapshot {
   return {
     id: '44444444-4444-4444-8444-444444444444',
     ...core,
+    revision_number: 1,
     content_sha256: hashTenancySnapshotPayload(core),
     created_at: '2026-07-27T12:00:00.000Z',
   };
 }
 
 describe('tenancy output snapshot integrity', () => {
+  it('recognises both legacy and current tenancy products for snapshot recovery', () => {
+    expect(isTenancyOutputProductSku('ast_standard')).toBe(true);
+    expect(isTenancyOutputProductSku('england_standard_tenancy_agreement')).toBe(true);
+    expect(isTenancyOutputProductSku('notice_only')).toBe(false);
+  });
+
+  it('requires a valid jurisdiction before recovering a tenancy snapshot', () => {
+    expect(toTenancyOutputSnapshotJurisdiction('wales')).toBe('wales');
+    expect(() => toTenancyOutputSnapshotJurisdiction('unknown')).toThrow(
+      /valid case jurisdiction/i
+    );
+  });
+
   it('hashes object keys deterministically', () => {
     expect(hashTenancySnapshotPayload({ a: 1, b: { x: 2, y: 3 } })).toBe(
       hashTenancySnapshotPayload({ b: { y: 3, x: 2 }, a: 1 })
@@ -39,6 +56,25 @@ describe('tenancy output snapshot integrity', () => {
 
   it('accepts an unchanged order-bound snapshot', () => {
     expect(() => assertTenancyOutputSnapshotIntegrity(snapshot())).not.toThrow();
+  });
+
+  it('distinguishes corrected answers from the current immutable revision', () => {
+    const current = snapshot();
+    const input = {
+      caseId: current.case_id,
+      userId: current.user_id,
+      productType: current.product_type,
+      jurisdiction: current.jurisdiction,
+      wizardAnswers: current.wizard_answers,
+    };
+
+    expect(doesTenancySnapshotMatchInput(current, input)).toBe(true);
+    expect(
+      doesTenancySnapshotMatchInput(current, {
+        ...input,
+        wizardAnswers: { ...input.wizardAnswers, rent: 950 },
+      })
+    ).toBe(false);
   });
 
   it('rejects answer drift and entitlement drift', () => {

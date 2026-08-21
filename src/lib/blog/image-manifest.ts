@@ -85,6 +85,20 @@ const heroesByTemplateKey = new Map(manifest.heroes.map((entry) => [entry.templa
 const ogByTemplateKey = new Map(manifest.og.map((entry) => [entry.templateKey, toPublicPath(entry.path)]));
 const SLUG_IMAGE_OVERRIDES = new Map([
   [
+    'england-section-8-ground-14',
+    {
+      hero: '/images/heroes/library/hero-guide-antisocial-behaviour-v2.webp',
+      og: '/images/heroes/library/hero-guide-antisocial-behaviour-v2.webp',
+    },
+  ],
+  [
+    'scotland-eviction-ground-1',
+    {
+      hero: '/images/heroes/library/hero-tenancy-scotland-v2.webp',
+      og: '/images/heroes/library/hero-tenancy-scotland-v2.webp',
+    },
+  ],
+  [
     'do-landlords-need-a-new-tenancy-agreement-after-1-may-2026',
     {
       hero: '/images/heroes/library/hero-tenancy-england-standard-v2.webp',
@@ -172,6 +186,17 @@ function getRotatedTemplateKey(input: BlogImageInput) {
 }
 
 export function resolveBlogImageSet(input: BlogImageInput): BlogImageResolution {
+  const slugOverride = SLUG_IMAGE_OVERRIDES.get(input.slug);
+  if (slugOverride) {
+    return {
+      hero: slugOverride.hero,
+      og: slugOverride.og,
+      placeholder: getPlaceholderBySlug(input.slug).hero,
+      strategy: 'explicit',
+      templateKey: `slug:${input.slug}`,
+    };
+  }
+
   const universalHero =
     UNIVERSAL_BLOG_HERO_POOL[stableHash(input.slug) % UNIVERSAL_BLOG_HERO_POOL.length];
 
@@ -182,17 +207,6 @@ export function resolveBlogImageSet(input: BlogImageInput): BlogImageResolution 
       placeholder: getPlaceholderBySlug(input.slug).hero,
       strategy: 'universal',
       templateKey: `universal:${input.slug}`,
-    };
-  }
-
-  const slugOverride = SLUG_IMAGE_OVERRIDES.get(input.slug);
-  if (slugOverride) {
-    return {
-      hero: slugOverride.hero,
-      og: slugOverride.og,
-      placeholder: getPlaceholderBySlug(input.slug).hero,
-      strategy: 'explicit',
-      templateKey: `slug:${input.slug}`,
     };
   }
 

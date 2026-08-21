@@ -38,6 +38,7 @@ import { FAQInline } from '@/components/seo/FAQSection';
 import Image from 'next/image';
 import { BlogReadingProgress } from '@/components/blog/BlogReadingProgress';
 import { BlogBackToTop } from '@/components/blog/BlogBackToTop';
+import { BlogAssistedPrepSidebar } from '@/components/blog/BlogAssistedPrepSidebar';
 import { BlogStickySlots } from '@/components/blog/BlogStickySlots';
 import { BlogProse } from '@/components/blog/BlogProse';
 import { BlogCtaProvider } from '@/components/blog/BlogCtaContext';
@@ -867,6 +868,8 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 image={post.author.image}
               />
 
+              <BlogAssistedPrepSidebar slug={slug} className="mt-8 lg:hidden" />
+
               {quickAnswer && (
                 <Reveal as="section" className="mt-8 rounded-2xl border border-[#e9dcff] bg-white p-5 shadow-[0_14px_34px_rgba(105,46,212,0.08)] md:p-6" aria-label="Quick answer">
                   <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">Short answer</p>
@@ -994,6 +997,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
             >
               <div className="space-y-3">
                 <TableOfContents items={post.tableOfContents} />
+                <BlogAssistedPrepSidebar slug={slug} />
                 <BlogStickySlots cta={productCta} postSlug={slug} category={post.category} showDesktop showMobile={false} />
                 <BlogAskHeavenPanel
                   topic={complianceTopic?.topic ?? 'general'}

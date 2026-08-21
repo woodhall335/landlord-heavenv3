@@ -175,59 +175,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { count: existingDocCount, error: existingDocsError } = await adminClient
-      .from('documents')
-      .select('id', { count: 'exact', head: true })
-      .eq('case_id', order.case_id)
-      .eq('is_preview', false);
-
-    if (existingDocsError) {
-      logger.error('Admin retry fulfillment failed to check documents', {
-        orderId,
-        caseId: order.case_id,
-        adminUserId,
-        error: existingDocsError.message,
-      });
-      return NextResponse.json(
-        { error: 'Failed to inspect existing documents' },
-        { status: 500 }
-      );
-    }
-
-    if (existingDocCount && existingDocCount > 0) {
-      if (order.fulfillment_status !== 'fulfilled') {
-        await safeUpdateOrderWithMetadata(
-          adminClient,
-          order.id,
-          {
-            fulfillment_status: 'fulfilled',
-            fulfilled_at: new Date().toISOString(),
-          },
-          extractOrderMetadata(order)
-        );
-      }
-
-      await logRetryAttempt(adminClient, {
-        orderId: order.id,
-        adminUserId,
-        status: 'completed',
-        result: {
-          status: 'already_fulfilled',
-          documents: existingDocCount,
-        },
-      });
-
-      return NextResponse.json(
-        {
-          success: true,
-          status: 'already_fulfilled',
-          documents: existingDocCount,
-          message: 'Documents already exist',
-        },
-        { status: 200 }
-      );
-    }
-
     const resolvedUserId = order.user_id || caseData.user_id;
     if (!resolvedUserId) {
       return NextResponse.json(
@@ -243,6 +190,31 @@ export async function POST(request: NextRequest) {
       admin_retry_attempt: new Date().toISOString(),
       admin_retry_user_id: adminUserId,
     };
+
+    const { data: processingOrder, error: processingError } = await adminClient
+      .from('orders')
+      .update({ fulfillment_status: 'processing' })
+      .eq('id', order.id)
+      .neq('fulfillment_status', 'processing')
+      .select('id')
+      .maybeSingle();
+
+    if (processingError) {
+      return NextResponse.json(
+        { error: 'Unable to start fulfillment retry. Please try again.' },
+        { status: 500 }
+      );
+    }
+    if (!processingOrder) {
+      return NextResponse.json(
+        {
+          success: true,
+          status: 'processing',
+          message: 'Document generation is already in progress',
+        },
+        { status: 200 }
+      );
+    }
 
     await safeUpdateOrderWithMetadata(
       adminClient,

@@ -44,7 +44,7 @@ describe('RegenerateOrderResponse type', () => {
 
 describe('Regenerate Endpoint Business Logic', () => {
   describe('Paid case within edit window', () => {
-    it('should allow regeneration and delete old finals', () => {
+    it('should allow regeneration while preserving the previous final pack until replacement succeeds', () => {
       // Scenario: Order paid 15 days ago (within 30-day window)
       const paidAt = new Date();
       paidAt.setDate(paidAt.getDate() - 15);
@@ -61,7 +61,6 @@ describe('Regenerate Endpoint Business Logic', () => {
       expect(isWithinWindow).toBe(true);
       expect(orderState.payment_status).toBe('paid');
 
-      // Expected behavior: delete old final docs, regenerate new ones
       const expectedResponse: RegenerateOrderResponse = {
         ok: true,
         regenerated_count: 4,
@@ -71,16 +70,15 @@ describe('Regenerate Endpoint Business Logic', () => {
       expect(expectedResponse.ok).toBe(true);
     });
 
-    it('should delete existing final documents before regenerating', () => {
+    it('should not delete existing final documents before regenerating', () => {
       // Simulate existing final documents
       const existingDocs = [
         { id: 'old-doc-1', is_preview: false, pdf_url: '/documents/user/case/old1.pdf' },
         { id: 'old-doc-2', is_preview: false, pdf_url: '/documents/user/case/old2.pdf' },
       ];
 
-      // Only non-preview docs should be deleted
-      const docsToDelete = existingDocs.filter((d) => !d.is_preview);
-      expect(docsToDelete).toHaveLength(2);
+      const docsToPreserveUntilSuccess = existingDocs.filter((d) => !d.is_preview);
+      expect(docsToPreserveUntilSuccess).toHaveLength(2);
 
       // Previews should NOT be deleted
       const previewDocs = [

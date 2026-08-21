@@ -50,7 +50,11 @@ import type {
 } from '@/lib/section13/types';
 import {
   assertTenancyOutputSnapshotIntegrity,
+  ensureTenancyOutputSnapshotForRegeneration,
+  getTenancyOutputSnapshotById,
   getTenancyOutputSnapshotByOrderId,
+  isTenancyOutputProductSku,
+  toTenancyOutputSnapshotJurisdiction,
   type TenancyOutputSnapshot,
 } from '@/lib/tenancy/output-snapshot.server';
 
@@ -64,6 +68,7 @@ interface FulfillOrderInput {
   productType: string;
   addOns?: string[];
   userId?: string | null;
+  tenancyOutputSnapshotId?: string | null;
 }
 
 interface FulfillmentValidation {
@@ -169,17 +174,30 @@ async function validateFulfillmentCompleteness(
   productType: string,
   jurisdiction: string,
   route?: string,
-  hasArrears?: boolean
+  hasArrears?: boolean,
+  scope?: { orderId?: string; tenancyOutputSnapshotId?: string | null }
 ): Promise<FulfillmentValidation> {
   // Get expected documents from pack-contents (single source of truth)
   const expectedKeys = getExpectedDocumentKeys(productType, jurisdiction, route, hasArrears);
 
   // Get actual documents from database
-  const { data: actualDocs, error } = await supabase
+  let documentsQuery = supabase
     .from('documents')
     .select('id, document_title, document_type, metadata')
     .eq('case_id', caseId)
     .eq('is_preview', false);
+
+  if (scope?.orderId) {
+    documentsQuery = documentsQuery.eq('order_id', scope.orderId);
+  }
+  if (scope?.tenancyOutputSnapshotId) {
+    documentsQuery = documentsQuery.eq(
+      'tenancy_output_snapshot_id',
+      scope.tenancyOutputSnapshotId
+    );
+  }
+
+  const { data: actualDocs, error } = await documentsQuery;
 
   if (error) {
     console.error('[fulfillment] Failed to fetch documents for validation:', error);
@@ -216,15 +234,28 @@ async function validateFulfillmentCompletenessForProducts(
   productTypes: string[],
   jurisdiction: string,
   route?: string,
-  hasArrears?: boolean
+  hasArrears?: boolean,
+  scope?: { orderId?: string; tenancyOutputSnapshotId?: string | null }
 ): Promise<FulfillmentValidation> {
   const expectedKeys = getExpectedDocumentKeysForProducts(productTypes, jurisdiction, route, hasArrears);
 
-  const { data: actualDocs, error } = await supabase
+  let documentsQuery = supabase
     .from('documents')
     .select('id, document_title, document_type, metadata')
     .eq('case_id', caseId)
     .eq('is_preview', false);
+
+  if (scope?.orderId) {
+    documentsQuery = documentsQuery.eq('order_id', scope.orderId);
+  }
+  if (scope?.tenancyOutputSnapshotId) {
+    documentsQuery = documentsQuery.eq(
+      'tenancy_output_snapshot_id',
+      scope.tenancyOutputSnapshotId
+    );
+  }
+
+  const { data: actualDocs, error } = await documentsQuery;
 
   if (error) {
     console.error('[fulfillment] Failed to fetch documents for validation:', error);
@@ -931,6 +962,7 @@ export async function fulfillOrder({
   productType,
   addOns = [],
   userId,
+  tenancyOutputSnapshotId,
 }: FulfillOrderInput): Promise<FulfillmentResult> {
   const supabase = createAdminClient();
   const primaryRequestedProductType = getAssistedPrepFulfillmentProduct(productType) || productType;
@@ -969,19 +1001,35 @@ export async function fulfillOrder({
   }
 
   const tenancyProductRequested = requestedFulfillmentProducts.some(
-    (sku) =>
-      sku === 'ast_standard' ||
-      sku === 'ast_premium' ||
-      isResidentialLettingProductSku(sku)
+    (sku) => isTenancyOutputProductSku(sku)
   );
   let tenancyOutputSnapshot: TenancyOutputSnapshot | null = null;
   let wizardFacts = ((caseData as any).collected_facts || {}) as Record<string, any>;
   if (tenancyProductRequested) {
-    tenancyOutputSnapshot = await getTenancyOutputSnapshotByOrderId(supabase, orderId);
+    tenancyOutputSnapshot = tenancyOutputSnapshotId
+      ? await getTenancyOutputSnapshotById(supabase, tenancyOutputSnapshotId)
+      : await getTenancyOutputSnapshotByOrderId(supabase, orderId);
     if (!tenancyOutputSnapshot) {
-      throw new Error(
-        'Paid tenancy order has no immutable output snapshot; generation is blocked to prevent answer drift'
+      if (!paidOrder.user_id) {
+        throw new Error('Paid tenancy order has no owner for legacy snapshot recovery');
+      }
+
+      const tenancyProductType = requestedFulfillmentProducts.find((sku) =>
+        isTenancyOutputProductSku(sku)
       );
+      if (!tenancyProductType) {
+        throw new Error('Unable to resolve tenancy product for legacy snapshot recovery');
+      }
+
+      tenancyOutputSnapshot = await ensureTenancyOutputSnapshotForRegeneration(supabase, {
+        orderId,
+        caseId,
+        userId: paidOrder.user_id,
+        productType: tenancyProductType,
+        jurisdiction: toTenancyOutputSnapshotJurisdiction((caseData as any).jurisdiction),
+        wizardAnswers: wizardFacts,
+        caseType: (caseData as any).case_type || null,
+      });
     }
     assertTenancyOutputSnapshotIntegrity(tenancyOutputSnapshot);
     if (
@@ -1224,7 +1272,11 @@ export async function fulfillOrder({
     fulfillmentProducts,
     jurisdiction,
     route,
-    hasArrears
+    hasArrears,
+    {
+      orderId,
+      tenancyOutputSnapshotId: tenancyOutputSnapshot?.id || null,
+    }
   );
 
   if (preValidation.isComplete && preValidation.actualCount > 0) {
@@ -1370,13 +1422,17 @@ export async function fulfillOrder({
     // ==========================================================================
     // POST-GENERATION VALIDATION: Verify all expected documents now exist
     // ==========================================================================
-    const postValidation = await validateFulfillmentCompletenessForProducts(
+  const postValidation = await validateFulfillmentCompletenessForProducts(
       supabase,
       caseId,
       fulfillmentProducts,
       jurisdiction,
       route,
-      hasArrears
+      hasArrears,
+      {
+        orderId,
+        tenancyOutputSnapshotId: tenancyOutputSnapshot?.id || null,
+      }
     );
 
     logFulfillmentValidation(orderId, caseId, fulfillmentProducts.join(', '), postValidation);
@@ -1488,7 +1544,11 @@ export async function fulfillOrder({
         productType,
         jurisdiction,
         route,
-        hasArrears
+        hasArrears,
+        {
+          orderId,
+          tenancyOutputSnapshotId: tenancyOutputSnapshot?.id || null,
+        }
       );
 
       await safeUpdateOrderWithMetadata(

@@ -1,9 +1,14 @@
 import 'server-only';
 
 import { createHash } from 'node:crypto';
+import { isResidentialLettingProductSku } from '@/lib/residential-letting/products';
 
 export const TENANCY_SNAPSHOT_SCHEMA_VERSION = 'tenancy-output-snapshot.v1';
 export const TENANCY_SNAPSHOT_SOURCE_VERSION = '2026-07-27';
+export const TENANCY_SNAPSHOT_LEGACY_RECOVERY_SOURCE_VERSION =
+  '2026-08-21-legacy-regeneration-recovery.v1';
+export const TENANCY_SNAPSHOT_REGENERATION_SOURCE_VERSION =
+  '2026-08-21-regeneration-revision.v1';
 
 export interface TenancyOutputSnapshot {
   id: string;
@@ -20,7 +25,31 @@ export interface TenancyOutputSnapshot {
   attachment_states: Record<string, unknown>;
   entitlement_reference: string;
   content_sha256: string;
+  revision_number: number;
   created_at: string;
+}
+
+export function isTenancyOutputProductSku(value: string): boolean {
+  return (
+    value === 'ast_standard' ||
+    value === 'ast_premium' ||
+    isResidentialLettingProductSku(value)
+  );
+}
+
+export function toTenancyOutputSnapshotJurisdiction(
+  value: unknown
+): TenancyOutputSnapshot['jurisdiction'] {
+  if (
+    value === 'england' ||
+    value === 'wales' ||
+    value === 'scotland' ||
+    value === 'northern-ireland'
+  ) {
+    return value;
+  }
+
+  throw new Error('Tenancy snapshot requires a valid case jurisdiction');
 }
 
 function stableValue(value: unknown): unknown {
@@ -115,10 +144,46 @@ export async function getTenancyOutputSnapshotByOrderId(
     .from('tenancy_output_snapshots')
     .select('*')
     .eq('order_id', orderId)
+    .order('revision_number', { ascending: false })
+    .limit(1)
     .maybeSingle();
 
   if (error) throw new Error(`Unable to load tenancy output snapshot: ${error.message}`);
   return (data as TenancyOutputSnapshot | null) ?? null;
+}
+
+export async function getTenancyOutputSnapshotById(
+  supabase: any,
+  snapshotId: string
+): Promise<TenancyOutputSnapshot | null> {
+  const { data, error } = await supabase
+    .from('tenancy_output_snapshots')
+    .select('*')
+    .eq('id', snapshotId)
+    .maybeSingle();
+
+  if (error) throw new Error(`Unable to load tenancy output snapshot: ${error.message}`);
+  return (data as TenancyOutputSnapshot | null) ?? null;
+}
+
+export function doesTenancySnapshotMatchInput(
+  snapshot: TenancyOutputSnapshot,
+  input: {
+    caseId: string;
+    userId: string;
+    productType: string;
+    jurisdiction: TenancyOutputSnapshot['jurisdiction'];
+    wizardAnswers: Record<string, unknown>;
+  }
+): boolean {
+  return (
+    snapshot.case_id === input.caseId &&
+    snapshot.user_id === input.userId &&
+    snapshot.product_type === input.productType &&
+    snapshot.jurisdiction === input.jurisdiction &&
+    JSON.stringify(stableValue(snapshot.wizard_answers)) ===
+      JSON.stringify(stableValue(input.wizardAnswers))
+  );
 }
 
 export async function createOrGetTenancyOutputSnapshot(
@@ -133,51 +198,150 @@ export async function createOrGetTenancyOutputSnapshot(
     derivedFields?: Record<string, unknown>;
     clauseDecisions?: Record<string, unknown>;
     attachmentStates?: Record<string, unknown>;
+    sourceVersion?: string;
   }
 ): Promise<TenancyOutputSnapshot> {
   assertTenancySnapshotInputConsistency(input);
 
-  const hashPayload = {
-    order_id: input.orderId,
-    case_id: input.caseId,
-    user_id: input.userId,
-    product_type: input.productType,
-    jurisdiction: input.jurisdiction,
-    schema_version: TENANCY_SNAPSHOT_SCHEMA_VERSION,
-    source_version: TENANCY_SNAPSHOT_SOURCE_VERSION,
-    wizard_answers: stableValue(input.wizardAnswers),
-    derived_fields: stableValue(input.derivedFields ?? {}),
-    clause_decisions: stableValue(input.clauseDecisions ?? {}),
-    attachment_states: stableValue(input.attachmentStates ?? {}),
-    entitlement_reference: `order:${input.orderId}`,
-  } as const;
-  const contentSha256 = hashTenancySnapshotPayload(hashPayload);
   const existing = await getTenancyOutputSnapshotByOrderId(supabase, input.orderId);
   if (existing) {
     assertTenancyOutputSnapshotIntegrity(existing);
-    if (existing.content_sha256 !== contentSha256) {
-      throw new Error(
-        'The answers changed after this checkout order was frozen; start a new checkout order'
-      );
+    if (doesTenancySnapshotMatchInput(existing, input)) return existing;
+  }
+
+  return createTenancyOutputSnapshotRevision(supabase, input, existing?.revision_number ?? 0);
+}
+
+async function createTenancyOutputSnapshotRevision(
+  supabase: any,
+  input: {
+    orderId: string;
+    caseId: string;
+    userId: string;
+    productType: string;
+    jurisdiction: TenancyOutputSnapshot['jurisdiction'];
+    wizardAnswers: Record<string, unknown>;
+    derivedFields?: Record<string, unknown>;
+    clauseDecisions?: Record<string, unknown>;
+    attachmentStates?: Record<string, unknown>;
+    sourceVersion?: string;
+  },
+  initialRevisionNumber: number
+): Promise<TenancyOutputSnapshot> {
+  let revisionNumber = initialRevisionNumber + 1;
+
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const hashPayload = {
+      order_id: input.orderId,
+      case_id: input.caseId,
+      user_id: input.userId,
+      product_type: input.productType,
+      jurisdiction: input.jurisdiction,
+      schema_version: TENANCY_SNAPSHOT_SCHEMA_VERSION,
+      source_version: input.sourceVersion || TENANCY_SNAPSHOT_SOURCE_VERSION,
+      wizard_answers: stableValue(input.wizardAnswers),
+      derived_fields: stableValue(input.derivedFields ?? {}),
+      clause_decisions: stableValue(input.clauseDecisions ?? {}),
+      attachment_states: stableValue(input.attachmentStates ?? {}),
+      entitlement_reference: `order:${input.orderId}`,
+    } as const;
+    const contentSha256 = hashTenancySnapshotPayload(hashPayload);
+
+    const { data, error } = await supabase
+      .from('tenancy_output_snapshots')
+      .insert({ ...hashPayload, revision_number: revisionNumber, content_sha256: contentSha256 })
+      .select('*')
+      .single();
+
+    if (!error) return data as TenancyOutputSnapshot;
+
+    if (error.code !== '23505') {
+      throw new Error(`Unable to create tenancy output snapshot: ${error.message}`);
     }
+
+    const latest = await getTenancyOutputSnapshotByOrderId(supabase, input.orderId);
+    if (latest) {
+      assertTenancyOutputSnapshotIntegrity(latest);
+      if (doesTenancySnapshotMatchInput(latest, input)) return latest;
+      revisionNumber = latest.revision_number + 1;
+    }
+  }
+
+  throw new Error('Unable to create a unique tenancy output snapshot revision');
+}
+
+export async function ensureTenancyOutputSnapshotForRegeneration(
+  supabase: any,
+  input: {
+    orderId: string;
+    caseId: string;
+    userId: string;
+    productType: string;
+    jurisdiction: TenancyOutputSnapshot['jurisdiction'];
+    wizardAnswers: Record<string, unknown>;
+    caseType?: string | null;
+  }
+): Promise<TenancyOutputSnapshot> {
+  const existing = await getTenancyOutputSnapshotByOrderId(supabase, input.orderId);
+  if (existing) {
+    assertTenancyOutputSnapshotIntegrity(existing);
     return existing;
   }
 
-  const { data, error } = await supabase
-    .from('tenancy_output_snapshots')
-    .insert({ ...hashPayload, content_sha256: contentSha256 })
-    .select('*')
-    .single();
+  return createOrGetTenancyOutputSnapshot(supabase, {
+    ...input,
+    sourceVersion: TENANCY_SNAPSHOT_LEGACY_RECOVERY_SOURCE_VERSION,
+    derivedFields: {
+      case_type: input.caseType || null,
+      snapshot_origin: 'legacy_regeneration_recovery',
+    },
+    clauseDecisions: {
+      product_type: input.productType,
+      jurisdiction: input.jurisdiction,
+    },
+    attachmentStates: {
+      legacy_snapshot_backfilled_on_regeneration: true,
+    },
+  });
+}
 
-  if (error) {
-    if (error.code === '23505') {
-      const raced = await getTenancyOutputSnapshotByOrderId(supabase, input.orderId);
-      if (raced) return raced;
-    }
-    throw new Error(`Unable to create tenancy output snapshot: ${error.message}`);
+export async function prepareTenancyOutputSnapshotForRegeneration(
+  supabase: any,
+  input: {
+    orderId: string;
+    caseId: string;
+    userId: string;
+    productType: string;
+    jurisdiction: TenancyOutputSnapshot['jurisdiction'];
+    wizardAnswers: Record<string, unknown>;
+    caseType?: string | null;
   }
+): Promise<TenancyOutputSnapshot> {
+  const existing = await getTenancyOutputSnapshotByOrderId(supabase, input.orderId);
+  if (!existing) return ensureTenancyOutputSnapshotForRegeneration(supabase, input);
 
-  return data as TenancyOutputSnapshot;
+  assertTenancyOutputSnapshotIntegrity(existing);
+  if (doesTenancySnapshotMatchInput(existing, input)) return existing;
+
+  return createTenancyOutputSnapshotRevision(
+    supabase,
+    {
+      ...input,
+      sourceVersion: TENANCY_SNAPSHOT_REGENERATION_SOURCE_VERSION,
+      derivedFields: {
+        case_type: input.caseType || null,
+        snapshot_origin: 'post_purchase_regeneration',
+      },
+      clauseDecisions: {
+        product_type: input.productType,
+        jurisdiction: input.jurisdiction,
+      },
+      attachmentStates: {
+        regenerated_from_snapshot_id: existing.id,
+      },
+    },
+    existing.revision_number
+  );
 }
 
 export function assertTenancyOutputSnapshotIntegrity(snapshot: TenancyOutputSnapshot): void {

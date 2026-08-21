@@ -206,52 +206,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // Check if final documents already exist (idempotency)
-    let documentsQuery = (userIsAdmin ? adminClient : supabase)
-      .from('documents')
-      .select('id, metadata')
-      .eq('case_id', case_id)
-      .eq('is_preview', false);
-
-    if (!userIsAdmin) {
-      documentsQuery = documentsQuery.eq('user_id', user.id);
-    }
-
-    const { data: existingDocs } = await documentsQuery;
-    const existingDocCount = (existingDocs || []).filter((doc: any) => {
-      const docOrderId = doc.metadata?.order_id;
-      const docPackType = doc.metadata?.pack_type;
-
-      if (docOrderId) {
-        return docOrderId === order.id;
-      }
-
-      return docPackType === order.product_type;
-    }).length;
-
-    if (existingDocCount && existingDocCount > 0) {
-      // Documents exist, mark as fulfilled if not already
-      if (order.fulfillment_status !== 'fulfilled') {
-        await adminClient
-          .from('orders')
-          .update({
-            fulfillment_status: 'fulfilled',
-            fulfilled_at: new Date().toISOString(),
-          })
-          .eq('id', order.id);
-      }
-
-      return NextResponse.json(
-        {
-          success: true,
-          status: 'already_fulfilled',
-          documents: existingDocCount,
-          message: 'Documents already exist',
-        },
-        { status: 200 }
-      );
-    }
-
     // Resolve userId - priority: order.user_id, then case.user_id
     const resolvedUserId = order.user_id || caseData.user_id;
 
@@ -267,13 +221,32 @@ export async function POST(request: Request) {
       );
     }
 
-    // Set status to processing before starting
-    await adminClient
+    const { data: processingOrder, error: processingError } = await adminClient
       .from('orders')
       .update({
         fulfillment_status: 'processing',
       })
-      .eq('id', order.id);
+      .eq('id', order.id)
+      .neq('fulfillment_status', 'processing')
+      .select('id')
+      .maybeSingle();
+
+    if (processingError) {
+      return NextResponse.json(
+        { success: false, error: 'Unable to start document generation. Please try again.' },
+        { status: 500 }
+      );
+    }
+    if (!processingOrder) {
+      return NextResponse.json(
+        {
+          success: true,
+          status: 'processing',
+          message: 'Document generation is already in progress',
+        },
+        { status: 200 }
+      );
+    }
 
     try {
       // Call fulfillOrder

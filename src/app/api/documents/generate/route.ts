@@ -10,6 +10,7 @@ import {
   tryGetServerUser,
 } from '@/lib/supabase/server';
 import { checkMutationAllowed } from '@/lib/payments/edit-window-enforcement';
+import { isTenancyOutputProductSku } from '@/lib/tenancy/output-snapshot.server';
 
 import { generateDocument } from '@/lib/documents/generator';
 import { generateSection8Notice } from '@/lib/documents/section8-generator';
@@ -612,6 +613,16 @@ export async function POST(request: Request) {
     if (!is_preview) {
       const productType = resolveProductForDocument(document_type, entitlementFacts as any);
       await assertPaidEntitlement({ caseId: case_id, product: productType });
+
+      if (isTenancyOutputProductSku(productType)) {
+        return NextResponse.json(
+          {
+            error: 'Use the tenancy agreement regeneration flow for paid tenancy documents.',
+            code: 'TENANCY_REGENERATION_FLOW_REQUIRED',
+          },
+          { status: 409 }
+        );
+      }
 
       // Check edit window for regeneration - block if paid and window expired
       const mutationCheck = await checkMutationAllowed(case_id);
