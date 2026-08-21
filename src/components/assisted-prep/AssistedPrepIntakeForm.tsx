@@ -1,13 +1,15 @@
 'use client';
 
 import { FormEvent, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { getSessionTokenHeaders } from '@/lib/session-token';
 import {
   ASSISTED_PREP_PROMISE,
+  getAssistedPrepConfig,
   normalizeAssistedPrepService,
   type AssistedPrepService,
 } from '@/lib/assisted-prep';
+import { trackEvent } from '@/lib/analytics';
 
 type FormState = {
   name: string;
@@ -132,6 +134,7 @@ function serviceSpecificFields(service: AssistedPrepService, form: FormState, se
 export function AssistedPrepIntakeForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname() || '/assisted-prep/start';
   const service = normalizeAssistedPrepService(searchParams.get('service'));
   const [form, setFormState] = useState<FormState>(initialForm);
   const [files, setFiles] = useState<File[]>([]);
@@ -195,7 +198,26 @@ export function AssistedPrepIntakeForm() {
         await uploadFiles(intake.case_id);
       }
 
-      router.push(`/assisted-prep/consultation?service=${service}&case_id=${intake.case_id}`);
+      const config = getAssistedPrepConfig(service);
+      trackEvent('tool_completed', {
+        sourcePage: pathname,
+        pagePath: pathname,
+        pageType: 'entry_page',
+        intent: service === 'possession' ? 'possession_assisted_prep' : 'section8_assisted_prep',
+        destination: '/assisted-prep/consultation',
+        recommendedProduct: config.sku,
+        productClicked: config.sku,
+        userType: 'landlord',
+        toolName: 'assisted_prep_intake',
+      });
+
+      const consultationParams = new URLSearchParams({
+        service,
+        case_id: intake.case_id,
+      });
+      const source = searchParams.get('src');
+      if (source) consultationParams.set('src', source);
+      router.push(`/assisted-prep/consultation?${consultationParams.toString()}`);
     } catch (err: any) {
       setError(err?.message || 'Unable to continue. Please try again.');
       setSubmitting(false);

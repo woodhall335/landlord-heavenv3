@@ -1,5 +1,8 @@
-import Link from 'next/link';
+'use client';
+
 import { clsx } from 'clsx';
+import { usePathname } from 'next/navigation';
+import { TrackedLink } from '@/components/analytics/TrackedLink';
 import {
   ASSISTED_PREP_PROMISE,
   buildAssistedPrepStartHref,
@@ -46,6 +49,7 @@ export function AssistedPrepCTA({
   src = 'assisted_cta',
   className,
 }: AssistedPrepCTAProps) {
+  const pathname = usePathname() || '/wizard';
   if (service === 'money_claim') return null;
 
   const config = getAssistedPrepConfig(service);
@@ -92,12 +96,19 @@ export function AssistedPrepCTA({
               </div>
             ))}
           </div>
-          <Link
+          <TrackedLink
             href={href}
+            pagePath={pathname}
+            pageType="entry_page"
+            ctaLabel="Book free consultation"
+            ctaPosition="support"
+            eventName="entry_page_secondary_cta_click"
+            routeIntent={service === 'possession' ? 'possession_assisted_prep' : 'section8_assisted_prep'}
+            product={product || config.sku}
             className="mt-4 flex w-full items-center justify-center rounded-xl bg-[#6d28d9] px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-[#5b21b6]"
           >
             Book free consultation
-          </Link>
+          </TrackedLink>
         </div>
       </section>
     );
@@ -126,12 +137,19 @@ export function AssistedPrepCTA({
             {ASSISTED_PREP_PROMISE} Start with a free consultation. We only send a payment link if we confirm we can help.
           </p>
         </div>
-        <Link
+        <TrackedLink
           href={href}
+          pagePath={pathname}
+          pageType="entry_page"
+          ctaLabel="Book free consultation"
+          ctaPosition="section"
+          eventName="entry_page_primary_cta_click"
+          routeIntent={service === 'possession' ? 'possession_assisted_prep' : 'section8_assisted_prep'}
+          product={product || config.sku}
           className="inline-flex shrink-0 items-center justify-center rounded-lg bg-violet-700 px-4 py-3 text-sm font-semibold text-white hover:bg-violet-800"
         >
           Book free consultation
-        </Link>
+        </TrackedLink>
       </div>
     </section>
   );

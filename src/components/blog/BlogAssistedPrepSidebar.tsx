@@ -1,10 +1,12 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import { TrackedLink } from '@/components/analytics/TrackedLink';
 
 type AssistedPrepSidebarConfig = {
   title: string;
   description: string;
   href: string;
+  routeIntent: string;
+  product?: string;
   imageSrc: string;
   imageAlt: string;
 };
@@ -15,6 +17,8 @@ const SIDEBAR_CONFIG_BY_SLUG: Record<string, AssistedPrepSidebarConfig> = {
     description:
       'Start with a free consultation. If suitable, we can help prepare the Form 3A notice, service record and evidence file before you serve it.',
     href: '/assisted-prep/start?service=section8&product=notice_only&src=blog_ground_14_sidebar',
+    routeIntent: 'section8_assisted_prep',
+    product: 'notice_only',
     imageSrc: '/images/heroes/library/hero-assisted-section8-v2.webp',
     imageAlt: 'Landlord reviewing a Section 8 assisted preparation file',
   },
@@ -23,6 +27,7 @@ const SIDEBAR_CONFIG_BY_SLUG: Record<string, AssistedPrepSidebarConfig> = {
     description:
       'Book a free consultation and we will review the route and documents with you. We only confirm paid assisted preparation if we can help.',
     href: '/assisted-prep?src=blog_scotland_ground_1_sidebar',
+    routeIntent: 'scotland_eviction_consultation',
     imageSrc: '/images/heroes/library/hero-assisted-prep-overview-v2.webp',
     imageAlt: 'Landlord reviewing eviction paperwork during a free consultation',
   },
@@ -38,6 +43,8 @@ export function getBlogAssistedPrepSidebarConfig(slug: string): AssistedPrepSide
       description:
         'Start with a free consultation. If suitable, we can help prepare the Form 3A notice, service record and supporting evidence before you serve it.',
       href: `/assisted-prep/start?service=section8&product=notice_only&src=blog_${slug}_sidebar`,
+      routeIntent: 'section8_assisted_prep',
+      product: 'notice_only',
       imageSrc: '/images/heroes/library/hero-assisted-section8-v2.webp',
       imageAlt: 'Landlord reviewing a Section 8 assisted preparation file',
     };
@@ -49,6 +56,7 @@ export function getBlogAssistedPrepSidebarConfig(slug: string): AssistedPrepSide
       description:
         'Book a free consultation and we will review the route and documents with you. We only confirm paid assisted preparation if we can help.',
       href: `/assisted-prep?src=blog_${slug}_sidebar`,
+      routeIntent: 'scotland_eviction_consultation',
       imageSrc: '/images/heroes/library/hero-assisted-prep-overview-v2.webp',
       imageAlt: 'Landlord reviewing eviction paperwork during a free consultation',
     };
@@ -87,12 +95,19 @@ export function BlogAssistedPrepSidebar({
         </p>
         <h3 className="mt-2 text-xl font-bold leading-tight text-[#1c1431]">{config.title}</h3>
         <p className="mt-3 text-sm leading-6 text-[#5d5672]">{config.description}</p>
-        <Link
+        <TrackedLink
           href={config.href}
+          pagePath={`/blog/${slug}`}
+          pageType="guide"
+          ctaLabel="Book free consultation"
+          ctaPosition="support"
+          eventName="entry_page_primary_cta_click"
+          routeIntent={config.routeIntent}
+          product={config.product}
           className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-[#6d28d9] px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-[#5b21b6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6d28d9] focus-visible:ring-offset-2"
         >
           Book free consultation
-        </Link>
+        </TrackedLink>
       </div>
     </section>
   );
