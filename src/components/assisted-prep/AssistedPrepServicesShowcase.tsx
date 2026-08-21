@@ -11,7 +11,6 @@ type AssistedPrepShowcaseCard = {
   title: string;
   eyebrow: string;
   description: string;
-  price: string;
   service: string;
   product: string;
   ctaLabel: string;
@@ -30,11 +29,10 @@ type AssistedPrepServicesShowcaseProps = {
 
 const assistedPrepCards: AssistedPrepShowcaseCard[] = [
   {
-    title: 'Section 8 notice prepared with you',
+    title: 'Landlord Section 8 notice assistance',
     eyebrow: 'Unsure about grounds or dates?',
     description:
-      'A 20-minute callback to prepare or check the Form 3A notice, service details, and notice file before you serve it.',
-    price: '£149',
+      'Start with a free consultation. If suitable, we prepare or check the Form 3A notice, service details, and notice file before you serve it.',
     service: 'section8',
     product: 'notice_only',
     ctaLabel: 'Book free consultation',
@@ -43,11 +41,10 @@ const assistedPrepCards: AssistedPrepShowcaseCard[] = [
     routeIntent: 'section8_assisted_prep',
   },
   {
-    title: 'Possession claim pack prepared with you',
+    title: 'Landlord eviction assistance service',
     eyebrow: 'Need to act after notice?',
     description:
-      'A 45-minute callback to prepare or check N5, N119, service evidence, bundle steps, and the filing pack.',
-    price: '£399',
+      'Start with a free consultation. If suitable, we prepare or check N5, N119, service evidence, bundle steps, and the filing pack.',
     service: 'possession',
     product: 'complete_pack',
     ctaLabel: 'Book free consultation',
@@ -60,7 +57,6 @@ const assistedPrepCards: AssistedPrepShowcaseCard[] = [
     eyebrow: 'Rent, damage, bills, or debt?',
     description:
       'A 30-minute callback to turn the debt, evidence, pre-action position, and claim wording into a clearer claim pack.',
-    price: '£249',
     service: 'money_claim',
     product: 'money_claim',
     ctaLabel: 'Book money claim assisted prep',

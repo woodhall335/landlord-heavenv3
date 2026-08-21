@@ -38,8 +38,9 @@ export default function AssistedPrepHubPage() {
           trustText="Clear document-preparation scope before any paid work begins"
           showTrustPositioningBar
         />
-        <section id="assisted-prep-services" className="mx-auto max-w-6xl scroll-mt-28 px-4 py-16 md:py-24">
+        <section id="assisted-prep-services" className="mx-auto max-w-7xl scroll-mt-28 px-4 py-14 sm:px-6 md:py-20 lg:px-8">
           <AssistedPrepServicesShowcase
+            className="!mt-0"
             pagePath="/assisted-prep"
             pageType="entry_page"
             src="assisted_prep_hub"

@@ -699,6 +699,57 @@ function escapeEmailHtml(value: string): string {
     .replace(/'/g, '&#39;');
 }
 
+export async function sendAssistedPrepConsultationRequest(params: {
+  to: string;
+  customerName: string;
+  productName: string;
+  caseId: string;
+  bookingUrl: string;
+}): Promise<{ success: boolean; error?: string }> {
+  const { to, customerName, productName, caseId, bookingUrl } = params;
+  const safeName = escapeEmailHtml(customerName);
+  const caseUrl = `${APP_URL}/dashboard/cases/${caseId}`;
+
+  const html = getEmailWrapper(`
+    ${getLogoRow()}
+    ${getHeaderBanner('Your Free Consultation Request Is Saved')}
+    ${getContentCard(`
+      <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.white}; line-height: 1.6;">Hi ${safeName},</p>
+      <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.lightGray}; line-height: 1.6;">Thanks for getting in touch. We have saved your free consultation request for ${escapeEmailHtml(productName)}.</p>
+      <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.lightGray}; line-height: 1.6;">There is nothing to pay now. Please choose a callback time so we can look at the facts and documents with you. If the service is suitable, we will confirm the scope and send a secure Stripe payment link afterwards.</p>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 26px 0;">
+        <tr><td align="center">${getBulletproofButton('Book my free consultation', bookingUrl)}</td></tr>
+      </table>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 26px 0;">
+        <tr><td align="center">${getBulletproofButton('Open my case file', caseUrl, COLORS.cardBgAlt)}</td></tr>
+      </table>
+      ${getInfoBox('If you already have documents, you can upload your tenancy agreement, notice, proof of service, rent records, or key correspondence in your case file before the callback.')}
+      <p style="margin: 24px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.mutedGray}; line-height: 1.6;">If you cannot find a suitable time, reply to this email and we will help.</p>
+    `)}
+    ${getEmailFooter(false)}
+  `);
+
+  const text = `Hi ${customerName},
+
+Thanks for getting in touch. We have saved your free consultation request for ${productName}.
+
+There is nothing to pay now. Please choose a callback time so we can look at the facts and documents with you. If the service is suitable, we will confirm the scope and send a secure Stripe payment link afterwards.
+
+Book my free consultation: ${bookingUrl}
+Open my case file: ${caseUrl}
+
+If you already have documents, you can upload your tenancy agreement, notice, proof of service, rent records, or key correspondence in your case file before the callback.
+
+If you cannot find a suitable time, reply to this email and we will help.`;
+
+  return sendEmail({
+    to,
+    subject: `Your free consultation request - ${productName}`,
+    html,
+    text,
+  });
+}
+
 export async function sendAssistedPrepLifecycleEmail(params: {
   to: string;
   customerName: string;

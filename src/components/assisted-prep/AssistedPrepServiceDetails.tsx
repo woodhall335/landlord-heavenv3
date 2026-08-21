@@ -19,7 +19,7 @@ type Detail = {
 
 const serviceDetails: Record<AssistedPrepService, Detail> = {
   section8: {
-    headline: 'Section 8 notice prep without guessing the grounds, dates, or service record',
+    headline: 'What is included with our landlord Section 8 notice assistance',
     intro:
       'We work through the key facts with you, prepare or check the Form 3A notice route, and help you leave the callback with a clearer notice file to approve before service.',
     includes: [
@@ -105,7 +105,7 @@ const serviceDetails: Record<AssistedPrepService, Detail> = {
     ],
   },
   possession: {
-    headline: 'Possession claim prep for landlords who need the notice, N5, N119, and evidence to line up',
+    headline: 'What is included with our landlord eviction assistance service',
     intro:
       'We help prepare or check the possession claim pack around the notice already served, the service evidence, the grounds relied on, and the documents the court is likely to expect.',
     includes: [

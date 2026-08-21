@@ -40,10 +40,10 @@ export default async function AssistedPrepConsultationPage({ searchParams }: Pag
       <main className="bg-slate-50 px-4 py-12 md:py-16">
         <div className="mx-auto max-w-5xl space-y-8">
           <section className="rounded-2xl border border-violet-200 bg-white p-6 shadow-sm md:p-8">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-violet-700">Free consultation request saved</p>
-            <h1 className="mt-3 text-3xl font-bold text-slate-950">Book your {config.shortLabel.toLowerCase()} consultation</h1>
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-violet-700">Thank you — your request is saved</p>
+            <h1 className="mt-3 text-3xl font-bold text-slate-950">Choose a time for your free {config.shortLabel.toLowerCase()} consultation</h1>
             <p className="mt-4 max-w-3xl text-base leading-7 text-slate-700">
-              There is no payment at this stage. We will discuss the facts and documents with you first. If the service is suitable, we will confirm the scope and send a Stripe payment link afterwards. This is document preparation, not legal representation.
+              We have emailed you a copy of these next steps. There is nothing to pay now. We will discuss the facts and documents with you first. If the service is suitable, we will confirm the scope and send a Stripe payment link afterwards. This is document preparation, not legal representation.
             </p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <CalendlyBookingButton url={bookingUrl} />
@@ -54,7 +54,7 @@ export default async function AssistedPrepConsultationPage({ searchParams }: Pag
                 Open case file and upload documents
               </Link>
             </div>
-            <p className="mt-4 text-sm text-slate-600">If you cannot find a suitable appointment, reply to the consultation email and we will help.</p>
+            <p className="mt-4 text-sm text-slate-600">If you cannot find a suitable appointment, reply to our email and we will help.</p>
           </section>
 
           <AssistedPrepChecklist service={service} />

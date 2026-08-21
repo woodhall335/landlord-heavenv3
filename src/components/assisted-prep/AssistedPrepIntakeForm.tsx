@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { getSessionTokenHeaders } from '@/lib/session-token';
 import {
   ASSISTED_PREP_PROMISE,
-  getAssistedPrepConfig,
   normalizeAssistedPrepService,
   type AssistedPrepService,
 } from '@/lib/assisted-prep';
@@ -134,7 +133,6 @@ export function AssistedPrepIntakeForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const service = normalizeAssistedPrepService(searchParams.get('service'));
-  const config = getAssistedPrepConfig(service);
   const [form, setFormState] = useState<FormState>(initialForm);
   const [files, setFiles] = useState<File[]>([]);
   const [showOptionalNote, setShowOptionalNote] = useState(false);
@@ -205,12 +203,12 @@ export function AssistedPrepIntakeForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mx-auto max-w-3xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <form onSubmit={handleSubmit} className="mx-auto max-w-3xl rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
       <div className="mb-6">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-violet-700">
           Free consultation
         </p>
-        <h1 className="mt-2 text-3xl font-bold text-slate-950">{config.label}</h1>
+        <h2 className="mt-2 text-3xl font-bold text-slate-950">Your free consultation request</h2>
         <p className="mt-3 text-sm leading-6 text-slate-700">
           {ASSISTED_PREP_PROMISE} Complete the essentials, then book a free consultation. We only send a Stripe payment link if we confirm we can help.
         </p>

@@ -5,6 +5,7 @@ import {
   getAssistedPrepConfig,
   normalizeAssistedPrepService,
 } from '@/lib/assisted-prep';
+import { sendAssistedPrepConsultationRequest } from '@/lib/email/resend';
 import { logger } from '@/lib/logger';
 
 export const runtime = 'nodejs';
@@ -150,6 +151,23 @@ export async function POST(request: Request) {
         { error: 'Unable to save your assisted prep request. Please try again.' },
         { status: 500 }
       );
+    }
+
+    const bookingUrl = process.env.NEXT_PUBLIC_CALENDLY_ASSISTED_PREP_URL || 'https://calendly.com/';
+    const emailResult = await sendAssistedPrepConsultationRequest({
+      to: input.email,
+      customerName: input.name,
+      productName: config.label,
+      caseId: (caseRow as any).id,
+      bookingUrl,
+    });
+
+    if (!emailResult.success) {
+      logger.error('Failed to send assisted prep consultation acknowledgement', {
+        caseId: (caseRow as any).id,
+        service,
+        error: emailResult.error,
+      });
     }
 
     return NextResponse.json({
