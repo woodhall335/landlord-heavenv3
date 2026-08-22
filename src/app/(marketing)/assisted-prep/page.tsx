@@ -39,19 +39,20 @@ export default function AssistedPrepHubPage() {
           trustText="Clear document-preparation scope before any paid work begins"
           showTrustPositioningBar
           verticalAlign="top"
+          contentWidth="wide"
           backgroundImageSrc="/images/heroes/library/hero-assisted-prep-overview-v2.webp"
           backgroundImageAlt="Watercolour illustration of landlord document preparation and property keys"
         />
-        <section id="assisted-prep-services" className="mx-auto max-w-7xl scroll-mt-28 px-4 py-14 sm:px-6 md:py-20 lg:px-8">
+        <section id="assisted-prep-services" className="mx-auto max-w-[112rem] scroll-mt-28 px-5 py-16 sm:px-8 md:py-20 lg:px-10 2xl:px-12">
+          <div className="mb-10">
+            <AssistedPrepVisualExplainer service="overview" />
+          </div>
           <AssistedPrepServicesShowcase
             className="!mt-0"
             pagePath="/assisted-prep"
             pageType="entry_page"
             src="assisted_prep_hub"
           />
-          <div className="mt-10">
-            <AssistedPrepVisualExplainer service="overview" />
-          </div>
           <div id="assisted-prep-details" className="scroll-mt-28">
             <AssistedPrepAllServiceDetails className="mt-10" />
           </div>

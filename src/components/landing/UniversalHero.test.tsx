@@ -1,6 +1,7 @@
 /**
  * @vitest-environment jsdom
  */
+/* eslint-disable @next/next/no-img-element */
 
 import '@testing-library/jest-dom/vitest';
 import { render, screen } from '@testing-library/react';
@@ -10,20 +11,10 @@ import { describe, expect, it, vi } from 'vitest';
 import { UniversalHero } from './UniversalHero';
 
 vi.mock('next/image', () => ({
-  default: ({
-    src,
-    alt,
-    unoptimized: _unoptimized,
-    fill: _fill,
-    priority: _priority,
-    ...props
-  }: {
+  default: ({ src, alt }: {
     src: string;
     alt: string;
-    unoptimized?: boolean;
-    fill?: boolean;
-    priority?: boolean;
-  }) => <img src={src} alt={alt} {...props} />,
+  }) => <img src={src} alt={alt} />,
 }));
 
 vi.mock('next/link', () => ({
@@ -87,11 +78,13 @@ describe('UniversalHero review pill', () => {
         title="Assisted prep"
         subtitle="Supporting copy"
         verticalAlign="top"
+        contentWidth="wide"
       />
     );
 
-    expect(screen.getByRole('region')).toHaveClass('lg:items-start', 'lg:justify-start');
+    expect(screen.getByRole('region')).toHaveClass('lg:items-start', 'lg:justify-start', 'lg:pt-10');
     expect(container.querySelector('.lg\\:my-0')).toBeInTheDocument();
+    expect(container.querySelector('.max-w-\\[112rem\\]')).toBeInTheDocument();
   });
 
   it('uses the stacked desktop pill for longer trust text and keeps the review row visible', () => {

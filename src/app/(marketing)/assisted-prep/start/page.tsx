@@ -67,7 +67,7 @@ const heroContent: Record<PublicAssistedPrepService, {
     preTitleLabel: 'Landlord Section 8 notice assistance',
     title: 'Get your Section 8 notice prepared with confidence',
     subtitle:
-      'Start with a free consultation. We review the grounds, tenant details, notice dates, and service evidence before any paid document preparation is agreed.',
+      'Tell us what has happened, then book a free consultation. We check the grounds, tenant details, notice dates and service evidence before agreeing any paid preparation.',
     imageSrc: '/images/heroes/library/hero-assisted-section8-v2.webp',
     imageAlt: 'Watercolour illustration of Section 8 notice documents, a calendar and property keys',
   },
@@ -75,7 +75,7 @@ const heroContent: Record<PublicAssistedPrepService, {
     preTitleLabel: 'Landlord eviction assistance service',
     title: 'Prepare your possession claim with the right documents',
     subtitle:
-      'Start with a free consultation. We review your served notice, expiry date, service evidence, and court paperwork before any paid document preparation is agreed.',
+      'Tell us what has happened, then book a free consultation. We check your served notice, expiry date, service evidence and court paperwork before agreeing any paid preparation.',
     imageSrc: '/images/heroes/library/hero-assisted-possession-v2.webp',
     imageAlt: 'Watercolour illustration of possession claim papers, court documents and property keys',
   },
@@ -125,12 +125,13 @@ export default async function AssistedPrepStartPage({ searchParams }: StartPageP
           trustText="Free consultation first — pay only if we confirm we can help"
           showTrustPositioningBar
           verticalAlign="top"
+          contentWidth="wide"
           backgroundImageSrc={hero.imageSrc}
           backgroundImageAlt={hero.imageAlt}
         />
-        <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 md:py-20 lg:px-8">
+        <section className="mx-auto max-w-[112rem] px-5 py-16 sm:px-8 md:py-20 lg:px-10 2xl:px-12">
           <div id="whats-included" className="scroll-mt-28">
-            <AssistedPrepServiceDetails service={service} className="mx-auto max-w-7xl" showCta={false} />
+            <AssistedPrepServiceDetails service={service} showCta={false} />
           </div>
           <div id="consultation-form" className="mt-10 grid scroll-mt-28 gap-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(20rem,0.65fr)] lg:items-start">
             <Suspense fallback={<div className="rounded-[2rem] bg-white p-6 shadow-sm md:p-8">Loading assisted prep...</div>}>

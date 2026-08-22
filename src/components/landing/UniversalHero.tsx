@@ -29,7 +29,7 @@ type HeroCta = {
 const SECTION_WRAP_CLASSES =
   'relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-white pt-28 sm:pt-32 lg:min-h-[100dvh] lg:items-center lg:justify-center lg:pb-16 lg:pt-36';
 const TOP_ALIGNED_SECTION_WRAP_CLASSES =
-  'relative isolate flex min-h-[44rem] flex-col overflow-hidden bg-white pt-20 sm:pt-24 lg:min-h-[44rem] lg:items-start lg:justify-start lg:pb-20 lg:pt-16';
+  'relative isolate flex min-h-[44rem] flex-col overflow-hidden bg-white pt-16 sm:pt-20 lg:min-h-[46rem] lg:items-start lg:justify-start lg:pb-20 lg:pt-10';
 const CTA_WRAP_CLASSES = 'mt-8 flex w-full flex-col gap-3 sm:mt-9 sm:flex-row sm:items-center lg:mt-6';
 const REVIEW_STARS = '\u2605\u2605\u2605\u2605\u2605';
 
@@ -109,6 +109,7 @@ export type UniversalHeroProps = {
   trustPositioningHeadline?: string;
   reviewPillLayout?: 'auto' | 'inline' | 'stacked';
   verticalAlign?: 'center' | 'top';
+  contentWidth?: 'standard' | 'wide';
 };
 
 const warnedMessages = new Set<string>();
@@ -161,6 +162,7 @@ export function UniversalHero({
   trustPositioningHeadline,
   reviewPillLayout = 'auto',
   verticalAlign = 'center',
+  contentWidth = 'standard',
 }: UniversalHeroProps) {
   const pathname = usePathname() ?? '/';
   const isValidHeading = headingAs === 'h1' || headingAs === 'h2';
@@ -265,7 +267,8 @@ export function UniversalHero({
 
       <div
         className={clsx(
-          'relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8',
+          'relative z-10 mx-auto w-full px-4 sm:px-6 lg:px-8',
+          contentWidth === 'wide' ? 'max-w-[112rem]' : 'max-w-7xl',
           verticalAlign === 'top' ? 'lg:my-0' : 'lg:my-auto'
         )}
       >
