@@ -4,9 +4,9 @@ import { redirect } from 'next/navigation';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { AssistedPrepIntakeForm } from '@/components/assisted-prep/AssistedPrepIntakeForm';
 import { AssistedPrepServiceDetails } from '@/components/assisted-prep/AssistedPrepServiceDetails';
-import { AssistedPrepVisualExplainer } from '@/components/assisted-prep/AssistedPrepVisualExplainer';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import {
+  getAssistedPrepConfig,
   isPublicAssistedPrepService,
   type PublicAssistedPrepService,
 } from '@/lib/assisted-prep';
@@ -110,6 +110,7 @@ export default async function AssistedPrepStartPage({ searchParams }: StartPageP
   const service = normaliseService(params?.service);
   if (!service) redirect('/assisted-prep');
   const hero = heroContent[service];
+  const config = getAssistedPrepConfig(service);
 
   return (
     <>
@@ -122,6 +123,7 @@ export default async function AssistedPrepStartPage({ searchParams }: StartPageP
           subtitle={hero.subtitle}
           primaryCta={{ label: 'Start free consultation', href: '#consultation-form' }}
           secondaryCta={{ label: "See what's included", href: '#whats-included' }}
+          feature={`Assisted preparation: ${config.priceLabel} — payable only if we confirm we can help.`}
           trustText="Free consultation first — pay only if we confirm we can help"
           showTrustPositioningBar
           verticalAlign="top"
@@ -133,13 +135,10 @@ export default async function AssistedPrepStartPage({ searchParams }: StartPageP
           <div id="whats-included" className="scroll-mt-28">
             <AssistedPrepServiceDetails service={service} showCta={false} />
           </div>
-          <div id="consultation-form" className="mt-10 grid scroll-mt-28 gap-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(20rem,0.65fr)] lg:items-start">
+          <div id="consultation-form" className="mt-10 scroll-mt-28">
             <Suspense fallback={<div className="rounded-[2rem] bg-white p-6 shadow-sm md:p-8">Loading assisted prep...</div>}>
-              <AssistedPrepIntakeForm />
+              <AssistedPrepIntakeForm className="mx-auto max-w-[88rem]" />
             </Suspense>
-            <div className="lg:sticky lg:top-28">
-              <AssistedPrepVisualExplainer service={service} compact />
-            </div>
           </div>
         </section>
       </main>

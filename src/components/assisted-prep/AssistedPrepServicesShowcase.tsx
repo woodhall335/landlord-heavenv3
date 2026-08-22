@@ -7,6 +7,7 @@ import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { AssistedPrepCTA } from '@/components/assisted-prep/AssistedPrepCTA';
 import { StaggerReveal } from '@/components/marketing/PremiumMotion';
 import type { MarketingCtaPosition, MarketingPageType } from '@/lib/analytics';
+import { getAssistedPrepConfig } from '@/lib/assisted-prep';
 
 type AssistedPrepShowcaseCard = {
   title: string;
@@ -14,6 +15,7 @@ type AssistedPrepShowcaseCard = {
   description: string;
   service: string;
   product: string;
+  priceLabel: string;
   ctaLabel: string;
   imageSrc: string;
   imageAlt: string;
@@ -36,6 +38,7 @@ const assistedPrepCards: AssistedPrepShowcaseCard[] = [
       'Start with a free consultation. If suitable, we prepare or check the Form 3A notice, service details, and notice file before you serve it.',
     service: 'section8',
     product: 'notice_only',
+    priceLabel: getAssistedPrepConfig('section8').priceLabel,
     ctaLabel: 'Book free consultation',
     imageSrc: '/images/generated/assisted-prep/section8-assisted-prep.png',
     imageAlt: 'Landlord checking compliance questions before taking action',
@@ -48,6 +51,7 @@ const assistedPrepCards: AssistedPrepShowcaseCard[] = [
       'Start with a free consultation. If suitable, we prepare or check N5, N119, service evidence, bundle steps, and the filing pack.',
     service: 'possession',
     product: 'complete_pack',
+    priceLabel: getAssistedPrepConfig('possession').priceLabel,
     ctaLabel: 'Book free consultation',
     imageSrc: '/images/generated/assisted-prep/possession-assisted-prep.png',
     imageAlt: 'Landlord preparing urgent possession claim documents',
@@ -60,6 +64,7 @@ const assistedPrepCards: AssistedPrepShowcaseCard[] = [
       'A 30-minute callback to turn the debt, evidence, pre-action position, and claim wording into a clearer claim pack.',
     service: 'money_claim',
     product: 'money_claim',
+    priceLabel: getAssistedPrepConfig('money_claim').priceLabel,
     ctaLabel: 'Book money claim assisted prep',
     imageSrc: '/images/generated/assisted-prep/money-claim-assisted-prep.png',
     imageAlt: 'Landlord organising tenancy records and claim evidence',
@@ -139,6 +144,9 @@ export function AssistedPrepServicesShowcase({
               <h3 className="mt-3 text-xl font-bold leading-tight text-[#1c1431]">
                 {card.title}
               </h3>
+              <p className="mt-3 text-sm font-semibold text-[#4c1d95]">
+                Free consultation &middot; {card.priceLabel} only if we confirm we can help
+              </p>
               <p className="mt-3 text-sm leading-6 text-[#5d5672]">
                 {card.description}
               </p>

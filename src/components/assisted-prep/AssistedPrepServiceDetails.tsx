@@ -18,20 +18,6 @@ type Detail = {
   }>;
 };
 
-const serviceIllustrations: Partial<Record<AssistedPrepService, {
-  imageSrc: string;
-  imageAlt: string;
-}>> = {
-  section8: {
-    imageSrc: '/images/generated/assisted-prep/assisted-section8-notice-watercolor-v1.png',
-    imageAlt: 'Watercolour illustration of a Section 8 notice, calendar, delivery envelope and service checklist',
-  },
-  possession: {
-    imageSrc: '/images/generated/assisted-prep/assisted-possession-claim-watercolor-v1.png',
-    imageAlt: 'Watercolour illustration of a possession claim bundle, court calendar and property keys',
-  },
-};
-
 const processIllustrations: Partial<Record<AssistedPrepService, {
   imageSrc: string;
   imageAlt: string;
@@ -227,7 +213,6 @@ export function AssistedPrepServiceDetails({
   const config = getAssistedPrepConfig(service);
   const detail = serviceDetails[service];
   const scope = serviceScope[service];
-  const serviceIllustration = serviceIllustrations[service];
   const processIllustration = processIllustrations[service];
 
   return (
@@ -235,25 +220,12 @@ export function AssistedPrepServiceDetails({
       className={clsx('rounded-[2rem] border border-[#e6dbff] bg-white p-6 shadow-sm md:p-8', className)}
       aria-label={`${config.label} details`}
     >
-      <div className={clsx('grid gap-7', serviceIllustration && 'xl:grid-cols-[minmax(0,1.05fr)_minmax(23rem,0.95fr)] xl:items-center')}>
-        <div className="max-w-4xl">
-          <p className="public-eyebrow">Free consultation before paid preparation</p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#1c1431]">
-            {detail.headline}
-          </h2>
-          <p className="mt-4 text-base leading-8 text-[#5d5672]">{detail.intro}</p>
-        </div>
-        {serviceIllustration ? (
-          <div className="relative min-h-[16rem] overflow-hidden rounded-2xl border border-[#e3d7ff] bg-[#fcfaff] sm:min-h-[19rem]">
-            <Image
-              src={serviceIllustration.imageSrc}
-              alt={serviceIllustration.imageAlt}
-              fill
-              sizes="(max-width: 1280px) 100vw, 44vw"
-              className="object-cover object-center"
-            />
-          </div>
-        ) : null}
+      <div className="max-w-4xl">
+        <p className="public-eyebrow">Free consultation before paid preparation</p>
+        <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#1c1431]">
+          {detail.headline}
+        </h2>
+        <p className="mt-4 text-base leading-8 text-[#5d5672]">{detail.intro}</p>
       </div>
 
       <div className="mt-7 grid gap-5 lg:grid-cols-[1fr_0.82fr]">

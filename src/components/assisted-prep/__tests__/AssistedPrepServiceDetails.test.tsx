@@ -29,11 +29,11 @@ describe('AssistedPrepServiceDetails', () => {
       'assisted-possession-claim-watercolor-v1.png',
       'assisted-possession-process-watercolor-v1.png',
     ],
-  ] as const)('keeps the %s illustrations with the service explanation', (service, primaryImage, processImage) => {
+  ] as const)('keeps only the %s process illustration with the service explanation', (service, primaryImage, processImage) => {
     render(<AssistedPrepServiceDetails service={service} showCta={false} />);
 
     const images = screen.getAllByRole('img');
-    expect(images.some((image) => image.getAttribute('src')?.endsWith(primaryImage))).toBe(true);
+    expect(images.some((image) => image.getAttribute('src')?.endsWith(primaryImage))).toBe(false);
     expect(images.some((image) => image.getAttribute('src')?.endsWith(processImage))).toBe(true);
   });
 });
