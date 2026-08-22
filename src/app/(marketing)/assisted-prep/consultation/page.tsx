@@ -31,6 +31,7 @@ export default async function AssistedPrepConsultationPage({ searchParams }: Pag
 
   const config = getAssistedPrepConfig(service);
   const caseId = readParam(params, 'case_id');
+  const confirmationEmailSent = readParam(params, 'email_confirmation') !== 'not_sent';
   const bookingUrl = process.env.NEXT_PUBLIC_CALENDLY_ASSISTED_PREP_URL || 'https://calendly.com/';
   const dashboardHref = caseId ? `/dashboard/cases/${caseId}` : '/dashboard';
 
@@ -43,7 +44,10 @@ export default async function AssistedPrepConsultationPage({ searchParams }: Pag
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-violet-700">Thank you — your request is saved</p>
             <h1 className="mt-3 text-3xl font-bold text-slate-950">Choose a time for your free {config.shortLabel.toLowerCase()} consultation</h1>
             <p className="mt-4 max-w-3xl text-base leading-7 text-slate-700">
-              We have emailed you a copy of these next steps. There is nothing to pay now. We will discuss the facts and documents with you first. If the service is suitable, we will confirm the scope and send a Stripe payment link afterwards. This is document preparation, not legal representation.
+              {confirmationEmailSent
+                ? 'We have emailed you a copy of these next steps. '
+                : 'Your request has been saved, but we could not send the automatic confirmation email. '}
+              There is nothing to pay now. We will discuss the facts and documents with you first. If the service is suitable, we will confirm the scope and send a Stripe payment link afterwards. This is document preparation, not legal representation.
             </p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <CalendlyBookingButton url={bookingUrl} />
@@ -54,7 +58,11 @@ export default async function AssistedPrepConsultationPage({ searchParams }: Pag
                 Open case file and upload documents
               </Link>
             </div>
-            <p className="mt-4 text-sm text-slate-600">If you cannot find a suitable appointment, reply to our email and we will help.</p>
+            <p className="mt-4 text-sm text-slate-600">
+              {confirmationEmailSent
+                ? 'If you cannot find a suitable appointment, reply to our email and we will help.'
+                : 'If you cannot find a suitable appointment, please contact us and we will help.'}
+            </p>
           </section>
 
           <AssistedPrepChecklist service={service} />

@@ -139,7 +139,6 @@ export function AssistedPrepIntakeForm({ className }: { className?: string }) {
   const service = normalizeAssistedPrepService(searchParams.get('service'));
   const [form, setFormState] = useState<FormState>(initialForm);
   const [files, setFiles] = useState<File[]>([]);
-  const [showOptionalNote, setShowOptionalNote] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const sourceCaseId = searchParams.get('case_id');
@@ -215,6 +214,7 @@ export function AssistedPrepIntakeForm({ className }: { className?: string }) {
       const consultationParams = new URLSearchParams({
         service,
         case_id: intake.case_id,
+        email_confirmation: intake.confirmation_email_sent ? 'sent' : 'not_sent',
       });
       const source = searchParams.get('src');
       if (source) consultationParams.set('src', source);
@@ -272,20 +272,21 @@ export function AssistedPrepIntakeForm({ className }: { className?: string }) {
           <input value={form.tenant_names} onChange={(event) => setForm({ tenant_names: event.target.value })} className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
         </label>
         {serviceSpecificFields(service, form, setForm)}
-        <div className="md:col-span-2">
-          <button
-            type="button"
-            onClick={() => setShowOptionalNote((value) => !value)}
-            className="text-sm font-semibold text-violet-700 hover:text-violet-900"
-          >
-            {showOptionalNote ? 'Hide optional note' : 'Add a short note'}
-          </button>
-          {showOptionalNote ? (
-            <label className="mt-2 block">
-              <span className="text-sm font-semibold text-slate-800">Short case overview</span>
-              <textarea value={form.overview} onChange={(event) => setForm({ overview: event.target.value })} rows={3} className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" placeholder="One or two lines is enough." />
-            </label>
-          ) : null}
+        <div className="block md:col-span-2">
+          <label htmlFor="assisted-prep-case-overview" className="text-sm font-semibold text-slate-800">
+            Briefly describe what is happening
+          </label>
+          <textarea
+            id="assisted-prep-case-overview"
+            required
+            minLength={15}
+            value={form.overview}
+            onChange={(event) => setForm({ overview: event.target.value })}
+            rows={4}
+            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+            placeholder="For example: the tenant has missed rent payments since May, I have sent reminders, and I need help preparing the correct Section 8 notice."
+          />
+          <span className="mt-1 block text-xs text-slate-500">Tell us what has happened so far, what you want to achieve, and any important dates or documents. A short paragraph is enough.</span>
         </div>
         <label className="block md:col-span-2">
           <span className="text-sm font-semibold text-slate-800">Optional documents</span>

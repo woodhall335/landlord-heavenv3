@@ -22,7 +22,11 @@ const intakeSchema = z.object({
   property_address: z.string().trim().min(5).max(500),
   tenant_names: z.string().trim().max(400).optional().default(''),
   urgency: z.string().trim().max(80).optional().default(''),
-  overview: z.string().trim().max(700).optional().default(''),
+  overview: z
+    .string()
+    .trim()
+    .min(15, 'Please briefly describe the issue you need help with.')
+    .max(700),
   authority_confirmed: z.boolean(),
   responsibility_confirmed: z.boolean(),
   section8_reason: z.string().trim().max(400).optional().default(''),
@@ -175,6 +179,7 @@ export async function POST(request: Request) {
       case_id: (caseRow as any).id,
       product_type: config.sku,
       service: config.service,
+      confirmation_email_sent: emailResult.success,
     });
   } catch (error: any) {
     if (error.message === 'Unauthorized - Please log in') {
