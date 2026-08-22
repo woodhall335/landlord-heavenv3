@@ -18,6 +18,8 @@ type Detail = {
   }>;
 };
 
+type AssistedPrepFaq = Detail['faqs'][number];
+
 const processIllustrations: Partial<Record<AssistedPrepService, {
   imageSrc: string;
   imageAlt: string;
@@ -205,10 +207,12 @@ export function AssistedPrepServiceDetails({
   service,
   className,
   showCta = true,
+  showSharedInformation = true,
 }: {
   service: AssistedPrepService;
   className?: string;
   showCta?: boolean;
+  showSharedInformation?: boolean;
 }) {
   const config = getAssistedPrepConfig(service);
   const detail = serviceDetails[service];
@@ -336,6 +340,20 @@ export function AssistedPrepServiceDetails({
         </section>
       </div>
 
+      {showSharedInformation ? <AssistedPrepSharedInformation faqs={detail.faqs} /> : null}
+    </section>
+  );
+}
+
+function AssistedPrepSharedInformation({
+  faqs,
+  faqHeading = 'Common questions',
+}: {
+  faqs: AssistedPrepFaq[];
+  faqHeading?: string;
+}) {
+  return (
+    <>
       <section className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5">
         <h3 className="text-xl font-semibold text-[#20103f]">Clear scope</h3>
         <p className="mt-3 text-sm leading-7 text-[#5d5672]">
@@ -344,9 +362,9 @@ export function AssistedPrepServiceDetails({
       </section>
 
       <div className="mt-6 rounded-2xl border border-[#eee5ff] bg-white p-5">
-        <h3 className="text-xl font-semibold text-[#20103f]">Common questions</h3>
+        <h3 className="text-xl font-semibold text-[#20103f]">{faqHeading}</h3>
         <div className="mt-4 grid gap-3 md:grid-cols-2">
-          {detail.faqs.map((faq) => (
+          {faqs.map((faq) => (
             <details key={faq.question} className="rounded-2xl border border-[#eee5ff] bg-[#fcfaff] p-4">
               <summary className="cursor-pointer text-sm font-semibold text-[#20103f]">
                 {faq.question}
@@ -356,15 +374,24 @@ export function AssistedPrepServiceDetails({
           ))}
         </div>
       </div>
-    </section>
+    </>
   );
 }
 
 export function AssistedPrepAllServiceDetails({ className }: { className?: string }) {
+  const combinedFaqs = [
+    ...serviceDetails.section8.faqs,
+    ...serviceDetails.possession.faqs,
+  ];
+
   return (
     <div className={clsx('space-y-6', className)}>
-      <AssistedPrepServiceDetails service="section8" />
-      <AssistedPrepServiceDetails service="possession" />
+      <AssistedPrepServiceDetails service="section8" showSharedInformation={false} />
+      <AssistedPrepServiceDetails service="possession" showSharedInformation={false} />
+      <AssistedPrepSharedInformation
+        faqs={combinedFaqs}
+        faqHeading="Common questions about assisted prep"
+      />
     </div>
   );
 }

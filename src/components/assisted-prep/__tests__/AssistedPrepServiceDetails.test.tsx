@@ -7,7 +7,7 @@ import '@testing-library/jest-dom/vitest';
 import { render, screen } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { AssistedPrepServiceDetails } from '../AssistedPrepServiceDetails';
+import { AssistedPrepAllServiceDetails, AssistedPrepServiceDetails } from '../AssistedPrepServiceDetails';
 
 vi.mock('next/image', () => ({
   default: ({ src, alt }: { src: string; alt: string }) => <img src={src} alt={alt} />,
@@ -35,5 +35,12 @@ describe('AssistedPrepServiceDetails', () => {
     const images = screen.getAllByRole('img');
     expect(images.some((image) => image.getAttribute('src')?.endsWith(primaryImage))).toBe(false);
     expect(images.some((image) => image.getAttribute('src')?.endsWith(processImage))).toBe(true);
+  });
+
+  it('renders the shared scope and questions once when both services are shown together', () => {
+    render(<AssistedPrepAllServiceDetails />);
+
+    expect(screen.getAllByRole('heading', { name: 'Clear scope' })).toHaveLength(1);
+    expect(screen.getAllByRole('heading', { name: 'Common questions about assisted prep' })).toHaveLength(1);
   });
 });
