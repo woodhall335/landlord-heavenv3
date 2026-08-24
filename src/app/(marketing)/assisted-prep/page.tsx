@@ -6,9 +6,9 @@ import { AssistedPrepVisualExplainer } from '@/components/assisted-prep/Assisted
 import { UniversalHero } from '@/components/landing/UniversalHero';
 
 export const metadata: Metadata = {
-  title: 'Assisted Eviction Service | Free Landlord Consultation',
+  title: 'Assisted Eviction Document Preparation | Free Consultation',
   description:
-    'Book a free consultation for assisted eviction notice preparation or an assisted possession-claim service in England. Pay only if we confirm we can help.',
+    'Free consultation for Section 8 notice or possession claim document preparation in England. We confirm the practical scope before sending a payment link.',
   keywords: [
     'assisted eviction service',
     'assisted eviction notice preparation',
@@ -32,8 +32,8 @@ export default function AssistedPrepHubPage() {
         <UniversalHero
           preset="product_owner"
           preTitleLabel="Assisted eviction service for England landlords"
-          title="Book a free consultation before you pay"
-          subtitle="We review the essentials first. If we can help with your eviction notice or possession-claim paperwork, we will confirm the scope and send a secure Stripe payment link afterwards. This is document preparation, not legal representation."
+          title="Get your eviction paperwork in order before you pay"
+          subtitle="Tell us what has happened in a free, no-obligation consultation. If document preparation is suitable, we confirm the scope and send a secure Stripe payment link afterwards. This is document preparation, not legal representation."
           primaryCta={{ label: 'Book a free consultation', href: '#assisted-prep-services' }}
           secondaryCta={{ label: 'See what is included', href: '#assisted-prep-details' }}
           trustText="Clear document-preparation scope before any paid work begins"

@@ -17,9 +17,9 @@ type StartPageProps = {
 
 const startSeo: Record<PublicAssistedPrepService, { title: string; description: string; keywords: string[] }> = {
   section8: {
-    title: 'Landlord Section 8 Notice Assistance | Free Consultation',
+    title: 'Section 8 Notice Assistance for Landlords | Free Consultation',
     description:
-      'Book a free consultation for landlord Section 8 notice assistance in England. Pay only if we confirm we can help.',
+      'Start with a free consultation for Section 8 notice preparation in England. We review the documents, dates and service position before agreeing paid preparation.',
     keywords: [
       'start section 8 assisted prep',
       'section 8 notice callback',
@@ -36,9 +36,9 @@ const startSeo: Record<PublicAssistedPrepService, { title: string; description: 
     ],
   },
   possession: {
-    title: 'Landlord Eviction Assistance Service | Free Consultation',
+    title: 'Possession Claim Preparation for Landlords | Free Consultation',
     description:
-      'Book a free consultation for landlord eviction assistance and possession-claim preparation in England. Pay only if we confirm we can help.',
+      'Start with a free consultation for landlord possession claim preparation in England. We review a served notice, service record and court paperwork before agreeing paid preparation.',
     keywords: [
       'start possession claim assisted prep',
       'possession claim callback',
@@ -65,17 +65,17 @@ const heroContent: Record<PublicAssistedPrepService, {
 }> = {
   section8: {
     preTitleLabel: 'Landlord Section 8 notice assistance',
-    title: 'Get your Section 8 notice prepared with confidence',
+    title: 'Get your Section 8 notice right before you serve',
     subtitle:
-      'Tell us what has happened, then book a free consultation. We check the grounds, tenant details, notice dates and service evidence before agreeing any paid preparation.',
+      'Start with a free, no-obligation consultation. We review the facts you provide, tenant details, notice dates and service plan before agreeing any paid preparation.',
     imageSrc: '/images/heroes/library/hero-assisted-section8-v2.webp',
     imageAlt: 'Watercolour illustration of Section 8 notice documents, a calendar and property keys',
   },
   possession: {
     preTitleLabel: 'Landlord eviction assistance service',
-    title: 'Prepare your possession claim with the right documents',
+    title: 'Prepare your possession claim before you file',
     subtitle:
-      'Tell us what has happened, then book a free consultation. We check your served notice, expiry date, service evidence and court paperwork before agreeing any paid preparation.',
+      'Start with a free, no-obligation consultation. We review your served notice, expiry date, service evidence and court paperwork before agreeing any paid preparation.',
     imageSrc: '/images/heroes/library/hero-assisted-possession-v2.webp',
     imageAlt: 'Watercolour illustration of possession claim papers, court documents and property keys',
   },

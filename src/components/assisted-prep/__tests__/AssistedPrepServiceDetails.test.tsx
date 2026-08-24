@@ -42,5 +42,13 @@ describe('AssistedPrepServiceDetails', () => {
 
     expect(screen.getAllByRole('heading', { name: 'Clear scope' })).toHaveLength(1);
     expect(screen.getAllByRole('heading', { name: 'Common questions about assisted prep' })).toHaveLength(1);
+    expect(screen.getAllByRole('heading', { name: 'How the free consultation becomes a prepared document file' })).toHaveLength(1);
+    expect(screen.queryByRole('heading', { name: 'How we take the pressure off' })).not.toBeInTheDocument();
+  });
+
+  it('explains the correct role of Form N119 in possession preparation', () => {
+    render(<AssistedPrepServiceDetails service="possession" showCta={false} />);
+
+    expect(screen.getByText(/N119 is the particulars-of-claim form, not the tenant’s defence form/i)).toBeInTheDocument();
   });
 });

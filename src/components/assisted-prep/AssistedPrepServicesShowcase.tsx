@@ -35,7 +35,7 @@ const assistedPrepCards: AssistedPrepShowcaseCard[] = [
     title: 'Landlord Section 8 notice assistance',
     eyebrow: 'Unsure about grounds or dates?',
     description:
-      'Start with a free consultation. If suitable, we prepare or check the Form 3A notice, service details, and notice file before you serve it.',
+      'Before you serve, we help organise your Form 3A, tenant details, notice timing, service plan and evidence prompts around the facts you approve.',
     service: 'section8',
     product: 'notice_only',
     priceLabel: getAssistedPrepConfig('section8').priceLabel,
@@ -48,7 +48,7 @@ const assistedPrepCards: AssistedPrepShowcaseCard[] = [
     title: 'Landlord eviction assistance service',
     eyebrow: 'Need to act after notice?',
     description:
-      'Start with a free consultation. If suitable, we prepare or check N5, N119, service evidence, bundle steps, and the filing pack.',
+      'After notice expiry, we help organise your N5, N119 particulars of claim, service evidence and supporting bundle into a clearer filing pack.',
     service: 'possession',
     product: 'complete_pack',
     priceLabel: getAssistedPrepConfig('possession').priceLabel,

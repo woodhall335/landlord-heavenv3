@@ -9,6 +9,12 @@ type Detail = {
   headline: string;
   intro: string;
   includes: string[];
+  accuracyTitle: string;
+  accuracyCopy: string;
+  documentChecks: Array<{
+    title: string;
+    body: string;
+  }>;
   stressCopy: string;
   processSteps: string[];
   blockerCopy: string;
@@ -45,17 +51,34 @@ const processIllustrations: Partial<Record<AssistedPrepService, {
 
 const serviceDetails: Record<AssistedPrepService, Detail> = {
   section8: {
-    headline: 'What is included with our landlord Section 8 notice assistance',
+    headline: 'Section 8 notice assistance for landlords',
     intro:
-      'We work through the key facts with you, prepare or check the Form 3A notice route, and help you leave the callback with a clearer notice file to approve before service.',
+      'A Section 8 notice starts a possession route for private landlords in England. We help you organise the facts, documents, Form 3A details and service plan into a notice file that you can check, approve and serve yourself.',
     includes: [
-      'Ground choice and notice-period checks based on the facts you give us.',
-      'Form 3A notice preparation with service details kept consistent.',
-      'N215/service record prompts so you know what proof to keep.',
-      'Evidence checklist for arrears, breach, sale, ASB, or the ground you rely on.',
+      'A free consultation to understand your practical reason for possession, tenancy position and documents already held.',
+      'Preparation or detailed checking of the current Form 3A using the approved facts and tenant details you provide.',
+      'A notice-date and service-plan review, with prompts for the evidence you should keep when you serve.',
+      'A ground-specific document checklist for arrears, breach, behaviour, sale, occupation, or another stated reason.',
+    ],
+    accuracyTitle: 'Why the notice file needs care',
+    accuracyCopy:
+      'For notices served from 1 May 2026, private landlords in England use Section 8 and Form 3A. The notice must identify the grounds relied on, explain why they apply, and give the required notice period. If the notice is incomplete or inaccurate, a later claim can be delayed or dismissed. We use the facts and documents you provide to make the notice file internally consistent before you decide whether to serve it.',
+    documentChecks: [
+      {
+        title: 'Facts, tenants and tenancy details',
+        body: 'We work from the tenancy agreement and your records to keep the property address, full tenant names, rent arrangement and key dates consistent across the notice and service record.',
+      },
+      {
+        title: 'Grounds, reasons and notice timing',
+        body: 'You explain the practical reason you want possession. We structure the information needed for the relevant Form 3A ground or grounds and flag missing facts, documents or timing questions before preparation is agreed.',
+      },
+      {
+        title: 'Service record and evidence prompts',
+        body: 'You remain responsible for serving the notice. We provide clear prompts for recording what was served, when, how and to whom, plus a checklist of the evidence that may support the ground later.',
+      },
     ],
     stressCopy:
-      'Instead of trying to work out whether the date, ground, or wording is wrong after the tenant has received it, we slow the file down before service and help you prepare it in the right order.',
+      'A notice can be challenged on the facts, form, notice period or service record. Rather than rushing to serve, we help you work through the file in a sensible order before you approve the final paperwork.',
     processSteps: [
       'Complete the short consultation request and book a free callback.',
       'We review the facts, documents, grounds, notice date, service method, and evidence position with you.',
@@ -63,17 +86,17 @@ const serviceDetails: Record<AssistedPrepService, Detail> = {
       'Only after payment do we prepare the notice pack for you to check before you serve it.',
     ],
     blockerCopy:
-      'If the facts point to a different route, a date problem, missing tenant details, or another issue that means the notice should not be served yet, we will explain it plainly before any paid work is agreed.',
+      'If the tenant details are unclear, the available documents do not support the proposed ground, the intended date is not ready, or the situation needs legal advice or representation, we will explain that plainly before any paid work is agreed.',
     faqs: [
       {
         question: 'Do I need to know the exact Section 8 ground before booking?',
         answer:
-          'No. Tell us the practical reason, such as rent arrears, sale, breach, or behaviour. We will work through the selected ground and notice-period position during the callback.',
+          'No. Tell us the practical reason, such as rent arrears, sale, breach, behaviour, or needing the property back. We will ask the document and timing questions needed to assess whether assisted preparation is a suitable next step.',
       },
       {
         question: 'Can you help if I already served a notice?',
         answer:
-          'Yes. Upload or have the notice ready. We can check the dates, service details, and obvious risk points before deciding whether to prepare a fresh pack or work from the existing notice.',
+          'Yes. Have the served notice and your service record ready. We can review the information you provide and discuss whether a fresh notice, more evidence, or a court-stage service is the more suitable next step.',
       },
       {
         question: 'Will you serve the notice for me?',
@@ -83,7 +106,7 @@ const serviceDetails: Record<AssistedPrepService, Detail> = {
       {
         question: 'What if my case is not ready?',
         answer:
-          'If it can be fixed, we explain what is needed. If the pack is unsuitable or we cannot reasonably proceed, we offer a full refund.',
+          'We explain what is missing or why the timing is not right. The consultation is free, and we only offer paid preparation once the practical scope is clear.',
       },
     ],
   },
@@ -97,6 +120,10 @@ const serviceDetails: Record<AssistedPrepService, Detail> = {
       'Particulars and evidence prompts for rent, damage, bills, or tenancy debt.',
       'A practical claim file so the story and the numbers match.',
     ],
+    accuracyTitle: 'A clear debt file before you decide the next step',
+    accuracyCopy:
+      'We organise the figures, dates and documents you provide into a clearer document-preparation scope. This legacy service is not currently offered to new customers.',
+    documentChecks: [],
     stressCopy:
       'Debt claims often become stressful because the figures, correspondence, and evidence are scattered. We help put the claim into a cleaner sequence before you decide the next step.',
     processSteps: [
@@ -131,17 +158,34 @@ const serviceDetails: Record<AssistedPrepService, Detail> = {
     ],
   },
   possession: {
-    headline: 'What is included with our landlord eviction assistance service',
+    headline: 'Possession claim preparation for landlords',
     intro:
-      'We help prepare or check the possession claim pack around the notice already served, the service evidence, the grounds relied on, and the documents the court is likely to expect.',
+      'After a notice has been served and the relevant notice period has ended, the court stage needs a clear claim file. We help prepare or check the forms, supporting documents and bundle structure around the notice you have already served.',
     includes: [
-      'Notice, expiry, and service evidence review before the court pack is prepared.',
-      'N5 and N119 preparation support using the facts you provide.',
-      'Evidence and bundle checklist for arrears, conduct, breach, sale, or other grounds.',
-      'Filing and hearing preparation prompts so the court-stage file is easier to follow.',
+      'A free consultation to review the served notice, expiry position, service evidence and information needed for the court stage.',
+      'Preparation or detailed checking of Form N5 and Form N119 particulars of claim using the facts and documents you approve.',
+      'An evidence and bundle checklist for arrears, conduct, breach, sale, occupation, or other grounds relied on.',
+      'Practical filing, service and hearing prompts so you can approve and manage your own court file.',
+    ],
+    accuracyTitle: 'Why the court-stage file needs to match',
+    accuracyCopy:
+      'A possession claim should match the notice already served, the reason for possession, the service evidence and the supporting documents. Form N5 is the possession claim form and Form N119 gives the court the particulars of the claim. We help organise a coherent document file, but the court decides the claim and you remain responsible for filing it and presenting your case.',
+    documentChecks: [
+      {
+        title: 'Notice, expiry and service evidence',
+        body: 'We review the notice you provide, the stated earliest court date, the method of service and the service record before preparing court documents around it.',
+      },
+      {
+        title: 'N5 and N119 particulars of claim',
+        body: 'We use the approved facts to keep the claimant, defendant, property, grounds, dates and supporting narrative aligned with the tenancy documents and notice. N119 is the particulars-of-claim form, not the tenant’s defence form.',
+      },
+      {
+        title: 'Evidence bundle and next-stage prompts',
+        body: 'We help create a clear index and evidence checklist, identify documents that are still missing, and give practical prompts for filing, service and preparing for a hearing as a litigant in person.',
+      },
     ],
     stressCopy:
-      'Possession claims are stressful when the notice says one thing, the evidence says another, and the forms are prepared in a rush. We help join the file together before you approve and file.',
+      'Court papers are easier to follow when the notice, service record, claim forms and evidence tell the same factual story. We help you slow the process down enough to identify avoidable gaps before you approve and file.',
     processSteps: [
       'Complete the short consultation request and tell us whether a notice has already been served.',
       'Book a free callback and upload the notice, proof of service, tenancy, rent records, and key correspondence where available.',
@@ -149,7 +193,7 @@ const serviceDetails: Record<AssistedPrepService, Detail> = {
       'If we can help, we confirm the scope and send a secure Stripe payment link before preparing the possession claim pack.',
     ],
     blockerCopy:
-      'If the notice has not expired, service evidence is weak, the wrong claim route was chosen, or the pack is not ready for court, we will explain what needs to happen next before any paid work is agreed.',
+      'If the notice has not expired, the service record is unclear, the forms would not match the notice, key evidence is missing, or the matter needs legal advice or representation, we will explain the practical next step before any paid work is agreed.',
     faqs: [
       {
         question: 'Do I need to have served a notice before booking?',
@@ -159,12 +203,12 @@ const serviceDetails: Record<AssistedPrepService, Detail> = {
       {
         question: 'Can you check N5 and N119 before I file?',
         answer:
-          'Yes. The service is designed around preparing or checking the possession claim pack, including N5, N119, service evidence, and supporting documents.',
+          'Yes. The service is designed around preparing or checking the N5, N119 particulars of claim, service evidence and supporting documents so the file is consistent with the notice you served.',
       },
       {
         question: 'What if my notice date or service record is wrong?',
         answer:
-          'We will flag the issue and explain the practical next step. If the claim pack cannot reasonably proceed, the assisted prep guarantee applies.',
+          'We will flag the issue and explain the practical next step. The consultation is free, and we only offer paid preparation once the practical scope is clear.',
       },
       {
         question: 'Will you file the possession claim for me?',
@@ -178,26 +222,26 @@ const serviceDetails: Record<AssistedPrepService, Detail> = {
 const serviceScope: Record<AssistedPrepService, { checks: string[]; diyRisks: string[] }> = {
   section8: {
     checks: [
-      'The tenant names, property details, practical reason, notice form, dates, and service documents line up.',
-      'The information and evidence prompts are organised before the notice is approved for service.',
-      'The landlord has a clear service and post-service record to complete using the actual facts.',
+      'The tenant names, property details, tenancy information, practical reason, notice form, dates and service plan line up.',
+      'The Form 3A wording, accompanying explanations and document prompts are based on the facts you approve.',
+      'The landlord has a clear service and post-service record to complete using the actual method of service.',
     ],
     diyRisks: [
-      'Using the wrong form, names, ground, or notice date can mean the notice needs to be corrected or re-served.',
-      'Serving without a clear record makes it harder to show the court what was given and when.',
-      'Preparing the notice before the facts and documents have been checked can create inconsistencies later.',
+      'Using an unsuitable form, incorrect names, a mismatched reason, or the wrong notice timing can mean a notice has to be corrected or re-served.',
+      'Serving without a clear contemporaneous record can make it harder to show the court what was given, to whom and when.',
+      'Preparing the notice before the tenancy and evidence have been checked can create inconsistencies in later court papers.',
     ],
   },
   possession: {
     checks: [
-      'The notice, expiry date, service evidence, N5, N119, and supporting bundle tell a consistent story.',
-      'The court-stage evidence is grouped so missing documents and factual gaps are identified early.',
-      'The landlord has practical filing and hearing prompts for the next stage of the process.',
+      'The notice, earliest court date, service evidence, N5, N119 particulars of claim, and supporting bundle tell a consistent factual story.',
+      'The court-stage evidence is grouped chronologically so missing documents, unanswered points and factual gaps are identified early.',
+      'The landlord has practical prompts for checking the filing route, retaining originals and preparing their own hearing file.',
     ],
     diyRisks: [
-      'Court forms that do not match the notice or evidence can create avoidable questions, delay, or a need to restart.',
-      'Weak proof of service or an unexpired notice can prevent the claim from being ready to issue.',
-      'Leaving witness evidence and the bundle until the last minute makes factual errors more likely.',
+      'Court forms that do not match the notice or evidence can create avoidable questions, delay or a need to start again.',
+      'Weak proof of service, an unexpired notice, or an unclear notice date can prevent the claim from being ready to issue.',
+      'Leaving witness evidence and the bundle until the last minute makes omissions and factual inconsistencies more likely.',
     ],
   },
   money_claim: { checks: [], diyRisks: [] },
@@ -268,6 +312,28 @@ export function AssistedPrepServiceDetails({
           ) : null}
         </div>
       </div>
+
+      <section className="mt-6 rounded-2xl border border-[#d8c6ff] bg-[linear-gradient(135deg,#f7f1ff_0%,#ffffff_100%)] p-5 md:p-6">
+        <h3 className="text-xl font-semibold text-[#20103f]">{detail.accuracyTitle}</h3>
+        <p className="mt-3 max-w-5xl text-sm leading-7 text-[#5d5672]">{detail.accuracyCopy}</p>
+      </section>
+
+      {detail.documentChecks.length > 0 ? (
+        <section className="mt-6">
+          <div className="max-w-4xl">
+            <p className="public-eyebrow">A detailed document review</p>
+            <h3 className="mt-3 text-2xl font-semibold text-[#20103f]">What we work through with you</h3>
+          </div>
+          <div className="mt-5 grid gap-5 lg:grid-cols-3">
+            {detail.documentChecks.map((check) => (
+              <article key={check.title} className="rounded-2xl border border-[#eee5ff] bg-[#fcfaff] p-5">
+                <h4 className="text-lg font-semibold text-[#20103f]">{check.title}</h4>
+                <p className="mt-3 text-sm leading-7 text-[#5d5672]">{check.body}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       {processIllustration ? (
         <section className="mt-6 overflow-hidden rounded-2xl border border-[#e3d7ff] bg-[#fcfaff]">
@@ -379,15 +445,168 @@ function AssistedPrepSharedInformation({
 }
 
 export function AssistedPrepAllServiceDetails({ className }: { className?: string }) {
-  const combinedFaqs = [
-    ...serviceDetails.section8.faqs,
-    ...serviceDetails.possession.faqs,
+  const hubServices = ['section8', 'possession'] as const;
+  const combinedFaqs = hubServices.flatMap((service) => serviceDetails[service].faqs);
+  const sharedProcess = [
+    'Tell us what has happened in plain English and choose the service that best matches your stage: before notice service or after a notice has been served.',
+    'Book a free consultation and upload any tenancy agreement, notice, proof of service, rent record, inspection record, photographs, or key correspondence you already have.',
+    'We discuss the documents, dates, service position and practical gaps with you before deciding whether paid document preparation is suitable for the scope you need.',
+    'If it is suitable, we confirm exactly what we will prepare and send a secure Stripe payment link. You remain responsible for reviewing, approving, signing, serving and filing the documents.',
   ];
 
   return (
     <div className={clsx('space-y-6', className)}>
-      <AssistedPrepServiceDetails service="section8" showSharedInformation={false} />
-      <AssistedPrepServiceDetails service="possession" showSharedInformation={false} />
+      <section className="rounded-[2rem] border border-[#e6dbff] bg-white p-6 shadow-sm md:p-8">
+        <div className="max-w-4xl">
+          <p className="public-eyebrow">What paid preparation covers</p>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#1c1431]">
+            Choose the eviction document preparation that matches your next step
+          </h2>
+          <p className="mt-4 text-base leading-8 text-[#5d5672]">
+            The two services are designed for different stages. Section 8 notice assistance is for landlords who need to prepare or check a Form 3A notice and service file before service. Possession claim assistance is for landlords whose notice has been served and who need a court-stage document file. We confirm the practical scope with you during the free consultation, before any payment is requested.
+          </p>
+        </div>
+
+        <div className="mt-7 grid gap-5 xl:grid-cols-2">
+          {hubServices.map((service) => {
+            const config = getAssistedPrepConfig(service);
+            const detail = serviceDetails[service];
+            const title = service === 'section8'
+              ? 'Section 8 notice assistance: before you serve'
+              : 'Possession claim assistance: after notice expiry';
+
+            return (
+              <article key={service} className="rounded-2xl border border-[#eee5ff] bg-[#fcfaff] p-5 md:p-6">
+                <p className="text-sm font-semibold text-[#6d28d9]">{config.priceLabel} only if we confirm we can help</p>
+                <h3 className="mt-2 text-2xl font-semibold text-[#20103f]">{title}</h3>
+                <p className="mt-3 text-sm leading-7 text-[#5d5672]">{detail.intro}</p>
+                <ul className="mt-5 space-y-3 text-sm leading-6 text-[#5d5672]">
+                  {detail.includes.map((item) => (
+                    <li key={item} className="flex items-start gap-2">
+                      <RiCheckLine className="mt-0.5 h-4 w-4 shrink-0 text-[#6d28d9]" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href={config.startHref}
+                  className="mt-6 inline-flex rounded-xl bg-[#6d28d9] px-5 py-3 text-sm font-semibold text-white hover:bg-[#5b21b6]"
+                >
+                  Book a free consultation
+                </Link>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="grid gap-5 rounded-[2rem] border border-[#e6dbff] bg-white p-6 shadow-sm md:p-8 lg:grid-cols-[1.1fr_0.9fr]">
+        <div>
+          <p className="public-eyebrow">One clear process</p>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#1c1431]">
+            How the free consultation becomes a prepared document file
+          </h2>
+          <ol className="mt-6 space-y-4 text-sm leading-7 text-[#5d5672]">
+            {sharedProcess.map((step, index) => (
+              <li key={step} className="flex gap-3">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#6d28d9] text-xs font-bold text-white">
+                  {index + 1}
+                </span>
+                <span>{step}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+        <aside className="rounded-2xl border border-[#d8c6ff] bg-[linear-gradient(135deg,#f7f1ff_0%,#ffffff_100%)] p-5 md:p-6">
+          <h3 className="text-xl font-semibold text-[#20103f]">What to have ready for the call</h3>
+          <p className="mt-3 text-sm leading-7 text-[#5d5672]">
+            Bring what you have; you do not need a perfect bundle to book. The most useful starting documents are the tenancy agreement, tenant names, the property address, relevant notices, proof of service, rent records, property compliance records and important messages or letters. We will identify which gaps matter for the document-preparation scope discussed with you.
+          </p>
+          <div className="mt-5 rounded-2xl border border-[#d8c6ff] bg-white p-4">
+            <h4 className="text-sm font-bold text-[#20103f]">No obligation to proceed</h4>
+            <p className="mt-2 text-sm leading-6 text-[#5d5672]">
+              The consultation is free. We only offer paid preparation where the facts, route, and practical scope are suitable for the service.
+            </p>
+          </div>
+        </aside>
+      </section>
+
+      <section className="rounded-[2rem] border border-[#e6dbff] bg-white p-6 shadow-sm md:p-8">
+        <div className="max-w-4xl">
+          <p className="public-eyebrow">Two practical stages</p>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#1c1431]">
+            Keep the notice stage and court stage in the right order
+          </h2>
+          <p className="mt-4 text-base leading-8 text-[#5d5672]">
+            The paperwork changes as an eviction moves forward. Before service, the focus is on the notice, its reasons, timing and service plan. After notice expiry, the focus moves to the claim form, particulars of claim, evidence and filing record. These focused checks help keep the documents consistent at the stage you have reached.
+          </p>
+        </div>
+        <div className="mt-7 grid gap-5 xl:grid-cols-2">
+          {hubServices.map((service) => {
+            const illustration = processIllustrations[service];
+            const scope = serviceScope[service];
+
+            if (!illustration) return null;
+
+            return (
+              <article key={service} className="overflow-hidden rounded-2xl border border-[#e3d7ff] bg-[#fcfaff]">
+                <div className="relative min-h-[15rem] bg-white">
+                  <Image
+                    src={illustration.imageSrc}
+                    alt={illustration.imageAlt}
+                    fill
+                    sizes="(max-width: 1280px) 100vw, 46vw"
+                    className="object-cover object-center"
+                  />
+                </div>
+                <div className="p-5 md:p-6">
+                  <p className="public-eyebrow">{illustration.eyebrow}</p>
+                  <h3 className="mt-3 text-2xl font-semibold text-[#20103f]">{illustration.title}</h3>
+                  <p className="mt-3 text-sm leading-7 text-[#5d5672]">{illustration.body}</p>
+                  <ul className="mt-5 space-y-3 text-sm leading-6 text-[#5d5672]">
+                    {scope.checks.map((item) => (
+                      <li key={item} className="flex items-start gap-2">
+                        <RiCheckLine className="mt-0.5 h-4 w-4 shrink-0 text-[#6d28d9]" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="rounded-[2rem] border border-amber-200 bg-amber-50 p-6 shadow-sm md:p-8">
+        <div className="max-w-4xl">
+          <p className="public-eyebrow">Avoidable risks</p>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#1c1431]">
+            What we help you identify before a mistake becomes a delay
+          </h2>
+          <p className="mt-4 text-base leading-8 text-[#5d5672]">
+            Many cases can be managed directly. The recurring risk is not simply the amount of paperwork, but a mismatch between the facts, the notice, the service record and later court papers. Finding that mismatch before service or filing is usually much easier than explaining it after a tenant has raised it.
+          </p>
+        </div>
+        <div className="mt-6 grid gap-5 md:grid-cols-2">
+          {hubServices.map((service) => (
+            <article key={service} className="rounded-2xl border border-amber-200 bg-white/80 p-5">
+              <h3 className="text-xl font-semibold text-[#20103f]">
+                {service === 'section8' ? 'Before notice service' : 'Before court issue'}
+              </h3>
+              <ul className="mt-4 space-y-3 text-sm leading-6 text-[#5d5672]">
+                {serviceScope[service].diyRisks.map((item) => (
+                  <li key={item} className="flex items-start gap-2">
+                    <RiCheckLine className="mt-0.5 h-4 w-4 shrink-0 text-amber-700" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <AssistedPrepSharedInformation
         faqs={combinedFaqs}
         faqHeading="Common questions about assisted prep"
