@@ -203,14 +203,15 @@ export const wizardHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('home'),
   preset: 'content_index',
-  trustText: 'Choose the right England landlord product before you start',
+  trustText: 'Choose the right landlord product before you start',
   title: 'Choose the landlord product you need',
   subtitle: (
     <>
       Choose the product that matches the job in front of you and start
       answering the questions straight away. Start with eviction, debt
       recovery, rent increases, or the right tenancy agreement for your
-      property in England.
+      property. England casework is supported alongside standard tenancy
+      agreement routes across the UK.
     </>
   ),
   primaryCta: {

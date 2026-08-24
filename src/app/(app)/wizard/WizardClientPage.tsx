@@ -10,10 +10,8 @@ import {
 } from '@/lib/tenancy/non-england-rollout';
 import {
   RiArrowRightLine,
-  RiFileCheckLine,
   RiFileTextLine,
   RiHome4Line,
-  RiMoneyPoundCircleLine,
   RiScales3Line,
 } from 'react-icons/ri';
 import { clsx } from 'clsx';
@@ -53,42 +51,65 @@ type CardProps = {
 
 const routeImages: Record<string, { src: string; alt: string }> = {
   notice_only: {
-    src: '/images/wizard-eviction-notice-generator.webp',
-    alt: 'Section 8 notice generator preview',
+    src: '/images/illustrations/pricing-cards/notice-only.webp',
+    alt: 'Watercolour illustration of a Section 8 notice, calendar and service record',
   },
   complete_pack: {
-    src: '/images/wizard-comlete-eviction-pack.webp',
-    alt: 'Complete eviction pack preview',
+    src: '/images/illustrations/pricing-cards/complete-pack.webp',
+    alt: 'Watercolour illustration of a complete possession claim bundle and property keys',
   },
   money_claim: {
-    src: '/images/wizard-money-claim-pack.webp',
-    alt: 'Money claim pack preview',
+    src: '/images/illustrations/pricing-cards/money-claim.webp',
+    alt: 'Watercolour illustration of a landlord money claim and payment records',
   },
   section13_standard: {
-    src: '/images/wizard-section-13-rent-increase.webp',
-    alt: 'Rent increase pack preview',
+    src: '/images/illustrations/pricing-cards/rent-increase.webp',
+    alt: 'Watercolour illustration of a rent increase notice and calendar',
   },
   england_standard_tenancy_agreement: {
-    src: '/images/wizard-standard-tenancy-agreement.webp',
-    alt: 'Standard tenancy agreement preview',
+    src: '/images/illustrations/pricing-cards/tenancy-england-standard.webp',
+    alt: 'Watercolour illustration of a standard England tenancy agreement and keys',
   },
   england_premium_tenancy_agreement: {
-    src: '/images/wizard-premium-tenancy-agreement.webp',
-    alt: 'Premium tenancy agreement preview',
+    src: '/images/illustrations/pricing-cards/tenancy-england-premium.webp',
+    alt: 'Watercolour illustration of a premium England tenancy agreement and landlord checklist',
   },
   england_student_tenancy_agreement: {
-    src: '/images/wizard-student-tenancy-agreement.webp',
-    alt: 'Student tenancy agreement preview',
+    src: '/images/illustrations/pricing-cards/tenancy-student.webp',
+    alt: 'Watercolour illustration of a student tenancy agreement and university books',
   },
   england_hmo_shared_house_tenancy_agreement: {
-    src: '/images/wizard-hmo-agreement.webp',
-    alt: 'HMO shared house tenancy agreement preview',
+    src: '/images/illustrations/pricing-cards/tenancy-hmo-shared.webp',
+    alt: 'Watercolour illustration of a shared-house tenancy agreement and home keys',
   },
   england_lodger_agreement: {
-    src: '/images/wizard-lodger-agreement.webp',
-    alt: 'Lodger agreement preview',
+    src: '/images/illustrations/pricing-cards/tenancy-lodger.webp',
+    alt: 'Watercolour illustration of a lodger agreement and shared home keys',
   },
 };
+
+const UK_STANDARD_TENANCY_JURISDICTIONS = [
+  {
+    name: 'England',
+    agreement: 'Assured periodic tenancy',
+    flag: '/gb-eng.svg',
+  },
+  {
+    name: 'Wales',
+    agreement: 'Standard occupation contract',
+    flag: '/gb-wls.svg',
+  },
+  {
+    name: 'Scotland',
+    agreement: 'Private Residential Tenancy',
+    flag: '/gb-sct.svg',
+  },
+  {
+    name: 'Northern Ireland',
+    agreement: 'Private tenancy agreement',
+    flag: '/gb-nir.svg',
+  },
+] as const;
 
 const WIZARD_ENTRY_TITLE = 'Choose the landlord product you need';
 const WIZARD_ENTRY_SUBTITLE =
@@ -395,13 +416,74 @@ export default function WizardClientPage() {
         <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'px-6 py-8 md:px-8')}>
           <div className="flex items-center gap-3">
             <RiHome4Line className="h-5 w-5 text-[#6b3fd1]" />
-            <h2 className="text-2xl font-semibold text-[#1d1532]">England tenancy agreements</h2>
+            <h2 className="text-2xl font-semibold text-[#1d1532]">Tenancy agreements across the UK</h2>
           </div>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-[#5a516d]">
-            If you already know the exact agreement you need, jump straight in
-            below. If you want help choosing between the five Renters&apos; Rights
-            compliant tenancy agreements aligned to the post-May 2026 rules,
-            start from the England tenancy hub.
+            Start with the property&apos;s jurisdiction. Standard tenancy agreement
+            routes are available for England, Wales, Scotland, and Northern
+            Ireland. England also has specialist options for premium,
+            student, shared-house, and lodger arrangements.
+          </p>
+
+          <div className="mt-6 rounded-[1.5rem] border border-[#ddd4f4] bg-[#fbf9ff] p-5 sm:p-6">
+            <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
+              <div className="max-w-2xl">
+                <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#6b3fd1]">
+                  Standard agreements
+                </p>
+                <h3 className="mt-2 text-xl font-semibold text-[#1d1532]">
+                  Choose the legal framework for the rental property first
+                </h3>
+                <p className="mt-2 text-sm leading-7 text-[#5a516d]">
+                  There is no one-size-fits-all UK tenancy agreement. Choose
+                  the nation where the property is located and the guided
+                  builder will use the correct standard agreement route.
+                </p>
+              </div>
+              <Link
+                href="/standard-tenancy-agreement#choose-jurisdiction"
+                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-[#6b3fd1] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#5b2bb9]"
+              >
+                Choose UK jurisdiction
+                <RiArrowRightLine className="h-4 w-4" />
+              </Link>
+            </div>
+
+            <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              {UK_STANDARD_TENANCY_JURISDICTIONS.map((jurisdiction) => (
+                <div
+                  key={jurisdiction.name}
+                  className="flex items-center gap-3 rounded-2xl border border-[#e8e1f8] bg-white px-4 py-3"
+                >
+                  <Image
+                    src={jurisdiction.flag}
+                    alt=""
+                    width={32}
+                    height={20}
+                    className="h-5 w-8 rounded-sm object-cover shadow-sm"
+                  />
+                  <span>
+                    <span className="block text-sm font-semibold text-[#2d2344]">
+                      {jurisdiction.name}
+                    </span>
+                    <span className="block text-xs text-[#665d78]">
+                      {jurisdiction.agreement}
+                    </span>
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-9 flex items-center gap-3">
+            <RiHome4Line className="h-5 w-5 text-[#6b3fd1]" />
+            <h3 className="text-xl font-semibold text-[#1d1532]">
+              England specialist tenancy agreements
+            </h3>
+          </div>
+          <p className="mt-2 max-w-3xl text-sm leading-7 text-[#5a516d]">
+            Choose one of these routes when the property is in England and
+            you already know the type of letting you need to set up.
           </p>
           <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
             {tenancyCards.map((product) => (
@@ -450,10 +532,10 @@ export default function WizardClientPage() {
                   <RiArrowRightLine className="h-4 w-4" />
                 </Link>
                 <Link
-                  href={PUBLIC_PRODUCT_DESCRIPTORS.ast.landingHref}
+                  href="/standard-tenancy-agreement#choose-jurisdiction"
                   className="inline-flex items-center gap-2 rounded-full border border-white/14 px-4 py-2 text-sm font-semibold text-white"
                 >
-                  England tenancy agreements
+                  UK tenancy agreements
                   <RiArrowRightLine className="h-4 w-4" />
                 </Link>
               </div>
