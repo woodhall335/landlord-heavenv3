@@ -49,6 +49,12 @@ describe('UniversalHero review pill', () => {
     ).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Wales agreement' })).toHaveClass('text-[#17112f]');
     expect(screen.getByTestId('hero-mobile-artwork')).toHaveClass('lg:hidden');
+    expect(screen.getByTestId('hero-mobile-artwork')).toHaveClass(
+      'absolute',
+      'bottom-0',
+      'pointer-events-none'
+    );
+    expect(screen.getByTestId('hero-mobile-artwork')).not.toHaveClass('shrink-0');
     expect(screen.getByTestId('hero-mobile-artwork').querySelector('img')).toHaveAttribute(
       'src',
       '/images/heroes/universal/hero-tenancy-wales.webp'

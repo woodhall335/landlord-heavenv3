@@ -25,11 +25,11 @@ type HeroCta = {
 };
 
 // DO NOT MODIFY WITHOUT UPDATING TESTS: these classes define the mobile hero layout contract
-// that keeps subtitle readability, right-edge media bleed, and CTA placement stable across pages.
+// that keeps the artwork integrated behind the content, preserves readable text, and keeps CTAs stable across pages.
 const SECTION_WRAP_CLASSES =
-  'relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-white pt-28 sm:pt-32 lg:min-h-[100dvh] lg:items-center lg:justify-center lg:pb-16 lg:pt-36';
+  'relative isolate flex min-h-[44rem] flex-col overflow-hidden bg-white pb-10 pt-24 sm:min-h-[48rem] sm:pb-12 sm:pt-28 lg:min-h-[100dvh] lg:items-center lg:justify-center lg:pb-16 lg:pt-36';
 const TOP_ALIGNED_SECTION_WRAP_CLASSES =
-  'relative isolate flex min-h-[44rem] flex-col overflow-hidden bg-white pt-16 sm:pt-20 lg:min-h-[46rem] lg:items-start lg:justify-start lg:pb-20 lg:pt-10';
+  'relative isolate flex min-h-[44rem] flex-col overflow-hidden bg-white pb-10 pt-24 sm:min-h-[48rem] sm:pb-12 sm:pt-28 lg:min-h-[46rem] lg:items-start lg:justify-start lg:pb-20 lg:pt-10';
 const CTA_WRAP_CLASSES = 'mt-8 flex w-full flex-col gap-3 sm:mt-9 sm:flex-row sm:items-center lg:mt-6';
 const REVIEW_STARS = '\u2605\u2605\u2605\u2605\u2605';
 
@@ -279,7 +279,7 @@ export function UniversalHero({
         >
           <StaggerReveal
             className={clsx(
-              'relative z-10 w-full min-w-0',
+              'relative z-10 w-full min-w-0 max-w-[25rem] sm:max-w-[34rem] lg:max-w-none',
               'text-left',
               hideMedia && !isPastel && 'max-w-3xl mx-auto'
             )}
@@ -468,7 +468,7 @@ export function UniversalHero({
       </div>
 
       <div
-        className="relative z-0 -mt-5 h-[44svh] min-h-[22rem] max-h-[32rem] w-full shrink-0 sm:-mt-8 sm:h-[46svh] lg:hidden"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-[70%] min-h-[25rem] max-h-[43rem] overflow-hidden lg:hidden"
         aria-hidden="true"
         data-testid="hero-mobile-artwork"
       >
@@ -480,7 +480,9 @@ export function UniversalHero({
           sizes="100vw"
           className="object-cover object-bottom"
         />
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-white via-white/55 to-transparent" />
+        <div className="absolute inset-y-0 left-0 w-[84%] bg-[linear-gradient(90deg,rgba(255,255,255,1)_0%,rgba(255,255,255,0.97)_38%,rgba(255,255,255,0.58)_67%,rgba(255,255,255,0)_100%)]" />
+        <div className="absolute inset-x-0 top-0 h-[44%] bg-gradient-to-b from-white via-white/88 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#f7f2ff]/78 to-transparent" />
       </div>
     </section>
   );
