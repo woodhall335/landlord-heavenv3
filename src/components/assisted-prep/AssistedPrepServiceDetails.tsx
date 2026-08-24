@@ -45,7 +45,7 @@ const processIllustrations: Partial<Record<AssistedPrepService, {
     imageAlt: 'Watercolour illustration of a served notice, evidence bundle and possession hearing calendar',
     eyebrow: 'From notice to court file',
     title: 'Build a possession file a judge can follow',
-    body: 'If your tenant stays, the served notice, service proof, claim forms and evidence should all support the same reason for possession.',
+    body: 'Whether we prepare a fresh notice or review one you have served, the notice, service proof, claim forms and evidence should all support the same reason for possession.',
   },
 };
 
@@ -158,22 +158,23 @@ const serviceDetails: Record<AssistedPrepService, Detail> = {
     ],
   },
   possession: {
-    headline: 'Possession claim preparation for landlords',
+    headline: 'Full eviction case preparation for landlords',
     intro:
-      'After a notice has been served and the relevant notice period has ended, the court stage needs a clear claim file. We help prepare or check the forms, supporting documents and bundle structure around the notice you have already served.',
+      'This is the £399 full-case service for landlords who want their Section 8 notice and court forms prepared as one joined-up file. You do not need to have served a notice already: where suitable, we can prepare the Form 3A notice, service record, N5, N119 particulars of claim and supporting bundle. If you have already served a notice, we begin by checking that stage before preparing the court file.',
     includes: [
-      'A free consultation to review the served notice, expiry position, service evidence and information needed for the court stage.',
+      'A free consultation to map the whole case: the reason for possession, tenancy documents, notice position, service plan and court-stage evidence.',
+      'Preparation or detailed checking of the Form 3A Section 8 notice and service record where notice has not already been served.',
       'Preparation or detailed checking of Form N5 and Form N119 particulars of claim using the facts and documents you approve.',
       'An evidence and bundle checklist for arrears, conduct, breach, sale, occupation, or other grounds relied on.',
       'Practical filing, service and hearing prompts so you can approve and manage your own court file.',
     ],
-    accuracyTitle: 'Why the court-stage file needs to match',
+    accuracyTitle: 'Why the whole case file needs to match',
     accuracyCopy:
-      'A possession claim should match the notice already served, the reason for possession, the service evidence and the supporting documents. Form N5 is the possession claim form and Form N119 gives the court the particulars of the claim. We help organise a coherent document file, but the court decides the claim and you remain responsible for filing it and presenting your case.',
+      'A possession claim should match the notice, the reason for possession, the service evidence and the supporting documents. Form N5 is the possession claim form and Form N119 gives the court the particulars of the claim. We can prepare the full document sequence, but a court claim cannot be issued until a valid notice has been served and its notice period has ended. The court decides the claim, and you remain responsible for filing it and presenting your case.',
     documentChecks: [
       {
-        title: 'Notice, expiry and service evidence',
-        body: 'We review the notice you provide, the stated earliest court date, the method of service and the service record before preparing court documents around it.',
+        title: 'Section 8 notice, expiry and service evidence',
+        body: 'If you have not served notice, we prepare or check the Form 3A and service record as part of the full case. If you have served it, we review the notice you provide, its earliest court date, the service method and the service record before preparing court documents around it.',
       },
       {
         title: 'N5 and N119 particulars of claim',
@@ -185,20 +186,20 @@ const serviceDetails: Record<AssistedPrepService, Detail> = {
       },
     ],
     stressCopy:
-      'Court papers are easier to follow when the notice, service record, claim forms and evidence tell the same factual story. We help you slow the process down enough to identify avoidable gaps before you approve and file.',
+      'A full case is easier to follow when the notice, service record, claim forms and evidence tell the same factual story. We help you slow the process down enough to identify avoidable gaps before you approve, serve and file.',
     processSteps: [
-      'Complete the short consultation request and tell us whether a notice has already been served.',
-      'Book a free callback and upload the notice, proof of service, tenancy, rent records, and key correspondence where available.',
-      'We check the notice route, expiry, service evidence, court-form facts, and supporting documents with you.',
-      'If we can help, we confirm the scope and send a secure Stripe payment link before preparing the possession claim pack.',
+      'Complete the short consultation request and tell us whether you need a fresh Section 8 notice or already have one served.',
+      'Book a free callback and upload the tenancy agreement, any notice and proof of service, rent records, and key correspondence where available.',
+      'We check the notice route, timing, service position, court-form facts, and supporting documents with you.',
+      'If we can help, we confirm the full-case scope and send a secure Stripe payment link before preparing the agreed notice and court pack.',
     ],
     blockerCopy:
       'If the notice has not expired, the service record is unclear, the forms would not match the notice, key evidence is missing, or the matter needs legal advice or representation, we will explain the practical next step before any paid work is agreed.',
     faqs: [
       {
-        question: 'Do I need to have served a notice before booking?',
+        question: 'Do I need to have served a notice before booking the £399 service?',
         answer:
-          'Usually, a possession claim depends on a notice already being served and expired. If no notice has been served, we can discuss the correct notice route and timeline during the callback.',
+          'No. The £399 service is for landlords who want the full case prepared, including the Section 8 notice and court forms. If you have not served notice, we can discuss whether the full-case scope is suitable and prepare the notice stage first. You cannot issue the possession claim until a valid notice has been served and the relevant notice period has ended.',
       },
       {
         question: 'Can you check N5 and N119 before I file?',
@@ -448,7 +449,7 @@ export function AssistedPrepAllServiceDetails({ className }: { className?: strin
   const hubServices = ['section8', 'possession'] as const;
   const combinedFaqs = hubServices.flatMap((service) => serviceDetails[service].faqs);
   const sharedProcess = [
-    'Tell us what has happened in plain English and choose the service that best matches your stage: before notice service or after a notice has been served.',
+    'Tell us what has happened in plain English and choose either the £149 notice-only service or the £399 full eviction case service, which includes court forms.',
     'Book a free consultation and upload any tenancy agreement, notice, proof of service, rent record, inspection record, photographs, or key correspondence you already have.',
     'We discuss the documents, dates, service position and practical gaps with you before deciding whether paid document preparation is suitable for the scope you need.',
     'If it is suitable, we confirm exactly what we will prepare and send a secure Stripe payment link. You remain responsible for reviewing, approving, signing, serving and filing the documents.',
@@ -463,7 +464,7 @@ export function AssistedPrepAllServiceDetails({ className }: { className?: strin
             Choose the eviction document preparation that matches your next step
           </h2>
           <p className="mt-4 text-base leading-8 text-[#5d5672]">
-            The two services are designed for different stages. Section 8 notice assistance is for landlords who need to prepare or check a Form 3A notice and service file before service. Possession claim assistance is for landlords whose notice has been served and who need a court-stage document file. We confirm the practical scope with you during the free consultation, before any payment is requested.
+            The £149 service is for landlords who only need a Section 8 notice and service file before service. The £399 full eviction case service is for landlords who want both the notice stage and the court forms included in one joined-up pack. If you have already served notice, the £399 service can instead focus on checking that stage and completing the court file. We confirm the practical scope with you during the free consultation, before any payment is requested.
           </p>
         </div>
 
@@ -473,7 +474,7 @@ export function AssistedPrepAllServiceDetails({ className }: { className?: strin
             const detail = serviceDetails[service];
             const title = service === 'section8'
               ? 'Section 8 notice assistance: before you serve'
-              : 'Possession claim assistance: after notice expiry';
+              : 'Full eviction case assistance: notice and court forms';
 
             return (
               <article key={service} className="rounded-2xl border border-[#eee5ff] bg-[#fcfaff] p-5 md:p-6">

@@ -28,9 +28,9 @@ const visualContent: Record<AssistedPrepService | 'overview', VisualContent> = {
     points: ['Form 3A and ground review', 'Notice-date and tenant-detail checks', 'Service evidence prompts for your file'],
   },
   possession: {
-    eyebrow: 'Before you issue a claim',
+    eyebrow: 'From notice to court forms',
     title: 'Make the notice, evidence and court forms tell one story',
-    body: 'For the court stage, we look at the notice already served, its expiry, proof of service and the documents needed to prepare a coherent possession-claim pack.',
+    body: 'The £399 full-case service can start before notice is served, combining the Section 8 notice and service record with the N5, N119 and supporting court bundle. If you have already served notice, we review that stage first.',
     imageSrc: '/images/generated/assisted-prep/assisted-possession-claim-watercolor-v1.png',
     imageAlt: 'Watercolour illustration of a possession claim bundle, evidence file, court calendar and property keys',
     points: ['Notice and expiry review', 'N5 and N119 preparation support', 'Evidence and filing prompts'],

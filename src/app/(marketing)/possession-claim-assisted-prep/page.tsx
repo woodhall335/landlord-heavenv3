@@ -8,12 +8,14 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 const service = getAssistedPrepConfig('possession');
 
 export const metadata: Metadata = {
-  title: 'Assisted Eviction Service | Possession Claim Preparation',
+  title: 'Assisted Eviction Service | Full Notice and Court Case Pack',
   description:
-    'Book a free consultation for assisted possession-claim preparation in England. We confirm whether we can help before sending any payment link.',
+    'Book a free consultation for a full England eviction case pack. If suitable, the £399 service can include the Section 8 notice, service record, N5, N119 and supporting court bundle.',
   keywords: [
     'assisted eviction service',
     'assisted possession claim preparation',
+    'full eviction case preparation',
+    'section 8 notice and court forms',
     'n5 n119 assisted prep',
     'possession claim pack help',
     'landlord court pack preparation',
@@ -38,8 +40,8 @@ export default function PossessionClaimAssistedPrepPage() {
       <main className="bg-slate-50">
         <UniversalHero
           preTitleLabel="Assisted eviction service"
-          title="Check the possession claim file before you pay"
-          subtitle={`${ASSISTED_PREP_PROMISE} Book a free consultation for N5, N119, notice evidence, bundle steps, and the filing pack. This is document preparation, not legal representation.`}
+          title="Prepare your full eviction case before you pay"
+          subtitle={`${ASSISTED_PREP_PROMISE} Our £399 service can prepare the Section 8 notice, service record, N5, N119, evidence bundle and filing prompts as one agreed case pack. If you have already served notice, we check it before preparing the court stage. This is document preparation, not legal representation.`}
           primaryCta={{ label: 'Book free consultation', href: service.startHref }}
           secondaryCta={{ label: 'See service details', href: '#service-details' }}
           trustText="Pay only if we confirm the preparation service is suitable"

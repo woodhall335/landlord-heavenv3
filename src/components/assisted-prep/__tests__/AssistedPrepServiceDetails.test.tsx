@@ -51,4 +51,13 @@ describe('AssistedPrepServiceDetails', () => {
 
     expect(screen.getByText(/N119 is the particulars-of-claim form, not the tenant’s defence form/i)).toBeInTheDocument();
   });
+
+  it('positions the £399 possession service as a full notice-to-court case pack', () => {
+    render(<AssistedPrepServiceDetails service="possession" showCta={false} />);
+
+    expect(screen.getByRole('heading', { name: 'Full eviction case preparation for landlords' })).toBeInTheDocument();
+    expect(screen.getByText(/you do not need to have served a notice already/i)).toBeInTheDocument();
+    expect(screen.getByText(/Form 3A Section 8 notice and service record/i)).toBeInTheDocument();
+    expect(screen.getByText(/Form N5 and Form N119 particulars of claim/i)).toBeInTheDocument();
+  });
 });

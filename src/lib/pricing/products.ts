@@ -328,10 +328,10 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
   },
   possession_claim_assisted_prep: {
     sku: 'possession_claim_assisted_prep',
-    label: 'Possession Claim Assisted Prep',
-    shortLabel: 'Possession Assisted Prep',
+    label: 'Full Eviction Case Assisted Prep',
+    shortLabel: 'Full Eviction Case Prep',
     description:
-      'Prepared for you, checked with you, approved and filed by you. A 45-minute callback to prepare or check N5, N119, service evidence, and filing steps.',
+      'Prepared for you, checked with you, approved and served or filed by you. A 45-minute callback to prepare the Section 8 notice, service record, N5, N119 and supporting court pack as one agreed case file.',
     price: SEO_PRICES.possessionClaimAssistedPrep.amount,
     displayPrice: SEO_PRICES.possessionClaimAssistedPrep.display,
     priceNote: 'England assisted preparation',

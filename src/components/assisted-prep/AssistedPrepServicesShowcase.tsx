@@ -46,9 +46,9 @@ const assistedPrepCards: AssistedPrepShowcaseCard[] = [
   },
   {
     title: 'Landlord eviction assistance service',
-    eyebrow: 'Need to act after notice?',
+    eyebrow: 'Want the full case, including court forms?',
     description:
-      'After notice expiry, we help organise your N5, N119 particulars of claim, service evidence and supporting bundle into a clearer filing pack.',
+      'Our £399 full-case service can cover your Section 8 notice, service record, N5, N119 particulars of claim and supporting bundle. If you have already served notice, we focus on the court-stage pack.',
     service: 'possession',
     product: 'complete_pack',
     priceLabel: getAssistedPrepConfig('possession').priceLabel,

@@ -8,13 +8,15 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 export const metadata: Metadata = {
   title: 'Assisted Eviction Document Preparation | Free Consultation',
   description:
-    'Free consultation for Section 8 notice or possession claim document preparation in England. We confirm the practical scope before sending a payment link.',
+    'Free consultation for England Section 8 notice preparation or a full eviction case pack with court forms. We confirm the practical scope before sending a payment link.',
   keywords: [
     'assisted eviction service',
     'assisted eviction notice preparation',
     'section 8 notice preparation service',
     'form 3a preparation help',
     'possession claim preparation service',
+    'full eviction case preparation',
+    'section 8 notice and court forms',
     'n5 n119 preparation help',
     'free landlord eviction consultation',
     'england landlord document preparation',

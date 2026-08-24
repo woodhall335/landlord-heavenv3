@@ -118,7 +118,7 @@ export const PRODUCT_METADATA: Record<string, { name: string; type: string; cate
     category: 'assisted_prep',
   },
   [PRICE_IDS.POSSESSION_CLAIM_ASSISTED_PREP]: {
-    name: 'Possession Claim Assisted Prep',
+    name: 'Full Eviction Case Assisted Prep',
     type: 'one_time',
     category: 'assisted_prep',
   },

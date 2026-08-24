@@ -121,7 +121,7 @@ export default function RefundsPage() {
             <div className="bg-green-50 border-l-4 border-green-500 p-4 mb-6">
               <p className="text-gray-700">
                 <strong>Assisted prep has a money-back guarantee.</strong> If you buy Section 8 Notice
-                Assisted Prep, Money Claim Assisted Prep, or Possession Claim Assisted Prep and we
+                Assisted Prep, Money Claim Assisted Prep, or Full Eviction Case Assisted Prep and we
                 decide during the assisted-prep process that the pack is unsuitable for your situation,
                 or we cannot reasonably proceed because of a blocker we cannot overcome, we will offer
                 you a full refund.

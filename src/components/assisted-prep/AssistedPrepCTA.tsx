@@ -33,9 +33,9 @@ const sidebarCopy: Record<AssistedPrepService, { title: string; body: string; bu
     bullets: ['30-minute callback', '£249', 'Full refund if unsuitable'],
   },
   possession: {
-    title: 'Want help with the court papers?',
-    body: 'We can review your notice stage and prepare the N5, N119, service evidence and bundle steps with you.',
-    bullets: ['45-minute callback', '£399', 'Full refund if unsuitable'],
+    title: 'Want the full eviction case prepared?',
+    body: 'Our £399 service can prepare the Section 8 notice, service record, N5, N119 and supporting bundle with you.',
+    bullets: ['45-minute callback', '£399 full-case service', 'Full refund if unsuitable'],
   },
 };
 

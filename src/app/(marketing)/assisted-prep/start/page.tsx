@@ -36,12 +36,14 @@ const startSeo: Record<PublicAssistedPrepService, { title: string; description: 
     ],
   },
   possession: {
-    title: 'Possession Claim Preparation for Landlords | Free Consultation',
+    title: 'Full Eviction Case Preparation for Landlords | Free Consultation',
     description:
-      'Start with a free consultation for landlord possession claim preparation in England. We review a served notice, service record and court paperwork before agreeing paid preparation.',
+      'Start with a free consultation for a full England eviction case pack. If suitable, the £399 service can cover the Section 8 notice, service record, N5, N119 and supporting court bundle.',
     keywords: [
       'start possession claim assisted prep',
       'possession claim callback',
+      'full eviction case preparation',
+      'section 8 notice and court forms',
       'n5 n119 help',
       'complete eviction pack help',
       'section 8 court pack support',
@@ -73,9 +75,9 @@ const heroContent: Record<PublicAssistedPrepService, {
   },
   possession: {
     preTitleLabel: 'Landlord eviction assistance service',
-    title: 'Prepare your possession claim before you file',
+    title: 'Prepare your full eviction case, including court forms',
     subtitle:
-      'Start with a free, no-obligation consultation. We review your served notice, expiry date, service evidence and court paperwork before agreeing any paid preparation.',
+      'Start with a free, no-obligation consultation. If suitable, our £399 full-case service can prepare the Section 8 notice, service record, N5, N119 and supporting bundle. If you have already served notice, we focus on checking it and preparing the court stage.',
     imageSrc: '/images/heroes/library/hero-assisted-possession-v2.webp',
     imageAlt: 'Watercolour illustration of possession claim papers, court documents and property keys',
   },
