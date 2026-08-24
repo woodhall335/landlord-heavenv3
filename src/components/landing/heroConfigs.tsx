@@ -55,21 +55,22 @@ export const homeHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('home'),
   preset: 'home',
-  trustText: 'England landlord documents checked before you serve, file, or raise rent',
+  trustText: 'England landlord documents and UK tenancy agreements, with the right route made clear first',
   title: 'Landlord documents',
   highlightTitle: 'without the solicitor bill.',
   subtitle: (
     <>
-      Section 8 notices, court papers, rent increases, money claims, and tenancy
-      agreements for landlords in England. Start from the problem you need to
-      solve today.
+      Start with the landlord problem you need to solve today. Create England
+      notices, court papers, money claims and rent increases, or choose the right
+      tenancy agreement for property in England, Wales, Scotland or Northern Ireland.
     </>
   ),
   primaryCta: {
     label: 'Choose the right next step',
     href: '#homepage-route-selector',
   },
-  feature: 'Built for landlords in England who need the next step clear fast when the tenancy is already under pressure.',
+  feature:
+    'England notice and court paperwork, plus tenancy-agreement routes across the UK — without guessing which framework applies.',
 };
 
 /* ============================================================

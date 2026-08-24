@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
@@ -184,7 +185,7 @@ export default function WalesOccupationContractPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <main className="min-h-screen bg-gradient-to-br from-red-50 via-red-100 to-red-50 text-gray-900">
+      <main className="min-h-screen bg-gradient-to-br from-[#fbfaff] via-[#f4efff] to-[#fbfaff] text-[#20103f]">
         <UniversalHero
           variant="pastel"
           backgroundImageKey="tenancyWales"
@@ -249,8 +250,8 @@ export default function WalesOccupationContractPage() {
               </p>
             </div>
 
-            <div className="bg-red-50 border-l-4 border-red-600 p-6 mt-8">
-              <h3 className="text-xl font-semibold text-red-900 mb-2">
+            <div className="mt-8 border-l-4 border-[#7c3aed] bg-[#f5f1ff] p-6">
+              <h3 className="mb-2 text-xl font-semibold text-[#20103f]">
                 Key differences from England
               </h3>
               <ul className="list-disc list-inside text-gray-700 space-y-2">
@@ -270,6 +271,28 @@ export default function WalesOccupationContractPage() {
                   <strong>Fitness for human habitation</strong> duties are stronger and more explicit
                 </li>
               </ul>
+            </div>
+
+            <div className="mt-8 grid overflow-hidden rounded-xl border border-[#e8e1f8] bg-[#faf8ff] lg:grid-cols-[1fr_0.9fr]">
+              <div className="flex flex-col justify-center p-6 md:p-8">
+                <p className="public-eyebrow">Built for Wales</p>
+                <h3 className="mt-3 text-2xl font-bold tracking-tight text-[#20103f]">
+                  Start with the contract and setup documents together
+                </h3>
+                <p className="mt-4 leading-7 text-[#5d5672]">
+                  The Wales route keeps the occupation contract, property details and practical
+                  supporting records in one guided pack for you to review before payment.
+                </p>
+              </div>
+              <div className="relative min-h-[18rem] bg-white sm:min-h-[22rem]">
+                <Image
+                  src="/images/illustrations/landlord-documents/site-tenancy-wales.webp"
+                  alt="Watercolour illustration of a Wales occupation contract, property keys and landlord paperwork"
+                  fill
+                  className="object-cover object-center"
+                  sizes="(max-width: 1024px) 100vw, 42vw"
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -344,14 +367,14 @@ export default function WalesOccupationContractPage() {
               You can also review our guidance on{' '}
               <Link
                 href="/renting-homes-wales-written-statement"
-                className="text-red-600 font-semibold hover:underline"
+                className="font-semibold text-[#6d28d9] hover:underline"
               >
                 written statement requirements in Wales
               </Link>{' '}
               and our page on the{' '}
               <Link
                 href="/standard-occupation-contract-wales"
-                className="text-red-600 font-semibold hover:underline"
+                className="font-semibold text-[#6d28d9] hover:underline"
               >
                 Standard Occupation Contract
               </Link>
@@ -370,7 +393,7 @@ export default function WalesOccupationContractPage() {
             <div className="overflow-x-auto">
               <table className="w-full border-collapse border border-gray-300 bg-white">
                 <thead>
-                  <tr className="bg-red-600 text-white">
+                  <tr className="bg-[#6d28d9] text-white">
                     <th className="border border-gray-300 px-4 py-3 text-left text-white">Topic</th>
                     <th className="border border-gray-300 px-4 py-3 text-left text-white">England</th>
                     <th className="border border-gray-300 px-4 py-3 text-left text-white">Wales</th>
@@ -451,7 +474,7 @@ export default function WalesOccupationContractPage() {
               If you need possession paperwork later, see our guide to{' '}
               <Link
                 href="/wales-eviction-notices"
-                className="text-red-600 font-semibold hover:underline"
+                className="font-semibold text-[#6d28d9] hover:underline"
               >
                 Welsh eviction notices
               </Link>
@@ -491,8 +514,8 @@ export default function WalesOccupationContractPage() {
               </div>
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-6">
-              <p className="text-blue-900 font-semibold">
+            <div className="mt-6 rounded-lg border border-[#d8c8ff] bg-[#f5f1ff] p-6">
+              <p className="font-semibold text-[#31224f]">
                 Looking for more detail? See our{' '}
                 <Link
                   href="/occupation-contract-template-wales"
@@ -514,8 +537,8 @@ export default function WalesOccupationContractPage() {
             </h2>
 
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="rounded-lg bg-red-50 border border-red-200 p-6">
-                <h3 className="text-xl font-semibold text-red-900 mb-3">
+              <div className="rounded-lg border border-[#dccfff] bg-[#faf8ff] p-6">
+                <h3 className="mb-3 text-xl font-semibold text-[#31224f]">
                   Using an English AST in Wales
                 </h3>
                 <p className="text-gray-700">
@@ -524,8 +547,8 @@ export default function WalesOccupationContractPage() {
                 </p>
               </div>
 
-              <div className="rounded-lg bg-red-50 border border-red-200 p-6">
-                <h3 className="text-xl font-semibold text-red-900 mb-3">
+              <div className="rounded-lg border border-[#dccfff] bg-[#faf8ff] p-6">
+                <h3 className="mb-3 text-xl font-semibold text-[#31224f]">
                   Missing the written statement deadline
                 </h3>
                 <p className="text-gray-700">
@@ -534,8 +557,8 @@ export default function WalesOccupationContractPage() {
                 </p>
               </div>
 
-              <div className="rounded-lg bg-red-50 border border-red-200 p-6">
-                <h3 className="text-xl font-semibold text-red-900 mb-3">
+              <div className="rounded-lg border border-[#dccfff] bg-[#faf8ff] p-6">
+                <h3 className="mb-3 text-xl font-semibold text-[#31224f]">
                   Assuming England notice rules apply
                 </h3>
                 <p className="text-gray-700">
@@ -544,8 +567,8 @@ export default function WalesOccupationContractPage() {
                 </p>
               </div>
 
-              <div className="rounded-lg bg-red-50 border border-red-200 p-6">
-                <h3 className="text-xl font-semibold text-red-900 mb-3">
+              <div className="rounded-lg border border-[#dccfff] bg-[#faf8ff] p-6">
+                <h3 className="mb-3 text-xl font-semibold text-[#31224f]">
                   Using blank forms with missing Welsh wording
                 </h3>
                 <p className="text-gray-700">
@@ -586,16 +609,16 @@ export default function WalesOccupationContractPage() {
         </section>
 
         {/* Pricing Section */}
-        <section className="container mx-auto px-4 py-12 bg-gray-50">
+        <section className="container mx-auto bg-[#f7f5fb] px-4 py-12">
           <div className="max-w-5xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
               Standard Wales Occupation Contract
             </h2>
 
             <div className="mx-auto max-w-2xl">
-              <div className="bg-white rounded-xl shadow-lg p-8 border-2 border-gray-200 text-gray-900">
+              <div className="rounded-xl border-2 border-[#d8c8ff] bg-white p-8 text-gray-900 shadow-lg">
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Standard Contract</h3>
-                <p className="text-4xl font-bold text-red-600 mb-4">{standardPrice}</p>
+                <p className="mb-4 text-4xl font-bold text-[#6d28d9]">{standardPrice}</p>
                 <ul className="space-y-2 text-gray-700 mb-6">
                   <li>Renting Homes (Wales) Act 2016 model-based wording</li>
                   <li>Written statement included</li>
@@ -606,13 +629,13 @@ export default function WalesOccupationContractPage() {
                 <div className="grid gap-3 sm:grid-cols-2">
                   <Link
                     href={fixedContractHref}
-                    className="block text-center bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
+                    className="block rounded-lg bg-[#6d28d9] px-6 py-3 text-center font-semibold text-white transition-colors hover:bg-[#5b21b6]"
                   >
                     Fixed-Term
                   </Link>
                   <Link
                     href={periodicContractHref}
-                    className="block text-center bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
+                    className="block rounded-lg bg-[#6d28d9] px-6 py-3 text-center font-semibold text-white transition-colors hover:bg-[#5b21b6]"
                   >
                     Periodic
                   </Link>
@@ -746,28 +769,28 @@ export default function WalesOccupationContractPage() {
 
         {/* CTA Section */}
         <section className="container mx-auto px-4 py-16">
-          <div className="max-w-5xl mx-auto bg-red-600 rounded-2xl shadow-2xl p-12 text-center text-white">
+          <div className="mx-auto max-w-5xl rounded-2xl bg-gradient-to-br from-[#5b21b6] via-[#6d28d9] to-[#7c3aed] p-12 text-center text-white shadow-2xl">
             <h2 className="text-4xl font-bold text-white mb-4">
               Ready to create your Wales Occupation Contract?
             </h2>
-            <p className="text-xl text-red-50 mb-8">
+            <p className="mb-8 text-xl text-[#f5f1ff]">
               Designed around the Renting Homes (Wales) Act 2016. Instant download.
             </p>
             <div className="flex gap-6 justify-center flex-wrap">
               <Link
                 href={fixedContractHref}
-                className="bg-white text-red-600 px-8 py-4 rounded-lg font-semibold hover:bg-red-50 transition-colors text-lg shadow-lg"
+                className="rounded-lg bg-white px-8 py-4 text-lg font-semibold text-[#6d28d9] shadow-lg transition-colors hover:bg-[#f5f1ff]"
               >
                 {`Fixed-Term - ${standardPrice}`}
               </Link>
               <Link
                 href={periodicContractHref}
-                className="bg-white text-red-600 px-8 py-4 rounded-lg font-semibold hover:bg-red-50 transition-colors text-lg shadow-lg"
+                className="rounded-lg bg-white px-8 py-4 text-lg font-semibold text-[#6d28d9] shadow-lg transition-colors hover:bg-[#f5f1ff]"
               >
                 {`Periodic - ${standardPrice}`}
               </Link>
             </div>
-            <p className="mt-6 text-sm text-red-100">
+            <p className="mt-6 text-sm text-[#ece4ff]">
               Instant download • Jurisdiction-specific wording • No subscription required
             </p>
           </div>

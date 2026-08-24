@@ -565,12 +565,25 @@ export function EnglandTenancyPage({
                 {salesContent.whyYouNeedThis.cards.map((card) => (
                   <article
                     key={card.title}
-                    className="rounded-[1.8rem] border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]"
+                    className="overflow-hidden rounded-[1.8rem] border border-[#E8E1D7] bg-white shadow-[0_14px_32px_rgba(31,41,55,0.05)]"
                   >
-                    <h3 className="text-xl font-semibold tracking-tight text-[#141B2D]">
-                      {card.title}
-                    </h3>
-                    <p className="mt-3 text-sm leading-7 text-[#546075] md:text-base">{card.body}</p>
+                    {card.imageSrc ? (
+                      <div className="relative h-40 border-b border-[#E8E1D7] bg-[#FCFAFF]">
+                        <Image
+                          src={card.imageSrc}
+                          alt={card.imageAlt || card.title}
+                          fill
+                          sizes="(min-width: 768px) 33vw, 100vw"
+                          className="object-cover object-center"
+                        />
+                      </div>
+                    ) : null}
+                    <div className="p-6">
+                      <h3 className="text-xl font-semibold tracking-tight text-[#141B2D]">
+                        {card.title}
+                      </h3>
+                      <p className="mt-3 text-sm leading-7 text-[#546075] md:text-base">{card.body}</p>
+                    </div>
                   </article>
                 ))}
               </div>
@@ -589,12 +602,25 @@ export function EnglandTenancyPage({
                 {salesContent.howThisHelps.cards.map((card) => (
                   <article
                     key={card.title}
-                    className="rounded-[1.8rem] border border-[#E8E1D7] bg-[#FCFAFF] p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]"
+                    className="overflow-hidden rounded-[1.8rem] border border-[#E8E1D7] bg-[#FCFAFF] shadow-[0_14px_32px_rgba(31,41,55,0.05)]"
                   >
-                    <h3 className="text-xl font-semibold tracking-tight text-[#141B2D]">
-                      {card.title}
-                    </h3>
-                    <p className="mt-3 text-sm leading-7 text-[#546075] md:text-base">{card.body}</p>
+                    {card.imageSrc ? (
+                      <div className="relative h-40 border-b border-[#E8E1D7] bg-white">
+                        <Image
+                          src={card.imageSrc}
+                          alt={card.imageAlt || card.title}
+                          fill
+                          sizes="(min-width: 768px) 33vw, 100vw"
+                          className="object-cover object-center"
+                        />
+                      </div>
+                    ) : null}
+                    <div className="p-6">
+                      <h3 className="text-xl font-semibold tracking-tight text-[#141B2D]">
+                        {card.title}
+                      </h3>
+                      <p className="mt-3 text-sm leading-7 text-[#546075] md:text-base">{card.body}</p>
+                    </div>
                   </article>
                 ))}
               </div>

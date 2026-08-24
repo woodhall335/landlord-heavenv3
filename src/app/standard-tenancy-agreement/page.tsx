@@ -19,9 +19,9 @@ const standardSamplePage = getProductSamplePageByPackKey('england_standard_tenan
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Standard Tenancy Agreements for England, Wales, Scotland and Northern Ireland',
+  title: 'Standard Tenancy Agreement | England, Wales, Scotland and Northern Ireland',
   description:
-    'Choose the property jurisdiction and create the currently released standard tenancy agreement for England, Wales, Scotland or Northern Ireland.',
+    'Choose the right standard tenancy agreement for your rental property. Build a current England assured periodic agreement or select the correct Wales, Scotland or Northern Ireland route.',
   keywords: [
     'standard periodic tenancy agreement',
     'standard periodic tenancy agreement england',
@@ -46,9 +46,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Choose a Standard Tenancy Agreement by UK Jurisdiction',
+    title: 'Choose the Right Standard Tenancy Agreement by Property Location',
     description:
-      'Start the correct released standard tenancy agreement for the property jurisdiction, including separate fixed-term and periodic options for Wales.',
+      'Start the correct standard tenancy agreement for the property jurisdiction, including assured periodic England agreements and separate Welsh occupation-contract options.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -74,16 +74,16 @@ export default function StandardTenancyAgreementPage() {
       />
       <EnglandTenancyPage
         pagePath="/standard-tenancy-agreement"
-        title="Choose the standard tenancy agreement for your property"
-        subtitle="Property law and agreement terminology differ across the UK. Choose England, Wales, Scotland or Northern Ireland before starting so the wizard asks the right jurisdiction-specific questions."
+        title="Choose the right standard tenancy agreement for your property"
+        subtitle="Start with the rental property’s location. England, Wales, Scotland and Northern Ireland use different tenancy frameworks, so the wizard asks the right questions and builds the right agreement route for the property."
         primaryCtaLabel="Choose property jurisdiction"
         primaryCtaHref="#choose-jurisdiction"
         secondaryCtaLabel="Compare England agreements"
         secondaryCtaHref="/tenancy-agreements/england"
         heroPreTitleLabel="Standard tenancy agreements"
         heroBadge="England, Wales, Scotland and Northern Ireland"
-        heroTrustText="Released standard agreement routes for England, Wales, Scotland and Northern Ireland."
-        heroFeature="Wales includes separate Fixed-Term and Periodic Standard Occupation Contract choices."
+        heroTrustText="Current tenancy-agreement routes for England, Wales, Scotland and Northern Ireland."
+        heroFeature="For England, new straightforward private residential lets use the assured periodic route introduced on 1 May 2026."
         showHeroTrustPositioningBar={false}
         afterHero={
           <>
@@ -116,22 +116,22 @@ export default function StandardTenancyAgreementPage() {
                     {
                       title: 'England',
                       body:
-                        'Standard Assured Periodic Tenancy Agreement for a straightforward whole-property residential let.',
+                        'For a straightforward private whole-property let, start with the Standard Assured Periodic Tenancy Agreement route. New England assured tenancies no longer use an AST fixed term.',
                     },
                     {
                       title: 'Wales',
                       body:
-                        'Choose either a Fixed-Term or Periodic Standard Occupation Contract under the Welsh framework.',
+                        'Choose a Fixed-Term or Periodic Standard Occupation Contract under the Welsh framework. The written-statement rules and terminology are different from England.',
                     },
                     {
                       title: 'Scotland',
                       body:
-                        'Private Residential Tenancy agreement for the open-ended Scottish PRT framework.',
+                        'Use a Private Residential Tenancy agreement for the open-ended Scottish PRT framework, rather than an England-style agreement.',
                     },
                     {
                       title: 'Northern Ireland',
                       body:
-                        'Northern Ireland Private Tenancy Agreement with the jurisdiction-specific supporting-document workflow.',
+                        'Use the Northern Ireland Private Tenancy Agreement route, with its own jurisdiction-specific support documents and workflow.',
                     },
                   ].map((item) => (
                     <article
@@ -162,24 +162,24 @@ export default function StandardTenancyAgreementPage() {
           width: 1086,
           height: 1448,
         }}
-        legacyNotice="England route: if you were searching for a standard tenancy agreement, basic tenancy agreement, updated AST replacement, or current England tenancy agreement, this is the standard periodic tenancy agreement route for a straightforward whole-property let. For Wales, Scotland or Northern Ireland, use the jurisdiction selector above."
-        introTitle="England standard agreement details"
+        legacyNotice="Searching for an AST replacement, basic tenancy agreement or standard tenancy agreement for England? For a new straightforward whole-property let, this is the assured periodic route. It is not the right route for Wales, Scotland, Northern Ireland, a resident landlord, a shared house or a specialist student let."
+        introTitle="England Standard Tenancy Agreement: clear, current paperwork for a straightforward let"
         introBody={[
-          'This is the standard periodic tenancy agreement workflow for a new England tenancy where the property is being let as an ordinary whole-property home. Use this route when you want current wording built around your property, occupiers, rent, deposit, and management facts, not a static form to adapt alone.',
-          'The pack keeps the setup practical and proportionate: the main agreement plus the key supporting documents, validation checks, and preview-before-payment workflow, without making a simple tenancy feel more complicated than it needs to be.',
+          'Use this route when you are letting an ordinary whole property in England and want the agreement built around the landlord, occupiers, rent, deposit, guarantor and management details that actually apply to the let. It is a guided setup pack, not a static form to adapt alone.',
+          'The Standard pack keeps a simple let proportionate: the core assured periodic agreement, setup records, validation checks and a preview before payment. If you need more detailed management drafting, or the property is student-led, shared or within your own home, choose the specialist route instead.',
         ]}
         highlights={[
-          'Standard periodic tenancy agreement for a straightforward whole-property residential let',
-          "Current England periodic tenancy wording for the post-May 2026 framework",
-          'Keeps the wording and pack paperwork practical and proportionate',
-          'Separate from the Premium, Student, HMO / Shared House, and Lodger routes',
-          'Review-ready guided agreement pack with validation checks and a preview before payment',
+          'Standard assured periodic agreement for a straightforward whole-property residential let in England',
+          'Written around the landlord, tenants, property, rent, deposit and guarantor details you provide',
+          'Includes the practical setup records shown in the sample pack, where they apply to your answers',
+          'Keeps the terms proportionate rather than adding specialist student, HMO or resident-landlord wording',
+          'Current wording, guided validation and a full preview before payment',
         ]}
         compliancePoints={[
-          'Built around the current England periodic tenancy route from 1 May 2026.',
-          "Positioned for landlords who want current England wording for a straightforward let.",
-          'Includes the practical England support documents that sit alongside the agreement.',
-          'If the tenancy is really a student let, shared house, or resident-landlord arrangement, use the specialist product instead.',
+          'From 1 May 2026, new private assured tenancies in England use the assured periodic framework.',
+          'Prompts you for the information that should be recorded in writing before the agreement is signed or agreed.',
+          'Helps keep the agreement and practical supporting records together at the start of the tenancy.',
+          'Directs student, shared-house / HMO and resident-landlord arrangements to the more suitable product route.',
         ]}
         keywordTargets={[
           'standard periodic tenancy agreement',
@@ -196,12 +196,12 @@ export default function StandardTenancyAgreementPage() {
         ]}
         idealFor={[
           'the tenancy is a straightforward whole-property let in England',
-          'you want a standard periodic tenancy agreement with the core support pack, but not the fuller Premium schedule',
-          'you want the standard England option rather than a more detailed Premium pack',
-          'you want a clean standard agreement without specialist student, shared-house, or resident-landlord wording',
+          'you want the standard agreement and core setup records, rather than the fuller Premium management schedule',
+          'the tenants will occupy the property as an ordinary private residential home',
+          'you want a clear, current agreement without specialist student, shared-house or resident-landlord wording',
         ]}
         notFor={[
-          'you want fuller wording on inspections, repairs, key handling, contractor access, and handover from the outset',
+          'you want fuller wording on inspections, repairs, key handling, contractor access and handover from the outset',
           'the main issue is student occupation, guarantors, or end-of-term student turnover',
           "the property is really a shared house / HMO or a room let in the landlord's home",
         ]}
@@ -370,71 +370,83 @@ export default function StandardTenancyAgreementPage() {
           ) : undefined,
           showPackBreakdown: false,
           whyYouNeedThis: {
-            title: 'Why a standard periodic agreement still needs proper setup',
+            title: 'Why a straightforward tenancy still needs a proper setup',
             intro:
-              'Even a straightforward assured periodic tenancy agreement can become awkward if the agreement is thin, the setup records are missing, or the wording does not match the current England position. This standard agreement route is built for post-May 2026 periodic tenancy setup.',
+              'A simple let does not need unnecessary legal jargon, but it does need the agreement, written information and day-one records to match the property and occupiers. This route helps you build a usable starting file around the facts you enter, rather than adapting older AST wording after the event.',
             cards: [
               {
-                title: 'The wording needs to match the let',
+                title: 'The agreement should match the real let',
                 body:
-                  'A standard periodic tenancy works best when the agreement is clear about rent, occupation, access, responsibilities, and the way the property is actually being let.',
+                  'Rent, occupiers, deposit, pets, access and responsibilities are easier to manage when they are set out consistently from the start. The wizard asks for these practical facts before the pack is generated.',
+                imageSrc: '/images/illustrations/landlord-documents/tenancy-periodic.webp',
+                imageAlt: 'Watercolour illustration of a periodic tenancy agreement and calendar',
               },
               {
                 title: 'Simple lets still need clean records',
                 body:
-                  'Straightforward tenancies often get the least admin, which is why smaller missing details become harder to reconstruct when a dispute appears.',
+                  'A deposit record, tenancy details and a clear inventory or handover trail are much easier to keep at the beginning than to reconstruct when a question arises later.',
+                imageSrc: '/images/illustrations/landlord-documents/tenancy-inventory.webp',
+                imageAlt: 'Watercolour illustration of an inventory checklist and property keys',
               },
               {
-                title: 'Older wording can feel out of step',
+                title: 'Older AST wording is no longer the right starting point',
                 body:
-                  'Landlords searching for an old-style AST replacement need a current standard periodic agreement, not a document that feels patched together from older assumptions.',
+                  'For new private assured tenancies in England, fixed-term AST wording is no longer the current framework. A clear assured periodic agreement is a better starting point for a new straightforward let.',
+                imageSrc: '/images/illustrations/landlord-documents/site-tenancy-england.webp',
+                imageAlt: 'Watercolour illustration of England tenancy paperwork',
               },
             ],
           },
           howThisHelps: {
-            title: 'How this helps you',
+            title: 'How the Standard pack helps you start clearly',
             intro:
-              'The Standard route is designed to help landlords set up an ordinary England tenancy clearly, without loading it up with specialist wording it does not need.',
+              'The aim is practical: a clean, current agreement for an ordinary England let, supporting records that follow your answers, and a chance to inspect the result before you pay. It is not a substitute for legal advice where the arrangement is unusual or disputed.',
             cards: [
               {
                 title: 'It keeps the agreement proportionate',
                 body:
-                  'The wording is aimed at a normal whole-property let, so the agreement stays easier to read and use.',
+                  'The Standard route is designed for an ordinary whole-property let, so the agreement remains easier for you and the tenants to read and use.',
+                imageSrc: '/images/generated/product-cards/standard-tenancy-agreement.webp',
+                imageAlt: 'Standard tenancy agreement pack preview',
               },
               {
-                title: 'It gives the landlord a cleaner starting point',
+                title: 'It gives you one guided starting point',
                 body:
-                  'The wizard gathers the property, tenant, rent, deposit, and setup details in one flow so the document does not feel pieced together.',
+                  'The wizard gathers the property, tenants, rent, deposit, guarantor and setup details in one flow, helping the documents feel joined-up rather than pieced together.',
+                imageSrc: '/images/wizard-standard-tenancy-agreement.webp',
+                imageAlt: 'Standard tenancy agreement wizard preview',
               },
               {
-                title: 'It helps avoid the wrong product',
+                title: 'It helps you avoid the wrong product',
                 body:
-                  'If the let is student, shared-house, lodger, or needs heavier management wording, the comparison cards point you to the better route.',
+                  'If the let is student, shared-house, lodger or needs fuller management wording, the comparison cards point you to a more suitable route before you generate the wrong pack.',
+                imageSrc: '/images/tenancy-agreement-selector.webp',
+                imageAlt: 'Tenancy agreement selector illustration',
               },
             ],
           },
           howItWorks: {
             title: 'How it works',
             intro:
-              'The steps are built for landlords who want to get a straightforward tenancy in place properly without drafting everything from scratch.',
+              'The steps are designed for landlords who want to set up a straightforward tenancy without drafting everything from scratch or guessing which fields matter.',
             steps: [
               {
                 step: 'Step 01',
                 title: 'Add the property and tenancy details',
                 body:
-                  'Enter the landlord, tenant, rent, and property details that drive the main agreement and the supporting records.',
+                  'Enter the landlord, tenant, property and rent details that drive the main agreement and supporting records.',
               },
               {
                 step: 'Step 02',
                 title: 'Answer the setup questions',
                 body:
-                  'Confirm the deposit, pets, keys, and other practical points so the pack includes the documents that fit the way the let is actually being started.',
+                  'Confirm the deposit, guarantor, pets, keys and other practical points so the pack reflects the way the let is actually being started.',
               },
               {
                 step: 'Step 03',
                 title: 'Create the full Standard pack',
                 body:
-                  'Download the agreement and the supporting paperwork as one England tenancy pack that is ready to print and use.',
+                  'Review the generated pack before payment, then download the agreement and supporting paperwork together when you are happy with the details.',
               },
             ],
           },
@@ -451,17 +463,17 @@ export default function StandardTenancyAgreementPage() {
           {
             question: 'Is this the new England tenancy agreement for the current rules?',
             answer:
-               'Yes. This page is built around the current England assured periodic position and is designed as the standard new tenancy agreement route for straightforward whole-property lets, rather than an older fixed-term AST-style starting point.',
+               'It is designed for the current England assured periodic position and for straightforward whole-property lets. It is not a replacement for legal advice on an unusual arrangement, a company let, a resident-landlord arrangement, social housing, or a dispute.',
           },
           {
             question: 'Is this the right Renters Rights Act tenancy agreement route for a straightforward let?',
             answer:
-              'Usually, yes. If the tenancy is a standard whole-property let in England and you want the current baseline option, this is the assured periodic agreement most landlords are looking for when they search for a Renters Rights Act tenancy agreement.',
+              'Usually, yes. If you are creating a new straightforward private whole-property tenancy in England, this is the standard assured periodic route. Use the comparison cards if the let is student-led, shared, involves a resident landlord, or needs fuller management wording.',
           },
           {
             question: 'What does this assured periodic pack include?',
             answer:
-              'The pack centres on the standard periodic tenancy agreement and includes the practical setup paperwork landlords usually need around the tenancy.',
+              'The pack centres on the Standard Assured Periodic Tenancy Agreement and includes the practical setup records shown in the sample viewer when they apply to the answers you give. You can inspect the sample and your own preview before payment.',
           },
           {
             question: 'Should I use this for a student or HMO let?',
@@ -476,10 +488,20 @@ export default function StandardTenancyAgreementPage() {
           {
             question: 'Is this legally binding?',
             answer:
-              'Yes - when completed and signed correctly. This template follows post-May 2026 England rules, and the checklist helps you avoid common tenancy agreement mistakes.',
+              'A tenancy agreement can be legally binding when it is completed and agreed correctly. This guided pack helps you record the key terms, but you remain responsible for ensuring the facts are accurate and for taking advice where your arrangement is unusual or disputed.',
+          },
+          {
+            question: 'What written information do I need to give a new tenant in England?',
+            answer:
+              'For a tenancy created after 1 May 2026, landlords must give tenants certain written information about the key terms before signing the agreement or agreeing the tenancy. The wizard prompts for the relevant agreement information, but you should check that your completed pack and delivery process match your circumstances.',
+          },
+          {
+            question: 'Do I need to replace an AST that started before 1 May 2026?',
+            answer:
+              'Usually no. Existing written assured or assured shorthold tenancies moved into the assured periodic system on 1 May 2026, but landlords had a separate obligation to provide the Government’s Renters’ Rights Act Information Sheet 2026 by 31 May 2026. This Standard route is for setting up a new straightforward tenancy.',
           },
         ]}
-        finalCtaBody="Use this standard periodic tenancy agreement workflow when the tenancy is straightforward and the property is being let as an ordinary whole-property home. Build the agreement from your facts, preview before payment, and compare Premium or the specialist products only when the facts call for something more tailored."
+        finalCtaBody="Use this route when you are setting up a new, straightforward whole-property tenancy in England. Build the agreement from your facts, inspect the sample and your own preview before payment, and choose Premium or a specialist product only when the property setup genuinely needs it."
       />
     </div>
   );

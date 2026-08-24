@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
-import { RiArrowRightLine, RiCheckLine } from 'react-icons/ri';
+import { RiArrowRightLine } from 'react-icons/ri';
 import { trackCtaClick, trackCtaImpression } from '@/lib/journey/events';
 import {
   getReleasedStandardTenancyEntries,
@@ -21,6 +22,13 @@ const JURISDICTION_LABELS: Record<(typeof JURISDICTION_ORDER)[number], string> =
   wales: 'Wales',
   scotland: 'Scotland',
   'northern-ireland': 'Northern Ireland',
+};
+
+const JURISDICTION_FLAGS: Record<(typeof JURISDICTION_ORDER)[number], string> = {
+  england: '/gb-eng.svg',
+  wales: '/gb-wls.svg',
+  scotland: '/gb-sct.svg',
+  'northern-ireland': '/gb-nir.svg',
 };
 
 function withAttribution(entry: TenancyAgreementRegistryEntry): string {
@@ -88,11 +96,14 @@ export function TenancyJurisdictionSelector() {
                 className="rounded-[1.75rem] border border-[#DDD4F4] bg-white p-6 shadow-[0_14px_34px_rgba(45,30,79,0.06)]"
               >
                 <div className="flex items-center gap-3">
-                  <span
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#EDE7FF] text-[#5B21B6]"
-                    aria-hidden="true"
-                  >
-                    <RiCheckLine className="h-5 w-5" />
+                  <span className="inline-flex h-10 w-12 items-center justify-center overflow-hidden rounded-md border border-[#DDD4F4] bg-white shadow-sm">
+                    <Image
+                      src={JURISDICTION_FLAGS[jurisdiction]}
+                      alt=""
+                      width={40}
+                      height={24}
+                      className="h-6 w-10 object-cover"
+                    />
                   </span>
                   <h3 className="text-2xl font-semibold text-[#17142B]">
                     {JURISDICTION_LABELS[jurisdiction]}

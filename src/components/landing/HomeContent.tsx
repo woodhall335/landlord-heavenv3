@@ -81,6 +81,16 @@ type ProcessStep = {
   imageAlt: string;
 };
 
+type JurisdictionCard = {
+  name: string;
+  agreement: string;
+  description: string;
+  href: string;
+  flagSrc: string;
+  imageSrc: string;
+  imageAlt: string;
+};
+
 const reviewCount = getDynamicReviewCount();
 const formattedReviewCount = reviewCount.toLocaleString('en-GB');
 const reviewStars = '\u2605\u2605\u2605\u2605\u2605';
@@ -326,6 +336,45 @@ const processSteps: ProcessStep[] = [
   },
 ];
 
+const jurisdictionCards: JurisdictionCard[] = [
+  {
+    name: 'England',
+    agreement: 'Assured periodic tenancy',
+    description: 'For a standard England let, with specialist options for student, shared-house and lodger arrangements.',
+    href: '/products/ast',
+    flagSrc: '/gb-eng.svg',
+    imageSrc: '/images/illustrations/landlord-documents/site-tenancy-england.webp',
+    imageAlt: 'Watercolour illustration of an England tenancy agreement and property keys',
+  },
+  {
+    name: 'Wales',
+    agreement: 'Standard Occupation Contract',
+    description: 'Choose the Welsh fixed-term or periodic occupation-contract route before entering the tenancy details.',
+    href: '/wales-tenancy-agreement-template',
+    flagSrc: '/gb-wls.svg',
+    imageSrc: '/images/illustrations/landlord-documents/site-tenancy-wales.webp',
+    imageAlt: 'Watercolour illustration of a Wales occupation contract and landlord paperwork',
+  },
+  {
+    name: 'Scotland',
+    agreement: 'Private Residential Tenancy',
+    description: 'Use the Scotland-specific PRT workflow for the open-ended private residential tenancy framework.',
+    href: '/private-residential-tenancy-agreement-template',
+    flagSrc: '/gb-sct.svg',
+    imageSrc: '/images/illustrations/landlord-documents/site-tenancy-scotland.webp',
+    imageAlt: 'Watercolour illustration of a Scotland private residential tenancy agreement',
+  },
+  {
+    name: 'Northern Ireland',
+    agreement: 'Private Tenancy Agreement',
+    description: 'Start with the Northern Ireland wording and supporting setup route for the property location.',
+    href: '/northern-ireland-tenancy-agreement-template',
+    flagSrc: '/gb-nir.svg',
+    imageSrc: '/images/illustrations/landlord-documents/site-tenancy-northern-ireland.webp',
+    imageAlt: 'Watercolour illustration of a Northern Ireland tenancy agreement and keys',
+  },
+];
+
 function RouteSelectionCard({
   title,
   eyebrow,
@@ -512,6 +561,86 @@ export default function HomeContent() {
         </Container>
       </section>
 
+      <section className="pb-16 pt-2 md:pb-20" aria-labelledby="uk-tenancy-heading">
+        <Container>
+          <Reveal>
+            <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'overflow-hidden px-6 py-8 md:px-10 md:py-10')}>
+              <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
+                <div className="max-w-xl">
+                  <span className="public-eyebrow">UK tenancy agreements</span>
+                  <h2 id="uk-tenancy-heading" className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-4xl">
+                    Choose the agreement by where the property is
+                  </h2>
+                  <p className="mt-4 text-lg leading-8 text-[#5d5672]">
+                    A tenancy agreement is not one generic UK document. Choose the nation first,
+                    then use wording and guided questions that match the property location.
+                  </p>
+                  <TrackedLink
+                    href="/standard-tenancy-agreement#choose-jurisdiction"
+                    pagePath="/"
+                    pageType="homepage"
+                    ctaLabel="Choose my tenancy agreement"
+                    ctaPosition="section"
+                    eventName="product_route_chosen"
+                    routeIntent="tenancy_jurisdiction"
+                    product="ast"
+                    className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#4f2a96] hover:text-[#3f2179]"
+                  >
+                    Choose my tenancy agreement
+                    <RiArrowRightLine className="h-4 w-4" />
+                  </TrackedLink>
+                </div>
+
+                <StaggerReveal className="grid gap-4 sm:grid-cols-2">
+                  {jurisdictionCards.map((card) => (
+                    <TrackedLink
+                      key={card.name}
+                      href={card.href}
+                      pagePath="/"
+                      pageType="homepage"
+                      ctaLabel={`${card.name} tenancy agreement`}
+                      ctaPosition="section"
+                      eventName="product_route_chosen"
+                      routeIntent="tenancy_jurisdiction"
+                      product="ast"
+                      className="group overflow-hidden rounded-[1.5rem] border border-[#e9e0f8] bg-white transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_42px_rgba(82,43,145,0.13)]"
+                    >
+                      <div className="relative aspect-[16/8] overflow-hidden bg-[#faf8ff]">
+                        <Image
+                          src={card.imageSrc}
+                          alt={card.imageAlt}
+                          fill
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 30vw"
+                          className="object-cover object-center transition duration-300 group-hover:scale-[1.03]"
+                        />
+                      </div>
+                      <div className="p-4">
+                        <div className="flex items-center gap-2">
+                          <Image
+                            src={card.flagSrc}
+                            alt=""
+                            width={24}
+                            height={15}
+                            className="h-[15px] w-6 rounded-sm object-cover shadow-[0_1px_3px_rgba(32,16,63,0.18)]"
+                          />
+                          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6b3fd1]">
+                            {card.name}
+                          </p>
+                        </div>
+                        <h3 className="mt-2 text-lg font-semibold text-[#1d1532]">
+                          {card.agreement}
+                        </h3>
+                        <p className="mt-2 text-sm leading-6 text-[#5a516d]">{card.description}</p>
+                      </div>
+                    </TrackedLink>
+                  ))}
+                </StaggerReveal>
+              </div>
+            </div>
+          </Reveal>
+        </Container>
+      </section>
+
       <section className="pb-16 pt-4 md:pb-20" aria-labelledby="clarity-first-heading">
         <Container>
           <Reveal>
@@ -681,31 +810,44 @@ export default function HomeContent() {
               </StaggerReveal>
             </div>
 
-            <div className={clsx(PUBLIC_LAYOUT_CLASSES.darkPanel, 'px-6 py-8 md:px-8')}>
-              <span className="inline-flex rounded-full border border-white/15 bg-white/8 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/85">
-                Built for landlords in England
-              </span>
-              <h2 className="mt-5 text-3xl font-bold tracking-tight text-white">
-                Made to help landlords act quickly
-              </h2>
-              <p className="mt-4 text-base leading-8 text-white/78">
-                When something needs dealing with, you should be able to find the
-                right next step quickly, understand what it covers, and move forward
-                without digging through legal jargon.
-              </p>
-              <div className="mt-8 grid gap-4">
-                {[
-                  'Section 8 notices, court papers, money claims, rent increases, and tenancy agreements in one place',
-                  'Guidance that explains the next step in plain English',
-                  'Documents that are easy to review, download, and print',
-                ].map((item) => (
-                  <div key={item} className="rounded-[1.4rem] border border-white/10 bg-white/7 px-4 py-4">
-                    <div className="flex items-start gap-3 text-white">
-                      <RiCheckLine className="mt-1 h-5 w-5 shrink-0 text-[#d7c2ff]" />
-                      <span className="text-sm leading-6 text-white/82">{item}</span>
-                    </div>
+            <div className={clsx(PUBLIC_LAYOUT_CLASSES.darkPanel, 'overflow-hidden px-6 py-8 md:px-8')}>
+              <div className="grid gap-8 lg:grid-cols-[1fr_0.76fr] lg:items-center">
+                <div>
+                  <span className="inline-flex rounded-full border border-white/15 bg-white/8 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/85">
+                    England documents. UK tenancy routes.
+                  </span>
+                  <h2 className="mt-5 text-3xl font-bold tracking-tight text-white">
+                    Made to help landlords act quickly
+                  </h2>
+                  <p className="mt-4 text-base leading-8 text-white/78">
+                    When something needs dealing with, you should be able to find the
+                    right next step quickly, understand what it covers, and move forward
+                    without digging through legal jargon.
+                  </p>
+                  <div className="mt-8 grid gap-4">
+                    {[
+                      'England Section 8 notices, court papers, money claims, and rent increases in one place',
+                      'Tenancy agreement routes for England, Wales, Scotland, and Northern Ireland',
+                      'Guidance and documents that are easy to review, download, and print',
+                    ].map((item) => (
+                      <div key={item} className="rounded-[1.4rem] border border-white/10 bg-white/7 px-4 py-4">
+                        <div className="flex items-start gap-3 text-white">
+                          <RiCheckLine className="mt-1 h-5 w-5 shrink-0 text-[#d7c2ff]" />
+                          <span className="text-sm leading-6 text-white/82">{item}</span>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+                <div className="relative min-h-[18rem] overflow-hidden rounded-[1.7rem] border border-white/12 bg-white/8">
+                  <Image
+                    src="/images/illustrations/landlord-documents/site-landlord-support.webp"
+                    alt="Watercolour illustration of landlord document support, property keys and a checklist"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 38vw"
+                    className="object-cover object-center"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -799,8 +941,8 @@ export default function HomeContent() {
               </TrackedLink>
             </div>
             <p className="mt-5 text-sm text-white/66">
-              For landlords with property in England. Clear next steps, strong checks,
-              and documents ready to review and print.
+              England notices and court paperwork, plus tenancy-agreement routes across the UK.
+              Clear next steps, strong checks, and documents ready to review and print.
             </p>
           </div>
         </Container>

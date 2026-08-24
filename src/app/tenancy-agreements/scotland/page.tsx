@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
@@ -168,7 +169,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
         jurisdiction="scotland"
       />
 
-      <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 text-gray-900">
+      <main className="min-h-screen bg-gradient-to-br from-[#fbfaff] via-white to-[#f4efff] text-gray-900">
         <UniversalHero
           badge="Scotland Only"
           badgeIcon={<Scale className="w-4 h-4" />}
@@ -193,28 +194,28 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
         >
           <div className="mt-4 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-700">
             <span className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-500" />
+              <CheckCircle className="w-4 h-4 text-[#6d28d9]" />
               Scotland-specific wording
             </span>
             <span className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-green-500" />
+              <Shield className="w-4 h-4 text-[#6d28d9]" />
               Built for PRT use
             </span>
             <span className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-green-500" />
+              <Clock className="w-4 h-4 text-[#6d28d9]" />
               Instant online creation
             </span>
           </div>
         </UniversalHero>
 
-        <section className="border-y border-gray-100 bg-white/80 py-6">
-          <div className="container mx-auto px-4">
+        <section className="border-y border-[#e8e1f8] bg-white/80 py-6">
+          <div className="container mx-auto px-6 lg:px-8">
             <SocialProofCounter variant="total" className="justify-center" />
           </div>
         </section>
 
         <section className="py-12">
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto px-6 lg:px-8">
             <TenancyPackSection
               defaultJurisdiction="scotland"
               lockJurisdiction
@@ -224,8 +225,8 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
         </section>
 
         <section className="py-16 lg:py-20">
-          <div className="container mx-auto px-4">
-            <div className="mx-auto max-w-5xl rounded-2xl border border-gray-100 bg-white p-8 shadow-sm md:p-10">
+          <div className="container mx-auto px-6 lg:px-8">
+            <div className="mx-auto max-w-6xl rounded-2xl border border-[#e8e1f8] bg-white p-8 shadow-sm md:p-10">
               <h2 className="mb-4 text-3xl font-bold text-gray-900">
                 Quick answer: what this page is for
               </h2>
@@ -271,13 +272,36 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                   how the tenancy is meant to operate in practice.
                 </p>
               </div>
+
+              <div className="mt-10 grid overflow-hidden rounded-2xl border border-[#e8e1f8] bg-[#faf8ff] lg:grid-cols-[1fr_0.9fr]">
+                <div className="flex flex-col justify-center p-6 md:p-8">
+                  <p className="public-eyebrow">Built for Scotland</p>
+                  <h3 className="mt-3 text-2xl font-bold tracking-tight text-[#20103f]">
+                    Start with the PRT route that matches the property
+                  </h3>
+                  <p className="mt-4 leading-7 text-[#5d5672]">
+                    The guided flow keeps the agreement, inventory, tenant details and
+                    supporting notes together, so you can review one Scotland-specific pack
+                    before payment.
+                  </p>
+                </div>
+                <div className="relative min-h-[18rem] bg-white sm:min-h-[22rem]">
+                  <Image
+                    src="/images/illustrations/landlord-documents/site-tenancy-scotland.webp"
+                    alt="Watercolour illustration of a Scotland tenancy agreement, property keys and landlord paperwork"
+                    fill
+                    className="object-cover object-center"
+                    sizes="(max-width: 1024px) 100vw, 42vw"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="bg-gray-50 py-16 lg:py-20">
-          <div className="container mx-auto px-4">
-            <div className="mx-auto max-w-5xl">
+        <section className="bg-[#f7f5fb] py-16 lg:py-20">
+          <div className="container mx-auto px-6 lg:px-8">
+            <div className="mx-auto max-w-6xl">
               <h2 className="mb-4 text-center text-3xl font-bold text-gray-900">
                 What is a Private Residential Tenancy agreement?
               </h2>
@@ -342,15 +366,15 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                 </div>
               </div>
 
-              <div className="mt-8 rounded-2xl border border-blue-200 bg-blue-50 p-6">
-                <h3 className="mb-3 text-xl font-semibold text-blue-900">
+              <div className="mt-8 rounded-2xl border border-[#d8c8ff] bg-[#f5f1ff] p-6">
+                <h3 className="mb-3 text-xl font-semibold text-[#31224f]">
                   Alternative search terms landlords still use
                 </h3>
-                <p className="mb-3 leading-relaxed text-blue-900/90">
+                <p className="mb-3 leading-relaxed text-[#31224f]/90">
                   Not every landlord searches for "Private Residential Tenancy agreement"
                   first time. Common high-intent searches also include:
                 </p>
-                <div className="grid gap-2 text-sm text-blue-900 md:grid-cols-2">
+                <div className="grid gap-2 text-sm text-[#31224f] md:grid-cols-2">
                   <div>PRT agreement Scotland</div>
                   <div>Scottish tenancy agreement template</div>
                   <div>Scotland landlord agreement</div>
@@ -364,8 +388,8 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
         </section>
 
         <section className="py-16 lg:py-20">
-          <div className="container mx-auto px-4">
-            <div className="mx-auto max-w-5xl">
+          <div className="container mx-auto px-6 lg:px-8">
+            <div className="mx-auto max-w-6xl">
               <h2 className="mb-4 text-center text-3xl font-bold text-gray-900">
                 Why Scotland needs a different tenancy agreement
               </h2>
@@ -453,9 +477,9 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
           </div>
         </section>
 
-        <section className="bg-gray-50 py-16 lg:py-20">
-          <div className="container mx-auto px-4">
-            <div className="mx-auto max-w-5xl">
+        <section className="bg-[#f7f5fb] py-16 lg:py-20">
+          <div className="container mx-auto px-6 lg:px-8">
+            <div className="mx-auto max-w-6xl">
               <h2 className="mb-4 text-center text-3xl font-bold text-gray-900">
                 Standard Scottish PRT agreement
               </h2>
@@ -463,12 +487,12 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                 One focused route for a standard residential Private Residential Tenancy.
               </p>
 
-              <div className="mx-auto max-w-2xl">
-                <div className="rounded-2xl border-2 border-gray-200 bg-white p-6 shadow-sm">
+              <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch">
+                <div className="rounded-2xl border-2 border-[#d8c8ff] bg-white p-6 shadow-sm">
                   <h3 className="mb-2 text-2xl font-bold text-gray-900">
                     Standard PRT
                   </h3>
-                  <p className="mb-4 text-2xl font-bold text-blue-600">
+                  <p className="mb-4 text-2xl font-bold text-[#6d28d9]">
                     {standardPrice}
                   </p>
                   <p className="mb-6 leading-relaxed text-gray-700">
@@ -498,10 +522,19 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                   </ul>
                   <Link
                     href={standardWizardHref}
-                    className="block w-full rounded-lg bg-blue-600 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-700"
+                    className="block w-full rounded-lg bg-[#6d28d9] py-3 text-center font-semibold text-white transition-colors hover:bg-[#5b21b6]"
                   >
                     Create Standard PRT
                   </Link>
+                </div>
+                <div className="relative min-h-[22rem] overflow-hidden rounded-2xl border border-[#e8e1f8] bg-white lg:min-h-full">
+                  <Image
+                    src="/images/illustrations/pricing-cards/tenancy-scotland.webp"
+                    alt="Watercolour illustration of a Scottish private residential tenancy agreement and supporting documents"
+                    fill
+                    className="object-contain object-center p-6"
+                    sizes="(max-width: 1024px) 100vw, 44vw"
+                  />
                 </div>
               </div>
 
@@ -521,8 +554,8 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
         </section>
 
         <section className="py-16 lg:py-20">
-          <div className="container mx-auto px-4">
-            <div className="mx-auto max-w-5xl rounded-2xl border border-gray-100 bg-white p-8 shadow-sm md:p-10">
+          <div className="container mx-auto px-6 lg:px-8">
+            <div className="mx-auto max-w-6xl rounded-2xl border border-[#e8e1f8] bg-white p-8 shadow-sm md:p-10">
               <h2 className="mb-6 text-3xl font-bold text-gray-900">
                 What landlords usually need to think about before creating a Scottish PRT
               </h2>
@@ -609,9 +642,9 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
           </div>
         </section>
 
-        <section className="bg-gray-50 py-16 lg:py-20">
-          <div className="container mx-auto px-4">
-            <div className="mx-auto max-w-5xl">
+        <section className="bg-[#f7f5fb] py-16 lg:py-20">
+          <div className="container mx-auto px-6 lg:px-8">
+            <div className="mx-auto max-w-6xl">
               <h2 className="mb-4 text-center text-3xl font-bold text-gray-900">
                 Scottish compliance points landlords should understand
               </h2>
@@ -623,8 +656,8 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
 
               <div className="grid gap-6 md:grid-cols-3">
                 <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50">
-                    <Shield className="w-6 h-6 text-blue-600" />
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#f1ebff]">
+                    <Shield className="w-6 h-6 text-[#6d28d9]" />
                   </div>
                   <h3 className="mb-3 text-xl font-semibold text-gray-900">
                     Landlord registration
@@ -638,8 +671,8 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                 </div>
 
                 <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50">
-                    <Home className="w-6 h-6 text-blue-600" />
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#f1ebff]">
+                    <Home className="w-6 h-6 text-[#6d28d9]" />
                   </div>
                   <h3 className="mb-3 text-xl font-semibold text-gray-900">
                     Repairing Standard context
@@ -652,8 +685,8 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                 </div>
 
                 <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50">
-                    <FileText className="w-6 h-6 text-blue-600" />
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#f1ebff]">
+                    <FileText className="w-6 h-6 text-[#6d28d9]" />
                   </div>
                   <h3 className="mb-3 text-xl font-semibold text-gray-900">
                     Deposit wording
@@ -686,15 +719,15 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
         </section>
 
         <section className="py-16 lg:py-20">
-          <div className="container mx-auto px-4">
-            <div className="mx-auto max-w-5xl rounded-2xl border border-gray-100 bg-white p-8 shadow-sm md:p-10">
+          <div className="container mx-auto px-6 lg:px-8">
+            <div className="mx-auto max-w-6xl rounded-2xl border border-[#e8e1f8] bg-white p-8 shadow-sm md:p-10">
               <h2 className="mb-6 text-3xl font-bold text-gray-900">
                 How the Scottish PRT process usually works
               </h2>
               <div className="grid gap-6 md:grid-cols-2">
                 <div className="rounded-xl border border-gray-200 bg-gray-50 p-5">
                   <div className="mb-3 flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#6d28d9] text-sm font-bold text-white">
                       1
                     </div>
                     <h3 className="text-lg font-semibold text-gray-900">
@@ -710,7 +743,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
 
                 <div className="rounded-xl border border-gray-200 bg-gray-50 p-5">
                   <div className="mb-3 flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#6d28d9] text-sm font-bold text-white">
                       2
                     </div>
                     <h3 className="text-lg font-semibold text-gray-900">
@@ -725,7 +758,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
 
                 <div className="rounded-xl border border-gray-200 bg-gray-50 p-5">
                   <div className="mb-3 flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#6d28d9] text-sm font-bold text-white">
                       3
                     </div>
                     <h3 className="text-lg font-semibold text-gray-900">
@@ -741,7 +774,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
 
                 <div className="rounded-xl border border-gray-200 bg-gray-50 p-5">
                   <div className="mb-3 flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#6d28d9] text-sm font-bold text-white">
                       4
                     </div>
                     <h3 className="text-lg font-semibold text-gray-900">
@@ -757,7 +790,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
 
                 <div className="rounded-xl border border-gray-200 bg-gray-50 p-5 md:col-span-2">
                   <div className="mb-3 flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#6d28d9] text-sm font-bold text-white">
                       5
                     </div>
                     <h3 className="text-lg font-semibold text-gray-900">
@@ -773,7 +806,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                   </p>
                   <Link
                     href="/scotland-eviction-notices"
-                    className="mt-4 inline-flex items-center gap-2 font-medium text-blue-600 hover:underline"
+                    className="mt-4 inline-flex items-center gap-2 font-medium text-[#6d28d9] hover:underline"
                   >
                     See Scotland notice guidance
                     <ArrowRight className="w-4 h-4" />
@@ -784,9 +817,9 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
           </div>
         </section>
 
-        <section className="bg-gray-50 py-16 lg:py-20">
-          <div className="container mx-auto px-4">
-            <div className="mx-auto max-w-5xl">
+        <section className="bg-[#f7f5fb] py-16 lg:py-20">
+          <div className="container mx-auto px-6 lg:px-8">
+            <div className="mx-auto max-w-6xl">
               <h2 className="mb-6 text-center text-3xl font-bold text-gray-900">
                 Common mistakes on Scottish tenancy agreement pages
               </h2>
@@ -862,7 +895,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
         </section>
 
         <section className="py-16 lg:py-20">
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto px-6 lg:px-8">
             <div className="mx-auto max-w-4xl">
               <SeoCtaBlock
                 showTrustPositioningBar
@@ -877,9 +910,9 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
           </div>
         </section>
 
-        <section className="bg-gray-50 py-16 lg:py-20">
-          <div className="container mx-auto px-4">
-            <div className="mx-auto max-w-5xl rounded-2xl border border-gray-200 bg-white p-8 shadow-sm md:p-10">
+        <section className="bg-[#f7f5fb] py-16 lg:py-20">
+          <div className="container mx-auto px-6 lg:px-8">
+            <div className="mx-auto max-w-6xl rounded-2xl border border-[#e8e1f8] bg-white p-8 shadow-sm md:p-10">
               <h2 className="mb-6 text-3xl font-bold text-gray-900">
                 When not to use this page
               </h2>
@@ -934,7 +967,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
         />
 
         <section className="py-16 lg:py-20">
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto px-6 lg:px-8">
             <div className="mx-auto max-w-4xl">
               <SeoCtaBlock
                 pageType="tenancy"
@@ -949,8 +982,8 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
           </div>
         </section>
 
-        <section className="bg-gray-50 py-16 lg:py-20">
-          <div className="container mx-auto px-4">
+        <section className="bg-[#f7f5fb] py-16 lg:py-20">
+          <div className="container mx-auto px-6 lg:px-8">
             <div className="mx-auto max-w-4xl">
               <RelatedLinks
                 title="Related Scotland tenancy resources"
@@ -960,8 +993,8 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
           </div>
         </section>
 
-        <section className="border-t border-gray-200 bg-white py-10">
-          <div className="container mx-auto px-4">
+        <section className="border-t border-[#e8e1f8] bg-white py-10">
+          <div className="container mx-auto px-6 lg:px-8">
             <div className="mx-auto max-w-4xl">
               <h3 className="mb-4 text-xl font-semibold text-gray-900">
                 Other UK jurisdictions
@@ -969,19 +1002,19 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
               <div className="flex flex-wrap gap-6">
                 <Link
                   href="/assured-shorthold-tenancy-agreement-template"
-                  className="font-semibold text-blue-600 hover:underline"
+                  className="font-semibold text-[#6d28d9] hover:underline"
                 >
                   England tenancy agreements -&gt;
                 </Link>
                 <Link
                   href="/wales-tenancy-agreement-template"
-                  className="font-semibold text-blue-600 hover:underline"
+                  className="font-semibold text-[#6d28d9] hover:underline"
                 >
                   Wales occupation contracts -&gt;
                 </Link>
                 <Link
                   href="/tenancy-agreement-northern-ireland"
-                  className="font-semibold text-blue-600 hover:underline"
+                  className="font-semibold text-[#6d28d9] hover:underline"
                 >
                   Northern Ireland tenancy agreements -&gt;
                 </Link>
