@@ -287,7 +287,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                 </div>
                 <div className="relative min-h-[18rem] bg-white sm:min-h-[22rem]">
                   <Image
-                    src="/images/illustrations/landlord-documents/site-tenancy-scotland.webp"
+                    src="/images/illustrations/tenancy-jurisdictions/scotland-prt-waterbrush-v2.webp"
                     alt="Watercolour illustration of a Scotland tenancy agreement, property keys and landlord paperwork"
                     fill
                     className="object-cover object-center"

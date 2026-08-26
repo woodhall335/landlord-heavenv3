@@ -100,7 +100,7 @@ export function RentCheckerLanding({ onStart }: RentCheckerLandingProps) {
         <div className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-slate-50 shadow-[0_20px_50px_rgba(15,23,42,0.12)]">
           <div className="relative aspect-[4/4.7] w-full">
             <Image
-              src="/images/rent-increase-challenge-tool.webp"
+              src="/images/illustrations/rent-increase/rent-increase-market-review-waterbrush-v1.webp"
               alt="Rent Increase & Challenge Checker preview"
               fill
               priority

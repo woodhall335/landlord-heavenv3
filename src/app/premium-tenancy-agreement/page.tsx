@@ -66,6 +66,8 @@ export default function PremiumTenancyAgreementPage() {
         primaryCtaHref={premiumWizardHref}
         secondaryCtaLabel="Read assured periodic guide"
         secondaryCtaHref="/assured-periodic-tenancy-agreement"
+        heroMediaSrc="/images/illustrations/tenancy-specialists/premium-tenancy-management-waterbrush-v1.webp"
+        heroMediaAlt="Waterbrush illustration of a premium tenancy management file, checklist and keys"
         workflowImageLink={{
           href: premiumWizardHref,
           desktopSrc: '/images/premium-tenancy-desktop.webp',

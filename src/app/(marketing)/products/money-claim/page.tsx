@@ -122,7 +122,7 @@ export default function MoneyClaimPage() {
           </p>
         </div>
       ),
-      mediaSrc: '/images/money_claims.webp',
+      mediaSrc: '/images/illustrations/money-claim/money-claim-debt-recovery-waterbrush-v1.webp',
       mediaAlt: 'Preview of the landlord money claim pack',
       showTrustPositioningBar: true,
       trustPositioningPreset: 'money_claim',
@@ -141,9 +141,9 @@ export default function MoneyClaimPage() {
         <section className="scroll-mt-24 bg-white py-10 md:py-12" aria-label="Money claim route">
           <Link href={descriptor.wizardHref} className="block w-full">
             <picture>
-              <source media="(max-width: 767px)" srcSet="/images/money-claim-mobile.webp" />
+              <source media="(max-width: 767px)" srcSet="/images/illustrations/money-claim/money-claim-debt-recovery-waterbrush-v1.webp" />
               <Image
-                src="/images/money-claim-desktop.webp"
+                src="/images/illustrations/money-claim/money-claim-debt-recovery-waterbrush-v1.webp"
                 alt="Choose the money claim route"
                 width={1672}
                 height={941}
@@ -160,7 +160,7 @@ export default function MoneyClaimPage() {
       valueSummary:
         'Preview the debt-recovery file before you pay. It includes the letter before claim, debt schedule, Particulars of Claim, MCOL/N1 guidance, and follow-through support.',
       imageHref: descriptor.wizardHref,
-      imageSrc: '/images/money-claim-wizard.webp',
+      imageSrc: '/images/illustrations/money-claim/money-claim-court-bundle-waterbrush-v1.webp',
       imageAlt: 'Money claim wizard preview',
       includedBullets: [
         'Letter before claim',
@@ -200,7 +200,7 @@ export default function MoneyClaimPage() {
             'Best when recovering money is the main job.',
           href: descriptor.landingHref,
           ctaLabel: 'Prepare my money claim',
-          imageSrc: '/images/money-claim-selector.webp',
+          imageSrc: '/images/illustrations/money-claim/money-claim-debt-recovery-waterbrush-v1.webp',
           imageAlt: 'Money claim pack route',
         },
         {
@@ -216,7 +216,7 @@ export default function MoneyClaimPage() {
             'Best when possession is the real next step.',
           href: '/products/complete-pack',
           ctaLabel: 'Compare the possession route',
-          imageSrc: '/images/section-8-court-paperwork.webp',
+          imageSrc: '/images/illustrations/money-claim/money-claim-court-bundle-waterbrush-v1.webp',
           imageAlt: 'Section 8 court and possession pack route',
         },
       ],

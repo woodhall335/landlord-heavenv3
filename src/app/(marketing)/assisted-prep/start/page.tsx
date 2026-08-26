@@ -70,7 +70,7 @@ const heroContent: Record<PublicAssistedPrepService, {
     title: 'Get your Section 8 notice right before you serve',
     subtitle:
       'Start with a free, no-obligation consultation. We review the facts you provide, tenant details, notice dates and service plan before agreeing any paid preparation.',
-    imageSrc: '/images/heroes/library/hero-assisted-section8-v2.webp',
+    imageSrc: '/images/illustrations/services/section8-service-evidence-waterbrush-v2.webp',
     imageAlt: 'Watercolour illustration of Section 8 notice documents, a calendar and property keys',
   },
   possession: {
@@ -78,7 +78,7 @@ const heroContent: Record<PublicAssistedPrepService, {
     title: 'Prepare your full eviction case, including court forms',
     subtitle:
       'Start with a free, no-obligation consultation. If suitable, our £399 full-case service can prepare the Section 8 notice, service record, N5, N119 and supporting bundle. If you have already served notice, we focus on checking it and preparing the court stage.',
-    imageSrc: '/images/heroes/library/hero-assisted-possession-v2.webp',
+    imageSrc: '/images/illustrations/services/possession-court-evidence-waterbrush-v2.webp',
     imageAlt: 'Watercolour illustration of possession claim papers, court documents and property keys',
   },
 };

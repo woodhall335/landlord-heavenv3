@@ -42,7 +42,7 @@ export default function AssistedPrepHubPage() {
           showTrustPositioningBar
           verticalAlign="top"
           contentWidth="wide"
-          backgroundImageSrc="/images/heroes/library/hero-assisted-prep-overview-v2.webp"
+          backgroundImageSrc="/images/illustrations/services/assisted-prep-consultation-waterbrush-v2.webp"
           backgroundImageAlt="Watercolour illustration of landlord document preparation and property keys"
         />
         <section id="assisted-prep-services" className="mx-auto max-w-[112rem] scroll-mt-28 px-5 py-16 sm:px-8 md:py-20 lg:px-10 2xl:px-12">

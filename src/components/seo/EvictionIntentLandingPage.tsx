@@ -106,6 +106,43 @@ const LANDLORD_SCENARIO_IMAGE_MAP: Record<string, { src: string; alt: string }> 
   },
 };
 
+const WATERBRUSH_SCENARIO_IMAGE_MAP: Record<string, { src: string; alt: string }> = {
+  'Your fixed term has ended, the tenant will not leave, and you want the right next step without restarting the paperwork.': {
+    src: '/images/illustrations/eviction-intents/tenant-wont-leave-waterbrush-v1.webp',
+    alt: 'Waterbrush illustration of a possession notice, calendar and rental home',
+  },
+  'You are unsure whether your tenancy records are complete enough to serve safely right now.': {
+    src: '/images/illustrations/eviction-intents/tenancy-compliance-check-waterbrush-v1.webp',
+    alt: 'Waterbrush illustration of tenancy records, a checklist and keys',
+  },
+  'You need to act this week and want guided questions instead of editing generic templates manually.': {
+    src: '/images/illustrations/eviction-intents/urgent-notice-preparation-waterbrush-v1.webp',
+    alt: 'Waterbrush illustration of a notice calendar, service envelope and keys',
+  },
+  'You inherited tenancy admin from an agent and need to check whether deposit and prescribed information records are usable later.': {
+    src: '/images/illustrations/eviction-intents/agent-tenancy-handover-waterbrush-v1.webp',
+    alt: 'Waterbrush illustration of tenancy administration records and a checklist',
+  },
+  'You expect possession might go to paper-based accelerated possession and want your notice-stage chronology to be usable later, not rebuilt from scratch.': {
+    src: '/images/illustrations/eviction-intents/possession-chronology-waterbrush-v1.webp',
+    alt: 'Waterbrush illustration of a possession paperwork timeline and calendar',
+  },
+  'You are balancing arrears pressure with notice risk and need to know what is still available before committing to service.': {
+    src: '/images/illustrations/eviction-intents/arrears-notice-plan-waterbrush-v1.webp',
+    alt: 'Waterbrush illustration of arrears records, notice paperwork and a calendar',
+  },
+};
+
+function getScenarioImage(scenario: string) {
+  return (
+    WATERBRUSH_SCENARIO_IMAGE_MAP[scenario] ??
+    LANDLORD_SCENARIO_IMAGE_MAP[scenario] ??
+    WATERBRUSH_SCENARIO_IMAGE_MAP[
+      'Your fixed term has ended, the tenant will not leave, and you want the right next step without restarting the paperwork.'
+    ]
+  );
+}
+
 function getHowToSchema(config: IntentPageConfig, canonical: string) {
   return {
     '@context': 'https://schema.org',
@@ -410,18 +447,18 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
               {config.landlordScenarios.map((scenario) => (
                 <article key={scenario} className="rounded-2xl border border-[#E6DBFF] bg-white p-5 text-sm text-gray-700">
                   <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-primary">Landlord situation</p>
-                  {LANDLORD_SCENARIO_IMAGE_MAP[scenario] ? (
+                  {getScenarioImage(scenario) ? (
                     <Image
-                      src={LANDLORD_SCENARIO_IMAGE_MAP[scenario].src}
-                      alt={LANDLORD_SCENARIO_IMAGE_MAP[scenario].alt}
+                      src={getScenarioImage(scenario).src}
+                      alt={getScenarioImage(scenario).alt}
                       width={400}
                       height={260}
                       className="scenario-image mb-4 mt-3 h-auto w-full rounded-lg"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 45vw, 400px"
                     />
                   ) : null}
-                  {LANDLORD_SCENARIO_IMAGE_MAP[scenario] ? (
-                    <p className="mt-2 text-xs text-gray-500">Illustration: {LANDLORD_SCENARIO_IMAGE_MAP[scenario].alt}.</p>
+                  {getScenarioImage(scenario) ? (
+                    <p className="mt-2 text-xs text-gray-500">Illustration: {getScenarioImage(scenario).alt}.</p>
                   ) : null}
                   <p>{scenario}</p>
                 </article>
@@ -527,8 +564,8 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
             <div className="mt-6 overflow-hidden rounded-2xl border border-[#E6DBFF] bg-white">
               <div className="relative w-full">
                 <Image
-                  src="/images/eviction-timeline.webp"
-                  alt="Eviction timeline"
+                  src="/images/illustrations/eviction-intents/possession-chronology-waterbrush-v1.webp"
+                  alt="Waterbrush illustration of a possession paperwork timeline and calendar"
                   width={1600}
                   height={900}
                   className="h-auto w-full"

@@ -51,7 +51,7 @@ const routeCards: ProductSalesRouteCard[] = [
   {
     name: 'Supported Rent Increase Pack',
     priceLabel: PRODUCTS.section13_standard.displayPrice,
-    imageSrc: '/images/rent-increase-standard.webp',
+    imageSrc: '/images/illustrations/rent-increase/rent-increase-notice-waterbrush-v1.webp',
     imageAlt: 'Supported Section 13 rent increase pack',
     whatItIs:
       'For landlords who want to serve a market-supported Form 4A with current comparable evidence and a service record.',
@@ -67,7 +67,7 @@ const routeCards: ProductSalesRouteCard[] = [
   {
     name: 'Tribunal-Ready Rent Increase Pack',
     priceLabel: PRODUCTS.section13_defensive.displayPrice,
-    imageSrc: '/images/rent-increase-defence.webp',
+    imageSrc: '/images/illustrations/rent-increase/rent-increase-market-review-waterbrush-v1.webp',
     imageAlt: 'Tribunal-ready Section 13 rent increase pack',
     whatItIs:
       'For landlords who already expect the proposed rent to be disputed, or who want a stronger file before serving.',
@@ -126,7 +126,7 @@ export default function RentIncreaseLandingPage() {
         'Before serving a rent increase, check when Section 13 applies, what notice period is needed, whether the proposed rent is supported by market evidence, and what to do if the tenant challenges it.',
       feature:
         'Prepare a market-supported rent increase file, not just a Form 4A notice.',
-      mediaSrc: '/images/increase-rent-hero.webp',
+      mediaSrc: '/images/illustrations/rent-increase/rent-increase-notice-waterbrush-v1.webp',
       mediaAlt: 'Section 13 rent increase workflow',
       showReviewPill: true,
       reviewPillLayout: 'stacked',
@@ -202,7 +202,7 @@ export default function RentIncreaseLandingPage() {
           </div>
           <div className="rounded-[2rem] border border-[#D8C8FF] bg-white p-5 shadow-[0_14px_34px_rgba(24,11,49,0.05)]">
             <Image
-              src="/images/rent-increase-overview.webp"
+              src="/images/illustrations/rent-increase/rent-increase-notice-waterbrush-v1.webp"
               alt="Rent increase market overview report"
               width={1100}
               height={840}
@@ -245,9 +245,9 @@ export default function RentIncreaseLandingPage() {
               </div>
             </div>
             <picture>
-              <source media="(max-width: 767px)" srcSet="/images/real-market-data-mobile.webp" />
+              <source media="(max-width: 767px)" srcSet="/images/illustrations/rent-increase/rent-increase-market-review-waterbrush-v1.webp" />
               <Image
-                src="/images/real-market-data-desktop.webp"
+                src="/images/illustrations/rent-increase/rent-increase-market-review-waterbrush-v1.webp"
                 alt="Real market rental data report preview"
                 width={1920}
                 height={980}

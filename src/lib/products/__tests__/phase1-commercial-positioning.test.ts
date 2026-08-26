@@ -42,11 +42,9 @@ describe('Phase 1 commercial positioning', () => {
     expect(source).toContain('Prepare a landlord money claim pack');
     expect(source).toContain('<GoldenPackProof data={sampleProof}');
     expect(source).not.toContain('What is included in the Money Claim Pack');
-    expect(source).toContain('/images/money-claim-desktop.webp');
-    expect(source).toContain('/images/money-claim-mobile.webp');
-    expect(source).toContain('/images/money-claim-wizard.webp');
-    expect(source).toContain("imageSrc: '/images/money-claim-selector.webp'");
-    expect(source).toContain("imageSrc: '/images/illustrations/pricing-cards/complete-pack.webp'");
+    expect(source).toContain('/images/illustrations/money-claim/money-claim-debt-recovery-waterbrush-v1.webp');
+    expect(source).toContain('/images/illustrations/money-claim/money-claim-court-bundle-waterbrush-v1.webp');
+    expect(source).toContain("imageSrc: '/images/illustrations/money-claim/money-claim-court-bundle-waterbrush-v1.webp'");
   });
 
   it('removes England-default routing to old notice aliases and regional tenancy aliases from high-prominence surfaces', () => {

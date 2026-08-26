@@ -84,6 +84,8 @@ export default function StandardTenancyAgreementPage() {
         heroBadge="England, Wales, Scotland and Northern Ireland"
         heroTrustText="Current tenancy-agreement routes for England, Wales, Scotland and Northern Ireland."
         heroFeature="For England, new straightforward private residential lets use the assured periodic route introduced on 1 May 2026."
+        heroMediaSrc="/images/illustrations/tenancy-jurisdictions/england-assured-periodic-waterbrush-v2.webp"
+        heroMediaAlt="Waterbrush illustration of an England assured periodic tenancy agreement, calendar and property keys"
         showHeroTrustPositioningBar={false}
         afterHero={
           <>

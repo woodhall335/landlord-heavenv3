@@ -61,18 +61,18 @@ const LANDLORD_HEAVEN_SELLER = {
 } as const;
 
 const STRUCTURED_DATA_PRODUCT_IMAGES: Partial<Record<ProductSku, string>> = {
-  notice_only: '/images/notice_bundles.webp',
-  complete_pack: '/images/eviction_packs.webp',
-  money_claim: '/images/money_claims.webp',
-  sc_money_claim: '/images/money_claims.webp',
-  ast_standard: '/images/tenancy_agreements.webp',
-  ast_premium: '/images/tenancy_agreements.webp',
-  england_standard_tenancy_agreement: '/images/tenancy_agreements.webp',
-  england_premium_tenancy_agreement: '/images/tenancy_agreements.webp',
-  england_student_tenancy_agreement: '/images/tenancy_agreements.webp',
-  england_hmo_shared_house_tenancy_agreement: '/images/tenancy_agreements.webp',
-  england_lodger_agreement: '/images/tenancy_agreements.webp',
-  residential_tenancy_application: '/images/tenancy_agreements.webp',
+  notice_only: '/images/illustrations/products/section8-notice-preparation-waterbrush-v1.webp',
+  complete_pack: '/images/illustrations/products/possession-court-pack-waterbrush-v1.webp',
+  money_claim: '/images/illustrations/money-claim/money-claim-debt-recovery-waterbrush-v1.webp',
+  sc_money_claim: '/images/illustrations/money-claim/money-claim-debt-recovery-waterbrush-v1.webp',
+  ast_standard: '/images/illustrations/tenancy-jurisdictions/england-assured-periodic-waterbrush-v2.webp',
+  ast_premium: '/images/illustrations/tenancy-specialists/premium-tenancy-management-waterbrush-v1.webp',
+  england_standard_tenancy_agreement: '/images/illustrations/tenancy-jurisdictions/england-assured-periodic-waterbrush-v2.webp',
+  england_premium_tenancy_agreement: '/images/illustrations/tenancy-specialists/premium-tenancy-management-waterbrush-v1.webp',
+  england_student_tenancy_agreement: '/images/illustrations/tenancy-specialists/student-tenancy-agreement-waterbrush-v1.webp',
+  england_hmo_shared_house_tenancy_agreement: '/images/illustrations/tenancy-specialists/hmo-shared-house-waterbrush-v1.webp',
+  england_lodger_agreement: '/images/illustrations/tenancy-specialists/lodger-agreement-waterbrush-v1.webp',
+  residential_tenancy_application: '/images/illustrations/tenancy-jurisdictions/england-assured-periodic-waterbrush-v2.webp',
 };
 
 function toStructuredDataUrl(url: string): string {

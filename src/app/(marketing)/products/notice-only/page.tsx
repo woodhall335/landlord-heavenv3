@@ -124,7 +124,7 @@ export default function NoticeOnlyPage() {
           </p>
         </div>
       ),
-      mediaSrc: '/images/heroes/library/hero-assisted-section8-v2.webp',
+      mediaSrc: '/images/illustrations/products/section8-notice-preparation-waterbrush-v1.webp',
       mediaAlt: 'Waterbrush illustration of a Section 8 notice, service record and delivery evidence',
       showTrustPositioningBar: true,
       trustPositioningPreset: 'notice_only',
@@ -148,9 +148,9 @@ export default function NoticeOnlyPage() {
         <section className="scroll-mt-24 bg-white py-10 md:py-12" aria-label="Notice stage route">
           <a href={descriptor.wizardHref} className="block w-full">
             <picture>
-              <source media="(max-width: 767px)" srcSet="/images/heroes/library/hero-assisted-section8-v2.webp" />
+              <source media="(max-width: 767px)" srcSet="/images/illustrations/products/section8-notice-preparation-waterbrush-v1.webp" />
               <Image
-                src="/images/heroes/library/hero-assisted-section8-v2.webp"
+                src="/images/illustrations/products/section8-notice-preparation-waterbrush-v1.webp"
                 alt="Waterbrush illustration of the Section 8 notice and service route"
                 width={1672}
                 height={941}
@@ -166,7 +166,7 @@ export default function NoticeOnlyPage() {
       priceLabel: product.displayPrice,
       valueSummary:
         'Prepare the notice file properly before anything goes to the tenant. You can check the actual Section 8 notice and service file before you pay. This is procedural document preparation, not legal advice.',
-      imageSrc: '/images/heroes/library/hero-assisted-section8-v2.webp',
+      imageSrc: '/images/illustrations/products/section8-notice-preparation-waterbrush-v1.webp',
       imageAlt: 'Waterbrush illustration of the Stage 1 Section 8 notice-only pack',
       imageHref: descriptor.wizardHref,
       mobileImageFirstFullBleed: true,
@@ -196,7 +196,7 @@ export default function NoticeOnlyPage() {
           landlordOutcome:
             'Helps the eviction route start with the right legal notice in place.',
           includedByDefault: true,
-          imageSrc: '/images/heroes/library/hero-assisted-section8-v2.webp',
+          imageSrc: '/images/illustrations/products/section8-notice-preparation-waterbrush-v1.webp',
           imageAlt: 'Waterbrush illustration of a Form 3A Section 8 notice and rental property',
         },
         {
@@ -224,7 +224,7 @@ export default function NoticeOnlyPage() {
           landlordOutcome:
             'Gives you a clearer service record from the first step.',
           includedByDefault: true,
-          imageSrc: '/images/heroes/library/hero-guide-proof-of-service-v2.webp',
+          imageSrc: '/images/illustrations/services/section8-service-evidence-waterbrush-v2.webp',
           imageAlt: 'Waterbrush illustration of a certificate, served envelope and dated service record',
         },
         {
@@ -238,7 +238,7 @@ export default function NoticeOnlyPage() {
           landlordOutcome:
             'Reduces the risk of the notice being challenged because of a service mistake.',
           includedByDefault: true,
-          imageSrc: '/images/heroes/library/hero-guide-proof-of-service-v2.webp',
+          imageSrc: '/images/illustrations/services/section8-service-evidence-waterbrush-v2.webp',
           imageAlt: 'Waterbrush illustration of step-by-step notice service instructions',
         },
         {
@@ -252,7 +252,7 @@ export default function NoticeOnlyPage() {
           landlordOutcome:
             'Gives you a cleaner file before the tenant or the court looks closely at the notice.',
           includedByDefault: true,
-          imageSrc: '/images/heroes/library/hero-guide-proof-of-service-v2.webp',
+          imageSrc: '/images/illustrations/services/section8-service-evidence-waterbrush-v2.webp',
           imageAlt: 'Waterbrush illustration of a notice validity checklist and date review',
         },
         {
@@ -266,7 +266,7 @@ export default function NoticeOnlyPage() {
           landlordOutcome:
             'Helps the file look prepared rather than improvised.',
           includedByDefault: true,
-          imageSrc: '/images/heroes/library/hero-assisted-section8-v2.webp',
+          imageSrc: '/images/illustrations/products/section8-notice-preparation-waterbrush-v1.webp',
           imageAlt: 'Waterbrush illustration of a signed compliance declaration and supporting records',
         },
         {
@@ -320,7 +320,7 @@ export default function NoticeOnlyPage() {
           href: '/products/notice-only',
           ctaLabel: 'This is my route',
           priceLabel: product.displayPrice,
-          imageSrc: '/images/illustrations/pricing-cards/notice-only.webp',
+          imageSrc: '/images/illustrations/products/section8-notice-preparation-waterbrush-v1.webp',
           imageAlt: 'Waterbrush illustration of the Section 8 notice stage',
         },
         {
@@ -335,7 +335,7 @@ export default function NoticeOnlyPage() {
             'Gives you the possession route from notice through claim without buying Stage 1 separately first.',
           href: '/products/complete-pack',
           ctaLabel: 'See the full court route',
-          imageSrc: '/images/illustrations/pricing-cards/complete-pack.webp',
+          imageSrc: '/images/illustrations/products/possession-court-pack-waterbrush-v1.webp',
           imageAlt: 'Waterbrush illustration of the Section 8 court route',
         },
       ],
@@ -403,14 +403,14 @@ export default function NoticeOnlyPage() {
           title: 'Service mistakes undo good cases',
           body:
             'A strong notice can still fail if you cannot show it was served correctly and on time.',
-          imageSrc: '/images/heroes/library/hero-guide-proof-of-service-v2.webp',
+          imageSrc: '/images/illustrations/services/section8-service-evidence-waterbrush-v2.webp',
           imageAlt: 'Waterbrush illustration of notice service and delivery proof',
         },
         {
           title: 'Different from a blank form',
           body:
             'A blank form gives you the shell. Notice Only gives you Form 3A, N215, arrears schedule, service instructions, validity checklist, compliance declaration, case summary, and next-step guide in one file.',
-          imageSrc: '/images/heroes/library/hero-assisted-section8-v2.webp',
+          imageSrc: '/images/illustrations/products/section8-notice-preparation-waterbrush-v1.webp',
           imageAlt: 'Waterbrush illustration of a Section 8 notice and service file',
         },
       ],
@@ -441,7 +441,7 @@ export default function NoticeOnlyPage() {
       title: 'How it works',
       intro:
         'We ask for the facts needed to prepare a current England Section 8 notice.',
-      imageSrc: '/images/heroes/library/hero-assisted-section8-v2.webp',
+      imageSrc: '/images/illustrations/products/section8-notice-preparation-waterbrush-v1.webp',
       imageAlt: 'Waterbrush illustration of how the Section 8 notice-only pack works',
       imageHref: descriptor.wizardHref,
       mobileImageFirstFullBleed: true,

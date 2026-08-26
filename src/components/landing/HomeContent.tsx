@@ -315,7 +315,7 @@ const processSteps: ProcessStep[] = [
     title: 'Pick the landlord job you need done',
     body:
       'Start with the thing you need to do now: serve notice, go to court, recover money, raise rent, or set up a tenancy.',
-    imageSrc: '/images/recover-unpaid-rent.webp',
+    imageSrc: '/images/illustrations/money-claim/money-claim-debt-recovery-waterbrush-v1.webp',
     imageAlt: 'Recover unpaid rent process step',
   },
   {
@@ -323,7 +323,7 @@ const processSteps: ProcessStep[] = [
     title: 'Answer the key details',
     body:
       'We ask for the details needed to prepare the right documents and flag issues before you pay or print.',
-    imageSrc: '/images/start-eviction.webp',
+    imageSrc: '/images/illustrations/products/section8-notice-preparation-waterbrush-v1.webp',
     imageAlt: 'Answer the key details process step',
   },
   {
@@ -331,7 +331,7 @@ const processSteps: ProcessStep[] = [
     title: 'Review and download the paperwork',
     body:
       'You get documents that match the task in front of you and are ready to review, save, and print.',
-    imageSrc: '/images/create-tenancy-agreements.webp',
+    imageSrc: '/images/illustrations/tenancy-jurisdictions/england-assured-periodic-waterbrush-v2.webp',
     imageAlt: 'Landlord documents and agreements',
   },
 ];
@@ -343,7 +343,7 @@ const jurisdictionCards: JurisdictionCard[] = [
     description: 'For a standard England let, with specialist options for student, shared-house and lodger arrangements.',
     href: '/products/ast',
     flagSrc: '/gb-eng.svg',
-    imageSrc: '/images/illustrations/landlord-documents/site-tenancy-england.webp',
+    imageSrc: '/images/illustrations/tenancy-jurisdictions/england-assured-periodic-waterbrush-v2.webp',
     imageAlt: 'Watercolour illustration of an England tenancy agreement and property keys',
   },
   {
@@ -352,7 +352,7 @@ const jurisdictionCards: JurisdictionCard[] = [
     description: 'Choose the Welsh fixed-term or periodic occupation-contract route before entering the tenancy details.',
     href: '/wales-tenancy-agreement-template',
     flagSrc: '/gb-wls.svg',
-    imageSrc: '/images/illustrations/landlord-documents/site-tenancy-wales.webp',
+    imageSrc: '/images/illustrations/tenancy-jurisdictions/wales-occupation-contract-waterbrush-v2.webp',
     imageAlt: 'Watercolour illustration of a Wales occupation contract and landlord paperwork',
   },
   {
@@ -361,7 +361,7 @@ const jurisdictionCards: JurisdictionCard[] = [
     description: 'Use the Scotland-specific PRT workflow for the open-ended private residential tenancy framework.',
     href: '/private-residential-tenancy-agreement-template',
     flagSrc: '/gb-sct.svg',
-    imageSrc: '/images/illustrations/landlord-documents/site-tenancy-scotland.webp',
+    imageSrc: '/images/illustrations/tenancy-jurisdictions/scotland-prt-waterbrush-v2.webp',
     imageAlt: 'Watercolour illustration of a Scotland private residential tenancy agreement',
   },
   {
@@ -370,7 +370,7 @@ const jurisdictionCards: JurisdictionCard[] = [
     description: 'Start with the Northern Ireland wording and supporting setup route for the property location.',
     href: '/northern-ireland-tenancy-agreement-template',
     flagSrc: '/gb-nir.svg',
-    imageSrc: '/images/illustrations/landlord-documents/site-tenancy-northern-ireland.webp',
+    imageSrc: '/images/illustrations/tenancy-jurisdictions/northern-ireland-private-tenancy-waterbrush-v2.webp',
     imageAlt: 'Watercolour illustration of a Northern Ireland tenancy agreement and keys',
   },
 ];

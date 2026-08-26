@@ -494,8 +494,8 @@ export default function Page() {
             <Card id="eviction-timeline" title="Eviction Timeline and Delay Points">
               <div className="mt-4 overflow-hidden rounded-2xl border border-[#E6DBFF] bg-white">
                 <Image
-                  src="/images/eviction-timeline.webp"
-                  alt="Eviction timeline England guide"
+                  src="/images/illustrations/eviction-intents/possession-chronology-waterbrush-v1.webp"
+                  alt="Waterbrush illustration of a possession paperwork timeline and calendar"
                   width={1600}
                   height={900}
                   className="h-auto w-full"

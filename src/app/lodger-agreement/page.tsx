@@ -67,6 +67,8 @@ export default function LodgerAgreementEnglandPage() {
         primaryCtaHref={lodgerWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
+        heroMediaSrc="/images/illustrations/tenancy-specialists/lodger-agreement-waterbrush-v1.webp"
+        heroMediaAlt="Waterbrush illustration of a resident-landlord home, lodger agreement and checklist"
         workflowImageLink={{
           href: lodgerWizardHref,
           desktopSrc: '/images/lodger-tenancy-desktop.webp',

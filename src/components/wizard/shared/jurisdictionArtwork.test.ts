@@ -15,10 +15,9 @@ describe('wizard jurisdiction artwork', () => {
     }
   });
 
-  it('uses both supplied Wales illustrations in their requested positions', () => {
+  it('uses the Wales waterbrush illustration in the left artwork position', () => {
     expect(WIZARD_JURISDICTION_ARTWORK.wales).toMatchObject({
-      left: '/images/wizard-wales-occupation-contract.png',
-      right: '/images/wizard-wales.png',
+      left: '/images/illustrations/tenancy-jurisdictions/wales-occupation-contract-waterbrush-v2.webp',
     });
   });
 });

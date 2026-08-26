@@ -68,6 +68,8 @@ export default function StudentTenancyAgreementPage() {
         primaryCtaHref={studentWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
+        heroMediaSrc="/images/illustrations/tenancy-specialists/student-tenancy-agreement-waterbrush-v1.webp"
+        heroMediaAlt="Waterbrush illustration of a student tenancy agreement, household checklist and keys"
         workflowImageLink={{
           href: studentWizardHref,
           desktopSrc: '/images/student-tenancy-desktop.webp',

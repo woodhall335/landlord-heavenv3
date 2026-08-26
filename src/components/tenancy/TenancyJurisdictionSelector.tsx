@@ -31,6 +31,25 @@ const JURISDICTION_FLAGS: Record<(typeof JURISDICTION_ORDER)[number], string> = 
   'northern-ireland': '/gb-nir.svg',
 };
 
+const JURISDICTION_ARTWORK: Record<(typeof JURISDICTION_ORDER)[number], { src: string; alt: string }> = {
+  england: {
+    src: '/images/illustrations/tenancy-jurisdictions/england-assured-periodic-waterbrush-v2.webp',
+    alt: 'Waterbrush illustration of an England assured periodic tenancy agreement and property keys',
+  },
+  wales: {
+    src: '/images/illustrations/tenancy-jurisdictions/wales-occupation-contract-waterbrush-v2.webp',
+    alt: 'Waterbrush illustration of a Wales occupation contract and property keys',
+  },
+  scotland: {
+    src: '/images/illustrations/tenancy-jurisdictions/scotland-prt-waterbrush-v2.webp',
+    alt: 'Waterbrush illustration of a Scotland private residential tenancy agreement and property keys',
+  },
+  'northern-ireland': {
+    src: '/images/illustrations/tenancy-jurisdictions/northern-ireland-private-tenancy-waterbrush-v2.webp',
+    alt: 'Waterbrush illustration of a Northern Ireland private tenancy agreement and property keys',
+  },
+};
+
 function withAttribution(entry: TenancyAgreementRegistryEntry): string {
   const separator = entry.startRoute.includes('?') ? '&' : '?';
   return `${entry.startRoute}${separator}src=standard_tenancy_selector&topic=tenancy`;
@@ -85,6 +104,7 @@ export function TenancyJurisdictionSelector() {
             const entries = RELEASED_ENTRIES.filter(
               (entry) => entry.jurisdiction === jurisdiction
             );
+            const artwork = JURISDICTION_ARTWORK[jurisdiction];
 
             if (!entries.length) {
               return null;
@@ -108,6 +128,16 @@ export function TenancyJurisdictionSelector() {
                   <h3 className="text-2xl font-semibold text-[#17142B]">
                     {JURISDICTION_LABELS[jurisdiction]}
                   </h3>
+                </div>
+
+                <div className="relative mt-5 aspect-[16/7] overflow-hidden rounded-2xl border border-[#E8E1F8] bg-[#FBF9FF]">
+                  <Image
+                    src={artwork.src}
+                    alt={artwork.alt}
+                    fill
+                    sizes="(min-width: 1024px) 44vw, 100vw"
+                    className="object-cover object-center"
+                  />
                 </div>
 
                 <div className="mt-5 space-y-3">

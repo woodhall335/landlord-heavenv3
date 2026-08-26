@@ -54,7 +54,7 @@ export default function Section13StandardProductPage() {
       secondaryCta: { label: 'Compare the tribunal-ready pack', href: '/products/section-13-defence' },
       feature:
         'Choose this for a normal rent increase where you want the figure explained by market evidence. If a challenge already feels likely, use the Tribunal-Ready pack instead.',
-      mediaSrc: '/images/wizard-icons/41-rent.png',
+      mediaSrc: '/images/illustrations/rent-increase/rent-increase-notice-waterbrush-v1.webp',
       mediaAlt: 'Section 13 rent increase documents',
       showReviewPill: true,
       showTrustPositioningBar: true,
@@ -102,7 +102,7 @@ export default function Section13StandardProductPage() {
           href: product.wizardHref,
           ctaLabel: 'Build my supported rent increase',
           priceLabel: product.displayPrice,
-          imageSrc: '/images/rent-increase-standard.webp',
+          imageSrc: '/images/illustrations/rent-increase/rent-increase-notice-waterbrush-v1.webp',
           imageAlt: 'Supported Section 13 rent increase pack',
         },
         {
@@ -118,7 +118,7 @@ export default function Section13StandardProductPage() {
           href: PRODUCTS.section13_defensive.wizardHref,
           ctaLabel: 'Prepare for a rent challenge',
           priceLabel: PRODUCTS.section13_defensive.displayPrice,
-          imageSrc: '/images/rent-increase-defence.webp',
+          imageSrc: '/images/illustrations/rent-increase/rent-increase-market-review-waterbrush-v1.webp',
           imageAlt: 'Tribunal-ready Section 13 rent increase pack',
         },
       ],

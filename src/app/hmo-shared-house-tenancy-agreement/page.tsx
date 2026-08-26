@@ -68,6 +68,8 @@ export default function HmoSharedHouseTenancyAgreementPage() {
         primaryCtaHref={hmoWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
+        heroMediaSrc="/images/illustrations/tenancy-specialists/hmo-shared-house-waterbrush-v1.webp"
+        heroMediaAlt="Waterbrush illustration of a shared-house plan, tenancy paperwork and multiple keys"
         workflowImageLink={{
           href: hmoWizardHref,
           desktopSrc: '/images/hmo-tenancy-desktop.webp',
