@@ -349,6 +349,13 @@ export default function AdminDashboardPage() {
 
         {/* Quick Links */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <Link href="/dashboard/admin/assisted-prep" className="bg-white rounded-lg border border-gray-200 p-4 hover:border-primary hover:shadow-md transition-all">
+              <div className="w-10 h-10 bg-fuchsia-100 rounded-lg flex items-center justify-center mb-3">
+                <RiMailLine className="w-5 h-5 text-fuchsia-600" />
+              </div>
+              <p className="font-medium text-charcoal">Consultation Requests</p>
+              <p className="text-xs text-gray-500">Assisted prep intake</p>
+            </Link>
             <Link href="/dashboard/admin/cases" className="bg-white rounded-lg border border-gray-200 p-4 hover:border-primary hover:shadow-md transition-all">
               <div className="w-10 h-10 bg-violet-100 rounded-lg flex items-center justify-center mb-3">
                 <RiFileTextLine className="w-5 h-5 text-violet-600" />

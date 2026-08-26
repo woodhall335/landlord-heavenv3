@@ -67,6 +67,7 @@ type AssistedAction =
   | null;
 
 const presetOptions: Array<{ value: AdminCasesPreset; label: string }> = [
+  { value: "assisted_consultations", label: "Consultation requests" },
   { value: "needs_attention", label: "Needs attention" },
   { value: "started_drafts", label: "Started drafts" },
   { value: "paid_awaiting_docs", label: "Paid awaiting docs" },
@@ -112,7 +113,17 @@ function recoveryStageLabel(stage: AdminCaseRecord["recovery_last_stage"]) {
   return "None";
 }
 
-export default function AdminCasesPage() {
+interface AdminCasesPageProps {
+  initialPreset?: AdminCasesPreset;
+  title?: string;
+  description?: string;
+}
+
+export function AdminCasesPage({
+  initialPreset = "needs_attention",
+  title = "Admin Case Manager",
+  description = "Support and operations console for paid cases, generated packs, abandoned previews, and started drafts.",
+}: AdminCasesPageProps) {
   const [loading, setLoading] = useState(true);
   const [hasAccess, setHasAccess] = useState(true);
   const [casesLoading, setCasesLoading] = useState(false);
@@ -124,7 +135,7 @@ export default function AdminCasesPage() {
   const [filterFulfillmentStatus, setFilterFulfillmentStatus] = useState("all");
   const [filterEditWindow, setFilterEditWindow] = useState("all");
   const [filterHasFinalDocuments, setFilterHasFinalDocuments] = useState("all");
-  const [preset, setPreset] = useState<AdminCasesPreset>("needs_attention");
+  const [preset, setPreset] = useState<AdminCasesPreset>(initialPreset);
   const [sortBy, setSortBy] = useState<AdminCasesSortBy>("risk");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -584,10 +595,8 @@ export default function AdminCasesPage() {
     <div className="min-h-screen bg-gray-50 py-12">
       <Container size="large">
         <div className="mb-8">
-          <h1 className="mb-2 text-3xl font-bold text-charcoal">Admin Case Manager</h1>
-          <p className="text-gray-600">
-            Support and operations console for paid cases, generated packs, abandoned previews, and started drafts.
-          </p>
+          <h1 className="mb-2 text-3xl font-bold text-charcoal">{title}</h1>
+          <p className="text-gray-600">{description}</p>
         </div>
 
         {message && (
@@ -900,8 +909,21 @@ export default function AdminCasesPage() {
                             <div className="font-semibold">Assisted intake</div>
                             <div>{caseItem.assisted_intake.case_overview.property_address || "No property address"}</div>
                             <div>{caseItem.assisted_intake.case_overview.tenant_names || "No tenant names"}</div>
+                            {caseItem.assisted_intake.case_overview.urgency ? (
+                              <div>Urgency: {caseItem.assisted_intake.case_overview.urgency}</div>
+                            ) : null}
                             {caseItem.assisted_intake.contact?.phone ? (
                               <div>{caseItem.assisted_intake.contact.phone}</div>
+                            ) : null}
+                            {Object.entries(caseItem.assisted_intake.service_facts || {}).map(([key, value]) => (
+                              <div key={key}>
+                                {key.replace(/_/g, " ")}: {value || "Not provided"}
+                              </div>
+                            ))}
+                            {caseItem.assisted_intake.case_overview.summary ? (
+                              <div className="mt-2 border-t border-violet-100 pt-2 leading-5">
+                                {caseItem.assisted_intake.case_overview.summary}
+                              </div>
                             ) : null}
                             {caseItem.assisted_intake.source_case_id ? (
                               <div>Imported from {caseItem.assisted_intake.source_case_id.slice(0, 8)}...</div>

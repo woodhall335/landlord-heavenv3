@@ -166,6 +166,11 @@ function pickBestOrder(current: RawOrder | undefined, candidate: RawOrder): RawO
 
 function applyPreset(caseItem: AdminCaseRecord, preset: AdminCasesPreset): boolean {
   switch (preset) {
+    case 'assisted_consultations':
+      return (
+        caseItem.workflow_status === 'consultation_requested' ||
+        Boolean(caseItem.assisted_intake)
+      );
     case 'needs_attention':
       return (
         caseItem.requires_action ||

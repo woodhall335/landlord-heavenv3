@@ -7,6 +7,7 @@ import {
 
 export type AdminCasesPreset =
   | 'all'
+  | 'assisted_consultations'
   | 'needs_attention'
   | 'paid_awaiting_docs'
   | 'started_drafts'
