@@ -1186,3 +1186,5 @@ export function AdminCasesPage({
     </div>
   );
 }
+
+export default AdminCasesPage;
