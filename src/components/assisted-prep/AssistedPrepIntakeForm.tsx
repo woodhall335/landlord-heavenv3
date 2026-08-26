@@ -136,7 +136,8 @@ export function AssistedPrepIntakeForm({ className }: { className?: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname() || '/assisted-prep/start';
-  const service = normalizeAssistedPrepService(searchParams.get('service'));
+  const initialService = normalizeAssistedPrepService(searchParams.get('service'));
+  const [service, setService] = useState<AssistedPrepService>(initialService);
   const [form, setFormState] = useState<FormState>(initialForm);
   const [files, setFiles] = useState<File[]>([]);
   const [submitting, setSubmitting] = useState(false);
@@ -243,6 +244,30 @@ export function AssistedPrepIntakeForm({ className }: { className?: string }) {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
+        <label className="block md:col-span-2">
+          <span
+            id="assisted-prep-service-label"
+            className="text-sm font-semibold text-slate-800"
+          >
+            What type of assistance do you need?
+          </span>
+          <select
+            aria-labelledby="assisted-prep-service-label"
+            value={service}
+            onChange={(event) => setService(event.target.value as AssistedPrepService)}
+            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+          >
+            <option value="section8">
+              Section 8 notice and service record — £149 if we confirm we can help
+            </option>
+            <option value="possession">
+              Full eviction case, including notice and court forms — £399 if we confirm we can help
+            </option>
+          </select>
+          <span className="mt-1 block text-xs text-slate-500">
+            Choose the closest fit. We confirm the final scope with you during the free consultation.
+          </span>
+        </label>
         <label className="block">
           <span className="text-sm font-semibold text-slate-800">Your name</span>
           <input required value={form.name} onChange={(event) => setForm({ name: event.target.value })} className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />

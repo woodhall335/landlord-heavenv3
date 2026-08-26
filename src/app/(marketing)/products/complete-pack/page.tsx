@@ -123,8 +123,8 @@ export default function CompleteEvictionPackPage() {
           </p>
         </div>
       ),
-      mediaSrc: '/images/eviction_packs.webp',
-      mediaAlt: 'Preview of the England Stage 2 court and possession pack',
+      mediaSrc: '/images/heroes/library/hero-guide-possession-claim-v2.webp',
+      mediaAlt: 'Waterbrush illustration of the England Stage 2 court and possession pack',
       showTrustPositioningBar: true,
       trustPositioningPreset: 'complete_pack',
     },
@@ -147,10 +147,10 @@ export default function CompleteEvictionPackPage() {
         <section className="scroll-mt-24 bg-white py-10 md:py-12" aria-label="Complete pack stage route">
           <a href={descriptor.wizardHref} className="block w-full">
             <picture>
-              <source media="(max-width: 767px)" srcSet="/images/complete-stage-mobile.webp" />
+              <source media="(max-width: 767px)" srcSet="/images/heroes/library/hero-guide-possession-claim-v2.webp" />
               <Image
-                src="/images/complete-stage-desktop.webp"
-                alt="Choose the complete court and possession route"
+                src="/images/heroes/library/hero-guide-possession-claim-v2.webp"
+                alt="Waterbrush illustration of the complete court and possession route"
                 width={1672}
                 height={941}
                 className="h-auto w-full"
@@ -165,8 +165,8 @@ export default function CompleteEvictionPackPage() {
       priceLabel: product.displayPrice,
       valueSummary:
         'Prepare the full possession file, not just the court forms. You can check the claim forms and supporting file before you pay. This is procedural document preparation, not legal advice.',
-      imageSrc: '/images/complete-pack.webp',
-      imageAlt: 'Preview of the complete Section 8 eviction pack',
+      imageSrc: '/images/heroes/library/hero-guide-possession-claim-v2.webp',
+      imageAlt: 'Waterbrush illustration of the complete Section 8 eviction pack',
       imageHref: descriptor.wizardHref,
       mobileImageFirstFullBleed: true,
       includedBullets: [
@@ -302,8 +302,8 @@ export default function CompleteEvictionPackPage() {
             'Lets you serve the notice properly and move onward later only if needed.',
           href: '/products/notice-only',
           ctaLabel: 'See the notice-first route',
-          imageSrc: '/images/section-8-notice.webp',
-          imageAlt: 'Serve Section 8 notice first',
+          imageSrc: '/images/illustrations/pricing-cards/notice-only.webp',
+          imageAlt: 'Waterbrush illustration of serving the Section 8 notice first',
         },
         {
           name: 'Stage 2: Notice, claim forms, and hearing support together',
@@ -318,8 +318,8 @@ export default function CompleteEvictionPackPage() {
           href: '/products/complete-pack',
           ctaLabel: 'This is my route',
           priceLabel: product.displayPrice,
-          imageSrc: '/images/section-8-court-paperwork.webp',
-          imageAlt: 'Section 8 claim and hearing route',
+          imageSrc: '/images/illustrations/pricing-cards/complete-pack.webp',
+          imageAlt: 'Waterbrush illustration of the Section 8 claim and hearing route',
         },
       ],
     },
@@ -372,29 +372,29 @@ export default function CompleteEvictionPackPage() {
           title: 'Possession cases need continuity',
           body:
             'The notice, grounds, arrears evidence, and claim forms should tell the same story from start to finish.',
-          imageSrc: '/images/the-court-looks-at-the-notice-first.webp',
-          imageAlt: 'Court paperwork and notice review illustration',
+          imageSrc: '/images/heroes/library/hero-guide-court-hearing-v2.webp',
+          imageAlt: 'Waterbrush illustration of court paperwork and notice review',
         },
         {
           title: 'Weak particulars make a good case harder to follow',
           body:
             "If the landlord's position is unclear in N119, the case is harder to follow even when the facts are sound.",
-          imageSrc: '/images/arrears-cases-are-only-clear-as-the-paperwork.webp',
-          imageAlt: 'Arrears paperwork and rent schedule illustration',
+          imageSrc: '/images/heroes/library/hero-guide-rent-arrears-schedule-v2.webp',
+          imageAlt: 'Waterbrush illustration of arrears paperwork and a rent schedule',
         },
         {
           title: 'Filing errors create expensive delay',
           body:
             'Even after the notice is served, the case can still be slowed down by bad filing, missing paperwork, or an evidence bundle that was never organised properly.',
-          imageSrc: '/images/service-mistakes-undo-good-cases.webp',
-          imageAlt: 'Notice service and delivery proof illustration',
+          imageSrc: '/images/heroes/library/hero-guide-proof-of-service-v2.webp',
+          imageAlt: 'Waterbrush illustration of notice service and delivery proof',
         },
         {
           title: 'Different from buying separate forms',
           body:
             'Blank court forms leave you to connect the notice, service record, N5, N119, arrears, evidence, and hearing prep yourself. Complete Pack builds them as one possession file.',
-          imageSrc: '/images/complete-pack.webp',
-          imageAlt: 'Complete Section 8 possession file preview',
+          imageSrc: '/images/heroes/library/hero-guide-possession-claim-v2.webp',
+          imageAlt: 'Waterbrush illustration of a complete Section 8 possession file',
         },
       ],
     },
@@ -424,8 +424,8 @@ export default function CompleteEvictionPackPage() {
       title: 'How it works',
       intro:
         'This asks for the facts needed to prepare the notice and court papers together.',
-      imageSrc: '/images/how-it-works-complete-pack.webp',
-      imageAlt: 'How the complete Section 8 pack works from notice to court',
+      imageSrc: '/images/heroes/library/hero-guide-possession-claim-v2.webp',
+      imageAlt: 'Waterbrush illustration of how the complete Section 8 pack works from notice to court',
       imageHref: descriptor.wizardHref,
       mobileImageFirstFullBleed: true,
       steps: [

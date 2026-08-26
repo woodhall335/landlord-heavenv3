@@ -67,6 +67,8 @@ function getResendClient(): Resend | null {
  */
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Landlord Heaven <no-reply@landlordheaven.co.uk>';
 const REPLY_TO_EMAIL = process.env.RESEND_REPLY_TO_EMAIL || 'support@landlordheaven.co.uk';
+const ASSISTED_PREP_NOTIFICATION_EMAIL =
+  process.env.ASSISTED_PREP_NOTIFICATION_EMAIL || 'support@landlordheaven.co.uk';
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://landlordheaven.co.uk';
 // Using headerlogo2.png - this was working in old emails
 const LOGO_URL = `${APP_URL}/headerlogo2.png`;
@@ -747,6 +749,62 @@ If you cannot find a suitable time, reply to this email and we will help.`;
     subject: `Your free consultation request - ${productName}`,
     html,
     text,
+  });
+}
+
+export async function sendAssistedPrepConsultationNotification(params: {
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  productName: string;
+  caseId: string;
+  propertyAddress: string;
+  tenantNames: string;
+  urgency: string;
+  overview: string;
+  serviceDetails: Array<{ label: string; value: string }>;
+}): Promise<{ success: boolean; error?: string }> {
+  const caseUrl = `${APP_URL}/dashboard/cases/${params.caseId}`;
+  const details = [
+    ['Customer', `${params.customerName} (${params.customerEmail})`],
+    ['Phone', params.customerPhone],
+    ['Requested assistance', params.productName],
+    ['Property', params.propertyAddress],
+    ['Tenant(s)', params.tenantNames || 'Not provided'],
+    ['Urgency', params.urgency || 'Not provided'],
+    ...params.serviceDetails.map((detail) => [detail.label, detail.value || 'Not provided']),
+  ];
+  const detailRows = details
+    .map(
+      ([label, value]) =>
+        `<p style="margin: 0 0 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.lightGray}; line-height: 1.5;"><strong style="color: ${COLORS.white};">${escapeEmailHtml(label)}:</strong> ${escapeEmailHtml(value)}</p>`
+    )
+    .join('');
+  const safeOverview = escapeEmailHtml(params.overview).replace(/\n/g, '<br>');
+
+  const html = getEmailWrapper(`
+    ${getLogoRow()}
+    ${getHeaderBanner('New Assisted Prep Consultation Request')}
+    ${getContentCard(`
+      <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.lightGray}; line-height: 1.6;">A landlord has submitted a new assisted prep consultation request.</p>
+      ${getInfoBox(detailRows)}
+      <p style="margin: 24px 0 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; color: ${COLORS.white};">Their summary</p>
+      <p style="margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.lightGray}; line-height: 1.6;">${safeOverview}</p>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 26px 0 0;">
+        <tr><td align="center">${getBulletproofButton('Open assisted prep case', caseUrl)}</td></tr>
+      </table>
+    `)}
+    ${getEmailFooter(false)}
+  `);
+  const detailsText = details.map(([label, value]) => `${label}: ${value}`).join('\n');
+  const text = `New assisted prep consultation request\n\n${detailsText}\n\nSummary:\n${params.overview}\n\nOpen case: ${caseUrl}`;
+
+  return sendEmail({
+    to: ASSISTED_PREP_NOTIFICATION_EMAIL,
+    subject: `New assisted prep request — ${params.productName}`,
+    html,
+    text,
+    replyTo: params.customerEmail,
   });
 }
 

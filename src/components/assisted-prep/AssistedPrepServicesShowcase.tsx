@@ -40,8 +40,8 @@ const assistedPrepCards: AssistedPrepShowcaseCard[] = [
     product: 'notice_only',
     priceLabel: getAssistedPrepConfig('section8').priceLabel,
     ctaLabel: 'Book free consultation',
-    imageSrc: '/images/generated/assisted-prep/section8-assisted-prep.png',
-    imageAlt: 'Landlord checking compliance questions before taking action',
+    imageSrc: '/images/illustrations/pricing-cards/assisted-section8.webp',
+    imageAlt: 'Waterbrush illustration of a landlord checking a Section 8 notice and service file',
     routeIntent: 'section8_assisted_prep',
   },
   {
@@ -53,8 +53,8 @@ const assistedPrepCards: AssistedPrepShowcaseCard[] = [
     product: 'complete_pack',
     priceLabel: getAssistedPrepConfig('possession').priceLabel,
     ctaLabel: 'Book free consultation',
-    imageSrc: '/images/generated/assisted-prep/possession-assisted-prep.png',
-    imageAlt: 'Landlord preparing urgent possession claim documents',
+    imageSrc: '/images/illustrations/pricing-cards/assisted-possession.webp',
+    imageAlt: 'Waterbrush illustration of a landlord preparing a possession claim bundle',
     routeIntent: 'possession_assisted_prep',
   },
   {

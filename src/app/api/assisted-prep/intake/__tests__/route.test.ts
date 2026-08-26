@@ -1,7 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { single, sendAssistedPrepConsultationRequest } = vi.hoisted(() => ({
+const {
+  single,
+  sendAssistedPrepConsultationNotification,
+  sendAssistedPrepConsultationRequest,
+} = vi.hoisted(() => ({
   single: vi.fn(),
+  sendAssistedPrepConsultationNotification: vi.fn(),
   sendAssistedPrepConsultationRequest: vi.fn(),
 }));
 
@@ -17,6 +22,7 @@ vi.mock('@/lib/supabase/server', () => ({
 }));
 
 vi.mock('@/lib/email/resend', () => ({
+  sendAssistedPrepConsultationNotification,
   sendAssistedPrepConsultationRequest,
 }));
 
@@ -53,6 +59,7 @@ describe('POST /api/assisted-prep/intake', () => {
       error: null,
     });
     sendAssistedPrepConsultationRequest.mockResolvedValue({ success: true });
+    sendAssistedPrepConsultationNotification.mockResolvedValue({ success: true });
   });
 
   it('requires a meaningful summary of the current issue', async () => {
@@ -84,6 +91,13 @@ describe('POST /api/assisted-prep/intake', () => {
     expect(sendAssistedPrepConsultationRequest).toHaveBeenCalledWith(
       expect.objectContaining({ to: 'jane@example.com' })
     );
+    expect(sendAssistedPrepConsultationNotification).toHaveBeenCalledWith(
+      expect.objectContaining({
+        customerEmail: 'jane@example.com',
+        productName: 'Section 8 Notice Assisted Prep',
+      })
+    );
     expect(body.confirmation_email_sent).toBe(true);
+    expect(body.team_notification_email_sent).toBe(true);
   });
 });

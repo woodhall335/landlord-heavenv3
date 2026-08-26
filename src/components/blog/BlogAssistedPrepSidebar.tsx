@@ -19,8 +19,8 @@ const SIDEBAR_CONFIG_BY_SLUG: Record<string, AssistedPrepSidebarConfig> = {
     href: '/assisted-prep/start?service=section8&product=notice_only&src=blog_ground_14_sidebar',
     routeIntent: 'section8_assisted_prep',
     product: 'notice_only',
-    imageSrc: '/images/heroes/library/hero-assisted-section8-v2.webp',
-    imageAlt: 'Landlord reviewing a Section 8 assisted preparation file',
+    imageSrc: '/images/illustrations/pricing-cards/assisted-section8.webp',
+    imageAlt: 'Waterbrush illustration of a landlord reviewing a Section 8 assisted preparation file',
   },
   'scotland-eviction-ground-1': {
     title: 'Want a second pair of eyes before you act?',
@@ -45,8 +45,8 @@ export function getBlogAssistedPrepSidebarConfig(slug: string): AssistedPrepSide
       href: `/assisted-prep/start?service=section8&product=notice_only&src=blog_${slug}_sidebar`,
       routeIntent: 'section8_assisted_prep',
       product: 'notice_only',
-      imageSrc: '/images/heroes/library/hero-assisted-section8-v2.webp',
-      imageAlt: 'Landlord reviewing a Section 8 assisted preparation file',
+      imageSrc: '/images/illustrations/pricing-cards/assisted-section8.webp',
+      imageAlt: 'Waterbrush illustration of a landlord reviewing a Section 8 assisted preparation file',
     };
   }
 

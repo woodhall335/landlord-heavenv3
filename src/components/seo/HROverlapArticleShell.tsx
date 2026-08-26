@@ -29,6 +29,7 @@ export type HROverlapArticleShellProps = {
   relatedResources: HROverlapRelatedResource[];
   conclusion: ReactNode;
   disclaimer?: ReactNode;
+  journeyPanel?: ReactNode;
   assistedPrepCta?: ReactNode;
   primaryCta?: {
     href: string;
@@ -52,6 +53,7 @@ export function HROverlapArticleShell({
   relatedResources,
   conclusion,
   disclaimer,
+  journeyPanel,
   assistedPrepCta,
   primaryCta,
   secondaryCta,
@@ -94,6 +96,7 @@ export function HROverlapArticleShell({
           </dl>
         </UniversalHero>
 
+        {journeyPanel}
         {assistedPrepCta ? (
           <section className="border-b border-[#e8ddff] bg-white py-8">
             <Container>{assistedPrepCta}</Container>

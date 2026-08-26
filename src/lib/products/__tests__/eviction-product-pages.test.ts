@@ -12,18 +12,18 @@ describe('Section 8 eviction product pages', () => {
 
     expect(source).toContain('Review-ready Section 8 notice and service file');
     expect(source).toContain('Prepare the notice file properly before anything goes to the tenant');
-    expect(source).toContain('/images/notice-stage-desktop.webp');
-    expect(source).toContain('/images/notice-stage-mobile.webp');
+    expect(source).toContain('/images/heroes/library/hero-assisted-section8-v2.webp');
     expect(source).toContain('descriptor.wizardHref');
     expect(source).toContain('8-document Review-ready Section 8 notice and service file');
     expect(source).toContain('Form 3A Section 8 notice, N215 certificate of service, rent arrears schedule, service instructions, validity checklist, compliance declaration, case summary, and what-happens-next guide');
     expect(source).toContain('Stage 1 covers preparing and serving the notice');
     expect(source).toContain(
-      "imageSrc: '/images/generated/notice-only/notice-only-pack-watercolour.webp'",
+      "imageSrc: '/images/heroes/library/hero-assisted-section8-v2.webp'",
     );
-    expect(source).toContain("imageSrc: '/images/section-8-notice.webp'");
-    expect(source).toContain("imageSrc: '/images/section-8-court-paperwork.webp'");
-    expect(source).toContain("imageSrc: '/images/how-it-works-notice-only.webp'");
+    expect(source).toContain("imageSrc: '/images/illustrations/pricing-cards/notice-only.webp'");
+    expect(source).toContain("imageSrc: '/images/illustrations/pricing-cards/complete-pack.webp'");
+    expect(source).toContain("imageSrc: '/images/heroes/library/hero-guide-rent-arrears-schedule-v2.webp'");
+    expect(source).toContain("imageSrc: '/images/heroes/library/hero-guide-proof-of-service-v2.webp'");
     expect(source).toContain('This is more than a blank form.');
     expect(source).toContain('N215 Certificate of Service');
     expect(source).toContain('Compliance Declaration');
@@ -37,14 +37,15 @@ describe('Section 8 eviction product pages', () => {
 
     expect(source).toContain('Review-ready Section 8 court and possession file');
     expect(source).toContain('Prepare the full possession file, not just the court forms');
-    expect(source).toContain('/images/complete-stage-desktop.webp');
-    expect(source).toContain('/images/complete-stage-mobile.webp');
+    expect(source).toContain('/images/heroes/library/hero-guide-possession-claim-v2.webp');
     expect(source).toContain('descriptor.wizardHref');
     expect(source).toContain('Stage 2 is the full court route');
-    expect(source).toContain("imageSrc: '/images/complete-pack.webp'");
-    expect(source).toContain("imageSrc: '/images/section-8-notice.webp'");
-    expect(source).toContain("imageSrc: '/images/section-8-court-paperwork.webp'");
-    expect(source).toContain("imageSrc: '/images/how-it-works-complete-pack.webp'");
+    expect(source).toContain("imageSrc: '/images/heroes/library/hero-guide-possession-claim-v2.webp'");
+    expect(source).toContain("imageSrc: '/images/illustrations/pricing-cards/notice-only.webp'");
+    expect(source).toContain("imageSrc: '/images/illustrations/pricing-cards/complete-pack.webp'");
+    expect(source).toContain("imageSrc: '/images/heroes/library/hero-guide-court-hearing-v2.webp'");
+    expect(source).toContain("imageSrc: '/images/heroes/library/hero-guide-rent-arrears-schedule-v2.webp'");
+    expect(source).toContain("imageSrc: '/images/heroes/library/hero-guide-proof-of-service-v2.webp'");
     expect(source).toContain('everything in Stage 1');
     expect(source).toContain('What you get in the combined pack');
     expect(source).toContain('Stage 1 Notice and Service File');

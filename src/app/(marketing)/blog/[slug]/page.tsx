@@ -45,6 +45,7 @@ import { BlogCtaProvider } from '@/components/blog/BlogCtaContext';
 import { BlogArticleStickyGuard } from '@/components/blog/BlogArticleStickyGuard';
 import { NextSteps } from '@/components/blog/NextSteps';
 import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
+import { Section8GroundRouteCards } from '@/components/seo/Section8GroundRouteCards';
 import { MoneyClaimBridge } from '@/components/marketing/CommercialBridge';
 import { getBlogImagesForPost, getBlogImagesForPostThumb } from '@/lib/blog/image-manifest';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
@@ -157,6 +158,16 @@ function getAssistedServiceForBlogPost(post: BlogPost): AssistedPrepService | nu
     return 'section8';
   }
   return null;
+}
+
+function getSection8GroundBlogRoute(slug: string): { groundCode: string; source: string } | null {
+  const match = slug.match(/^england-section-8-ground-(1|2|7|8|10-11|12|14|17)$/i);
+  if (!match) return null;
+
+  return {
+    groundCode: match[1] === '10-11' ? '10 and 11' : match[1],
+    source: `blog_section8_ground_${match[1]}`,
+  };
 }
 
 function getComplianceTopicForPost(slug: string): { topic: AskHeavenTopic; prompt: string; title: string } | null {
@@ -608,6 +619,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
   const heroSrc = manifestImages.hero || post.heroImage;
   const productCta = getBlogProductCta(post);
   const assistedService = getAssistedServiceForBlogPost(post);
+  const section8GroundBlogRoute = getSection8GroundBlogRoute(post.slug);
   const extractedFaqs = extractFaqsFromContent(post.content);
   const resolvedFaqs = [
     ...(post.faqs ?? []),
@@ -925,7 +937,13 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 </BlogProse>
               </BlogCtaProvider>
 
-              {assistedService ? (
+              {section8GroundBlogRoute ? (
+                <Section8GroundRouteCards
+                  groundCode={section8GroundBlogRoute.groundCode}
+                  source={section8GroundBlogRoute.source}
+                  className="mt-10 -mx-4 sm:mx-0"
+                />
+              ) : assistedService ? (
                 <AssistedPrepServicesShowcase
                   pagePath={`/blog/${slug}`}
                   pageType="guide"

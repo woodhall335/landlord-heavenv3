@@ -30,4 +30,15 @@ describe('AssistedPrepIntakeForm', () => {
     expect(overview).toHaveAttribute('minlength', '15');
     expect(screen.queryByText('Add a short note')).not.toBeInTheDocument();
   });
+
+  it('asks the landlord to confirm the assistance they need', () => {
+    render(<AssistedPrepIntakeForm />);
+
+    expect(screen.getByLabelText('What type of assistance do you need?')).toHaveValue('section8');
+    expect(
+      screen.getByRole('option', {
+        name: /Full eviction case, including notice and court forms/,
+      })
+    ).toBeInTheDocument();
+  });
 });

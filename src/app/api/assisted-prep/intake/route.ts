@@ -5,7 +5,10 @@ import {
   getAssistedPrepConfig,
   normalizeAssistedPrepService,
 } from '@/lib/assisted-prep';
-import { sendAssistedPrepConsultationRequest } from '@/lib/email/resend';
+import {
+  sendAssistedPrepConsultationNotification,
+  sendAssistedPrepConsultationRequest,
+} from '@/lib/email/resend';
 import { logger } from '@/lib/logger';
 
 export const runtime = 'nodejs';
@@ -47,6 +50,26 @@ function buildServiceFacts(input: z.infer<typeof intakeSchema>) {
     notice_served: input.possession_notice_served || 'not_sure',
     notice_date: input.possession_notice_date,
   };
+}
+
+function buildServiceDetails(input: z.infer<typeof intakeSchema>): Array<{ label: string; value: string }> {
+  if (input.service === 'section8') {
+    return [
+      { label: 'Ground or reason', value: input.section8_reason || 'Not provided' },
+      {
+        label: 'Notice already served',
+        value: input.section8_notice_already_served || 'Not sure',
+      },
+    ];
+  }
+
+  return [
+    {
+      label: 'Notice already served',
+      value: input.possession_notice_served || 'Not sure',
+    },
+    { label: 'Notice service date', value: input.possession_notice_date || 'Not provided' },
+  ];
 }
 
 export async function POST(request: Request) {
@@ -158,13 +181,27 @@ export async function POST(request: Request) {
     }
 
     const bookingUrl = process.env.NEXT_PUBLIC_CALENDLY_ASSISTED_PREP_URL || 'https://calendly.com/';
-    const emailResult = await sendAssistedPrepConsultationRequest({
-      to: input.email,
-      customerName: input.name,
-      productName: config.label,
-      caseId: (caseRow as any).id,
-      bookingUrl,
-    });
+    const [emailResult, notificationResult] = await Promise.all([
+      sendAssistedPrepConsultationRequest({
+        to: input.email,
+        customerName: input.name,
+        productName: config.label,
+        caseId: (caseRow as any).id,
+        bookingUrl,
+      }),
+      sendAssistedPrepConsultationNotification({
+        customerName: input.name,
+        customerEmail: input.email,
+        customerPhone: input.phone,
+        productName: config.label,
+        caseId: (caseRow as any).id,
+        propertyAddress: input.property_address,
+        tenantNames: input.tenant_names,
+        urgency: input.urgency,
+        overview: input.overview,
+        serviceDetails: buildServiceDetails(input),
+      }),
+    ]);
 
     if (!emailResult.success) {
       logger.error('Failed to send assisted prep consultation acknowledgement', {
@@ -174,12 +211,21 @@ export async function POST(request: Request) {
       });
     }
 
+    if (!notificationResult.success) {
+      logger.error('Failed to send assisted prep team notification', {
+        caseId: (caseRow as any).id,
+        service,
+        error: notificationResult.error,
+      });
+    }
+
     return NextResponse.json({
       ok: true,
       case_id: (caseRow as any).id,
       product_type: config.sku,
       service: config.service,
       confirmation_email_sent: emailResult.success,
+      team_notification_email_sent: notificationResult.success,
     });
   } catch (error: any) {
     if (error.message === 'Unauthorized - Please log in') {

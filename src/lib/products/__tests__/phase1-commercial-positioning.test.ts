@@ -30,7 +30,7 @@ describe('Phase 1 commercial positioning', () => {
 
     expect(completePackSource).toContain('Solicitor-approved Section 8 court and possession file');
     expect(completePackSource).toContain('Prepare the full possession file, not just the court forms');
-    expect(completePackSource).toContain('/images/complete-stage-desktop.webp');
+    expect(completePackSource).toContain('/images/heroes/library/hero-guide-possession-claim-v2.webp');
     expect(completePackSource).toContain('N5, N119, witness statement, court readiness status, and evidence collection checklist');
 
     expect(rentIncreaseHubSource).toContain("reviewPillLayout: 'stacked'");
@@ -46,7 +46,7 @@ describe('Phase 1 commercial positioning', () => {
     expect(source).toContain('/images/money-claim-mobile.webp');
     expect(source).toContain('/images/money-claim-wizard.webp');
     expect(source).toContain("imageSrc: '/images/money-claim-selector.webp'");
-    expect(source).toContain("imageSrc: '/images/section-8-court-paperwork.webp'");
+    expect(source).toContain("imageSrc: '/images/illustrations/pricing-cards/complete-pack.webp'");
   });
 
   it('removes England-default routing to old notice aliases and regional tenancy aliases from high-prominence surfaces', () => {
