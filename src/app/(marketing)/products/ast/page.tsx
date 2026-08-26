@@ -366,8 +366,8 @@ export default function EnglandTenancyHubPage() {
       title: 'How it works',
       intro:
         'Compare the options first, then open the product page that matches the tenancy.',
-      imageSrc: '/tenancy-how-it-works.webp',
-      imageAlt: 'Landlord tenancy agreement preview',
+      imageSrc: '/images/illustrations/tenancy-regions/england-agreement-selection-waterbrush-v1.webp',
+      imageAlt: 'Waterbrush illustration of choosing between England tenancy agreement routes',
       steps: [
         {
           step: 'Step 01',

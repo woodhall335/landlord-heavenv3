@@ -34,15 +34,15 @@ const processIllustrations: Partial<Record<AssistedPrepService, {
   body: string;
 }>> = {
   section8: {
-    imageSrc: '/images/generated/assisted-prep/assisted-section8-process-watercolor-v1.png',
-    imageAlt: 'Watercolour illustration of a Section 8 notice, notice date calendar and proof of service',
+    imageSrc: '/images/illustrations/products/section8-notice-preparation-waterbrush-v1.webp',
+    imageAlt: 'Waterbrush illustration of a Section 8 notice, service record and property keys',
     eyebrow: 'From notice to service',
     title: 'Keep the notice steps in the right order',
     body: 'The notice, date calculation and proof of service need to match the facts of your case. We help you organise those stages before you serve anything.',
   },
   possession: {
-    imageSrc: '/images/generated/assisted-prep/assisted-possession-process-watercolor-v1.png',
-    imageAlt: 'Watercolour illustration of a served notice, evidence bundle and possession hearing calendar',
+    imageSrc: '/images/illustrations/products/possession-court-pack-waterbrush-v1.webp',
+    imageAlt: 'Waterbrush illustration of a possession case file, court forms and property keys',
     eyebrow: 'From notice to court file',
     title: 'Build a possession file a judge can follow',
     body: 'Whether we prepare a fresh notice or review one you have served, the notice, service proof, claim forms and evidence should all support the same reason for possession.',

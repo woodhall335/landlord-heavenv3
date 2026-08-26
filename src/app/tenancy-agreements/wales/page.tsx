@@ -185,7 +185,7 @@ export default function WalesOccupationContractPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <main className="min-h-screen bg-gradient-to-br from-[#fbfaff] via-[#f4efff] to-[#fbfaff] text-[#20103f]">
+      <main className="regional-tenancy-page min-h-screen bg-gradient-to-br from-[#fbfaff] via-[#f4efff] to-[#fbfaff] text-[#20103f]">
         <UniversalHero
           variant="pastel"
           backgroundImageKey="tenancyWales"
@@ -514,6 +514,29 @@ export default function WalesOccupationContractPage() {
               </div>
             </div>
 
+            <div className="mt-8 grid overflow-hidden rounded-2xl border border-[#e8e1f8] bg-[#faf8ff] md:grid-cols-[1.1fr_0.9fr]">
+              <div className="flex flex-col justify-center p-6 md:p-8">
+                <p className="public-eyebrow">Designed for the whole setup</p>
+                <h3 className="mt-3 text-2xl font-bold tracking-tight text-[#20103f]">
+                  Keep the occupation contract and move-in details together
+                </h3>
+                <p className="mt-4 leading-7 text-[#5d5672]">
+                  The agreement is easier to use when its core terms, written statement,
+                  inventory prompts and practical records all reflect the same property and
+                  contract-holder details from the start.
+                </p>
+              </div>
+              <div className="relative min-h-[15rem] bg-white sm:min-h-[18rem]">
+                <Image
+                  src="/images/illustrations/tenancy-regions/wales-contract-contents-waterbrush-v1.webp"
+                  alt="Waterbrush illustration of a Wales occupation contract, written statement checklist, inventory and keys"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 42vw"
+                  className="object-cover object-center"
+                />
+              </div>
+            </div>
+
             <div className="mt-6 rounded-lg border border-[#d8c8ff] bg-[#f5f1ff] p-6">
               <p className="font-semibold text-[#31224f]">
                 Looking for more detail? See our{' '}
@@ -604,6 +627,29 @@ export default function WalesOccupationContractPage() {
                 <li>Electrical safety documentation where required</li>
                 <li>Any notices or compliance information relevant to the tenancy</li>
               </ul>
+            </div>
+
+            <div className="mt-8 grid overflow-hidden rounded-xl border border-[#e8e1f8] bg-[#faf8ff] lg:grid-cols-[1fr_0.9fr]">
+              <div className="flex flex-col justify-center p-6 md:p-8">
+                <p className="public-eyebrow">Keep the setup records together</p>
+                <h3 className="mt-3 text-2xl font-bold tracking-tight text-[#20103f]">
+                  Make the contract easier to use after move-in
+                </h3>
+                <p className="mt-4 leading-7 text-[#5d5672]">
+                  The occupation contract is the core document, but a clear inventory,
+                  compliance records and handover notes make the tenancy easier to manage and
+                  reconstruct later if a question arises.
+                </p>
+              </div>
+              <div className="relative min-h-[17rem] bg-white sm:min-h-[21rem]">
+                <Image
+                  src="/images/illustrations/tenancy-regions/wales-occupation-contract-setup-waterbrush-v1.webp"
+                  alt="Waterbrush illustration of a Wales occupation contract, written-statement checklist, calendar and keys"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 42vw"
+                  className="object-cover object-center"
+                />
+              </div>
             </div>
           </div>
         </section>

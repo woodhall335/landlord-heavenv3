@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { AssistedPrepIntakeForm } from '@/components/assisted-prep/AssistedPrepIntakeForm';
 import { AssistedPrepServiceDetails } from '@/components/assisted-prep/AssistedPrepServiceDetails';
+import { AssistedPrepVisualExplainer } from '@/components/assisted-prep/AssistedPrepVisualExplainer';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import {
   getAssistedPrepConfig,
@@ -135,7 +136,8 @@ export default async function AssistedPrepStartPage({ searchParams }: StartPageP
         />
         <section className="mx-auto max-w-[112rem] px-5 py-16 sm:px-8 md:py-20 lg:px-10 2xl:px-12">
           <div id="whats-included" className="scroll-mt-28">
-            <AssistedPrepServiceDetails service={service} showCta={false} />
+            <AssistedPrepVisualExplainer service={service} compact />
+            <AssistedPrepServiceDetails service={service} showCta={false} className="mt-10" />
           </div>
           <div id="consultation-form" className="mt-10 scroll-mt-28">
             <Suspense fallback={<div className="rounded-[2rem] bg-white p-6 shadow-sm md:p-8">Loading assisted prep...</div>}>

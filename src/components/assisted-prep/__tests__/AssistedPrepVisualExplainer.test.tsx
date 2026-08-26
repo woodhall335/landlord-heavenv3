@@ -14,15 +14,15 @@ vi.mock('next/image', () => ({
 
 describe('AssistedPrepVisualExplainer', () => {
   it.each([
-    ['overview', 'assisted-prep-consultation-watercolor-v1.png'],
-    ['section8', 'assisted-section8-notice-watercolor-v1.png'],
-    ['possession', 'assisted-possession-claim-watercolor-v1.png'],
-  ] as const)('uses the bespoke %s watercolour illustration', (service, assetName) => {
+    ['overview', '/images/illustrations/services/assisted-prep-consultation-waterbrush-v2.webp'],
+    ['section8', '/images/illustrations/services/section8-service-evidence-waterbrush-v2.webp'],
+    ['possession', '/images/illustrations/services/possession-court-evidence-waterbrush-v2.webp'],
+  ] as const)('uses the bespoke %s waterbrush illustration', (service, assetPath) => {
     render(<AssistedPrepVisualExplainer service={service} />);
 
     expect(screen.getByRole('img')).toHaveAttribute(
       'src',
-      `/images/generated/assisted-prep/${assetName}`
+      assetPath
     );
   });
 });

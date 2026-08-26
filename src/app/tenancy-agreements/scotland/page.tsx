@@ -169,7 +169,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
         jurisdiction="scotland"
       />
 
-      <main className="min-h-screen bg-gradient-to-br from-[#fbfaff] via-white to-[#f4efff] text-gray-900">
+      <main className="regional-tenancy-page min-h-screen bg-gradient-to-br from-[#fbfaff] via-white to-[#f4efff] text-gray-900">
         <UniversalHero
           badge="Scotland Only"
           badgeIcon={<Scale className="w-4 h-4" />}
@@ -638,6 +638,29 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                   </p>
                 </div>
               </div>
+
+              <div className="mt-8 grid overflow-hidden rounded-2xl border border-[#e8e1f8] bg-[#faf8ff] lg:grid-cols-[0.9fr_1.1fr]">
+                <div className="relative min-h-[17rem] bg-white sm:min-h-[21rem]">
+                  <Image
+                    src="/images/illustrations/tenancy-regions/scotland-prt-setup-waterbrush-v1.webp"
+                    alt="Waterbrush illustration of a Scottish PRT file, move-in calendar, checklist and keys"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 42vw"
+                    className="object-cover object-center"
+                  />
+                </div>
+                <div className="flex flex-col justify-center p-6 md:p-8">
+                  <p className="public-eyebrow">A cleaner PRT setup</p>
+                  <h3 className="mt-3 text-2xl font-bold tracking-tight text-[#20103f]">
+                    Keep the agreement and move-in records easy to follow
+                  </h3>
+                  <p className="mt-4 leading-7 text-[#5d5672]">
+                    The agreement is the starting point, not the whole tenancy file. Keeping the
+                    property condition, keys, meter records and tenant details together makes the
+                    Scottish setup easier to manage from day one.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -653,6 +676,29 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                 without making reckless promises or pretending the agreement alone solves
                 every legal issue.
               </p>
+
+              <div className="mb-10 grid overflow-hidden rounded-2xl border border-[#e8e1f8] bg-white md:grid-cols-[0.9fr_1.1fr]">
+                <div className="relative min-h-[15rem] bg-[#faf8ff] sm:min-h-[18rem]">
+                  <Image
+                    src="/images/illustrations/tenancy-regions/scotland-prt-compliance-waterbrush-v1.webp"
+                    alt="Waterbrush illustration of Scottish PRT compliance records, deposit information, checklist and keys"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 42vw"
+                    className="object-cover object-center"
+                  />
+                </div>
+                <div className="flex flex-col justify-center p-6 md:p-8">
+                  <p className="public-eyebrow">More than an agreement</p>
+                  <h3 className="mt-3 text-2xl font-bold tracking-tight text-[#20103f]">
+                    Put the practical Scottish compliance record in order early
+                  </h3>
+                  <p className="mt-4 leading-7 text-[#5d5672]">
+                    Your PRT is one part of the letting file. Registration, deposit handling,
+                    property condition and the information recorded at move-in should be kept
+                    consistent with the tenancy you are creating.
+                  </p>
+                </div>
+              </div>
 
               <div className="grid gap-6 md:grid-cols-3">
                 <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">

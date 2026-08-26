@@ -21,13 +21,13 @@ describe('AssistedPrepServiceDetails', () => {
   it.each([
     [
       'section8',
-      'assisted-section8-notice-watercolor-v1.png',
-      'assisted-section8-process-watercolor-v1.png',
+      'section8-service-evidence-waterbrush-v2.webp',
+      'section8-notice-preparation-waterbrush-v1.webp',
     ],
     [
       'possession',
-      'assisted-possession-claim-watercolor-v1.png',
-      'assisted-possession-process-watercolor-v1.png',
+      'possession-court-evidence-waterbrush-v2.webp',
+      'possession-court-pack-waterbrush-v1.webp',
     ],
   ] as const)('keeps only the %s process illustration with the service explanation', (service, primaryImage, processImage) => {
     render(<AssistedPrepServiceDetails service={service} showCta={false} />);

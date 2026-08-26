@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
@@ -143,7 +144,7 @@ export default function NorthernIrelandTenancyPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <main className="min-h-screen bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
+      <main className="regional-tenancy-page min-h-screen bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <UniversalHero
           variant="pastel"
           backgroundImageKey="tenancyNorthernIreland"
@@ -171,6 +172,31 @@ export default function NorthernIrelandTenancyPage() {
             lockJurisdiction
             intro="You get more than a Northern Ireland tenancy agreement. Landlord Heaven builds a practical NI tenancy pack with the agreement, setup documents, and preview-before-payment flow so the product is more useful than a generic download."
           />
+        </section>
+
+        <section className="container mx-auto px-4 py-12">
+          <div className="grid overflow-hidden rounded-2xl border border-[#e3d7ff] bg-white shadow-sm lg:grid-cols-[1fr_0.9fr]">
+            <div className="flex flex-col justify-center p-6 md:p-8">
+              <p className="public-eyebrow">Built for Northern Ireland</p>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#20103f]">
+                Set up the agreement and practical records together
+              </h2>
+              <p className="mt-4 max-w-2xl leading-7 text-[#5d5672]">
+                The guided route keeps the Private Tenancy Agreement, tenancy information,
+                deposit details and practical setup records in one Northern Ireland-specific file
+                for you to review before payment.
+              </p>
+            </div>
+            <div className="relative min-h-[18rem] bg-white sm:min-h-[22rem]">
+              <Image
+                src="/images/illustrations/tenancy-regions/northern-ireland-tenancy-setup-waterbrush-v1.webp"
+                alt="Waterbrush illustration of a Northern Ireland tenancy file, information checklist, calendar and keys"
+                fill
+                sizes="(max-width: 1024px) 100vw, 42vw"
+                className="object-cover object-center"
+              />
+            </div>
+          </div>
         </section>
 
         {/* 2025 Legal Updates Highlight */}
@@ -220,6 +246,28 @@ export default function NorthernIrelandTenancyPage() {
               <p className="text-gray-700 leading-relaxed mb-4">
                 Private tenancies in Northern Ireland are primarily governed by the <strong>Private Tenancies Order (Northern Ireland) 2006</strong> and the <strong>Private Tenancies Act (Northern Ireland) 2022</strong>, with significant updates taking effect from <strong>1 April 2025</strong>.
               </p>
+              <div className="not-prose my-8 grid overflow-hidden rounded-2xl border border-[#e8e1f8] bg-[#faf8ff] md:grid-cols-[0.9fr_1.1fr]">
+                <div className="relative min-h-[15rem] bg-white sm:min-h-[18rem]">
+                  <Image
+                    src="/images/illustrations/tenancy-regions/northern-ireland-compliance-waterbrush-v1.webp"
+                    alt="Waterbrush illustration of a Northern Ireland tenancy agreement, safety certificate, calendar, deposit record and keys"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 42vw"
+                    className="object-cover object-center"
+                  />
+                </div>
+                <div className="flex flex-col justify-center p-6 md:p-8">
+                  <p className="public-eyebrow">Set up the file properly</p>
+                  <h3 className="mt-3 text-2xl font-bold tracking-tight text-[#20103f]">
+                    Keep the agreement connected to the wider letting records
+                  </h3>
+                  <p className="mt-4 leading-7 text-[#5d5672]">
+                    A clear tenancy agreement works best when the safety, deposit, registration
+                    and service records are easy to locate alongside it. The guided pack helps
+                    you start with those practical details in one place.
+                  </p>
+                </div>
+              </div>
               <div className="bg-red-50 border-l-4 border-red-600 p-6 my-6">
                 <h3 className="text-xl font-semibold text-red-900 mb-2">Key Features of NI Private Tenancies</h3>
                 <ul className="list-disc list-inside text-gray-700 space-y-2">
