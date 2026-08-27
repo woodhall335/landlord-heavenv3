@@ -131,8 +131,8 @@ export function Section8GroundRouteCards({
             </p>
             <div className="mt-6 grid gap-4 lg:grid-cols-2">
               <div className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-sm">
-                <div className="relative mb-4 aspect-[16/6] overflow-hidden rounded-xl border border-white/15 bg-white/10">
-                  <Image src="/images/illustrations/services/section8-service-evidence-waterbrush-v2.webp" alt="Waterbrush illustration of a Section 8 notice, calendar and service evidence" fill sizes="(max-width: 1024px) 100vw, 36vw" className="object-contain p-3" />
+                <div className="relative mb-4 aspect-[16/10] overflow-hidden rounded-xl border border-white/15 bg-white">
+                  <Image src="/images/generated/assisted-prep/section8-assisted-prep.png" alt="Waterbrush illustration of landlords preparing a Section 8 notice" fill sizes="(max-width: 1024px) 100vw, 36vw" className="object-cover object-center" />
                 </div>
                 <p className="text-sm font-semibold text-white">Section 8 notice assistance</p>
                 <p className="mt-2 text-sm leading-6 text-white/80">For landlords who need the Form 3A notice, service plan and evidence prompts checked before serving.</p>
@@ -141,8 +141,8 @@ export function Section8GroundRouteCards({
                 </TrackedLink>
               </div>
               <div className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-sm">
-                <div className="relative mb-4 aspect-[16/6] overflow-hidden rounded-xl border border-white/15 bg-white/10">
-                  <Image src="/images/illustrations/services/possession-court-evidence-waterbrush-v2.webp" alt="Waterbrush illustration of a possession claim bundle, court forms and evidence" fill sizes="(max-width: 1024px) 100vw, 36vw" className="object-contain p-3" />
+                <div className="relative mb-4 aspect-[16/10] overflow-hidden rounded-xl border border-white/15 bg-white">
+                  <Image src="/images/generated/assisted-prep/possession-assisted-prep.png" alt="Waterbrush illustration of landlords preparing a possession claim" fill sizes="(max-width: 1024px) 100vw, 36vw" className="object-cover object-center" />
                 </div>
                 <p className="text-sm font-semibold text-white">Full eviction case assistance</p>
                 <p className="mt-2 text-sm leading-6 text-white/80">For landlords who want the Section 8 notice plus N5, N119, service record, evidence bundle and court-stage file prepared together.</p>
