@@ -103,7 +103,7 @@ export function HROverlapArticleShell({
           </section>
         ) : null}
         <Container id="guide-content" className="scroll-mt-28 py-12">
-          <article className="mx-auto max-w-4xl rounded-[1.5rem] border border-[#e8ddff] bg-white p-6 shadow-sm md:p-10">
+          <article className="mx-auto max-w-5xl rounded-[1.5rem] border border-[#e8ddff] bg-white p-6 shadow-sm md:p-10">
             <div className="space-y-10 text-base leading-8 text-[#4d4365]">
               {sections.map((section) => (
                 <section key={section.heading}>
@@ -184,8 +184,8 @@ export function HROverlapArticleShell({
               </section>
             </div>
           </article>
-          <div className="mx-auto mt-10 max-w-4xl">
-            <FAQSection faqs={faqs} includeSchema={false} showContactCTA={false} />
+          <div className="mx-auto mt-10 max-w-5xl">
+            <FAQSection faqs={faqs} includeSchema={false} showContactCTA={false} contentWidth="wide" />
           </div>
         </Container>
       </main>

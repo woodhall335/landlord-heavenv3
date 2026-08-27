@@ -51,7 +51,7 @@ export function Section8GroundRouteCards({
 
   return (
     <section className={`border-b border-[#e8ddff] bg-[#fcfaff] py-12 md:py-16 ${className ?? ''}`} aria-label={`${groundTitle} next steps`}>
-      <Container>
+      <Container size="large">
         <div className="overflow-hidden rounded-[2rem] border border-[#dfd1ff] bg-white shadow-[0_20px_55px_rgba(72,42,129,0.10)]">
           <div className="grid gap-8 border-b border-[#ede5ff] bg-[linear-gradient(135deg,#fff_0%,#f5efff_100%)] p-6 md:p-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:p-10">
             <div>
@@ -125,12 +125,15 @@ export function Section8GroundRouteCards({
 
           <div className="border-t border-[#e7dcff] bg-[linear-gradient(135deg,#28134d_0%,#6332bd_52%,#8a56d9_100%)] p-6 text-white md:p-8 lg:p-10">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-white/75">Prefer us to prepare it with you?</p>
-            <h3 className="mt-2 max-w-3xl text-2xl font-bold tracking-tight md:text-3xl">Start with a free consultation before any paid work is agreed</h3>
-            <p className="mt-3 max-w-3xl text-sm leading-6 text-white/85 md:text-base md:leading-7">
+            <h3 className="mt-2 max-w-[68rem] text-2xl font-bold leading-tight tracking-tight md:text-3xl lg:text-4xl">Start with a free consultation before any paid work is agreed</h3>
+            <p className="mt-4 max-w-5xl text-sm leading-6 text-white/85 md:text-base md:leading-7">
               Tell us what has happened and show us the documents you have. We confirm whether assisted preparation is suitable, explain the scope, and only then send a secure payment link.
             </p>
             <div className="mt-6 grid gap-4 lg:grid-cols-2">
               <div className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-sm">
+                <div className="relative mb-4 aspect-[16/6] overflow-hidden rounded-xl border border-white/15 bg-white/10">
+                  <Image src="/images/illustrations/services/section8-service-evidence-waterbrush-v2.webp" alt="Waterbrush illustration of a Section 8 notice, calendar and service evidence" fill sizes="(max-width: 1024px) 100vw, 36vw" className="object-contain p-3" />
+                </div>
                 <p className="text-sm font-semibold text-white">Section 8 notice assistance</p>
                 <p className="mt-2 text-sm leading-6 text-white/80">For landlords who need the Form 3A notice, service plan and evidence prompts checked before serving.</p>
                 <TrackedLink href={`/assisted-prep/start?service=section8&product=notice_only&src=${source}_assisted_notice`} pagePath="/section-8-grounds" pageType="guide" ctaLabel="Book Section 8 consultation" ctaPosition="section" eventName="entry_page_primary_cta_click" routeIntent="section8_assisted_prep" product="notice_only" className="mt-4 inline-flex items-center rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#4c1d95] transition hover:bg-[#f4edff]">
@@ -138,8 +141,11 @@ export function Section8GroundRouteCards({
                 </TrackedLink>
               </div>
               <div className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-sm">
+                <div className="relative mb-4 aspect-[16/6] overflow-hidden rounded-xl border border-white/15 bg-white/10">
+                  <Image src="/images/illustrations/services/possession-court-evidence-waterbrush-v2.webp" alt="Waterbrush illustration of a possession claim bundle, court forms and evidence" fill sizes="(max-width: 1024px) 100vw, 36vw" className="object-contain p-3" />
+                </div>
                 <p className="text-sm font-semibold text-white">Full eviction case assistance</p>
-                <p className="mt-2 text-sm leading-6 text-white/80">For landlords who want the notice plus N5, N119, service record, evidence bundle and court-stage file prepared together.</p>
+                <p className="mt-2 text-sm leading-6 text-white/80">For landlords who want the Section 8 notice plus N5, N119, service record, evidence bundle and court-stage file prepared together.</p>
                 <TrackedLink href={`/assisted-prep/start?service=possession&product=complete_pack&src=${source}_assisted_full_case`} pagePath="/section-8-grounds" pageType="guide" ctaLabel="Book full case consultation" ctaPosition="section" eventName="entry_page_primary_cta_click" routeIntent="possession_assisted_prep" product="complete_pack" className="mt-4 inline-flex items-center rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#4c1d95] transition hover:bg-[#f4edff]">
                   Book a free consultation · {possessionPrep.priceLabel}
                 </TrackedLink>

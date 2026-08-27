@@ -43,6 +43,8 @@ export interface FAQSectionProps {
   defaultOpenIndex?: number | null;
   /** Optional trust positioning bar beneath heading copy */
   showTrustPositioningBar?: boolean;
+  /** Controls the readable width of the visible FAQ content. */
+  contentWidth?: "narrow" | "wide";
 }
 
 /**
@@ -131,6 +133,7 @@ export function FAQSection({
   className,
   defaultOpenIndex = 0,
   showTrustPositioningBar = false,
+  contentWidth = "narrow",
 }: FAQSectionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(defaultOpenIndex);
   const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
@@ -177,7 +180,7 @@ export function FAQSection({
   return (
     <section id={id} className={clsx("py-16 md:py-20", bgClass, className)}>
       <Container>
-        <div className="max-w-3xl mx-auto">
+        <div className={clsx("mx-auto", contentWidth === "wide" ? "max-w-5xl" : "max-w-3xl")}>
           {/* Section Header */}
           <div className="text-center mb-12">
             {badge && (
