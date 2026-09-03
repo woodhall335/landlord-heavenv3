@@ -25,6 +25,11 @@ import {
   buildRecoveryUnsubscribeUrl,
   isRecoveryUnsubscribedFromEvents,
 } from '@/lib/recovery/unsubscribe';
+import {
+  RECOVERY_RECIPIENT_COOLDOWN_MINUTES,
+  claimRecoveryEmail,
+  completeRecoveryEmailClaim,
+} from '@/lib/recovery/send-claim';
 import { createAdminClient } from '@/lib/supabase/server';
 import { completeCronRun, startCronRun } from '@/lib/validation/cron-run-tracker';
 
@@ -33,6 +38,7 @@ export const RECOVERY_ORCHESTRATOR_JOB_NAME = 'recovery:orchestrate' as const;
 const DEFAULT_BATCH_LIMIT = 50;
 const CHECKOUT_MIN_AGE_MINUTES = 45;
 const CHECKOUT_MAX_AGE_HOURS = 23;
+const WIZARD_HOUR_1_AGE_HOURS = 1;
 const CASE_DAY_1_AGE_HOURS = 24;
 const WIZARD_DAY_3_AGE_HOURS = 24 * 3;
 const PREVIEW_DAY_7_AGE_HOURS = 24 * 7;
@@ -186,8 +192,8 @@ function hasCaseStageEmailActivity(
           CASE_PREVIEW_RECOVERY_SENT_EVENT_TYPES[stage as 'day_1' | 'day_7' | 'manual'],
         ])
       : new Set<string>([
-          CASE_WIZARD_RECOVERY_ATTEMPT_EVENT_TYPES[stage as 'day_1' | 'day_3'],
-          CASE_WIZARD_RECOVERY_SENT_EVENT_TYPES[stage as 'day_1' | 'day_3'],
+          CASE_WIZARD_RECOVERY_ATTEMPT_EVENT_TYPES[stage as 'hour_1' | 'day_1' | 'day_3'],
+          CASE_WIZARD_RECOVERY_SENT_EVENT_TYPES[stage as 'hour_1' | 'day_1' | 'day_3'],
         ]);
 
   return events.some(
@@ -209,15 +215,19 @@ function getPreviewDueStage(caseRow: CaseRow, events: EmailEventRow[], email: st
   return null;
 }
 
-function getWizardDueStage(caseRow: CaseRow, events: EmailEventRow[], email: string | null): 'day_1' | 'day_3' | null {
+function getWizardDueStage(caseRow: CaseRow, events: EmailEventRow[], email: string | null): 'hour_1' | 'day_1' | 'day_3' | null {
   const ageHours = getAgeHours(caseRow.updated_at);
 
-  if (ageHours >= CASE_DAY_1_AGE_HOURS && !hasCaseStageEmailActivity(events, 'wizard', caseRow.id, email, 'day_1')) {
-    return 'day_1';
+  if (ageHours >= CASE_DAY_1_AGE_HOURS) {
+    if (!hasCaseStageEmailActivity(events, 'wizard', caseRow.id, email, 'day_1')) return 'day_1';
+    if (ageHours >= WIZARD_DAY_3_AGE_HOURS) {
+      return hasCaseStageEmailActivity(events, 'wizard', caseRow.id, email, 'day_3') ? null : 'day_3';
+    }
+    return null;
   }
 
-  if (ageHours >= WIZARD_DAY_3_AGE_HOURS && !hasCaseStageEmailActivity(events, 'wizard', caseRow.id, email, 'day_3')) {
-    return 'day_3';
+  if (ageHours >= WIZARD_HOUR_1_AGE_HOURS && !hasCaseStageEmailActivity(events, 'wizard', caseRow.id, email, 'hour_1')) {
+    return 'hour_1';
   }
 
   return null;
@@ -364,6 +374,21 @@ export async function runRecoveryOrchestrator(options: RecoveryOptions = {}): Pr
         continue;
       }
 
+      const claim = await claimRecoveryEmail({
+        supabase: supabase as any,
+        claimKey: `checkout:${order.id}:initial`,
+        email,
+        recoveryKind: 'checkout',
+        subjectId: order.id,
+        stage: 'initial',
+        source: RECOVERY_ORCHESTRATOR_JOB_NAME,
+      });
+      if (!claim.claimed || !claim.claimId) {
+        result.skipped += 1;
+        result.skipped_ids.push(order.id);
+        continue;
+      }
+
       const emailResult = await sendAbandonedCheckoutRecoveryEmail({
         to: email,
         customerName: getCustomerName(contact?.name || user?.full_name, email),
@@ -388,6 +413,12 @@ export async function runRecoveryOrchestrator(options: RecoveryOptions = {}): Pr
           recovery_kind: 'checkout',
         },
       });
+      await completeRecoveryEmailClaim({
+        supabase: supabase as any,
+        claimId: claim.claimId,
+        success: emailResult.success,
+        error: emailResult.success ? null : emailResult.error,
+      });
 
       if (emailResult.success) {
         result.emails_sent += 1;
@@ -407,7 +438,7 @@ export async function runRecoveryOrchestrator(options: RecoveryOptions = {}): Pr
         .select(
           'id, user_id, case_type, jurisdiction, status, workflow_status, wizard_progress, wizard_completed_at, collected_facts, created_at, updated_at'
         )
-        .lte('updated_at', hoursAgoIso(CASE_DAY_1_AGE_HOURS))
+        .lte('updated_at', hoursAgoIso(WIZARD_HOUR_1_AGE_HOURS))
         .order('updated_at', { ascending: true })
         .limit(batchLimit * 6);
 
@@ -441,8 +472,10 @@ export async function runRecoveryOrchestrator(options: RecoveryOptions = {}): Pr
             CASE_PREVIEW_RECOVERY_ATTEMPT_EVENT_TYPES.day_7,
             CASE_WIZARD_RECOVERY_SENT_EVENT_TYPES.day_1,
             CASE_WIZARD_RECOVERY_SENT_EVENT_TYPES.day_3,
+            CASE_WIZARD_RECOVERY_SENT_EVENT_TYPES.hour_1,
             CASE_WIZARD_RECOVERY_ATTEMPT_EVENT_TYPES.day_1,
             CASE_WIZARD_RECOVERY_ATTEMPT_EVENT_TYPES.day_3,
+            CASE_WIZARD_RECOVERY_ATTEMPT_EVENT_TYPES.hour_1,
             RECOVERY_UNSUBSCRIBED_EVENT,
           ])
           .limit(10000),
@@ -530,6 +563,21 @@ export async function runRecoveryOrchestrator(options: RecoveryOptions = {}): Pr
           continue;
         }
 
+        const claim = await claimRecoveryEmail({
+          supabase: supabase as any,
+          claimKey: `${recoveryKind}:${caseRow.id}:${dueStage}`,
+          email,
+          recoveryKind,
+          subjectId: caseRow.id,
+          stage: dueStage,
+          source: RECOVERY_ORCHESTRATOR_JOB_NAME,
+        });
+        if (!claim.claimed || !claim.claimId) {
+          result.skipped += 1;
+          result.skipped_ids.push(caseRow.id);
+          continue;
+        }
+
         const recovery = await createCaseRecoveryLink({
           supabase: supabase as any,
           caseRow,
@@ -544,15 +592,15 @@ export async function runRecoveryOrchestrator(options: RecoveryOptions = {}): Pr
         const attemptEventType =
           recoveryKind === 'preview'
             ? CASE_PREVIEW_RECOVERY_ATTEMPT_EVENT_TYPES[dueStage as 'day_1' | 'day_7']
-            : CASE_WIZARD_RECOVERY_ATTEMPT_EVENT_TYPES[dueStage as 'day_1' | 'day_3'];
+            : CASE_WIZARD_RECOVERY_ATTEMPT_EVENT_TYPES[dueStage as 'hour_1' | 'day_1' | 'day_3'];
         const sentEventType =
           recoveryKind === 'preview'
             ? CASE_PREVIEW_RECOVERY_SENT_EVENT_TYPES[dueStage as 'day_1' | 'day_7']
-            : CASE_WIZARD_RECOVERY_SENT_EVENT_TYPES[dueStage as 'day_1' | 'day_3'];
+            : CASE_WIZARD_RECOVERY_SENT_EVENT_TYPES[dueStage as 'hour_1' | 'day_1' | 'day_3'];
         const failedEventType =
           recoveryKind === 'preview'
             ? CASE_PREVIEW_RECOVERY_FAILED_EVENT_TYPES[dueStage as 'day_1' | 'day_7']
-            : CASE_WIZARD_RECOVERY_FAILED_EVENT_TYPES[dueStage as 'day_1' | 'day_3'];
+            : CASE_WIZARD_RECOVERY_FAILED_EVENT_TYPES[dueStage as 'hour_1' | 'day_1' | 'day_3'];
 
         await insertEmailEvent(supabase, {
           email,
@@ -568,7 +616,6 @@ export async function runRecoveryOrchestrator(options: RecoveryOptions = {}): Pr
             recovery_kind: recoveryKind,
           },
         });
-
         const emailResult =
           recoveryKind === 'preview'
             ? await sendCasePreviewRecoveryEmail({
@@ -584,7 +631,7 @@ export async function runRecoveryOrchestrator(options: RecoveryOptions = {}): Pr
                 customerName: contact.name || getCustomerName(user?.full_name, email),
                 productName: recovery.productName || getAdminProductLabel(productType),
                 resumeUrl: recovery.resumeUrl,
-                stage: dueStage as 'day_1' | 'day_3',
+                stage: dueStage as 'hour_1' | 'day_1' | 'day_3',
                 unsubscribeUrl: buildRecoveryUnsubscribeUrl(email, 'wizard'),
               });
 
@@ -602,6 +649,12 @@ export async function runRecoveryOrchestrator(options: RecoveryOptions = {}): Pr
             status: emailResult.success ? 'sent' : 'failed',
             recovery_kind: recoveryKind,
           },
+        });
+        await completeRecoveryEmailClaim({
+          supabase: supabase as any,
+          claimId: claim.claimId,
+          success: emailResult.success,
+          error: emailResult.success ? null : emailResult.error,
         });
 
         if (emailResult.success) {
@@ -647,9 +700,12 @@ export function getRecoveryOrchestratorConfig() {
     batch_limit: DEFAULT_BATCH_LIMIT,
     checkout_min_age_minutes: CHECKOUT_MIN_AGE_MINUTES,
     checkout_max_age_hours: CHECKOUT_MAX_AGE_HOURS,
+    wizard_hour_1_age_hours: WIZARD_HOUR_1_AGE_HOURS,
     case_day_1_age_hours: CASE_DAY_1_AGE_HOURS,
     wizard_day_3_age_hours: WIZARD_DAY_3_AGE_HOURS,
     preview_day_7_age_hours: PREVIEW_DAY_7_AGE_HOURS,
+    recipient_cooldown_hours: RECOVERY_RECIPIENT_COOLDOWN_MINUTES / 60,
+    atomic_send_claims: true,
     priority: ['checkout_started', 'preview_reached', 'draft_started'],
   };
 }

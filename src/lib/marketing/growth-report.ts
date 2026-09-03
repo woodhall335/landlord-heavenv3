@@ -21,6 +21,7 @@ export interface GrowthOrderRow {
   product_type?: string | null;
   total_amount?: number | null;
   payment_status?: string | null;
+  fulfillment_status?: string | null;
   created_at?: string | null;
   paid_at?: string | null;
   landing_path?: string | null;
@@ -101,6 +102,7 @@ export interface GrowthReportResponse {
     ctaClickRateByPage: GrowthRateMetric[];
     toolStartRate: GrowthRateMetric[];
     toolCompletionRate: GrowthRateMetric[];
+    builderStepCompletionRate: GrowthRateMetric[];
     productPageConversionRate: GrowthRateMetric[];
     checkoutStartRate: GrowthRateMetric[];
   };
@@ -121,6 +123,13 @@ export interface GrowthReportResponse {
       count: number;
     }>;
     sensitivePayloadDetected: boolean;
+  };
+  dataQuality: {
+    paidOrders: number;
+    clientPaymentEvents: number;
+    attributedPaidOrders: number;
+    fulfilledOrders: number;
+    usesAuthoritativeOrderOutcomes: true;
   };
 }
 
@@ -177,6 +186,9 @@ function getSourceMedium(order: GrowthOrderRow): string {
 
   const referrer = order.referrer?.toLowerCase();
   if (referrer?.includes('google.')) return 'google / organic';
+  if (referrer?.includes('checkout.stripe.com') || referrer?.includes('stripe.com')) {
+    return 'unknown / unattributed';
+  }
   if (referrer) return `${referrer} / referral`;
 
   return 'direct / none';
@@ -346,6 +358,8 @@ export function buildGrowthReport(params: {
         String(event.event_payload?.productSlug || ''),
       'unknown'
     );
+  const eventBuilderStep = (event: GrowthMarketingEventRow) =>
+    groupLabel(String(event.event_payload?.builderStep || event.intent || ''), 'unknown');
   const canonicalEventName = (event: GrowthMarketingEventRow) => {
     const payloadName = event.event_payload?.canonicalEventName;
     return typeof payloadName === 'string' && payloadName ? payloadName : event.event_name;
@@ -365,6 +379,12 @@ export function buildGrowthReport(params: {
   const toolCompletions = eventsInRange.filter((event) => event.event_name === 'tool_completed');
   const productClicks = eventsInRange.filter(
     (event) => canonicalEventName(event) === 'product_primary_cta_click'
+  );
+  const builderStepViews = eventsInRange.filter(
+    (event) => canonicalEventName(event) === 'builder_step_viewed'
+  );
+  const builderStepCompletions = eventsInRange.filter(
+    (event) => canonicalEventName(event) === 'builder_step_completed'
   );
   const checkoutStarts = eventsInRange.filter((event) =>
     ['checkout_started', 'checkout_opened'].includes(canonicalEventName(event))
@@ -386,6 +406,14 @@ export function buildGrowthReport(params: {
   ] as const;
   const stageCount = (name: string) =>
     eventsInRange.filter((event) => canonicalEventName(event) === name).length;
+  const fulfilledOrders = paidOrders.filter((order) =>
+    ['fulfilled', 'sent_to_customer'].includes(order.fulfillment_status || '')
+  );
+  const authoritativeStageCount = (name: string) => {
+    if (name === 'payment_succeeded') return paidOrders.length;
+    if (name === 'document_delivered') return fulfilledOrders.length;
+    return stageCount(name);
+  };
   const countRows = (counts: Map<string, number>) =>
     [...counts.entries()]
       .map(([key, count]) => ({ key, count }))
@@ -439,7 +467,11 @@ export function buildGrowthReport(params: {
     ),
     revenueByLandingPath: buildGroup(paidOrders, (order) => groupLabel(order.landing_path, 'unknown')),
     revenueBySourceMedium: buildGroup(paidOrders, getSourceMedium),
-    funnelStages: funnelStageDefinitions.map(([event, label]) => ({ event, label, count: stageCount(event) })),
+    funnelStages: funnelStageDefinitions.map(([event, label]) => ({
+      event,
+      label,
+      count: authoritativeStageCount(event),
+    })),
     journeyRates: [
       {
         key: 'offer_ctr',
@@ -452,8 +484,20 @@ export function buildGrowthReport(params: {
       stageRate('product_to_builder', 'Product to builder', 'builder_started', 'product_view'),
       stageRate('builder_to_preview', 'Builder to preview', 'preview_generated', 'builder_started'),
       stageRate('preview_to_checkout', 'Preview to checkout', 'checkout_opened', 'preview_generated'),
-      stageRate('checkout_to_payment', 'Checkout to payment', 'payment_succeeded', 'checkout_opened'),
-      stageRate('landing_to_sale', 'Landing to sale', 'payment_succeeded', 'organic_landing_view'),
+      {
+        key: 'checkout_to_payment',
+        label: 'Checkout to payment',
+        numerator: paidOrders.length,
+        denominator: stageCount('checkout_opened'),
+        rate: pct(paidOrders.length, stageCount('checkout_opened')),
+      },
+      {
+        key: 'landing_to_sale',
+        label: 'Landing to sale',
+        numerator: paidOrders.length,
+        denominator: stageCount('organic_landing_view'),
+        rate: pct(paidOrders.length, stageCount('organic_landing_view')),
+      },
     ],
     funnelRates: {
       ctaClickRateByPage: buildRateRows(
@@ -474,6 +518,12 @@ export function buildGrowthReport(params: {
         'completions',
         'starts'
       ),
+      builderStepCompletionRate: buildRateRows(
+        countBy(builderStepViews, eventBuilderStep),
+        countBy(builderStepCompletions, eventBuilderStep),
+        'completions',
+        'views'
+      ),
       productPageConversionRate: buildRateRows(
         countBy(productClicks, eventProduct),
         countBy(checkoutStarts, eventProduct),
@@ -490,6 +540,13 @@ export function buildGrowthReport(params: {
     target: {
       dailyRevenue: DAILY_REVENUE_TARGET_GBP,
       rolling7DayRevenue: rolling7DayTargetRevenue,
+    },
+    dataQuality: {
+      paidOrders: paidOrders.length,
+      clientPaymentEvents: stageCount('payment_succeeded'),
+      attributedPaidOrders: paidOrders.filter((order) => Boolean(order.marketing_session_id)).length,
+      fulfilledOrders: fulfilledOrders.length,
+      usesAuthoritativeOrderOutcomes: true,
     },
   };
   if (params.filters?.qaMarker) {

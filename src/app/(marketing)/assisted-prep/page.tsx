@@ -42,6 +42,7 @@ export default function AssistedPrepHubPage() {
           showTrustPositioningBar
           verticalAlign="top"
           contentWidth="wide"
+          mobileTopPadding="compact"
           backgroundImageSrc="/images/illustrations/services/assisted-prep-consultation-waterbrush-v2.webp"
           backgroundImageAlt="Watercolour illustration of landlord document preparation and property keys"
         />

@@ -328,15 +328,15 @@ export default function AdminGrowthPage() {
               <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
                 <div>
                   <h2 className="text-lg font-semibold text-charcoal">
-                    Live notice campaign: possession grounds
+                    Notice campaign configuration
                   </h2>
                   <p className="mt-1 text-sm text-gray-600">
-                    Four intent-specific search ad groups send landlords to the matching Form 3A page section.
+                    Saved campaign copy and landing-page mappings. This panel does not report Google Ads spend or confirm that ads are running.
                   </p>
                 </div>
                 <div className="text-sm text-gray-600 md:text-right">
-                  <p className="font-semibold text-emerald-700">
-                    {NOTICE_ONLY_GOOGLE_ADS_CAMPAIGN.status === 'enabled' ? 'Enabled' : 'Paused'}
+                  <p className="font-semibold text-gray-700">
+                    {NOTICE_ONLY_GOOGLE_ADS_CAMPAIGN.status === 'enabled' ? 'Configured' : 'Draft configuration'}
                   </p>
                   <p>
                     {formatCurrency(NOTICE_ONLY_GOOGLE_ADS_CAMPAIGN.settings?.dailyBudgetGbp || 0)}/day ·{' '}
@@ -390,6 +390,19 @@ export default function AdminGrowthPage() {
                 <MetricCard key={card.label} {...card} />
               ))}
             </div>
+
+            <Card padding="medium" className="rounded-lg">
+              <h2 className="text-lg font-semibold text-charcoal">Funnel data quality</h2>
+              <p className="mt-1 text-sm text-gray-600">
+                Payments and delivered documents use authoritative order records. Browser events remain useful for the steps before payment.
+              </p>
+              <dl className="mt-4 grid gap-3 text-sm md:grid-cols-4">
+                <div><dt className="text-gray-500">Paid orders</dt><dd className="text-xl font-bold text-charcoal">{report.dataQuality.paidOrders}</dd></div>
+                <div><dt className="text-gray-500">Client payment events</dt><dd className="text-xl font-bold text-charcoal">{report.dataQuality.clientPaymentEvents}</dd></div>
+                <div><dt className="text-gray-500">Orders with session attribution</dt><dd className="text-xl font-bold text-charcoal">{report.dataQuality.attributedPaidOrders}</dd></div>
+                <div><dt className="text-gray-500">Fulfilled orders</dt><dd className="text-xl font-bold text-charcoal">{report.dataQuality.fulfilledOrders}</dd></div>
+              </dl>
+            </Card>
 
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
               {report.funnelStages.map((stage) => (
@@ -447,6 +460,7 @@ export default function AdminGrowthPage() {
               <RateTable title="CTA click rate by page" rows={report.funnelRates.ctaClickRateByPage} emptyLabel="No bridge views or clicks yet." />
               <RateTable title="Tool start rate" rows={report.funnelRates.toolStartRate} emptyLabel="No tool starts yet." />
               <RateTable title="Tool completion rate" rows={report.funnelRates.toolCompletionRate} emptyLabel="No completed tools yet." />
+              <RateTable title="Builder completion by step" rows={report.funnelRates.builderStepCompletionRate} emptyLabel="No builder step views yet." />
               <RateTable title="Product page conversion rate" rows={report.funnelRates.productPageConversionRate} emptyLabel="No product CTA or checkout starts yet." />
               <RateTable title="Checkout start rate" rows={report.funnelRates.checkoutStartRate} emptyLabel="No bridge-to-checkout data yet." />
             </div>

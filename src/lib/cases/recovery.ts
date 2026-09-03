@@ -2,7 +2,7 @@ import crypto from 'crypto';
 
 import { isValidProductSku, type ProductSku } from '../pricing/products';
 
-export type CaseRecoveryStage = 'manual' | 'day_1' | 'day_3' | 'day_7';
+export type CaseRecoveryStage = 'manual' | 'hour_1' | 'day_1' | 'day_3' | 'day_7';
 
 export const CASE_PREVIEW_RECOVERY_SENT_EVENT_TYPES = {
   manual: 'case_preview_recovery_manual_sent',
@@ -23,19 +23,22 @@ export const CASE_PREVIEW_RECOVERY_ATTEMPT_EVENT_TYPES = {
 } as const satisfies Record<Extract<CaseRecoveryStage, 'manual' | 'day_1' | 'day_7'>, string>;
 
 export const CASE_WIZARD_RECOVERY_SENT_EVENT_TYPES = {
+  hour_1: 'case_wizard_recovery_hour_1_sent',
   day_1: 'case_wizard_recovery_day_1_sent',
   day_3: 'case_wizard_recovery_day_3_sent',
-} as const satisfies Record<Extract<CaseRecoveryStage, 'day_1' | 'day_3'>, string>;
+} as const satisfies Record<Extract<CaseRecoveryStage, 'hour_1' | 'day_1' | 'day_3'>, string>;
 
 export const CASE_WIZARD_RECOVERY_FAILED_EVENT_TYPES = {
+  hour_1: 'case_wizard_recovery_hour_1_failed',
   day_1: 'case_wizard_recovery_day_1_failed',
   day_3: 'case_wizard_recovery_day_3_failed',
-} as const satisfies Record<Extract<CaseRecoveryStage, 'day_1' | 'day_3'>, string>;
+} as const satisfies Record<Extract<CaseRecoveryStage, 'hour_1' | 'day_1' | 'day_3'>, string>;
 
 export const CASE_WIZARD_RECOVERY_ATTEMPT_EVENT_TYPES = {
+  hour_1: 'case_wizard_recovery_hour_1_attempted',
   day_1: 'case_wizard_recovery_day_1_attempted',
   day_3: 'case_wizard_recovery_day_3_attempted',
-} as const satisfies Record<Extract<CaseRecoveryStage, 'day_1' | 'day_3'>, string>;
+} as const satisfies Record<Extract<CaseRecoveryStage, 'hour_1' | 'day_1' | 'day_3'>, string>;
 
 type CaseLike = {
   id: string;

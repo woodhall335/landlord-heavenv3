@@ -15,6 +15,7 @@ import { HeaderModeProvider } from "@/components/layout/HeaderModeContext";
 import { JourneyProvider } from "@/components/journey/JourneyProvider";
 import { SmoothAnchorScroll } from "@/components/browser/SmoothAnchorScroll";
 import { OrganicLandingTracker } from "@/components/analytics/OrganicLandingTracker";
+import { AttributionInitializer } from "@/components/analytics/AttributionInitializer";
 
 
 export const metadata: Metadata = {
@@ -81,6 +82,7 @@ export default async function RootLayout({
           </PopupProvider>
         </HeaderModeProvider>
         <TrackingPixels />
+        <AttributionInitializer />
         <OrganicLandingTracker authenticated={Boolean(user)} />
         <SmoothAnchorScroll />
         <JourneyProvider />

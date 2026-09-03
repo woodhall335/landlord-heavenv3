@@ -85,12 +85,27 @@ describe('UniversalHero review pill', () => {
         subtitle="Supporting copy"
         verticalAlign="top"
         contentWidth="wide"
+        mobileTopPadding="compact"
       />
     );
 
-    expect(screen.getByRole('region')).toHaveClass('lg:items-start', 'lg:justify-start', 'lg:pt-10');
+    expect(screen.getByRole('region')).toHaveClass(
+      'pt-4',
+      'sm:pt-8',
+      'lg:items-start',
+      'lg:justify-start',
+      'lg:pt-10'
+    );
+    expect(screen.getByRole('region')).not.toHaveClass('pt-24', 'sm:pt-28');
     expect(container.querySelector('.lg\\:my-0')).toBeInTheDocument();
     expect(container.querySelector('.max-w-\\[112rem\\]')).toBeInTheDocument();
+  });
+
+  it('retains the site-wide mobile top padding by default', () => {
+    render(<UniversalHero title="Standard hero" subtitle="Supporting copy" />);
+
+    expect(screen.getByRole('region')).toHaveClass('pt-24', 'sm:pt-28');
+    expect(screen.getByRole('region')).not.toHaveClass('pt-4', 'sm:pt-8');
   });
 
   it('uses the stacked desktop pill for longer trust text and keeps the review row visible', () => {

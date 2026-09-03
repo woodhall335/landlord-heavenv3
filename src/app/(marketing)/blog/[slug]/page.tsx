@@ -941,6 +941,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 <Section8GroundRouteCards
                   groundCode={section8GroundBlogRoute.groundCode}
                   source={section8GroundBlogRoute.source}
+                  pagePath={`/blog/${slug}`}
                   className="mt-10 -mx-4 sm:mx-0"
                 />
               ) : assistedService ? (

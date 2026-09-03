@@ -14,5 +14,12 @@ export function Section8GroundDecisionPath() {
 
   const guide = getSection8GroundGuide(groundCode);
 
-  return <Section8GroundRouteCards groundCode={guide.code} groundLabel={guide.label} source={`section8_ground_${groundCode}`} />;
+  return (
+    <Section8GroundRouteCards
+      groundCode={guide.code}
+      groundLabel={guide.label}
+      source={`section8_ground_${groundCode}`}
+      pagePath={pathname}
+    />
+  );
 }

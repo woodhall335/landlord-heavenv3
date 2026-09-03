@@ -14,7 +14,7 @@ npm install -g supabase
 supabase login
 
 # Link to your project
-supabase link --project-ref YOUR_PROJECT_REF
+supabase link --project-ref mdlntvznunpfuwnlhzwb
 
 # Push all migrations
 supabase db push

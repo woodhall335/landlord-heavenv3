@@ -565,8 +565,8 @@ export default function HomeContent() {
         <Container>
           <Reveal>
             <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'overflow-hidden px-6 py-8 md:px-10 md:py-10')}>
-              <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
-                <div className="max-w-xl">
+              <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
+                <div className="max-w-xl self-start">
                   <span className="public-eyebrow">UK tenancy agreements</span>
                   <h2 id="uk-tenancy-heading" className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-4xl">
                     Choose the agreement by where the property is
@@ -810,9 +810,9 @@ export default function HomeContent() {
               </StaggerReveal>
             </div>
 
-            <div className={clsx(PUBLIC_LAYOUT_CLASSES.darkPanel, 'overflow-hidden px-6 py-8 md:px-8')}>
-              <div className="grid gap-8 lg:grid-cols-[1fr_0.76fr] lg:items-center">
-                <div>
+            <div className={clsx(PUBLIC_LAYOUT_CLASSES.darkPanel, 'overflow-hidden px-6 py-8 md:px-8 md:py-10')}>
+              <div className="mx-auto max-w-6xl">
+                <div className="max-w-3xl">
                   <span className="inline-flex rounded-full border border-white/15 bg-white/8 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/85">
                     England documents. UK tenancy routes.
                   </span>
@@ -824,29 +824,20 @@ export default function HomeContent() {
                     right next step quickly, understand what it covers, and move forward
                     without digging through legal jargon.
                   </p>
-                  <div className="mt-8 grid gap-4">
-                    {[
-                      'England Section 8 notices, court papers, money claims, and rent increases in one place',
-                      'Tenancy agreement routes for England, Wales, Scotland, and Northern Ireland',
-                      'Guidance and documents that are easy to review, download, and print',
-                    ].map((item) => (
-                      <div key={item} className="rounded-[1.4rem] border border-white/10 bg-white/7 px-4 py-4">
-                        <div className="flex items-start gap-3 text-white">
-                          <RiCheckLine className="mt-1 h-5 w-5 shrink-0 text-[#d7c2ff]" />
-                          <span className="text-sm leading-6 text-white/82">{item}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
                 </div>
-                <div className="relative min-h-[18rem] overflow-hidden rounded-[1.7rem] border border-white/12 bg-white/8">
-                  <Image
-                    src="/images/illustrations/landlord-documents/site-landlord-support.webp"
-                    alt="Watercolour illustration of landlord document support, property keys and a checklist"
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 38vw"
-                    className="object-cover object-center"
-                  />
+                <div className="mt-8 grid gap-4 md:grid-cols-3">
+                  {[
+                    'England Section 8 notices, court papers, money claims, and rent increases in one place',
+                    'Tenancy agreement routes for England, Wales, Scotland, and Northern Ireland',
+                    'Guidance and documents that are easy to review, download, and print',
+                  ].map((item) => (
+                    <div key={item} className="rounded-[1.4rem] border border-white/10 bg-white/7 px-4 py-4">
+                      <div className="flex items-start gap-3 text-white">
+                        <RiCheckLine className="mt-1 h-5 w-5 shrink-0 text-[#d7c2ff]" />
+                        <span className="text-sm leading-6 text-white/82">{item}</span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

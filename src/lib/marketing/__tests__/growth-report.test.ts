@@ -11,6 +11,7 @@ describe('growth report builder', () => {
         {
           id: 'order-1',
           payment_status: 'paid',
+          fulfillment_status: 'fulfilled',
           product_type: 'money_claim',
           total_amount: 49,
           paid_at: '2026-05-05T09:00:00.000Z',
@@ -28,6 +29,14 @@ describe('growth report builder', () => {
           landing_path: '/n5-n119-possession-claim',
           utm_source: 'google',
           utm_medium: 'organic',
+        },
+        {
+          id: 'order-3',
+          payment_status: 'paid',
+          product_type: 'notice_only',
+          total_amount: 39,
+          paid_at: '2026-05-02T10:00:00.000Z',
+          referrer: 'https://checkout.stripe.com/c/pay/example',
         },
         {
           id: 'pending-order',
@@ -48,11 +57,11 @@ describe('growth report builder', () => {
       gapToDailyTarget: 250,
     });
     expect(report.summary).toMatchObject({
-      revenue: 228,
-      orders: 2,
-      aov: 114,
-      rolling7DayRevenue: 228,
-      rolling7DayGap: 1522,
+      revenue: 267,
+      orders: 3,
+      aov: 89,
+      rolling7DayRevenue: 267,
+      rolling7DayGap: 1483,
     });
     expect(report.revenueByProduct).toEqual(
       expect.arrayContaining([
@@ -62,7 +71,7 @@ describe('growth report builder', () => {
     );
     expect(report.revenueByLandingPath).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ key: 'unknown', revenue: 49, orders: 1 }),
+        expect.objectContaining({ key: 'unknown', revenue: 88, orders: 2 }),
         expect.objectContaining({ key: '/n5-n119-possession-claim', revenue: 179, orders: 1 }),
       ])
     );
@@ -70,8 +79,22 @@ describe('growth report builder', () => {
       expect.arrayContaining([
         expect.objectContaining({ key: 'direct / none', revenue: 49, orders: 1 }),
         expect.objectContaining({ key: 'google / organic', revenue: 179, orders: 1 }),
+        expect.objectContaining({ key: 'unknown / unattributed', revenue: 39, orders: 1 }),
       ])
     );
+    expect(report.funnelStages).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ event: 'payment_succeeded', count: 3 }),
+        expect.objectContaining({ event: 'document_delivered', count: 1 }),
+      ])
+    );
+    expect(report.dataQuality).toMatchObject({
+      paidOrders: 3,
+      clientPaymentEvents: 0,
+      attributedPaidOrders: 0,
+      fulfilledOrders: 1,
+      usesAuthoritativeOrderOutcomes: true,
+    });
   });
 
   it('calculates CTA, tool, product, and checkout rates', () => {
@@ -123,6 +146,18 @@ describe('growth report builder', () => {
           intent: 'rent_increase',
           created_at: '2026-05-05T09:05:00.000Z',
         },
+        {
+          event_name: 'builder_step_viewed',
+          marketing_session_id: 'mkt_1',
+          event_payload: { builderStep: 'parties' },
+          created_at: '2026-05-05T09:06:00.000Z',
+        },
+        {
+          event_name: 'builder_step_completed',
+          marketing_session_id: 'mkt_1',
+          event_payload: { builderStep: 'parties' },
+          created_at: '2026-05-05T09:07:00.000Z',
+        },
       ],
     });
 
@@ -148,6 +183,12 @@ describe('growth report builder', () => {
       key: 'section13_standard',
       productClicks: 1,
       checkoutStarts: 1,
+      rate: 100,
+    });
+    expect(report.funnelRates.builderStepCompletionRate[0]).toMatchObject({
+      key: 'parties',
+      views: 1,
+      completions: 1,
       rate: 100,
     });
   });

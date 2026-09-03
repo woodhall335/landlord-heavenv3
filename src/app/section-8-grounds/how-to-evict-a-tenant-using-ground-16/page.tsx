@@ -300,7 +300,7 @@ export default function Ground16EmploymentLinkedAccommodationPage() {
           </p>
         </>
       }
-      journeyPanel={<Section8GroundRouteCards groundCode="16" groundLabel="Employment-linked accommodation" source="section8_ground_16" />}
+      journeyPanel={<Section8GroundRouteCards groundCode="16" groundLabel="Employment-linked accommodation" source="section8_ground_16" pagePath="/section-8-grounds/how-to-evict-a-tenant-using-ground-16" />}
       assistedPrepCta={<AssistedPrepCTA service="section8" product="notice_only" caseType="eviction" src="seo_ground_16_assisted_prep" variant="banner" />}
       primaryCta={{ href: '/products/notice-only?route=section-8&ground=16&src=seo_ground_16', label: 'Create a Ground 16 notice pack' }}
       secondaryCta={{ href: '/assisted-prep/start?service=section8&product=notice_only&src=section8_ground_16_hero', label: 'Book a free consultation' }}

@@ -9,6 +9,7 @@ type Section8GroundRouteCardsProps = {
   groundCode: string;
   groundLabel?: string;
   source: string;
+  pagePath: string;
   className?: string;
 };
 
@@ -43,6 +44,7 @@ export function Section8GroundRouteCards({
   groundCode,
   groundLabel,
   source,
+  pagePath,
   className,
 }: Section8GroundRouteCardsProps) {
   const groundTitle = groundLabel ? `Ground ${groundCode}: ${groundLabel}` : `Section 8 Ground ${groundCode}`;
@@ -113,9 +115,19 @@ export function Section8GroundRouteCards({
                         <div><dt className="font-semibold text-[#17142b]">Risk if this is not the right stage</dt><dd>{card.risk}</dd></div>
                         <div><dt className="font-semibold text-[#17142b]">Landlord outcome</dt><dd>{card.outcome}</dd></div>
                       </dl>
-                      <Link href={href} className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#5b21b6] underline-offset-4 hover:text-[#3b168c] hover:underline">
+                      <TrackedLink
+                        href={href}
+                        pagePath={pagePath}
+                        pageType="guide"
+                        ctaLabel={card.ctaLabel}
+                        ctaPosition="section"
+                        eventName="entry_page_primary_cta_click"
+                        routeIntent={groundTitle}
+                        product={card.href.includes('complete-pack') ? 'complete_pack' : 'notice_only'}
+                        className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#5b21b6] underline-offset-4 hover:text-[#3b168c] hover:underline"
+                      >
                         {card.ctaLabel}<span aria-hidden="true">→</span>
-                      </Link>
+                      </TrackedLink>
                     </div>
                   </article>
                 );
@@ -136,7 +148,7 @@ export function Section8GroundRouteCards({
                 </div>
                 <p className="text-sm font-semibold text-white">Section 8 notice assistance</p>
                 <p className="mt-2 text-sm leading-6 text-white/80">For landlords who need the Form 3A notice, service plan and evidence prompts checked before serving.</p>
-                <TrackedLink href={`/assisted-prep/start?service=section8&product=notice_only&src=${source}_assisted_notice`} pagePath="/section-8-grounds" pageType="guide" ctaLabel="Book Section 8 consultation" ctaPosition="section" eventName="entry_page_primary_cta_click" routeIntent="section8_assisted_prep" product="notice_only" className="mt-4 inline-flex items-center rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#4c1d95] transition hover:bg-[#f4edff]">
+                <TrackedLink href={`/assisted-prep/start?service=section8&product=notice_only&src=${source}_assisted_notice`} pagePath={pagePath} pageType="guide" ctaLabel="Book Section 8 consultation" ctaPosition="section" eventName="entry_page_primary_cta_click" routeIntent="section8_assisted_prep" product="notice_only" className="mt-4 inline-flex items-center rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#4c1d95] transition hover:bg-[#f4edff]">
                   Book a free consultation · {section8Prep.priceLabel}
                 </TrackedLink>
               </div>
@@ -146,7 +158,7 @@ export function Section8GroundRouteCards({
                 </div>
                 <p className="text-sm font-semibold text-white">Full eviction case assistance</p>
                 <p className="mt-2 text-sm leading-6 text-white/80">For landlords who want the Section 8 notice plus N5, N119, service record, evidence bundle and court-stage file prepared together.</p>
-                <TrackedLink href={`/assisted-prep/start?service=possession&product=complete_pack&src=${source}_assisted_full_case`} pagePath="/section-8-grounds" pageType="guide" ctaLabel="Book full case consultation" ctaPosition="section" eventName="entry_page_primary_cta_click" routeIntent="possession_assisted_prep" product="complete_pack" className="mt-4 inline-flex items-center rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#4c1d95] transition hover:bg-[#f4edff]">
+                <TrackedLink href={`/assisted-prep/start?service=possession&product=complete_pack&src=${source}_assisted_full_case`} pagePath={pagePath} pageType="guide" ctaLabel="Book full case consultation" ctaPosition="section" eventName="entry_page_primary_cta_click" routeIntent="possession_assisted_prep" product="complete_pack" className="mt-4 inline-flex items-center rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#4c1d95] transition hover:bg-[#f4edff]">
                   Book a free consultation · {possessionPrep.priceLabel}
                 </TrackedLink>
               </div>

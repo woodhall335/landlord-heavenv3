@@ -37,6 +37,7 @@ ordersBuilder.calls = 0;
 function casesBuilder() {
   const builder: any = {
     select: vi.fn(() => builder),
+    in: vi.fn(() => Promise.resolve({ data: mockCases, error: null })),
     lte: vi.fn(() => builder),
     order: vi.fn(() => builder),
     limit: vi.fn(() => Promise.resolve({ data: mockCases, error: null })),
@@ -120,6 +121,16 @@ vi.mock('@/lib/email/resend', () => ({
   }),
 }));
 
+vi.mock('@/lib/recovery/send-claim', () => ({
+  RECOVERY_RECIPIENT_COOLDOWN_MINUTES: 1200,
+  claimRecoveryEmail: vi.fn((params: any) => Promise.resolve({
+    claimed: true,
+    reason: 'claimed',
+    claimId: `claim-${params.recoveryKind}-${params.subjectId}-${params.stage}`,
+  })),
+  completeRecoveryEmailClaim: vi.fn(() => Promise.resolve()),
+}));
+
 vi.mock('@/lib/validation/cron-run-tracker', () => ({
   startCronRun: vi.fn(() =>
     Promise.resolve({
@@ -162,6 +173,16 @@ function previewCase(overrides: Record<string, any> = {}) {
     updated_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
     ...overrides,
   };
+}
+
+function wizardCase(ageHours: number, overrides: Record<string, any> = {}) {
+  return previewCase({
+    workflow_status: 'draft',
+    wizard_progress: 35,
+    created_at: new Date(Date.now() - ageHours * 60 * 60 * 1000).toISOString(),
+    updated_at: new Date(Date.now() - ageHours * 60 * 60 * 1000).toISOString(),
+    ...overrides,
+  });
 }
 
 describe('recovery orchestrator cron', () => {
@@ -276,5 +297,85 @@ describe('recovery orchestrator cron', () => {
     expect(previewEmails).toEqual([]);
     expect(wizardEmails).toEqual([]);
     expect(insertedEmailEvents).toEqual([]);
+  });
+
+  it('sends the one-hour wizard stage through the unified job', async () => {
+    mockCases = [wizardCase(2)];
+
+    const { GET } = await import('@/app/api/cron/recovery-orchestrator/route');
+    const response = await GET(request('http://localhost/api/cron/recovery-orchestrator', {
+      authorization: `Bearer ${MOCK_CRON_SECRET}`,
+    }));
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data.emails_sent).toBe(1);
+    expect(wizardEmails[0]).toEqual(expect.objectContaining({ stage: 'hour_1' }));
+  });
+
+  it('sends preview day one through the unified job', async () => {
+    mockCases = [previewCase()];
+
+    const { GET } = await import('@/app/api/cron/recovery-orchestrator/route');
+    const response = await GET(request('http://localhost/api/cron/recovery-orchestrator', {
+      authorization: `Bearer ${MOCK_CRON_SECRET}`,
+    }));
+
+    expect(response.status).toBe(200);
+    expect(previewEmails[0]).toEqual(expect.objectContaining({ stage: 'day_1' }));
+    expect(wizardEmails).toEqual([]);
+  });
+
+  it('sends preview day seven only after preview day one has been recorded', async () => {
+    mockCases = [previewCase({
+      created_at: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString(),
+      updated_at: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
+    })];
+    const dayOneEvent = {
+      email: 'alex@example.com',
+      event_type: 'case_preview_recovery_day_1_sent',
+      event_data: { case_id: 'case-1' },
+    };
+    mockCheckoutEvents = [dayOneEvent];
+    mockCaseEvents = [dayOneEvent];
+
+    const { GET } = await import('@/app/api/cron/recovery-orchestrator/route');
+    const response = await GET(request('http://localhost/api/cron/recovery-orchestrator', {
+      authorization: `Bearer ${MOCK_CRON_SECRET}`,
+    }));
+
+    expect(response.status).toBe(200);
+    expect(previewEmails[0]).toEqual(expect.objectContaining({ stage: 'day_7' }));
+  });
+
+  it('sends wizard day one after the first day', async () => {
+    mockCases = [wizardCase(26)];
+
+    const { GET } = await import('@/app/api/cron/recovery-orchestrator/route');
+    const response = await GET(request('http://localhost/api/cron/recovery-orchestrator', {
+      authorization: `Bearer ${MOCK_CRON_SECRET}`,
+    }));
+
+    expect(response.status).toBe(200);
+    expect(wizardEmails[0]).toEqual(expect.objectContaining({ stage: 'day_1' }));
+  });
+
+  it('sends day three only after day one has been recorded', async () => {
+    mockCases = [wizardCase(96)];
+    const dayOneEvent = {
+      email: 'alex@example.com',
+      event_type: 'case_wizard_recovery_day_1_sent',
+      event_data: { case_id: 'case-1' },
+    };
+    mockCheckoutEvents = [dayOneEvent];
+    mockCaseEvents = [dayOneEvent];
+
+    const { GET } = await import('@/app/api/cron/recovery-orchestrator/route');
+    const response = await GET(request('http://localhost/api/cron/recovery-orchestrator', {
+      authorization: `Bearer ${MOCK_CRON_SECRET}`,
+    }));
+
+    expect(response.status).toBe(200);
+    expect(wizardEmails[0]).toEqual(expect.objectContaining({ stage: 'day_3' }));
   });
 });

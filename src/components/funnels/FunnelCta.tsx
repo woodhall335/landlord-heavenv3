@@ -1,4 +1,8 @@
+'use client';
+
 import Link from 'next/link';
+import { useEffect, useRef } from 'react';
+import { trackMarketingCtaClick, trackMarketingCtaImpression } from '@/lib/analytics';
 
 type SecondaryLink = {
   href: string;
@@ -17,6 +21,14 @@ type FunnelCtaProps = {
   className?: string;
 };
 
+function productFor(dataCta?: SecondaryLink['dataCta']) {
+  if (dataCta === 'notice-only') return 'notice_only';
+  if (dataCta === 'complete-pack') return 'complete_pack';
+  if (dataCta === 'money-claim') return 'money_claim';
+  if (dataCta === 'ast') return 'tenancy_agreement';
+  return undefined;
+}
+
 export function FunnelCta({
   title,
   subtitle,
@@ -27,6 +39,23 @@ export function FunnelCta({
   secondaryLinks = [],
   className,
 }: FunnelCtaProps) {
+  const trackedImpression = useRef(false);
+  const pagePath = typeof window === 'undefined' ? '' : window.location.pathname;
+  const ctaPosition = location === 'above-fold' ? 'hero' : location;
+  useEffect(() => {
+    if (!pagePath || trackedImpression.current) return;
+    trackedImpression.current = true;
+    trackMarketingCtaImpression({
+      pagePath,
+      pageType: 'guide',
+      ctaLabel: primaryText,
+      destinationPath: primaryHref,
+      ctaPosition,
+      routeIntent: productFor(primaryDataCta),
+      product: productFor(primaryDataCta),
+    });
+  }, [ctaPosition, pagePath, primaryDataCta, primaryHref, primaryText]);
+
   return (
     <section className={`rounded-2xl border border-primary/20 bg-primary/5 p-6 md:p-8 ${className ?? ''}`}>
       <h2 className="text-2xl font-bold text-gray-900 mb-2">{title}</h2>
@@ -37,6 +66,16 @@ export function FunnelCta({
           className="hero-btn-primary inline-flex items-center justify-center"
           data-cta={primaryDataCta}
           data-cta-location={location}
+          onClick={() => trackMarketingCtaClick({
+            eventName: 'entry_page_primary_cta_click',
+            pagePath,
+            pageType: 'guide',
+            ctaLabel: primaryText,
+            destinationPath: primaryHref,
+            ctaPosition,
+            routeIntent: productFor(primaryDataCta),
+            product: productFor(primaryDataCta),
+          })}
         >
           {primaryText}
         </Link>
@@ -49,6 +88,16 @@ export function FunnelCta({
                 className="text-primary font-medium hover:underline"
                 data-cta={link.dataCta}
                 data-cta-location={location}
+                onClick={() => trackMarketingCtaClick({
+                  eventName: 'entry_page_secondary_cta_click',
+                  pagePath,
+                  pageType: 'guide',
+                  ctaLabel: link.text,
+                  destinationPath: link.href,
+                  ctaPosition,
+                  routeIntent: productFor(link.dataCta),
+                  product: productFor(link.dataCta),
+                })}
               >
                 {link.text}
               </Link>

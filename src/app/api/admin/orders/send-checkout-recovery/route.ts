@@ -13,6 +13,7 @@ import { sendAbandonedCheckoutRecoveryEmail } from '@/lib/email/resend';
 import { logger } from '@/lib/logger';
 import { PRODUCTS, isValidProductSku, type ProductSku } from '@/lib/pricing/products';
 import { RECOVERY_UNSUBSCRIBED_EVENT, buildRecoveryUnsubscribeUrl } from '@/lib/recovery/unsubscribe';
+import { claimRecoveryEmail, completeRecoveryEmailClaim } from '@/lib/recovery/send-claim';
 import { createAdminClient, requireServerAuth } from '@/lib/supabase/server';
 
 const payloadSchema = z.object({
@@ -208,6 +209,27 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    const claim = await claimRecoveryEmail({
+      supabase: adminClient as any,
+      claimKey: `checkout:${order.id}:initial`,
+      email: recoveryEmail,
+      recoveryKind: 'checkout',
+      subjectId: order.id,
+      stage: 'initial',
+      source: 'admin:failed-payments',
+    });
+
+    if (!claim.claimed || !claim.claimId) {
+      return NextResponse.json({
+        success: true,
+        status: 'already_sent',
+        message: claim.reason === 'recipient_cooldown'
+          ? 'Another recovery email was sent to this customer within the last 20 hours.'
+          : 'This recovery email has already been claimed or sent.',
+        email: recoveryEmail,
+      });
+    }
+
     const emailResult = await sendAbandonedCheckoutRecoveryEmail({
       to: recoveryEmail,
       customerName: getCustomerName(contact.name, recoveryEmail),
@@ -232,6 +254,12 @@ export async function POST(request: NextRequest) {
         sent_at: new Date().toISOString(),
         source: 'admin:failed-payments',
       },
+    });
+    await completeRecoveryEmailClaim({
+      supabase: adminClient as any,
+      claimId: claim.claimId,
+      success: emailResult.success,
+      error: emailResult.success ? null : emailResult.error,
     });
 
     if (!emailResult.success) {

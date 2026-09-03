@@ -45,6 +45,7 @@ export default function PossessionClaimAssistedPrepPage() {
           primaryCta={{ label: 'Book free consultation', href: service.startHref }}
           secondaryCta={{ label: 'See service details', href: '#service-details' }}
           trustText="Pay only if we confirm the preparation service is suitable"
+          mobileTopPadding="compact"
         />
         <div id="service-details" className="mx-auto max-w-5xl scroll-mt-28 space-y-8 px-4 py-12 md:py-16">
           <AssistedPrepServiceDetails service="possession" />

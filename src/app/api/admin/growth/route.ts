@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     const [ordersResult, eventsResult] = await Promise.all([
       adminClient
         .from('orders')
-        .select('id, product_type, total_amount, payment_status, created_at, paid_at, landing_path, utm_source, utm_medium, referrer, marketing_session_id')
+        .select('id, product_type, total_amount, payment_status, fulfillment_status, created_at, paid_at, landing_path, utm_source, utm_medium, referrer, marketing_session_id')
         .gte('created_at', since.toISOString()),
       adminClient
         .from('marketing_events')

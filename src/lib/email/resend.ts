@@ -1038,14 +1038,16 @@ export async function sendWizardAbandonmentRecoveryEmail(params: {
   customerName: string;
   productName: string;
   resumeUrl: string;
-  stage: 'day_1' | 'day_3';
+  stage: 'hour_1' | 'day_1' | 'day_3';
   unsubscribeUrl?: string;
 }): Promise<{ success: boolean; error?: string }> {
   const { to, customerName, productName, resumeUrl, stage, unsubscribeUrl } = params;
   const stageLine =
-    stage === 'day_3'
-      ? 'Your saved answers are still waiting if you want to finish the pack.'
-      : 'Your answers were saved, so you can pick up where you left off.';
+    stage === 'hour_1'
+      ? 'Your answers were saved. You can return to the exact step you reached whenever you are ready.'
+      : stage === 'day_3'
+        ? 'Your saved answers are still waiting if you want to finish the pack.'
+        : 'Your answers were saved, so you can pick up where you left off.';
 
   const cardContent = `
     <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.white}; line-height: 1.6;">Hi ${customerName},</p>

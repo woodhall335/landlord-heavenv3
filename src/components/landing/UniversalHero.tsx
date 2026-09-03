@@ -27,9 +27,13 @@ type HeroCta = {
 // DO NOT MODIFY WITHOUT UPDATING TESTS: these classes define the mobile hero layout contract
 // that keeps the artwork integrated behind the content, preserves readable text, and keeps CTAs stable across pages.
 const SECTION_WRAP_CLASSES =
-  'relative isolate flex min-h-[44rem] flex-col overflow-hidden bg-white pb-10 pt-24 sm:min-h-[48rem] sm:pb-12 sm:pt-28 lg:min-h-[100dvh] lg:items-center lg:justify-center lg:pb-16 lg:pt-36';
+  'relative isolate flex min-h-[44rem] flex-col overflow-hidden bg-white pb-10 sm:min-h-[48rem] sm:pb-12 lg:min-h-[100dvh] lg:items-center lg:justify-center lg:pb-16 lg:pt-36';
 const TOP_ALIGNED_SECTION_WRAP_CLASSES =
-  'relative isolate flex min-h-[44rem] flex-col overflow-hidden bg-white pb-10 pt-24 sm:min-h-[48rem] sm:pb-12 sm:pt-28 lg:min-h-[46rem] lg:items-start lg:justify-start lg:pb-20 lg:pt-10';
+  'relative isolate flex min-h-[44rem] flex-col overflow-hidden bg-white pb-10 sm:min-h-[48rem] sm:pb-12 lg:min-h-[46rem] lg:items-start lg:justify-start lg:pb-20 lg:pt-10';
+const MOBILE_TOP_PADDING_CLASSES = {
+  standard: 'pt-24 sm:pt-28',
+  compact: 'pt-4 sm:pt-8',
+} as const;
 const CTA_WRAP_CLASSES = 'mt-8 flex w-full flex-col gap-3 sm:mt-9 sm:flex-row sm:items-center lg:mt-6';
 const REVIEW_STARS = '\u2605\u2605\u2605\u2605\u2605';
 
@@ -110,6 +114,7 @@ export type UniversalHeroProps = {
   reviewPillLayout?: 'auto' | 'inline' | 'stacked';
   verticalAlign?: 'center' | 'top';
   contentWidth?: 'standard' | 'wide';
+  mobileTopPadding?: keyof typeof MOBILE_TOP_PADDING_CLASSES;
 };
 
 const warnedMessages = new Set<string>();
@@ -163,6 +168,7 @@ export function UniversalHero({
   reviewPillLayout = 'auto',
   verticalAlign = 'center',
   contentWidth = 'standard',
+  mobileTopPadding = 'standard',
 }: UniversalHeroProps) {
   const pathname = usePathname() ?? '/';
   const isValidHeading = headingAs === 'h1' || headingAs === 'h2';
@@ -239,6 +245,7 @@ export function UniversalHero({
     <section
       className={clsx(
         verticalAlign === 'top' ? TOP_ALIGNED_SECTION_WRAP_CLASSES : SECTION_WRAP_CLASSES,
+        MOBILE_TOP_PADDING_CLASSES[mobileTopPadding],
         presetStyles.section
       )}
       aria-label={ariaLabel}

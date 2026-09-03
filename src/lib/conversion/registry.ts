@@ -89,6 +89,7 @@ export const CONVERSION_REGISTRY: readonly ConversionMapping[] = [
   moneyClaim('/blog/england-money-claim-online', 'Recover a quantified landlord debt through a money claim.', 'mcol_money_claim'),
   notice('/blog/england-section-8-ground-14', 'Serve a notice for nuisance or anti-social behaviour.', 'ground_14_notice', '14'),
   notice('/form-3-section-8', 'Prepare the current Form 3A Section 8 notice.', 'form_3_notice'),
+  notice('/section-8-grounds-explained', 'Choose the Section 8 ground that matches the facts and evidence before serving Form 3A.', 'section_8_grounds_notice'),
   notice('/blog/england-section-8-ground-12', 'Serve a notice for a tenancy obligation breach.', 'ground_12_notice', '12'),
   courtPack('/eviction-cost-uk', 'Understand and prepare for the full possession process.', 'eviction_cost_complete_pack'),
   {

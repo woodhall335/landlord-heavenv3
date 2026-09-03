@@ -81,6 +81,7 @@
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.84.0",
+    "@tailwindcss/postcss": "^4",
     "@tailwindcss/typography": "^0.5.19",
     "@vercel/analytics": "^1.6.1",
     "clsx": "^2.1.1",
@@ -106,10 +107,9 @@
     "sharp": "^0.34.5",
     "stripe": "^20.0.0",
     "tailwind-merge": "^3.4.0",
+    "tailwindcss": "^4",
     "unpdf": "^1.4.0",
-    "zod": "^3.25.76",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4"
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
@@ -125,6 +125,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.3",
     "jsdom": "^26.0.0",
+    "supabase": "^2.116.0",
     "ts-node": "^10.9.2",
     "typescript": "^5",
     "vitest": "^2.1.9"
