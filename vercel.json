@@ -61,7 +61,7 @@
     },
     {
       "path": "/api/cron/recovery-orchestrator?key=$CRON_SECRET",
-      "schedule": "17 * * * *"
+      "schedule": "17 9 * * *"
     },
     {
       "path": "/api/cron/rent-checker-followups?key=$CRON_SECRET",
