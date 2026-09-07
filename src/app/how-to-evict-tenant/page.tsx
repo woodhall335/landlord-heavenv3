@@ -404,9 +404,9 @@ export default function HowToEvictTenantPage() {
                 <p className="leading-7">
                   In England, landlords usually begin by asking whether they are dealing with
                   older no-fault wording or a live grounds-based route. That distinction still
-                  drives a lot of search traffic, but it is also where the most confusion now
-                  happens. A useful page should not just list Section 21 and Section 8. It
-                  should explain what changed, what is current, and why compliance and service
+                  is also where much of the confusion now happens. It is not enough to list
+                  Section 21 and Section 8: you need to understand what changed, what is current,
+                  and why compliance and service
                   details matter so much before any possession claim is issued.
                 </p>
                 <p className="leading-7">
@@ -520,8 +520,8 @@ export default function HowToEvictTenantPage() {
               <div className="rounded-xl border-l-4 border-red-600 bg-red-100 p-4 mb-8">
                 <p className="text-sm text-red-900">
                   <strong>Wales uses different terminology:</strong> in Wales, many landlords
-                  still search for "evicting a tenant", but the page should use the proper
-                  Renting Homes terminology where possible. That means talking about
+                  still search for "evicting a tenant", but the proper Renting Homes terminology
+                  matters. That means talking about
                   <strong> occupation contracts</strong> and <strong>contract-holders</strong>,
                   not lazily importing England's Section 21 or Section 8 language.
                 </p>
@@ -532,8 +532,8 @@ export default function HowToEvictTenantPage() {
                   Wales requires a different mental model from England. The biggest risk on
                   Wales pages is copying England possession language and changing only a few
                   labels. That weakens trust and increases the risk of landlords taking the
-                  wrong first step. A proper Wales page should explain that the possession
-                  route depends on the structure of the occupation contract and the correct
+                  wrong first step. The Welsh possession route depends on the structure of the
+                  occupation contract and the correct
                   Welsh notice or breach-based route, not on simply asking whether the case is
                   Section 21 or Section 8.
                 </p>

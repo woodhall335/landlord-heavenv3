@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { astHeroConfig } from '@/components/landing/heroConfigs';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
+import { EnglandAgreementChooser } from '@/components/tenancy/EnglandAgreementChooser';
 import type { FAQItem } from '@/components/seo/FAQSection';
 import type {
   ProductSalesPageContent,
@@ -18,9 +19,9 @@ const canonicalUrl = getCanonicalUrl(descriptor.landingHref);
 const tenancyProducts = getPublicTenancyProducts();
 
 export const metadata: Metadata = {
-  title: "Tenancy Agreement England | Renters' Rights Act Compliant",
+  title: 'England Tenancy Agreements | Compare 5 Landlord Options',
   description:
-    "Create a Renters' Rights Act compliant England tenancy agreement. Compare assured periodic, Standard, Premium, Student, HMO and Lodger routes for post-May 2026 lets.",
+    'Compare Standard, Premium, Student, HMO/shared-house and Lodger agreements for England. Choose the right route, preview the documents and create online.',
   keywords: [
     'England tenancy agreement',
     'tenancy agreement template england',
@@ -40,9 +41,9 @@ export const metadata: Metadata = {
     canonical: canonicalUrl,
   },
   openGraph: {
-    title: "Tenancy Agreement England | Renters' Rights Act Compliant",
+    title: 'England Tenancy Agreements | Compare 5 Landlord Options',
     description:
-      "Choose a Renters' Rights Act compliant England tenancy agreement for an assured periodic, student, HMO, shared-house, or lodger setup.",
+      'Compare five England landlord agreement routes, choose the one that fits the occupiers and preview the documents before payment.',
     url: canonicalUrl,
   },
 };
@@ -192,6 +193,7 @@ export default function EnglandTenancyHubPage() {
         href: '/premium-tenancy-agreement',
       },
     },
+    earlyDecisionContent: <EnglandAgreementChooser />,
     postHeroContent: (
       <div className="rounded-[2.25rem] border border-[#E8E1F8] bg-[#FCFAFF] p-6 shadow-[0_18px_46px_rgba(24,11,49,0.06)] md:p-8">
         <div className="grid gap-5 lg:grid-cols-3">
@@ -203,7 +205,7 @@ export default function EnglandTenancyHubPage() {
               What changed after 1 May 2026?
             </h2>
             <p className="mt-3 text-sm leading-7 text-[#4B5565]">
-              For new England private-rented lets, the starting point is now an assured periodic tenancy agreement. The agreement should reflect the current notice, rent increase, pets, repairs, bills, and written-information rules.
+              From 1 May 2026, the starting point for new England private-rented lets is an assured periodic tenancy agreement. The agreement should reflect the current notice, rent increase, pets, repairs, bills, and written-information rules.
             </p>
           </article>
           <article className="rounded-[1.5rem] border border-[#D8C8FF] bg-white p-5">

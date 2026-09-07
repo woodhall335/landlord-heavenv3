@@ -4,12 +4,11 @@ import { useEffect, type ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BadgeCheck, FileDown, Headphones } from 'lucide-react';
+import { BadgeCheck, FileDown, HelpCircle } from 'lucide-react';
 import { RiCheckLine, RiShieldCheckFill } from 'react-icons/ri';
 import { StaggerReveal } from '@/components/marketing/PremiumMotion';
 import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
 import type { PositioningPreset } from '@/lib/marketing/positioning';
-import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats';
 import { getUniversalHeroImage, type UniversalHeroImageKey } from '@/config/universal-hero-images';
 import { getUniversalHeroImageForPath } from '@/config/universal-hero-images';
 import { findUniversalHeroForPath } from '@/config/universal-hero-library';
@@ -35,12 +34,11 @@ const MOBILE_TOP_PADDING_CLASSES = {
   compact: 'pt-4 sm:pt-8',
 } as const;
 const CTA_WRAP_CLASSES = 'mt-8 flex w-full flex-col gap-3 sm:mt-9 sm:flex-row sm:items-center lg:mt-6';
-const REVIEW_STARS = '\u2605\u2605\u2605\u2605\u2605';
 
 const HERO_BENEFITS = [
-  { label: 'Solicitor approved', Icon: BadgeCheck },
-  { label: 'Instant download', Icon: FileDown },
-  { label: 'Expert support', Icon: Headphones },
+  { label: 'Guided questions', Icon: BadgeCheck },
+  { label: 'Downloadable files', Icon: FileDown },
+  { label: 'Help guidance', Icon: HelpCircle },
 ] as const;
 
 function HeroBenefitGrid() {
@@ -173,7 +171,6 @@ export function UniversalHero({
   const pathname = usePathname() ?? '/';
   const isValidHeading = headingAs === 'h1' || headingAs === 'h2';
   const HeadingTag = isValidHeading ? headingAs : 'h1';
-  const reviewCount = getDynamicReviewCount();
   const presetStyles = PUBLIC_HERO_PRESET_STYLES[preset];
   const shouldRenderHeading = Boolean(title || highlightTitle);
   // The new public hero contract keeps proof and live usage visible everywhere.
@@ -300,13 +297,7 @@ export function UniversalHero({
                 )}
               >
                 <RiCheckLine className="h-4 w-4 text-[#6333d5]" aria-hidden="true" />
-                <span>Rated</span>
-                <span className="text-[#facc15]" aria-hidden="true">
-                  {REVIEW_STARS}
-                </span>
-                <span>
-                  {REVIEW_RATING}/5 | {reviewCount} reviews
-                </span>
+                <span>Guided landlord document preparation</span>
               </p>
             )}
 
@@ -340,11 +331,8 @@ export function UniversalHero({
                       isCenter ? 'justify-center' : 'pl-8'
                     )}
                   >
-                    <span className="shrink-0 text-[#facc15]" aria-hidden="true">
-                      {REVIEW_STARS}
-                    </span>
                     <span className="shrink-0 font-medium text-[#2b253d]">
-                      {REVIEW_RATING}/5 | {reviewCount} reviews
+                      Fixed scope and price shown before payment
                     </span>
                   </span>
                 </p>
@@ -364,15 +352,8 @@ export function UniversalHero({
                       {resolvedTrustText}
                     </span>
                   ) : null}
-                  <span
-                    data-testid="hero-review-pill-meta"
-                    className="shrink-0 text-[#facc15]"
-                    aria-hidden="true"
-                  >
-                    {REVIEW_STARS}
-                  </span>
-                  <span className="shrink-0 font-medium text-[#2b253d]">
-                    {REVIEW_RATING}/5 | {reviewCount} reviews
+                  <span data-testid="hero-review-pill-meta" className="shrink-0 font-medium text-[#2b253d]">
+                    Preview before payment where shown
                   </span>
                 </p>
               )

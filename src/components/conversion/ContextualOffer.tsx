@@ -23,6 +23,7 @@ export function ContextualOffer({
 }) {
   const mapping = getConversionMapping(sourceRoute);
   const viewed = useRef(false);
+  const offerRef = useRef<HTMLElement>(null);
   const identity = useMemo(
     () => getMarketingSessionId() || `route:${sourceRoute}`,
     [sourceRoute],
@@ -31,19 +32,37 @@ export function ContextualOffer({
   const experimentId = `${SALES002_CONTEXTUAL_OFFER_EXPERIMENT}:${variant}`;
 
   useEffect(() => {
-    if (!mapping || viewed.current) return;
-    viewed.current = true;
-    recordMarketingGrowthEvent('contextual_offer_view', {
-      sourcePage: sourceRoute,
-      pagePath: sourceRoute,
-      pageType: mapping.sourceCategory,
-      destination: mapping.destinationRoute,
-      recommendedProduct: mapping.primaryProduct,
-      ctaPosition: placement,
-      experimentId,
-      price: mapping.price,
-      deviceCategory: window.matchMedia('(max-width: 767px)').matches ? 'mobile' : 'desktop',
-    });
+    const element = offerRef.current;
+    if (!mapping || !element || viewed.current) return;
+    const recordVisibleOffer = () => {
+      if (viewed.current) return;
+      viewed.current = true;
+      recordMarketingGrowthEvent('contextual_offer_view', {
+        sourcePage: sourceRoute,
+        pagePath: sourceRoute,
+        pageType: mapping.sourceCategory,
+        destination: mapping.destinationRoute,
+        recommendedProduct: mapping.primaryProduct,
+        ctaPosition: placement,
+        experimentId,
+        price: mapping.price,
+        deviceCategory: window.matchMedia('(max-width: 767px)').matches ? 'mobile' : 'desktop',
+      });
+    };
+    if (typeof IntersectionObserver === 'undefined') {
+      recordVisibleOffer();
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        recordVisibleOffer();
+        observer.disconnect();
+      },
+      { threshold: 0.4 },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
   }, [experimentId, mapping, placement, sourceRoute]);
 
   if (!mapping) return null;
@@ -57,6 +76,7 @@ export function ContextualOffer({
 
   return (
     <section
+      ref={offerRef}
       data-contextual-offer={mapping.trackingId}
       data-experiment={experimentId}
       className={`border-y border-[#E6DBFF] bg-white py-8 ${className}`}
@@ -105,4 +125,3 @@ export function ContextualOffer({
     </section>
   );
 }
-

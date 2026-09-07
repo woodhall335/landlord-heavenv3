@@ -9,7 +9,6 @@ import {
   PRODUCT_OWNER_METADATA_LIST,
 } from '@/lib/seo/product-owner-metadata';
 import {
-  STRUCTURED_PRODUCT_REVIEW_COUNT,
   productSchema,
 } from '@/lib/seo/structured-data';
 
@@ -80,7 +79,7 @@ const earlyInternalLinks = [
   },
   {
     source: 'src/app/how-to-rent-guide/page.tsx',
-    href: '/standard-tenancy-agreement',
+    href: '/products/ast',
     anchor: "create a Renters' Rights Act compliant tenancy agreement",
   },
   {
@@ -128,9 +127,9 @@ const earlyInternalLinks = [
 
 const expectedProductMetaDescriptions = {
   noticeOnly:
-    'Create an England landlord Section 8 eviction notice file with Form 3A, N215, arrears schedule, service instructions, and pre-service checks.',
+    'Create an England Section 8 Form 3A notice file with ground selection, notice dates, N215 service proof, and pre-service checks before the tenant receives it.',
   completePack:
-    'Evict a tenant through court with an England complete eviction pack: Section 8 possession claim, court forms N5 and N119, evidence, and hearing support.',
+    'Prepare England Section 8 court papers after notice, including N5 and N119, evidence prompts, witness statement support, and hearing preparation.',
   moneyClaim:
     'Recover unpaid rent, property damage, or tenant debt with a landlord money claim pack: letter before claim, particulars, debt schedule, and MCOL/N1 guidance.',
   section13Standard:
@@ -291,24 +290,27 @@ describe('product owner SEO funnel', () => {
       expect(Number.isFinite(Number(schema.offers.price)), page.path).toBe(true);
       expect(schema.offers.priceCurrency, page.path).toBe('GBP');
       expect(schema.offers.availability, page.path).toBe('https://schema.org/InStock');
-      expect(String(schema.aggregateRating.ratingValue), page.path).toBe('4.8');
-      expect(schema.aggregateRating.reviewCount, page.path).toBe(
-        STRUCTURED_PRODUCT_REVIEW_COUNT.toString()
-      );
+      expect(schema, page.path).not.toHaveProperty('aggregateRating');
     }
   });
 
   it('adds early commercial body links from high-traffic support pages', () => {
     for (const link of earlyInternalLinks) {
       const source = readSource(link.source);
-      const anchorIndex = source.indexOf(link.anchor);
-      const localBodyLinkWindow = source.slice(Math.max(0, anchorIndex - 250), anchorIndex + 450);
+      const anchorIndexes = [...source.matchAll(new RegExp(link.anchor.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'))]
+        .map((match) => match.index ?? -1);
 
-      expect(anchorIndex, link.source).toBeGreaterThanOrEqual(0);
-      const hasDirectHref = localBodyLinkWindow.includes(link.href);
+      expect(anchorIndexes.length, link.source).toBeGreaterThan(0);
+      const hasDirectHref = anchorIndexes.some((anchorIndex) =>
+        source.slice(Math.max(0, anchorIndex - 250), anchorIndex + 450).includes(link.href)
+      );
       const hasHrefExpression =
         'hrefExpression' in link &&
-        localBodyLinkWindow.includes(String(link.hrefExpression)) &&
+        anchorIndexes.some((anchorIndex) =>
+          source
+            .slice(Math.max(0, anchorIndex - 250), anchorIndex + 450)
+            .includes(String(link.hrefExpression))
+        ) &&
         source.includes(`= '${link.href}'`);
 
       expect(hasDirectHref || hasHrefExpression, link.source).toBe(true);

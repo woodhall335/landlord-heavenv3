@@ -56,6 +56,8 @@ export interface MarketingGrowthEventPayload {
   pageType?: string | null;
   intent?: string | null;
   ctaPosition?: GrowthCtaPosition | string | null;
+  ctaLabel?: string | null;
+  ctaVariant?: string | null;
   destination?: string | null;
   recommendedProduct?: string | null;
   productClicked?: string | null;
@@ -100,6 +102,8 @@ const PAYLOAD_KEYS = [
   'pageType',
   'intent',
   'ctaPosition',
+  'ctaLabel',
+  'ctaVariant',
   'destination',
   'recommendedProduct',
   'productClicked',

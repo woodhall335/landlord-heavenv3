@@ -128,7 +128,13 @@ export interface GrowthReportResponse {
     paidOrders: number;
     clientPaymentEvents: number;
     attributedPaidOrders: number;
+    attributionRate: number | null;
+    organicallyAttributedPaidOrders: number;
     fulfilledOrders: number;
+    marketingEvents: number;
+    marketingSessions: number;
+    earliestEventAt: string | null;
+    latestEventAt: string | null;
     usesAuthoritativeOrderOutcomes: true;
   };
 }
@@ -225,6 +231,47 @@ function countBy<T>(rows: T[], getKey: (row: T) => string): Map<string, number> 
     counts.set(key, (counts.get(key) || 0) + 1);
   });
   return counts;
+}
+
+function transitionSessionCounts(
+  denominatorRows: GrowthMarketingEventRow[],
+  numeratorRows: GrowthMarketingEventRow[],
+  getKey: (row: GrowthMarketingEventRow) => string
+) {
+  const denominatorPairs = new Map<string, number>();
+  const numeratorPairs = new Set<string>();
+
+  denominatorRows.forEach((row) => {
+    const sessionId = row.marketing_session_id?.trim();
+    if (!sessionId) return;
+    const pair = `${getKey(row)}\u0000${sessionId}`;
+    const timestamp = parseDate(row.created_at)?.getTime() ?? 0;
+    const current = denominatorPairs.get(pair);
+    if (current === undefined || timestamp < current) denominatorPairs.set(pair, timestamp);
+  });
+
+  numeratorRows.forEach((row) => {
+    const sessionId = row.marketing_session_id?.trim();
+    if (!sessionId) return;
+    const pair = `${getKey(row)}\u0000${sessionId}`;
+    const denominatorAt = denominatorPairs.get(pair);
+    if (denominatorAt === undefined) return;
+    const numeratorAt = parseDate(row.created_at)?.getTime() ?? 0;
+    if (numeratorAt >= denominatorAt) numeratorPairs.add(pair);
+  });
+
+  const denominator = new Map<string, number>();
+  const numerator = new Map<string, number>();
+  denominatorPairs.forEach((_timestamp, pair) => {
+    const key = pair.split('\u0000')[0];
+    denominator.set(key, (denominator.get(key) || 0) + 1);
+  });
+  numeratorPairs.forEach((pair) => {
+    const key = pair.split('\u0000')[0];
+    numerator.set(key, (numerator.get(key) || 0) + 1);
+  });
+
+  return { denominator, numerator };
 }
 
 function buildRateRows(
@@ -406,13 +453,64 @@ export function buildGrowthReport(params: {
   ] as const;
   const stageCount = (name: string) =>
     eventsInRange.filter((event) => canonicalEventName(event) === name).length;
+  const eventsForStage = (name: string) =>
+    eventsInRange.filter((event) => canonicalEventName(event) === name);
+  const eventSessionIds = (events: GrowthMarketingEventRow[]) =>
+    new Set(
+      events
+        .map((event) => event.marketing_session_id?.trim())
+        .filter((sessionId): sessionId is string => Boolean(sessionId))
+    );
+  const sessionTransition = (
+    key: string,
+    label: string,
+    numeratorEvents: GrowthMarketingEventRow[],
+    denominatorEvents: GrowthMarketingEventRow[]
+  ) => {
+    const counts = transitionSessionCounts(denominatorEvents, numeratorEvents, () => 'all');
+    const numerator = counts.numerator.get('all') || 0;
+    const denominator = counts.denominator.get('all') || 0;
+    return { key, label, numerator, denominator, rate: pct(numerator, denominator) };
+  };
   const fulfilledOrders = paidOrders.filter((order) =>
     ['fulfilled', 'sent_to_customer'].includes(order.fulfillment_status || '')
   );
+  const paidOrderAtBySession = new Map<string, number>();
+  paidOrders.forEach((order) => {
+    const sessionId = order.marketing_session_id?.trim();
+    const orderDate = getOrderDate(order);
+    if (!sessionId || !orderDate) return;
+    const current = paidOrderAtBySession.get(sessionId);
+    if (current === undefined || orderDate.getTime() < current) {
+      paidOrderAtBySession.set(sessionId, orderDate.getTime());
+    }
+  });
+  const paidTransition = (
+    key: string,
+    label: string,
+    denominatorEvents: GrowthMarketingEventRow[]
+  ) => {
+    const firstDenominatorAtBySession = new Map<string, number>();
+    denominatorEvents.forEach((event) => {
+      const sessionId = event.marketing_session_id?.trim();
+      if (!sessionId) return;
+      const eventAt = parseDate(event.created_at)?.getTime() ?? 0;
+      const current = firstDenominatorAtBySession.get(sessionId);
+      if (current === undefined || eventAt < current) {
+        firstDenominatorAtBySession.set(sessionId, eventAt);
+      }
+    });
+    const numerator = [...firstDenominatorAtBySession].filter(
+      ([sessionId, denominatorAt]) =>
+        (paidOrderAtBySession.get(sessionId) ?? -1) >= denominatorAt
+    ).length;
+    const denominator = firstDenominatorAtBySession.size;
+    return { key, label, numerator, denominator, rate: pct(numerator, denominator) };
+  };
   const authoritativeStageCount = (name: string) => {
     if (name === 'payment_succeeded') return paidOrders.length;
     if (name === 'document_delivered') return fulfilledOrders.length;
-    return stageCount(name);
+    return eventSessionIds(eventsForStage(name)).size;
   };
   const countRows = (counts: Map<string, number>) =>
     [...counts.entries()]
@@ -438,11 +536,19 @@ export function buildGrowthReport(params: {
     const key = `${experimentId}\u0000${variantId}`;
     experimentDimensions.set(key, (experimentDimensions.get(key) || 0) + 1);
   });
-  const stageRate = (key: string, label: string, numeratorEvent: string, denominatorEvent: string) => {
-    const numerator = stageCount(numeratorEvent);
-    const denominator = stageCount(denominatorEvent);
-    return { key, label, numerator, denominator, rate: pct(numerator, denominator) };
-  };
+  const bridgeRateCounts = transitionSessionCounts(bridgeViews, bridgeClicks, eventPage);
+  const productRateCounts = transitionSessionCounts(productClicks, checkoutStarts, eventProduct);
+  const checkoutRateCounts = transitionSessionCounts(
+    bridgeClicks,
+    checkoutStarts,
+    (event) => groupLabel(event.intent || event.product_clicked, 'unknown')
+  );
+  const datedEvents = eventsInRange
+    .map((event) => parseDate(event.created_at))
+    .filter((date): date is Date => Boolean(date))
+    .sort((left, right) => left.getTime() - right.getTime());
+  const attributedPaidOrders = paidOrders.filter((order) => Boolean(order.marketing_session_id));
+  const organicLandingSessionIds = eventSessionIds(eventsForStage('organic_landing_view'));
 
   const rolling7DayTargetRevenue = DAILY_REVENUE_TARGET_GBP * 7;
 
@@ -473,36 +579,38 @@ export function buildGrowthReport(params: {
       count: authoritativeStageCount(event),
     })),
     journeyRates: [
-      {
-        key: 'offer_ctr',
-        label: 'Offer / entry CTA CTR',
-        numerator: bridgeClicks.length,
-        denominator: bridgeViews.length,
-        rate: pct(bridgeClicks.length, bridgeViews.length),
-      },
-      stageRate('landing_to_product', 'Landing to product', 'product_view', 'organic_landing_view'),
-      stageRate('product_to_builder', 'Product to builder', 'builder_started', 'product_view'),
-      stageRate('builder_to_preview', 'Builder to preview', 'preview_generated', 'builder_started'),
-      stageRate('preview_to_checkout', 'Preview to checkout', 'checkout_opened', 'preview_generated'),
-      {
-        key: 'checkout_to_payment',
-        label: 'Checkout to payment',
-        numerator: paidOrders.length,
-        denominator: stageCount('checkout_opened'),
-        rate: pct(paidOrders.length, stageCount('checkout_opened')),
-      },
-      {
-        key: 'landing_to_sale',
-        label: 'Landing to sale',
-        numerator: paidOrders.length,
-        denominator: stageCount('organic_landing_view'),
-        rate: pct(paidOrders.length, stageCount('organic_landing_view')),
-      },
+      sessionTransition('offer_ctr', 'Visible offer to click', bridgeClicks, bridgeViews),
+      sessionTransition(
+        'landing_to_product',
+        'Organic landing to product',
+        eventsForStage('product_view'),
+        eventsForStage('organic_landing_view')
+      ),
+      sessionTransition(
+        'product_to_builder',
+        'Product to builder',
+        eventsForStage('builder_started'),
+        eventsForStage('product_view')
+      ),
+      sessionTransition(
+        'builder_to_preview',
+        'Builder to preview',
+        eventsForStage('preview_generated'),
+        eventsForStage('builder_started')
+      ),
+      sessionTransition(
+        'preview_to_checkout',
+        'Preview to checkout',
+        eventsForStage('checkout_opened'),
+        eventsForStage('preview_generated')
+      ),
+      paidTransition('checkout_to_payment', 'Checkout to payment', eventsForStage('checkout_opened')),
+      paidTransition('landing_to_sale', 'Organic landing to sale', eventsForStage('organic_landing_view')),
     ],
     funnelRates: {
       ctaClickRateByPage: buildRateRows(
-        countBy(bridgeViews, eventPage),
-        countBy(bridgeClicks, eventPage),
+        bridgeRateCounts.denominator,
+        bridgeRateCounts.numerator,
         'clicks',
         'views'
       ),
@@ -525,14 +633,14 @@ export function buildGrowthReport(params: {
         'views'
       ),
       productPageConversionRate: buildRateRows(
-        countBy(productClicks, eventProduct),
-        countBy(checkoutStarts, eventProduct),
+        productRateCounts.denominator,
+        productRateCounts.numerator,
         'checkoutStarts',
         'productClicks'
       ),
       checkoutStartRate: buildRateRows(
-        countBy(bridgeClicks, (event) => groupLabel(event.intent, 'unknown')),
-        countBy(checkoutStarts, (event) => groupLabel(event.intent || event.product_clicked, 'unknown')),
+        checkoutRateCounts.denominator,
+        checkoutRateCounts.numerator,
         'checkoutStarts',
         'clicks'
       ),
@@ -544,8 +652,16 @@ export function buildGrowthReport(params: {
     dataQuality: {
       paidOrders: paidOrders.length,
       clientPaymentEvents: stageCount('payment_succeeded'),
-      attributedPaidOrders: paidOrders.filter((order) => Boolean(order.marketing_session_id)).length,
+      attributedPaidOrders: attributedPaidOrders.length,
+      attributionRate: pct(attributedPaidOrders.length, paidOrders.length),
+      organicallyAttributedPaidOrders: attributedPaidOrders.filter((order) =>
+        organicLandingSessionIds.has(order.marketing_session_id?.trim() || '')
+      ).length,
       fulfilledOrders: fulfilledOrders.length,
+      marketingEvents: eventsInRange.length,
+      marketingSessions: eventSessionIds(eventsInRange).size,
+      earliestEventAt: datedEvents[0]?.toISOString() || null,
+      latestEventAt: datedEvents.at(-1)?.toISOString() || null,
       usesAuthoritativeOrderOutcomes: true,
     },
   };

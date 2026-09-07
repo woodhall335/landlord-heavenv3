@@ -240,23 +240,18 @@ export default function Section21BanPage() {
                 <p className="mt-4 leading-7 text-gray-700">
                   Section 21 has long been the cleaner no-fault possession route used by
                   landlords in England when they wanted possession without relying on a
-                  behaviour-based or arrears-based ground. The reason this page matters is
-                  simple: once that route closes, landlords lose the easiest public-facing
-                  possession pathway they have relied on for years.
+                  behaviour-based or arrears-based ground. Once that route closes, landlords
+                  must use the current grounds-based possession framework instead.
                 </p>
                 <p className="mt-4 leading-7 text-gray-700">
-                  This means the Section 21 conversation is not just a news story. It is a
-                  real commercial deadline problem. Landlords who still want to use the
-                  no-fault route usually need to think about timing, file validity, and
-                  service risk now, not later. The closer the deadline gets, the more likely
-                  people are to rush the notice stage and create avoidable mistakes.
+                  Timing alone was never enough. A landlord also had to check that the notice
+                  route applied, the file was valid, and the notice was served correctly within
+                  the transition timetable.
                 </p>
                 <p className="mt-4 leading-7 text-gray-700">
-                  In practical terms, the best way to treat this page is as a transition
-                  guide. It explains why the route matters, what makes Section 21 different
-                  from Section 8, why the final window is commercially important, and why a
-                  compliance-checked notice workflow is usually safer than trying to improvise
-                  close to the line.
+                  Use this as transition guidance. It explains how Section 21 differed from
+                  Section 8 and why checking the notice, compliance record, dates, and proof of
+                  service mattered before the route closed.
                 </p>
                 <p className="mt-4 leading-7 text-gray-700">
                   For the live authority version of this topic, use the{' '}
@@ -284,17 +279,15 @@ export default function Section21BanPage() {
                   contested court pathway in many cases.
                 </p>
                 <p className="mt-4 leading-7 text-gray-700">
-                  This is why the transition matters commercially. Section 21 has traditionally
-                  been easier to explain to landlords because it is cleaner: valid notice,
-                  correct process, possession route. Section 8 is usually more demanding. It
+                  Section 21 followed a no-fault route: valid notice, correct process, then the
+                  possession route. Section 8 is usually more demanding. It
                   asks not only whether the landlord wants possession, but also why, on what
                   ground, and with what evidence. That makes the post-ban world more complex,
                   slower-feeling, and more documentation-heavy for many users.
                 </p>
                 <p className="mt-4 leading-7 text-gray-700">
-                  A strong landing page should therefore do more than say “the law is changing.”
-                  It should help landlords understand what practical advantage still exists in
-                  acting early, why the Section 21 file needs to be valid before service, and
+                  It is not enough to know that the law changed. Landlords also need to understand
+                  why the Section 21 file had to be valid before service and
                   what changes once the no-fault option is gone.
                 </p>
 
@@ -311,30 +304,28 @@ export default function Section21BanPage() {
 
               <Card id="key-dates" title="Key Dates Landlords Need to Watch">
                 <p className="mt-4 leading-7 text-gray-700">
-                  Deadline pages perform best when they turn abstract legal change into a
-                  clear timeline. The user wants to know not just that Section 21 is ending,
-                  but what the critical dates mean for service, possession planning, and court
-                  action. The point is not to create panic. It is to show that waiting reduces
-                  margin for error.
+                  The critical dates affected notice service, possession planning, and court
+                  action. Leaving action until a deadline reduced the time available to correct
+                  errors.
                 </p>
 
                 <div className="mt-8 grid gap-6 md:grid-cols-3">
                   <div className="rounded-xl bg-white p-6 text-center shadow-sm border border-[#E6DBFF]">
                     <Calendar className="mx-auto mb-4 h-10 w-10 text-primary" />
                     <div className="mb-2 text-2xl font-bold text-gray-900">30 April 2026</div>
-                    <p className="text-gray-600">Last day the page positions as the final service window</p>
+                    <p className="text-gray-600">Final service date described by this transition guide</p>
                   </div>
 
                   <div className="rounded-xl border-2 border-primary bg-white p-6 text-center shadow-sm">
                     <AlertTriangle className="mx-auto mb-4 h-10 w-10 text-primary" />
                     <div className="mb-2 text-2xl font-bold text-primary">1 May 2026</div>
-                    <p className="text-gray-600">Section 21 ban takes effect in the page’s transition messaging</p>
+                    <p className="text-gray-600">Section 21 transition date in England</p>
                   </div>
 
                   <div className="rounded-xl bg-white p-6 text-center shadow-sm border border-[#E6DBFF]">
                     <Clock3 className="mx-auto mb-4 h-10 w-10 text-primary" />
                     <div className="mb-2 text-2xl font-bold text-gray-900">31 July 2026</div>
-                    <p className="text-gray-600">Court-start deadline position for previously served notices</p>
+                    <p className="text-gray-600">Court-start deadline stated for qualifying notices served earlier</p>
                   </div>
                 </div>
 
@@ -347,16 +338,13 @@ export default function Section21BanPage() {
 
               <Card id="section-21-vs-section-8" title="Section 21 vs Section 8: Why the Difference Matters">
                 <p className="mt-4 leading-7 text-gray-700">
-                  One of the biggest conversion failures on deadline pages is assuming the
-                  user already understands why Section 21 matters. A strong page should make
-                  that explicit. Section 21 has historically been attractive because it is the
+                  Section 21 was historically attractive because it offered a
                   cleaner no-fault route. Section 8 is different. It is a grounds-based route
                   that usually requires more evidence and a more obviously contested pathway.
                 </p>
                 <p className="mt-4 leading-7 text-gray-700">
-                  That difference is what makes the final Section 21 window commercially
-                  important. Landlords are not just losing a legal label. They are losing a
-                  simpler route. Once the market becomes more Section 8-led, more landlords
+                  Landlords did not just lose a legal label; they lost a simpler route. Under a
+                  more Section 8-led framework, more landlords
                   will need stronger files, more evidence, and more route-planning before they
                   even begin.
                 </p>
@@ -392,7 +380,7 @@ export default function Section21BanPage() {
                         <td className="p-4">Higher</td>
                       </tr>
                       <tr>
-                        <td className="p-4 font-medium">Commercial fit</td>
+                        <td className="p-4 font-medium">When it applied</td>
                         <td className="p-4 text-primary">Best while still available</td>
                         <td className="p-4">Becomes more important after the ban</td>
                       </tr>
@@ -414,8 +402,7 @@ export default function Section21BanPage() {
                   properly. That turns what should have been a cleaner route into a riskier one.
                 </p>
                 <p className="mt-4 leading-7 text-gray-700">
-                  A good transition page therefore needs to frame urgency properly. The point is
-                  not to frighten the user. The point is to explain that earlier action usually
+                  The purpose of this transition guidance is not to frighten you. It explains why earlier action usually
                   creates a better-quality notice file. Better-quality notice files are easier to
                   defend. Better-defended files are less likely to collapse later because somebody
                   rushed them near the deadline.
@@ -426,7 +413,7 @@ export default function Section21BanPage() {
                     <CheckCircle className="mt-1 h-6 w-6 flex-shrink-0 text-primary" />
                     <div>
                       <div className="font-semibold text-gray-900">Cleaner route while still available</div>
-                      <p className="text-gray-600">The no-fault route is usually easier to position than a grounds-based claim.</p>
+                      <p className="text-gray-600">The no-fault route was generally simpler than a grounds-based claim.</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
@@ -461,8 +448,8 @@ export default function Section21BanPage() {
                 <p className="mt-4 leading-7 text-gray-700">
                   One of the biggest myths in this area is that the deadline is the only thing
                   that matters. It is not. A rushed but invalid Section 21 notice is not a win.
-                  A stronger page should therefore push landlords toward file quality as well as
-                  speed. The right question is not “Can I serve today?” but “Can I serve a
+                  Focus on file quality as well as speed. The right question is not “Can I serve
+                  today?” but “Can I serve a
                   valid notice today?”
                 </p>
 
@@ -478,9 +465,8 @@ export default function Section21BanPage() {
                 <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-5">
                   <h3 className="text-lg font-semibold text-amber-900">Practical point</h3>
                   <p className="mt-2 leading-7 text-amber-900/90">
-                    Deadline pressure usually makes landlords faster, not clearer. The best
-                    commercial service in this space is one that makes the file cleaner before
-                    service rather than just making the button easier to click.
+                    Deadline pressure can lead to rushed decisions. Check the file before service;
+                    a faster start does not make an invalid notice effective.
                   </p>
                 </div>
               </Card>
@@ -596,10 +582,9 @@ export default function Section21BanPage() {
             <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
               <h2 className="text-2xl font-semibold text-[#2a2161]">What to do next</h2>
               <p className="mt-4 leading-7 text-gray-700">
-                Section 21 deadline pages work best when they do two jobs at once: create enough
-                urgency to move the landlord forward, and still make clear that a valid notice
-                matters more than a rushed one. That is the balance this page is designed to
-                strike.
+                A valid notice mattered more than a rushed one. Check the current England route
+                before preparing new possession paperwork, because the Section 21 transition
+                dates have now passed.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
                 If your case still belongs on the no-fault route, act while the route is still

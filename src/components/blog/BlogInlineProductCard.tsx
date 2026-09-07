@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { trackEvent } from '@/lib/analytics';
 import { recordMarketingGrowthEvent } from '@/lib/analytics/growth-events';
 import type { ProductCtaConfig } from '@/lib/blog/product-cta-map';
@@ -28,20 +28,44 @@ export function BlogInlineProductCard({
 }: BlogInlineProductCardProps) {
   const iconSrc = CTA_ICONS[cta.iconKey ?? 'notice'];
   const sourceRoute = `/blog/${postSlug}`;
+  const cardRef = useRef<HTMLElement>(null);
+  const hasTrackedView = useRef(false);
 
   useEffect(() => {
-    recordMarketingGrowthEvent('contextual_offer_view', {
-      sourcePage: sourceRoute,
-      pagePath: sourceRoute,
-      pageType: 'blog',
-      destination: cta.primaryProductHref,
-      recommendedProduct: cta.iconKey,
-      experimentId: cta.trackingId,
-    });
+    const element = cardRef.current;
+    if (!element || hasTrackedView.current) return;
+    const trackVisibleCard = () => {
+      if (hasTrackedView.current) return;
+      hasTrackedView.current = true;
+      recordMarketingGrowthEvent('contextual_offer_view', {
+        sourcePage: sourceRoute,
+        pagePath: sourceRoute,
+        pageType: 'blog',
+        ctaPosition: 'section',
+        destination: cta.primaryProductHref,
+        recommendedProduct: cta.iconKey,
+        experimentId: cta.trackingId,
+      });
+    };
+    if (typeof IntersectionObserver === 'undefined') {
+      trackVisibleCard();
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        trackVisibleCard();
+        observer.disconnect();
+      },
+      { threshold: 0.4 },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
   }, [cta.iconKey, cta.primaryProductHref, cta.trackingId, sourceRoute]);
 
   return (
-    <Reveal as="section" className="my-10 rounded-3xl border border-[#e8ddfb] bg-[linear-gradient(135deg,#f8f1ff,#ffffff)] p-6 shadow-[0_18px_50px_rgba(105,46,212,0.12)]">
+    <Reveal as="div">
+    <section ref={cardRef} className="my-10 rounded-3xl border border-[#e8ddfb] bg-[linear-gradient(135deg,#f8f1ff,#ffffff)] p-6 shadow-[0_18px_50px_rgba(105,46,212,0.12)]">
       <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">
         {cta.eyebrow}
       </p>
@@ -83,6 +107,7 @@ export function BlogInlineProductCard({
             sourcePage: sourceRoute,
             pagePath: sourceRoute,
             pageType: 'blog',
+            ctaPosition: 'section',
             destination: cta.primaryProductHref,
             recommendedProduct: cta.iconKey,
             experimentId: cta.trackingId,
@@ -92,6 +117,7 @@ export function BlogInlineProductCard({
       >
         {cta.ctaLabel}
       </Link>
+    </section>
     </Reveal>
   );
 }

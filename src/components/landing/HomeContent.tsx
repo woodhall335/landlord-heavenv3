@@ -21,7 +21,6 @@ import {
   PUBLIC_LAYOUT_CLASSES,
 } from '@/lib/public-brand';
 import { PUBLIC_PRODUCT_DESCRIPTORS } from '@/lib/public-products';
-import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats';
 import {
   RiArrowRightLine,
   RiCheckLine,
@@ -91,9 +90,6 @@ type JurisdictionCard = {
   imageAlt: string;
 };
 
-const reviewCount = getDynamicReviewCount();
-const formattedReviewCount = reviewCount.toLocaleString('en-GB');
-const reviewStars = '\u2605\u2605\u2605\u2605\u2605';
 
 const routeFilters: Array<{ id: 'all' | RouteFilter; label: string }> = [
   { id: 'all', label: 'All situations' },
@@ -507,15 +503,8 @@ export default function HomeContent() {
                 </p>
               </div>
                 <div className="public-stat-card hidden px-5 py-4 sm:block">
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-2xl font-bold text-[#1c1431]">
-                    <span className="text-[#facc15]" aria-hidden="true">
-                      {reviewStars}
-                    </span>
-                    <span>{REVIEW_RATING}/5</span>
-                  </div>
-                  <p className="mt-1 text-sm text-[#5d5672]">
-                    Rated by {formattedReviewCount} landlords
-                  </p>
+                  <p className="text-lg font-bold text-[#1c1431]">Clear scope and fixed prices</p>
+                  <p className="mt-1 text-sm text-[#5d5672]">See what is included before you start.</p>
                 </div>
             </StaggerReveal>
 
@@ -849,32 +838,27 @@ export default function HomeContent() {
         <Container>
           <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
             <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'px-6 py-8 md:px-8')}>
-              <span className="public-eyebrow">Landlord reviews</span>
+              <span className="public-eyebrow">Product assurance</span>
               <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-4xl">
-                Trusted by landlords who want the paperwork right first time
+                Check the scope before you commit
               </h2>
                 <div className="mt-8 grid gap-4 sm:grid-cols-2">
                   <div className="public-stat-card px-5 py-5">
                     <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6b3fd1]">
-                      Rating
+                      Transparent pricing
                     </p>
-                    <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-2xl font-bold text-[#1c1431] md:text-3xl">
-                      <span className="text-[#facc15]" aria-hidden="true">
-                        {reviewStars}
-                      </span>
-                      <span>{REVIEW_RATING}/5</span>
-                    </div>
+                    <p className="mt-3 text-2xl font-bold text-[#1c1431] md:text-3xl">One-time price</p>
                     <p className="mt-2 text-sm text-[#5d5672]">
-                      Average landlord rating across the product.
+                      Product scope and price are shown before checkout.
                     </p>
                   </div>
                 <div className="public-stat-card px-5 py-5">
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6b3fd1]">
-                    Reviews
+                    Preview and checks
                   </p>
-                  <p className="mt-3 text-4xl font-bold text-[#1c1431]">{formattedReviewCount}</p>
+                  <p className="mt-3 text-2xl font-bold text-[#1c1431] md:text-3xl">Review before payment</p>
                   <p className="mt-2 text-sm text-[#5d5672]">
-                    Reviews left by landlords who have used the product.
+                    See the available output and suitability checks before paying.
                   </p>
                 </div>
               </div>

@@ -128,7 +128,7 @@ export default function EvictionGuidesPage() {
                 Current England eviction after 1 May 2026
               </h2>
               <p className="mt-2 text-gray-700">
-                Use these five England owner pages when the landlord needs the live framework, not a legacy Section 21 explanation or a generic UK summary.
+                Use these five guides for the current England framework rather than relying on a legacy Section 21 explanation or a generic UK summary.
               </p>
               <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {currentEnglandFrameworkLinks.map((guide) => (

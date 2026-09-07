@@ -1352,6 +1352,41 @@ export async function POST(request: Request) {
 
     const session = await stripe.checkout.sessions.create(checkoutSessionPayload, stripeOptions);
 
+    if (marketing_session_id) {
+      const checkoutSourcePath = (() => {
+        try {
+          return new URL(resolvedCancelUrl).pathname;
+        } catch {
+          return '/checkout';
+        }
+      })();
+      const { error: checkoutEventError } = await adminSupabase.from('marketing_events').insert({
+        event_name: 'checkout_opened',
+        marketing_session_id: marketing_session_id.substring(0, 200),
+        source_page: checkoutSourcePath,
+        page_path: checkoutSourcePath,
+        page_type: 'checkout',
+        intent: normalizedProductType,
+        destination: 'stripe_checkout',
+        recommended_product: normalizedProductType,
+        product_clicked: normalizedProductType,
+        user_type: 'landlord',
+        event_payload: {
+          canonicalEventName: 'checkout_opened',
+          eventSource: 'checkout_api',
+          productSlug: normalizedProductType,
+          price: totalAmount,
+        },
+      });
+      if (checkoutEventError) {
+        logger.warn('Failed to persist authoritative checkout event', {
+          productType: normalizedProductType,
+          code: checkoutEventError.code,
+          message: checkoutEventError.message,
+        });
+      }
+    }
+
     // Update order with Stripe session ID and checkout URL (use admin client)
     await adminSupabase
       .from('orders')

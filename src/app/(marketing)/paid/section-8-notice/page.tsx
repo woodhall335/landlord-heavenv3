@@ -290,8 +290,7 @@ export default function EvictionNoticePaidLandingPage() {
                 <span data-testid="hero-review-pill-trust">England landlord documents checked before you serve, file, or raise rent</span>
               </span>
               <span data-testid="hero-review-pill-meta" className="mt-1.5 flex items-center gap-3 pl-8 leading-5">
-                <span className="shrink-0 text-[#facc15]" aria-hidden>★★★★★</span>
-                <span className="shrink-0 font-medium text-[#2b253d]">4.8/5 | 2095 reviews</span>
+                <span className="shrink-0 font-medium text-[#2b253d]">Fixed price and preview before payment</span>
               </span>
             </p>
 

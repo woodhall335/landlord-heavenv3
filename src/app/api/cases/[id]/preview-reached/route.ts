@@ -9,6 +9,7 @@ export const runtime = 'nodejs';
 const payloadSchema = z.object({
   product: z.string().min(1).optional(),
   source: z.string().min(1).optional(),
+  marketingSessionId: z.string().min(1).max(200).optional(),
 });
 
 const NON_PREVIEW_STATUSES = new Set(['paid', 'generating', 'fulfilled', 'bundle_ready']);
@@ -82,6 +83,31 @@ export async function POST(
     if (updateError) {
       console.error('[cases/preview-reached] update failed', updateError);
       return NextResponse.json({ error: 'Failed to mark preview reached' }, { status: 500 });
+    }
+
+    if (parsed.data.marketingSessionId) {
+      const { error: eventError } = await supabase.from('marketing_events').insert({
+        event_name: 'preview_generated',
+        marketing_session_id: parsed.data.marketingSessionId,
+        source_page: `/wizard/preview/${caseId}`,
+        page_path: `/wizard/preview/${caseId}`,
+        page_type: 'preview',
+        intent: parsed.data.product || null,
+        recommended_product: parsed.data.product || null,
+        product_clicked: parsed.data.product || null,
+        user_type: 'landlord',
+        event_payload: {
+          canonicalEventName: 'preview_generated',
+          eventSource: 'preview_reached_api',
+          productSlug: parsed.data.product || null,
+        },
+      });
+      if (eventError) {
+        console.warn('[cases/preview-reached] analytics event failed', {
+          code: eventError.code,
+          message: eventError.message,
+        });
+      }
     }
 
     return NextResponse.json({

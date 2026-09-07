@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { X } from 'lucide-react';
 import { trackEvent } from '@/lib/analytics';
+import { recordMarketingGrowthEvent } from '@/lib/analytics/growth-events';
 import type { ProductCtaConfig } from '@/lib/blog/product-cta-map';
 
 interface BlogStickySlotsProps {
@@ -36,6 +37,8 @@ export function BlogStickySlots({ cta, postSlug, category, showDesktop = true, s
   const [mobileDismissed, setMobileDismissed] = useState(false);
   const source = useMemo(() => `blog_${postSlug}`, [postSlug]);
   const warnedRef = useRef(false);
+  const trackedDesktopView = useRef(false);
+  const trackedMobileView = useRef(false);
 
   useEffect(() => {
     if (process.env.NODE_ENV === 'production') return;
@@ -68,6 +71,30 @@ export function BlogStickySlots({ cta, postSlug, category, showDesktop = true, s
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (!showSticky) return;
+    const sourceRoute = `/blog/${postSlug}`;
+    const trackSlot = (placement: 'desktop_sticky' | 'mobile_bar') => {
+      recordMarketingGrowthEvent('journey_cta_impression', {
+        sourcePage: sourceRoute,
+        pagePath: sourceRoute,
+        pageType: 'blog',
+        ctaPosition: placement,
+        destination: cta.primaryProductHref,
+        recommendedProduct: cta.iconKey,
+        experimentId: cta.trackingId,
+      });
+    };
+    if (showDesktop && !trackedDesktopView.current) {
+      trackedDesktopView.current = true;
+      trackSlot('desktop_sticky');
+    }
+    if (showMobile && !mobileDismissed && !trackedMobileView.current) {
+      trackedMobileView.current = true;
+      trackSlot('mobile_bar');
+    }
+  }, [cta.iconKey, cta.primaryProductHref, cta.trackingId, mobileDismissed, postSlug, showDesktop, showMobile, showSticky]);
+
   const onClick = (placement: 'desktop_sticky' | 'mobile_bar') => {
     trackEvent('click_blog_sticky_cta', {
       slot: placement,
@@ -76,6 +103,15 @@ export function BlogStickySlots({ cta, postSlug, category, showDesktop = true, s
       slug: postSlug,
       category,
       productHref: cta.primaryProductHref,
+    });
+    recordMarketingGrowthEvent('journey_cta_click', {
+      sourcePage: `/blog/${postSlug}`,
+      pagePath: `/blog/${postSlug}`,
+      pageType: 'blog',
+      ctaPosition: placement,
+      destination: cta.primaryProductHref,
+      recommendedProduct: cta.iconKey,
+      experimentId: cta.trackingId,
     });
   };
 

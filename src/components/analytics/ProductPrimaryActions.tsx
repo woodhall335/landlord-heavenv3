@@ -1,7 +1,6 @@
 'use client';
 
-import Link from 'next/link';
-import { recordMarketingGrowthEvent } from '@/lib/analytics/growth-events';
+import { CommercialSeoTrackedCta } from '@/components/seo/CommercialSeoTrackedCta';
 
 export function ProductPrimaryActions({
   pagePath,
@@ -18,32 +17,36 @@ export function ProductPrimaryActions({
 }) {
   return (
     <>
-      <Link
+      <CommercialSeoTrackedCta
         href={primary.href}
+        label={primary.label}
+        variant="primary"
+        sourcePage={pagePath}
+        pageType="product_page"
+        intent={productSlug}
+        ctaPosition="hero"
+        recommendedProduct={productSlug}
+        price={price}
         className="hero-btn-primary flex w-full justify-center text-center sm:w-auto"
-        onClick={() =>
-          recordMarketingGrowthEvent('product_primary_cta_click', {
-            sourcePage: pagePath,
-            pagePath,
-            pageType: 'product_page',
-            destination: primary.href,
-            recommendedProduct: productSlug,
-            productSlug,
-            price,
-          })
-        }
       >
         {primary.label}
-      </Link>
+      </CommercialSeoTrackedCta>
       {secondary ? (
-        <Link
+        <CommercialSeoTrackedCta
           href={secondary.href}
+          label={secondary.label}
+          variant="secondary"
+          sourcePage={pagePath}
+          pageType="product_page"
+          intent={productSlug}
+          ctaPosition="hero"
+          recommendedProduct={productSlug}
+          price={price}
           className="hero-btn-secondary flex w-full justify-center text-center sm:w-auto"
         >
           {secondary.label}
-        </Link>
+        </CommercialSeoTrackedCta>
       ) : null}
     </>
   );
 }
-

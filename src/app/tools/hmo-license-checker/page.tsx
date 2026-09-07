@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
+import Link from 'next/link';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout';
 import { Container } from '@/components/ui/Container';
@@ -422,7 +423,7 @@ export default function HMOLicenseChecker() {
         showUsageCounter={false}
       />
 
-      <section className="hidden border-b border-gray-100 bg-white py-6 lg:block">
+      <section className="border-b border-gray-100 bg-white py-6">
         <Container>
           <div className="mx-auto max-w-5xl">
             <p className="text-base leading-7 text-gray-700">
@@ -431,6 +432,13 @@ export default function HMOLicenseChecker() {
               multiple occupiers. If the check points to shared occupation or multiple households,
               the result will explain the next documents to consider before you issue terms to the
               occupiers.
+            </p>
+            <p className="mt-4 text-sm leading-6 text-gray-700">
+              If the property will be occupied as a shared house,{' '}
+              <Link href="/hmo-shared-house-tenancy-agreement" className="font-semibold text-primary hover:underline">
+                create an HMO tenancy agreement and house rules pack
+              </Link>{' '}
+              using the dedicated England route.
             </p>
             <div className="mt-5 grid gap-4 md:grid-cols-3">
               <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">

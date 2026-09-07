@@ -42,10 +42,11 @@ describe('paid Section 8 landing page', () => {
     expect(illustrationSource).toContain("site-compliance-protection");
   });
 
-  it('restores the desktop review pill immediately inside the hero', () => {
+  it('shows evidence-based trust information immediately inside the hero', () => {
     expect(pageSource).toContain('data-testid="hero-review-pill-desktop"');
     expect(pageSource).toContain('data-testid="hero-review-pill-trust"');
-    expect(pageSource).toContain('4.8/5 | 2095 reviews');
+    expect(pageSource).toContain('Fixed price and preview before payment');
+    expect(pageSource).not.toContain('4.8/5 | 2095 reviews');
   });
 
   it('keeps every reusable illustration in the optimized public asset library', () => {

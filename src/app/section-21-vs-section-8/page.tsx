@@ -46,7 +46,7 @@ const faqs: FAQItem[] = [
   {
     question: 'Why keep a Section 21 vs Section 8 page live at all?',
     answer:
-      'Because landlords still search with older terminology. This page translates that intent into the current England notice path, then sends you back to the broad owner page and current live guidance.',
+      'Because landlords still use the older terminology. This guide explains the distinction and points you to the current England notice route and live guidance.',
   },
   {
     question: 'Where should broad notice users go first?',
@@ -178,17 +178,16 @@ export default function Page() {
                 route rather than a Section 21-first workflow.
               </p>
               <p>
-                This page stays live because landlords still search with Section 21 language. Its
-                purpose is to answer that search clearly, then hand you back to the owner page and
-                the live guidance that now matters.
+                Landlords still use Section 21 language when looking for possession guidance. This
+                comparison explains the older route and points you to the current guidance.
               </p>
             </SupportCard>
 
-            <SupportCard title="Where the owner page and current guide now fit">
+            <SupportCard title="Where the current notice guide fits">
               <p>
-                The owner page should handle broad notice intent: what the notice-stage bundle
-                looks like, how service guidance fits around the form, what validity checks matter,
-                and how the current route differs from legacy terminology.
+                The current notice guide explains what the notice-stage bundle contains, how
+                service guidance fits around the form, which validity checks matter, and how the
+                current route differs from the older terminology.
               </p>
               <p>
                 The current England notice guide should then take over when you already know the
@@ -270,8 +269,7 @@ export default function Page() {
             <h2 className="text-2xl font-semibold text-[#2a2161]">Next steps</h2>
             <p className="mt-4 leading-7 text-gray-700">
               Use this page to translate older Section 21 language into the current England notice
-              path. Then move back to the broad owner page, the current England route, and the
-              wider process guide.
+              path. Then continue to the current England route or the wider process guide.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link

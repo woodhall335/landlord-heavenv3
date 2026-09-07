@@ -32,7 +32,7 @@ import {
   trackCheckoutStarted,
   trackBeginCheckout,
 } from '@/lib/analytics';
-import { recordMarketingGrowthEvent } from '@/lib/analytics/growth-events';
+import { getMarketingSessionId, recordMarketingGrowthEvent } from '@/lib/analytics/growth-events';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { getCheckoutRedirectUrls, type CheckoutProduct } from '@/lib/payments/redirects';
 import { getSessionTokenHeaders } from '@/lib/session-token';
@@ -577,6 +577,7 @@ export default function WizardPreviewPage() {
           body: JSON.stringify({
             product: resolvedPreviewProduct,
             source: 'wizard_preview_page',
+            marketingSessionId: getMarketingSessionId(),
           }),
         }).catch((previewMarkerError) => {
           console.warn('Failed to mark case preview reached:', previewMarkerError);

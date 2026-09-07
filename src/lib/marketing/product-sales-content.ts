@@ -111,6 +111,7 @@ export interface ProductSalesPageContent {
     routeIntent?: string;
   };
   hero: ProductSalesHero;
+  earlyDecisionContent?: ReactNode;
   postHeroContent?: ReactNode;
   afterPostHeroContent?: ReactNode;
   earlyProofBand?: ProductSalesEarlyProofBand;

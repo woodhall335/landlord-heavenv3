@@ -236,19 +236,15 @@ export default function WalesEvictionNoticesPage() {
                   article. That creates confusion for landlords and weakens trust immediately.
                 </p>
                 <p className="leading-7">
-                  A stronger Wales page needs to do three things properly. First, it should make
-                  clear that the agreement framework is based on <strong>occupation contracts</strong>,
-                  not ASTs. Second, it should talk about <strong>contract-holders</strong> where
-                  that is the proper Welsh term, while still capturing the search intent of users
-                  who type “evict tenant Wales” into Google. Third, it should explain that Wales
-                  possession routes and notice logic sit inside the Renting Homes framework rather
+                  In Wales, the agreement framework is based on <strong>occupation contracts</strong>,
+                  not ASTs, and the proper term is generally <strong>contract-holder</strong> rather
+                  than tenant. Welsh possession routes and notice logic sit inside the Renting Homes
+                  framework rather
                   than being treated as England notices with a Welsh flag added on top.
                 </p>
                 <p className="leading-7">
-                  That matters for both SEO and conversion. SEO improves because the page serves
-                  the actual Welsh search intent more precisely. Conversion improves because the
-                  user lands on a page that sounds like it belongs to the jurisdiction they are
-                  dealing with, rather than a generic UK article with a few cosmetic edits.
+                  Confirm the property jurisdiction before selecting a notice or document. A generic
+                  UK article can hide differences that matter to a Welsh possession case.
                 </p>
               </div>
             </div>
@@ -324,9 +320,9 @@ export default function WalesEvictionNoticesPage() {
 
               <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50 p-6">
                 <p className="leading-7 text-amber-900">
-                  <strong>Commercial takeaway:</strong> a Wales possession page should feel
-                  unmistakably Welsh in both terminology and route logic. That is what helps
-                  it compete against weaker “UK eviction” pages that blur the jurisdictions.
+                  <strong>Why Wales-specific wording matters:</strong> Welsh possession law uses
+                  its own terminology and route logic. Generic “UK eviction” guidance can blur
+                  important differences between the jurisdictions.
                 </p>
               </div>
             </div>
@@ -349,9 +345,9 @@ export default function WalesEvictionNoticesPage() {
                   wrong before the notice is even served.
                 </p>
                 <p className="leading-7">
-                  That is why this page should not sound like a general “how to evict a tenant”
-                  blog post. It should sound like a Wales possession route guide. The user needs
-                  to understand what kind of occupation arrangement they are dealing with, what
+                  Start by treating this as a Wales possession question, not a generic “how to
+                  evict a tenant” question. You need to understand what kind of occupation
+                  arrangement you are dealing with, what
                   notice logic may apply, and whether the case is really about standard
                   possession, breach, arrears, or another Wales-specific route.
                 </p>
@@ -524,7 +520,7 @@ export default function WalesEvictionNoticesPage() {
                   <XCircle className="mt-0.5 h-5 w-5 text-red-600" />
                   <div>
                     <h3 className="text-lg font-semibold text-red-900">
-                      What this page should not encourage
+                      What to avoid
                     </h3>
                     <p className="mt-2 leading-7 text-red-900/90">
                       It should never sound like a landlord can just “tell the tenant to go” and
@@ -546,9 +542,9 @@ export default function WalesEvictionNoticesPage() {
 
               <div className="mb-8 rounded-r-lg border-l-4 border-amber-500 bg-amber-50 p-4">
                 <p className="text-sm text-amber-900">
-                  <strong>Important:</strong> Wales notice timing and route detail should be
-                  checked carefully against the current Welsh position. This page should guide
-                  route choice, but landlords should not rely on a simplistic “one notice period
+                  <strong>Important:</strong> Check Wales notice timing and route detail carefully
+                  against the current Welsh position. Use this guide to understand the likely
+                  route, but do not rely on a simplistic “one notice period
                   fits all” assumption.
                 </p>
               </div>
@@ -656,11 +652,11 @@ export default function WalesEvictionNoticesPage() {
               </div>
 
               <div className="mt-8 rounded-2xl border border-green-200 bg-green-50 p-6">
-                <h3 className="text-lg font-semibold text-green-900">What this means for conversion</h3>
+                <h3 className="text-lg font-semibold text-green-900">Choose the Wales route first</h3>
                 <p className="mt-2 leading-7 text-green-900/90">
-                  A high-performing Wales page should help landlords self-identify the right route
-                  early. That improves user trust and reduces the risk of wrong-door purchases by
-                  users who really needed Welsh possession guidance rather than a generic UK notice page.
+                  Identify the Welsh route before buying or preparing a notice. This reduces the
+                  risk of choosing a document intended for England when you actually need Welsh
+                  possession guidance.
                 </p>
               </div>
             </div>

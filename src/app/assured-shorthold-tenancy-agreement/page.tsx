@@ -185,31 +185,29 @@ export default function AssuredShortholdTenancyAgreementPage() {
                 <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">The product route is newer</h3>
                   <p className="text-gray-700">
-                    The live England route is stronger when presented as an updated tenancy agreement
-                    rather than staying tied to narrow legacy AST language.
+                    The live England route uses current tenancy agreement wording rather than relying
+                    only on the older AST label.
                   </p>
                 </div>
 
                 <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">2026 needs better framing</h3>
                   <p className="text-gray-700">
-                    Newer wording gives cleaner conversion copy, stronger SEO coverage, and better
-                    future-facing positioning for landlords.
+                    The route explains the current agreement options while still helping landlords
+                    who know the document by its older AST name.
                   </p>
                 </div>
               </div>
 
               <div className="mt-10 max-w-4xl mx-auto space-y-5 text-gray-700 leading-relaxed">
                 <p>
-                  Older AST-first pages often rank because they match the legacy query, but they do
-                  not always convert well because they feel thin, historic or too tied to outdated
-                  public product language.
+                  “AST agreement” remains familiar language, but the document you choose must match
+                  the current England framework and the actual letting arrangement.
                 </p>
 
                 <p>
-                  Stronger competitor pages usually do more. They answer the historic query, add
-                  practical guidance, explain the current route, and then convert the visitor into
-                  the live product journey. That is the model this page now follows.
+                  Use the comparison route to check whether you need Standard, Premium, Student,
+                  HMO / Shared House, or Lodger wording before starting the document.
                 </p>
               </div>
             </div>
@@ -220,37 +218,33 @@ export default function AssuredShortholdTenancyAgreementPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto rounded-2xl border border-red-200 bg-red-50 p-8 md:p-10">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                How it relates to the Renters&apos; Rights Bill
+                How it relates to the current England framework
               </h2>
               <p className="text-gray-700 text-center mb-10 max-w-3xl mx-auto">
-                The updated England route is positioned around <strong>Renters&apos; Rights compliant</strong>{' '}
-                wording rather than older assured shorthold tenancy agreement product language.
+                The updated England route uses current product wording rather than presenting every
+                letting arrangement as an assured shorthold tenancy.
               </p>
 
               <div className="space-y-5 text-gray-700 leading-relaxed">
                 <p>
-                  This is one of the main reasons the page should not stay as a basic legacy bridge.
-                  England landlords searching in 2026 want a tenancy agreement route that feels
-                  current, commercially usable and aligned with the direction of tenancy reform.
+                  England landlords searching in 2026 need a tenancy agreement route that reflects
+                  the current framework and is practical to use for the property and household.
                 </p>
 
                 <p>
-                  By positioning the page around the <strong>updated England Tenancy Agreement</strong>,
-                  Landlord Heaven can keep historic AST search intent while moving the product language
-                  into a broader England tenancy agreement framework that references{' '}
-                  <strong>Renters&apos; Rights</strong> expectations.
+                  The <strong>updated England Tenancy Agreement</strong> route lets you compare the
+                  current options while recognising that many landlords still use “AST” as a familiar
+                  description.
                 </p>
 
                 <p>
-                  That makes the page stronger commercially and stronger for organic search. It means
-                  the page can compete not only for AST terms but also for broader tenancy agreement
-                  and landlord agreement searches in England.
+                  Choose the agreement based on the property, occupiers, and management setup, not
+                  solely on the name used in an older template.
                 </p>
 
                 <p>
-                  Before publishing, your legal or compliance owner should approve the exact wording of
-                  any compliance claim. If they prefer a softer formulation, replace "compliant" with a
-                  phrase like "bill-ready" or "updated for Renters' Rights changes."
+                  If you are unsure which rules apply to a tenancy or whether an older agreement needs
+                  updating, obtain advice before relying on a document.
                 </p>
               </div>
             </div>
@@ -487,15 +481,12 @@ export default function AssuredShortholdTenancyAgreementPage() {
 
               <div className="mt-10 max-w-4xl mx-auto space-y-5 text-gray-700 leading-relaxed">
                 <p>
-                  This comparison is not about pretending assured shorthold tenancy agreement demand
-                  has disappeared. It is about making sure the page that captures that demand is also
-                  commercially stronger and more useful than a basic legacy page.
+                  The phrase “assured shorthold tenancy agreement” remains familiar, but the current
+                  product route needs to match the tenancy you are creating.
                 </p>
 
                 <p>
-                  That is how stronger competitors usually win. They answer the historic search term,
-                  but they present the page around the current product reality rather than stopping at
-                  the old label.
+                  Compare the current England agreement options instead of stopping at the old label.
                 </p>
               </div>
             </div>

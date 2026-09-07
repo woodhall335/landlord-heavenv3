@@ -57,13 +57,13 @@ export default function JointTenancyAgreementEnglandPage() {
         highlights={[
           'Supports multiple tenants, couples, flatmates, and shared houses',
           'Uses current England tenancy agreement wording instead of outdated AST sales copy',
-          'Keeps joint and several liability search intent commercially useful',
+          'Explains how joint and several liability fits a shared tenancy',
           'Dedicated Student and HMO / Shared House routes for specialist shared lets',
         ]}
         compliancePoints={[
           'Aligned to the current England tenancy rollout after 1 May 2026',
           'Avoids presenting a new fixed-term AST as the default England route',
-          'Keeps shared-house search demand connected to the live England product routes',
+          'Connects shared-house arrangements to the appropriate England product route',
         ]}
         keywordTargets={[
           'joint tenancy agreement england',

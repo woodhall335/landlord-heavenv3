@@ -21,6 +21,7 @@ interface FailedPayment {
   recovery_status: "not_sent" | "sent" | "failed";
   recovery_last_event_at: string | null;
   recovery_last_error: string | null;
+  is_stale: boolean;
 }
 
 interface AdminFailedPaymentsPageProps {
@@ -42,6 +43,7 @@ type RecoveryEventSummary = {
 
 const CHECKOUT_RECOVERY_SENT_EVENT = "checkout_recovery_sent";
 const CHECKOUT_RECOVERY_FAILED_EVENT = "checkout_recovery_failed";
+const STALE_PENDING_DAYS = 7;
 
 function daysAgoIso(days: number): string {
   return new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
@@ -127,6 +129,7 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
     .limit(5000);
 
   const recoveryEventByOrder = buildRecoveryEventMap((recoveryEvents || []) as EmailEventRow[]);
+  const stalePendingCutoff = new Date(daysAgoIso(STALE_PENDING_DAYS)).getTime();
 
   failedPayments = (orders || []).map((order) => {
     const userInfo = userMap.get(order.user_id);
@@ -145,6 +148,9 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
       recovery_status: recoveryEvent?.status || "not_sent",
       recovery_last_event_at: recoveryEvent?.created_at || null,
       recovery_last_error: recoveryEvent?.error || null,
+      is_stale:
+        order.payment_status === "pending" &&
+        new Date(order.created_at).getTime() < stalePendingCutoff,
     };
   });
 
@@ -301,12 +307,12 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
                       </td>
                       <td className="p-4">
                         <span className={`inline-block px-2 py-1 rounded-full text-xs ${getStatusColor(payment.payment_status)}`}>
-                          {payment.payment_status}
+                          {payment.is_stale ? "stale pending" : payment.payment_status}
                         </span>
                       </td>
                       <td className="p-4">
                         <span className="text-xs text-red-600">
-                          Payment failed or pending
+                          {payment.is_stale ? "Expired checkout record" : "Payment failed or pending"}
                         </span>
                       </td>
                       <td className="p-4">
@@ -342,7 +348,7 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
                             </div>
                           )}
                         </div>
-                        {payment.payment_status === "pending" && payment.stripe_checkout_url && payment.user_email !== "Unknown" ? (
+                        {payment.payment_status === "pending" && !payment.is_stale && payment.stripe_checkout_url && payment.user_email !== "Unknown" ? (
                           <RecoveryEmailButton
                             orderId={payment.id}
                             initialStatus={
@@ -408,25 +414,25 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
         {/* Summary Stats */}
         <div className="grid md:grid-cols-4 gap-6">
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <p className="text-sm text-gray-600 mb-1">Total Failed</p>
-            <p className="text-3xl font-bold text-red-600">{failedPayments.length}</p>
+            <p className="text-sm text-gray-600 mb-1">Failed payments</p>
+            <p className="text-3xl font-bold text-red-600">{failedPayments.filter((p) => p.payment_status === "failed").length}</p>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <p className="text-sm text-gray-600 mb-1">Lost Revenue</p>
+            <p className="text-sm text-gray-600 mb-1">Recoverable value</p>
             <p className="text-3xl font-bold text-red-600">
-              {formatGbpAmount(failedPayments.reduce((sum, p) => sum + normalizeGbpAmount(p.total_amount), 0))}
+              {formatGbpAmount(failedPayments.filter((p) => !p.is_stale).reduce((sum, p) => sum + normalizeGbpAmount(p.total_amount), 0))}
             </p>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <p className="text-sm text-gray-600 mb-1">Pending</p>
+            <p className="text-sm text-gray-600 mb-1">Recoverable pending</p>
             <p className="text-3xl font-bold text-orange-600">
-              {failedPayments.filter((p) => p.payment_status === "pending").length}
+              {failedPayments.filter((p) => p.payment_status === "pending" && !p.is_stale).length}
             </p>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <p className="text-sm text-gray-600 mb-1">Recovery Sent</p>
+            <p className="text-sm text-gray-600 mb-1">Stale pending</p>
             <p className="text-3xl font-bold text-purple-700">
-              {failedPayments.filter((p) => p.recovery_status === "sent").length}
+              {failedPayments.filter((p) => p.is_stale).length}
             </p>
           </div>
         </div>

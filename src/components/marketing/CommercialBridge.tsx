@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { AlertTriangle, ArrowRight, CheckCircle2, ClipboardCheck, ShieldCheck } from 'lucide-react';
 import { clsx } from 'clsx';
 
@@ -93,6 +93,8 @@ export function CommercialBridge({
   body,
   className,
 }: CommercialBridgeProps) {
+  const bridgeRef = useRef<HTMLElement>(null);
+  const hasTrackedView = useRef(false);
   const mapping = getConversionMapping(sourcePage);
   const resolvedHeadline = mapping?.headline ?? headline;
   const resolvedBody = mapping?.supportingCopy ?? body;
@@ -101,31 +103,51 @@ export function CommercialBridge({
   const resolvedPrimaryLabel = mapping?.ctaLabel ?? primaryLabel;
 
   useEffect(() => {
-    trackEvent(
-      'commercial_bridge_viewed',
-      buildPayload({
+    const element = bridgeRef.current;
+    if (!element || hasTrackedView.current) return;
+    const recordVisibleBridge = () => {
+      if (hasTrackedView.current) return;
+      hasTrackedView.current = true;
+      trackEvent(
+        'commercial_bridge_viewed',
+        buildPayload({
+          sourcePage,
+          intent,
+          ctaPosition,
+          recommendedProduct: primaryProduct,
+        }),
+        {
+          dedupeScope: 'page',
+          dedupeKey: `${sourcePage}:${intent}:${ctaPosition}:commercial_bridge_viewed`,
+        }
+      );
+      recordMarketingGrowthEvent('contextual_offer_view', {
         sourcePage,
+        pagePath: sourcePage,
+        pageType: 'guide',
         intent,
         ctaPosition,
-        recommendedProduct: primaryProduct,
-      }),
-      {
-        dedupeScope: 'page',
-        dedupeKey: `${sourcePage}:${intent}:${ctaPosition}:commercial_bridge_viewed`,
-      }
+        destination: resolvedPrimaryHref,
+        recommendedProduct: resolvedPrimaryProduct,
+        price: mapping?.price,
+        experimentId: mapping?.trackingId,
+      });
+    };
+    if (typeof IntersectionObserver === 'undefined') {
+      recordVisibleBridge();
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        recordVisibleBridge();
+        observer.disconnect();
+      },
+      { threshold: 0.4 },
     );
-    recordMarketingGrowthEvent('contextual_offer_view', {
-      sourcePage,
-      pagePath: sourcePage,
-      pageType: 'guide',
-      intent,
-      ctaPosition,
-      destination: resolvedPrimaryHref,
-      recommendedProduct: resolvedPrimaryProduct,
-      price: mapping?.price,
-      experimentId: mapping?.trackingId,
-    });
-  }, [ctaPosition, intent, mapping?.price, mapping?.trackingId, resolvedPrimaryHref, resolvedPrimaryProduct, sourcePage]);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [ctaPosition, intent, mapping?.price, mapping?.trackingId, primaryProduct, resolvedPrimaryHref, resolvedPrimaryProduct, sourcePage]);
 
   const trackClick = (destination: string, productClicked?: string, toolName?: string) => {
     trackEvent(
@@ -172,6 +194,7 @@ export function CommercialBridge({
 
   return (
     <section
+      ref={bridgeRef}
       className={clsx(
         'my-8 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm',
         className

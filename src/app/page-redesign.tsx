@@ -306,7 +306,7 @@ export default function Home() {
               Ready to Get Your Documents?
             </h2>
             <p className="text-xl mb-8 text-gray-600">
-              Join thousands of landlords getting their paperwork sorted faster.
+              Prepare, review, and access your landlord documents in one place.
               <span className="font-semibold text-gray-800"> Start in under 2 minutes.</span>
             </p>
 

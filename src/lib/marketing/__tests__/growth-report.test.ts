@@ -236,11 +236,13 @@ describe('growth report builder', () => {
       events: [
         {
           event_name: 'journey_cta_impression',
+          marketing_session_id: 'mkt_journey',
           source_page: '/form-3-section-8',
           created_at: '2026-05-05T09:00:00.000Z',
         },
         {
           event_name: 'journey_cta_click',
+          marketing_session_id: 'mkt_journey',
           source_page: '/form-3-section-8',
           created_at: '2026-05-05T09:01:00.000Z',
         },
@@ -256,10 +258,64 @@ describe('growth report builder', () => {
       })
     );
     expect(report.journeyRates.find((rate) => rate.key === 'offer_ctr')).toMatchObject({
-      label: 'Offer / entry CTA CTR',
+      label: 'Visible offer to click',
       numerator: 1,
       denominator: 1,
       rate: 100,
+    });
+  });
+
+  it('only counts paid orders in funnel rates when they share the preceding session', () => {
+    const report = buildGrowthReport({
+      days: 7,
+      now: new Date('2026-05-05T12:00:00.000Z'),
+      orders: [
+        {
+          id: 'attributed-order',
+          payment_status: 'paid',
+          paid_at: '2026-05-05T10:00:00.000Z',
+          marketing_session_id: 'mkt_checkout',
+        },
+        {
+          id: 'unattributed-order',
+          payment_status: 'paid',
+          paid_at: '2026-05-05T10:00:00.000Z',
+        },
+      ],
+      events: [
+        {
+          event_name: 'organic_landing_view',
+          marketing_session_id: 'mkt_checkout',
+          created_at: '2026-05-05T09:00:00.000Z',
+        },
+        {
+          event_name: 'checkout_opened',
+          marketing_session_id: 'mkt_checkout',
+          created_at: '2026-05-05T09:30:00.000Z',
+        },
+        {
+          event_name: 'checkout_opened',
+          marketing_session_id: 'mkt_abandoned',
+          created_at: '2026-05-05T09:30:00.000Z',
+        },
+      ],
+    });
+
+    expect(report.journeyRates.find((rate) => rate.key === 'checkout_to_payment')).toMatchObject({
+      numerator: 1,
+      denominator: 2,
+      rate: 50,
+    });
+    expect(report.journeyRates.find((rate) => rate.key === 'landing_to_sale')).toMatchObject({
+      numerator: 1,
+      denominator: 1,
+      rate: 100,
+    });
+    expect(report.dataQuality).toMatchObject({
+      attributedPaidOrders: 1,
+      attributionRate: 50,
+      organicallyAttributedPaidOrders: 1,
+      marketingSessions: 2,
     });
   });
 

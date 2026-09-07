@@ -23,6 +23,7 @@ import {
   markWizardCompleted,
 } from '@/lib/analytics';
 import { getWizardAttribution } from '@/lib/wizard/wizardAttribution';
+import { getMarketingSessionId } from '@/lib/analytics/growth-events';
 import { getSessionTokenHeaders } from '@/lib/session-token';
 
 // Scotland utilities
@@ -561,6 +562,7 @@ function ReviewPageInner() {
         body: JSON.stringify({
           product,
           source: 'wizard_review_page',
+          marketingSessionId: getMarketingSessionId(),
         }),
       }).catch((previewMarkerError) => {
         console.warn('Failed to mark case review/preview reached:', previewMarkerError);

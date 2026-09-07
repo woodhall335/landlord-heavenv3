@@ -8,6 +8,7 @@ import { ProductPrimaryActions } from '@/components/analytics/ProductPrimaryActi
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { getUniversalHeroImageForPath } from '@/config/universal-hero-images';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { CommercialSeoTrackedCta } from '@/components/seo/CommercialSeoTrackedCta';
 import type {
   ProductSalesCard,
   ProductSalesCta,
@@ -92,27 +93,48 @@ function CtaButtons({
   primary,
   secondary,
   className = '',
+  tracking,
 }: {
   primary: { label: string; href: string };
   secondary?: { label: string; href: string };
   className?: string;
+  tracking?: {
+    pagePath: string;
+    pageType: string;
+    productId: string;
+    position: string;
+  };
 }) {
   return (
     <div className={`flex flex-col gap-3 sm:flex-row sm:items-center ${className}`}>
-      <Link
+      <CommercialSeoTrackedCta
         href={primary.href}
+        label={primary.label}
+        variant="primary"
+        sourcePage={tracking?.pagePath}
+        pageType={tracking?.pageType}
+        intent={tracking?.productId}
+        recommendedProduct={tracking?.productId}
+        ctaPosition={tracking?.position}
         className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#17142B] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#2A2447]"
       >
         {primary.label}
         <RiArrowRightLine aria-hidden="true" className="h-4 w-4" />
-      </Link>
+      </CommercialSeoTrackedCta>
       {secondary ? (
-        <Link
+        <CommercialSeoTrackedCta
           href={secondary.href}
+          label={secondary.label}
+          variant="secondary"
+          sourcePage={tracking?.pagePath}
+          pageType={tracking?.pageType}
+          intent={tracking?.productId}
+          recommendedProduct={tracking?.productId}
+          ctaPosition={tracking?.position}
           className="inline-flex items-center justify-center rounded-lg border border-[#D8C8FF] bg-white px-5 py-3 text-sm font-semibold text-[#17142B] shadow-sm transition hover:border-[#BDA5F7]"
         >
           {secondary.label}
-        </Link>
+        </CommercialSeoTrackedCta>
       ) : null}
     </div>
   );
@@ -187,7 +209,13 @@ function EarlyProofBand({ proof }: { proof: ProductSalesEarlyProofBand }) {
   );
 }
 
-function RouteCard({ card }: { card: ProductSalesRouteCard }) {
+function RouteCard({
+  card,
+  tracking,
+}: {
+  card: ProductSalesRouteCard;
+  tracking?: { pagePath: string; pageType: string; productId: string };
+}) {
   return (
     <article className="flex h-full flex-col rounded-lg border border-[#E8E1F8] bg-white shadow-sm">
       <SmartImage src={card.imageSrc} alt={card.imageAlt} className="aspect-[16/10] rounded-b-none" />
@@ -215,32 +243,50 @@ function RouteCard({ card }: { card: ProductSalesRouteCard }) {
             <dd>{card.landlordOutcome}</dd>
           </div>
         </dl>
-        <Link
+        <CommercialSeoTrackedCta
           href={card.href}
+          label={card.ctaLabel}
+          variant="primary"
+          sourcePage={tracking?.pagePath}
+          pageType={tracking?.pageType}
+          intent={tracking?.productId}
+          ctaPosition="route_card"
           className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#5B21B6] hover:text-[#3B168C]"
         >
           {card.ctaLabel}
           <RiArrowRightLine aria-hidden="true" className="h-4 w-4" />
-        </Link>
+        </CommercialSeoTrackedCta>
       </div>
     </article>
   );
 }
 
-function ComparisonBlock({ block }: { block: NonNullable<ProductSalesPageContent['comparisonBlock']> }) {
+function ComparisonBlock({
+  block,
+  tracking,
+}: {
+  block: NonNullable<ProductSalesPageContent['comparisonBlock']>;
+  tracking?: { pagePath: string; pageType: string; productId: string };
+}) {
   return (
     <SectionShell className="bg-[#FCFAFF]">
       <SectionHeader title={block.title || 'Compare the options'} intro={block.intro} />
       <div className={`mt-10 grid gap-5 md:grid-cols-2 ${block.routeGridClassName || ''}`}>
         {block.routeCards.map((card) => (
-          <RouteCard key={card.name} card={card} />
+          <RouteCard key={card.name} card={card} tracking={tracking} />
         ))}
       </div>
     </SectionShell>
   );
 }
 
-function BreakdownList({ whatYouGet }: { whatYouGet: ProductSalesPageContent['whatYouGet'] }) {
+function BreakdownList({
+  whatYouGet,
+  tracking,
+}: {
+  whatYouGet: ProductSalesPageContent['whatYouGet'];
+  tracking?: { pagePath: string; pageType: string; productId: string };
+}) {
   if (whatYouGet.hideSection) return null;
 
   return (
@@ -298,7 +344,7 @@ function BreakdownList({ whatYouGet }: { whatYouGet: ProductSalesPageContent['wh
       {whatYouGet.routeCards && whatYouGet.routeCards.length > 0 ? (
         <div className={`mt-10 grid gap-5 md:grid-cols-2 ${whatYouGet.routeGridClassName || ''}`}>
           {whatYouGet.routeCards.map((card) => (
-            <RouteCard key={card.name} card={card} />
+            <RouteCard key={card.name} card={card} tracking={tracking} />
           ))}
         </div>
       ) : null}
@@ -351,7 +397,13 @@ function CardGrid({
   );
 }
 
-function DecisionBlock({ block }: { block: ProductSalesDecisionBlock }) {
+function DecisionBlock({
+  block,
+  tracking,
+}: {
+  block: ProductSalesDecisionBlock;
+  tracking?: { pagePath: string; pageType: string; productId: string; position: string };
+}) {
   const toneClasses = {
     positive: 'border-[#BBF7D0] bg-[#F0FDF4]',
     warning: 'border-[#FED7AA] bg-[#FFF7ED]',
@@ -375,7 +427,14 @@ function DecisionBlock({ block }: { block: ProductSalesDecisionBlock }) {
           </article>
         ))}
       </div>
-      {block.primary ? <CtaButtons primary={block.primary} secondary={block.secondary} className="mt-8 justify-center" /> : null}
+      {block.primary ? (
+        <CtaButtons
+          primary={block.primary}
+          secondary={block.secondary}
+          className="mt-8 justify-center"
+          tracking={tracking}
+        />
+      ) : null}
     </SectionShell>
   );
 }
@@ -427,13 +486,24 @@ function HowItWorks({ content }: { content: ProductSalesPageContent['howItWorks'
   );
 }
 
-function CtaBand({ cta }: { cta: ProductSalesCta }) {
+function CtaBand({
+  cta,
+  tracking,
+}: {
+  cta: ProductSalesCta;
+  tracking?: { pagePath: string; pageType: string; productId: string; position: string };
+}) {
   return (
     <SectionShell className="bg-[#17142B]">
       <div className="mx-auto max-w-3xl text-center text-white">
         <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{cta.title}</h2>
         <div className="mt-4 text-lg leading-8 text-white/80">{cta.body}</div>
-        <CtaButtons primary={cta.primary} secondary={cta.secondary} className="mt-8 justify-center" />
+        <CtaButtons
+          primary={cta.primary}
+          secondary={cta.secondary}
+          className="mt-8 justify-center"
+          tracking={tracking}
+        />
         {cta.guideLinks && cta.guideLinks.length > 0 ? (
           <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm">
             {cta.guideLinks.map((link) => (
@@ -448,6 +518,34 @@ function CtaBand({ cta }: { cta: ProductSalesCta }) {
   );
 }
 
+function ProductRationaleSummary({ content }: { content: ProductSalesPageContent }) {
+  return (
+    <SectionShell className="bg-[#FCFAFF] py-8 sm:py-10">
+      <details className="rounded-2xl border border-[#E8E1F8] bg-white p-5 shadow-sm sm:p-6">
+        <summary className="cursor-pointer text-lg font-bold text-[#17142B]">
+          Why this product and how it helps
+        </summary>
+        <div className="mt-6 grid gap-8 lg:grid-cols-2">
+          {[content.whyYouNeedThis, content.howThisHelps].map((section) => (
+            <div key={section.title}>
+              <h2 className="text-xl font-bold text-[#17142B]">{section.title}</h2>
+              <div className="mt-2 text-sm leading-6 text-[#4B5565]">{section.intro}</div>
+              <ul className="mt-4 space-y-3">
+                {section.cards.map((card) => (
+                  <li key={card.title} className="rounded-xl bg-[#FCFAFF] p-4 text-sm leading-6 text-[#4B5565]">
+                    <strong className="block text-[#17142B]">{card.title}</strong>
+                    {card.body}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </details>
+    </SectionShell>
+  );
+}
+
 export function PublicProductSalesPage({ content }: { content: ProductSalesPageContent }) {
   const analytics = content.analytics;
   const productName = simplifyProductName(
@@ -456,6 +554,9 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
   const productId = analytics?.routeIntent || analytics?.pagePath?.split('/').filter(Boolean).at(-1) || productName;
   const priceLabel = content.earlyProofBand?.priceLabel;
   const shouldShowMidPageCta = analytics?.pageType !== 'product_page' && Boolean(content.midPageCta);
+  const tracking = analytics
+    ? { pagePath: analytics.pagePath, pageType: analytics.pageType, productId }
+    : undefined;
 
   return (
     <>
@@ -529,30 +630,55 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
         </section>
       ) : null}
 
+      {content.earlyDecisionContent ? (
+        <SectionShell className="bg-[#FCFAFF] py-8 sm:py-10">
+          {content.earlyDecisionContent}
+        </SectionShell>
+      ) : null}
+
       {content.earlyProofBand ? <EarlyProofBand proof={content.earlyProofBand} /> : null}
-      {content.decisionBlock ? <DecisionBlock block={content.decisionBlock} /> : null}
-      <BreakdownList whatYouGet={content.whatYouGet} />
+      {content.decisionBlock ? (
+        <DecisionBlock
+          block={content.decisionBlock}
+          tracking={tracking ? { ...tracking, position: 'selector' } : undefined}
+        />
+      ) : null}
+      <BreakdownList whatYouGet={content.whatYouGet} tracking={tracking} />
       {content.postHeroContent ? (
         <SectionShell className="bg-white">{content.postHeroContent}</SectionShell>
       ) : null}
       {content.afterPostHeroContent ? <div>{content.afterPostHeroContent}</div> : null}
-      {content.comparisonBlock ? <ComparisonBlock block={content.comparisonBlock} /> : null}
+      {content.comparisonBlock ? <ComparisonBlock block={content.comparisonBlock} tracking={tracking} /> : null}
       {content.objectionBlock ? <ObjectionBlock block={content.objectionBlock} /> : null}
-      {shouldShowMidPageCta && content.midPageCta ? <CtaBand cta={content.midPageCta} /> : null}
+      {shouldShowMidPageCta && content.midPageCta ? (
+        <CtaBand
+          cta={content.midPageCta}
+          tracking={tracking ? { ...tracking, position: 'mid' } : undefined}
+        />
+      ) : null}
       {content.beforeWhyYouNeedThis ? <div>{content.beforeWhyYouNeedThis}</div> : null}
-      <CardGrid
-        title={content.whyYouNeedThis.title}
-        intro={content.whyYouNeedThis.intro}
-        cards={content.whyYouNeedThis.cards}
-      />
-      <CardGrid
-        title={content.howThisHelps.title}
-        intro={content.howThisHelps.intro}
-        cards={content.howThisHelps.cards}
-        className="bg-white"
-      />
+      {analytics?.pageType === 'product_page' ? (
+        <ProductRationaleSummary content={content} />
+      ) : (
+        <>
+          <CardGrid
+            title={content.whyYouNeedThis.title}
+            intro={content.whyYouNeedThis.intro}
+            cards={content.whyYouNeedThis.cards}
+          />
+          <CardGrid
+            title={content.howThisHelps.title}
+            intro={content.howThisHelps.intro}
+            cards={content.howThisHelps.cards}
+            className="bg-white"
+          />
+        </>
+      )}
       <HowItWorks content={content.howItWorks} />
-      <CtaBand cta={content.cta} />
+      <CtaBand
+        cta={content.cta}
+        tracking={tracking ? { ...tracking, position: 'final' } : undefined}
+      />
       <FAQSection
         title={content.faq.title}
         faqs={content.faq.items}

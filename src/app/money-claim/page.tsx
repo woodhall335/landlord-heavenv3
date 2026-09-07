@@ -72,14 +72,14 @@ const pageFaqs: FAQItem[] = [
       'It is the county court debt-recovery route landlords use to recover unpaid rent, bills, damage costs, and other tenancy-related debts. The broad task is not just choosing a form. It is building one coherent file that explains what is owed, why it is owed, and what evidence supports each figure.',
   },
   {
-    question: 'Why does this page lead with the broad claim guide instead of the product page?',
+    question: 'Why should I understand the claim route before starting the product?',
     answer:
       'Because broad money-claim users usually need route clarity first. They need to see what the paperwork looks like, understand the pre-action and evidence steps, and decide whether the debt file is ready before they move into a transactional workflow.',
   },
   {
-    question: 'Is unpaid rent still the strongest support route under this guide?',
+    question: 'Does this guide cover unpaid rent?',
     answer:
-      'Yes. Unpaid rent remains the strongest support route because it is the most common landlord debt claim. It stays visible here, but it does not replace the commercial owner page for wider money-claim intent.',
+      'Yes. Unpaid rent is a common landlord debt claim. The same route can also help you organise other tenancy debts, bills, or damage costs where they are properly evidenced.',
   },
   {
     question: 'What documents matter before issuing a claim?',
@@ -304,15 +304,14 @@ export default async function MoneyClaimPage() {
                 After the broad guide: move into the claim workflow
               </h2>
               <p className="mt-4 max-w-3xl text-lg text-gray-700">
-                Once the landlord understands the route, evidence structure, and likely filing path,
-                the primary transactional step is the money claim pack. The product remains downstream
-                because the owner page is responsible for broad intent satisfaction first.
+                Once you understand the route, evidence structure, and likely filing path, continue
+                to the Money Claim Pack to prepare the claim documents in one guided workflow.
               </p>
 
               <div className="mt-8 grid gap-5 md:grid-cols-2">
                 <article className="rounded-3xl border border-[#CAB6FF] bg-[#FCFAFF] p-6 shadow-[0_14px_40px_rgba(76,29,149,0.08)]">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#692ed4]">
-                    Primary transactional step
+                    Guided product
                   </p>
                   <h3 className="mt-3 text-2xl font-bold text-[#2a2161]">Money Claim Pack</h3>
                   <p className="mt-4 text-gray-700">

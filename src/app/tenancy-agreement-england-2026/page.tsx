@@ -87,25 +87,25 @@ export default function TenancyAgreementEngland2026Page() {
         {
           title: 'When the answer is usually "use the new route"',
           paragraphs: [
-            'If you are creating a new private tenancy in England after 1 May 2026, the commercial answer is usually straightforward: start with the current England agreement route. That keeps the wording, product framing, and buying journey aligned with the present framework instead of forcing the landlord to reverse-engineer the change from older assumptions.',
-            'This is where the main product page becomes the right destination. It compares Standard, Premium, Student, HMO / Shared House, and Lodger routes, explains the current position clearly, and helps the landlord choose the level of cover that fits the property and household setup. For a new let, that is far more useful than staying on a transition explainer page for too long.',
-            'In other words, the page should reassure the landlord quickly and then get out of the way. Once the user understands that a brand-new tenancy should start on the current route, the best next step is to view the product options and move toward purchase.',
+            'If you are creating a new private tenancy in England after 1 May 2026, start with the current England agreement route. This helps you choose wording designed for the present framework instead of relying on older assumptions.',
+            'You can compare Standard, Premium, Student, HMO / Shared House, and Lodger options in one place. Each route explains who it is for, what is included, and the price before you begin.',
+            'Once you know that you are creating a brand-new tenancy, compare the agreement options and select the one that fits the property and household setup.',
           ],
         },
         {
           title: 'When the answer is usually "do not restart the tenancy"',
           paragraphs: [
-            'If the tenancy already started before 1 May 2026, landlords often assume they need to rip up the old arrangement and begin again. In many cases that is not the broad position this page should push. The safer message is that you will not usually start again with a new agreement, and depending on the tenancy you may instead need to provide updated written information.',
-            'That short explanation is important for conversion too. It reduces wasted clicks from landlords who are researching a transition issue rather than buying a new agreement today. It also builds trust by showing that Landlord Heaven is not treating every tenancy as a sale that must start from zero.',
-            'Once the page has done that job, it can still convert well by pointing landlords back to the product page for the current route, where they can compare the England agreement options for genuinely new tenancies or understand the broader product offer more clearly.',
+            'If the tenancy already started before 1 May 2026, do not assume that you must replace the agreement and begin again. You will not usually start again with a new agreement, although you may need to provide updated written information depending on the tenancy.',
+            'Check the transition position before buying a document for an existing tenancy. This avoids paying for a new-agreement product when the issue is really about updating information for an older tenancy.',
+            'If you are also creating a genuinely new tenancy, the England agreement page lets you compare the available options and choose the appropriate route.',
           ],
         },
         {
-          title: 'Why this page should stay simple',
+          title: 'A simple way to choose your next step',
           paragraphs: [
-            'A strong transition page should not try to become a solicitor-style note covering every possible branch. That would slow the user down and weaken the commercial outcome. Instead, the page should state the broad position plainly, use the human-readable date 1 May 2026 prominently, and point landlords toward the product page once they know whether they are dealing with a new tenancy or an older one.',
-            'That simplicity helps with search intent as well. A landlord searching this question usually wants clarity fast. They want to know whether they are about to make an avoidable mistake, not read a dense wall of legislation. The page should therefore prioritise readability, confidence, and next-step clarity.',
-            'That makes this route highly valuable in the funnel. It catches confusion traffic that might otherwise bounce, turns it into trust, and then routes users either into the product journey or away from the wrong buying assumption before frustration sets in.',
+            'First establish whether you are creating a new tenancy or dealing with one that began before 1 May 2026. That distinction determines whether you should compare new agreement options or look for transition guidance.',
+            'For a new England tenancy, continue to the agreement comparison and choose the route that matches the property and household. For an existing tenancy, check whether updated written information is required before replacing anything.',
+            'If your circumstances are unusual or you are unsure how the transition rules apply, obtain legal advice before relying on a document.',
           ],
         },
       ]}

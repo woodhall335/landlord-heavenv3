@@ -219,8 +219,8 @@ export default function N5BFormGuidePage() {
                 </p>
 
                 <p>
-                  That is why this page should not just tell landlords that N5B is "faster." The real
-                  issue is whether the accelerated route is actually suitable for the case in front of
+                  Do not choose N5B simply because the accelerated route can be described as
+                  "faster." The real issue is whether it is suitable for the case in front of
                   you.
                 </p>
 

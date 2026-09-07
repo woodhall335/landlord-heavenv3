@@ -16,6 +16,7 @@ import { JourneyProvider } from "@/components/journey/JourneyProvider";
 import { SmoothAnchorScroll } from "@/components/browser/SmoothAnchorScroll";
 import { OrganicLandingTracker } from "@/components/analytics/OrganicLandingTracker";
 import { AttributionInitializer } from "@/components/analytics/AttributionInitializer";
+import { CommercialLinkTracker } from "@/components/analytics/CommercialLinkTracker";
 
 
 export const metadata: Metadata = {
@@ -84,6 +85,7 @@ export default async function RootLayout({
         <TrackingPixels />
         <AttributionInitializer />
         <OrganicLandingTracker authenticated={Boolean(user)} />
+        <CommercialLinkTracker />
         <SmoothAnchorScroll />
         <JourneyProvider />
         <Analytics />

@@ -25,12 +25,7 @@ vi.mock('next/link', () => ({
   ),
 }));
 
-vi.mock('@/lib/reviews/reviewStats', () => ({
-  REVIEW_RATING: 4.8,
-  getDynamicReviewCount: () => 1061,
-}));
-
-describe('UniversalHero review pill', () => {
+describe('UniversalHero trust pill', () => {
   it('resolves a registered watercolor hero and applies the pastel contrast contract', () => {
     const { container } = render(
       <UniversalHero
@@ -75,7 +70,7 @@ describe('UniversalHero review pill', () => {
     expect(screen.getByTestId('hero-review-pill-trust')).toHaveTextContent(
       'Clear England landlord guidance'
     );
-    expect(desktopPill).toHaveTextContent('4.8/5 | 1061 reviews');
+    expect(desktopPill).toHaveTextContent('Preview before payment where shown');
   });
 
   it('can keep conversion-page content aligned below the navigation', () => {
@@ -122,7 +117,9 @@ describe('UniversalHero review pill', () => {
     expect(screen.getByTestId('hero-review-pill-trust')).toHaveTextContent(
       'England tenancy agreements | Standard and Premium updated for 1 May 2026'
     );
-    expect(screen.getByTestId('hero-review-pill-meta')).toHaveTextContent('4.8/5 | 1061 reviews');
+    expect(screen.getByTestId('hero-review-pill-meta')).toHaveTextContent(
+      'Fixed scope and price shown before payment'
+    );
   });
 
   it('keeps the site-wide proof contract and mobile benefit grid for legacy wrappers', () => {
@@ -137,12 +134,12 @@ describe('UniversalHero review pill', () => {
     );
 
     expect(screen.getByTestId('hero-review-pill-desktop')).toHaveTextContent(
-      '4.8/5 | 1061 reviews'
+      'Fixed scope and price shown before payment'
     );
     const benefits = screen.getByTestId('hero-benefit-grid');
-    expect(benefits).toHaveTextContent('Solicitor approved');
-    expect(benefits).toHaveTextContent('Instant download');
-    expect(benefits).toHaveTextContent('Expert support');
+    expect(benefits).toHaveTextContent('Guided questions');
+    expect(benefits).toHaveTextContent('Downloadable files');
+    expect(benefits).toHaveTextContent('Help guidance');
     expect(benefits).toHaveTextContent('stripe');
     expect(benefits).toHaveClass('lg:hidden');
     expect(

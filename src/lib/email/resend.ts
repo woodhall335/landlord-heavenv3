@@ -1118,7 +1118,7 @@ export async function sendWelcomeEmail(params: {
 
   const cardContent = `
     <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.white}; line-height: 1.6;">Hi ${name},</p>
-    <p style="margin: 0 0 25px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.lightGray}; line-height: 1.6;">Welcome to Landlord Heaven! We're thrilled to have you join thousands of UK landlords who trust us for their legal document needs.</p>
+    <p style="margin: 0 0 25px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.lightGray}; line-height: 1.6;">Welcome to Landlord Heaven. Your account gives you one place to prepare, review, and access your landlord documents.</p>
 
     <p style="margin: 0 0 15px 0; font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bold; color: ${COLORS.primary};">What You Can Do:</p>
 
@@ -1158,7 +1158,7 @@ export async function sendWelcomeEmail(params: {
   const text = `
 Hi ${name},
 
-Welcome to Landlord Heaven! We're thrilled to have you join thousands of UK landlords who trust us for their legal document needs.
+Welcome to Landlord Heaven. Your account gives you one place to prepare, review, and access your landlord documents.
 
 What You Can Do:
 - Generate Court-Ready Case Bundles: Create Section 8/21 notices, tenancy agreements, money claims, and more.

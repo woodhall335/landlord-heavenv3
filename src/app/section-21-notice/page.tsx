@@ -171,9 +171,9 @@ const content: PillarPageContent = {
         'Explain that the old Section 21 comparison no longer applies and that current England cases must follow the current possession route instead.',
     },
     {
-      question: 'Which product should this page prioritise?',
+      question: 'Which product should I use now?',
       recommendation:
-        'Keep products below the route logic. This page should work as a transition page, not as the main acquisition page.',
+        'Use this page to understand the Section 21 transition, then check the current England possession route before choosing a product.',
     },
   ],
   sections: [
@@ -214,8 +214,8 @@ const content: PillarPageContent = {
       title: 'Why this page still matters',
       paragraphs: [
         'Many landlords still search for Section 21 out of habit because it was the best-known route for years. That makes this page useful as a bridge, even though it is no longer the place to start a live possession workflow.',
-        'Its job is simple: answer the historical question properly, explain the dates that mattered, and move landlords into the current framework without confusion.',
-        'That means the page should stay factual and transitional. It should not behave like a live service page for a route that no longer exists.',
+        'It explains the historical position and the dates that mattered, then points landlords to the current framework.',
+        'Treat the information as transition guidance rather than a live service route for a notice that is no longer available.',
       ],
     },
     {

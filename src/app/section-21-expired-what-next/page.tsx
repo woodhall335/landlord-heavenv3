@@ -233,9 +233,8 @@ export default function Section21ExpiredPage() {
                 </p>
 
                 <p>
-                  That is why this page should not just say “apply to court.” The real issue is whether
-                  the landlord is moving into court with the right route, the right timing and the right
-                  supporting documents.
+                  Do not move directly to “apply to court” without checking that the route, timing,
+                  and supporting documents are correct.
                 </p>
               </div>
             </div>

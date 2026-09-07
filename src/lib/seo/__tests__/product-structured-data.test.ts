@@ -1,13 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  STRUCTURED_PRODUCT_REVIEW_COUNT,
-  productSchema,
-} from '../structured-data';
-import { REVIEW_RATING } from '@/lib/reviews/reviewStats';
+import { productSchema } from '../structured-data';
 
 describe('product structured data', () => {
-  it('includes required Product fields with pinned aggregate rating', () => {
+  it('includes required Product fields without unverified aggregate ratings', () => {
     const schema = productSchema({
       name: 'Supported Rent Increase Pack',
       description: 'Prepare Form 4A with market evidence and service record.',
@@ -32,12 +28,7 @@ describe('product structured data', () => {
         availability: 'https://schema.org/InStock',
         url: 'https://landlordheaven.co.uk/products/section-13-standard',
       }),
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: REVIEW_RATING,
-        reviewCount: STRUCTURED_PRODUCT_REVIEW_COUNT.toString(),
-        ratingCount: STRUCTURED_PRODUCT_REVIEW_COUNT.toString(),
-      },
     });
+    expect(schema).not.toHaveProperty('aggregateRating');
   });
 });

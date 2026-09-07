@@ -22,14 +22,14 @@ const STEP_GROUPS: StepGroup[] = [
     id: 'overview',
     heading: 'Claim paperwork overview',
     intro:
-      'A landlord money claim needs one clear claim identity: who the parties are, what the debt is for, how the amount is made up, and which paperwork carries that story into court. This first section shows the broad claim documents, including Form N1 Claim Form and Particulars Of Claim, that anchor the file before the user chooses a more specific support route.',
+      'A landlord money claim needs one clear claim identity: who the parties are, what the debt is for, how the amount is made up, and which paperwork carries that story into court. This section shows the main claim documents, including Form N1 and Particulars of Claim.',
     match: (step) => /form-n1|particulars/i.test(`${step.docKey} ${step.docTitle}`),
   },
   {
     id: 'pre-action',
     heading: 'Before you issue: pre-action documents',
     intro:
-      'The pre-action layer exists to show the debt clearly before issue. The broad owner page keeps the letter before claim, reply form, and financial statement visible so broad users understand that debt recovery starts before filing, not at the court fee screen.',
+      'The pre-action documents set out the debt before issue. Review the letter before claim, reply form, and financial statement so the recovery process starts before the court fee stage.',
     match: (step) =>
       /letter-before-claim|defendant-information-sheet|reply-form|financial-statement/i.test(
         `${step.docKey} ${step.docTitle}`
@@ -46,14 +46,14 @@ const STEP_GROUPS: StepGroup[] = [
     id: 'issue',
     heading: 'Issue route: N1, particulars, and MCOL context',
     intro:
-      'Broad users usually need to understand how the N1 route and Money Claim Online (MCOL) fit the same evidence file. The paperwork still needs one consistent story whichever filing route is chosen, so the example keeps the issue-stage documents visible instead of hiding them behind a product interaction.',
+      'The N1 route and Money Claim Online (MCOL) use the same underlying evidence file. The paperwork needs one consistent account whichever filing route is chosen.',
     match: (step) => /form-n1|particulars|court-filing-guide/i.test(`${step.docKey} ${step.docTitle}`),
   },
   {
     id: 'post-issue',
     heading: 'After issue: filing and enforcement',
     intro:
-      'A claim does not stop being commercial after it is filed. The owner page keeps filing and enforcement guidance visible so landlords see the whole journey, including what happens if the debtor does not pay after judgment.',
+      'Filing is not always the end of the recovery process. Review the enforcement guidance so you understand the possible next steps if the debtor does not pay after judgment.',
     match: (step) => /court-filing-guide|enforcement-guide/i.test(`${step.docKey} ${step.docTitle}`),
   },
 ];

@@ -394,13 +394,24 @@ export default function AdminGrowthPage() {
             <Card padding="medium" className="rounded-lg">
               <h2 className="text-lg font-semibold text-charcoal">Funnel data quality</h2>
               <p className="mt-1 text-sm text-gray-600">
-                Payments and delivered documents use authoritative order records. Browser events remain useful for the steps before payment.
+                Payments and delivered documents use authoritative order records. Conversion rates only count
+                visitors who share a marketing session across consecutive stages; they are not ratios of unrelated totals.
               </p>
+              {report.dataQuality.attributionRate !== null && report.dataQuality.attributionRate < 80 ? (
+                <p className="mt-4 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                  Attribution warning: only {formatPercent(report.dataQuality.attributionRate)} of paid orders have
+                  a marketing session. Source-specific conversion is incomplete until this reaches at least 80%.
+                </p>
+              ) : null}
               <dl className="mt-4 grid gap-3 text-sm md:grid-cols-4">
                 <div><dt className="text-gray-500">Paid orders</dt><dd className="text-xl font-bold text-charcoal">{report.dataQuality.paidOrders}</dd></div>
                 <div><dt className="text-gray-500">Client payment events</dt><dd className="text-xl font-bold text-charcoal">{report.dataQuality.clientPaymentEvents}</dd></div>
-                <div><dt className="text-gray-500">Orders with session attribution</dt><dd className="text-xl font-bold text-charcoal">{report.dataQuality.attributedPaidOrders}</dd></div>
+                <div><dt className="text-gray-500">Orders with session attribution</dt><dd className="text-xl font-bold text-charcoal">{report.dataQuality.attributedPaidOrders} <span className="text-sm font-medium text-gray-500">({formatPercent(report.dataQuality.attributionRate)})</span></dd></div>
+                <div><dt className="text-gray-500">Organic attributed orders</dt><dd className="text-xl font-bold text-charcoal">{report.dataQuality.organicallyAttributedPaidOrders}</dd></div>
                 <div><dt className="text-gray-500">Fulfilled orders</dt><dd className="text-xl font-bold text-charcoal">{report.dataQuality.fulfilledOrders}</dd></div>
+                <div><dt className="text-gray-500">Marketing events</dt><dd className="text-xl font-bold text-charcoal">{report.dataQuality.marketingEvents}</dd></div>
+                <div><dt className="text-gray-500">Marketing sessions</dt><dd className="text-xl font-bold text-charcoal">{report.dataQuality.marketingSessions}</dd></div>
+                <div><dt className="text-gray-500">Event coverage</dt><dd className="mt-1 font-semibold text-charcoal">{report.dataQuality.earliestEventAt ? new Date(report.dataQuality.earliestEventAt).toLocaleDateString('en-GB') : 'No events'} – {report.dataQuality.latestEventAt ? new Date(report.dataQuality.latestEventAt).toLocaleDateString('en-GB') : 'No events'}</dd></div>
               </dl>
             </Card>
 
@@ -461,8 +472,8 @@ export default function AdminGrowthPage() {
               <RateTable title="Tool start rate" rows={report.funnelRates.toolStartRate} emptyLabel="No tool starts yet." />
               <RateTable title="Tool completion rate" rows={report.funnelRates.toolCompletionRate} emptyLabel="No completed tools yet." />
               <RateTable title="Builder completion by step" rows={report.funnelRates.builderStepCompletionRate} emptyLabel="No builder step views yet." />
-              <RateTable title="Product page conversion rate" rows={report.funnelRates.productPageConversionRate} emptyLabel="No product CTA or checkout starts yet." />
-              <RateTable title="Checkout start rate" rows={report.funnelRates.checkoutStartRate} emptyLabel="No bridge-to-checkout data yet." />
+              <RateTable title="Product CTA to checkout rate" rows={report.funnelRates.productPageConversionRate} emptyLabel="No matched product CTA-to-checkout sessions yet." />
+              <RateTable title="Commercial click to checkout rate" rows={report.funnelRates.checkoutStartRate} emptyLabel="No matched commercial-click-to-checkout sessions yet." />
             </div>
           </div>
         ) : null}

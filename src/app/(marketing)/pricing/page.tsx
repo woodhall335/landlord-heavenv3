@@ -202,13 +202,6 @@ export default function PricingPage() {
       </UniversalHero>
 
       <Container size="large" className="py-14">
-        <AssistedPrepServicesShowcase
-          className="mb-10 mt-0"
-          pagePath="/pricing"
-          pageType="entry_page"
-          src="pricing_assisted"
-        />
-
         <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'px-6 py-8 md:px-10 md:py-10')}>
           <div className="mb-8 max-w-4xl">
             <span className="public-eyebrow">Public pricing</span>
@@ -307,6 +300,13 @@ export default function PricingPage() {
             })}
           </StaggerReveal>
         </div>
+
+        <AssistedPrepServicesShowcase
+          className="mb-0 mt-10"
+          pagePath="/pricing"
+          pageType="entry_page"
+          src="pricing_assisted"
+        />
       </Container>
 
       <Container size="large" className="pb-12">

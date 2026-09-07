@@ -37,7 +37,9 @@ export const RECOVERY_ORCHESTRATOR_JOB_NAME = 'recovery:orchestrate' as const;
 
 const DEFAULT_BATCH_LIMIT = 50;
 const CHECKOUT_MIN_AGE_MINUTES = 45;
-const CHECKOUT_MAX_AGE_HOURS = 23;
+// The job runs daily, so a sub-24-hour window can miss checkouts created near
+// the cron execution time. Three days guarantees at least two recovery runs.
+const CHECKOUT_MAX_AGE_HOURS = 72;
 const WIZARD_HOUR_1_AGE_HOURS = 1;
 const CASE_DAY_1_AGE_HOURS = 24;
 const WIZARD_DAY_3_AGE_HOURS = 24 * 3;

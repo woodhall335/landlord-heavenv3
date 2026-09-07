@@ -274,20 +274,18 @@ export default function ScotlandEvictionNoticesPage() {
                   as its own commercial and legal process.
                 </p>
                 <p className="leading-7">
-                  That matters because high-intent landlords are usually not browsing for
-                  theory. They are asking a practical question: how do I get possession of my
+                  Landlords usually need an answer to a practical question: how do I get possession of my
                   Scottish property lawfully and efficiently? If the page answers that
                   question with England vocabulary, it immediately sounds less trustworthy.
                   If it answers it with the right Scottish vocabulary, a clearer tribunal
                   route, and more precise guidance on Notice to Leave, it becomes much more
-                  useful and much more competitive.
+                  useful.
                 </p>
                 <p className="leading-7">
-                  It also improves conversion quality. Users who reach this page after
-                  searching for Scottish eviction notices are often close to action. They want
-                  the right notice route, the right language, and a clearer understanding of
-                  what happens after the notice expires. That is exactly what this page should
-                  deliver.
+                  If you are preparing to act, you need the right notice route, the right language,
+                  and a clearer understanding of
+                  what happens after the notice expires. The sections below take you through
+                  those decisions.
                 </p>
               </div>
             </div>
@@ -363,9 +361,9 @@ export default function ScotlandEvictionNoticesPage() {
 
               <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50 p-6">
                 <p className="leading-7 text-amber-900">
-                  <strong>Commercial takeaway:</strong> the stronger Scotland page is the one
-                  that sounds properly Scottish from the start. It should not read like an
-                  England eviction page with “Notice to Leave” pasted into the headings.
+                  <strong>Why Scotland-specific guidance matters:</strong> Scottish possession
+                  law has its own terminology and process. Do not rely on an England eviction
+                  guide simply because “Notice to Leave” has been added to the heading.
                 </p>
               </div>
             </div>
@@ -382,8 +380,8 @@ export default function ScotlandEvictionNoticesPage() {
               <div className="mb-8 space-y-5 text-gray-700">
                 <p className="leading-7">
                   A Notice to Leave is the formal Scottish possession notice used in the
-                  private residential tenancy context. A strong landlord page should explain
-                  that the notice is not just a letter telling the tenant to go. It is the
+                  private residential tenancy context. It is not just a letter telling the
+                  tenant to go. It is the
                   foundation document for the Scottish possession route and will often be
                   examined closely if the matter reaches the tribunal.
                 </p>
@@ -458,8 +456,8 @@ export default function ScotlandEvictionNoticesPage() {
               </h2>
               <p className="mb-8 max-w-5xl text-gray-700 leading-7">
                 One of the strongest commercial and SEO assets on a Scotland page is a clear,
-                readable explanation of the 18 grounds. The user does not just want a list.
-                They want to understand which types of reason point toward quicker notice
+                readable explanation of the 18 grounds. You need to understand which types of
+                reason point toward quicker notice
                 logic, which are mandatory, which are discretionary, and why the evidence
                 behind the chosen ground matters if the case reaches tribunal.
               </p>
@@ -468,9 +466,8 @@ export default function ScotlandEvictionNoticesPage() {
                 <p className="text-sm text-amber-900">
                   <strong>Mandatory vs discretionary:</strong> mandatory grounds are stronger
                   where proved, while discretionary grounds usually invite a reasonableness
-                  analysis. That difference matters commercially because landlords want a page
-                  that helps them understand the likely strength of their route, not just one
-                  that prints out a table with no explanation.
+                  analysis. Understand the likely strength of the selected route rather than
+                  relying on a table of grounds without explanation.
                 </p>
               </div>
 
@@ -543,8 +540,7 @@ export default function ScotlandEvictionNoticesPage() {
 
               <div className="mb-8 space-y-5 text-gray-700">
                 <p className="leading-7">
-                  A good Scotland possession page should make the overall journey feel clear.
-                  In practice, many landlords need a simple sequence: identify the ground,
+                  The overall Scottish possession journey follows a sequence: identify the ground,
                   prepare the notice, serve it properly, wait for the notice period, apply to
                   the tribunal if the tenant remains, and then move to enforcement only if it
                   becomes necessary. That sounds basic, but clarity is exactly what many
@@ -739,9 +735,8 @@ export default function ScotlandEvictionNoticesPage() {
                 Notice to Leave checklist and common mistakes
               </h2>
               <p className="mb-10 max-w-4xl text-gray-600">
-                Scottish cases are often delayed not because the landlord lacked a route, but
-                because the route was documented poorly. The page should therefore help users
-                avoid the errors that most often weaken a tribunal application.
+                Scottish cases can be delayed when the route is documented poorly. Check the
+                common errors below before preparing a tribunal application.
               </p>
 
               <div className="grid gap-6 md:grid-cols-2">
@@ -776,12 +771,11 @@ export default function ScotlandEvictionNoticesPage() {
               </div>
 
               <div className="mt-8 rounded-2xl border border-green-200 bg-green-50 p-6">
-                <h3 className="text-lg font-semibold text-green-900">Why this matters commercially</h3>
+                <h3 className="text-lg font-semibold text-green-900">What to do with this guidance</h3>
                 <p className="mt-2 leading-7 text-green-900/90">
-                  A stronger Scotland eviction page gives landlords enough detail to feel they
-                  are on the correct route without drowning them in noise. That balance is
-                  exactly what lets the page outrank weaker template pages while still converting
-                  users who are ready to act now.
+                  Use the Scotland-specific details to confirm the likely route before preparing a
+                  notice. If the case is unusual or the ground is disputed, obtain advice before
+                  serving documents.
                 </p>
               </div>
             </div>

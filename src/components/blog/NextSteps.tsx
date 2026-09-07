@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { CommercialSeoTrackedCta } from '@/components/seo/CommercialSeoTrackedCta';
 import {
   ArrowRight,
   FileText,
@@ -180,9 +180,15 @@ export function NextSteps({ slug, category, tags }: NextStepsProps) {
         {steps.map((step) => {
           const Icon = step.icon;
           return (
-            <Link
+            <CommercialSeoTrackedCta
               key={step.href}
               href={step.href}
+              label={step.label}
+              variant="secondary"
+              sourcePage={`/blog/${slug}`}
+              pageType="blog"
+              intent={category}
+              ctaPosition="bottom"
               className="group flex items-start gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200 hover:border-primary hover:bg-white hover:shadow-md transition-all"
             >
               <div className="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
@@ -195,7 +201,7 @@ export function NextSteps({ slug, category, tags }: NextStepsProps) {
                 </span>
                 <p className="text-sm text-gray-600 mt-0.5">{step.description}</p>
               </div>
-            </Link>
+            </CommercialSeoTrackedCta>
           );
         })}
       </div>

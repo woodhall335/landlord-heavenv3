@@ -18,6 +18,7 @@ export interface CommercialSeoTrackedCtaProps {
   intent?: string;
   ctaPosition?: string;
   recommendedProduct?: string;
+  price?: string;
 }
 
 function destinationPath(href: string) {
@@ -65,11 +66,14 @@ export function CommercialSeoTrackedCta({
   intent,
   ctaPosition = 'mid',
   recommendedProduct,
+  price,
 }: CommercialSeoTrackedCtaProps) {
   const hasTrackedImpression = useRef(false);
+  const linkRef = useRef<HTMLAnchorElement>(null);
   const destination = destinationPath(href);
-  const productClicked = inferProduct(href);
-  const resolvedRecommendedProduct = recommendedProduct || productClicked;
+  const inferredProduct = inferProduct(href);
+  const resolvedRecommendedProduct = recommendedProduct || inferredProduct;
+  const productClicked = pageType === 'product_page' ? resolvedRecommendedProduct : inferredProduct;
   const payload = useMemo(() => {
     const pagePath = sourcePage || pagePathFromBrowser() || destination;
 
@@ -84,6 +88,7 @@ export function CommercialSeoTrackedCta({
       productClicked,
       ctaLabel: label,
       ctaVariant: variant,
+      price,
       userType: 'landlord',
     };
   }, [
@@ -93,6 +98,7 @@ export function CommercialSeoTrackedCta({
     label,
     pageType,
     productClicked,
+    price,
     resolvedRecommendedProduct,
     sourcePage,
     variant,
@@ -100,22 +106,48 @@ export function CommercialSeoTrackedCta({
 
   useEffect(() => {
     if (hasTrackedImpression.current) return;
-    hasTrackedImpression.current = true;
+    const element = linkRef.current;
+    if (!element) return;
 
-    trackEvent('journey_cta_impression', payload, {
-      dedupeScope: 'page',
-      dedupeKey: `${payload.pagePath}:${destination}:${variant}:journey_cta_impression`,
-    });
+    const recordVisibleImpression = () => {
+      if (hasTrackedImpression.current) return;
+      hasTrackedImpression.current = true;
+      trackEvent('journey_cta_impression', payload, {
+        dedupeScope: 'page',
+        dedupeKey: `${payload.pagePath}:${destination}:${variant}:journey_cta_impression`,
+      });
+    };
+
+    if (typeof IntersectionObserver === 'undefined') {
+      recordVisibleImpression();
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        recordVisibleImpression();
+        observer.disconnect();
+      },
+      { threshold: 0.5 },
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
   }, [destination, payload, variant]);
 
   return (
     <Link
+      ref={linkRef}
       href={href}
       className={className}
+      data-commercial-tracked="true"
       data-testid={variant === 'primary' ? 'guide-primary-cta' : undefined}
       onClick={() => {
         trackEvent('journey_cta_click', payload);
-        if (productClicked || destination.startsWith('/products/')) {
+        if (pageType === 'product_page' && variant === 'primary') {
+          trackEvent('product_primary_cta_click', payload);
+        } else if (productClicked || destination.startsWith('/products/')) {
           trackEvent('product_cta_clicked', payload);
         }
       }}

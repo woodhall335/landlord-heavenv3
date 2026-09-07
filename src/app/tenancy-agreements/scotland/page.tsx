@@ -264,12 +264,9 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                   into the live creation route.
                 </p>
                 <p>
-                  The result is a page that is both more search-ready and more conversion-ready
-                  than a generic "template" page. It does not rely on reckless overclaims.
-                    It does not blur jurisdictions. It does not treat a Scottish tenancy as
-                    though it works like an English AST with a different label on top. Instead,
-                  it gives landlords a clearer route into a Scottish PRT agreement built for
-                  how the tenancy is meant to operate in practice.
+                  The Scottish route does not blur jurisdictions or treat a PRT as an English AST
+                  with a different label. It helps landlords prepare an agreement for how a
+                  Scottish private residential tenancy is intended to operate in practice.
                 </p>
               </div>
 
@@ -394,8 +391,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                 Why Scotland needs a different tenancy agreement
               </h2>
               <p className="mx-auto mb-12 max-w-3xl text-center text-gray-600">
-                One of the biggest SEO and conversion mistakes in this category is treating
-                Scotland as if it is just another label on the same UK template.
+                Scotland is not simply another label on the same UK tenancy template.
               </p>
 
               <div className="overflow-x-auto rounded-2xl border border-gray-200 bg-white shadow-sm">
@@ -589,8 +585,8 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                   <p className="mb-4 leading-relaxed text-gray-700">
                     Scottish landlords also need the rent and deposit side of the tenancy to
                     be set up properly from the start. That includes the amount, the payment
-                    frequency, and the wider handling of any deposit taken. A PRT page should
-                    not pretend these are minor admin points. They are central to how the
+                    frequency, and the wider handling of any deposit taken. These are not minor
+                    admin points. They are central to how the
                     tenancy is run and how the landlord's position is documented.
                   </p>
                   <p className="leading-relaxed text-gray-700">
@@ -672,9 +668,8 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                 Scottish compliance points landlords should understand
               </h2>
               <p className="mx-auto mb-12 max-w-3xl text-center text-gray-600">
-                This page should help landlords understand the shape of the Scottish regime
-                without making reckless promises or pretending the agreement alone solves
-                every legal issue.
+                Understand the main features of the Scottish regime without assuming that the
+                agreement alone resolves every legal issue.
               </p>
 
               <div className="mb-10 grid overflow-hidden rounded-2xl border border-[#e8e1f8] bg-white md:grid-cols-[0.9fr_1.1fr]">
@@ -749,15 +744,13 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                 <div className="mb-3 flex items-center gap-3">
                   <XCircle className="w-5 h-5 text-red-600" />
                   <h3 className="text-xl font-semibold text-red-900">
-                    What this page should not do
+                    What the agreement cannot do
                   </h3>
                 </div>
                 <p className="leading-relaxed text-red-900/90">
-                  It should not promise that a tenancy agreement makes every later possession,
-                  arrears, or tribunal issue easy. It should not blur Scotland into England.
-                  It should not mislead landlords into thinking a PRT works like an old-style
-                  AST with Scottish branding. Stronger legal-product pages win by being clearer,
-                  more useful, and more commercially honest than template-heavy competitors.
+                  A tenancy agreement cannot guarantee that every later possession, arrears, or
+                  tribunal issue will be straightforward. A Scottish PRT should not be treated as
+                  an old-style England AST with Scottish branding.
                 </p>
               </div>
             </div>
@@ -889,10 +882,8 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                     Overselling with brittle legal claims
                   </h3>
                   <p className="leading-relaxed text-gray-700">
-                    Pages in this category often overclaim. They present the agreement as if it
-                    guarantees a smooth tribunal outcome or solves every future landlord issue.
-                    Better copy stays commercially strong while remaining careful about what the
-                    agreement actually does.
+                    Do not assume that an agreement guarantees a smooth tribunal outcome or solves
+                    every future landlord issue. Check what the agreement actually covers.
                   </p>
                 </div>
 
@@ -901,8 +892,8 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                     Hiding product limitations
                   </h3>
                   <p className="leading-relaxed text-gray-700">
-                    A useful page explains what the standard PRT covers and which arrangements
-                    require another route. The wizard then enforces those boundaries.
+                    Check what the standard PRT covers and whether your arrangement requires a
+                    different route. The wizard uses those boundaries when preparing the document.
                   </p>
                 </div>
 
