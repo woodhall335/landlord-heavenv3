@@ -5,6 +5,7 @@ import readline from 'node:readline';
 const ROOT = process.cwd();
 const SEO_BASE_DIR = path.join(ROOT, 'audit-output', 'seo-current');
 const SEO_LATEST_DIR = path.join(SEO_BASE_DIR, 'latest');
+const SEO_UNIFIED_LATEST_DIR = path.join(ROOT, 'audit-output', 'seo-unified-coverage', 'latest');
 const OUT_DIR = path.join(ROOT, 'audit-output', 'cannibalisation', 'latest');
 
 const REQUIRED_DECISIONS = [
@@ -121,7 +122,7 @@ function pageTypeFromPath(urlPath) {
 }
 
 function normalizeRow(raw) {
-  const rawUrl = asString(raw.url) || asString(raw.path) || asString(raw.loc);
+  const rawUrl = asString(raw.url) || asString(raw.path) || asString(raw.loc) || asString(raw.route);
   const url = normalizeUrl(rawUrl);
   if (!url) return null;
 
@@ -130,7 +131,9 @@ function normalizeRow(raw) {
   const h1_texts = h1TextsPrimary.length ? h1TextsPrimary : asStringArray(raw.h1Text || raw.h1 || raw.h1s);
   const h1_count = asNumber(raw.h1_count) ?? asNumber(raw.h1Count) ?? h1_texts.length;
   const canonical = asString(raw.canonical) || asString(raw.canonical_url) || null;
-  const indexable = asBoolOrNull(raw.indexable);
+  const indexable =
+    asBoolOrNull(raw.indexable) ??
+    (raw.scope === 'public' ? true : raw.scope === 'private-excluded' ? false : null);
   const word_count = asNumber(raw.word_count) ?? asNumber(raw.wordCount) ?? null;
   const jsonldTypesPrimary = asStringArray(raw.jsonld_types);
   const jsonld_types = jsonldTypesPrimary.length
@@ -146,7 +149,7 @@ function normalizeRow(raw) {
 
   return {
     url,
-    page_type: asString(raw.page_type) || pageTypeFromPath(url),
+    page_type: asString(raw.page_type) || asString(raw.family) || pageTypeFromPath(url),
     title,
     h1_texts,
     h1_count: h1_count ?? 0,
@@ -320,6 +323,11 @@ function toCanonicalActionRows(decisions) {
 }
 
 async function getInputDir() {
+  if (await fileExists(path.join(SEO_UNIFIED_LATEST_DIR, 'rows.json'))) {
+    console.log(`[cannibalisation-audit] using complete unified route inventory ${SEO_UNIFIED_LATEST_DIR}`);
+    return SEO_UNIFIED_LATEST_DIR;
+  }
+
   const latestExists = await fileExists(SEO_LATEST_DIR);
   if (latestExists) {
     const latestFiles = await fs.readdir(SEO_LATEST_DIR);
@@ -350,7 +358,7 @@ async function getInputDir() {
 async function main() {
   const inputDir = await getInputDir();
 
-  const sourceOrder = ['onpage.jsonl', 'seo_audit_report.json', 'crawl_table.jsonl', 'pages.jsonl', 'report.json'];
+  const sourceOrder = ['rows.json', 'onpage.jsonl', 'seo_audit_report.json', 'crawl_table.jsonl', 'pages.jsonl', 'report.json'];
 
   const loaded = (await Promise.all(sourceOrder.map((file) => loadSource(inputDir, file)))).filter(Boolean);
   if (loaded.length === 0) {
@@ -365,7 +373,9 @@ async function main() {
   loaded.sort((a, b) => b.richnessScore - a.richnessScore);
   const primary = loaded[0];
   const secondaryMerged = loaded.slice(1).flatMap((s) => s.pages);
-  const normalizedPages = mergePagesByUrl(primary.pages, secondaryMerged);
+  const normalizedPages = mergePagesByUrl(primary.pages, secondaryMerged).filter(
+    (page) => page.indexable !== false,
+  );
 
   const decisions = buildDecisions(normalizedPages);
 

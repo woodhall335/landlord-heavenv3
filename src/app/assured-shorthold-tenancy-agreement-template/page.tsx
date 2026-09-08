@@ -85,7 +85,7 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
           {
             question: 'Why does this page link to the England agreement example first?',
             answer:
-              'Because the example page satisfies the broad template query directly. This page exists to capture older AST wording, explain the transition, and then move landlords into the current route.',
+              'Because the example page shows the agreement itself. This guide explains the older AST wording and transition, then points landlords to the current route.',
           },
           {
             question: 'Where does assured periodic fit?',

@@ -163,7 +163,7 @@ const faqs: FAQItem[] = [
   {
     question: 'Can I download this exact template as a blank file?',
     answer:
-      'No. This page is designed to satisfy template intent by showing a credible example first, then guiding landlords into the route that fits the property and tenancy setup instead of leaving them with a generic blank form to edit alone.',
+      'No. It shows a realistic example first, then helps you choose the agreement that fits the property and tenancy setup instead of leaving you with a generic blank form to edit alone.',
   },
   {
     question: 'Why do Standard and Premium come before the other route links?',

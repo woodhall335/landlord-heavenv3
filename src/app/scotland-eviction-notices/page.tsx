@@ -169,7 +169,7 @@ export default function ScotlandEvictionNoticesPage() {
                   not AST possession routes or county court assumptions.
                 </p>
                 <p className="leading-7">
-                  This page is designed as the main Scotland landlord decision page for
+                  Use this as the main Scotland landlord decision guide for
                   possession notices. It explains how the Scottish route works, what a Notice
                   to Leave is for, how the 18 eviction grounds fit into the process, when a
                   landlord is dealing with a mandatory ground versus a discretionary one, and
@@ -455,8 +455,8 @@ export default function ScotlandEvictionNoticesPage() {
                 All 18 Scottish eviction grounds
               </h2>
               <p className="mb-8 max-w-5xl text-gray-700 leading-7">
-                One of the strongest commercial and SEO assets on a Scotland page is a clear,
-                readable explanation of the 18 grounds. You need to understand which types of
+                A landlord needs a clear, readable explanation of the 18 Scottish eviction grounds.
+                You need to understand which types of
                 reason point toward quicker notice
                 logic, which are mandatory, which are discretionary, and why the evidence
                 behind the chosen ground matters if the case reaches tribunal.

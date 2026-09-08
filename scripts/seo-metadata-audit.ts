@@ -188,6 +188,19 @@ function findPageFile(route: string): string | null {
   return pageFileIndex.get(route) ?? null;
 }
 
+function resolveReExportedPageContent(filePath: string, seen = new Set<string>()): string {
+  if (!fs.existsSync(filePath) || seen.has(filePath)) return '';
+  seen.add(filePath);
+  const source = fs.readFileSync(filePath, 'utf8');
+  const reExport = source.match(/export\s*\{\s*default(?:\s*,[\s\S]*?)?\}\s*from\s*['"]([^'"]+)['"]/);
+  if (!reExport?.[1] || !reExport[1].startsWith('.')) return source;
+
+  const base = path.resolve(path.dirname(filePath), reExport[1]);
+  const candidates = [base, `${base}.tsx`, `${base}.ts`, path.join(base, 'page.tsx')];
+  const target = candidates.find((candidate) => fs.existsSync(candidate));
+  return target ? `${source}\n${resolveReExportedPageContent(target, seen)}` : source;
+}
+
 function findNearestLayoutFile(pageFilePath: string): string | null {
   let currentDir = path.dirname(pageFilePath);
 
@@ -371,6 +384,14 @@ function extractKeywords(head: string): string[] {
   return [];
 }
 
+function extractShorthandString(content: string, metadataWindow: string, fieldName: string): string | null {
+  if (!new RegExp(`\\b${fieldName}\\s*,`).test(metadataWindow)) return null;
+  const match = content.match(new RegExp(`const\\s+${fieldName}\\s*=\\s*(['\"\x60])([\\s\\S]*?)\\1`));
+  return match?.[2]
+    ? match[2].replace(/\\n/g, ' ').replace(/\s+/g, ' ').trim()
+    : null;
+}
+
 function auditRoute(route: string): AuditResult {
   const filePath = findPageFile(route);
   const sharedMetadata = getSharedMetadata(route);
@@ -392,7 +413,7 @@ function auditRoute(route: string): AuditResult {
     };
   }
 
-  const content = fs.readFileSync(filePath, 'utf8');
+  const content = resolveReExportedPageContent(filePath);
   const pageHasMetadataExport = /export\s+(const metadata|async function generateMetadata|function generateMetadata)/.test(content);
   const layoutPath = pageHasMetadataExport ? null : findNearestLayoutFile(filePath);
   const layoutContent = layoutPath ? fs.readFileSync(layoutPath, 'utf8') : '';
@@ -413,8 +434,14 @@ function auditRoute(route: string): AuditResult {
   const usesMetadataGenerator = /=\s*(?:buildSeoMetadata|generateMetadataForPageType|generateMetadata)\(/.test(metadataSourceContent);
   const helperGuarantees = usesSharedHelper || usesMetadataGenerator;
 
-  const extractedTitle = extractFirstValue(metadataWindow, 'title');
-  const extractedDescription = extractFirstValue(metadataWindow, 'description');
+  const extractedTitle =
+    extractFirstValue(metadataWindow, 'title') ??
+    extractShorthandString(content, metadataWindow, 'title') ??
+    (/generateMetadata/.test(metadataWindow) ? extractFirstValue(content, 'title') : null);
+  const extractedDescription =
+    extractFirstValue(metadataWindow, 'description') ??
+    extractShorthandString(content, metadataWindow, 'description') ??
+    (/generateMetadata/.test(metadataWindow) ? extractFirstValue(content, 'description') : null);
   const extractedKeywords = extractKeywords(metadataWindow);
 
   const title = usesSharedHelper
@@ -533,7 +560,11 @@ async function main(): Promise<void> {
   printPolicy();
 
   const routes = (await discoverStaticPageRoutes())
-    .filter((route) => !isExemptRoute(route));
+    .filter((route) => !isExemptRoute(route))
+    .filter((route) => {
+      const filePath = findPageFile(route);
+      return !filePath || !/\bpermanentRedirect\s*\(/.test(fs.readFileSync(filePath, 'utf8'));
+    });
 
   const results = routes.map((route) => auditRoute(route));
   printResults(results);

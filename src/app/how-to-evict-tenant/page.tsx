@@ -216,7 +216,7 @@ export default function HowToEvictTenantPage() {
                   enforcement route.
                 </p>
                 <p className="leading-7">
-                  For England landlords, the main owner pages are now{' '}
+                  For England landlords, the main starting points are{' '}
                   <Link href={guideLinks.rentersRightsActEvictionRules.href} className="font-medium text-primary hover:underline">
                     Renters&apos; Rights Act Eviction Rules
                   </Link>

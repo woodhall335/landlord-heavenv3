@@ -3,6 +3,25 @@ import { describe, expect, it } from 'vitest';
 import { normalizeMarketingGrowthEvent } from '../growth-events';
 
 describe('growth event normalization', () => {
+  it('accepts the privacy-safe site visit event used by the live usage counter', () => {
+    expect(
+      normalizeMarketingGrowthEvent({
+        eventName: 'site_visit',
+        marketingSessionId: 'mkt_daily_counter',
+        payload: {
+          sourcePage: '/products/ast',
+          pageType: 'product_page',
+          deviceCategory: 'mobile',
+        },
+      })
+    ).toMatchObject({
+      eventName: 'site_visit',
+      marketingSessionId: 'mkt_daily_counter',
+      sourcePage: '/products/ast',
+      pageType: 'product_page',
+    });
+  });
+
   it('accepts allowlisted revenue funnel events and strips unknown fields', () => {
     const event = normalizeMarketingGrowthEvent({
       eventName: 'commercial_bridge_clicked',

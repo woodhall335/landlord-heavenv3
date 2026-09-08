@@ -5,7 +5,23 @@ export type ConversionProduct =
   | 'complete_pack'
   | 'money_claim'
   | 'tenancy_agreement'
-  | 'hmo_shared_house';
+  | 'hmo_shared_house'
+  | 'section13_standard'
+  | 'section13_defence';
+
+export interface SeoConversionInput {
+  sourceRoute: string;
+  jurisdiction: 'england' | 'wales' | 'scotland' | 'northern-ireland' | 'uk';
+  cluster: string;
+  pageType: string;
+  primaryProduct:
+    | '/products/notice-only'
+    | '/products/complete-pack'
+    | '/products/money-claim'
+    | '/products/section-13-standard'
+    | '/products/section-13-defence'
+    | '/products/ast';
+}
 
 export interface ConversionMapping {
   sourceRoute: string;
@@ -56,6 +72,78 @@ const courtPack = (sourceRoute: string, problem: string, trackingId: string): Co
   benefits: ['Keep notice and claim details consistent.', 'Prepare the possession forms and filing checks.', 'See what the pack includes before starting.'],
   price: PRODUCTS.complete_pack.displayPrice, previewAvailable: true, trackingId,
 });
+
+const tenancyAgreement = (
+  sourceRoute: string,
+  problem: string,
+  trackingId: string,
+): ConversionMapping => ({
+  sourceRoute,
+  sourceCategory: 'tenancy_setup',
+  visitorProblem: problem,
+  primaryProduct: 'tenancy_agreement',
+  headline: 'Ready to create the agreement for your property?',
+  supportingCopy:
+    'Choose the property jurisdiction and type of let first. The agreement route then asks for the rent, deposit, occupiers, guarantor and management details needed for the selected tenancy.',
+  ctaLabel: `Choose my tenancy agreement — from ${PRODUCTS.ast_standard.displayPrice}`,
+  destinationRoute: '/products/ast',
+  builderPreselection: { type: 'tenancy_agreement', topic: 'tenancy' },
+  benefits: [
+    'Choose by jurisdiction and property setup.',
+    'Answer guided questions instead of editing a blank form.',
+    'Preview the supported agreement before payment.',
+  ],
+  price: PRODUCTS.ast_standard.displayPrice,
+  previewAvailable: true,
+  trackingId,
+});
+
+const rentIncrease = (
+  sourceRoute: string,
+  problem: string,
+  trackingId: string,
+  defensive: boolean,
+): ConversionMapping => {
+  const product = defensive ? PRODUCTS.section13_defensive : PRODUCTS.section13_standard;
+  return {
+    sourceRoute,
+    sourceCategory: 'rent_increase',
+    visitorProblem: problem,
+    primaryProduct: defensive ? 'section13_defence' : 'section13_standard',
+    secondaryProduct: defensive ? 'section13_standard' : 'section13_defence',
+    headline: defensive
+      ? 'Has the tenant challenged the increase? Prepare the evidence file'
+      : 'Ready to propose the new rent? Prepare Form 4A and the evidence',
+    supportingCopy: defensive
+      ? 'Bring the notice, comparable rents, chronology and tribunal response materials into one consistent file before the challenge progresses.'
+      : 'Create the notice and keep the proposed rent, comparable evidence, dates and service record aligned before anything is served.',
+    ctaLabel: defensive
+      ? `Prepare my challenge pack — ${product.displayPrice}`
+      : `Prepare my rent increase pack — ${product.displayPrice}`,
+    destinationRoute: defensive
+      ? '/products/section-13-defence'
+      : '/products/section-13-standard',
+    builderPreselection: {
+      type: 'rent_increase',
+      product: defensive ? 'section13_defensive' : 'section13_standard',
+      topic: 'general',
+    },
+    benefits: defensive
+      ? [
+          'Organise the notice and challenge chronology.',
+          'Bring comparable-rent evidence into one file.',
+          'Preview the available tribunal materials before payment.',
+        ]
+      : [
+          'Prepare the current Form 4A route for England.',
+          'Record comparable-rent evidence and service details.',
+          'Preview the available paperwork before payment.',
+        ],
+    price: product.displayPrice,
+    previewAvailable: true,
+    trackingId,
+  };
+};
 
 export const CONVERSION_REGISTRY: readonly ConversionMapping[] = [
   {
@@ -111,4 +199,55 @@ export const CONVERSION_REGISTRY: readonly ConversionMapping[] = [
 export function getConversionMapping(sourceRoute: string): ConversionMapping | undefined {
   const normalized = sourceRoute.split('?')[0].replace(/\/$/, '') || '/';
   return CONVERSION_REGISTRY.find((mapping) => mapping.sourceRoute === normalized);
+}
+
+/**
+ * Builds a relevant offer for retained SEO pages that already have a taxonomy
+ * owner, while preserving hand-written mappings for the highest-value routes.
+ * Non-England regional guidance never falls through to an England product.
+ */
+export function getConversionMappingForSeoPage(
+  input: SeoConversionInput,
+): ConversionMapping | undefined {
+  const sourceRoute = input.sourceRoute.split('?')[0].replace(/\/$/, '') || '/';
+  const explicit = getConversionMapping(sourceRoute);
+  if (explicit) return explicit;
+  if (sourceRoute.startsWith('/products/') || !['england', 'uk'].includes(input.jurisdiction)) {
+    return undefined;
+  }
+
+  const routeId = sourceRoute.replace(/^\//, '').replace(/[^a-z0-9]+/gi, '_') || 'home';
+  const problem = `Move from ${input.cluster.replace(/-/g, ' ')} guidance to the appropriate practical document route.`;
+  let mapping: ConversionMapping;
+
+  switch (input.primaryProduct) {
+    case '/products/money-claim':
+      mapping = moneyClaim(sourceRoute, problem, `${routeId}_money_claim`);
+      break;
+    case '/products/complete-pack':
+      mapping = courtPack(sourceRoute, problem, `${routeId}_complete_pack`);
+      break;
+    case '/products/ast':
+      mapping = tenancyAgreement(sourceRoute, problem, `${routeId}_tenancy_agreement`);
+      break;
+    case '/products/section-13-standard':
+      mapping = rentIncrease(sourceRoute, problem, `${routeId}_section13_standard`, false);
+      break;
+    case '/products/section-13-defence':
+      mapping = rentIncrease(sourceRoute, problem, `${routeId}_section13_defence`, true);
+      break;
+    default:
+      mapping = notice(sourceRoute, problem, `${routeId}_notice_only`);
+  }
+
+  if (input.jurisdiction === 'uk' && input.primaryProduct !== '/products/ast') {
+    return {
+      ...mapping,
+      headline: `Property in England? ${mapping.headline}`,
+      supportingCopy: `The paid route below is for properties in England. ${mapping.supportingCopy}`,
+      ctaLabel: `${mapping.ctaLabel} (England)`,
+    };
+  }
+
+  return mapping;
 }

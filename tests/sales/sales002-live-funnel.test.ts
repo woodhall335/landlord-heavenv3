@@ -12,6 +12,7 @@ describe('SALES-002 live funnel', () => {
       read('src', 'components', 'conversion', 'ContextualOffer.tsx'),
       read('src', 'components', 'analytics', 'ProductPageTracker.tsx'),
       read('src', 'components', 'analytics', 'ProductPrimaryActions.tsx'),
+      read('src', 'components', 'seo', 'CommercialSeoTrackedCta.tsx'),
       read('src', 'lib', 'analytics.ts'),
       read('src', 'lib', 'analytics', 'track.ts'),
       read('src', 'lib', 'analytics', 'cross-sell.ts'),
@@ -21,7 +22,7 @@ describe('SALES-002 live funnel', () => {
     ].join('\n');
 
     for (const event of [
-      'organic_landing_view', 'contextual_offer_view', 'contextual_offer_click',
+      'site_visit', 'organic_landing_view', 'contextual_offer_view', 'contextual_offer_click',
       'product_view', 'product_primary_cta_click', 'builder_started',
       'builder_step_viewed', 'builder_step_completed', 'builder_validation_error',
       'builder_abandoned', 'preview_requested', 'preview_generated', 'preview_failed',

@@ -12,7 +12,10 @@ import {
 
 export const metadata: Metadata = {
   title: 'Assisted Prep Payment Received | Landlord Heaven',
-  description: 'Book your assisted prep callback and see what to have ready.',
+  description:
+    'Your assisted preparation payment has been received. Book your callback, upload the available evidence, and review what to have ready.',
+  alternates: { canonical: '/assisted-prep' },
+  robots: { index: false, follow: true },
 };
 
 type PageProps = {

@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'No-Fault Eviction (England) | Historical Transition and Current Rules',
     description:
-      'Historical-only explanation of no-fault eviction search intent and where landlords should go under the current England framework.',
+      'Historical explanation of no-fault eviction terminology and the possession routes landlords should use under the current England framework.',
     type: 'article',
     url: canonical,
   },
@@ -162,7 +162,7 @@ export default function NoFaultEvictionPage() {
                   <li>Most live England cases now need the current possession process instead.</li>
                 </ul>
 
-                <h2>No-fault search intent vs current England possession</h2>
+                <h2>No-fault eviction wording and current England possession</h2>
                 <p>
                   Landlords still search for no-fault eviction terms, but current England cases now
                   turn on the current possession rules, current notice wording, current court
@@ -191,7 +191,7 @@ export default function NoFaultEvictionPage() {
                 Ready to follow the current England route?
               </h2>
               <p className="mb-6 text-gray-600">
-                Move from historical search intent into the current Renters’ Rights Act framework
+                Move from historical no-fault terminology into the current Renters’ Rights Act framework
                 and the current England workflow.
               </p>
               <div className="flex flex-col justify-center gap-4 sm:flex-row">

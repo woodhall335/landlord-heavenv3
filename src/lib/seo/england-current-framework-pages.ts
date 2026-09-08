@@ -181,7 +181,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
     ],
     introduction: [
       'If you need to regain possession in England after 1 May 2026, the starting point is no longer a broad menu of older notice routes. You now need to identify the live basis for possession, confirm the facts you can prove, and use the current notice that matches that case theory. For most breach-based cases in England, that means understanding Form 3A carefully before you serve anything.',
-      'This page is designed to help you do that without over-promising certainty. A notice is not just a document to fill in. It is part of a chain that starts with tenancy facts, moves through service, and can end in an N5 and N119 possession claim. If the front end is weak, the court stage is usually weaker. Calm preparation at the notice stage gives you a much better chance of running a coherent case later.',
+      'A notice is not just a document to fill in. It is part of a chain that starts with tenancy facts, moves through service, and can end in an N5 and N119 possession claim. If the front end is weak, the court stage is usually weaker. Calm preparation at the notice stage gives you a much better chance of running a coherent case later.',
       'You should read this guide as a practical current-law briefing, not as a shortcut around legal judgment. Grounds need to match the real evidence. Dates need to be worked out correctly. The tenancy file needs to be consistent. Where the case is high value, contested, or factually messy, you may still want legal review before service. The aim here is to help you move into the right framework and avoid preventable errors.',
     ],
     sections: [
@@ -1268,8 +1268,8 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         title: 'Best next action from this hub',
         paragraphs: [
           'If you want the current England notice generated now, move into Notice Only. If you are still mapping out the wider route, review the England process guide. If you already know the matter may need a claim, open the N5 and N119 guide before you issue anything. The right next action depends on how settled the route is and how complete the file already feels.',
-          'The important point is that you now have a current owner page for England notice intent. That means broad notice searches can land here safely, gain route clarity, and then move into the correct live destination without detouring through retired language or outdated process assumptions.',
-          'Use this hub whenever you need the current route explained first. It is designed to convert broad notice intent into a grounded, current, and defensible next step.',
+          'The important point is to identify the current England notice route before drafting. That avoids detours through retired wording and helps keep the notice, evidence, dates, and service plan consistent.',
+          'Use this hub whenever you need the available notice routes explained first, then continue to the document or court-stage guidance that matches the facts.',
         ],
       },
     ],
@@ -1278,7 +1278,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
       {
         question: 'What is this page for in the current England framework?',
         answer:
-          'It is the broad owner page for England notice intent, helping landlords understand the live route, the notice bundle, and the right next action before they serve.',
+          'It explains the current England notice routes, what belongs in the notice file, and the practical next action before anything is served.',
       },
       {
         question: 'What should be in a stronger notice bundle?',

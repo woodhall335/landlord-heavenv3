@@ -106,7 +106,7 @@ const content: PillarPageContent = {
     },
   ],
   comparisonTable: [
-    { factor: 'Best use', routeA: 'Legacy no-fault search intent only', routeB: 'Grounds-based or arrears-led possession', routeC: 'Court, order, and enforcement stages after notice expires' },
+    { factor: 'Best use', routeA: 'Understanding older no-fault terminology', routeB: 'Grounds-based or arrears-led possession', routeC: 'Court, order, and enforcement stages after notice expires' },
     { factor: 'Evidence burden', routeA: 'Compliance-heavy', routeB: 'Grounds and chronology heavy', routeC: 'Full bundle consistency and order execution' },
     { factor: 'Main supporting guide', routeA: 'Section 21 ban and transition pages', routeB: 'Section 8 notice and rent arrears guides', routeC: 'Possession order timeline and bailiff guides' },
     { factor: 'Commercial route', routeA: 'Bridge into broader possession support', routeB: 'Notice Only or Complete Pack depending certainty', routeC: 'Usually Complete Pack' },
@@ -148,7 +148,7 @@ const content: PillarPageContent = {
           <Link href="/tenant-not-paying-rent" className="text-primary font-medium hover:underline">
             tenant not paying rent in the UK
           </Link>
-          . If the issue is legacy Section 21 search intent or confusion about what replaced it, use{' '}
+          . If the issue is older Section 21 terminology or confusion about what replaced it, use{' '}
           <Link href="/section-21-ban-uk" className="text-primary font-medium hover:underline">
             Section 21 ending in 2026
           </Link>{' '}

@@ -815,7 +815,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     icon: '/images/wizard-icons/15-rent-arrears.png',
     keyword: 'section 8 grounds explained',
     problemIntro: 'Section 8 fails when landlords pick grounds casually. If the grounds choice and evidence do not line up, possession can be delayed and your arrears position worsens.',
-    intentDeepDive: 'This page targets landlords searching for practical meaning behind Section 8 grounds. It focuses on converting legal categories into workable landlord actions, especially in arrears cases where timing and evidence matter.',
+    intentDeepDive: 'This guide explains the practical meaning of Section 8 grounds and turns the legal categories into workable landlord actions, especially in arrears cases where timing and evidence matter.',
     landlordScenarios: [
       'Your tenant is in arrears and you need clarity on which grounds are normally considered.',
       'You have breach concerns beyond arrears and want to understand mandatory vs discretionary impact.',

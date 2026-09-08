@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { AssistedPrepChecklist } from '@/components/assisted-prep/AssistedPrepChecklist';
 import { CalendlyBookingButton } from '@/components/assisted-prep/CalendlyBookingButton';
 import {
@@ -11,7 +12,9 @@ import {
 
 export const metadata: Metadata = {
   title: 'Book Your Free Consultation | Landlord Heaven',
-  description: 'Book a free assisted eviction consultation.',
+  description:
+    'Choose a time for your free assisted document-preparation consultation and see which case details and supporting documents to have ready.',
+  alternates: { canonical: '/assisted-prep' },
   robots: { index: false, follow: true },
 };
 
@@ -38,9 +41,22 @@ export default async function AssistedPrepConsultationPage({ searchParams }: Pag
   return (
     <>
       <HeaderConfig mode="solid" />
+      <UniversalHero
+        preset="content_index"
+        preTitleLabel="Free assisted-prep consultation"
+        title={`Choose a time to discuss your ${config.shortLabel.toLowerCase()} case`}
+        subtitle="Your request is saved. Book a free call so we can review the facts, explain the document-preparation scope and confirm whether the service is suitable before you pay."
+        primaryCta={{ label: 'Choose an appointment', href: '#choose-consultation-time' }}
+        secondaryCta={{ label: 'Open my case file', href: dashboardHref }}
+        trustText="No payment is taken until the preparation scope is confirmed"
+        hideMedia
+      />
       <main className="bg-slate-50 px-4 py-12 md:py-16">
         <div className="mx-auto max-w-5xl space-y-8">
-          <section className="rounded-2xl border border-violet-200 bg-white p-6 shadow-sm md:p-8">
+          <section
+            id="choose-consultation-time"
+            className="scroll-mt-28 rounded-2xl border border-violet-200 bg-white p-6 shadow-sm md:p-8"
+          >
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-violet-700">Thank you — your request is saved</p>
             <h1 className="mt-3 text-3xl font-bold text-slate-950">Choose a time for your free {config.shortLabel.toLowerCase()} consultation</h1>
             <p className="mt-4 max-w-3xl text-base leading-7 text-slate-700">

@@ -8,7 +8,7 @@ import { UniversalHero } from "@/components/landing/UniversalHero";
 export const metadata = generateMetadata({
   title: "Refund Policy | Landlord Heaven Digital Products and Assisted Prep",
   description:
-    "Read the refund policy for Landlord Heaven digital products and assisted prep services, including document delivery, technical errors, duplicate charges, and assisted prep blockers.",
+    "Read the Landlord Heaven refund policy for digital documents and assisted preparation, including delivery errors, duplicate charges and blocked cases.",
   path: "/refunds",
   keywords: [
     "refund policy",

@@ -48,12 +48,12 @@ const faqs = [
   {
     question: 'Is this still an assured shorthold tenancy agreement?',
     answer:
-      'This page captures assured shorthold tenancy agreement search intent, but the live Landlord Heaven route is now positioned as the updated England Tenancy Agreement 2026 rather than using older AST-first product language.',
+      'The assured shorthold tenancy agreement is older terminology. For a new England let, use the current England tenancy agreement route and choose the option that matches the property and occupiers.',
   },
   {
     question: 'Why keep assured shorthold tenancy agreement wording on the page?',
     answer:
-      'Because many landlords in England still search using assured shorthold tenancy agreement terminology. This page keeps that search demand while moving users into the newer England agreement flow with more modern wording and stronger product positioning.',
+      'Because many landlords in England still know the document by that name. Keeping the term explained helps you recognise the legal change and move to the current England agreement without mistaking an old AST form for a new product.',
   },
   {
     question: 'How does this relate to the 1 May 2026 England changes?',
@@ -68,7 +68,7 @@ const faqs = [
   {
     question: 'Who is this page for?',
     answer:
-      'It is for landlords in England who still search for assured shorthold tenancy agreement wording but need a more modern 2026 tenancy agreement route rather than relying on thin legacy AST-only landing pages.',
+      'It is for landlords in England who know the assured shorthold tenancy agreement wording but need a current agreement for a new tenancy rather than an old AST form.',
   },
   {
     question: 'What is the difference between standard and premium?',
@@ -76,14 +76,14 @@ const faqs = [
       'The standard option suits many straightforward England lets. The premium option is better where a landlord wants extra clauses, broader wording, or more detailed drafting for more complex real-world situations.',
   },
   {
-    question: 'Can I still rank for AST terms without selling the product as an AST?',
+    question: 'Why does Landlord Heaven still explain AST terminology?',
     answer:
-      'Yes. That is the purpose of this page. It captures assured shorthold tenancy agreement demand while moving users into the updated England agreement flow with newer public-facing product language.',
+      'The term is still widely recognised, so the page explains what it meant and where landlords should now go to create a current England tenancy agreement.',
   },
   {
     question: 'Can I use an old AST template for a new England tenancy?',
     answer:
-      'You may want a stronger and more current route than an old thin AST template. This page is designed to move landlords into a modern 2026 England agreement flow with better commercial and SEO positioning.',
+      'Do not start a new tenancy with an old AST template. Use the current England agreement route, check that it matches the property and occupiers, and complete the guided setup instead.',
   },
 ];
 
@@ -149,8 +149,8 @@ export default function AssuredShortholdTenancyAgreementPage() {
                 </p>
 
                 <p>
-                  This page is designed to bridge that gap. It preserves legacy search relevance while
-                  guiding landlords into a stronger and more future-facing England agreement flow.
+                  The guide bridges that gap by explaining the older AST term and directing landlords
+                  to the current England agreement flow.
                 </p>
 
                 <p>
@@ -471,9 +471,9 @@ export default function AssuredShortholdTenancyAgreementPage() {
                       <td className="px-4 py-3 text-gray-700">Modern England agreement journey</td>
                     </tr>
                     <tr>
-                      <td className="px-4 py-3 text-gray-700">Competitive strength</td>
-                      <td className="px-4 py-3 text-gray-700">Thin legacy SEO page</td>
-                      <td className="px-4 py-3 text-gray-700">Full search-first landing page</td>
+                      <td className="px-4 py-3 text-gray-700">Practical help</td>
+                      <td className="px-4 py-3 text-gray-700">A static form with limited guidance</td>
+                      <td className="px-4 py-3 text-gray-700">A guided agreement journey with supporting documents</td>
                     </tr>
                   </tbody>
                 </table>

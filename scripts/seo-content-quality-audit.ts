@@ -74,6 +74,7 @@ interface ContentSignals {
   hasProductFit: boolean;
   hasTrustProof: boolean;
   hiddenKeywordRelianceRisk: boolean;
+  internalEditorialVoice: boolean;
 }
 
 interface ContentQualityRow {
@@ -145,6 +146,38 @@ function readText(filePath: string | null): string {
   if (!filePath) return '';
   const absPath = path.isAbsolute(filePath) ? filePath : path.join(ROOT, filePath);
   return fs.existsSync(absPath) ? fs.readFileSync(absPath, 'utf8') : '';
+}
+
+function resolveRouteSource(filePath: string | null, seen = new Set<string>()): string {
+  if (!filePath) return '';
+  const absPath = path.isAbsolute(filePath) ? filePath : path.join(ROOT, filePath);
+  if (!fs.existsSync(absPath) || seen.has(absPath)) return '';
+  seen.add(absPath);
+
+  const source = fs.readFileSync(absPath, 'utf8');
+  const reExport = source.match(/export\s*\{\s*default(?:\s*,[\s\S]*?)?\}\s*from\s*['"]([^'"]+)['"]/);
+  if (!reExport?.[1] || !reExport[1].startsWith('.')) return source;
+
+  const base = path.resolve(path.dirname(absPath), reExport[1]);
+  const candidates = [base, `${base}.tsx`, `${base}.ts`, path.join(base, 'page.tsx')];
+  const target = candidates.find((candidate) => fs.existsSync(candidate));
+  return target ? `${source}\n${resolveRouteSource(target, seen)}` : source;
+}
+
+function routeLayoutText(filePath: string | null): string {
+  if (!filePath) return '';
+  let current = path.dirname(path.isAbsolute(filePath) ? filePath : path.join(ROOT, filePath));
+  const appRoot = path.join(ROOT, 'src', 'app');
+  const layouts: string[] = [];
+
+  while (current.startsWith(appRoot)) {
+    const layout = path.join(current, 'layout.tsx');
+    if (fs.existsSync(layout)) layouts.push(fs.readFileSync(layout, 'utf8'));
+    if (current === appRoot) break;
+    current = path.dirname(current);
+  }
+
+  return layouts.join('\n');
 }
 
 function cleanText(value: string): string {
@@ -383,7 +416,9 @@ function configBackedText(row: UnifiedSeoRow): { text: string; metaDescription: 
 }
 
 function visibleTextForRow(row: UnifiedSeoRow): { text: string; metaDescription: string | null; configSource: string } {
-  const sourceText = readText(row.sourceFile);
+  const sourceText = resolveRouteSource(row.sourceFile);
+  const layoutText = routeLayoutText(row.sourceFile);
+  const routeAndLayoutText = `${sourceText}\n${layoutText}`;
   const componentText = [
     row.route === '/' ? readText(path.join('src', 'components', 'landing', 'HomeContent.tsx')) : '',
     /PublicProductSalesPage/.test(sourceText) ? readText(path.join('src', 'components', 'marketing', 'PublicProductSalesPage.tsx')) : '',
@@ -398,9 +433,22 @@ function visibleTextForRow(row: UnifiedSeoRow): { text: string; metaDescription:
     /RentIncreaseChallengeChecker/.test(sourceText) ? readText(path.join('src', 'components', 'tools', 'rent-checker', 'RentCheckerForm.tsx')) : '',
     /RentIncreaseChallengeChecker/.test(sourceText) ? readText(path.join('src', 'components', 'tools', 'rent-checker', 'RentCheckerResultPage.tsx')) : '',
     /RentCheckerSeoPage/.test(sourceText) ? readText(path.join('src', 'components', 'tools', 'rent-checker', 'RentCheckerSeoPage.tsx')) : '',
+    /ClaimsWizard/.test(sourceText) ? readText(path.join('src', 'components', 'claims', 'ClaimsWizard.tsx')) : '',
+    /AssistedPrepServicesShowcase/.test(sourceText) ? readText(path.join('src', 'components', 'assisted-prep', 'AssistedPrepServicesShowcase.tsx')) : '',
+    /AssistedPrepServiceDetails|AssistedPrepAllServiceDetails/.test(sourceText) ? readText(path.join('src', 'components', 'assisted-prep', 'AssistedPrepServiceDetails.tsx')) : '',
+    /AssistedPrepChecklist/.test(sourceText) ? readText(path.join('src', 'components', 'assisted-prep', 'AssistedPrepChecklist.tsx')) : '',
+    /TenancyJurisdictionSelector/.test(sourceText) ? readText(path.join('src', 'components', 'tenancy', 'TenancyJurisdictionSelector.tsx')) : '',
+    /Section8GroundRouteCards/.test(sourceText) ? readText(path.join('src', 'components', 'seo', 'Section8GroundRouteCards.tsx')) : '',
+    /CurrentFrameworkGuidePage/.test(sourceText) ? readText(path.join('src', 'components', 'seo', 'CurrentFrameworkGuidePage.tsx')) : '',
+    /HROverlapArticleShell/.test(sourceText) ? readText(path.join('src', 'components', 'seo', 'HROverlapArticleShell.tsx')) : '',
+    /TenancyFunnelLandingPage/.test(sourceText) ? readText(path.join('src', 'components', 'seo', 'TenancyFunnelLandingPage.tsx')) : '',
+    /Section8GroundUniversalHero/.test(layoutText) ? readText(path.join('src', 'components', 'seo', 'Section8GroundUniversalHero.tsx')) : '',
   ].join('\n');
   const config = configBackedText(row);
-  const sourceVisibleText = [...jsxText(`${sourceText}\n${componentText}`), ...literalStrings(`${sourceText}\n${componentText}`)].join(' ');
+  const sourceVisibleText = [
+    ...jsxText(`${routeAndLayoutText}\n${componentText}`),
+    ...literalStrings(`${routeAndLayoutText}\n${componentText}`),
+  ].join(' ');
   const metaDescription = config.metaDescription ?? getFirstStringField(sourceText, 'description');
   return {
     configSource: config.configSource,
@@ -491,6 +539,17 @@ function getSignals(row: UnifiedSeoRow, visibleText: string, metaDescription: st
       /\bcurrent wording\b/,
     ]),
     hiddenKeywordRelianceRisk: wordCount(visibleText) < 220 && row.emittedKeywordCount >= 10,
+    internalEditorialVoice: hasAny(lower, [
+      /\bsearch intent\b/,
+      /\bowner page\b/,
+      /\brank better\b/,
+      /\bconvert better\b/,
+      /\bright seo page\b/,
+      /\bkeyword (target|cluster|coverage)\b/,
+      /\bcommercial and seo\b/,
+      /\bcompetitor pages?\b/,
+      /\boutrank\b/,
+    ]),
   };
 }
 
@@ -614,6 +673,17 @@ function scoreRow(row: UnifiedSeoRow): ContentQualityRow {
         count < 120 ? 'high' : 'medium',
         'The page has 10+ keyword targets but too little visible content to carry those topics naturally.',
         'Treat the meta keywords as planning inputs only and add visible copy that covers the target topics naturally.',
+      ),
+    );
+  }
+
+  if (signals.internalEditorialVoice) {
+    issues.push(
+      issue(
+        'internal_editorial_voice',
+        'high',
+        'Visitor-facing copy appears to discuss SEO strategy instead of the landlord decision.',
+        'Rewrite the passage in plain landlord-facing language and keep ranking, keyword, owner-page, and competitor notes out of public copy.',
       ),
     );
   }

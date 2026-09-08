@@ -194,7 +194,7 @@ export default function Section21ExpiredPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <RelatedLinks
-                title="Current England route after Section 21 search intent"
+                title="Current England route after Section 21"
                 links={currentEnglandRouteLinks}
               />
             </div>

@@ -55,8 +55,8 @@ const content: PillarPageContent = {
       .
     </>,
     <>
-      Landlords should treat this page as the main transition hub. Use it when the search intent is about the ban, what
-      replaces Section 21, or how to evict after Section 21 is gone. Then move into the supporting page that matches the
+      Use this as the main transition guide if you need to understand the ban, what replaces Section 21, or how to evict
+      after Section 21 has ended. Then move into the supporting page that matches the
       live scenario, such as{' '}
       <Link href="/tenant-not-paying-rent" className="text-primary font-medium hover:underline">
         tenant not paying rent in the UK

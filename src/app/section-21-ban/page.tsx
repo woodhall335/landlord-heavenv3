@@ -78,7 +78,7 @@ const faqs: FAQItem[] = [
   {
     question: 'Can I still serve a Section 21 notice before the ban takes effect?',
     answer:
-      'That depends on the current England transition position and whether your tenancy and compliance record support the route. This page is designed to help landlords act before the Section 21 route closes, but landlords should make sure the notice is valid and served in time rather than relying on assumptions.',
+      'That depends on the current England transition position and whether your tenancy and compliance record support the route. Check that any notice is valid and served in time rather than relying on assumptions about the closing date.',
   },
   {
     question: 'What happens after the Section 21 route ends?',

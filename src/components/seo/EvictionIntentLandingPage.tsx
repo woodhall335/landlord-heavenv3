@@ -507,7 +507,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
                 {config.templateRisks.map((risk) => <li key={risk}>• {plainEnglishTemplateRisk(risk)}</li>)}
               </ul>
               <p className="mt-6 text-gray-700">
-                For historical Section 21 search intent, use the <Link href="/section-21-notice" className="text-primary hover:underline">Section 21 transition guide</Link>.
+                If you know the older Section 21 terminology, use the <Link href="/section-21-notice" className="text-primary hover:underline">Section 21 transition guide</Link>.
                 For live England court progression details, see <Link href="/eviction-court-forms-england" className="text-primary hover:underline">eviction court forms explained</Link>.
               </p>
             </div>

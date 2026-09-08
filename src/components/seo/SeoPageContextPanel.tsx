@@ -8,7 +8,10 @@ import {
 } from '@/lib/seo/page-taxonomy';
 import { getCommercialSeoCopy } from '@/components/seo/CommercialSeoNextStep';
 import { ContextualOffer } from '@/components/conversion/ContextualOffer';
-import { getConversionMapping } from '@/lib/conversion/registry';
+import {
+  getConversionMapping,
+  getConversionMappingForSeoPage,
+} from '@/lib/conversion/registry';
 
 interface SeoPageContextPanelProps {
   pathname: string;
@@ -38,7 +41,16 @@ export function SeoPageContextPanel({
     entry.jurisdiction === 'england' || entry.jurisdiction === 'uk'
       ? getCommercialSeoCopy(productHref, entry.secondaryProduct)
       : null;
-  const mapping = commercialOffer ? getConversionMapping(pathname) : undefined;
+  const mapping = commercialOffer
+    ? getConversionMapping(pathname) ??
+      getConversionMappingForSeoPage({
+        sourceRoute: pathname,
+        jurisdiction: entry.jurisdiction,
+        cluster: entry.cluster,
+        pageType: entry.pageType,
+        primaryProduct: productHref,
+      })
+    : undefined;
 
   return (
     <>
@@ -112,7 +124,14 @@ export function SeoPageContextPanel({
         ) : null}
       </div>
     </div>
-    {mapping ? <ContextualOffer sourceRoute={pathname} placement="after_answer" className="mt-6" /> : null}
+    {mapping ? (
+      <ContextualOffer
+        sourceRoute={pathname}
+        placement="after_answer"
+        className="mt-6"
+        mapping={mapping}
+      />
+    ) : null}
     </>
   );
 }

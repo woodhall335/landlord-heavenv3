@@ -9,6 +9,7 @@ import { RiCheckLine, RiShieldCheckFill } from 'react-icons/ri';
 import { StaggerReveal } from '@/components/marketing/PremiumMotion';
 import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
 import type { PositioningPreset } from '@/lib/marketing/positioning';
+import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats';
 import { getUniversalHeroImage, type UniversalHeroImageKey } from '@/config/universal-hero-images';
 import { getUniversalHeroImageForPath } from '@/config/universal-hero-images';
 import { findUniversalHeroForPath } from '@/config/universal-hero-library';
@@ -34,6 +35,7 @@ const MOBILE_TOP_PADDING_CLASSES = {
   compact: 'pt-4 sm:pt-8',
 } as const;
 const CTA_WRAP_CLASSES = 'mt-8 flex w-full flex-col gap-3 sm:mt-9 sm:flex-row sm:items-center lg:mt-6';
+const REVIEW_STARS = '\u2605\u2605\u2605\u2605\u2605';
 
 const HERO_BENEFITS = [
   { label: 'Guided questions', Icon: BadgeCheck },
@@ -171,6 +173,7 @@ export function UniversalHero({
   const pathname = usePathname() ?? '/';
   const isValidHeading = headingAs === 'h1' || headingAs === 'h2';
   const HeadingTag = isValidHeading ? headingAs : 'h1';
+  const reviewCount = getDynamicReviewCount();
   const presetStyles = PUBLIC_HERO_PRESET_STYLES[preset];
   const shouldRenderHeading = Boolean(title || highlightTitle);
   // The new public hero contract keeps proof and live usage visible everywhere.
@@ -295,9 +298,15 @@ export function UniversalHero({
                   'mb-4 inline-flex w-fit max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[#e5ddf7] bg-white/90 px-3 py-2 text-xs font-semibold text-[#271b45] shadow-sm backdrop-blur-sm lg:hidden',
                   'justify-start text-left'
                 )}
-              >
-                <RiCheckLine className="h-4 w-4 text-[#6333d5]" aria-hidden="true" />
-                <span>Guided landlord document preparation</span>
+                >
+                  <RiCheckLine className="h-4 w-4 text-[#6333d5]" aria-hidden="true" />
+                  <span>Rated</span>
+                  <span className="text-[#facc15]" aria-hidden="true">
+                    {REVIEW_STARS}
+                  </span>
+                  <span>
+                    {REVIEW_RATING}/5 | {reviewCount} reviews
+                  </span>
               </p>
             )}
 
@@ -331,8 +340,11 @@ export function UniversalHero({
                       isCenter ? 'justify-center' : 'pl-8'
                     )}
                   >
+                    <span className="shrink-0 text-[#facc15]" aria-hidden="true">
+                      {REVIEW_STARS}
+                    </span>
                     <span className="shrink-0 font-medium text-[#2b253d]">
-                      Fixed scope and price shown before payment
+                      {REVIEW_RATING}/5 | {reviewCount} reviews
                     </span>
                   </span>
                 </p>
@@ -352,8 +364,15 @@ export function UniversalHero({
                       {resolvedTrustText}
                     </span>
                   ) : null}
-                  <span data-testid="hero-review-pill-meta" className="shrink-0 font-medium text-[#2b253d]">
-                    Preview before payment where shown
+                  <span
+                    data-testid="hero-review-pill-meta"
+                    className="shrink-0 text-[#facc15]"
+                    aria-hidden="true"
+                  >
+                    {REVIEW_STARS}
+                  </span>
+                  <span className="shrink-0 font-medium text-[#2b253d]">
+                    {REVIEW_RATING}/5 | {reviewCount} reviews
                   </span>
                 </p>
               )

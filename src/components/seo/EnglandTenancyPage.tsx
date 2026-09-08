@@ -674,9 +674,9 @@ export function EnglandTenancyPage({
               </h2>
               <div className="mt-4 space-y-4 text-lg leading-8 text-[#546075]">
                 <p>
-                  Short answer: use this page to match the tenancy agreement search term to the current
-                  landlord document route, then choose the Standard, Premium, Student, HMO / Shared House,
-                  Lodger, Scotland, Wales, or Northern Ireland path that fits the property.
+                  Short answer: choose the agreement by property location and how the home will be occupied.
+                  From there, compare the Standard, Premium, Student, HMO / Shared House and Lodger options,
+                  or move to the separate Scotland, Wales or Northern Ireland route.
                 </p>
                 {introBody.map((paragraph, index) => (
                   <p key={`intro-body-${index}`}>{paragraph}</p>
@@ -688,12 +688,12 @@ export function EnglandTenancyPage({
               <section className="mb-12 rounded-[2rem] border border-[#E6E0D5] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)] md:p-8">
                 <div className="max-w-3xl">
                   <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
-                    Common landlord searches for this setup
+                    Terms you may see used for this type of agreement
                   </h2>
                   <p className="mt-3 text-base leading-7 text-[#546075]">
-                    These are the phrases landlords usually use when they are trying to find the right
-                    agreement for this kind of let. The important part is making sure the agreement
-                    matches the way the property is actually being occupied.
+                    Agreement names are not always used consistently. Whatever wording brought you here,
+                    check that the document matches the property location, who lives there and how the
+                    accommodation is shared.
                   </p>
                 </div>
                 <div className="mt-5 flex flex-wrap gap-3">

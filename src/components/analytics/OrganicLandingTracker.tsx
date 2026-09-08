@@ -16,9 +16,22 @@ function pageType(pathname: string) {
 export function OrganicLandingTracker({ authenticated }: { authenticated: boolean }) {
   const pathname = usePathname();
   const tracked = useRef(new Set<string>());
+  const visitsTracked = useRef(new Set<string>());
 
   useEffect(() => {
-    if (!pathname || tracked.current.has(pathname)) return;
+    if (!pathname) return;
+    if (!visitsTracked.current.has(pathname)) {
+      visitsTracked.current.add(pathname);
+      recordMarketingGrowthEvent('site_visit', {
+        sourcePage: pathname,
+        pagePath: pathname,
+        pageType: pageType(pathname),
+        authenticatedState: authenticated,
+        deviceCategory: window.matchMedia('(max-width: 767px)').matches ? 'mobile' : 'desktop',
+      });
+    }
+
+    if (tracked.current.has(pathname)) return;
     const params = new URLSearchParams(window.location.search);
     const referrer = document.referrer.toLowerCase();
     const medium = params.get('utm_medium')?.toLowerCase();
@@ -41,4 +54,3 @@ export function OrganicLandingTracker({ authenticated }: { authenticated: boolea
 
   return null;
 }
-

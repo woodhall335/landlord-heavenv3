@@ -35,24 +35,24 @@ export default function SixMonthTenancyAgreementTemplatePage() {
       <EnglandTenancyPage
         pagePath="/6-month-tenancy-agreement-template"
         title="6 Month Tenancy Agreement Template"
-        subtitle="This page remains live for search demand, but the current England agreement routes no longer sell a new 6-month AST as the default self-serve product."
+        subtitle="A six-month AST is no longer the default agreement for a new England tenancy. Use this guide to understand the change and choose a current Standard or Premium agreement."
         primaryCtaLabel="Start Standard England agreement"
         primaryCtaHref={standardAgreementHref}
         secondaryCtaLabel="Start Premium England agreement"
         secondaryCtaHref={premiumAgreementHref}
-        legacyNotice="6-month AST search demand still exists, so this page stays live as an explainer. The live England product now centres on current wording designed for the assured periodic framework."
-        introTitle="Short fixed-term search, modern England route"
+        legacyNotice="Many landlords still recognise the six-month AST format. For a new England tenancy, use current wording designed for the assured periodic framework instead."
+        introTitle="From a six-month AST to the current England agreement"
         introBody={[
-          'This page captures landlords searching for 6 month tenancy agreement wording while making the current product position clear.',
+          'If you were expecting a six-month tenancy agreement, start by checking how the current England framework changes the agreement you should create.',
           'From 1 May 2026 new England agreements generally move into the assured periodic model, so Landlord Heaven now guides landlords into current Standard or Premium routes instead of selling a new 6-month AST in the old sense.',
         ]}
         highlights={[
-          'Legacy six-month keyword coverage',
-          'Forward CTA into the current England agreement routes',
-          'No live AST-first sales positioning on the page itself',
+          'A clear explanation of the older six-month AST wording',
+          'Direct routes to the current Standard and Premium agreements',
+          'Guidance on choosing an agreement for a new England tenancy',
         ]}
         compliancePoints={[
-          'Legacy query coverage only',
+          'Older six-month wording is explained rather than sold as a new fixed-term AST',
           'Current England wording designed around the assured periodic framework from 1 May 2026',
         ]}
       />

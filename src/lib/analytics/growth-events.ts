@@ -1,6 +1,7 @@
 export const MARKETING_SESSION_STORAGE_KEY = 'lh_marketing_session_id';
 
 export const MARKETING_GROWTH_EVENT_NAMES = [
+  'site_visit',
   'commercial_bridge_viewed',
   'commercial_bridge_clicked',
   'journey_cta_impression',

@@ -6,10 +6,10 @@ import type { FAQItem } from '@/components/seo/FAQSection';
 const canonical = 'https://landlordheaven.co.uk/hiring-a-property-manager-employment-contract-checklist';
 const title = 'Hiring a Property Manager: Employment Contract Checklist';
 const description =
-  'A practical checklist for landlords and property businesses hiring a property manager, covering role scope, tenancy duties, authority, records, confidentiality, and employment paperwork.';
+  'A checklist for landlords hiring a property manager, covering role scope, tenancy duties, authority, records, confidentiality and employment documents.';
 
 export const metadata: Metadata = {
-  title: 'Hiring a Property Manager: Employment Contract Checklist | Landlord Heaven',
+  title: 'Property Manager Employment Contract Checklist | Landlord Heaven',
   description,
   keywords: [
     'hiring a property manager',

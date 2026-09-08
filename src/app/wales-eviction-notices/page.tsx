@@ -136,7 +136,7 @@ export default function WalesEvictionNoticesPage() {
                   than lazy England carry-over language.
                 </p>
                 <p className="leading-7">
-                  This page is designed as a commercial decision guide for landlords who need to
+                  This is a practical decision guide for landlords who need to
                   understand the Welsh route before they serve notice. It is not just a thin
                   template page. It explains the key Wales-versus-England differences, what an
                   occupation contract means for possession, how notice and court stages usually

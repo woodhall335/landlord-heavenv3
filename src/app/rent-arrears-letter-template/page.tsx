@@ -234,7 +234,7 @@ export default function RentArrearsLetterTemplatePage() {
                   worth using even where the tenant already knows they are behind.
                 </p>
                 <p>
-                  In practice, this page is designed to help with three things: sending a better arrears
+                  In practice, the guidance helps with three things: sending a better arrears
                   letter now, keeping the evidence record cleaner, and choosing the right escalation route
                   if the tenant still does not pay.
                 </p>

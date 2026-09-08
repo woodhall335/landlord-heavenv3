@@ -236,10 +236,9 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                   tenancy agreement for a new private let, this is the page you should start
                   from. A <strong>Private Residential Tenancy agreement</strong>, or
                   <strong> PRT</strong>, is the main Scottish tenancy agreement route for
-                  most new private residential lets. This page is designed to do more than
-                  say that in one line and drop you straight into a purchase button. Its
-                  job is to help you choose the right route for the tenancy you are actually
-                  creating.
+                  most new private residential lets. Before you start, use the guidance below
+                  to check that a PRT matches the property, occupiers and tenancy you are
+                  actually creating.
                 </p>
                 <p>
                   Many competing pages are too thin. They tell landlords that a PRT exists,
@@ -967,7 +966,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                     </h3>
                     <ul className="space-y-2 text-gray-700">
                         <li>- Properties outside Scotland</li>
-                        <li>- Pages focused on England AST search intent</li>
+                        <li>- England assured or periodic tenancy agreements</li>
                         <li>- Welsh occupation contract use cases</li>
                         <li>- Northern Ireland private tenancy pages</li>
                         <li>- Lodger or resident-landlord arrangements where a different agreement is needed</li>
@@ -986,9 +985,9 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                   </div>
                 </div>
                 <p>
-                  This kind of clarity helps the page rank better and convert better at the
-                  same time. The right SEO page is not always the broadest one. It is the page
-                  that answers the user's actual next-step question most clearly.
+                  If the property is in Scotland and this is a standard private residential let,
+                  continue with the Scotland PRT route. If either point is different, choose the
+                  relevant jurisdiction or agreement type before entering the tenancy details.
                 </p>
               </div>
             </div>

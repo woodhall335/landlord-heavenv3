@@ -9,7 +9,7 @@ const description =
   'A landlord-facing guide to employment documents for property management businesses, letting agency teams, cleaners, caretakers, admin staff, and property managers.';
 
 export const metadata: Metadata = {
-  title: 'Employment Documents for Property Management Businesses | Landlord Heaven',
+  title: 'Employment Documents for Property Managers | Landlord Heaven',
   description,
   keywords: [
     'employment documents property management',

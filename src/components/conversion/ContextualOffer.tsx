@@ -2,7 +2,10 @@
 
 import Link from 'next/link';
 import { useEffect, useMemo, useRef } from 'react';
-import { getConversionMapping } from '@/lib/conversion/registry';
+import {
+  getConversionMapping,
+  type ConversionMapping,
+} from '@/lib/conversion/registry';
 import {
   assignSales002OfferVariant,
   SALES002_CONTEXTUAL_OFFER_EXPERIMENT,
@@ -16,12 +19,14 @@ export function ContextualOffer({
   sourceRoute,
   placement = 'after_answer',
   className = '',
+  mapping: suppliedMapping,
 }: {
   sourceRoute: string;
   placement?: string;
   className?: string;
+  mapping?: ConversionMapping;
 }) {
-  const mapping = getConversionMapping(sourceRoute);
+  const mapping = suppliedMapping ?? getConversionMapping(sourceRoute);
   const viewed = useRef(false);
   const offerRef = useRef<HTMLElement>(null);
   const identity = useMemo(

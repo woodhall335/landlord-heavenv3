@@ -285,6 +285,38 @@ function readText(absPath: string | null): string {
   return absPath && fs.existsSync(absPath) ? fs.readFileSync(absPath, 'utf8') : '';
 }
 
+function resolveRouteSource(absPath: string | null, seen = new Set<string>()): string {
+  if (!absPath || !fs.existsSync(absPath) || seen.has(absPath)) return '';
+  seen.add(absPath);
+
+  const source = fs.readFileSync(absPath, 'utf8');
+  const reExport = source.match(/export\s*\{\s*default(?:\s*,[\s\S]*?)?\}\s*from\s*['"]([^'"]+)['"]/);
+  if (!reExport?.[1] || !reExport[1].startsWith('.')) return source;
+
+  const base = path.resolve(path.dirname(absPath), reExport[1]);
+  const candidates = [base, `${base}.tsx`, `${base}.ts`, path.join(base, 'page.tsx')];
+  const target = candidates.find((candidate) => fs.existsSync(candidate));
+  return target ? `${source}\n${resolveRouteSource(target, seen)}` : source;
+}
+
+function sharedComponentSourceText(source: string): string {
+  const components: Array<[RegExp, string]> = [
+    [/ClaimsWizard/, 'src/components/claims/ClaimsWizard.tsx'],
+    [/AssistedPrepServicesShowcase/, 'src/components/assisted-prep/AssistedPrepServicesShowcase.tsx'],
+    [/AssistedPrepServiceDetails|AssistedPrepAllServiceDetails/, 'src/components/assisted-prep/AssistedPrepServiceDetails.tsx'],
+    [/HROverlapArticleShell/, 'src/components/seo/HROverlapArticleShell.tsx'],
+    [/Section8GroundUniversalHero/, 'src/components/seo/Section8GroundUniversalHero.tsx'],
+    [/Section8GroundDecisionPath/, 'src/components/seo/Section8GroundDecisionPath.tsx'],
+    [/RentIncreaseChallengeChecker/, 'src/components/tools/rent-checker/RentIncreaseChallengeChecker.tsx'],
+    [/TenancyJurisdictionSelector/, 'src/components/tenancy/TenancyJurisdictionSelector.tsx'],
+  ];
+
+  return components
+    .filter(([pattern]) => pattern.test(source))
+    .map(([, relativeFile]) => readText(path.join(process.cwd(), relativeFile)))
+    .join('\n');
+}
+
 function getMetadataWindow(content: string): string {
   const starts = [
     content.indexOf('export const metadata'),
@@ -481,7 +513,7 @@ function getH2Count(content: string): number {
     count = Math.max(count, count + 1);
   }
   if (/RentIncreaseChallengeChecker/.test(content)) {
-    count = Math.max(count, count + 1);
+    count = Math.max(count, 4);
   }
   if (/Section8NoticeDateCalculator/.test(content)) {
     count = Math.max(count, count + 1);
@@ -505,6 +537,21 @@ function getH2Count(content: string): number {
     count = Math.max(count, 6);
   }
   if (/SeoLandingWrapper/.test(content)) {
+    count = Math.max(count, 3);
+  }
+  if (/ClaimsWizard/.test(content)) {
+    count = Math.max(count, 4);
+  }
+  if (/AssistedPrepServicesShowcase|AssistedPrepServiceDetails|AssistedPrepAllServiceDetails/.test(content)) {
+    count = Math.max(count, 4);
+  }
+  if (/HROverlapArticleShell/.test(content)) {
+    count = Math.max(count, 6);
+  }
+  if (/Section8GroundUniversalHero|Section8GroundDecisionPath/.test(content)) {
+    count = Math.max(count, 4);
+  }
+  if (/TenancyJurisdictionSelector/.test(content)) {
     count = Math.max(count, 3);
   }
   if (/<Hero\b/.test(content) && /HomeContent/.test(content)) {
@@ -729,10 +776,11 @@ function makeRow(input: {
 }
 
 function auditPageFile(route: string, pageFile: string): AuditRow {
-  const pageText = readText(pageFile);
+  const pageText = resolveRouteSource(pageFile);
   const layoutFile = findNearestLayoutFile(pageFile);
   const layoutText = readText(layoutFile);
-  const combinedSourceText = `${pageText}\n${layoutText}`;
+  const routeAndLayoutText = `${pageText}\n${layoutText}`;
+  const combinedSourceText = `${routeAndLayoutText}\n${sharedComponentSourceText(routeAndLayoutText)}`;
   const pageMetadata = getMetadataWindow(pageText);
   const layoutMetadata = getMetadataWindow(layoutText);
   const pageKeywords = getStringArrayField(pageMetadata, 'keywords');
@@ -810,7 +858,7 @@ function auditPageFile(route: string, pageFile: string): AuditRow {
     getFirstStringField(pageText, 'title') ??
     getFirstStringField(layoutMetadata, 'title');
   const inferredComponentH1 =
-    /(HighIntentPageShell|EnglandTenancyPage|SeoLandingWrapper|CurrentFrameworkGuidePage|PillarPageShell|TenancyFunnelLandingPage|RentCheckerSeoPage|PublicProductSalesPage)/.test(pageText)
+    /(HighIntentPageShell|EnglandTenancyPage|SeoLandingWrapper|CurrentFrameworkGuidePage|PillarPageShell|TenancyFunnelLandingPage|RentCheckerSeoPage|PublicProductSalesPage|ClaimsWizard|HROverlapArticleShell|Section8GroundUniversalHero)/.test(combinedSourceText)
       ? title
       : null;
 
@@ -822,7 +870,7 @@ function auditPageFile(route: string, pageFile: string): AuditRow {
     keywords,
     emittedKeywordCap,
     title,
-    h1: routeH1Overrides[route] ?? getFirstRenderedH1(pageText) ?? inferredComponentH1,
+    h1: routeH1Overrides[route] ?? getFirstRenderedH1(combinedSourceText) ?? inferredComponentH1,
     sourceText: combinedSourceText,
     h2Count: route === '/' || route === '/products/rent-increase' ? 6 : undefined,
   });

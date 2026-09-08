@@ -13,7 +13,7 @@ const canonical = getCanonicalUrl('/section-21-notice');
 
 export const metadata: Metadata = {
   title: 'Section 21 Notice | Historical-Only Transition Guide for England',
-  description: `England landlord guide to Section 21 notice search intent, the ${SECTION21_END_DATE} end date, and the current possession route to use instead.`,
+  description: `England landlord guide to the Section 21 transition, the ${SECTION21_END_DATE} end date, and the current possession route to use instead.`,
   alternates: { canonical },
   openGraph: {
     title: 'Section 21 Notice | Historical-Only Transition Guide for England',
@@ -185,8 +185,7 @@ const content: PillarPageContent = {
       title: 'What landlords should understand immediately',
       paragraphs: [
         <>
-          This page exists because Section 21 is still one of the most searched landlord terms in England, even before
-          the route changes. The right approach is not to ignore that search intent. It is to explain clearly that the
+          Section 21 remains familiar wording for many landlords in England. The important point is to explain clearly that the
           route is due to end in England on <strong>{SECTION21_END_DATE}</strong>, then send the landlord back to{' '}
           <Link href="/products/notice-only" className="text-primary font-medium hover:underline">
             Eviction Notice Pack for Landlords
@@ -269,7 +268,7 @@ const content: PillarPageContent = {
     {
       question: 'Why is this page still live?',
       answer:
-        'It remains live to capture legacy Section 21 search intent, explain the transition clearly, and route landlords back into the current England notice framework.',
+        'It explains the transition for landlords who know the older Section 21 terminology and points them to the current England notice framework.',
     },
   ],
 };

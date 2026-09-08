@@ -437,6 +437,7 @@ export function buildGrowthReport(params: {
     ['checkout_started', 'checkout_opened'].includes(canonicalEventName(event))
   );
   const funnelStageDefinitions = [
+    ['site_visit', 'Site visits'],
     ['organic_landing_view', 'Landing views'],
     ['journey_cta_impression', 'Journey CTA impressions'],
     ['journey_cta_click', 'Journey CTA clicks'],

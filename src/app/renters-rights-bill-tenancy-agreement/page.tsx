@@ -56,7 +56,7 @@ export default function RentersRightsBillTenancyAgreementPage() {
         ]}
         highlights={[
           'Dedicated page for the Bill-era search query',
-          'Explains the terminology shift without dropping the search intent',
+          'Explains the terminology shift from an AST to the current England agreement',
           'Routes users into the current England agreement flows rather than legacy AST sales pages',
         ]}
         compliancePoints={[

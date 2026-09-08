@@ -15,7 +15,7 @@ const faqs = [
   {
     question: 'Does this page replace the main England agreement example page?',
     answer:
-      'No. The main example page is /tenancy-agreement-template. This page exists to explain periodic terminology and then send landlords to the page that shows the agreement itself.',
+      'No. This guide explains periodic terminology. Use the tenancy agreement example page when you want to inspect the document itself.',
   },
   {
     question: 'Why keep both AST and assured periodic pages live?',
@@ -117,9 +117,9 @@ export default function AssuredPeriodicTenancyAgreementPage() {
         {
           title: 'Why this page stays support-only',
           paragraphs: [
-            'Keeping this page support-only helps Landlord Heaven answer periodic-tenancy and reform-aware searches without weakening the clearer example-led and product-led pages.',
-            'That means no full sample agreement preview here, no attempt to outrank the main example page for broad head terms, and no mixed signals about which route is the real starting point.',
-            'Instead, this page does a narrower job well: define the wording, explain why landlords are seeing it, and point them back to the page where the agreement itself can be inspected properly.',
+            'This guide focuses on the meaning of an assured periodic tenancy and how that wording affects a new England agreement.',
+            'The full agreement example and product comparison sit on separate pages so that you can inspect the wording or choose a paid option when you are ready.',
+            'Use this page to understand the terminology, then continue to the example or agreement builder for the practical next step.',
           ],
         },
       ]}

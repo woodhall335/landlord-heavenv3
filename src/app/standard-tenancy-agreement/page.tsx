@@ -19,7 +19,7 @@ const standardSamplePage = getProductSamplePageByPackKey('england_standard_tenan
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Standard Tenancy Agreement | England, Wales, Scotland and Northern Ireland',
+  title: 'Standard Tenancy Agreement by UK Jurisdiction',
   description:
     'Choose the right standard tenancy agreement for your rental property. Build a current England assured periodic agreement or select the correct Wales, Scotland or Northern Ireland route.',
   keywords: [

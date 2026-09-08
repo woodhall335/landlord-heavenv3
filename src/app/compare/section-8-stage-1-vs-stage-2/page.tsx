@@ -35,7 +35,7 @@ const faqs = [
 export const metadata: Metadata = {
   title: 'Section 8 Notice or Court Pack? Compare Landlord Options',
   description:
-    'Decide whether you need to serve Form 3A first or prepare the N5, N119, and possession claim documents as well.',
+    'Compare the Section 8 notice pack with the court possession pack, including Form 3A, N5, N119, service records and supporting evidence.',
   keywords: [
     'section 8 court pack',
     'section 8 notice pack',

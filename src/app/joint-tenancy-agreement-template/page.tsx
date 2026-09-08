@@ -50,7 +50,7 @@ export default function JointTenancyAgreementTemplatePage() {
         secondaryCtaHref={chooserHref}
         introTitle="Multiple tenants, current England wording"
         introBody={[
-          'This page targets landlords who need a joint tenancy agreement for England without falling back to old AST-first sales language.',
+          'This guide is for landlords who need a joint tenancy agreement for England and want to understand the current agreement route rather than relying on an old AST form.',
           'The live Landlord Heaven routes now use current England agreement wording, while still supporting multiple tenants, shared households, and dedicated Standard, Premium, Student, and HMO / Shared House routes.',
         ]}
         highlights={[

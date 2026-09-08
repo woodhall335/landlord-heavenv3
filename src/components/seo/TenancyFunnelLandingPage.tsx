@@ -103,7 +103,7 @@ export function TenancyFunnelLandingPage({
       <Container className="py-12 md:py-16">
         <section className="max-w-4xl rounded-[2rem] border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)] md:p-8">
           <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
-            Intent hook
+            Start with the right agreement
           </p>
           <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
             {intentHookTitle}

@@ -122,9 +122,9 @@ export default function Page() {
         showTrustPositioningBar
       >
         <p className="mt-6 text-sm text-white/90 md:text-base">
-          Section 21 is now historical-only language in England. This page exists to convert that
-          older terminology into the live possession route, the eviction notice pack, and the
-          current notice-stage workflow.
+          Section 21 is now historical-only language in England. If that is the wording you know,
+          use this comparison to identify the current possession route, the appropriate eviction
+          notice pack and the notice-stage workflow.
         </p>
       </UniversalHero>
 
@@ -136,7 +136,7 @@ export default function Page() {
             <SupportCard title="Quick answer">
               <p>
                 Section 21 and Section 8 are no longer equal live options in England. Section 21
-                is historical transition support for older search language. Live England cases now
+                is relevant only to the historical transition and qualifying older notices. Live England cases now
                 sit inside the current Renters&apos; Rights Act possession framework, with notice,
                 evidence, and court preparation carrying more weight from the start.
               </p>
@@ -228,7 +228,7 @@ export default function Page() {
               <p>
                 Notice Only is the primary transactional next step once the route is already
                 understood. Complete Pack stays below that because it is for notice-to-court
-                continuity, not broad historical search intent.
+                continuity after the notice stage, not for simply understanding the older terminology.
               </p>
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="rounded-xl border border-[#E6DBFF] bg-white p-4">

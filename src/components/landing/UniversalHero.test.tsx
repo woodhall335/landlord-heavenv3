@@ -25,6 +25,11 @@ vi.mock('next/link', () => ({
   ),
 }));
 
+vi.mock('@/lib/reviews/reviewStats', () => ({
+  REVIEW_RATING: 4.8,
+  getDynamicReviewCount: () => 1061,
+}));
+
 describe('UniversalHero trust pill', () => {
   it('resolves a registered watercolor hero and applies the pastel contrast contract', () => {
     const { container } = render(
@@ -70,7 +75,7 @@ describe('UniversalHero trust pill', () => {
     expect(screen.getByTestId('hero-review-pill-trust')).toHaveTextContent(
       'Clear England landlord guidance'
     );
-    expect(desktopPill).toHaveTextContent('Preview before payment where shown');
+    expect(desktopPill).toHaveTextContent('4.8/5 | 1061 reviews');
   });
 
   it('can keep conversion-page content aligned below the navigation', () => {
@@ -117,9 +122,8 @@ describe('UniversalHero trust pill', () => {
     expect(screen.getByTestId('hero-review-pill-trust')).toHaveTextContent(
       'England tenancy agreements | Standard and Premium updated for 1 May 2026'
     );
-    expect(screen.getByTestId('hero-review-pill-meta')).toHaveTextContent(
-      'Fixed scope and price shown before payment'
-    );
+    expect(screen.getByTestId('hero-review-pill-meta')).toHaveTextContent('★★★★★');
+    expect(desktopPill).toHaveTextContent('4.8/5 | 1061 reviews');
   });
 
   it('keeps the site-wide proof contract and mobile benefit grid for legacy wrappers', () => {
@@ -134,7 +138,7 @@ describe('UniversalHero trust pill', () => {
     );
 
     expect(screen.getByTestId('hero-review-pill-desktop')).toHaveTextContent(
-      'Fixed scope and price shown before payment'
+      '4.8/5 | 1061 reviews'
     );
     const benefits = screen.getByTestId('hero-benefit-grid');
     expect(benefits).toHaveTextContent('Guided questions');

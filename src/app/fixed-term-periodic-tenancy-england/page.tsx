@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Fixed Term vs Periodic Tenancy England | Legacy Search Guide 2026',
     description:
-      'Compare fixed-term and rolling search intent while moving into the current England agreement route designed for the assured periodic framework.',
+      'Compare fixed-term and rolling tenancy wording, then move into the current England agreement route designed for the assured periodic framework.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -90,7 +90,7 @@ export default function FixedTermPeriodicTenancyEnglandPage() {
           {
             question: 'Does Landlord Heaven still sell fixed-term ASTs as the main England product?',
             answer:
-              'No. This page now exists to handle search intent and explain the topic, while the live product route is the current England agreement flow designed for the assured periodic framework.',
+              'No. This guide explains the older fixed-term and rolling terminology, while the live product route uses the current England agreement flow designed for the assured periodic framework.',
           },
           {
             question: 'Why keep this page live if the product position changed?',

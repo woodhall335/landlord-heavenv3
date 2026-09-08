@@ -10,7 +10,7 @@ const canonicalUrl = getCanonicalUrl('/claims');
 export const metadata: Metadata = {
   title: 'Money Claim Wizard | Landlord Heaven Claims',
   description:
-    'Choose a claim type and answer a focused one-question-at-a-time wizard for landlord debt, unpaid invoices, loans, faulty goods, poor service, builder disputes, deposits, and vehicle damage claims.',
+    'Use a guided money claim wizard for landlord debt, unpaid invoices, loans, faulty goods, poor service, builder disputes, deposits and vehicle damage claims.',
   keywords: [
     'money claim wizard',
     'small claim wizard',

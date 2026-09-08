@@ -452,9 +452,8 @@ export default function EvictionProcessWalesPage() {
 
               <div className="mt-8 prose prose-lg max-w-none text-gray-700">
                 <p>
-                  That is one reason this page is structured around the process rather than just the
-                  form. Competitor pages often stop at “download a notice.” The stronger landlord page
-                  explains what makes that notice usable later. In Wales, that means written statement
+                  That is why the guidance follows the whole process rather than stopping at the
+                  form. A notice also needs to remain usable later. In Wales, that means written statement
                   thinking, correct terminology, service discipline, and a possession file that still
                   works under scrutiny.
                 </p>

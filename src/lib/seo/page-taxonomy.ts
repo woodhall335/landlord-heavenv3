@@ -3316,7 +3316,7 @@ export function getFreshnessPolicy(entry: SeoPageTaxonomyEntry): FreshnessPolicy
       'Section 21 is due to end in England on 1 May 2026, and court proceedings on qualifying older Section 21 notices must begin by 31 July 2026. Landlords should already be planning around a Section 8-led possession route unless a transitional legacy case is clearly available.';
   } else if (entry.jurisdiction === 'uk') {
     legalContextNote =
-      'This page targets UK search intent, but possession rules differ across England, Wales, Scotland, and Northern Ireland.';
+      'This is a UK-wide guide, but possession rules differ across England, Wales, Scotland, and Northern Ireland.';
   } else {
     legalContextNote = `This guide is written for ${defaultPolicy.jurisdictionScope.toLowerCase()} and should be read alongside the current possession route for that jurisdiction.`;
   }

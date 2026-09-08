@@ -20,7 +20,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title: 'Scottish Tenancy Agreement 2026 | Standard PRT',
-  description: 'Create the released Standard Scottish Private Residential Tenancy agreement through the Scotland-specific wizard.',
+  description: 'Create a Scotland Private Residential Tenancy agreement with guided questions, supporting notes and a preview before payment.',
   keywords: [
     'Scottish tenancy agreement template',
     'Scotland tenancy agreement',

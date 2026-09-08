@@ -10,7 +10,7 @@ const service = getAssistedPrepConfig('possession');
 export const metadata: Metadata = {
   title: 'Assisted Eviction Service | Full Notice and Court Case Pack',
   description:
-    'Book a free consultation for a full England eviction case pack. If suitable, the £399 service can include the Section 8 notice, service record, N5, N119 and supporting court bundle.',
+    'Book a free consultation for an England eviction case pack covering the Section 8 notice, service record, N5, N119 and supporting court bundle.',
   keywords: [
     'assisted eviction service',
     'assisted possession claim preparation',

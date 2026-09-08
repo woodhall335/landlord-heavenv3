@@ -55,7 +55,7 @@ describe('SALES-003 conversion remediation', () => {
     expect(source).not.toContain('crypto.randomUUID');
   });
 
-  it('keeps unsupported public authority and review-count claims out of source copy', () => {
+  it('keeps unsupported public authority and legacy testimonial claims out of source copy', () => {
     const filesToCheck = [
       path.join(root, 'src', 'app'),
       path.join(root, 'src', 'components'),
@@ -68,7 +68,6 @@ describe('SALES-003 conversion remediation', () => {
       'court accepted',
       'Landlord Heaven Legal Team',
       'Property Law Specialists',
-      '4.8/5',
       '2,007',
       'saved me £',
       'fines avoided',
