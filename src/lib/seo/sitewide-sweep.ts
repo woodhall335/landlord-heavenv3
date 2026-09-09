@@ -34,13 +34,26 @@ export const SITEWIDE_SWEEP_STATIC_ROUTE_EXCLUSIONS = new Set([
   '/privacy',
   '/refunds',
   '/terms',
+  // Conversion and completion routes are intentionally noindex or redirect-only.
+  '/assisted-prep/consultation',
+  '/assisted-prep/start',
+  '/assisted-prep/success',
+  '/money-claim-assisted-prep',
+  '/paid/section-8-notice',
 ]);
 
 export const SUPPLEMENTAL_SWEEP_CLASSIFIED_ROUTES = [
+  '/assisted-prep',
   '/ast-agreement-template',
   '/compare/section-13-standard-vs-defence',
   '/compare/section-8-stage-1-vs-stage-2',
   '/compare/tenancy-agreement-options-england',
+  '/claims',
+  '/employment-documents-for-property-management-businesses',
+  '/hiring-a-property-manager-employment-contract-checklist',
+  '/landlords-hiring-staff-employee-or-contractor',
+  '/letting-agency-employee-handbook',
+  '/possession-claim-assisted-prep',
   '/products/money-claim-pack',
   '/products/rent-increase',
   '/products/section-13-standard',
@@ -48,6 +61,8 @@ export const SUPPLEMENTAL_SWEEP_CLASSIFIED_ROUTES = [
   '/renters-rights-act-information-sheet-2026',
   '/samples',
   '/samples/notice-only',
+  '/section-8-grounds/how-to-evict-a-tenant-using-ground-16',
+  '/section-8-notice-assisted-prep',
   '/tenancy-agreement-england-2026',
   '/tenancy-agreement-template-uk',
 ] as const;

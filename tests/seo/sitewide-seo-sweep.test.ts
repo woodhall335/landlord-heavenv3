@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import sitemap from '@/app/sitemap';
-import { metadata as astMetadata } from '@/app/(marketing)/products/ast/page';
-import { metadata as completePackMetadata } from '@/app/(marketing)/products/complete-pack/page';
-import { metadata as moneyClaimMetadata } from '@/app/(marketing)/products/money-claim/page';
-import { metadata as noticeOnlyMetadata } from '@/app/(marketing)/products/notice-only/page';
+import { metadata as astMetadata } from '@/app/products/ast/page';
+import { metadata as completePackMetadata } from '@/app/products/complete-pack/page';
+import { metadata as moneyClaimMetadata } from '@/app/products/money-claim/page';
+import { metadata as noticeOnlyMetadata } from '@/app/products/notice-only/page';
 import { metadata as hmoMetadata } from '@/app/hmo-shared-house-tenancy-agreement/page';
 import { metadata as lodgerMetadata } from '@/app/lodger-agreement/page';
 import { metadata as premiumMetadata } from '@/app/premium-tenancy-agreement/page';
@@ -57,7 +57,7 @@ async function getSitemapPathnames(): Promise<string[]> {
 }
 
 describe('sitewide SEO sweep coverage', () => {
-  it('keeps non-England public acquisition routes out of the sitemap', async () => {
+  it('indexes canonical regional routes while excluding overlapping regional long-tail pages', async () => {
     const sitemapPaths = await getSitemapPathnames();
 
     [
@@ -66,6 +66,11 @@ describe('sitewide SEO sweep coverage', () => {
       '/northern-ireland-tenancy-agreement-template',
       '/eviction-process-wales',
       '/eviction-process-scotland',
+    ].forEach((pathname) => {
+      expect(sitemapPaths).toContain(pathname);
+    });
+
+    [
       '/occupation-contract-template-wales',
       '/ni-tenancy-agreement-template-free',
     ].forEach((pathname) => {

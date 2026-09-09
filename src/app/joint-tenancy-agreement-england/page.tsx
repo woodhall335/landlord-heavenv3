@@ -47,23 +47,23 @@ export default function JointTenancyAgreementEnglandPage() {
         subtitle="Create England tenancy paperwork for couples, flatmates, and shared households using current wording designed for the assured periodic framework from 1 May 2026."
         primaryCtaLabel="Create Standard joint agreement"
         primaryCtaHref={standardHref}
-        secondaryCtaLabel="Compare England joint routes"
+        secondaryCtaLabel="Compare England agreements"
         secondaryCtaHref={chooserHref}
         introTitle="Shared households, current England wording"
         introBody={[
-          'This page stays live for joint-tenancy and house-share search demand, but it no longer sells old AST-first joint tenancy wording as the live product.',
-          'Instead, it directs shared-house and multi-tenant landlords into the current England agreement flow, with dedicated Standard, Premium, Student, and HMO / Shared House routes depending on the setup.',
+          'Use a joint agreement when two or more tenants rent the property together and share responsibility under the same tenancy.',
+          'Choose Standard, Premium, Student or HMO / Shared House according to the occupiers, property and level of management detail required.',
         ]}
         highlights={[
           'Supports multiple tenants, couples, flatmates, and shared houses',
           'Uses current England tenancy agreement wording instead of outdated AST sales copy',
           'Explains how joint and several liability fits a shared tenancy',
-          'Dedicated Student and HMO / Shared House routes for specialist shared lets',
+          'Dedicated Student and HMO / Shared House agreements for specialist shared lets',
         ]}
         compliancePoints={[
           'Aligned to the current England tenancy rollout after 1 May 2026',
-          'Avoids presenting a new fixed-term AST as the default England route',
-          'Connects shared-house arrangements to the appropriate England product route',
+          'Does not present a fixed-term AST as the default for a new England tenancy',
+          'Matches shared-house arrangements to the appropriate England agreement',
         ]}
         keywordTargets={[
           'joint tenancy agreement england',
@@ -75,7 +75,7 @@ export default function JointTenancyAgreementEnglandPage() {
           {
             question: 'Can I still use this for a shared house or flatshare?',
             answer:
-              'Yes. This page still targets joint-tenancy and house-share demand, but the live England route now uses current England agreement wording designed for the assured periodic framework.',
+              'Yes. Choose the agreement according to how the property is occupied. An ordinary joint let, student house and HMO may need different wording.',
           },
           {
             question: 'Should I use Premium for student or HMO lets?',
@@ -85,7 +85,7 @@ export default function JointTenancyAgreementEnglandPage() {
           {
             question: 'Does this page still sell a joint AST as the live product?',
             answer:
-              'No. It now routes England landlords into the current England agreement flow for multiple-tenant properties.',
+              'No. It points England landlords to current agreements for properties with more than one tenant.',
           },
         ]}
       />

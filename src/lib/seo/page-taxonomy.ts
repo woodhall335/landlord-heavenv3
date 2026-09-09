@@ -3295,7 +3295,7 @@ export function getFreshnessPolicy(entry: SeoPageTaxonomyEntry): FreshnessPolicy
 
   if (entry.cluster === 'tenancy-england') {
     legalContextNote =
-      'England tenancy pages should reflect the transition to the post-Renters Rights Act 2025 wording used for new agreements, with Section 21 due to end in England on 1 May 2026 and court proceedings on qualifying older notices needing to begin by 31 July 2026.';
+      'England tenancy pages should use the post-Renters Rights Act 2025 wording that applies from 1 May 2026. Section 21 has ended for new private-rented possession notices, and the 31 July 2026 deadline to start a claim using a qualifying older notice has passed.';
   } else if (entry.cluster === 'tenancy-wales') {
     legalContextNote =
       'Wales tenancy pages should reflect the Renting Homes (Wales) Act 2016, occupation contract terminology, the written statement deadline, and the distinct Welsh possession notice framework.';
@@ -3310,10 +3310,10 @@ export function getFreshnessPolicy(entry: SeoPageTaxonomyEntry): FreshnessPolicy
       'Debt recovery is separate from possession. Landlords should review the current pre-action protocol, keep a reconciled debt schedule, and make sure any county court claim matches the evidence file and the amount being claimed.';
   } else if (entry.cluster === 'notice-templates') {
     legalContextNote =
-      'Template-led notice pages should be read with the current statutory form version, route-specific validity checks, and the wider landlord workflow needed if the case moves into court. Section 21 is due to end in England on 1 May 2026, and court proceedings on qualifying older notices must begin by 31 July 2026.';
+      'Template-led notice pages should be read with the current statutory form version, ground-specific validity checks and the wider landlord workflow needed if the case moves into court. Section 21 ended for new England notices on 1 May 2026, and the 31 July 2026 court-claim deadline for qualifying older notices has passed.';
   } else if (entry.section21TransitionEligible) {
     legalContextNote =
-      'Section 21 is due to end in England on 1 May 2026, and court proceedings on qualifying older Section 21 notices must begin by 31 July 2026. Landlords should already be planning around a Section 8-led possession route unless a transitional legacy case is clearly available.';
+      'Section 21 ended for new private-rented possession notices in England on 1 May 2026, and the 31 July 2026 deadline to start a claim using a qualifying older notice has passed. New cases must use the current grounds-based possession process.';
   } else if (entry.jurisdiction === 'uk') {
     legalContextNote =
       'This is a UK-wide guide, but possession rules differ across England, Wales, Scotland, and Northern Ireland.';

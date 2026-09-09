@@ -201,7 +201,7 @@ function buildSituationFirstOpener(
     return `You are trying to sort ${keyword} before it causes a bigger problem later. This guide explains what you need to do, when it matters, and how it affects the rest of your case.`;
   }
 
-  return `You are trying to work out what to do about ${keyword}. This guide explains the route in plain English, the common mistakes, and what to do next.`;
+  return `This guide explains ${keyword} in plain English, including the rules, common mistakes and practical next steps.`;
 }
 
 function isTag(node: ReactNode, tagName: string): boolean {

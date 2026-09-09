@@ -28,7 +28,6 @@ import {
   AlertCircle,
   PoundSterling,
   XCircle,
-  Home,
   MessageSquare,
   Scale,
   Shield,
@@ -82,19 +81,6 @@ export const metadata: Metadata = {
 };
 
 export default function EvictionProcessWalesPage() {
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: evictionWalesFAQs.map((faq) => ({
-      '@type': 'Question',
-      name: faq.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: faq.answer,
-      },
-    })),
-  };
-
   return (
     <>
       <SeoLandingWrapper
@@ -256,11 +242,10 @@ export default function EvictionProcessWalesPage() {
 
               <div className="mt-8 prose prose-lg max-w-none text-gray-700">
                 <p>
-                  This matters for both SEO and legal accuracy. Landlords still search for “tenant
-                  eviction Wales” and “Section 21 Wales”, but the working legal route in Wales is
-                  different. A strong Welsh eviction page therefore needs to do two things at once:
-                  capture the search term the landlord uses and then quickly translate that into the
-                  correct Wales-specific framework.
+                  Landlords still use phrases such as “tenant eviction Wales” and “Section 21
+                  Wales”, but Welsh law uses different terminology and procedures. In Wales, begin
+                  with the occupation contract and the reason possession is required, then choose
+                  the notice that applies to those facts.
                 </p>
               </div>
             </div>

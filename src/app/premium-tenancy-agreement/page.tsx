@@ -198,7 +198,7 @@ export default function PremiumTenancyAgreementPage() {
               },
             ],
           },
-          ctaTitle: 'Build the validated Premium tenancy pack',
+    ctaTitle: 'Create your Premium tenancy pack',
           ctaBody:
             'Use this option when the tenancy is still an ordinary residential let, but the paperwork needs review-ready drafting depth, validation checks, and stronger day-to-day management support than Standard provides.',
         }}

@@ -29,18 +29,18 @@ const content: PillarPageContent = {
   title: metadata.title as string,
   description: metadata.description as string,
   heroTitle: 'Section 21 Ban UK',
-  heroSubtitle: `What landlords need to do before Section 21 ends in England on ${SECTION21_END_DATE}, what replaces it, and how to move into the current possession route without guesswork.`,
+  heroSubtitle: `Section 21 ended for new notices in England on ${SECTION21_END_DATE}. Learn what replaced it and how to prepare a current possession case.`,
   icon: '/images/wizard-icons/11-calendar-timeline.png',
   heroBullets: [
     'Uses exact England dates and transition rules, not vague countdown copy.',
     'Explains what replaced Section 21 in plain English.',
-    'Routes landlords into the current notice, process, and product path next.',
+    'Shows landlords the current notice, evidence and possession process.',
   ],
   quickAnswer: [
     <>
-      Section 21 is due to end in England on <strong>{SECTION21_END_DATE}</strong>. If a landlord serves a qualifying
-      Section 21 notice before that date, court proceedings must begin by <strong>{SECTION21_COURT_CUTOFF_DATE}</strong>.
-      That means landlords should already be planning around the current possession framework and the route explained in{' '}
+      Section 21 ended for new private-rented possession notices in England on <strong>{SECTION21_END_DATE}</strong>.
+      The deadline to start a Section 21 court claim using a qualifying older notice was <strong>{SECTION21_COURT_CUTOFF_DATE}</strong>.
+      A new case must follow the current possession framework explained in{' '}
       <Link href="/renters-rights-act-eviction-rules" className="text-primary font-medium hover:underline">
         Renters' Rights Act Eviction Rules
       </Link>{' '}
@@ -68,7 +68,7 @@ const content: PillarPageContent = {
     'The end of Section 21 matters because it removed the route many England landlords used to know best. The replacement conversation is now more evidence-led, more structured, and more closely tied to the current possession rules.',
     'That means this page has to do more than repeat a headline. It needs to explain what changed, the exact dates, what replaced Section 21, and the practical steps landlords should take next.',
     'For most live cases, the next step is not another Section 21 explainer. It is choosing the right current possession route, preparing the evidence bundle, and planning the court sequence before deadlines are missed.',
-    'This page therefore works as the main transition hub, with the supporting pages covering arrears, service, possession claims, and enforcement detail.',
+    'The supporting guides cover arrears, notice service, possession claims and enforcement in more detail.',
   ],
   processSteps: [
     {
@@ -87,9 +87,9 @@ const content: PillarPageContent = {
         'Use Section 8 Notice, the rent arrears pillar, or Eviction Process in England depending on the scenario.',
     },
     {
-      title: 'Choose the right product-first route',
+      title: 'Choose the right level of support',
       detail:
-        'Use Complete Pack when you need broader possession support, or Notice Only when the route is already settled and the task is narrower.',
+        'Use Complete Pack when you need support through the possession process, or Notice Only when the ground is settled and the task is narrower.',
     },
     {
       title: 'Avoid panic and low-quality shortcuts',
@@ -101,8 +101,8 @@ const content: PillarPageContent = {
     {
       title: 'What is happening',
       items: [
-        `Section 21 is due to end in England on ${SECTION21_END_DATE}.`,
-        `Older qualifying notices have a ${SECTION21_COURT_CUTOFF_DATE} court-start cutoff.`,
+        `Section 21 ended for new England notices on ${SECTION21_END_DATE}.`,
+        `The ${SECTION21_COURT_CUTOFF_DATE} court-start deadline for qualifying older notices has passed.`,
         'The current England possession route now carries the live workflow.',
         'Landlords need better evidence and process control.',
       ],
@@ -146,7 +146,7 @@ const content: PillarPageContent = {
       routeC: 'Eviction Process in England',
     },
     {
-      factor: 'Commercial route',
+      factor: 'Suitable support',
       routeA: 'Bridge into current guidance',
       routeB: 'Notice Only where route is settled',
       routeC: 'Complete Pack for broader possession support',
@@ -222,11 +222,11 @@ const content: PillarPageContent = {
           to answer every sub-scenario on one page.
         </>,
         <>
-          When the route is already clear, the fastest commercial handoff is usually{' '}
+          When you already know which notice is required, start with the{' '}
           <Link href="/products/notice-only" className="text-primary font-medium hover:underline">
             Eviction Notice Pack for Landlords
           </Link>
-          . When route choice, court preparation, or broader process support still matter, use the{' '}
+          . When you still need help choosing the notice or preparing for court, use the{' '}
           <Link href="/products/complete-pack" className="text-primary font-medium hover:underline">
             Complete Eviction Pack for Landlords
           </Link>
@@ -252,10 +252,10 @@ const content: PillarPageContent = {
   primaryCta: { label: 'Start your full eviction pack', href: '/products/complete-pack' },
   secondaryCta: { label: 'Read Section 8 Notice', href: '/section-8-notice' },
   faqs: [
-    { question: 'When does Section 21 end in England?', answer: `Section 21 is due to end in England on ${SECTION21_END_DATE}.` },
+    { question: 'When did Section 21 end in England?', answer: `Section 21 ended for new private-rented possession notices in England on ${SECTION21_END_DATE}.` },
     {
       question: 'What is the court-start cutoff for older notices?',
-      answer: `If a qualifying notice is served before ${SECTION21_END_DATE}, court proceedings must start by ${SECTION21_COURT_CUTOFF_DATE}.`,
+      answer: `A qualifying notice had to be served before ${SECTION21_END_DATE}, and court proceedings had to start by ${SECTION21_COURT_CUTOFF_DATE}. That deadline has passed.`,
     },
     {
       question: 'What replaces Section 21?',

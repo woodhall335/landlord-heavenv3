@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { metadata as astMetadata } from '@/app/(marketing)/products/ast/page';
-import { metadata as completePackMetadata } from '@/app/(marketing)/products/complete-pack/page';
-import { metadata as moneyClaimMetadata } from '@/app/(marketing)/products/money-claim/page';
-import { metadata as noticeOnlyMetadata } from '@/app/(marketing)/products/notice-only/page';
-import { metadata as section13DefenceMetadata } from '@/app/(marketing)/products/section-13-defence/page';
-import { metadata as section13StandardMetadata } from '@/app/(marketing)/products/section-13-standard/page';
+import { metadata as astMetadata } from '@/app/products/ast/page';
+import { metadata as completePackMetadata } from '@/app/products/complete-pack/page';
+import { metadata as moneyClaimMetadata } from '@/app/products/money-claim/page';
+import { metadata as noticeOnlyMetadata } from '@/app/products/notice-only/page';
+import { metadata as section13DefenceMetadata } from '@/app/products/section-13-defence/page';
+import { metadata as section13StandardMetadata } from '@/app/products/section-13-standard/page';
 import { metadata as tenancyTemplateMetadata } from '@/app/tenancy-agreement-template/page';
 import { metadata as premiumTenancyMetadata } from '@/app/premium-tenancy-agreement/page';
 import { metadata as standardTenancyMetadata } from '@/app/standard-tenancy-agreement/page';

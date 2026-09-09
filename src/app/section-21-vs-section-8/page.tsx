@@ -170,12 +170,12 @@ export default function Page() {
               </div>
             </SupportCard>
 
-            <SupportCard title="What changes when Section 21 ends">
+            <SupportCard title="What changed when Section 21 ended">
               <p>
-                Section 21 is due to end in England on <strong>{SECTION21_END_DATE}</strong>. If a
-                qualifying notice is served before then, court proceedings must begin by <strong>{SECTION21_COURT_CUTOFF_DATE}</strong>. That
-                means landlords should already be planning around the current England notice and court
-                route rather than a Section 21-first workflow.
+                Section 21 ended for new notices in England on <strong>{SECTION21_END_DATE}</strong>.
+                The deadline to start a court claim using a qualifying older notice was{' '}
+                <strong>{SECTION21_COURT_CUTOFF_DATE}</strong>. New cases must use the current England
+                possession grounds and notice process.
               </p>
               <p>
                 Landlords still use Section 21 language when looking for possession guidance. This
@@ -224,11 +224,11 @@ export default function Page() {
               </div>
             </SupportCard>
 
-            <SupportCard title="Transactional paths stay downstream">
+            <SupportCard title="Choose the documents you need next">
               <p>
-                Notice Only is the primary transactional next step once the route is already
-                understood. Complete Pack stays below that because it is for notice-to-court
-                continuity after the notice stage, not for simply understanding the older terminology.
+                Choose Notice Only when you understand the grounds and mainly need the notice and
+                service documents. Choose Complete Pack when you also need the court claim and
+                possession paperwork prepared as one file.
               </p>
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="rounded-xl border border-[#E6DBFF] bg-white p-4">

@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next';
+import { UNIVERSAL_HERO_THEME_COLOR } from '@/lib/seo/hero-theme';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -7,8 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: 'Guided eviction, arrears, rent increase, and tenancy paperwork for UK landlords',
     start_url: '/',
     display: 'standalone',
-    theme_color: '#130c2b',
-    background_color: '#130c2b',
+    theme_color: UNIVERSAL_HERO_THEME_COLOR,
+    background_color: UNIVERSAL_HERO_THEME_COLOR,
     icons: [
       {
         src: '/android-chrome-192x192.png',

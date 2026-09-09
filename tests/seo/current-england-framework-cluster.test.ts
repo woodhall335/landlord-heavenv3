@@ -30,9 +30,9 @@ describe('current England framework cluster', () => {
     });
 
     expect(getCurrentFrameworkPageConfig('section-8-notice')).toMatchObject({
-      ownerQueryTheme: 'section 8 notice england',
+      ownerQueryTheme: 'section 8 notice',
       primaryCta: {
-        label: 'Create my Section 8 notice',
+        label: 'Create and preview my Form 3A — £39.99',
         href: '/products/notice-only',
       },
       secondaryCta: {
@@ -44,8 +44,8 @@ describe('current England framework cluster', () => {
     expect(getCurrentFrameworkPageConfig('form-3-section-8')).toMatchObject({
       ownerQueryTheme: 'form 3a section 8',
       primaryCta: {
-        label: 'Create my Section 8 notice',
-        href: '/products/notice-only',
+        label: 'Create my eviction notice — £39.99',
+        href: '/wizard/flow?type=eviction&product=notice_only&src=form3_paid_landing&topic=eviction',
       },
       secondaryCta: {
         label: 'Prepare my court pack',
@@ -56,12 +56,12 @@ describe('current England framework cluster', () => {
     expect(getCurrentFrameworkPageConfig('how-to-evict-a-tenant-england')).toMatchObject({
       ownerQueryTheme: 'how to evict a tenant in england',
       primaryCta: {
-        label: 'Read Section 8 Notice',
-        href: '/section-8-notice',
+        label: 'Create and preview my Form 3A — £39.99',
+        href: '/products/notice-only',
       },
       secondaryCta: {
-        label: 'Read Eviction Process in England',
-        href: '/eviction-process-england',
+        label: 'Read Section 8 notice guide',
+        href: '/section-8-notice',
       },
     });
 
@@ -131,7 +131,7 @@ describe('current England framework cluster', () => {
         ],
       },
       {
-        file: 'src/app/(marketing)/products/notice-only/page.tsx',
+        file: 'src/app/products/notice-only/page.tsx',
         needles: [
           'guideLinks.rentersRightsActEvictionRules',
           'guideLinks.section8Notice',
@@ -139,7 +139,7 @@ describe('current England framework cluster', () => {
         ],
       },
       {
-        file: 'src/app/(marketing)/products/complete-pack/page.tsx',
+        file: 'src/app/products/complete-pack/page.tsx',
         needles: [
           'guideLinks.rentersRightsActEvictionRules',
           'guideLinks.howToEvictTenantEngland',

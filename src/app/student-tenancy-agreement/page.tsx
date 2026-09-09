@@ -194,7 +194,7 @@ export default function StudentTenancyAgreementPage() {
               },
             ],
           },
-          ctaTitle: 'Build the validated Student tenancy pack',
+    ctaTitle: 'Create your Student tenancy pack',
           ctaBody:
             'Use this option when the occupiers are students and you want review-ready document preparation for the agreement, student hand-back wording, guarantor support, and extra paperwork as one coherent pack.',
         }}
@@ -245,7 +245,7 @@ export default function StudentTenancyAgreementPage() {
               'Yes - when completed and signed correctly. This template follows post-May 2026 England rules, and the checklist helps you avoid common student tenancy agreement mistakes.',
           },
         ]}
-        finalCtaBody="Use the Student workflow when the occupiers are students and you want the agreement to reflect how student lets actually work in practice. If guarantors, sharers, replacements, and end-of-term hand-back matter from the start, this validated pack is usually the better fit than the Standard or Premium assured periodic packs. If you are still deciding, compare it against the other England products on the main comparison page."
+      finalCtaBody="Use the Student workflow when the occupiers are students and you want the agreement to reflect how student lets actually work in practice. If guarantors, sharers, replacements, and end-of-term hand-back matter from the start, this specialist pack is usually the better fit than the Standard or Premium assured periodic packs. If you are still deciding, compare it against the other England products on the main comparison page."
       />
     </div>
   );

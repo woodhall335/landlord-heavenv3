@@ -640,8 +640,8 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
               </div>
             </div>
             <p className="mt-6 text-gray-700">
-              Complex, defended, or unusual matters may still require legal advice. For straightforward landlord cases, the commercial goal is clear:
-              avoid invalid paperwork, avoid rework, and move forward with evidence that stands up.
+              Complex, defended or unusual matters may still require legal advice. For a straightforward case, check the paperwork early,
+              avoid repeat work and keep evidence that can be followed later.
             </p>
           </div>
         </Container>

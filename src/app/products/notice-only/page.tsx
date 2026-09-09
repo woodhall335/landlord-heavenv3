@@ -27,9 +27,12 @@ export const metadata: Metadata = {
     'section 8 notice',
     'section 8 notice england',
     'section 8 eviction notice',
+    'eviction notice generator',
     'eviction notice generator england',
+    'evict a tenant legally',
     'evict a tenant for rent arrears',
     'form 3a section 8 notice',
+    'form 3a',
     'section 8 notice pack',
     'review-ready section 8 notice file',
     'N215 certificate of service',
@@ -183,119 +186,119 @@ export default function NoticeOnlyPage() {
     whatYouGet: {
       title: 'What you get in Stage 1',
       intro:
-        'This is more than a blank form. You get an England eviction notice and service file, and you can inspect it before buying.',
+        'This is the complete notice-and-service file, not a blank form. Here is what each document does and why it is included.',
       items: [
         {
           name: 'Form 3A (Section 8 Notice)',
           plainEnglish:
-            'The official notice used to start a Section 8 possession case in England.',
+            'The formal notice that tells the tenant why you are seeking possession and how much notice they have.',
           function:
-            'Sets out the grounds for possession and gives the tenant formal notice that court action may follow.',
+            'It records the possession grounds and the facts supporting them before any court claim is started.',
           riskIfMissing:
-            'Without a valid notice, a later possession claim can fail before the court reaches the main dispute.',
+            'The wrong grounds, dates, or supporting details can delay or undermine a later possession claim.',
           landlordOutcome:
-            'Helps the eviction route start with the right legal notice in place.',
+            'A current Form 3A prepared around the facts you provide, ready for you to review before service.',
           includedByDefault: true,
-          imageSrc: '/images/illustrations/products/section8-notice-preparation-waterbrush-v1.webp',
-          imageAlt: 'Waterbrush illustration of a Form 3A Section 8 notice and rental property',
+          imageSrc: '/images/illustrations/product-cards/section8-form3a-card-v1.webp',
+          imageAlt: 'Portrait watercolour illustration of a Form 3A notice, calendar, rental home and key',
         },
         {
           name: 'Rent Arrears Schedule',
           plainEnglish:
-            'A rent breakdown showing what is owed and how the arrears built up.',
+            'A month-by-month rent record showing what was due, what was paid, and what remains outstanding.',
           function:
-            'Supports the possession grounds by showing the arrears position clearly and consistently.',
+            'It supports rent-arrears grounds with figures that can be checked against the notice and tenancy records.',
           riskIfMissing:
-            'If the arrears are vague or poorly recorded, rent arrears grounds are much harder to prove cleanly.',
+            'Unclear or inconsistent figures make the arrears harder to explain to the tenant and, if needed, the court.',
           landlordOutcome:
-            'Gives the notice file a clearer rent record if the case later goes to court.',
+            'One clear arrears record that can stay with the case if it later moves to court.',
           includedByDefault: true,
-          imageSrc: '/images/heroes/library/hero-guide-rent-arrears-schedule-v2.webp',
-          imageAlt: 'Waterbrush illustration of a rent arrears schedule, calendar and rental property',
+          imageSrc: '/images/illustrations/product-cards/rent-arrears-schedule-card-v1.webp',
+          imageAlt: 'Portrait watercolour illustration of a rent arrears ledger, calculator and rental home',
         },
         {
           name: 'N215 Certificate of Service',
           plainEnglish:
-            'The certificate used to record how and when the notice was served.',
+            'A certificate recording when, where, and how the notice was delivered.',
           function:
-            'Keeps proof of service with the notice file so the court can see how the tenant was notified if the case later progresses.',
+            'It keeps the service details with the notice so you do not have to reconstruct them later.',
           riskIfMissing:
-            'If service cannot be shown clearly, a later possession claim can be delayed or challenged.',
+            'If service cannot be shown clearly, the tenant may challenge it and the court may require further evidence.',
           landlordOutcome:
-            'Gives you a clearer service record from the first step.',
+            'A dated service record kept alongside the notice from day one.',
           includedByDefault: true,
-          imageSrc: '/images/illustrations/services/section8-service-evidence-waterbrush-v2.webp',
-          imageAlt: 'Waterbrush illustration of a certificate, served envelope and dated service record',
+          imageSrc: '/images/illustrations/product-cards/n215-service-certificate-card-v1.webp',
+          imageAlt: 'Portrait watercolour illustration of a service certificate, sealed envelope and dated record',
         },
         {
           name: 'Service Instructions',
           plainEnglish:
-            'Step-by-step guidance on how to serve the notice and what proof to keep.',
+            'Plain-English steps for delivering the notice and keeping evidence of service.',
           function:
-            'Explains the delivery methods, timing, and evidence needed so the notice is served properly.',
+            'It explains the available delivery methods, timing, and records to retain.',
           riskIfMissing:
-            'Incorrect service is one of the easiest ways for a possession case to be delayed or challenged.',
+            'Using the wrong method or keeping no proof can create an avoidable dispute about service.',
           landlordOutcome:
-            'Reduces the risk of the notice being challenged because of a service mistake.',
+            'A practical service plan you can follow without guessing what to keep.',
           includedByDefault: true,
-          imageSrc: '/images/illustrations/services/section8-service-evidence-waterbrush-v2.webp',
-          imageAlt: 'Waterbrush illustration of step-by-step notice service instructions',
+          imageSrc: '/images/illustrations/product-cards/service-instructions-card-v1.webp',
+          imageAlt: 'Portrait watercolour illustration of the steps for serving a notice and keeping proof',
         },
         {
           name: 'Validity Checklist',
           plainEnglish:
-            'A practical checklist of the key points to check before serving the notice.',
+            'A final check of the grounds, dates, tenancy details, and supporting information before service.',
           function:
-            'Checks the notice, grounds, dates, and supporting details for obvious errors before you act.',
+            'It brings the details most likely to cause problems into one review before you act.',
           riskIfMissing:
-            'A small mistake in dates, grounds, or paperwork can invalidate the notice completely.',
+            'A missed date, inconsistent fact, or unsuitable ground can delay the case or require a fresh notice.',
           landlordOutcome:
-            'Gives you a cleaner file before the tenant or the court looks closely at the notice.',
+            'A cleaner notice file with the obvious weak points checked before it reaches the tenant.',
           includedByDefault: true,
-          imageSrc: '/images/illustrations/services/section8-service-evidence-waterbrush-v2.webp',
-          imageAlt: 'Waterbrush illustration of a notice validity checklist and date review',
+          imageSrc: '/images/illustrations/product-cards/notice-validity-checklist-card-v1.webp',
+          imageAlt: 'Portrait watercolour illustration of a notice checklist, date review and compliance shield',
         },
         {
           name: 'Compliance Declaration',
           plainEnglish:
-            'A structured declaration that records the key compliance points checked before service.',
+            'A written record of the key notice and tenancy checks completed before service.',
           function:
-            'Keeps the notice, dates, grounds, and service assumptions together in one reviewable file.',
+            'It keeps the assumptions behind the notice visible instead of leaving the review in scattered notes.',
           riskIfMissing:
-            'Without a check record, it is harder to show what was reviewed before the notice was served.',
+            'Without one review record, inconsistencies between the notice, dates, and supporting documents are easier to miss.',
           landlordOutcome:
-            'Helps the file look prepared rather than improvised.',
+            'A clear record of what you checked and the information the notice was based on.',
           includedByDefault: true,
-          imageSrc: '/images/illustrations/products/section8-notice-preparation-waterbrush-v1.webp',
-          imageAlt: 'Waterbrush illustration of a signed compliance declaration and supporting records',
+          imageSrc: '/images/illustrations/product-cards/compliance-declaration-card-v1.webp',
+          imageAlt: 'Portrait watercolour illustration of a signed compliance declaration and supporting records',
         },
         {
           name: 'Case Summary',
           plainEnglish:
-            'A short overview of the tenancy, arrears, grounds, and intended next step.',
+            'A concise overview of the tenancy, possession grounds, arrears where relevant, and next step.',
           function:
-            'Summarises the facts so the notice file can be understood quickly later.',
+            'It puts the important facts in one place so the file is easy to pick up again.',
           riskIfMissing:
-            'If the case later moves to court, scattered facts make the file harder to rebuild.',
+            'Scattered facts make it easier for dates, figures, or the reason for possession to drift later.',
           landlordOutcome:
-            'Makes it easier to move into court papers later if you need them.',
+            'A useful case overview if the tenant does not leave and court papers are needed.',
           includedByDefault: true,
-          imageSrc: '/images/heroes/library/hero-guide-possession-claim-v2.webp',
-          imageAlt: 'Waterbrush illustration of an organised Section 8 case summary file',
+          imageSrc: '/images/illustrations/product-cards/case-summary-card-v1.webp',
+          imageAlt: 'Portrait watercolour illustration of an organised Section 8 case summary folder',
         },
         {
           name: 'What Happens Next Guide',
           plainEnglish:
-            'A practical guide to the next steps after the Section 8 notice is served.',
+            'A practical guide to what happens during the notice period and what to do when it ends.',
           function:
-            'Explains what to monitor during the notice period and when Stage 2 may be needed.',
+            'It explains what to monitor, what records to keep, and when the court stage may become relevant.',
           riskIfMissing:
-            'Landlords can lose time if they are unsure what to do after service.',
+            'Uncertainty after service can lead to missed preparation and unnecessary delay.',
           landlordOutcome:
-            'Keeps the next step clear once the notice has gone to the tenant.',
+            'A clear next-step plan rather than being left with a served notice and no roadmap.',
           includedByDefault: true,
-          imageSrc: '/images/heroes/library/hero-guide-court-hearing-v2.webp',
-          imageAlt: 'Waterbrush illustration of the steps after serving a Section 8 notice',
+          imageSrc: '/images/illustrations/product-cards/what-happens-next-card-v1.webp',
+          imageAlt: 'Portrait watercolour illustration of the steps from served notice to a possible court claim',
         },
       ],
       sampleProof: sampleProof ? (

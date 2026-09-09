@@ -276,7 +276,7 @@ export default function StandardTenancyAgreementPage() {
             description:
               'The dedicated agreement for student households in England.',
             href: '/student-tenancy-agreement',
-            ctaLabel: 'Build my validated Student pack',
+      ctaLabel: 'Create my Student tenancy pack',
             imageSrc: '/images/generated/product-cards/student-tenancy-agreement.webp',
             imageAlt: 'Student tenancy agreement preview',
             price: PRODUCTS.england_student_tenancy_agreement.displayPrice,
@@ -307,7 +307,7 @@ export default function StandardTenancyAgreementPage() {
             description:
               'The shared-house agreement for occupiers living together and using communal areas.',
             href: '/hmo-shared-house-tenancy-agreement',
-            ctaLabel: 'Build my validated HMO pack',
+      ctaLabel: 'Create my HMO tenancy pack',
             imageSrc: '/images/generated/product-cards/hmo-shared-house-agreement.webp',
             imageAlt: 'HMO shared house tenancy agreement preview',
             price: PRODUCTS.england_hmo_shared_house_tenancy_agreement.displayPrice,
@@ -339,7 +339,7 @@ export default function StandardTenancyAgreementPage() {
             description:
               'The room-let agreement for a landlord who lives in the property.',
             href: '/lodger-agreement',
-            ctaLabel: 'Build my validated Lodger pack',
+      ctaLabel: 'Create my Lodger agreement pack',
             imageSrc: '/images/generated/product-cards/lodger-agreement.webp',
             imageAlt: 'Lodger agreement preview',
             price: PRODUCTS.england_lodger_agreement.displayPrice,
@@ -393,7 +393,7 @@ export default function StandardTenancyAgreementPage() {
               {
                 title: 'Older AST wording is no longer the right starting point',
                 body:
-                  'For new private assured tenancies in England, fixed-term AST wording is no longer the current framework. A clear assured periodic agreement is a better starting point for a new straightforward let.',
+      'For new private assured tenancies in England, fixed-term AST wording is no longer the usual starting point. A clear assured periodic agreement is a better fit for a new straightforward let.',
                 imageSrc: '/images/illustrations/landlord-documents/site-tenancy-england.webp',
                 imageAlt: 'Watercolour illustration of England tenancy paperwork',
               },
@@ -452,7 +452,7 @@ export default function StandardTenancyAgreementPage() {
               },
             ],
           },
-          ctaTitle: 'Build the validated Standard tenancy pack',
+    ctaTitle: 'Create your Standard tenancy pack',
           ctaBody:
             'Use this option when the let is straightforward and you want review-ready document preparation with validation checks instead of a wording-only form for an ordinary whole-property home in England.',
         }}

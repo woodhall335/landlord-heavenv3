@@ -98,6 +98,7 @@ describe('revenue-focused SEO funnels', () => {
     const nextStep = readRepoFile('src', 'components', 'seo', 'CommercialSeoTrackedCta.tsx');
     const commercialBlock = readRepoFile('src', 'components', 'seo', 'CommercialSeoNextStep.tsx');
     const rentCheckerSeo = readRepoFile('src', 'components', 'tools', 'rent-checker', 'RentCheckerSeoPage.tsx');
+    const universalHero = readRepoFile('src', 'components', 'landing', 'UniversalHero.tsx');
     const rentCheckerResult = readRepoFile('src', 'components', 'tools', 'rent-checker', 'RentCheckerResultPage.tsx');
     const pillarShell = readRepoFile('src', 'components', 'seo', 'PillarPageShell.tsx');
     const moneyClaim = readRepoFile('src', 'app', 'money-claim', 'page.tsx');
@@ -107,7 +108,8 @@ describe('revenue-focused SEO funnels', () => {
     expect(nextStep).toContain("trackEvent('journey_cta_click'");
     expect(nextStep).toContain("trackEvent('product_cta_clicked'");
     expect(nextStep).toContain("data-testid={variant === 'primary' ? 'guide-primary-cta' : undefined}");
-    expect(rentCheckerSeo).toContain('data-testid="hero-primary-cta"');
+    expect(rentCheckerSeo).toContain('<UniversalHero');
+    expect(universalHero).toContain('data-testid="hero-primary-cta"');
     expect(rentCheckerSeo).toContain('data-testid="tool-upsell-cta"');
     expect(rentCheckerResult).toContain('data-testid="tool-upsell-cta"');
     expect(pillarShell).toContain('data-testid="guide-primary-cta"');
@@ -152,7 +154,7 @@ describe('revenue-focused SEO funnels', () => {
   it('routes MCOL and money claim content to the Money Claim Pack', () => {
     const mcol = readRepoFile('src', 'app', 'money-claim-online-mcol', 'page.tsx');
     const blog = readRepoFile('src', 'app', '(marketing)', 'blog', '[slug]', 'page.tsx');
-    const alias = readRepoFile('src', 'app', '(marketing)', 'products', 'money-claim-pack', 'page.tsx');
+    const alias = readRepoFile('src', 'app', 'products', 'money-claim-pack', 'page.tsx');
 
     expect(mcol).toContain('MoneyClaimBridge');
     expect(mcol).toContain('Money Claim Online (MCOL) for Landlords: Rent Arrears Guide');

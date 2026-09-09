@@ -8,7 +8,7 @@ function readSource(relativePath: string) {
 
 describe('Section 13 product pages', () => {
   it('keeps the standard page positioned as the serve-and-evidence route with preview proof', () => {
-    const source = readSource('src/app/(marketing)/products/section-13-standard/page.tsx');
+    const source = readSource('src/app/products/section-13-standard/page.tsx');
 
     expect(source).toContain('earlyProofBand: {');
     expect(source).toContain('const samplePreviewEntries = config.packBreakdown.map');
@@ -27,7 +27,7 @@ describe('Section 13 product pages', () => {
   });
 
   it('keeps the defence page positioned as the challenge-ready route with preview proof', () => {
-    const source = readSource('src/app/(marketing)/products/section-13-defence/page.tsx');
+    const source = readSource('src/app/products/section-13-defence/page.tsx');
 
     expect(source).toContain('fullWidthPreview: true');
     expect(source).toContain('const samplePreviewEntries = config.packBreakdown.map');

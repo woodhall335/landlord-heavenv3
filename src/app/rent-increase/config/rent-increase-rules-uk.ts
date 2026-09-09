@@ -17,9 +17,9 @@ export const rentIncreaseRulesUkPage: RentIncreaseGuidePage = {
   metaDescription:
     'Understand rent increase rules searched in the UK, with detailed England process guidance, Section 13/Form 4A requirements, and jurisdiction differences.',
   primaryKeyword: 'rent increase rules UK',
-  intentLabel: 'rules overview / jurisdiction clarification',
+  intentLabel: 'England rules with UK jurisdiction guidance',
   introAngle:
-    'Answer UK-intent searches honestly by giving full England detail and explicit boundaries for other nations.',
+    'Explain the England process in full and make the different rules elsewhere in the UK unmistakable.',
   heroImage: '/images/wizard-icons/05-compliance.png',
   heroAlt: 'Rent increase rules compliance icon',
   secondaryCta: RENT_INCREASE_LINKS.section13,
@@ -27,15 +27,15 @@ export const rentIncreaseRulesUkPage: RentIncreaseGuidePage = {
   jurisdictionNote:
     'Scotland, Wales, and Northern Ireland differ. Use jurisdiction-specific guidance before serving notice outside England.',
   quickAnswer: [
-    'People search "rent increase rules UK", but legal mechanics are not uniform across the UK. This page gives full operational detail for England and explicitly marks jurisdiction boundaries so landlords are not misled by broad keywords. In England, landlords using the formal route should focus on Section 13 workflow quality: timeline validity, Form 4A completion, market-rent evidence, and service discipline.',
-    'The trust-first approach is to avoid pretending this page is a complete procedural manual for all UK nations. Instead, it provides clear England guidance and a short boundary section for Scotland, Wales, and Northern Ireland. That precision helps landlords make better decisions and helps search engines map intent correctly without duplicate or inflated claims.',
-    'If your property is in England, use this rules page as the legal frame, then move to the notice, Form 4A, and market-rent pages for implementation detail. If your property is outside England, treat this page as orientation only and switch to the correct jurisdiction route before drafting any notice.',
+    'Rent increase law is not uniform across the UK. This guide explains the England process, where landlords using the formal procedure need to check the timing, complete Form 4A accurately, support the proposed rent with market evidence and serve the notice correctly.',
+    'Scotland, Wales and Northern Ireland have different tenancy and rent-increase rules. The notes below explain those boundaries so you can avoid applying an England-only procedure to a property elsewhere in the UK.',
+    'If your property is in England, use this guide to understand the rules, then read the notice, Form 4A and market-rent guides for the practical detail. If the property is outside England, use guidance for that jurisdiction before drafting anything.',
     'For portfolio landlords with mixed jurisdictions, make jurisdiction checks an explicit gate before drafting. A simple pre-check note in your case file can prevent the wrong template being used under time pressure. The few minutes spent confirming scope at the start usually save hours of rework and reputational damage later.',
   ],
   sections: sections({
     whatIsIt: [
-      'This page is a jurisdiction-clarification guide for UK-intent queries. Its primary job is to stop scope confusion. It explains the operational rules landlords actually need in England while clearly acknowledging that other UK nations differ. That prevents the common and risky assumption that one rule set applies nationwide.',
-      'From a landlord perspective, this page acts as a legal context page before process execution. It should be read before serving notice, not after errors are discovered.',
+      'This guide explains the practical rules landlords need in England while making clear that the other UK nations follow different procedures. That prevents the risky assumption that one rule set applies nationwide.',
+      'Read these rules before preparing or serving a notice, while there is still time to correct dates, evidence and assumptions.',
       'The practical value is confidence in direction. Once jurisdiction and route are clear, every next step becomes simpler: date validation, form population, evidence framing, and tenant communication all follow the same legal track. Without that certainty, even good operational work can end up applied to the wrong framework.',
     ],
     legalRules: [
@@ -73,7 +73,7 @@ export const rentIncreaseRulesUkPage: RentIncreaseGuidePage = {
     {
       question: 'Why is England scope stated above the fold?',
       answer:
-        'Because UK-intent keywords are broad, and explicit scope prevents landlords from applying England-only steps to other jurisdictions.',
+        'Because rent increase rules differ across the UK. Clear scope helps landlords avoid applying England-only steps to a property in another jurisdiction.',
     },
     {
       question: 'What should England landlords do after reading this page?',
@@ -98,5 +98,5 @@ export const rentIncreaseRulesUkPage: RentIncreaseGuidePage = {
     'If your property is in England, generate your Section 13 notice with timeline validation and market-rent positioning in one flow.',
   finalCtaTitle: 'Create my rent increase notice',
   finalCtaBody:
-    'Start the Standard wizard after confirming jurisdiction and chronology assumptions, so the notice you serve reflects the right legal route as well as the right landlord narrative.',
+    'Start the Standard wizard after confirming the property is in England and checking the tenancy dates, so the notice follows the correct procedure and explains the proposed rent clearly.',
 };

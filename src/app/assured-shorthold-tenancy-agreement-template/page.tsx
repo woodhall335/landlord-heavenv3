@@ -47,28 +47,28 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
       <EnglandTenancyPage
         pagePath="/assured-shorthold-tenancy-agreement-template"
         title="Assured Shorthold Tenancy Agreement Template"
-        subtitle="AST is now legacy search wording for many England landlords. Use this page to translate that search into the current England agreement route, then move to the agreement example or comparison page."
+        subtitle="AST is now older wording for many England landlords. This guide explains the change and points you to the current agreement example and product comparison."
         primaryCtaLabel="View the England agreement example"
         primaryCtaHref="/tenancy-agreement-template"
         secondaryCtaLabel="Read the assured periodic guide"
         secondaryCtaHref="/assured-periodic-tenancy-agreement"
-        legacyNotice="This page stays live because landlords still search for AST wording. It works as a legacy search entry point and then routes landlords into the current England agreement example or comparison page."
+        legacyNotice="Landlords still search for AST wording, so this page explains the term and directs them to the current England agreements."
         introTitle="Why this AST page still exists"
         introBody={[
           'Many landlords still search for assured shorthold tenancy agreement template because AST was the familiar label for years. That search behaviour matters, but it should now lead into the current England agreement structure rather than leaving landlords anchored to outdated wording.',
-          'The England agreement example page shows a real agreement preview first, then explains how Standard and Premium fit the ordinary-residential route. This AST page works as an educational bridge for legacy terminology, not as the primary owner of broad tenancy agreement searches.',
+          'The England agreement example page shows a worked document, then explains how Standard and Premium fit ordinary residential lets. Use this guide when the older AST term is the part you need clarified.',
           'If you are comparing the wording shift itself, the assured periodic guide explains why the newer framework matters. If you are trying to inspect the actual agreement structure, move to the England agreement example page instead.',
         ]}
         highlights={[
           'Captures legacy AST template demand without treating AST as the main England destination',
-          'Explains why the broader England agreement journey now lives on the example and comparison pages',
+          'Explains where to inspect and compare the current England agreements',
           'Introduces assured periodic wording as the newer framing for current England lets',
           'Keeps the path simple: legacy AST term first, real agreement example next',
         ]}
         compliancePoints={[
-          'AST is treated here as legacy search language rather than the live public-facing England product position',
-          'Current England terminology is introduced carefully so landlords can understand the transition without losing the route into the right agreement',
-          'Primary internal journey now points to /tenancy-agreement-template and /products/ast instead of trying to make this page compete for broad head terms',
+          'AST is explained as older terminology rather than the default name for a new England agreement',
+          'Current terminology is introduced without obscuring the agreement landlords need',
+          'The worked example and comparison links provide clear next steps',
         ]}
         keywordTargets={[
           'assured shorthold tenancy agreement template',
@@ -80,17 +80,17 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
           {
             question: 'Is AST still the main England tenancy product?',
             answer:
-              'No. AST remains important as legacy search language, but the broader England tenancy agreement journey now sits on the example and comparison pages so landlords can inspect a real agreement and then choose the right route.',
+              'No. Landlords still use the AST name, but new lets need current England wording. Inspect the worked example and then choose the agreement that fits the property and occupiers.',
           },
           {
             question: 'Why does this page link to the England agreement example first?',
             answer:
-              'Because the example page shows the agreement itself. This guide explains the older AST wording and transition, then points landlords to the current route.',
+              'Because the example page shows the agreement itself. This guide explains the older AST wording, while the example lets you inspect the current document.',
           },
           {
             question: 'Where does assured periodic fit?',
             answer:
-              'Assured periodic wording is the newer framing for the current England route. The assured periodic support page explains that terminology, while the England agreement example page shows the sample document itself.',
+              'Assured periodic is the current wording used for new England tenancies. The assured periodic guide explains the term, while the agreement example shows the document itself.',
           },
         ]}
         routeComparison={[
@@ -109,11 +109,11 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
             ctaLabel: 'Read APT guide',
           },
           {
-            title: 'Compare England agreement routes',
+            title: 'Compare England agreements',
             description:
-              'Compare Standard, Premium, Student, HMO / Shared House, and Lodger once you are ready to choose the route that fits the property.',
+              'Compare Standard, Premium, Student, HMO / Shared House and Lodger once you are ready to choose.',
             href: '/products/ast',
-            ctaLabel: 'Compare England routes',
+            ctaLabel: 'Compare England agreements',
           },
         ]}
       />

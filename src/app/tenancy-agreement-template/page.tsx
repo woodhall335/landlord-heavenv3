@@ -31,14 +31,14 @@ const comparisonRows = [
     genericTemplate:
       'A static file that leaves the landlord to decide how much of it still fits the tenancy.',
     guidedAgreement:
-      'The Premium golden-pack tenancy agreement and supporting records, generated from a worked England example before you start your own guided route.',
+      'The Premium tenancy agreement and supporting records, shown with worked England details before you start your own document.',
   },
   {
     label: 'Risk of outdated wording',
     genericTemplate:
       'High if the template was written for a different framework, old AST assumptions, or another UK jurisdiction.',
     guidedAgreement:
-      'Lower because the route is built around the current England position and the property setup you are actually choosing.',
+      'Lower because the agreement is built around the current England position and the property details you provide.',
   },
   {
     label: 'Deposit, notices, and supporting paperwork',
@@ -48,11 +48,11 @@ const comparisonRows = [
       'Shown together through the Premium golden pack so the agreement, setup summary, deposit records, keys, utilities, and management schedule stay aligned.',
   },
   {
-    label: 'Choosing the right route',
+    label: 'Choosing the right agreement',
     genericTemplate:
       'Still depends on the landlord spotting whether the let should be Standard, Premium, Student, HMO / Shared House, or Lodger.',
     guidedAgreement:
-      'Premium is the lead route from this page, with Standard and specialist support still available when the facts point to a simpler or different setup.',
+      'Premium is featured on this page, with Standard and specialist agreements available when the facts point to a simpler or different setup.',
   },
 ];
 
@@ -68,7 +68,7 @@ const primaryRoutes: Array<{
     sku: 'england_premium_tenancy_agreement',
     title: 'Premium Tenancy Agreement',
     href: '/premium-tenancy-agreement',
-    label: 'Featured golden-pack route',
+    label: 'Featured worked agreement',
     body: 'Choose Premium when you want the tenancy agreement shown on this page: fuller wording around access, repairs, keys, utilities, hand-back, guarantors, and day-to-day management from day one.',
     ctaLabel: 'View premium agreement',
   },
@@ -102,7 +102,7 @@ const specialistRoutes: Array<{
     title: 'HMO / Shared House Tenancy Agreement',
     href: '/hmo-shared-house-tenancy-agreement',
     summary:
-      'Use this when sharer controls, communal areas, or room-by-room occupation need their own drafting instead of being folded into a normal residential route.',
+      'Use this when sharer controls, communal areas or room-by-room occupation need wording beyond an ordinary residential agreement.',
     ctaLabel: 'View HMO / Shared House agreement',
   },
   {
@@ -110,7 +110,7 @@ const specialistRoutes: Array<{
     title: 'Room Let / Lodger Agreement & Shared Home Pack',
     href: '/lodger-agreement',
     summary:
-      'Use this when the landlord lives at the property and the occupier is sharing the home rather than taking the ordinary assured periodic route.',
+      'Use this when the landlord lives at the property and the occupier shares the home rather than renting it as an assured periodic tenant.',
     ctaLabel: 'View lodger agreement',
   },
 ];
@@ -120,14 +120,14 @@ const supportRoutes = [
     title: 'Assured Shorthold Tenancy Agreement Template',
     href: '/assured-shorthold-tenancy-agreement-template',
     summary:
-      'Use this legacy AST guide when older terminology is driving the search. It explains the wording shift and routes you back to the England agreement example page.',
+      'Use this AST guide when you recognise the older terminology but need to understand the current England wording.',
     ctaLabel: 'Read AST legacy guide',
   },
   {
     title: 'Assured Periodic Tenancy Agreement',
     href: '/assured-periodic-tenancy-agreement',
     summary:
-      'Use this support page when you need the newer England terminology explained in plain English before returning to the England agreement example and comparison journey.',
+      'Use this guide when you want assured periodic terminology explained in plain English before choosing an agreement.',
     ctaLabel: 'Read assured periodic guide',
   },
   {
@@ -142,11 +142,11 @@ const supportRoutes = [
 const clauseExplainers = [
   {
     title: 'Why the term clause matters now',
-    body: 'A good England tenancy agreement no longer relies on a vague template opening and hopes the rest follows. The term section needs to tell the reader how the tenancy starts, that it continues until ended through the lawful route, and what the notice and possession framework looks like in practice.',
+    body: 'The term section should state when the tenancy begins, explain that it continues until ended lawfully, and describe how notice and possession work in practice.',
   },
   {
     title: 'Why rent and deposit wording still drive disputes',
-    body: 'Even a simple rent agreement needs more than the monthly amount. It should make payment timing, deposit handling, permitted deductions, and the rent-change route clear enough that the landlord is not left patching the gaps later.',
+    body: 'Even a simple agreement needs more than the monthly rent. It should state when rent is due, how the deposit is handled, which deductions are permitted and how rent can change.',
   },
   {
     title: 'Why responsibilities need to read like a real document',
@@ -158,7 +158,7 @@ const faqs: FAQItem[] = [
   {
     question: 'Is this a real tenancy agreement template example?',
     answer:
-      "Yes. The sample agreement preview uses Landlord Heaven's England standard agreement wording with safe example names, contact details, and property facts so you can see how the document is structured before choosing a route.",
+      "Yes. The preview uses Landlord Heaven's England agreement wording with example names, contact details and property facts so you can inspect the structure before choosing a product.",
   },
   {
     question: 'Can I download this exact template as a blank file?',
@@ -166,24 +166,24 @@ const faqs: FAQItem[] = [
       'No. It shows a realistic example first, then helps you choose the agreement that fits the property and tenancy setup instead of leaving you with a generic blank form to edit alone.',
   },
   {
-    question: 'Why do Standard and Premium come before the other route links?',
+    question: 'Why do Standard and Premium appear first?',
     answer:
-      'Because they are the default mainstream England routes for ordinary residential lets. Specialist routes are still available, but they should appear after the main template and comparison journey instead of interrupting it.',
+      'Because they cover most ordinary residential lets in England. Student, HMO / Shared House and Lodger agreements are still available for those specific arrangements.',
   },
   {
     question: 'Why do AST and assured periodic wording both appear here?',
     answer:
-      'Because landlords still search with AST terminology, while the current England route is better explained through assured periodic language. The legacy AST support page and the assured periodic support page both point back to this England agreement example page.',
+      'Because landlords still search with AST terminology, while current England agreements are better explained using assured periodic language. Both terms are explained so you can choose confidently.',
   },
   {
     question: 'What is the difference between this page and /products/ast?',
     answer:
-      'This page is the England agreement example page for broad searches such as tenancy agreement template, rent agreement, and tenancy contract. /products/ast is the downstream comparison page for landlords who want every England route shown side by side after they have seen the example page first.',
+      'This page shows a worked England agreement. The comparison page shows Standard, Premium, Student, HMO / Shared House and Lodger products side by side.',
   },
   {
     question: 'Does this page apply outside England?',
     answer:
-      'No. This example and guide are England-first. Wales, Scotland, and Northern Ireland use different tenancy frameworks and should begin from the jurisdiction-specific route instead of treating one UK template as interchangeable.',
+      'No. This example is for England. Wales, Scotland and Northern Ireland use different tenancy frameworks and need their own agreements.',
   },
 ];
 
@@ -193,7 +193,7 @@ const webPageSchema = {
   name: 'Tenancy Agreement Template (England) - Premium Golden Pack Sample',
   url: canonicalUrl,
   description:
-    'Review the Premium Tenancy Agreement golden pack sample for England, then start the guided Premium route or compare alternatives.',
+    'Review the Premium Tenancy Agreement sample for England, then create your agreement or compare the alternatives.',
   inLanguage: 'en-GB',
 };
 
@@ -202,7 +202,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Tenancy Agreement Template (England) - Premium Sample',
   description:
-    'See the Premium Tenancy Agreement golden pack sample for England, including the agreement and supporting management records, before starting the guided route.',
+    'See the Premium Tenancy Agreement sample for England, including the agreement and supporting management records, before creating your own.',
   keywords: [
     'tenancy agreement',
     'tenancy agreement template',
@@ -219,7 +219,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Tenancy Agreement Template (England) - Premium Sample',
     description:
-      'Review the Premium Tenancy Agreement golden pack sample for England, then start the guided Premium route or compare alternatives.',
+      'Review the Premium Tenancy Agreement sample for England, then create your agreement or compare the alternatives.',
     url: canonicalUrl,
     type: 'website',
     locale: 'en_GB',
@@ -229,7 +229,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Tenancy Agreement Template (England) - Premium Sample',
     description:
-      'See the Premium Tenancy Agreement golden pack sample for England before starting the guided route.',
+      'See the Premium Tenancy Agreement sample for England before creating your own.',
   },
   robots: {
     index: true,
@@ -312,7 +312,7 @@ function SpecialistRouteCard({
 function SupportRouteCard({ title, href, summary, ctaLabel }: (typeof supportRoutes)[number]) {
   return (
     <article className="rounded-[1.7rem] border border-[#E3DDD2] bg-white p-5 shadow-[0_14px_32px_rgba(31,41,55,0.04)]">
-      <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">Support route</p>
+      <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">Related guide</p>
       <h3 className="mt-3 text-xl font-semibold tracking-tight text-[#141B2D]">{title}</h3>
       <p className="mt-3 text-sm leading-7 text-[#556177]">{summary}</p>
       <Link
@@ -350,7 +350,7 @@ export default function TenancyAgreementTemplatePage() {
           subtitle={
             <>
               See the <strong>Premium golden-pack tenancy agreement</strong> and supporting
-              management records before you start the guided England route built around your facts.
+              management records before you create an agreement from your own details.
             </>
           }
           primaryCta={{
@@ -379,7 +379,7 @@ export default function TenancyAgreementTemplatePage() {
                     Landlords searching for a tenancy agreement, rent agreement, or tenancy
                     contract usually want to inspect the wording first. This page now leads with
                     the Premium golden-pack example so you can see the fuller management wording,
-                    agreement structure, and supporting documents before starting the guided route.
+                    agreement structure and supporting documents before creating your own.
                   </p>
                   <p>
                     If older terminology is still shaping the search, the{' '}
@@ -417,7 +417,7 @@ export default function TenancyAgreementTemplatePage() {
           <section className="rounded-[2.3rem] border border-[#E5DED2] bg-white p-6 shadow-[0_18px_46px_rgba(31,41,55,0.05)] md:p-8">
             <div className="max-w-3xl">
               <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#7C3AED]">
-                Transition before route choice
+                From example to finished agreement
               </p>
               <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
                 Blank file vs Premium golden pack
@@ -425,7 +425,7 @@ export default function TenancyAgreementTemplatePage() {
               <p className="mt-4 text-base leading-7 text-[#556177]">
                 The example above shows the Premium tenancy agreement and the supporting pack that
                 sits around it. The next question is whether you want to rely on a static template
-                file or move into a guided route that keeps the agreement structure, supporting
+                file or use guided questions that keep the agreement structure, supporting
                 documents, and tenancy setup aligned.
               </p>
             </div>
@@ -436,7 +436,7 @@ export default function TenancyAgreementTemplatePage() {
                 <div className="border-b border-[#E5DED2] px-5 py-4 md:border-b-0 md:border-r">
                   Blank file
                 </div>
-                <div className="px-5 py-4">Premium guided route</div>
+                <div className="px-5 py-4">Guided Premium agreement</div>
               </div>
               {comparisonRows.map((row) => (
                 <div
@@ -483,12 +483,11 @@ export default function TenancyAgreementTemplatePage() {
                 Branch only when the facts demand it
               </p>
               <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
-                Specialist England agreement routes
+                Specialist England agreements
               </h2>
               <p className="mt-4 text-base leading-7 text-[#556177]">
-                Student, HMO / Shared House, and Lodger should stay clearly available, but they
-                belong after the mainstream England journey rather than competing with it at the
-                top of the page.
+                Student, HMO / Shared House and Lodger agreements cover specific living
+                arrangements. Choose one only when it matches how the property will be occupied.
               </p>
             </div>
 
@@ -505,7 +504,7 @@ export default function TenancyAgreementTemplatePage() {
                 Legacy wording and terminology support
               </p>
               <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
-                Legacy AST and assured periodic support routes
+                AST and assured periodic guides
               </h2>
               <p className="mt-4 text-base leading-7 text-[#556177]">
                 These pages stay live so landlords using older or transitional terminology can
@@ -549,7 +548,7 @@ export default function TenancyAgreementTemplatePage() {
           <div className="mt-12">
             <FAQSection
               title="Tenancy agreement template FAQs"
-              intro="Clear answers for landlords comparing a static template with the live England agreement routes."
+              intro="Clear answers for landlords comparing a static template with a guided England agreement."
               faqs={faqs}
               showContactCTA={false}
               includeSchema={false}
@@ -563,11 +562,11 @@ export default function TenancyAgreementTemplatePage() {
                 Secondary comparison path
               </p>
               <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
-                Need route-comparison help?
+                Need help choosing an agreement?
               </h2>
               <p className="mt-4 text-base leading-7 text-[#556177]">
-                Use the England comparison page only after the example page if you want
-                every England route shown side by side before you choose what to do next.
+                Compare all five England products side by side if you are unsure which agreement
+                fits the property and occupiers.
               </p>
             </div>
 
@@ -576,7 +575,7 @@ export default function TenancyAgreementTemplatePage() {
                 href="/products/ast"
                 className="inline-flex items-center justify-center rounded-xl border border-[#CBBDF1] bg-white px-5 py-3 text-sm font-semibold text-[#432B87] transition hover:border-[#B69BF4] hover:bg-[#F7F4FF]"
               >
-                Compare all England agreement routes
+                Compare all England agreements
               </Link>
             </div>
           </section>

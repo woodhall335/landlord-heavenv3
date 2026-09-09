@@ -112,12 +112,12 @@ export default function MoneyClaimPage() {
         href: '/products/complete-pack',
       },
       feature:
-        'Choose this when recovering money is the job. If the urgent problem is getting possession of the property, use the Section 8 possession route instead. Procedural document pack, not legal advice.',
+        'Choose this when you need to recover money. If the urgent problem is getting the property back, use the Section 8 possession pack instead. This is a document-preparation service, not legal advice.',
       children: (
         <div className="mt-6 rounded-2xl border border-white/20 bg-white/10 p-4 text-sm leading-6 text-white/90 backdrop-blur">
           <p className="font-semibold text-white">Choose this if the tenant owes money.</p>
           <p className="mt-1 text-white">
-            It is the debt-recovery route for rent arrears, damage, bills, and tenancy debt.
+            It covers rent arrears, damage, unpaid bills and other tenancy debts.
             It does not replace a Section 8 notice or possession claim pack.
           </p>
         </div>
@@ -182,7 +182,7 @@ export default function MoneyClaimPage() {
       ) : undefined,
     },
     comparisonBlock: {
-      title: 'Compare the debt route with the possession route',
+      title: 'Do you need to recover money or regain possession?',
       intro:
         'Some landlords need to recover unpaid rent or tenant debt. Some need the tenant to leave. Some need both, but not always through the same product.',
       routeGridClassName: 'mt-8 grid gap-5 lg:grid-cols-2',
@@ -191,11 +191,11 @@ export default function MoneyClaimPage() {
           name: descriptor.displayName,
           priceLabel: product.displayPrice,
           whatItIs:
-            'The route for unpaid rent, damage, bills, guarantor debt, and other tenancy-related money claims.',
+            'For unpaid rent, damage, bills, guarantor debt and other tenancy-related money claims.',
           problemItSolves:
             'Gives you the letter before claim, figures, and court paperwork needed to pursue the debt.',
           riskIfWrong:
-            'If you use the debt route when the real issue is possession, the occupation problem can remain unresolved.',
+            'A money claim will not by itself recover possession of the property.',
           landlordOutcome:
             'Best when recovering money is the main job.',
           href: descriptor.landingHref,
@@ -207,11 +207,11 @@ export default function MoneyClaimPage() {
           name: 'Stage 2: Section 8 Court & Possession Pack',
           priceLabel: PRODUCTS.complete_pack.displayPrice,
           whatItIs:
-            'The full Section 8 route for landlords who need the notice, the court claim, and the possession file kept together.',
+            'For landlords who need the Section 8 notice, court claim and possession paperwork kept together.',
           problemItSolves:
-            'Handles the notice-to-court route when the main issue is recovering the property.',
+            'Handles the notice and court paperwork when the main issue is recovering the property.',
           riskIfWrong:
-            'If you buy a possession route when you only need money recovery, you may still need a separate debt file afterwards.',
+            'A possession claim may not recover every debt, so you could still need a separate money claim.',
           landlordOutcome:
             'Best when possession is the real next step.',
           href: '/products/complete-pack',
@@ -239,7 +239,7 @@ export default function MoneyClaimPage() {
         {
           question: 'What if I also need possession?',
           answer:
-            'If the immediate problem is getting the tenant out, the Section 8 possession route is usually the better first step. Use this pack when recovering the debt is the job you need to do now.',
+            'If the immediate problem is getting the property back, the Section 8 possession pack is usually the better place to start. Use this pack when recovering the debt is your priority.',
         },
         {
           question: 'Is this legal advice?',
@@ -284,7 +284,7 @@ export default function MoneyClaimPage() {
       ],
     },
     howThisHelps: {
-      title: 'How this improves the landlord outcome',
+      title: 'How this pack helps',
       intro:
         'The pack helps you explain the debt clearly and stay organised if the matter reaches court or enforcement.',
       cards: [

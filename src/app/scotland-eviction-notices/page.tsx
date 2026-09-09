@@ -20,13 +20,11 @@ import {
   AlertTriangle,
   ArrowRight,
   CheckCircle,
-  Clock,
   FileText,
   Gavel,
   Home,
   Scale,
   Shield,
-  XCircle,
 } from 'lucide-react';
 
 const canonicalUrl = getCanonicalUrl('/scotland-eviction-notices');
@@ -176,9 +174,9 @@ export default function ScotlandEvictionNoticesPage() {
                   why the Scottish tribunal stage changes the structure of the case.
                 </p>
                 <p className="leading-7">
-                  The commercial goal is not just to define Notice to Leave. It is to help
-                  landlords choose the right Scottish route early, avoid England carry-over
-                  mistakes, and move into the correct document workflow before time is lost.
+                  The aim is not just to define a Notice to Leave. It is to help landlords
+                  choose the correct Scottish process, avoid carrying over England rules and
+                  prepare the right document before time is lost.
                 </p>
                 <p className="leading-7">
                   Keep the wider hierarchy in view by starting with{' '}
@@ -261,17 +259,15 @@ export default function ScotlandEvictionNoticesPage() {
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-5xl">
               <h2 className="mb-6 text-3xl font-bold text-gray-900">
-                Why Scotland eviction pages need their own route logic
+                Why Scottish eviction law must be treated separately
               </h2>
               <div className="space-y-5 text-gray-700">
                 <p className="leading-7">
-                  One of the biggest weaknesses in landlord SEO content is treating Scotland
-                  as though it is basically England with different branding. It is not. The
+                  Scotland is not simply England with different terminology. The
                   structure of the tenancy, the notice language, the possession grounds, and
                   the forum for resolving the dispute all point landlords into a different
-                  route. A stronger Scotland page therefore has to do more than list the 18
-                  grounds. It has to explain why the Scottish framework needs to be treated
-                  as its own commercial and legal process.
+                  process. It is not enough to list the 18 grounds without explaining how the
+                  Scottish framework works in practice.
                 </p>
                 <p className="leading-7">
                   Landlords usually need an answer to a practical question: how do I get possession of my
@@ -438,8 +434,8 @@ export default function ScotlandEvictionNoticesPage() {
                     <p className="mt-2 leading-7 text-red-900/90">
                       Many Scottish cases are weakened because the landlord starts from an
                       England-style mindset and only later realises the tribunal expects a
-                      clearer Scottish route and evidence base. The point of this page is to
-                      stop that happening earlier in the funnel.
+                      clearer Scottish case and evidence base. Check those points before serving
+                      the notice, not after tribunal proceedings have begun.
                     </p>
                   </div>
                 </div>

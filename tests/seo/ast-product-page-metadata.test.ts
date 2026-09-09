@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { metadata } from '@/app/(marketing)/products/ast/page';
+import { metadata } from '@/app/products/ast/page';
 
 const asText = (value: unknown): string =>
   typeof value === 'string' ? value : value?.toString?.() ?? '';
@@ -7,15 +7,15 @@ const asText = (value: unknown): string =>
 describe('/products/ast metadata', () => {
   it('uses the England tenancy comparison positioning for landlord intent', () => {
     expect(asText(metadata.title)).toBe(
-      'Tenancy Agreement England | Compare Standard, Premium, Student, HMO and Lodger',
+      'England Tenancy Agreements | Compare 5 Landlord Options',
     );
 
     expect(asText(metadata.description)).toContain(
-      'Choose Standard, Premium, Student, HMO / Shared House, or Lodger',
+      'Compare Standard, Premium, Student, HMO/shared-house and Lodger',
     );
     expect(asText(metadata.description)).toContain('England');
     expect(asText(metadata.description)).toContain(
-      'Compare and start the right England tenancy agreement',
+      'Choose the right agreement, preview the documents and create online',
     );
   });
 
@@ -23,9 +23,9 @@ describe('/products/ast metadata', () => {
     const openGraph = metadata.openGraph ?? {};
 
     expect(asText(openGraph.title)).toBe(
-      'Tenancy Agreement England | Compare Standard, Premium, Student, HMO and Lodger',
+      'England Tenancy Agreements | Compare 5 Landlord Options',
     );
-    expect(asText(openGraph.description)).toContain('Standard, Premium, Student, HMO / Shared House, and Lodger');
+    expect(asText(openGraph.description)).toContain('five England landlord agreements');
     expect(asText(openGraph.description)).toContain('England');
   });
 

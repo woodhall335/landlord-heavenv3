@@ -8,7 +8,7 @@ function readSource(relativePath: string) {
 
 describe('tenancy product pages', () => {
   it('/products/ast acts as the England comparison owner page', () => {
-    const source = readSource('src/app/(marketing)/products/ast/page.tsx');
+    const source = readSource('src/app/products/ast/page.tsx');
 
     expect(source).toContain('Choose by how the property is let');
     expect(source).toContain('Compare the five England agreement options.');
@@ -25,11 +25,11 @@ describe('tenancy product pages', () => {
     const landlordDocs = readSource('src/app/landlord-documents-england/page.tsx');
 
     expect(englandGuide).toContain('View the England agreement example');
-    expect(englandGuide).toContain('Compare England routes');
-    expect(englandGuide).toContain('Student, HMO / Shared House, and Lodger');
-    expect(jointEngland).toContain('Dedicated Student and HMO / Shared House routes for specialist shared lets');
-    expect(jointTemplate).toContain('Dedicated Student and HMO / Shared House routes for specialist shared lets');
-    expect(landlordDocs).toContain('Student, HMO / Shared House, and Lodger now have their own England routes.');
+    expect(englandGuide).toContain('Compare England agreements');
+    expect(englandGuide).toContain('Student, HMO / Shared House and Lodger');
+    expect(jointEngland).toContain('Dedicated Student and HMO / Shared House agreements for specialist shared lets');
+    expect(jointTemplate).toContain('Dedicated Student and HMO / Shared House agreements for specialist shared lets');
+    expect(landlordDocs).toContain('Student, HMO / Shared House and Lodger each have their own England agreements.');
   });
 
   it('legacy England tenancy pages now hand landlords into product-owner pages instead of wizard-first support copy', () => {
@@ -57,7 +57,6 @@ describe('tenancy product pages', () => {
   it('shared England SEO tenancy page component exposes keyword, pack, and route-comparison sections', () => {
     const source = readSource('src/components/seo/EnglandTenancyPage.tsx');
 
-    expect(source).toContain('Common landlord searches for this setup');
     expect(source).toContain('Choose this agreement if');
     expect(source).toContain('What you get');
     expect(source).toContain('See the actual pack before you pay');
@@ -83,7 +82,7 @@ describe('tenancy product pages', () => {
     expect(standardSource).toContain('Standard Periodic Tenancy Agreement');
     expect(standardSource).toContain('assured periodic');
     expect(standardSource).toContain('Renters Rights Act tenancy agreement');
-    expect(standardSource).toContain('Build the validated Standard tenancy pack');
+    expect(standardSource).toContain('Create your Standard tenancy pack');
     expect(standardSource).toContain('not a static form to adapt alone');
     expect(standardSource).toContain('legacyNotice=');
 
@@ -91,7 +90,7 @@ describe('tenancy product pages', () => {
     expect(premiumSource).toContain('Premium Periodic Tenancy Agreement');
     expect(premiumSource).toContain('assured periodic');
     expect(premiumSource).toContain('Renters Rights Act tenancy agreement');
-    expect(premiumSource).toContain('Build the validated Premium tenancy pack');
+    expect(premiumSource).toContain('Create your Premium tenancy pack');
     expect(premiumSource).toContain('not a static form');
     expect(premiumSource).toContain('england tenancy agreement management schedule');
     expect(premiumSource).toContain('you want a stronger pack with a management schedule and handover records');

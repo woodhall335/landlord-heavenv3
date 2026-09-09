@@ -16,6 +16,10 @@ export interface RouteAuditResult {
 }
 
 const PAGE_ROOT = path.join(process.cwd(), 'src', 'app');
+const RETIRED_ROUTE_CONFIG = JSON.parse(
+  fs.readFileSync(path.join(process.cwd(), 'config', 'retired-public-routes.json'), 'utf8'),
+) as { routeRedirects?: Record<string, string> };
+const RETIRED_ROUTE_SET = new Set(Object.keys(RETIRED_ROUTE_CONFIG.routeRedirects ?? {}));
 
 const EXCLUDED_ROUTE_PREFIXES = [
   '/api',
@@ -91,6 +95,7 @@ const trustInjectorTokens = [
   '<homecontent',
   'homecontent(',
   'rentincreaseguidepageview',
+  'claimswizard',
   'showtrustpositioningbar',
 ] as const;
 
@@ -151,8 +156,26 @@ function getTemplateHeuristicMatches(content: string): string[] {
 
 function isAuditedRoute(route: string): boolean {
   if (EXCLUDED_ROUTES.has(route)) return false;
+  if (RETIRED_ROUTE_SET.has(route)) return false;
   if (EXCLUDED_ROUTE_PREFIXES.some((prefix) => route.startsWith(prefix))) return false;
   return true;
+}
+
+function resolvePageContent(filePath: string, seen = new Set<string>()): string {
+  if (seen.has(filePath) || !fs.existsSync(filePath)) return '';
+  seen.add(filePath);
+
+  const source = fs.readFileSync(filePath, 'utf8');
+  const reExport = source.match(
+    /export\s*{[\s\S]*?default[\s\S]*?}\s*from\s*['"]([^'"]+)['"]/,
+  );
+  if (!reExport?.[1]?.startsWith('.')) return source;
+
+  const targetBase = path.resolve(path.dirname(filePath), reExport[1]);
+  const target = [targetBase, `${targetBase}.tsx`, `${targetBase}.ts`, path.join(targetBase, 'page.tsx')]
+    .find((candidate) => fs.existsSync(candidate));
+
+  return target ? `${source}\n${resolvePageContent(target, seen)}` : source;
 }
 
 function isNoindexOrRedirectPage(content: string): boolean {
@@ -168,7 +191,7 @@ export function auditPositioning(filePaths?: string[]): RouteAuditResult[] {
 
   return pages
     .map((fullPath) => {
-      const raw = fs.readFileSync(fullPath, 'utf8');
+      const raw = resolvePageContent(fullPath);
       const content = raw.toLowerCase();
       if (isNoindexOrRedirectPage(content)) {
         return null;

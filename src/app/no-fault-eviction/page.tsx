@@ -17,7 +17,7 @@ const canonical = getCanonicalUrl('/no-fault-eviction');
 export const metadata: Metadata = {
   title: 'No-Fault Eviction (England) | Historical Transition and Current Rules',
   description:
-    'Historical-only bridge page for landlords searching no-fault eviction terms after England moved into the Renters’ Rights Act framework and current possession rules.',
+    'Historical guide to no-fault eviction terminology after England moved to the Renters’ Rights Act framework and current possession rules.',
   keywords: [
     'no fault eviction',
     'no fault eviction england',
@@ -52,7 +52,7 @@ const faqs = [
   {
     question: 'Why keep this page live?',
     answer:
-      'Landlords still search for no-fault eviction wording. This page stays live to explain the change calmly, then guide users into the current England possession and eviction rules.',
+      'Because landlords still encounter no-fault eviction wording in older guidance and tenancy records. This page explains what changed and where to find the current rules.',
   },
   {
     question: 'What should I follow instead?',
@@ -82,7 +82,7 @@ export default function NoFaultEvictionPage() {
         <HeaderConfig mode="autoOnScroll" />
         <UniversalHero
           title="No-Fault Eviction (England)"
-          subtitle="A historical-only bridge page for landlords still searching no-fault eviction terms after England moved into the Renters’ Rights Act framework."
+          subtitle="Section 21 no-fault eviction has ended in England. Understand what changed and which current possession rules apply instead."
           primaryCta={{ label: 'See the current England process', href: '/eviction-process-england' }}
           secondaryCta={{ label: 'Start the current notice pack', href: '/products/notice-only' }}
           showTrustPositioningBar
@@ -102,7 +102,7 @@ export default function NoFaultEvictionPage() {
               <div className="prose prose-slate max-w-none">
                 <h2>What this page means today</h2>
                 <p>
-                  “No-fault eviction” is now mainly a historical England search term. Before{' '}
+                  “No-fault eviction” now describes the former England process. Before{' '}
                   <strong>1 May 2026</strong>, landlords often used Section 21 as the familiar
                   no-fault route. That is no longer the current framework.
                 </p>
@@ -112,11 +112,9 @@ export default function NoFaultEvictionPage() {
                   the current possession and eviction rules instead.
                 </p>
                 <p>
-                  Use this page as the decision point: first check whether your question is genuinely
-                  historical, then check which current notice or possession route fits the facts, and
-                  finally choose the document pack only when the evidence, dates, and service plan
-                  are clear. Keep the page in the file as your transition note so the reason for
-                  avoiding legacy no-fault wording is obvious later in your landlord decision record.
+                  First confirm whether you are dealing with an old Section 21 matter or a current
+                  possession case. For a current case, identify the applicable ground and check the
+                  evidence, dates and service requirements before preparing a notice.
                 </p>
 
                 <h2>What you should do instead</h2>

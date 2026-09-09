@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import {
-  SECTION21_END_DATE,
   SECTION21_PRE_CHANGE_BRIDGE,
   SECTION21_PRE_CHANGE_SUMMARY,
 } from '@/lib/seo/section21-transition-copy';
@@ -22,17 +21,16 @@ export function LegacySection21Banner({
         Historical Only
       </p>
       <h2 className="mt-3 text-xl font-bold text-[#431407]">
-        Section 21 Is Ending In England
+        Section 21 Has Ended In England
       </h2>
       <p className="mt-3 text-sm leading-7 md:text-base">
         {SECTION21_PRE_CHANGE_SUMMARY} We are aligned with the Renters&apos; Rights Act, so live
-        England case planning should already be based on the current possession process rather
+        England case planning must be based on the current possession process rather
         than older Section 21 assumptions.
       </p>
       <p className={`text-sm leading-7 md:text-base ${compact ? 'mt-2' : 'mt-3'}`}>
         {SECTION21_PRE_CHANGE_BRIDGE} Treat any Section 21 wording on this page as transition
-        support only, and use the current notice, claim, and court guidance that landlords need
-        from {SECTION21_END_DATE}.
+        guidance only, and use the current notice, claim, and court guidance for any new case.
       </p>
       <div className="mt-4 flex flex-col gap-3 sm:flex-row">
         <Link

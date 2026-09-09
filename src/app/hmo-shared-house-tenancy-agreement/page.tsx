@@ -195,7 +195,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
               },
             ],
           },
-          ctaTitle: 'Build the validated HMO / Shared House pack',
+    ctaTitle: 'Create your HMO / Shared House pack',
           ctaBody:
             'Use this option when the property is being shared and you want review-ready document preparation for the agreement, communal rules, and supporting records from the start.',
         }}
@@ -246,7 +246,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
               'Yes - when completed and signed correctly. This template follows post-May 2026 England rules, and the checklist helps you avoid common shared-house agreement mistakes.',
           },
         ]}
-        finalCtaBody="Use the HMO / Shared House workflow when the real complexity is shared occupation, communal areas, and day-to-day house management. If the occupiers are sharers and you want the agreement to reflect how the house is actually going to be lived in, this validated pack is usually a better fit than the Standard or Premium packs."
+      finalCtaBody="Use the HMO / Shared House workflow when the real complexity is shared occupation, communal areas, and day-to-day house management. If the occupiers are sharers and you want the agreement to reflect how the house is actually going to be lived in, this specialist pack is usually a better fit than the Standard or Premium packs."
       />
       <section className="bg-white px-4 pb-14">
         <div className="mx-auto max-w-4xl rounded-2xl border border-[#E8E1F8] bg-[#FCFAFF] p-5 text-sm leading-7 text-[#4B5565]">

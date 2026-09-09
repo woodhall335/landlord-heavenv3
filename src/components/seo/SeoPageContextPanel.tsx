@@ -89,22 +89,21 @@ export function SeoPageContextPanel({
         }
       >
         <p>
-          Start here if you need the main guide on this issue. If your situation is
-          narrower or you want the next practical step, go to{' '}
+          For a more focused explanation and the next practical step, read{' '}
           <Link href={entry.supportingPage} className="font-medium text-primary hover:underline">
             {supportingAnchor}
           </Link>
           .
         </p>
         <p>
-          If you want the wider background first, read{' '}
+          For the wider background and full process, read{' '}
           <Link href={entry.primaryPillar} className="font-medium text-primary hover:underline">
             {pillarAnchor}
           </Link>
           .
         </p>
         {!mapping ? <p>
-          Ready to act? The quickest next step from here is{' '}
+          Ready to prepare the documents? Continue to{' '}
           <Link href={productHref} className="font-medium text-primary hover:underline">
             {productAnchor}
           </Link>

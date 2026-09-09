@@ -11,7 +11,6 @@ import {
   StructuredData,
   articleSchema,
   breadcrumbSchema,
-  faqPageSchema,
 } from '@/lib/seo/structured-data';
 
 const canonical = 'https://landlordheaven.co.uk/accelerated-possession-guide';
@@ -246,8 +245,7 @@ export default function Page() {
                 problems after the claim has already been issued.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
-                For high-intent landlords, the real question is usually not whether the
-                route sounds faster. The real question is whether the Section 21 file is
+                The important question is not whether the process sounds faster. It is whether the Section 21 file is
                 clean enough for the court to treat it as straightforward. That is why the
                 best accelerated possession claims start long before the court form is
                 filed. They start with route choice, compliance checks, and a strong paper
@@ -686,7 +684,7 @@ export default function Page() {
               <p className="mt-4 leading-7 text-gray-700">
                 Behind most of these mistakes is the same pattern: the landlord treated the
                 route as a quick court filing instead of a controlled evidence exercise.
-                That is why high-intent landlords usually do best when they work backwards
+                Landlords usually do best when they work backwards
                 from what a judge will need to see. If the answer is not clear on the page,
                 it may not be clear enough for the court either.
               </p>

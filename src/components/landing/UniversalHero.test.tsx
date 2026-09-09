@@ -146,6 +146,9 @@ describe('UniversalHero trust pill', () => {
     expect(benefits).toHaveTextContent('Help guidance');
     expect(benefits).toHaveTextContent('stripe');
     expect(benefits).toHaveClass('lg:hidden');
+    expect(screen.getByTestId('usage-today-counter')).toHaveTextContent(
+      /\d+ landlords have used Landlord Heaven today/
+    );
     expect(
       screen.queryByText(/Build the notice, service file, court pack/i)
     ).not.toBeInTheDocument();

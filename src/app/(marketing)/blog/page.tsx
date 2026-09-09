@@ -132,7 +132,7 @@ export default function BlogPage() {
           {...blogHeroConfig}
           variant="pastel"
           backgroundImageKey="blogEviction"
-          backgroundImageAlt="Watercolour illustration of landlord eviction guides and court-ready documents"
+          backgroundImageAlt="Watercolour illustration of landlord eviction guides and court documents"
         />
 
         <section className="border-b border-[#ede2ff] bg-[#f8f1ff]/70 py-8 lg:py-11">
@@ -145,15 +145,14 @@ export default function BlogPage() {
                 Landlord help that tells you what to do next
               </h2>
               <p className="mt-4 text-lg text-slate-600">
-                Begin with the England landlord problem in plain English, understand the route, and
-                then move into the right product when you are ready, with clear evidence checks.
+                Start with the problem in plain English, understand the evidence and legal steps,
+                then choose a product only when it fits what you need to do.
               </p>
               <p className="mt-4 text-base leading-8 text-slate-600">
-                Use this hub when you are not sure whether the next step is a Section 8 notice,
+                Use these guides when you are not sure whether the next step is a Section 8 notice,
                 possession claim, money claim, rent increase notice, tenancy agreement, or a free
-                tool check. Each guide is written to answer the search query quickly, explain the
-                evidence and compliance points that matter, and connect you to a document route only
-                where that route genuinely fits the landlord problem.
+                tool. Each guide gives a direct answer, explains the evidence and compliance points
+                that matter and links to the relevant documents where appropriate.
               </p>
               <div className="mt-5 grid gap-3 text-sm text-slate-700 md:grid-cols-3">
                 <div className="rounded-xl border border-[#e3d3ff] bg-white p-4">

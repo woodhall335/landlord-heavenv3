@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Renters Rights Act Tenancy Agreement | England 2026',
     description:
-      'Search-intent page for landlords looking for a Renters Rights Bill tenancy agreement, now routed into the current England agreement flows.',
+      'Understand what the Renters Rights Act means for new England tenancy agreements and compare the current Standard and Premium options.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -44,25 +44,25 @@ export default function RentersRightsBillTenancyAgreementPage() {
       <EnglandTenancyPage
         pagePath="/renters-rights-bill-tenancy-agreement"
         title="Renters Rights Bill Tenancy Agreement"
-        subtitle="Landlords still search using Bill phrasing, but from 1 May 2026 new England agreements generally move into the assured periodic framework. This page captures the old search language and directs it into the current England agreement routes."
+        subtitle="The Renters Rights Bill is now an Act. For new England tenancies from 1 May 2026, choose an agreement written for the assured periodic framework."
         primaryCtaLabel="Start Standard England agreement"
         primaryCtaHref={standardAgreementHref}
         secondaryCtaLabel="Start Premium England agreement"
         secondaryCtaHref={premiumAgreementHref}
-        introTitle="Bill keyword, current England route"
+        introTitle="What landlords need for a new tenancy"
         introBody={[
-          'This page intentionally targets the phrase renters rights bill tenancy agreement because that remains a live search term used by landlords.',
-          'The product wording itself now focuses on the current England position from 1 May 2026 and routes landlords into the right Standard or Premium agreement flow instead of keeping them in older AST-era language.',
+          'You may still see the change described as the Renters Rights Bill, but the practical question is whether your agreement reflects the rules now in force.',
+          'For a new England tenancy, compare Standard and Premium agreements written for the assured periodic framework rather than adapting an old AST.',
         ]}
         highlights={[
-          'Dedicated page for the Bill-era search query',
-          'Explains the terminology shift from an AST to the current England agreement',
-          'Routes users into the current England agreement flows rather than legacy AST sales pages',
+          'Explains the change from the Bill to the Act',
+          'Clarifies the move away from old fixed-term AST wording',
+          'Links directly to current Standard and Premium agreements',
         ]}
         compliancePoints={[
-          'Uses current England transition wording in customer copy',
-          'Keeps Bill phrasing for search-intent targeting only',
-          'Supports the assured periodic framework used for new England lets from 1 May 2026',
+          'Confirm that the rental property is in England',
+          'Use the current assured periodic framework for a new England let from 1 May 2026',
+          'Review the generated agreement against the actual property and occupier details',
         ]}
         keywordTargets={[
           'renters rights bill tenancy agreement',

@@ -43,27 +43,27 @@ export default function FixedTermPeriodicTenancyEnglandPage() {
       <EnglandTenancyPage
         pagePath="/fixed-term-periodic-tenancy-england"
         title="Fixed Term vs Periodic Tenancy England"
-        subtitle="Use this page if you are comparing fixed-term and periodic tenancy wording in England. If you need the plain-English definition first, start with the periodic tenancy guide, then come back when you are ready to compare routes."
+        subtitle="Compare fixed-term and periodic tenancy wording in England, understand what changed in 2026 and choose a current agreement for a new let."
         primaryCtaLabel="Start Standard England agreement"
         primaryCtaHref={standardAgreementHref}
         secondaryCtaLabel="Start Premium England agreement"
         secondaryCtaHref={premiumAgreementHref}
-        legacyNotice="Landlords still search for fixed-term and rolling tenancy language, but Landlord Heaven no longer sells a new fixed-term AST as the core England product route."
+        legacyNotice="Fixed-term and rolling tenancy language remains familiar, but a new England tenancy now needs an agreement written for the assured periodic framework."
         introTitle="Compare the older wording without getting stuck in it"
         introBody={[
           'Landlords still compare fixed-term and periodic tenancy wording because those labels shaped the older market for years.',
-          'The useful next step now is to separate the definition question from the drafting question: understand the difference first, then move into the current England agreement route that matches the property.',
+          'First understand the difference between the terms. Then choose the current England agreement that matches the property and occupiers.',
         ]}
         highlights={[
           'Helps landlords compare fixed-term and periodic wording in one place',
-          'Keeps the page focused on the comparison query rather than the basic definition',
-          'Routes landlords into the current Standard or Premium England agreement flow',
+          'Explains the practical difference between the two terms',
+          'Links landlords to current Standard and Premium England agreements',
           'Explains the terminology shift without turning the page into an old AST sales page',
         ]}
         compliancePoints={[
-          'Makes clear that fixed-term AST language is now legacy search framing on Landlord Heaven England pages',
-          'Keeps the live CTA path on the current England agreement flow',
-          'Avoids presenting a new fixed-term AST as the default England route',
+          'Makes clear that fixed-term AST language describes the older England position',
+          'Directs new lets to current England agreements',
+          'Does not present a fixed-term AST as the default for a new England tenancy',
         ]}
         keywordTargets={[
           'fixed term tenancy agreement england',
@@ -74,7 +74,7 @@ export default function FixedTermPeriodicTenancyEnglandPage() {
           {
             title: 'What is a periodic tenancy?',
             description:
-              'Read the plain-English guide if you want the definition of periodic and rolling tenancy before comparing routes.',
+              'Read the plain-English guide if you want the definition of periodic and rolling tenancy before choosing an agreement.',
             href: '/periodic-tenancy-agreement',
             ctaLabel: 'Read the periodic tenancy guide',
           },
@@ -90,17 +90,17 @@ export default function FixedTermPeriodicTenancyEnglandPage() {
           {
             question: 'Does Landlord Heaven still sell fixed-term ASTs as the main England product?',
             answer:
-              'No. This guide explains the older fixed-term and rolling terminology, while the live product route uses the current England agreement flow designed for the assured periodic framework.',
+              'No. This guide explains the older fixed-term and rolling terminology. Current Standard and Premium agreements use the assured periodic framework.',
           },
           {
-            question: 'Why keep this page live if the product position changed?',
+            question: 'Why do landlords still use fixed-term wording?',
             answer:
-              'Because landlords still search for fixed-term and periodic tenancy terms. Keeping the page live preserves rankings while steering users into the current England path.',
+              'Because fixed-term ASTs were widely used before the 2026 changes and the terminology remains common in older agreements and landlord guidance.',
           },
           {
             question: 'Where do I start the current England agreement flow?',
             answer:
-              'Use the CTA on this page to move into the live England Standard or Premium route that matches the let.',
+              'Choose Standard or Premium using the buttons on this page. The right option depends on the letting arrangement and how much management detail you need.',
           },
         ]}
       />

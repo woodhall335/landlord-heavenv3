@@ -62,9 +62,9 @@ export function Section21HeaderBanner() {
         {/* Center content */}
         <div className="flex items-center justify-center gap-2 sm:gap-4 flex-1">
           {/* Desktop */}
-          <span className="hidden sm:inline">⚠️ Section 21 ends 1 May 2026 —</span>
+          <span className="hidden sm:inline">⚠️ Section 21 ended on 1 May 2026 —</span>
           {/* Mobile */}
-          <span className="sm:hidden">⚠️ S21 ends May 2026 —</span>
+          <span className="sm:hidden">⚠️ Section 21 has ended —</span>
 
           <Section21Countdown variant="compact" className="text-white" />
 
@@ -72,8 +72,8 @@ export function Section21HeaderBanner() {
             href="/products/notice-only"
             className="text-white underline hover:no-underline font-medium ml-1"
           >
-            <span className="hidden sm:inline">Serve Your Notice Now →</span>
-            <span className="sm:hidden">Act Now →</span>
+            <span className="hidden sm:inline">Check the current notice →</span>
+            <span className="sm:hidden">Current rules →</span>
           </Link>
         </div>
 

@@ -5,10 +5,10 @@
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render } from '@testing-library/react';
-import NoticeOnlyPage from '@/app/(marketing)/products/notice-only/page';
-import CompletePackPage from '@/app/(marketing)/products/complete-pack/page';
-import MoneyClaimPage from '@/app/(marketing)/products/money-claim/page';
-import AstPage from '@/app/(marketing)/products/ast/page';
+import NoticeOnlyPage from '@/app/products/notice-only/page';
+import CompletePackPage from '@/app/products/complete-pack/page';
+import MoneyClaimPage from '@/app/products/money-claim/page';
+import AstPage from '@/app/products/ast/page';
 import TenancyAgreementTemplatePage from '@/app/tenancy-agreement-template/page';
 import AssuredShortholdTenancyAgreementTemplatePage from '@/app/assured-shorthold-tenancy-agreement-template/page';
 import WalesTenancyAgreementTemplatePage from '@/app/wales-tenancy-agreement-template/page';
@@ -70,6 +70,12 @@ vi.mock('next/navigation', () => ({
 
 vi.mock('@/components/layout/HeaderConfig', () => ({
   HeaderConfig: () => null,
+}));
+
+// The regional pages include an async server component whose contents are not
+// relevant to this contract. Keep this test focused on each route's h1 output.
+vi.mock('@/components/value-proposition', () => ({
+  TenancyPackSection: () => <section data-testid="tenancy-pack-section" />,
 }));
 
 const renderPage = async (renderer: () => React.ReactElement | Promise<React.ReactElement>) => {

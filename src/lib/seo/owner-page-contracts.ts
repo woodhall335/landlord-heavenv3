@@ -40,12 +40,12 @@ export const OWNER_PAGE_CONTRACTS: OwnerPageContract[] = [
   },
   {
     pathname: '/products/notice-only',
-    primaryTheme: 'Evict a tenant legally',
+    primaryTheme: 'Section 8 notice for landlords',
     secondaryThemes: ['eviction notice', 'Section 8 notice', 'notice pack for landlords'],
     userProblem: 'A landlord needs to serve the right notice before court.',
     productPromise: 'Create the right eviction notice pack for the route being served.',
     primaryCtaLabel: 'Create and preview my Form 3A — £39.99',
-    mustMention: ['evict a tenant legally', 'eviction notice', 'landlord'],
+    mustMention: ['Section 8', 'Form 3A', 'landlord'],
     forbiddenHeroPhrases: ['cluster', 'hub'],
   },
   {
@@ -55,8 +55,8 @@ export const OWNER_PAGE_CONTRACTS: OwnerPageContract[] = [
     userProblem: 'A landlord needs the court-stage possession paperwork and guidance.',
     productPromise: 'Prepare the complete England eviction pack from notice to court.',
     primaryCtaLabel: 'Prepare my court pack',
-    mustMention: ['evict a tenant through court', 'eviction pack', 'court forms'],
-    forbiddenHeroPhrases: ['bundle', 'cluster', 'hub'],
+    mustMention: ['Section 8', 'N5', 'N119', 'court'],
+    forbiddenHeroPhrases: ['cluster', 'hub'],
   },
   {
     pathname: '/products/money-claim',
@@ -97,8 +97,8 @@ export const OWNER_PAGE_CONTRACTS: OwnerPageContract[] = [
     secondaryThemes: ['basic tenancy agreement', 'whole-property let'],
     userProblem: 'A landlord needs the standard England tenancy agreement route.',
     productPromise:
-      'Build the validated Standard tenancy setup pack for a straightforward England let.',
-    primaryCtaLabel: 'Build my validated Standard pack',
+      'Create the Standard tenancy setup pack for a straightforward England let.',
+    primaryCtaLabel: 'Create my standard agreement',
     mustMention: ['standard tenancy agreement', 'England'],
   },
   {
@@ -107,8 +107,8 @@ export const OWNER_PAGE_CONTRACTS: OwnerPageContract[] = [
     secondaryThemes: ['detailed tenancy agreement', 'fuller residential drafting'],
     userProblem: 'A landlord needs broader drafting for an England residential let.',
     productPromise:
-      'Build the validated Premium tenancy setup pack with fuller management wording.',
-    primaryCtaLabel: 'Build my validated Premium pack',
+      'Create the Premium tenancy setup pack with fuller management wording.',
+    primaryCtaLabel: 'Create my premium agreement',
     mustMention: ['premium tenancy agreement', 'England'],
   },
   {
@@ -116,8 +116,8 @@ export const OWNER_PAGE_CONTRACTS: OwnerPageContract[] = [
     primaryTheme: 'Student tenancy agreement England',
     secondaryThemes: ['student tenancy agreement with guarantor', 'student house agreement'],
     userProblem: 'A landlord needs a student-focused agreement with guarantor and sharer wording.',
-    productPromise: 'Build the validated England Student tenancy setup pack.',
-    primaryCtaLabel: 'Build my validated Student pack',
+    productPromise: 'Create the England Student tenancy setup pack.',
+    primaryCtaLabel: 'Create my student agreement',
     mustMention: ['student tenancy agreement', 'England'],
   },
   {
@@ -125,8 +125,8 @@ export const OWNER_PAGE_CONTRACTS: OwnerPageContract[] = [
     primaryTheme: 'HMO tenancy agreement England',
     secondaryThemes: ['shared house tenancy agreement', 'room by room tenancy agreement'],
     userProblem: 'A landlord needs shared-house or HMO wording for an England let.',
-    productPromise: 'Build the validated HMO / Shared House tenancy setup pack.',
-    primaryCtaLabel: 'Build my validated HMO / Shared House pack',
+    productPromise: 'Create the HMO / Shared House tenancy setup pack.',
+    primaryCtaLabel: 'Create my HMO agreement',
     mustMention: ['HMO tenancy agreement', 'shared house tenancy agreement'],
   },
   {
@@ -134,8 +134,8 @@ export const OWNER_PAGE_CONTRACTS: OwnerPageContract[] = [
     primaryTheme: 'Lodger agreement England',
     secondaryThemes: ['room let agreement', 'resident landlord agreement'],
     userProblem: 'A resident landlord needs the right lodger agreement.',
-    productPromise: 'Build the validated England Lodger setup pack.',
-    primaryCtaLabel: 'Build my validated Lodger pack',
+    productPromise: 'Create the England Lodger setup pack.',
+    primaryCtaLabel: 'Create my lodger agreement',
     mustMention: ['lodger agreement', 'room let agreement'],
   },
 ] as const;

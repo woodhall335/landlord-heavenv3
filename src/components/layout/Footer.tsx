@@ -98,17 +98,17 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/tenancy-agreements/wales" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                <Link href="/wales-tenancy-agreement-template" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
                   Wales Standard Occupation Contracts
                 </Link>
               </li>
               <li>
-                <Link href="/tenancy-agreements/scotland" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                <Link href="/private-residential-tenancy-agreement-template" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
                   Scotland Standard PRT
                 </Link>
               </li>
               <li>
-                <Link href="/tenancy-agreements/northern-ireland" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                <Link href="/northern-ireland-tenancy-agreement-template" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
                   Northern Ireland Standard Agreement
                 </Link>
               </li>

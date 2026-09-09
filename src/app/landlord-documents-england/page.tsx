@@ -25,7 +25,7 @@ const GROUPS = [
         href: '/premium-tenancy-agreement',
         label: 'Premium England tenancy agreement',
         description:
-          'Use the premium route for fuller ordinary-residential drafting. Student, HMO / Shared House, and Lodger now have their own England routes.',
+          'Use Premium for fuller ordinary-residential drafting. Student, HMO / Shared House and Lodger each have their own England agreements.',
       },
       {
         href: buildWizardLink({
@@ -140,7 +140,7 @@ export default function LandlordDocumentsEnglandPage() {
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">Bridge page</p>
             <h2 className="mt-3 text-3xl font-bold text-slate-950">Live landlord document routes for England</h2>
             <p className="mt-3 text-lg leading-8 text-slate-700">
-              The older standalone England document pages have been retired. Use the live routes below to reach the current public entry points without dead ends or outdated product journeys.
+              Choose the document you need below. Each link takes you to the current product or guide, with the price and contents explained before you start.
             </p>
           </div>
         </Container>

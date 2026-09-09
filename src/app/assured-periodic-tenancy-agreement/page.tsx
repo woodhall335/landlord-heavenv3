@@ -10,7 +10,7 @@ const faqs = [
   {
     question: 'What is an assured periodic tenancy agreement in plain English?',
     answer:
-      'In plain English, it is the newer England wording many landlords now see when choosing a tenancy agreement for a new let. This page explains the term, then points you to the England agreement example page or the comparison page so you can choose the right route.',
+      'It is the current form of tenancy used for many new private lets in England. This guide explains the term and links to a worked agreement and the available products.',
   },
   {
     question: 'Does this page replace the main England agreement example page?',
@@ -28,12 +28,12 @@ const relatedLinks = [
   {
     href: '/tenancy-agreement-template',
     title: 'England tenancy agreement example',
-    description: 'See the sample agreement preview and decide which England route fits the let.',
+    description: 'See the worked agreement and decide which England product fits the let.',
   },
   {
     href: '/assured-shorthold-tenancy-agreement-template',
     title: 'AST legacy guide',
-    description: 'Understand older AST terminology and how it now feeds into the current England route.',
+    description: 'Understand older AST terminology and how it relates to current England agreements.',
   },
   {
     href: '/products/ast',
@@ -83,7 +83,7 @@ export default function AssuredPeriodicTenancyAgreementPage() {
       })}
       faqSchemaData={faqPageSchema(faqs)}
       heroTitle="Assured Periodic Tenancy Agreement"
-      heroSubtitle="This page explains the newer England terminology in plain English, then points you to the England agreement example page or comparison page so you can choose the right route."
+      heroSubtitle="Understand assured periodic tenancy wording, inspect a worked England agreement and compare the available products."
       heroMediaSrc="/images/wizard-icons/10-signing.png"
       heroMediaAlt="Illustration of a tenancy agreement document"
       primaryCtaLabel="View the England agreement example"
@@ -91,31 +91,31 @@ export default function AssuredPeriodicTenancyAgreementPage() {
       pagePath={pagePath}
       intentHookTitle="Use this page to understand the wording before choosing an agreement"
       intentHookParagraphs={[
-        'If you searched for assured periodic tenancy agreement, the practical question is usually whether this is the newer England wording you now need to understand when choosing a tenancy document. This page answers that question directly, then points you to the page that shows a real agreement example.',
-        'It should not try to replace the broader England agreement journey. Landlords who want to inspect the agreement itself should move to /tenancy-agreement-template, while landlords who want to compare all five live England routes should move to /products/ast.',
-        'Think of this page as translation and context. Once the terminology makes sense, move into the agreement example or comparison page rather than treating this support guide as the end of the journey.',
+        'If you searched for assured periodic tenancy agreement, you probably want to know whether this is the current England wording for a new let. The short answer is yes for many ordinary private tenancies.',
+        'Use the worked agreement page to inspect the document itself. Use the comparison page when you need to choose between Standard, Premium, Student, HMO / Shared House and Lodger agreements.',
+        'Once the terminology is clear, continue to the agreement that matches the property and occupiers.',
       ]}
       intentHookCta={{
         href: '/standard-tenancy-agreement',
-        label: "Create a validated assured periodic tenancy agreement",
+        label: "Create an assured periodic tenancy agreement",
         suffix: 'when you already know the let is a standard England residential tenancy.',
       }}
-      currentPositionTitle="Where assured periodic wording fits in the current England route"
+      currentPositionTitle="Where assured periodic wording applies"
       currentPositionParagraphs={[
-        'Assured periodic wording helps explain the direction of travel for new England lets and the way modern tenancy structures are now described. That makes it useful for support content, FAQs, and explanatory guides.',
-        'It does not make this page the main example or buying page. The broad England head terms should still resolve into the sample agreement page or the comparison page once the wording has been clarified.',
+        'Assured periodic wording describes the current starting point for many new private tenancies in England. It replaces the familiar fixed-term AST framing used before 1 May 2026.',
+        'The right document still depends on the property and living arrangement. Ordinary whole-property lets, student houses, HMOs and lodger arrangements do not all use identical wording.',
       ]}
       sections={[
         {
           title: 'What landlords need to know',
           paragraphs: [
-            'The first thing to understand is that assured periodic wording is not meant to send you into a separate dead-end branch of the site. It exists to make the current England position easier to follow when older AST terminology still dominates search habits.',
-            'The second thing to understand is that this page is not trying to replicate the main agreement preview. If you want to inspect the actual document structure, the right destination is /tenancy-agreement-template, where the sample agreement and clause sections are shown directly.',
-            'The third point is practical: if you already know the tenancy is an ordinary residential whole-property let, move to the England agreement example and then into Standard or Premium. If the occupier setup is specialist, compare the Student, HMO / Shared House, and Lodger routes on /products/ast.',
+            'Older AST terminology still appears in searches and existing paperwork, but it should not determine which agreement you use for a new let.',
+            'Inspect the worked example if you want to see the document structure and clause sections before buying.',
+            'For an ordinary whole-property let, compare Standard and Premium. For a specialist arrangement, compare the Student, HMO / Shared House and Lodger agreements.',
           ],
         },
         {
-          title: 'Why this page stays support-only',
+          title: 'When to use the worked agreement instead',
           paragraphs: [
             'This guide focuses on the meaning of an assured periodic tenancy and how that wording affects a new England agreement.',
             'The full agreement example and product comparison sit on separate pages so that you can inspect the wording or choose a paid option when you are ready.',
@@ -124,7 +124,7 @@ export default function AssuredPeriodicTenancyAgreementPage() {
         },
       ]}
       ctaBlockTitle="Ready to move from terminology into the actual England agreement?"
-      ctaBlockDescription="Open the England agreement example page to inspect the document structure first, then choose Standard, Premium, or the specialist route that fits the property."
+      ctaBlockDescription="Inspect the worked England agreement, then choose Standard, Premium or the specialist product that fits the property."
       faqTitle="Assured periodic tenancy agreement FAQs"
       faqIntro="Short answers for landlords using newer periodic-tenancy wording."
       faqs={faqs}

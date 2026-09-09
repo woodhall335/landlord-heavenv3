@@ -10,23 +10,23 @@ describe('golden-pack sample-proof rollout pages', () => {
   it('keeps the shared sample-proof wiring on eviction, money claim and Section 13 product pages', () => {
     const pages = [
       {
-        source: readSource('src/app/(marketing)/products/notice-only/page.tsx'),
+        source: readSource('src/app/products/notice-only/page.tsx'),
         assertion: 'sampleProof: sampleProof ? (',
       },
       {
-        source: readSource('src/app/(marketing)/products/complete-pack/page.tsx'),
+        source: readSource('src/app/products/complete-pack/page.tsx'),
         assertion: 'sampleProof: sampleProof ? (',
       },
       {
-        source: readSource('src/app/(marketing)/products/money-claim/page.tsx'),
+        source: readSource('src/app/products/money-claim/page.tsx'),
         assertion: 'sampleProof: sampleProof ? (',
       },
       {
-        source: readSource('src/app/(marketing)/products/section-13-standard/page.tsx'),
+        source: readSource('src/app/products/section-13-standard/page.tsx'),
         assertion: 'earlyProofBand: {',
       },
       {
-        source: readSource('src/app/(marketing)/products/section-13-defence/page.tsx'),
+        source: readSource('src/app/products/section-13-defence/page.tsx'),
         assertion: 'earlyProofBand: {',
       },
     ];

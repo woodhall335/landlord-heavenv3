@@ -3,7 +3,6 @@ import Link from 'next/link';
 import {
   AlertTriangle,
   ArrowRight,
-  CheckCircle2,
   FileText,
   Gavel,
   Scale,
@@ -19,8 +18,6 @@ import { PRODUCTS } from '@/lib/pricing/products';
 import { getCanonicalUrl } from '@/lib/seo';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import {
-  blogLinks,
-  guideLinks,
   moneyClaimForms,
   moneyClaimGuides,
   productLinks,
@@ -69,12 +66,12 @@ const pageFaqs: FAQItem[] = [
   {
     question: 'What is a landlord money claim in England?',
     answer:
-      'It is the county court debt-recovery route landlords use to recover unpaid rent, bills, damage costs, and other tenancy-related debts. The broad task is not just choosing a form. It is building one coherent file that explains what is owed, why it is owed, and what evidence supports each figure.',
+      'It is a county court claim for unpaid rent, bills, damage costs or another tenancy-related debt. You need a clear total, an explanation of what is owed and evidence for each figure.',
   },
   {
-    question: 'Why should I understand the claim route before starting the product?',
+    question: 'What should I check before starting a money claim?',
     answer:
-      'Because broad money-claim users usually need route clarity first. They need to see what the paperwork looks like, understand the pre-action and evidence steps, and decide whether the debt file is ready before they move into a transactional workflow.',
+      'Check the amount claimed, the documents supporting it, whether the pre-action steps have been followed and whether you have a realistic address and enforcement plan.',
   },
   {
     question: 'Does this guide cover unpaid rent?',
@@ -94,7 +91,7 @@ const pageFaqs: FAQItem[] = [
   {
     question: 'Does the money claim pack replace the broad guide?',
     answer:
-      'No. The pack is the primary transactional step after the broad guide has done its job. This page stays focused on route clarity, evidence structure, and what a landlord needs before they start generating claim documents.',
+      'The guide explains the process and evidence. The Money Claim Pack prepares the claim documents from the facts you provide.',
   },
 ];
 
@@ -168,11 +165,10 @@ export default async function MoneyClaimPage() {
               <div className="mt-5 grid gap-4 md:grid-cols-3">
                 <div className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-5">
                   <Scale className="h-6 w-6 text-[#692ed4]" />
-                  <h3 className="mt-4 text-lg font-semibold text-[#2a2161]">One route and one figure</h3>
+                  <h3 className="mt-4 text-lg font-semibold text-[#2a2161]">One clear total</h3>
                   <p className="mt-3 text-gray-700">
-                    Broad money-claim users often know money is owed but have not stabilised the
-                    amount yet. The first job is turning the debt into one clean figure supported
-                    by one coherent route and one evidence story.
+                    Before sending a claim, reconcile the rent ledger, invoices, payments and
+                    credits into one total that can be explained and supported.
                   </p>
                 </div>
                 <div className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-5">
@@ -188,9 +184,8 @@ export default async function MoneyClaimPage() {
                   <Gavel className="h-6 w-6 text-[#692ed4]" />
                   <h3 className="mt-4 text-lg font-semibold text-[#2a2161]">Collectability still matters</h3>
                   <p className="mt-3 text-gray-700">
-                    Filing the claim is not the end of the commercial analysis. Landlords should
-                    think about judgment, enforcement, and whether possession is also running in
-                    parallel before they commit to the final document set.
+                    A judgment does not guarantee payment. Consider how it could be enforced and
+                    whether a separate possession case is also needed before issuing the claim.
                   </p>
                 </div>
               </div>
@@ -202,25 +197,22 @@ export default async function MoneyClaimPage() {
           <Container>
             <div className="mx-auto max-w-5xl">
               <h2 className="text-3xl font-bold text-[#2a2161]">
-                Choose the right money claim support route
+                Find the guidance that matches the debt
               </h2>
               <p className="mt-4 max-w-3xl text-lg text-gray-700">
-                The broad guide stays above the support estate. Unpaid rent remains the strongest
-                support route, scenario pages stay scenario-specific, and process pages help with
-                the filing and evidence layers without replacing this guide.
+                Start with unpaid rent guidance for arrears. Use the more specific pages for bills,
+                guarantor liability, damage, pre-action steps, filing or enforcement.
               </p>
 
               <div className="mt-8 grid gap-5 md:grid-cols-3">
                 <article className="rounded-3xl border border-[#CAB6FF] bg-[#FCFAFF] p-6 shadow-[0_14px_40px_rgba(76,29,149,0.08)]">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#692ed4]">
-                    Strongest support route
+                    Rent arrears
                   </p>
                   <h3 className="mt-3 text-2xl font-bold text-[#2a2161]">Claim unpaid rent</h3>
                   <p className="mt-4 text-gray-700">
-                    Use this route when the main debt is arrears and the landlord needs clearer
-                    rent-led examples, arrears file structure, and judgment planning. It stays
-                    strongest underneath the broad guide, but it is still a support page, not the
-                    commercial owner.
+                    Use this guide when the main debt is unpaid rent and you need examples of an
+                    arrears schedule, evidence file and enforcement planning.
                   </p>
                   <Link
                     href="/money-claim-unpaid-rent"
@@ -233,14 +225,12 @@ export default async function MoneyClaimPage() {
 
                 <article className="rounded-3xl border border-[#E6DBFF] bg-white p-6">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#8a6fd1]">
-                    Scenario routes
+                    Other tenancy debts
                   </p>
                   <h3 className="mt-3 text-2xl font-bold text-[#2a2161]">Bills, guarantor, and damage claims</h3>
                   <p className="mt-4 text-gray-700">
-                    Use the scenario pages when the landlord already knows the debt type and needs
-                    route-specific details, such as unpaid bills, guarantor liability, former tenant
-                    tracing, property damage, or cleaning costs. They support this guide instead of competing
-                    with it.
+                    Choose the relevant guide for unpaid bills, guarantor liability, former tenant
+                    tracing, property damage or cleaning costs.
                   </p>
                   <div className="mt-5 flex flex-wrap gap-3 text-sm">
                     <Link href="/money-claim-unpaid-bills" className="rounded-lg border border-[#E6DBFF] px-3 py-2 text-primary hover:bg-[#FCFAFF]">
@@ -266,7 +256,7 @@ export default async function MoneyClaimPage() {
 
                 <article className="rounded-3xl border border-[#E6DBFF] bg-white p-6">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#8a6fd1]">
-                    Process and evidence routes
+                    Process and evidence
                   </p>
                   <h3 className="mt-3 text-2xl font-bold text-[#2a2161]">Pre-action, filing, and enforcement</h3>
                   <p className="mt-4 text-gray-700">
@@ -301,11 +291,11 @@ export default async function MoneyClaimPage() {
           <Container>
             <div className="mx-auto max-w-5xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-8">
               <h2 className="text-3xl font-bold text-[#2a2161]">
-                After the broad guide: move into the claim workflow
+                Ready to prepare the claim documents?
               </h2>
               <p className="mt-4 max-w-3xl text-lg text-gray-700">
-                Once you understand the route, evidence structure, and likely filing path, continue
-                to the Money Claim Pack to prepare the claim documents in one guided workflow.
+                Once the amount, evidence and likely filing method are clear, use the Money Claim
+                Pack to prepare the documents together.
               </p>
 
               <div className="mt-8 grid gap-5 md:grid-cols-2">

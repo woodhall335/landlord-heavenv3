@@ -1,5 +1,6 @@
 {
   "intentionallyExcludedRoutes": [
+    "/accelerated-possession-guide",
     "/assured-shorthold-tenancy-agreement",
     "/ast-agreement-template",
     "/ast-template-england",
@@ -7,9 +8,14 @@
     "/assisted-prep/start",
     "/assisted-prep/success",
     "/claim-rent-arrears-tenant",
+    "/complete-eviction-pack-england",
     "/court-bailiff-eviction-guide",
+    "/form-6a-section-21",
+    "/hmo-tenancy-agreement-template",
+    "/lodger-agreement-template",
     "/money-claim-rent-arrears",
     "/n5b-form-guide",
+    "/n5b-possession-claim-guide",
     "/n5b-possession-claim-form",
     "/ni-private-tenancy-agreement",
     "/ni-tenancy-agreement-template-free",
@@ -22,8 +28,16 @@
     "/scottish-tenancy-agreement-template",
     "/section-21-ban",
     "/section-21-checklist",
+    "/section-21-court-pack",
+    "/section-21-expired-what-next",
     "/section-21-notice-guide",
+    "/section-21-notice-period",
+    "/section-21-notice-template",
+    "/section-21-validity-checklist",
+    "/section-8-court-pack",
     "/section-8-notice-guide",
+    "/section-8-vs-section-21",
+    "/serve-section-21-notice",
     "/standard-occupation-contract-wales",
     "/tenancy-agreement",
     "/tenancy-agreement-northern-ireland",
@@ -34,8 +48,10 @@
     "/tenancy-agreements/scotland",
     "/tenancy-agreements/wales",
     "/tenant-refusing-inspection",
+    "/tenant-ignores-section-21",
     "/tenant-wont-leave",
     "/wales-eviction-notices",
-    "/warrant-of-possession"
+    "/warrant-of-possession",
+    "/what-happens-after-section-21"
   ]
 }

@@ -46,6 +46,7 @@ import { BlogArticleStickyGuard } from '@/components/blog/BlogArticleStickyGuard
 import { NextSteps } from '@/components/blog/NextSteps';
 import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { Section8GroundRouteCards } from '@/components/seo/Section8GroundRouteCards';
+import { LegacySection21Banner } from '@/components/seo/LegacySection21Banner';
 import { MoneyClaimBridge } from '@/components/marketing/CommercialBridge';
 import { getBlogImagesForPost, getBlogImagesForPostThumb } from '@/lib/blog/image-manifest';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
@@ -920,6 +921,9 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               )}
 
               <BlogCtaProvider value={{ cta: productCta, postSlug: slug, category: post.category }}>
+                {slug.includes('section-21') ? (
+                  <LegacySection21Banner className="mb-8" />
+                ) : null}
                 {slug === 'england-money-claim-online' ? (
                   <MoneyClaimBridge
                     sourcePage="/blog/england-money-claim-online"

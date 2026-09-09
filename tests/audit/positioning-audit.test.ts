@@ -5,9 +5,9 @@ import { auditPositioning } from '../../scripts/positioning-audit';
 const criticalRoutes = [
   'src/app/(marketing)/page.tsx',
   'src/app/(marketing)/pricing/page.tsx',
-  'src/app/(marketing)/products/notice-only/page.tsx',
-  'src/app/(marketing)/products/complete-pack/page.tsx',
-  'src/app/(marketing)/products/money-claim/page.tsx',
+  'src/app/products/notice-only/page.tsx',
+  'src/app/products/complete-pack/page.tsx',
+  'src/app/products/money-claim/page.tsx',
   'src/app/section-21-notice-template/page.tsx',
   'src/app/eviction-notice-england/page.tsx',
   'src/app/tenancy-agreement/page.tsx',
@@ -27,11 +27,11 @@ describe('positioning audit critical routes', () => {
     const absolute = [
       'src/app/(marketing)/page.tsx',
       'src/app/(marketing)/pricing/page.tsx',
-      'src/app/(marketing)/products/notice-only/page.tsx',
-      'src/app/(marketing)/products/complete-pack/page.tsx',
-      'src/app/(marketing)/products/money-claim/page.tsx',
-      'src/app/(marketing)/products/rent-increase/page.tsx',
-      'src/app/(marketing)/products/ast/page.tsx',
+      'src/app/products/notice-only/page.tsx',
+      'src/app/products/complete-pack/page.tsx',
+      'src/app/products/money-claim/page.tsx',
+      'src/app/products/rent-increase/page.tsx',
+      'src/app/products/ast/page.tsx',
     ].map((route) => path.join(process.cwd(), route));
 
     const results = auditPositioning(absolute);
@@ -42,7 +42,7 @@ describe('positioning audit critical routes', () => {
 
   it('excludes noindex redirect aliases from commercial positioning checks', () => {
     const absolute = [
-      'src/app/(marketing)/products/money-claim-pack/page.tsx',
+      'src/app/products/money-claim-pack/page.tsx',
       'src/app/tenancy-agreement-template-free/page.tsx',
     ].map((route) => path.join(process.cwd(), route));
 

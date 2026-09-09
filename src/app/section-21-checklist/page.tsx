@@ -12,7 +12,6 @@ import {
   StructuredData,
   articleSchema,
   breadcrumbSchema,
-  faqPageSchema,
 } from '@/lib/seo/structured-data';
 
 const canonical = 'https://landlordheaven.co.uk/section-21-checklist';
@@ -327,7 +326,7 @@ export default function Page() {
 
               <p className="mt-4 leading-7 text-gray-700">
                 Good landlords usually use the checklist to prevent restarts rather than to
-                diagnose failure after the fact. That is the commercial value of the page.
+                diagnose failure after the fact. That is the practical value of the checklist.
                 A few minutes of disciplined file review before service can save far more
                 time than trying to recover from an invalid or weak notice later.
               </p>

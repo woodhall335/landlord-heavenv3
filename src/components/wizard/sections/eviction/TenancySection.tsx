@@ -348,7 +348,7 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
                 helperText={
                   isEnglandForm3ARoute
                     ? 'The earliest date the break clause can be exercised. This is often 6 months after tenancy start.'
-                    : 'The earliest date the break clause can be exercised. This is often 6 months after tenancy start. Section 21 notices can expire on or after this date (subject to 2-month notice period).'
+                    : 'The earliest date the break clause can be exercised. Section 21 cannot be used for a new England notice; any saved legacy case needs individual legal review.'
                 }
                 sectionId={SECTION_ID}
                 className="max-w-xs"
@@ -371,11 +371,11 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
                   <>Check whether the tenancy has a break clause before relying on a possession date before the fixed term end.</>
                 )
               ) : facts.has_break_clause === true ? (
-                <>If you have a break clause, you can serve a Section 21 notice that expires on or after the break clause date (subject to minimum 2-month notice).</>
+                <>Section 21 cannot be served for a new England case. If this is a saved legacy matter, check that court proceedings began by the transitional deadline and seek legal advice.</>
               ) : facts.has_break_clause === false ? (
-                <>Without a break clause, a Section 21 notice cannot expire before the fixed term end date. You can still serve the notice during the fixed term, but it will expire on the fixed term end date (or 2 months from service, whichever is later).</>
+                <>Section 21 cannot be served for a new England case. Use the current possession grounds and keep the tenancy agreement with the case file.</>
               ) : (
-                <>If the tenancy has a break clause, you may be able to serve a Section 21 notice that expires before the fixed term end date. Check your tenancy agreement.</>
+                <>Section 21 cannot be served for a new England case. Check the current possession ground and your tenancy agreement before preparing a notice.</>
               )}
             </p>
           </div>

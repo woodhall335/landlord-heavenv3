@@ -15,7 +15,7 @@ Audit of Complete Eviction Pack pricing references before implementation and pos
 | `src/lib/pricing/products.ts` | `SEO_PRICES.evictionBundle = 129.99 / £129.99` | **Yes (authoritative)** | User-visible + internal |
 | `src/lib/pricing.ts` | `REGIONAL_PRICING.complete_pack.england = 129.99`, `PRICING.COMPLETE_EVICTION_PACK = 129.99` | Partially (duplicate legacy source) | Internal |
 | `src/lib/checkout/cta-mapper.ts` | `complete_pack` CTA price pulled from `PRODUCTS.complete_pack.price` | **Yes** | User-visible |
-| `src/app/(marketing)/products/complete-pack/page.tsx` | Uses `PRODUCTS.complete_pack` for metadata/schema price | **Yes** | User-visible SEO |
+| `src/app/products/complete-pack/page.tsx` | Uses `PRODUCTS.complete_pack` for metadata/schema price | **Yes** | User-visible SEO |
 | `src/lib/seo/wizard-landing-content.ts` | `SEO_PRICES.evictionBundle.display` | **Yes** | User-visible SEO |
 | `src/lib/seo/structured-data.tsx` | Product schema uses `PRODUCTS.complete_pack.price` | **Yes** | User-visible SEO |
 | `src/app/(marketing)/pricing/page.tsx` | `£129.99` copy updated | No (literal copy) | User-visible |

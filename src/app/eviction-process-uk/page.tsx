@@ -109,7 +109,7 @@ const content: PillarPageContent = {
     { factor: 'Best use', routeA: 'Understanding older no-fault terminology', routeB: 'Grounds-based or arrears-led possession', routeC: 'Court, order, and enforcement stages after notice expires' },
     { factor: 'Evidence burden', routeA: 'Compliance-heavy', routeB: 'Grounds and chronology heavy', routeC: 'Full bundle consistency and order execution' },
     { factor: 'Main supporting guide', routeA: 'Section 21 ban and transition pages', routeB: 'Section 8 notice and rent arrears guides', routeC: 'Possession order timeline and bailiff guides' },
-    { factor: 'Commercial route', routeA: 'Bridge into broader possession support', routeB: 'Notice Only or Complete Pack depending certainty', routeC: 'Usually Complete Pack' },
+    { factor: 'Suitable support', routeA: 'Historical guidance before choosing current documents', routeB: 'Notice Only or Complete Pack depending on the case', routeC: 'Usually Complete Pack' },
   ],
   decisionGuide: [
     { question: 'Is the property in England and the route now grounds-led?', recommendation: 'Start with the Section 8 guide and the Section 21 transition page before serving notice.' },
@@ -155,8 +155,7 @@ const content: PillarPageContent = {
           for the current England position.
         </>,
         <>
-          When you are ready to move from process guidance to document generation, the commercial handoff for most
-          process-led cases is the{' '}
+          When you are ready to prepare the documents, most England cases can continue to the{' '}
           <Link href="/products/complete-pack" className="text-primary font-medium hover:underline">
             complete eviction pack for England
           </Link>

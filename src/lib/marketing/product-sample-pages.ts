@@ -87,7 +87,7 @@ export const productSamplePages = [
       'eviction court bundle sample',
       'witness statement possession sample',
       'section 8 possession claim example',
-      'court-ready eviction pack',
+      'eviction court document pack',
       'complete pack document sample',
     ],
     intro:
@@ -203,8 +203,8 @@ export const productSamplePages = [
       'england landlord agreement sample',
     ],
     intro:
-      'Use this standard tenancy agreement example to inspect the core agreement, setup checklist, and support records before building a validated England tenancy setup pack around your own property, occupiers, rent, deposit, and management facts.',
-    ctaText: 'Setting up a straightforward let? Build my validated Standard tenancy pack.',
+      'Use this standard tenancy agreement example to inspect the core agreement, setup checklist, and support records before building an England tenancy setup pack around your own property, occupiers, rent, deposit, and management facts.',
+    ctaText: 'Setting up a straightforward let? Create my Standard tenancy pack.',
     faqs: buildFaqs('Standard Tenancy Agreement', 'prescribed information support'),
   },
   {
@@ -232,7 +232,7 @@ export const productSamplePages = [
     ],
     intro:
       'Use this premium tenancy agreement example to see the fuller management wording, handover records, and support documents before creating a fact-built Premium pack with stronger control around access, repairs, keys, reporting, and hand-back.',
-    ctaText: 'Need stronger management terms? Build my validated Premium tenancy pack.',
+    ctaText: 'Need stronger management terms? Create my Premium tenancy pack.',
     faqs: buildFaqs('Premium Tenancy Agreement', 'premium management wording'),
   },
   {
@@ -259,8 +259,8 @@ export const productSamplePages = [
       'england student let agreement',
     ],
     intro:
-      'Use this student tenancy agreement example to see how guarantors, sharers, replacement occupiers, and end-of-term move-out are handled before building a validated student pack around the actual household.',
-    ctaText: 'Setting up a student let? Build my validated Student tenancy pack.',
+      'Use this student tenancy agreement example to see how guarantors, sharers, replacement occupiers, and end-of-term move-out are handled before building a student pack around the actual household.',
+    ctaText: 'Setting up a student let? Create my Student tenancy pack.',
     faqs: buildFaqs('Student Tenancy Agreement', 'guarantor and sharer wording'),
   },
   {
@@ -287,8 +287,8 @@ export const productSamplePages = [
       'england hmo agreement preview',
     ],
     intro:
-      'Use this HMO tenancy agreement example to see how communal areas, house rules, shared facilities, and sharer expectations are documented before building a validated shared-house management pack around the property setup.',
-    ctaText: 'Managing sharers? Build my validated HMO / Shared House pack.',
+      'Use this HMO tenancy agreement example to see how communal areas, house rules, shared facilities, and sharer expectations are documented before building a shared-house management pack around the property setup.',
+    ctaText: 'Managing sharers? Create my HMO / Shared House pack.',
     faqs: buildFaqs('HMO / Shared House Tenancy Agreement', 'house rules and communal areas'),
   },
   {
@@ -315,8 +315,8 @@ export const productSamplePages = [
       'england lodger agreement preview',
     ],
     intro:
-      'Use this lodger agreement example to see how resident-landlord room lets, shared-home rules, notice terms, and day-to-day boundaries are documented before building a validated shared-home pack around your facts.',
-    ctaText: 'Taking in a lodger? Build my validated Lodger pack.',
+      'Use this lodger agreement example to see how resident-landlord room lets, shared-home rules, notice terms, and day-to-day boundaries are documented before building a shared-home pack around your facts.',
+    ctaText: 'Taking in a lodger? Create my Lodger agreement pack.',
     faqs: buildFaqs('Lodger Agreement', 'resident-landlord room let wording'),
   },
 ] as const satisfies ProductSamplePageConfig[];

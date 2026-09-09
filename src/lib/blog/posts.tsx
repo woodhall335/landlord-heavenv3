@@ -195,10 +195,9 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-red-800 text-lg mb-2">Key date for landlords</p>
           <p className="text-red-700">
-            <strong>Section 21 no-fault evictions end on 1 May 2026.</strong> If you have any tenancies where you may
-            need to regain possession, you must serve your Section 21 notice before <strong>30 April 2026</strong>.
-            After this date, you&apos;ll only be able to evict using Section 8, which requires proving specific grounds.
-            <strong> If you think you may need possession, review the tenancy now and decide the route early.</strong>
+            <strong>Section 21 no-fault evictions ended for new notices on 1 May 2026.</strong> The deadline to
+            start a Section 21 court claim using a qualifying older notice was <strong>31 July 2026</strong>.
+            A new possession case must use an applicable current ground supported by the correct notice and evidence.
           </p>
         </div>
 
@@ -639,9 +638,8 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">When does Section 21 actually end?</h3>
             <p className="text-gray-600">
-              Section 21 is abolished on <strong>1 May 2026</strong>. The last day to serve a valid Section 21 notice
-              is <strong>30 April 2026</strong>. Notices served before this date remain valid and can proceed through
-              court even after the ban takes effect.
+              Section 21 ended for new notices on <strong>1 May 2026</strong>. A qualifying older notice had to be
+              used to start court proceedings by <strong>31 July 2026</strong>; that transitional claim deadline has passed.
             </p>
           </div>
 
@@ -656,8 +654,8 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">What if my Section 21 is already served but not completed?</h3>
             <p className="text-gray-600">
-              Notices served before 1 May 2026 remain valid. You can continue to court and obtain possession even after
-              the ban takes effect, as long as the notice was served before the deadline.
+              A Section 21 claim can continue only if court proceedings were started within the transitional deadline.
+              If no claim was started by 31 July 2026, use the current grounds-based process and seek legal advice if needed.
             </p>
           </div>
 
@@ -728,10 +726,10 @@ const allBlogPosts: BlogPost[] = [
   {
     slug: 'what-is-section-21-notice',
     title: 'Section 21 Notice Explained: Complete Guide for UK Landlords (2026)',
-    description: 'Everything you need to know about Section 21 no-fault eviction notices, including how to serve one correctly before the 2026 ban takes effect.',
-    metaDescription: 'Learn what a Section 21 notice is, how to serve one correctly, and how landlords should think about the route before the May 2026 ban. Complete guide for UK landlords.',
+    description: 'Historical guide to Section 21 no-fault eviction notices, the deadlines that have passed and the current England possession process.',
+    metaDescription: 'Section 21 ended for new England notices on 1 May 2026. Learn what it was, which deadlines have passed and what landlords must use now.',
     date: '2026-01-02',
-    updatedDate: '2026-01-02',
+    updatedDate: '2026-09-09',
     readTime: '10 min read',
     wordCount: 1250,
     category: 'Eviction Guides',
@@ -746,52 +744,50 @@ const allBlogPosts: BlogPost[] = [
     targetKeyword: 'section 21 notice',
     secondaryKeywords: ['section 21', 'no fault eviction', 'form 6a', 'eviction notice', 'section 21 ban'],
     tableOfContents: [
-      { id: 'what-is-section-21', title: 'What Is Section 21?', level: 2 },
-      { id: 'how-section-21-works', title: 'How Section 21 Works', level: 2 },
-      { id: 'section-21-requirements', title: 'Section 21 Requirements', level: 2 },
-      { id: 'section-21-notice-period', title: 'Notice Period', level: 2 },
-      { id: 'section-21-ban-2026', title: 'Section 21 Ban 2026', level: 2 },
-      { id: 'how-to-serve-section-21', title: 'How to Serve', level: 2 },
+      { id: 'what-is-section-21', title: 'What Was Section 21?', level: 2 },
+      { id: 'how-section-21-works', title: 'How Section 21 Worked', level: 2 },
+      { id: 'section-21-requirements', title: 'Historical Requirements', level: 2 },
+      { id: 'section-21-notice-period', title: 'Former Notice Period', level: 2 },
+      { id: 'section-21-ban-2026', title: 'What Changed in 2026', level: 2 },
+      { id: 'how-to-serve-section-21', title: 'What to Use Now', level: 2 },
       { id: 'section-21-faq', title: 'FAQ', level: 2 },
     ],
     relatedPosts: ['section-21-vs-section-8', 'how-to-serve-eviction-notice', 'how-long-does-eviction-take-uk'],
     content: (
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
-          A <strong>Section 21 notice</strong> is a legal document that allows landlords in England
-          to evict tenants without giving a reason. Also known as a &quot;no-fault eviction,&quot; it has been
-          the simplest and most straightforward way for landlords to regain possession of their
-          property since the Housing Act 1988 was introduced.
+          A <strong>Section 21 notice</strong> was the notice used for no-fault possession in England.
+          Landlords cannot serve a new Section 21 notice, and the transitional deadline for starting
+          a court claim using a qualifying older notice has also passed.
         </p>
         {section21TemplateCta}
 
         <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8 rounded-r-lg">
-          <p className="font-semibold text-amber-800 text-lg mb-2">Critical Deadline Approaching</p>
+          <p className="font-semibold text-amber-800 text-lg mb-2">Section 21 deadlines have passed</p>
           <p className="text-amber-700">
-            The Renters&apos; Rights Act 2025 abolishes Section 21 from <strong>1 May 2026</strong>.
-            If you&apos;re considering evicting a tenant using Section 21, you must serve your notice
-            before <strong>30 April 2026</strong>. After this date, no-fault evictions will no longer
-            be possible in England.
+            Section 21 ended for new notices on <strong>1 May 2026</strong>. The deadline to start a
+            court claim using a qualifying older notice was <strong>31 July 2026</strong>. For a new
+            possession case, identify a current statutory ground and use the correct notice.
           </p>
         </div>
 
         <ImagePlaceholder
           src="/images/blog/section-21-overview.svg"
           alt="Section 21 Notice Overview - Key Facts for Landlords"
-          caption="Section 21 allows landlords to recover possession without proving tenant fault"
+          caption="Section 21 was the former no-fault possession process in England"
           aspectRatio="inline"
         />
 
         <h2 id="what-is-section-21" className="scroll-mt-24">What Is Section 21?</h2>
 
         <p>
-          Section 21 refers to <strong>Section 21 of the Housing Act 1988</strong>. This legislation
-          gives landlords the legal right to recover possession of their property at the end of an
-          assured shorthold tenancy (AST) without needing to prove any fault or wrongdoing by the tenant.
+          Section 21 referred to <strong>Section 21 of the Housing Act 1988</strong>. Before the 2026
+          reforms, it allowed landlords to seek possession of an assured shorthold tenancy without
+          proving a tenant breach. It is now historical for new private-rented possession cases in England.
         </p>
 
         <p>
-          In practical terms, this means you can ask a tenant to leave your property even if they have:
+          Historically, this meant a landlord could seek possession even if the tenant had:
         </p>
 
         <ul>
@@ -802,25 +798,22 @@ const allBlogPosts: BlogPost[] = [
         </ul>
 
         <p>
-          This is why it&apos;s commonly referred to as a &quot;no-fault&quot; eviction—you don&apos;t need to
-          demonstrate that the tenant has done anything wrong. You simply need to follow the
-          correct legal procedure and give them the required notice period.
+          This is why the former process was called a &quot;no-fault&quot; eviction. A landlord starting a
+          case now must instead establish an applicable current possession ground.
         </p>
 
         <p>
-          The <strong>Section 21 notice</strong> itself is served using <strong>Form 6A</strong>,
-          which is the prescribed form for assured shorthold tenancies in England. Using any other
-          format can make your notice invalid, so it&apos;s crucial to use the correct form.
+          The former <strong>Section 21 notice</strong> used <strong>Form 6A</strong>. Do not use Form 6A
+          for a new case: current grounds-based possession notices use the applicable current form.
         </p>
 
         <BlogCTA variant="inline" />
 
-        <h2 id="how-section-21-works" className="scroll-mt-24">How Does Section 21 Work?</h2>
+        <h2 id="how-section-21-works" className="scroll-mt-24">How Did Section 21 Work?</h2>
 
         <p>
-          The Section 21 eviction process follows a structured series of steps. Understanding
-          each stage will help you navigate the process successfully and avoid common mistakes
-          that could delay your eviction.
+          The steps below explain the former process for historical context. They are not instructions
+          for starting a new case. Use the current possession grounds and forms for any new notice.
         </p>
 
         <ImagePlaceholder
@@ -831,14 +824,14 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Step 1: Verify Eligibility</h3>
         <p>
-          Before serving a Section 21 notice, you must ensure you&apos;ve met all the legal prerequisites.
+          Before a Section 21 notice could be served, a landlord had to meet the legal prerequisites.
           This includes protecting the tenant&apos;s deposit, providing required documents, and ensuring
           the property meets safety standards.
         </p>
 
         <h3>Step 2: Serve the Notice</h3>
         <p>
-          You must serve Form 6A to your tenant, giving them at least <strong>2 months&apos; notice</strong>.
+          The former process required Form 6A and at least <strong>2 months&apos; notice</strong>.
           The notice cannot expire before the end of any fixed term in the tenancy agreement.
         </p>
 
@@ -850,9 +843,8 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Step 4: Apply to Court (If Necessary)</h3>
         <p>
-          If the tenant doesn&apos;t leave after the notice expires, you&apos;ll need to apply to the county
-          court for a possession order. You can use the accelerated possession procedure for
-          Section 21 claims, which is faster and often doesn&apos;t require a hearing.
+          If the tenant did not leave after the notice expired, the landlord could apply to the county
+          court. No new Section 21 claim can now be started because the transitional deadline has passed.
         </p>
 
         <h3>Step 5: Obtain Possession Order</h3>
@@ -872,7 +864,7 @@ const allBlogPosts: BlogPost[] = [
         <h2 id="section-21-requirements" className="scroll-mt-24">Section 21 Requirements: What You Must Have</h2>
 
         <p>
-          For a Section 21 notice to be valid, landlords must comply with several legal requirements.
+          Historically, a Section 21 notice depended on several legal requirements.
           Failing to meet any of these can render your notice invalid and delay eviction by months.
         </p>
 
@@ -923,8 +915,8 @@ const allBlogPosts: BlogPost[] = [
         <h2 id="section-21-notice-period" className="scroll-mt-24">Section 21 Notice Period</h2>
 
         <p>
-          The minimum notice period for a Section 21 notice is <strong>2 months</strong>. However,
-          there are important rules about when this notice can expire:
+          The former minimum notice period was <strong>2 months</strong>. The following points describe
+          the historical rules only:
         </p>
 
         <ul>
@@ -950,12 +942,11 @@ const allBlogPosts: BlogPost[] = [
 
         <BlogCTA variant="urgency" />
 
-        <h2 id="section-21-ban-2026" className="scroll-mt-24">Section 21 Ban: What&apos;s Changing in 2026?</h2>
+        <h2 id="section-21-ban-2026" className="scroll-mt-24">Section 21 Ban: What Changed in 2026?</h2>
 
         <p>
           The Renters&apos; Rights Act 2025 represents the biggest change to landlord-tenant law
-          in decades. <strong>Section 21 no-fault evictions will be completely abolished</strong>
-          from 1 May 2026.
+          in decades. <strong>Section 21 no-fault evictions ended for new notices</strong> on 1 May 2026.
         </p>
 
         <ImagePlaceholder
@@ -972,7 +963,7 @@ const allBlogPosts: BlogPost[] = [
           <li><strong>31 July 2026:</strong> Last day for court proceedings on pre-ban notices</li>
         </ul>
 
-        <h3>What Happens After the Ban?</h3>
+        <h3>What Happens Now?</h3>
 
         <p>
           After 1 May 2026, landlords will only be able to evict tenants using <strong>Section 8</strong>,
@@ -992,7 +983,7 @@ const allBlogPosts: BlogPost[] = [
           Section 21 Ban - Complete Guide</Link>
         </p>
 
-        <h2 id="how-to-serve-section-21" className="scroll-mt-24">How to Serve a Section 21 Notice</h2>
+        <h2 id="how-to-serve-section-21" className="scroll-mt-24">What to Use Instead of Section 21</h2>
 
         <p>
           This section is now mainly useful for legacy cases. For new England notices after 1 May 2026,
@@ -1050,27 +1041,26 @@ const allBlogPosts: BlogPost[] = [
           </div>
 
           <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">Can I serve Section 21 during a fixed term?</h3>
+            <h3 className="font-semibold text-gray-900 mb-2">Can I serve Section 21 now?</h3>
             <p className="text-gray-600">
-              Yes, you can serve the notice during the fixed term, but it cannot expire until the
-              fixed term ends. Many landlords serve Section 21 a few months before the fixed term
-              expires.
+              No. A landlord cannot serve a new Section 21 notice in England. Check which current
+              possession ground applies to the facts of the case.
             </p>
           </div>
 
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">How long is a Section 21 notice valid?</h3>
             <p className="text-gray-600">
-              A Section 21 notice is valid for 6 months after it expires. If you haven&apos;t started
-              court proceedings within this time, you&apos;ll need to serve a new notice.
+              It is too late to start a new Section 21 court claim. The transitional deadline was
+              31 July 2026. A claim started in time may continue, but new cases use the current process.
             </p>
           </div>
 
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Will Section 21 still work after May 2026?</h3>
             <p className="text-gray-600">
-              No. After 1 May 2026, Section 21 will be abolished completely. You will only be able
-              to evict tenants using Section 8, which requires proving specific grounds.
+              No. Section 21 ended for new notices on 1 May 2026. A new possession case requires an
+              applicable ground, the correct notice and supporting evidence.
             </p>
           </div>
         </div>
@@ -1078,14 +1068,13 @@ const allBlogPosts: BlogPost[] = [
         <h2>What to do next</h2>
 
         <p>
-          If you are weighing up Section 21, start by checking whether it still fits your timing,
-          paperwork, and possession plan. The earlier you check the route, the easier it is to
-          avoid delays later.
+          Do not prepare a new Section 21 notice. Start by identifying the current possession ground,
+          the evidence it requires and the correct notice period.
         </p>
 
         <ul>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
-            Prepare Section 21 notice</Link></li>
+            Prepare a current possession notice</Link></li>
           <li><Link href="/blog/section-21-vs-section-8" className="text-primary hover:underline">
             Compare Section 21 vs Section 8</Link></li>
           <li><Link href="/blog/how-long-does-eviction-take-uk" className="text-primary hover:underline">
@@ -2638,8 +2627,8 @@ const allBlogPosts: BlogPost[] = [
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
           The <strong>Section 21 eviction process</strong> used to be the primary route for landlords in England
-          to regain possession of their property since 1988. Also known as <Link href="/no-fault-eviction" className="text-primary hover:underline">&quot;no-fault&quot; eviction</Link>, it allows
-          you to end an Assured Shorthold Tenancy without proving any wrongdoing by the tenant. This guide
+          to regain possession of their property. Also known as <Link href="/no-fault-eviction" className="text-primary hover:underline">&quot;no-fault&quot; eviction</Link>, it allowed
+          a landlord to end an Assured Shorthold Tenancy without proving tenant wrongdoing. This guide
           now acts as a legacy explainer. For new England cases after 1 May 2026, use the current Form 3A route.
         </p>
         {section21TemplateCta}
@@ -2647,10 +2636,9 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-red-800 text-lg mb-2">Section 21 is now a legacy route</p>
           <p className="text-red-700">
-            <strong>Section 21 is being abolished on 1 May 2026.</strong> The last day to serve a valid Section 21
-            notice is <strong>30 April 2026</strong>. If you may need to regain possession of any property,
-            you must serve your notice before this date. After May 2026, you will only be able to evict using
-            Section 8, which requires proving specific grounds.
+            <strong>Section 21 ended for new notices on 1 May 2026.</strong> The deadline to start a court claim
+            using a qualifying older notice was <strong>31 July 2026</strong>. A new England possession case must
+            use an applicable current ground supported by the correct notice and evidence.
           </p>
         </div>
 
@@ -2664,9 +2652,8 @@ const allBlogPosts: BlogPost[] = [
         <h2 id="section-21-overview" className="scroll-mt-24">Section 21 Overview</h2>
 
         <p>
-          Section 21 of the <strong>Housing Act 1988</strong> gives landlords the right to recover possession
-          of a property let on an Assured Shorthold Tenancy without having to prove any fault on the tenant&apos;s
-          part. The key features are:
+          Section 21 of the <strong>Housing Act 1988</strong> formerly allowed landlords to seek possession
+          of an Assured Shorthold Tenancy without proving tenant fault. These were its key features:
         </p>
 
         <ul>
@@ -2677,10 +2664,10 @@ const allBlogPosts: BlogPost[] = [
           <li><strong>Compliance requirements:</strong> Various legal boxes must be ticked first</li>
         </ul>
 
-        <h3>When Can You Use Section 21?</h3>
+        <h3>When Could Section 21 Be Used?</h3>
 
         <p>
-          Section 21 can be used in the following situations:
+          Before the 2026 change, Section 21 could be used in the following situations:
         </p>
 
         <ul>
@@ -2692,17 +2679,17 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-blue-800 text-lg mb-2">Section 21 vs Section 8</p>
           <p className="text-blue-700">
-            Section 21 requires no grounds but takes longer. Section 8 requires proving grounds (like rent arrears)
-            but can be faster for serious breaches. Many landlords serve both notices together—read our
-            <Link href="/blog/section-21-vs-section-8" className="text-blue-800 underline font-medium"> comparison guide</Link>.
+            Section 21 was a no-fault process. New possession cases now require an applicable ground and
+            supporting evidence. Read the <Link href="/blog/section-21-vs-section-8" className="text-blue-800 underline font-medium">comparison guide</Link>{' '}
+            to understand the old and current positions.
           </p>
         </div>
 
-        <h2 id="pre-requirements" className="scroll-mt-24">Pre-Requisites Before Serving</h2>
+        <h2 id="pre-requirements" className="scroll-mt-24">Historical Validity Requirements</h2>
 
         <p>
-          Before you can serve a valid Section 21 notice, you must have complied with several legal requirements.
-          If any of these are missing, your notice will be <strong>invalid</strong> and the court will not grant possession.
+          A Section 21 notice formerly depended on several legal requirements. The checklist below is retained
+          as historical context, not as instructions for serving a new notice.
         </p>
 
         <h3>Mandatory Compliance Checklist</h3>
@@ -2776,14 +2763,14 @@ const allBlogPosts: BlogPost[] = [
         <h2 id="serving-notice" className="scroll-mt-24">Serving the Section 21 Notice</h2>
 
         <p>
-          Once you&apos;ve confirmed all pre-requisites are met, you can serve the Section 21 notice using
-          <Link href="/form-6a-section-21" className="text-primary hover:underline font-medium">Form 6A</Link>—the prescribed notice form.
+          Section 21 could formerly be served using <Link href="/form-6a-section-21" className="text-primary hover:underline font-medium">Form 6A</Link>.
+          A new notice cannot be served now; use the current grounds-based notice process instead.
         </p>
 
         <h3>Form 6A Requirements</h3>
 
         <p>
-          The Section 21 notice must:
+          The former Section 21 notice had to:
         </p>
 
         <ul>
@@ -2797,7 +2784,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>Methods of Service</h3>
 
         <p>
-          You can serve the notice by:
+          Accepted service methods depended on the tenancy agreement and the facts. Historically, they included:
         </p>
 
         <ul>
@@ -2819,8 +2806,8 @@ const allBlogPosts: BlogPost[] = [
         <h2 id="after-notice-expires" className="scroll-mt-24">After the Notice Expires</h2>
 
         <p>
-          Once the 2-month notice period has passed, the tenant should vacate the property. However, many
-          tenants do not leave voluntarily. You then have two options:
+          The following section describes the former process after a notice expired. It only remains relevant
+          to a claim that was started by the transitional court deadline.
         </p>
 
         <h3>Option 1: Wait for Voluntary Departure</h3>
@@ -2999,26 +2986,24 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">How long is a Section 21 notice valid?</h3>
             <p className="text-gray-600">
-              A Section 21 notice is valid for <strong>10 months</strong> from the date it&apos;s served (for periodic
-              tenancies) or 10 months from the end of the fixed term. You must start court proceedings within
-              this window, or the notice expires.
+              It is now too late to start a new Section 21 claim. The final transitional deadline was
+              <strong>31 July 2026</strong>. A claim started in time may continue under the saving provisions.
             </p>
           </div>
 
           <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">Can I serve Section 21 during a fixed term?</h3>
+            <h3 className="font-semibold text-gray-900 mb-2">Can I serve Section 21 now?</h3>
             <p className="text-gray-600">
-              Yes, but the notice cannot expire before the fixed term ends unless there&apos;s a break clause.
-              You can serve it early, but the earliest possession date must align with the fixed term end.
+              No. Section 21 cannot be used for a new England notice. Identify the current ground that applies
+              and use the notice form and period required for that ground.
             </p>
           </div>
 
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">What if the tenant has children or is vulnerable?</h3>
             <p className="text-gray-600">
-              The Section 21 process is the same regardless of the tenant&apos;s circumstances. However, the
-              court or bailiffs may delay enforcement in certain cases, and the local authority has duties
-              to help homeless households. This doesn&apos;t affect your right to possession.
+              A claim already started before the transitional deadline continues under the saving provisions,
+              but vulnerability and equality considerations may still affect case handling and enforcement.
             </p>
           </div>
 
@@ -3042,7 +3027,7 @@ const allBlogPosts: BlogPost[] = [
         </div>
 
         <div className="bg-gradient-to-r from-red-50 to-red-100 rounded-xl p-8 my-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Don&apos;t Wait—Section 21 Ends Soon</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Start with the current possession grounds</h3>
           <p className="text-gray-700 mb-6">
             Section 21 ended on 1 May 2026. For a new England case, use the current Section 8 route and
             create the notice with the right grounds, dates, and service record.
@@ -4463,18 +4448,17 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Is accelerated possession available after May 2026?</h3>
             <p className="text-gray-600">
-              Section 21 is abolished on 1 May 2026 under the Renters&apos; Rights Act. After this date, accelerated
-              possession (which is Section 21-only) will no longer be available. All evictions will require Section 8
-              with grounds.
+              Section 21 ended for new notices on 1 May 2026. The transitional deadline for starting an
+              accelerated claim was 31 July 2026, so a new possession case must use an applicable current ground.
             </p>
           </div>
         </div>
 
         <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-8 my-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Start Your Accelerated Possession Claim</h3>
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Prepare a current possession claim</h3>
           <p className="text-gray-700 mb-6">
-            The Complete Eviction Pack includes the documents you need for accelerated possession:
-            Section 21 notice, Form N5B guidance, and a step-by-step process guide. Get your landlord documents today.
+            The Complete Eviction Pack helps you prepare the current notice, supporting evidence and court
+            documents for the possession ground that applies to your case.
           </p>
           <Link
             href="/products/complete-pack"
@@ -7037,7 +7021,7 @@ const allBlogPosts: BlogPost[] = [
           options:
         </p>
         <ul>
-          <li>Section 21 notice (if still available before May 2026)</li>
+          <li>Another current possession ground, if the facts support it</li>
           <li>Other Section 8 grounds if applicable (e.g., rent arrears)</li>
         </ul>
 

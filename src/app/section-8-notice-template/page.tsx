@@ -690,12 +690,11 @@ export default function Section8NoticeTemplatePage() {
 
               <div className="mt-8 text-center">
                 <p className="text-gray-600 mb-4">
-                  If your case is clearly grounds-based, the strongest commercial route on this page
-                  is usually{' '}
+                  If your case is clearly grounds-based and you are ready to prepare the notice, use{' '}
                   <Link href="/products/notice-only" className="font-semibold text-primary hover:underline">
                     Notice Only
                   </Link>
-                  , not a bare template.
+                  rather than completing a blank template without guidance.
                 </p>
                 <Link
                   href={noticeOnlyProductHref}

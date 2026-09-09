@@ -11,7 +11,22 @@
 
 import { blogPosts } from '../src/lib/blog/posts';
 import { SITE_ORIGIN } from '../src/lib/seo/urls';
-import { getValidRegions } from '../src/lib/blog/categories';
+import {
+  getPostRegion,
+  getPublicBlogRegions,
+  isPublicBlogDiscoveryRegion,
+} from '../src/lib/blog/categories';
+import { getBlogSeoConfig } from '../src/lib/blog/seo';
+
+const NON_ENGLAND_DISCOVERY_PATTERNS = [
+  'scotland',
+  'wales',
+  'northern-ireland',
+] as const;
+
+function isNonEnglandDiscoveryPath(pathname: string): boolean {
+  return NON_ENGLAND_DISCOVERY_PATTERNS.some((pattern) => pathname.includes(pattern));
+}
 
 async function fetchText(url: string) {
   const response = await fetch(url, {
@@ -91,17 +106,28 @@ async function run() {
   const locSet = new Set(locs);
 
   console.log('\nChecking blog posts...');
-  const expectedBlogUrls = blogPosts.map((post) => `${SITE_ORIGIN}/blog/${post.slug}`);
+  const expectedBlogUrls = blogPosts
+    .filter((post) => {
+      const region = getPostRegion(post.slug);
+      return (
+        isPublicBlogDiscoveryRegion(region) &&
+        getBlogSeoConfig(post, region).isIndexable &&
+        !isNonEnglandDiscoveryPath(`/blog/${post.slug}`)
+      );
+    })
+    .map((post) => `${SITE_ORIGIN}/blog/${post.slug}`);
   const missingBlog = expectedBlogUrls.filter((loc) => !locSet.has(loc));
   if (missingBlog.length > 0) {
     errors.push(`Missing ${missingBlog.length} blog URL(s): ${missingBlog.slice(0, 5).join(', ')}`);
     console.log(`   FAIL Missing ${missingBlog.length} blog post(s)`);
   } else {
-    console.log(`   PASS All ${blogPosts.length} blog posts present`);
+    console.log(`   PASS All ${expectedBlogUrls.length} public discovery blog posts present`);
   }
 
   console.log('\nChecking category pages...');
-  const categoryUrls = getValidRegions().map((region) => `${SITE_ORIGIN}/blog/${region}`);
+  const categoryUrls = getPublicBlogRegions()
+    .filter((region) => !isNonEnglandDiscoveryPath(`/blog/${region}`))
+    .map((region) => `${SITE_ORIGIN}/blog/${region}`);
   const missingCategories = categoryUrls.filter((loc) => !locSet.has(loc));
   if (missingCategories.length > 0) {
     errors.push(`Missing ${missingCategories.length} category page(s): ${missingCategories.join(', ')}`);
@@ -116,12 +142,12 @@ async function run() {
     '/pricing',
     '/blog',
     '/tools',
-    '/eviction-notice',
+    '/eviction-notice-template',
     '/products/notice-only',
     '/products/complete-pack',
     '/products/money-claim',
     '/products/ast',
-    '/section-21-notice-template',
+    '/section-21-notice',
     '/section-8-notice-template',
     '/tenancy-agreement-template',
   ];
@@ -139,7 +165,7 @@ async function run() {
 
   console.log('\nChecking tool pages...');
   const toolPages = [
-    '/eviction-notice',
+    '/eviction-notice-template',
     '/tools/rent-arrears-calculator',
     '/tools/free-rent-demand-letter',
   ];

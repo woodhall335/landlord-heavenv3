@@ -1,6 +1,3 @@
-'use client';
-
-import { useState, useEffect } from 'react';
 import { AlertTriangle } from 'lucide-react';
 
 interface Section21CountdownProps {
@@ -8,48 +5,14 @@ interface Section21CountdownProps {
   className?: string;
 }
 
-// Target: 1 May 2026 00:00:00 BST (British Summer Time)
-const TARGET_DATE = new Date('2026-05-01T00:00:00+01:00');
-
-function calculateTimeLeft() {
-  const now = new Date();
-  const diff = TARGET_DATE.getTime() - now.getTime();
-
-  if (diff <= 0) return { days: 0, hours: 0, minutes: 0 };
-
-  return {
-    days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-    hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-    minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
-  };
-}
-
 export function Section21Countdown({ variant, className = '' }: Section21CountdownProps) {
-  const [timeLeft, setTimeLeft] = useState(() => calculateTimeLeft());
-  useEffect(() => {
-    const interval = setInterval(() => setTimeLeft(calculateTimeLeft()), 60000); // Update every minute
-    return () => clearInterval(interval);
-  }, []);
-
-  // Large variant - for popup modal and landing page hero
-  // Check if white text is requested via className
   const isWhite = className.includes('text-white');
 
   if (variant === 'large') {
     return (
-      <div className={`flex justify-center gap-4 sm:gap-6 ${className}`}>
-        <div className="text-center">
-          <div className={`text-4xl sm:text-5xl font-bold font-mono ${isWhite ? 'text-white' : 'text-primary'}`}>{timeLeft.days}</div>
-          <div className={`text-sm mt-1 ${isWhite ? 'text-white/80' : 'text-gray-500'}`}>days</div>
-        </div>
-        <div className="text-center">
-          <div className={`text-4xl sm:text-5xl font-bold font-mono ${isWhite ? 'text-white' : 'text-primary'}`}>{timeLeft.hours}</div>
-          <div className={`text-sm mt-1 ${isWhite ? 'text-white/80' : 'text-gray-500'}`}>hours</div>
-        </div>
-        <div className="text-center">
-          <div className={`text-4xl sm:text-5xl font-bold font-mono ${isWhite ? 'text-white' : 'text-primary'}`}>{timeLeft.minutes}</div>
-          <div className={`text-sm mt-1 ${isWhite ? 'text-white/80' : 'text-gray-500'}`}>mins</div>
-        </div>
+      <div className={`text-center ${className}`}>
+        <div className={`text-2xl sm:text-3xl font-bold ${isWhite ? 'text-white' : 'text-primary'}`}>Section 21 has ended</div>
+        <div className={`text-sm mt-2 ${isWhite ? 'text-white/80' : 'text-gray-600'}`}>Use the current England possession grounds</div>
       </div>
     );
   }
@@ -60,7 +23,7 @@ export function Section21Countdown({ variant, className = '' }: Section21Countdo
       <div className={`flex items-center justify-center gap-2 text-primary ${className}`}>
         <AlertTriangle className="w-5 h-5 flex-shrink-0" />
         <span className="font-medium">
-          Only <strong>{timeLeft.days} days</strong> left to serve Section 21 notices
+          <strong>Section 21 has ended.</strong> Use the current possession grounds.
         </span>
       </div>
     );
@@ -70,7 +33,7 @@ export function Section21Countdown({ variant, className = '' }: Section21Countdo
   if (variant === 'compact') {
     return (
       <span className={`font-semibold ${className}`}>
-        {timeLeft.days} days left
+        Section 21 has ended
       </span>
     );
   }
@@ -79,7 +42,7 @@ export function Section21Countdown({ variant, className = '' }: Section21Countdo
   return (
     <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium ${className}`}>
       <AlertTriangle className="w-3.5 h-3.5" />
-      {timeLeft.days} days left
+      Current possession rules apply
     </span>
   );
 }

@@ -143,13 +143,13 @@ export function CategoryPage({ region, posts }: CategoryPageProps) {
           </div>
         </section>
 
-        {/* Urgency Banner for England */}
+        {/* Current possession-law banner for England */}
         {region === 'england' && (
           <section className="bg-primary py-6">
             <div className="container mx-auto px-4">
               <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 text-white">
                 <span className="font-semibold text-lg text-white">
-                  Section 21 ends 1 May 2026
+                  Section 21 ended on 1 May 2026
                 </span>
                 <Section21Countdown variant="compact" className="text-white font-bold" />
                 <Link

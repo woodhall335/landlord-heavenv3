@@ -235,35 +235,24 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                   If you are letting residential property in Scotland and need the correct
                   tenancy agreement for a new private let, this is the page you should start
                   from. A <strong>Private Residential Tenancy agreement</strong>, or
-                  <strong> PRT</strong>, is the main Scottish tenancy agreement route for
+                  <strong> PRT</strong>, is the standard agreement for
                   most new private residential lets. Before you start, use the guidance below
                   to check that a PRT matches the property, occupiers and tenancy you are
                   actually creating.
                 </p>
                 <p>
-                  Many competing pages are too thin. They tell landlords that a PRT exists,
-                  repeat a few generic points about Scottish tenancy law, and then try to
-                  convert without helping the user decide whether they need a basic
-                  agreement, a more detailed agreement, or a different page altogether.
-                  That is not good enough for high-intent search traffic. Landlords landing
-                  here are often close to action. They may already have the property ready,
-                  the tenants lined up, and a move-in timeline in mind. What they need is
-                  a Scotland-only page that explains the agreement clearly, covers the
-                  practical points that matter, and then moves them into the correct flow.
+                  Before creating the agreement, confirm that the property and proposed letting
+                  fall within the Scottish PRT framework. The property may already be ready, the
+                  tenants selected and the move-in date close, but those facts do not remove the
+                  need to choose the correct Scottish document.
                 </p>
                 <p>
-                  This page therefore focuses on five things. First, it explains what a PRT
-                  is and why Scotland needs a distinct agreement route. Second, it helps
-                  landlords understand why Scottish tenancy law should not be mixed up with
-                  English AST wording, Welsh occupation contracts, or Northern Ireland
-                  private tenancy language. Third, it explains the scope of the standard PRT
-                  and the arrangements that need a different agreement. Fourth, it covers
-                  the main legal and operational points landlords
-                  usually want to understand before starting. Finally, it gives a clean path
-                  into the live creation route.
+                  This guide explains what a PRT is, why English AST wording does not apply,
+                  what the Standard PRT covers and which arrangements may need a different
+                  agreement. It also covers the main information to collect before you start.
                 </p>
                 <p>
-                  The Scottish route does not blur jurisdictions or treat a PRT as an English AST
+                  The Scottish agreement does not treat a PRT as an English AST
                   with a different label. It helps landlords prepare an agreement for how a
                   Scottish private residential tenancy is intended to operate in practice.
                 </p>
@@ -273,7 +262,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                 <div className="flex flex-col justify-center p-6 md:p-8">
                   <p className="public-eyebrow">Built for Scotland</p>
                   <h3 className="mt-3 text-2xl font-bold tracking-tight text-[#20103f]">
-                    Start with the PRT route that matches the property
+                    Start with the PRT that matches the property
                   </h3>
                   <p className="mt-4 leading-7 text-[#5d5672]">
                     The guided flow keeps the agreement, inventory, tenant details and
@@ -343,32 +332,30 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                     One of the biggest practical differences for landlords is that Scottish
                     PRTs are open-ended. This is a central feature of how the tenancy works
                     in Scotland. The agreement therefore needs to reflect Scottish tenancy
-                    logic rather than borrowing the commercial style or assumptions of older
+                    rules rather than borrowing the assumptions of older
                     English AST-led pages.
                   </p>
                 </div>
 
                 <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
                   <h3 className="mb-3 text-xl font-semibold text-gray-900">
-                    Scotland-only route
+                    For Scottish property only
                   </h3>
                   <p className="leading-relaxed text-gray-700">
                     This page is specifically for Scottish private residential lets. If the
                     property is in England, Wales, or Northern Ireland, the correct agreement
-                    route is different. Landlords should always choose the agreement page that
-                    matches the location of the property, not whichever template phrase happens
-                    to rank highest in a search result.
+                    agreement is different. Always choose according to the location of the
+                    property and the type of occupation.
                   </p>
                 </div>
               </div>
 
               <div className="mt-8 rounded-2xl border border-[#d8c8ff] bg-[#f5f1ff] p-6">
                 <h3 className="mb-3 text-xl font-semibold text-[#31224f]">
-                  Alternative search terms landlords still use
+                  Other names you may have seen
                 </h3>
                 <p className="mb-3 leading-relaxed text-[#31224f]/90">
-                  Not every landlord searches for "Private Residential Tenancy agreement"
-                  first time. Common high-intent searches also include:
+                  Landlords use several names for a Scottish PRT. Common examples include:
                 </p>
                 <div className="grid gap-2 text-sm text-[#31224f] md:grid-cols-2">
                   <div>PRT agreement Scotland</div>
@@ -589,10 +576,9 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                     tenancy is run and how the landlord's position is documented.
                   </p>
                   <p className="leading-relaxed text-gray-700">
-                    Good agreement wording should support clarity around payment and occupation
-                    expectations without turning the page into a dense legal lecture. This is
-                    one reason stronger commercial pages outperform thin template pages: they
-                    explain why the details matter instead of assuming the user already knows.
+                    Good agreement wording should make payment and occupation expectations clear.
+                    These details matter because they affect how the tenancy is managed and how
+                    disputes are understood later.
                   </p>
                 </div>
 
@@ -869,10 +855,8 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                   </h3>
                   <p className="leading-relaxed text-gray-700">
                     This is one of the most common and damaging mistakes. The page may use the
-                    phrase "PRT" in the title, but the body copy still reads like an AST
-                    landing page. That weakens trust and can create the impression that the
-                    underlying document is also a light adaptation rather than a proper
-                    Scottish route.
+                    phrase "PRT" in the title but still use AST assumptions in the document.
+                    A Scottish tenancy needs Scottish terms, notices and tribunal procedures.
                   </p>
                 </div>
 
@@ -901,10 +885,9 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                     Giving too little decision support
                   </h3>
                   <p className="leading-relaxed text-gray-700">
-                    High-intent visitors do not just want to know what a PRT stands for. They
-                    want to know whether they are on the right page, what route suits their
-                    letting, what the main Scottish differences are, and what to do next. Thin
-                    pages lose that traffic because they answer almost none of those questions.
+                    Knowing what PRT stands for is not enough. Check whether it suits the letting,
+                    understand the main Scottish requirements and collect the information needed
+                    to complete the agreement accurately.
                   </p>
                 </div>
               </div>
@@ -955,7 +938,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
               <div className="space-y-5 leading-relaxed text-gray-700">
                 <p>
                   This page is for <strong>Scottish private residential tenancies</strong>.
-                  It is not the right landing page for every residential occupation scenario.
+                  It is not the right agreement for every residential occupation scenario.
                   If you are dealing with a different living arrangement, a different product
                   page or agreement route may be more suitable.
                 </p>

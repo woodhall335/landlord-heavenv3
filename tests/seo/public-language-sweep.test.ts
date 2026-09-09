@@ -7,11 +7,11 @@ const FILES_TO_CHECK = [
   'src/app/(marketing)/blog/page.tsx',
   'src/app/(marketing)/help/page.tsx',
   'src/app/(marketing)/pricing/page.tsx',
-  'src/app/(marketing)/products/ast/page.tsx',
-  'src/app/(marketing)/products/complete-pack/page.tsx',
-  'src/app/(marketing)/products/money-claim/page.tsx',
-  'src/app/(marketing)/products/notice-only/page.tsx',
-  'src/app/(marketing)/products/section-13-standard/page.tsx',
+  'src/app/products/ast/page.tsx',
+  'src/app/products/complete-pack/page.tsx',
+  'src/app/products/money-claim/page.tsx',
+  'src/app/products/notice-only/page.tsx',
+  'src/app/products/section-13-standard/page.tsx',
   'src/components/landing/heroConfigs.tsx',
   'src/components/landing/HomeContent.tsx',
   'src/components/landing/heroConfigs.tsx',
@@ -28,11 +28,11 @@ const FILES_TO_CHECK = [
   'src/lib/marketing/section13-products.ts',
   'src/lib/public-products.ts',
   'src/lib/seo/product-owner-metadata.ts',
-  'src/app/(marketing)/products/notice-only/page.tsx',
-  'src/app/(marketing)/products/complete-pack/page.tsx',
-  'src/app/(marketing)/products/money-claim/page.tsx',
-  'src/app/(marketing)/products/section-13-standard/page.tsx',
-  'src/app/(marketing)/products/section-13-defence/page.tsx',
+  'src/app/products/notice-only/page.tsx',
+  'src/app/products/complete-pack/page.tsx',
+  'src/app/products/money-claim/page.tsx',
+  'src/app/products/section-13-standard/page.tsx',
+  'src/app/products/section-13-defence/page.tsx',
   'src/app/standard-tenancy-agreement/page.tsx',
   'src/app/premium-tenancy-agreement/page.tsx',
   'src/app/student-tenancy-agreement/page.tsx',
@@ -97,9 +97,63 @@ const BANNED_PHRASES = [
   'Generate notice pack',
 ];
 
+const SITEWIDE_INTERNAL_PHRASES = [
+  'high-intent search',
+  'high-intent visitor',
+  'search-intent page',
+  'keyword demand',
+  'search demand still exists',
+  'preserves rankings',
+  'commercial handoff',
+  'strongest commercial route',
+  'transactional paths stay downstream',
+  'rank highest in a search result',
+  'landlord SEO content',
+  'the commercial goal is',
+  'product journey',
+  'agreement journey',
+  'route landscape',
+  'broad head terms',
+];
+
+const retiredRoutes = new Set<string>(
+  Object.keys(
+    JSON.parse(
+      fs.readFileSync(path.join(process.cwd(), 'config/retired-public-routes.json'), 'utf-8')
+    ).routeRedirects
+  )
+);
+
+function collectPageFiles(directory: string): string[] {
+  return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const absolute = path.join(directory, entry.name);
+    if (entry.isDirectory()) return collectPageFiles(absolute);
+    return entry.name === 'page.tsx' ? [absolute] : [];
+  });
+}
+
+function publicRouteForPage(file: string): string | null {
+  const relative = path.relative(path.join(process.cwd(), 'src/app'), file).replaceAll('\\', '/');
+  const segments = relative
+    .replace(/\/page\.tsx$/, '')
+    .split('/')
+    .filter((segment) => !/^\(.+\)$/.test(segment));
+
+  if (segments.some((segment) => segment.startsWith('['))) return null;
+  if (segments[0] === 'api' || segments[0] === 'dashboard' || segments[0] === 'wizard') return null;
+  return segments.length ? `/${segments.join('/')}` : '/';
+}
+
+const REACHABLE_STATIC_PAGE_FILES = collectPageFiles(path.join(process.cwd(), 'src/app'))
+  .filter((file) => {
+    const route = publicRouteForPage(file);
+    return route !== null && !retiredRoutes.has(route);
+  })
+  .map((file) => path.relative(process.cwd(), file).replaceAll('\\', '/'));
+
 describe('Public language sweep regression', () => {
   it('keeps core public pages free of internal or awkward marketing phrasing', () => {
-    const contents = FILES_TO_CHECK.map((file) => ({
+    const contents = [...new Set(FILES_TO_CHECK)].map((file) => ({
       file,
       text: fs.readFileSync(path.join(process.cwd(), file), 'utf-8'),
     }));
@@ -117,30 +171,67 @@ describe('Public language sweep regression', () => {
     expect(violations).toEqual([]);
   });
 
+  it('keeps every reachable static page free of internal SEO and funnel terminology', () => {
+    const violations: string[] = [];
+
+    for (const file of REACHABLE_STATIC_PAGE_FILES) {
+      const text = fs.readFileSync(path.join(process.cwd(), file), 'utf-8').toLowerCase();
+      for (const phrase of SITEWIDE_INTERNAL_PHRASES) {
+        if (text.includes(phrase.toLowerCase())) violations.push(`${file}: ${phrase}`);
+      }
+    }
+
+    expect(violations).toEqual([]);
+  });
+
+  it('does not present the expired Section 21 deadlines as future on reachable pages', () => {
+    const staleLegalPhrases = [
+      /Section 21 is due to end/i,
+      /Section 21 ends 1 May 2026/i,
+      /Section 21 is being (?:abolished|phased out)/i,
+      /only \d+ days left to serve Section 21/i,
+      /last chance to serve a Section 21/i,
+      /you can serve a Section 21/i,
+    ];
+    const violations: string[] = [];
+
+    for (const file of REACHABLE_STATIC_PAGE_FILES) {
+      const text = fs.readFileSync(path.join(process.cwd(), file), 'utf-8');
+      for (const phrase of staleLegalPhrases) {
+        if (phrase.test(text)) violations.push(`${file}: ${phrase.source}`);
+      }
+    }
+
+    expect(violations).toEqual([]);
+  });
+
   it('keeps the updated landlord-facing replacements in the core public pages', () => {
     const wizard = fs.readFileSync(
       path.join(process.cwd(), 'src/app/(app)/wizard/WizardClientPage.tsx'),
       'utf-8'
     );
     const noticeOnly = fs.readFileSync(
-      path.join(process.cwd(), 'src/app/(marketing)/products/notice-only/page.tsx'),
+      path.join(process.cwd(), 'src/app/products/notice-only/page.tsx'),
       'utf-8'
     );
     const completePack = fs.readFileSync(
-      path.join(process.cwd(), 'src/app/(marketing)/products/complete-pack/page.tsx'),
+      path.join(process.cwd(), 'src/app/products/complete-pack/page.tsx'),
       'utf-8'
     );
     const astHub = fs.readFileSync(
-      path.join(process.cwd(), 'src/app/(marketing)/products/ast/page.tsx'),
+      path.join(process.cwd(), 'src/app/products/ast/page.tsx'),
       'utf-8'
     );
 
     expect(wizard).toContain('Choose the landlord product you need');
     expect(wizard).toContain('Choose the product that matches the job in front of you');
-    expect(noticeOnly).toContain('Create my Section 8 notice');
+    expect(noticeOnly).toContain("getPublicProductDescriptor('notice_only')");
+    expect(fs.readFileSync(path.join(process.cwd(), 'src/lib/public-products.ts'), 'utf-8')).toContain(
+      'Create and preview my Form 3A'
+    );
     expect(completePack).toContain('Prepare my court pack');
-    expect(astHub).toContain('Choose the agreement that fits the let');
-    expect(fs.readFileSync(path.join(process.cwd(), 'src/components/landing/HomeContent.tsx'), 'utf-8')).toContain('Prepare my court pack');
+    expect(astHub).toContain('Start with the agreement that fits the let');
+    expect(fs.readFileSync(path.join(process.cwd(), 'src/components/landing/HomeContent.tsx'), 'utf-8')).toContain('Prepare my court papers');
     expect(fs.readFileSync(path.join(process.cwd(), 'src/lib/blog/product-cta-map.ts'), 'utf-8')).toContain('Prepare my money claim');
   });
 });

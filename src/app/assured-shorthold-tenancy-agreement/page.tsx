@@ -48,7 +48,7 @@ const faqs = [
   {
     question: 'Is this still an assured shorthold tenancy agreement?',
     answer:
-      'The assured shorthold tenancy agreement is older terminology. For a new England let, use the current England tenancy agreement route and choose the option that matches the property and occupiers.',
+      'Assured shorthold tenancy agreement is older terminology. For a new England let, choose the current agreement that matches the property and occupiers.',
   },
   {
     question: 'Why keep assured shorthold tenancy agreement wording on the page?',
@@ -58,7 +58,7 @@ const faqs = [
   {
     question: 'How does this relate to the 1 May 2026 England changes?',
     answer:
-      'The page is positioned around a newer England agreement route designed for the assured periodic framework from 1 May 2026. It should not be sold as a new fixed-term AST product in the old sense.',
+      'New England agreements must reflect the assured periodic framework that applies from 1 May 2026. They should not be presented as old-style fixed-term ASTs.',
   },
   {
     question: 'What should an England tenancy agreement include?',
@@ -83,7 +83,7 @@ const faqs = [
   {
     question: 'Can I use an old AST template for a new England tenancy?',
     answer:
-      'Do not start a new tenancy with an old AST template. Use the current England agreement route, check that it matches the property and occupiers, and complete the guided setup instead.',
+      'Do not start a new tenancy with an old AST template. Choose a current England agreement, check that it matches the property and occupiers, and complete the guided questions instead.',
   },
 ];
 
@@ -112,10 +112,10 @@ export default function AssuredShortholdTenancyAgreementPage() {
       <main>
         <UniversalHero
           preset="content_index"
-          preTitleLabel="Updated England tenancy agreement route"
+          preTitleLabel="England tenancy agreements from May 2026"
           title="Assured Shorthold Tenancy Agreement 2026"
           highlightTitle="Use the current England agreement."
-          subtitle="If you searched for an assured shorthold tenancy agreement, this page explains the updated England route and moves you into the current agreement flow with clearer 2026 landlord guidance."
+          subtitle="If you searched for an assured shorthold tenancy agreement, this page explains what changed and helps you choose the correct current England agreement."
           primaryCta={{ label: 'Start updated England agreement', href: wizardHref }}
           secondaryCta={{ label: 'Use the premium agreement', href: premiumWizardHref }}
           trustText="Current England tenancy setup with preview before payment"
@@ -128,9 +128,8 @@ export default function AssuredShortholdTenancyAgreementPage() {
                 What is the new 2026 England Tenancy Agreement?
               </h2>
               <p className="text-gray-600 text-center mb-10 max-w-3xl mx-auto">
-                This is the updated Landlord Heaven route for England landlords who still search for
-                assured shorthold tenancy agreement wording but now need a more modern tenancy
-                agreement journey.
+                This page is for England landlords who still search for an assured shorthold tenancy
+                agreement but need paperwork that reflects the current rules.
               </p>
 
               <div className="space-y-5 text-gray-700 leading-relaxed">
@@ -144,8 +143,8 @@ export default function AssuredShortholdTenancyAgreementPage() {
                 <p>
                   That change matters because many landlords still search for{' '}
                   <strong>assured shorthold tenancy agreement</strong>,{' '}
-                  <strong>AST agreement England</strong>, or similar phrases, even when the stronger
-                  landing-page experience is no longer a thin AST-only route.
+                  <strong>AST agreement England</strong>, or similar phrases, even though new lets now
+                  need current assured periodic wording.
                 </p>
 
                 <p>
@@ -154,8 +153,8 @@ export default function AssuredShortholdTenancyAgreementPage() {
                 </p>
 
                 <p>
-                  In practical terms, the page is now a real standalone landing page rather than only
-                  a legacy explainer. It captures the old query but sells the updated England route.
+                  This page explains the familiar AST term, what replaced the old fixed-term approach,
+                  and where to choose the right agreement for a new let.
                 </p>
               </div>
             </div>
@@ -169,31 +168,31 @@ export default function AssuredShortholdTenancyAgreementPage() {
                 Why this replaces old AST-first wording
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
-                Assured shorthold tenancy agreement remains a powerful search term, but it is no
-                longer the strongest way to frame the whole public product journey.
+                Assured shorthold tenancy agreement remains a familiar search term, but it no longer
+                describes how every new England tenancy should be documented.
               </p>
 
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Search demand still exists</h3>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Landlords still recognise the term</h3>
                   <p className="text-gray-700">
-                    Landlords continue to search for assured shorthold tenancy agreement wording, so
-                    removing these pages entirely would leave real commercial traffic behind.
+                    Many landlords still call their document an assured shorthold tenancy agreement.
+                    This guide explains how that familiar term relates to today&apos;s agreement.
                   </p>
                 </div>
 
                 <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">The product route is newer</h3>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">The agreement wording has changed</h3>
                   <p className="text-gray-700">
-                    The live England route uses current tenancy agreement wording rather than relying
-                    only on the older AST label.
+                    Current England agreements use updated tenancy wording rather than relying only
+                    on the older AST label.
                   </p>
                 </div>
 
                 <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">2026 needs better framing</h3>
                   <p className="text-gray-700">
-                    The route explains the current agreement options while still helping landlords
+                    The comparison explains the current agreement options while still helping landlords
                     who know the document by its older AST name.
                   </p>
                 </div>
@@ -206,7 +205,7 @@ export default function AssuredShortholdTenancyAgreementPage() {
                 </p>
 
                 <p>
-                  Use the comparison route to check whether you need Standard, Premium, Student,
+                  Use the comparison page to check whether you need Standard, Premium, Student,
                   HMO / Shared House, or Lodger wording before starting the document.
                 </p>
               </div>
@@ -221,18 +220,18 @@ export default function AssuredShortholdTenancyAgreementPage() {
                 How it relates to the current England framework
               </h2>
               <p className="text-gray-700 text-center mb-10 max-w-3xl mx-auto">
-                The updated England route uses current product wording rather than presenting every
+                The current England agreements avoid presenting every
                 letting arrangement as an assured shorthold tenancy.
               </p>
 
               <div className="space-y-5 text-gray-700 leading-relaxed">
                 <p>
-                  England landlords searching in 2026 need a tenancy agreement route that reflects
+                  England landlords searching in 2026 need a tenancy agreement that reflects
                   the current framework and is practical to use for the property and household.
                 </p>
 
                 <p>
-                  The <strong>updated England Tenancy Agreement</strong> route lets you compare the
+                  The <strong>England Tenancy Agreement</strong> comparison lets you review the
                   current options while recognising that many landlords still use “AST” as a familiar
                   description.
                 </p>
@@ -258,24 +257,24 @@ export default function AssuredShortholdTenancyAgreementPage() {
                 Who this agreement is for
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
-                The updated England route is for landlords who want something more useful than a thin
-                legacy AST landing page.
+                These agreements are for landlords who want current paperwork and clear guidance,
+                rather than an old blank AST template.
               </p>
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">First-time England landlords</h3>
                   <p className="text-gray-700">
-                    Useful if you want a clearer and more current route than copying wording from an
+                    Useful if you want a clearer and more current agreement than copying wording from an
                     old assured shorthold tenancy agreement page.
                   </p>
                 </div>
 
                 <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Landlords replacing older routes</h3>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Landlords replacing an old AST</h3>
                   <p className="text-gray-700">
-                    Ideal if your previous process relied on outdated AST-only landing pages and you
-                    want a stronger 2026 agreement route.
+                    Useful if your previous paperwork relied on an outdated AST and you now need a
+                    current England agreement.
                   </p>
                 </div>
 
@@ -283,7 +282,7 @@ export default function AssuredShortholdTenancyAgreementPage() {
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Straightforward private lets</h3>
                   <p className="text-gray-700">
                     The standard option is suitable for many standard England tenancy scenarios where
-                    you need a modern written agreement route.
+                    you need a modern written agreement.
                   </p>
                 </div>
 
@@ -357,8 +356,8 @@ export default function AssuredShortholdTenancyAgreementPage() {
               </div>
 
               <p className="mt-8 text-gray-700 text-center max-w-3xl mx-auto">
-                The aim is not just to generate a document. It is to create a cleaner, stronger and
-                more competitive England landlord agreement route than a basic legacy AST page.
+                The aim is not just to generate a document. It is to give the landlord a clear,
+                usable agreement that matches the property and occupiers.
               </p>
             </div>
           </div>
@@ -371,8 +370,8 @@ export default function AssuredShortholdTenancyAgreementPage() {
                 Common mistakes with old assured shorthold tenancy agreement pages
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
-                One reason to modernise the page is that many landlords still rely on weak legacy
-                template routes.
+                Many landlords still find and reuse old AST templates that no longer explain the
+                current England position clearly.
               </p>
 
               <div className="grid md:grid-cols-2 gap-6">
@@ -391,8 +390,8 @@ export default function AssuredShortholdTenancyAgreementPage() {
                     Treating AST as the whole product story
                   </h3>
                   <p className="text-gray-700">
-                    The query may still be assured shorthold tenancy agreement, but the commercial
-                    route can be stronger when framed as an updated England tenancy agreement.
+                    You may still call it an assured shorthold tenancy agreement, but for a new let
+                    you should choose an agreement written for the current England framework.
                   </p>
                 </div>
 
@@ -451,7 +450,7 @@ export default function AssuredShortholdTenancyAgreementPage() {
                       <td className="px-4 py-3 text-gray-700">AST search retained</td>
                     </tr>
                     <tr>
-                      <td className="px-4 py-3 text-gray-700">Commercial route</td>
+                      <td className="px-4 py-3 text-gray-700">Agreement type</td>
                       <td className="px-4 py-3 text-gray-700">Legacy AST wording</td>
                       <td className="px-4 py-3 text-gray-700">England Tenancy Agreement 2026</td>
                     </tr>
@@ -468,12 +467,12 @@ export default function AssuredShortholdTenancyAgreementPage() {
                     <tr>
                       <td className="px-4 py-3 text-gray-700">User expectation</td>
                       <td className="px-4 py-3 text-gray-700">Basic template page</td>
-                      <td className="px-4 py-3 text-gray-700">Modern England agreement journey</td>
+                      <td className="px-4 py-3 text-gray-700">Current England agreement options</td>
                     </tr>
                     <tr>
                       <td className="px-4 py-3 text-gray-700">Practical help</td>
                       <td className="px-4 py-3 text-gray-700">A static form with limited guidance</td>
-                      <td className="px-4 py-3 text-gray-700">A guided agreement journey with supporting documents</td>
+                      <td className="px-4 py-3 text-gray-700">A guided agreement with supporting documents</td>
                     </tr>
                   </tbody>
                 </table>
@@ -481,8 +480,8 @@ export default function AssuredShortholdTenancyAgreementPage() {
 
               <div className="mt-10 max-w-4xl mx-auto space-y-5 text-gray-700 leading-relaxed">
                 <p>
-                  The phrase “assured shorthold tenancy agreement” remains familiar, but the current
-                  product route needs to match the tenancy you are creating.
+                  The phrase “assured shorthold tenancy agreement” remains familiar, but the document
+                  still needs to match the tenancy you are creating.
                 </p>
 
                 <p>
@@ -500,7 +499,7 @@ export default function AssuredShortholdTenancyAgreementPage() {
                 Standard vs premium
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
-                Choose the England agreement route that fits your letting situation and the level of
+                Choose the England agreement that fits your letting situation and the level of
                 detail you need.
               </p>
 
@@ -511,10 +510,10 @@ export default function AssuredShortholdTenancyAgreementPage() {
                     Suitable for many straightforward England lets using the updated 2026 agreement flow.
                   </p>
                   <ul className="space-y-3 text-gray-700 mb-6">
-                    <li>Updated England agreement route</li>
-                    <li>AST search capture with modern product language</li>
+                    <li>Current England agreement wording</li>
+                    <li>Suitable for landlords familiar with the AST name</li>
                     <li>Core landlord wording for many standard lets</li>
-                    <li>Stronger than a thin legacy AST landing page</li>
+                    <li>More guidance than a blank legacy AST template</li>
                   </ul>
                   <Link
                     href={wizardHref}
@@ -534,7 +533,7 @@ export default function AssuredShortholdTenancyAgreementPage() {
                     drafting for real-world scenarios.
                   </p>
                   <ul className="space-y-3 text-gray-700 mb-6">
-                    <li>Everything in the standard route</li>
+                    <li>Everything in the Standard agreement</li>
                     <li>More detailed commercial coverage</li>
                     <li>Broader drafting for practical landlord situations</li>
                     <li>Stronger premium positioning for 2026</li>
@@ -562,7 +561,7 @@ export default function AssuredShortholdTenancyAgreementPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto rounded-2xl bg-red-600 p-10 md:p-12 text-center text-white shadow-2xl">
               <h2 className="text-4xl font-bold mb-4">
-                Ready to use the updated England agreement route?
+                Ready to create your current England tenancy agreement?
               </h2>
               <p className="text-xl text-red-50 mb-8 max-w-3xl mx-auto">
                 Keep assured shorthold tenancy agreement search visibility, use stronger 2026 wording,

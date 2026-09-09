@@ -5,7 +5,7 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
-import ASTProductPage from '@/app/(marketing)/products/ast/page';
+import ASTProductPage from '@/app/products/ast/page';
 
 vi.mock('next/image', () => ({
   default: ({
@@ -114,14 +114,14 @@ describe('/products/ast page', () => {
     expect(
       screen.getByRole('heading', {
         level: 1,
-        name: /Create the Right Tenancy Agreement for Your England Let/i,
+        name: /Create the right England tenancy agreement for the let/i,
       })
     ).toBeInTheDocument();
 
     const orderedHeadings = [
-      screen.getByRole('heading', { level: 2, name: 'Choose the agreement that fits the tenancy' }),
-      screen.getByRole('heading', { level: 2, name: 'Why you need the right route first' }),
-      screen.getByRole('heading', { level: 2, name: 'How this hub helps the landlord outcome' }),
+      screen.getByRole('heading', { level: 2, name: 'Choose the agreement before you start' }),
+      screen.getByRole('heading', { level: 2, name: 'Why you need the right agreement first' }),
+      screen.getByRole('heading', { level: 2, name: 'How this helps' }),
       screen.getByRole('heading', { level: 2, name: 'How it works' }),
       screen.getByRole('heading', { level: 2, name: 'Start with the agreement that fits the let' }),
       screen.getByRole('heading', { level: 2, name: 'England tenancy agreement FAQs' }),

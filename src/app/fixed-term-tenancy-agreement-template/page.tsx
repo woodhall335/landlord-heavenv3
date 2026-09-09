@@ -42,25 +42,25 @@ export default function FixedTermTenancyAgreementTemplatePage() {
       <EnglandTenancyPage
         pagePath="/fixed-term-tenancy-agreement-template"
         title="Fixed Term Tenancy Agreement Template"
-        subtitle="This is now a legacy England explainer page. From 1 May 2026 new England agreements generally move into the assured periodic framework, so the live self-serve routes no longer sell fixed-term AST paperwork as the core product."
+        subtitle="Fixed-term AST wording is familiar to many landlords, but new England tenancies from 1 May 2026 generally use the assured periodic framework."
         primaryCtaLabel="Start Standard England agreement"
         primaryCtaHref={standardAgreementHref}
         secondaryCtaLabel="Start Premium England agreement"
         secondaryCtaHref={premiumAgreementHref}
-        legacyNotice="Landlord Heaven keeps this fixed-term page live for search demand, but new England self-serve agreements are now routed into current Standard and Premium flows designed for the assured periodic framework."
-        introTitle="From fixed-term demand to the current England route"
+        legacyNotice="If you are creating a new England tenancy, do not copy an old fixed-term AST. Choose a current Standard or Premium agreement instead."
+        introTitle="What replaced the old fixed-term starting point?"
         introBody={[
-          'Landlords still search for fixed term tenancy agreement templates, so this page remains available as a legacy explainer.',
-          'For the current England product, the live routes now position new agreements around the assured periodic framework rather than selling fixed-term AST wording as the default.',
+          'Fixed-term tenancy agreements were the familiar starting point for many England landlords before the 2026 changes.',
+          'For a new tenancy, Standard and Premium agreements now use the current assured periodic framework. Choose between them according to the level of management detail you need.',
         ]}
         highlights={[
-          'Preserves fixed-term keyword demand',
-          'Explains the product shift to the current England routes',
-          'Routes users into Standard or Premium instead of selling fixed-term AST paperwork',
+          'Explains why old fixed-term AST wording is no longer the default',
+          'Shows where Standard and Premium differ',
+          'Directs new-tenancy landlords to current England agreements',
         ]}
         compliancePoints={[
-          'Legacy search page only',
-          'Live England product positioned around the assured periodic framework from 1 May 2026',
+          'Check whether the tenancy began before or after 1 May 2026',
+          'Use an agreement written for the current England framework when creating a new tenancy',
         ]}
       />
     </div>

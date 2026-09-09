@@ -14,17 +14,17 @@ const faqs = [
   {
     question: 'What is this England tenancy agreement guide for now?',
     answer:
-      'It is a support page for landlords who want context on the England routes and the terminology shift from older AST wording. If you want to inspect a real agreement example first, move to /tenancy-agreement-template.',
+      'It explains the current England agreement options and the change from older AST wording. You can also inspect a worked agreement example before choosing a product.',
   },
   {
     question: 'Does this page replace the England agreement example page?',
     answer:
-      'No. The broad England example page is /tenancy-agreement-template. This guide stays live to support broader agreement-intent searches without competing with the example page.',
+      'No. This page explains the options. The England agreement example page lets you inspect a worked document before deciding what to buy.',
   },
   {
-    question: 'Should I go to /products/ast first from here?',
+    question: 'Where can I compare all five England agreements?',
     answer:
-      'Only if you already know you want to compare all five England routes. If you want to inspect a real agreement example first, start with /tenancy-agreement-template and then move to /products/ast when you are ready to compare routes side by side.',
+      'Use the England agreement comparison page to compare Standard, Premium, Student, HMO / Shared House and Lodger agreements side by side. If you want to see the document first, begin with the worked agreement example.',
   },
 ] as const;
 
@@ -33,7 +33,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'England Tenancy Agreement Guide | Support Page',
   description:
-    'Support guide for landlords using England tenancy agreement wording, with clear routes into the England agreement example page and comparison page.',
+    'Plain-English guide to current England tenancy agreements, older AST terminology, worked document examples and the five available agreement types.',
   keywords: [
     'england tenancy agreement guide',
     'england tenancy agreement',
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'England Tenancy Agreement Guide | Support Page',
     description:
-      'Support page explaining England tenancy agreement wording and routing landlords into the example page or comparison page.',
+      'Understand current England tenancy agreement wording, inspect a worked example and compare the available agreement types.',
     url: canonicalUrl,
     type: 'website',
     locale: 'en_GB',
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'England Tenancy Agreement Guide | Support Page',
     description:
-      'Support page for England tenancy agreement terminology and next steps into the example page or comparison page.',
+      'Understand England tenancy agreement terminology, inspect a worked example and compare the available agreements.',
   },
   robots: {
     index: true,
@@ -76,28 +76,28 @@ export default function EnglandTenancyAgreementsPage() {
       <EnglandTenancyPage
         pagePath={pagePath}
         title="England Tenancy Agreement Guide"
-        subtitle="Use this page as a support guide for England terminology and route context, then move to the England agreement example or comparison page when you are ready to build a validated tenancy setup pack from your facts."
+        subtitle="Understand the current England terminology, inspect a worked agreement and choose the product that fits your property and occupiers."
         primaryCtaLabel="View the England agreement example"
         primaryCtaHref="/tenancy-agreement-template"
-        secondaryCtaLabel="Build my validated Standard pack"
+        secondaryCtaLabel="Create my Standard agreement"
         secondaryCtaHref="/standard-tenancy-agreement"
-        legacyNotice="This page stays live as a support guide. It captures broader England tenancy-agreement searches and older AST-led wording, while the main example page remains /tenancy-agreement-template."
-        introTitle="Why this England guide still exists"
+        legacyNotice="Landlords still use AST terminology, but new England lets need paperwork that reflects the current assured periodic framework."
+        introTitle="Start with the tenancy you are creating"
         introBody={[
-          'Landlords do not always arrive with clean template-first intent. Some want the document example immediately, while others want context on the wording shift from older AST terminology or reassurance that they are still on the right England route.',
-          'That is why this page remains live as support content. Its job is to explain the route landscape, keep England-specific terminology straight, and move users to the England agreement example or comparison page instead of leaving them with a vague overview or a static wording-only form.',
-          'Once the example page has satisfied the broad template question, landlords can branch into Standard, Premium, the specialist routes, or the full comparison page and build a fixed-price, review-ready document preparation workflow around their property, occupiers, rent, deposit, and management facts.',
+          'Some landlords want to inspect a document immediately. Others need to understand what changed from older AST terminology before they choose. Both questions are answered here.',
+          'The worked example shows how a current agreement is structured. The comparison page then helps you choose between Standard, Premium, Student, HMO / Shared House and Lodger agreements.',
+          'Your choice should reflect the property, occupiers and level of management detail you need. Each product shows its fixed price and document contents before you start.',
         ]}
         highlights={[
-          'Keeps the England agreement pages discoverable without trying to replace the main example page',
-          'Explains how Standard and Premium fit the default mainstream England journey',
-          'Keeps Student, HMO / Shared House, and Lodger as separate specialist branches when the facts demand them',
-          'Routes AST and assured periodic terminology back into the main agreement pages instead of letting support pages compete',
+          'Explains the change from older AST wording in plain English',
+          'Shows how Standard and Premium cover ordinary residential lets',
+          'Keeps Student, HMO / Shared House and Lodger agreements for the arrangements they are designed for',
+          'Links directly to a worked example and the five-product comparison',
         ]}
         compliancePoints={[
-          'Broad England example intent now belongs to /tenancy-agreement-template, not this support page',
-          'The page is careful with current England wording while still acknowledging older AST search behaviour',
-          'Primary user journey moves into the agreement example page before any side-by-side product comparison',
+          'Use an England agreement only for property in England',
+          'Check the agreement matches the occupiers and how the property is let',
+          'Review the generated document and all facts before payment and signing',
         ]}
         keywordTargets={[
           'england tenancy agreement',
@@ -110,23 +110,23 @@ export default function EnglandTenancyAgreementsPage() {
           {
             title: 'England agreement example',
             description:
-              'See the sample agreement preview first, then move into a validated Standard or Premium pack once the template intent has been satisfied.',
+              'Inspect a worked agreement and its supporting documents before choosing Standard or Premium.',
             href: '/tenancy-agreement-template',
             ctaLabel: 'View agreement example',
           },
           {
             title: 'Standard tenancy agreement',
             description:
-              'Build the validated mainstream route for straightforward whole-property lets once you know the ordinary residential path is the right fit.',
+              'Create the mainstream agreement for a straightforward whole-property residential let.',
             href: '/standard-tenancy-agreement',
             ctaLabel: 'Build Standard pack',
           },
           {
-            title: 'Compare all England routes',
+            title: 'Compare all England agreements',
             description:
-              'Use the comparison page only if you still need Standard, Premium, Student, HMO / Shared House, and Lodger shown side by side.',
+              'Compare Standard, Premium, Student, HMO / Shared House and Lodger side by side.',
             href: '/products/ast',
-            ctaLabel: 'Compare England routes',
+            ctaLabel: 'Compare England agreements',
           },
         ]}
       />

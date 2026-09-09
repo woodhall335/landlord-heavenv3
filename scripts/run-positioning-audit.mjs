@@ -12,6 +12,11 @@ const projectRoot = path.resolve(__dirname, '..');
 const auditScript = path.resolve(projectRoot, 'scripts', 'positioning-audit.ts');
 const npxBin = process.platform === 'win32' ? 'npx.cmd' : 'npx';
 const childArgs = ['-p', 'node@20', '-p', 'tsx', 'tsx', auditScript, ...forwardedArgs];
+const npmBinDir = process.env.npm_execpath ? path.dirname(process.env.npm_execpath) : null;
+const npxCli = npmBinDir ? path.join(npmBinDir, 'npx-cli.js') : null;
+const useNpxCli = Boolean(npxCli && existsSync(npxCli));
+const runner = useNpxCli ? process.execPath : npxBin;
+const runnerArgs = useNpxCli ? [npxCli, ...childArgs] : childArgs;
 
 if (!existsSync(auditScript)) {
   console.error(`[run-positioning-audit] Missing audit script at: ${auditScript}`);
@@ -20,17 +25,18 @@ if (!existsSync(auditScript)) {
 
 if (process.env.LH_AUDIT_DEBUG === '1') {
   console.error('[run-positioning-audit] Debug info:');
-  console.error(`  runner: ${npxBin}`);
-  console.error(`  args: ${JSON.stringify(childArgs)}`);
+  console.error(`  runner: ${runner}`);
+  console.error(`  args: ${JSON.stringify(runnerArgs)}`);
   console.error(`  cwd: ${projectRoot}`);
 }
 
-const child = spawn(npxBin, childArgs, {
+const child = spawn(runner, runnerArgs, {
   cwd: projectRoot,
   stdio: 'inherit',
   env: {
     ...process.env,
   },
+  // Prefer npm's JS entry point so Windows does not have to spawn a .cmd shim.
   shell: false,
 });
 

@@ -402,7 +402,7 @@ export default function Page() {
                   Ground-specific eviction guides
                 </h3>
                 <p className="mt-3 leading-7 text-gray-700">
-                  If you already know the ground you need, use the commercial guide for
+                  If you already know the ground you need, read the detailed guide for
                   that ground before starting the Form 3A notice.
                 </p>
                 <div className="mt-4 grid gap-3 md:grid-cols-2">

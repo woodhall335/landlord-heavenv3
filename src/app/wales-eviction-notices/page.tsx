@@ -602,8 +602,8 @@ export default function WalesEvictionNoticesPage() {
               </div>
 
               <p className="mt-6 text-sm leading-6 text-gray-600">
-                Better commercial wording on a Wales page focuses on the route and the logic, not
-                on pretending every Welsh possession case can be reduced to one fixed timeline.
+                Welsh possession cases do not all follow one fixed timeline. The notice used,
+                the reason for possession and the evidence available can all change the process.
               </p>
             </div>
           </div>

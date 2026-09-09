@@ -21,9 +21,10 @@ const tenancyProducts = getPublicTenancyProducts();
 export const metadata: Metadata = {
   title: 'England Tenancy Agreements | Compare 5 Landlord Options',
   description:
-    'Compare Standard, Premium, Student, HMO/shared-house and Lodger agreements for England. Choose the right route, preview the documents and create online.',
+    'Compare Standard, Premium, Student, HMO/shared-house and Lodger agreements for England. Choose the right agreement, preview the documents and create online.',
   keywords: [
     'England tenancy agreement',
+    'landlord tenancy agreement england',
     'tenancy agreement template england',
     "Renters' Rights Act compliant tenancy agreement",
     'post-May 2026 tenancy agreement',
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
     'periodic tenancy agreement england',
     'assured periodic tenancy agreement england',
     'assured periodic tenancy agreement',
-    'Standard tenancy agreement',
+    'standard tenancy agreement england',
     'Premium tenancy agreement',
     'Student tenancy agreement',
     'HMO tenancy agreement',
@@ -43,7 +44,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'England Tenancy Agreements | Compare 5 Landlord Options',
     description:
-      'Compare five England landlord agreement routes, choose the one that fits the occupiers and preview the documents before payment.',
+      'Compare five England landlord agreements, choose the one that fits the occupiers and preview the documents before payment.',
     url: canonicalUrl,
   },
 };
@@ -157,7 +158,7 @@ const faqs: FAQItem[] = [
   {
     question: 'What if I searched for periodic tenancy agreement or assured periodic tenancy agreement?',
     answer:
-      "That is still the right kind of search for this England tenancy journey. Standard and Premium are the current England assured periodic options, so use this page to choose the exact product and the periodic support guides if you want the terminology explained first.",
+      "You are in the right place. Standard and Premium are the current England assured periodic options. Compare them here, or read the assured periodic guide first if you want the terminology explained.",
   },
   {
     question: 'Where do I get the full pack breakdown for each agreement?',
@@ -216,7 +217,7 @@ export default function EnglandTenancyHubPage() {
               AST wording is legacy for new lets
             </h2>
             <p className="mt-3 text-sm leading-7 text-[#4B5565]">
-              Landlords still search for AST templates, but new England paperwork needs to match the assured periodic framework. Use this hub to choose the current route instead of adapting old AST wording.
+              Landlords still search for AST templates, but new England paperwork needs to match the assured periodic framework. Compare the current agreements here instead of adapting old AST wording.
             </p>
           </article>
           <article className="rounded-[1.5rem] border border-[#D8C8FF] bg-white p-5">
@@ -227,7 +228,7 @@ export default function EnglandTenancyHubPage() {
               Choose by how the property is let
             </h2>
             <p className="mt-3 text-sm leading-7 text-[#4B5565]">
-              Standard and Premium cover ordinary whole-property lets. Student, HMO / Shared House, and Lodger routes handle specialist setups where a generic agreement can miss important landlord protections.
+              Standard and Premium cover ordinary whole-property lets. Student, HMO / Shared House, and Lodger agreements cover living arrangements that need more specific wording.
             </p>
           </article>
         </div>

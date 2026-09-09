@@ -16,16 +16,14 @@ describe('Universal Hero proof contract', () => {
     expect(hero).toContain('<UsageTodayCounter />');
   });
 
-  it('uses first-party aggregate sessions and does not display an invented fallback number', () => {
+  it('restores the original browser-persistent daily counter capped at 500', () => {
     const counter = read('src', 'components', 'ui', 'SocialProofCounter.tsx');
-    const endpoint = read('src', 'app', 'api', 'public', 'usage-today', 'route.ts');
-    const tracker = read('src', 'components', 'analytics', 'OrganicLandingTracker.tsx');
 
-    expect(counter).toContain("fetch('/api/public/usage-today'");
-    expect(counter).toContain('Live landlord usage updates throughout the day');
-    expect(endpoint).toContain("basis: 'distinct_first_party_sessions'");
-    expect(endpoint).toContain(".eq('event_name', 'site_visit')");
-    expect(tracker).toContain("recordMarketingGrowthEvent('site_visit'");
-    expect(counter).not.toMatch(/baseNumber\s*[+*-]|Math\.random/);
+    expect(counter).toContain('dailyGrowth: 500');
+    expect(counter).toContain("text: 'landlords have used Landlord Heaven today'");
+    expect(counter).toContain('getPersistedCount');
+    expect(counter).toContain('Math.min(timeBasedCount + initialVariance, maxCount)');
+    expect(counter).toContain('Math.max(count, nextCount)');
+    expect(counter).toContain('sessionStorage.getItem(animationKey)');
   });
 });

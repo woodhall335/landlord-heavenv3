@@ -142,7 +142,7 @@ type PageContract = {
 const pageContracts: PageContract[] = [
   {
     name: 'notice only',
-    load: () => import('@/app/(marketing)/products/notice-only/page'),
+    load: () => import('@/app/products/notice-only/page'),
     h1: /Create a Section 8 eviction notice and service file/i,
     sectionTitles: [
       'Why a blank notice is risky',
@@ -161,14 +161,15 @@ const pageContracts: PageContract[] = [
       'Case Summary',
       'What Happens Next',
     ],
+    expectsWhatYouGet: true,
   },
   {
     name: 'complete pack',
-    load: () => import('@/app/(marketing)/products/complete-pack/page'),
+    load: () => import('@/app/products/complete-pack/page'),
     h1: /Section 8 possession claim pack with N5 and N119/i,
     sectionTitles: [
       'Why separate forms cause problems',
-      'How the full pack improves the landlord outcome',
+      'How the full pack helps',
       'How it works',
       'Prepare the court papers without piecing them together',
       'Stage 2 Court & Possession FAQs',
@@ -186,14 +187,15 @@ const pageContracts: PageContract[] = [
       'Hearing Preparation Guide',
       'Arrears Engagement Letter',
     ],
+    expectsWhatYouGet: true,
   },
   {
     name: 'money claim',
-    load: () => import('@/app/(marketing)/products/money-claim/page'),
+    load: () => import('@/app/products/money-claim/page'),
     h1: /Recover unpaid rent with a landlord money claim pack/i,
     sectionTitles: [
       'Why a landlord money claim needs more than one form',
-      'How this improves the landlord outcome',
+      'How this pack helps',
       'How it works',
       'Prepare the money claim without piecing it together',
       'Money Claim Pack FAQs',
@@ -212,7 +214,7 @@ const pageContracts: PageContract[] = [
   },
   {
     name: 'section 13 standard',
-    load: () => import('@/app/(marketing)/products/section-13-standard/page'),
+    load: () => import('@/app/products/section-13-standard/page'),
     h1: /Create a Form 4A rent increase pack with market evidence/i,
     sectionTitles: [
       'Why you need this',
@@ -230,7 +232,7 @@ const pageContracts: PageContract[] = [
   },
   {
     name: 'section 13 defence',
-    load: () => import('@/app/(marketing)/products/section-13-defence/page'),
+    load: () => import('@/app/products/section-13-defence/page'),
     h1: /Prepare for a Section 13 rent challenge before it lands/i,
     sectionTitles: [
       'Why this route helps',

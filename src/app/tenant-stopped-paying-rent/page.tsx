@@ -45,7 +45,7 @@ export const metadata: Metadata = {
 const jumpLinks = [
   { href: '#quick-answer', label: 'Quick answer' },
   { href: '#first-steps-when-rent-stops', label: 'First steps when rent stops' },
-  { href: '#section-8-vs-section-21', label: 'Section 8 vs Section 21' },
+  { href: '#section-8-vs-section-21', label: 'Current possession grounds' },
   { href: '#grounds-8-10-11', label: 'Grounds 8, 10 and 11' },
   { href: '#arrears-evidence-pack', label: 'Arrears evidence pack' },
   { href: '#how-the-process-usually-runs', label: 'How the process usually runs' },
@@ -248,9 +248,9 @@ export default function Page() {
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                In many serious arrears cases, Section 8 becomes the main route because it
-                lets the landlord rely directly on the breach. In some cases, Section 21
-                may also be relevant if the tenancy and compliance file support it. The
+                In many serious arrears cases, the current grounds-based process is central because it
+                lets the landlord rely directly on the breach. Section 21 is no longer available for a
+                new notice. The
                 strongest route is usually not the one that sounds fastest. It is the one
                 least likely to fail once the dates, records, and notice history are
                 examined properly.
@@ -265,10 +265,9 @@ export default function Page() {
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                There is also a wider strategic point now. As Section 21 is being phased
-                out in England, many landlords should expect serious arrears cases to rely
-                more heavily on Section 8 and stronger breach-based files over time. That
-                makes arrears discipline even more important.
+                Section 21 has ended for new England notices, so serious arrears cases now depend
+                on the current possession grounds and a strong breach-based file. That makes
+                accurate arrears records and evidence even more important.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
@@ -342,24 +341,19 @@ export default function Page() {
 
             <Card
               id="section-8-vs-section-21"
-              title="Section 8 vs Section 21"
+              title="Current possession grounds vs the former Section 21 process"
             >
               <p className="mt-4 leading-7 text-gray-700">
-                In rent arrears cases, the natural first question is often whether the
-                case should proceed under Section 8, Section 21, or a combination of
-                options considered strategically over time. The answer depends on the
-                tenancy type, the compliance position, the level of arrears, and the
-                landlord’s objective.
+                In a current rent arrears case, the first question is which possession grounds
+                the evidence supports and whether the landlord also needs a separate money claim.
+                The answer depends on the tenancy, level of arrears, payment history and desired outcome.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                Section 8 is often the core arrears route because it lets the landlord rely
-                directly on the tenant’s breach. That usually makes it the more obvious
-                legal fit where non-payment is the central issue. Section 21 is different.
-                It is a no-fault route and depends on the tenancy and compliance file being
-                strong enough to support it. Where both routes are technically available,
-                the real question is which file is stronger and which route is more
-                resilient once challenged.
+                The grounds-based process lets the landlord rely directly on the tenant’s breach,
+                making it the natural fit where non-payment is central. Section 21 was the former
+                no-fault process and cannot be used for a new notice. The current question is which
+                ground the evidence can prove and whether possession, debt recovery or both are needed.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
@@ -371,11 +365,9 @@ export default function Page() {
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                There is also a changing policy backdrop. Because Section 21 is being
-                phased out, landlords should expect the Section 8 route to matter more in
-                future possession work. That does not mean Section 21 is irrelevant in
-                every live file today. It does mean landlords should stop assuming that
-                every rent arrears case can be solved by falling back on a no-fault route.
+                A landlord cannot fall back on a new no-fault notice. The case must be built around
+                the current grounds, dates and evidence, with separate debt-recovery steps considered
+                where recovering the unpaid rent matters as well as regaining possession.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">

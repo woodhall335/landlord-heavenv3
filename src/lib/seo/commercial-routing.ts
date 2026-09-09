@@ -61,6 +61,10 @@ const OWNER_ROUTE_DESTINATIONS: Record<string, { primaryHref: string; secondaryH
 };
 
 const SUPPLEMENTAL_ROUTE_DESTINATIONS: Record<string, { primaryHref: string; secondaryHref?: string }> = {
+  '/assisted-prep': {
+    primaryHref: '/products/notice-only',
+    secondaryHref: '/products/complete-pack',
+  },
   '/ast-agreement-template': { primaryHref: '/products/ast' },
   '/compare/section-13-standard-vs-defence': {
     primaryHref: '/products/section-13-standard',
@@ -71,6 +75,11 @@ const SUPPLEMENTAL_ROUTE_DESTINATIONS: Record<string, { primaryHref: string; sec
     secondaryHref: '/products/complete-pack',
   },
   '/compare/tenancy-agreement-options-england': { primaryHref: '/products/ast' },
+  '/claims': { primaryHref: '/products/money-claim' },
+  '/employment-documents-for-property-management-businesses': { primaryHref: '/products/ast' },
+  '/hiring-a-property-manager-employment-contract-checklist': { primaryHref: '/products/ast' },
+  '/landlords-hiring-staff-employee-or-contractor': { primaryHref: '/products/ast' },
+  '/letting-agency-employee-handbook': { primaryHref: '/products/ast' },
   '/hmo-tenancy-agreement-template': {
     primaryHref: '/hmo-shared-house-tenancy-agreement',
     secondaryHref: '/products/ast',
@@ -96,9 +105,15 @@ const SUPPLEMENTAL_ROUTE_DESTINATIONS: Record<string, { primaryHref: string; sec
     primaryHref: '/products/section-13-defence',
     secondaryHref: '/products/section-13-standard',
   },
+  '/possession-claim-assisted-prep': { primaryHref: '/products/complete-pack' },
   '/renters-rights-act-information-sheet-2026': { primaryHref: '/products/ast' },
   '/samples': { primaryHref: '/products/notice-only' },
   '/samples/notice-only': { primaryHref: '/products/notice-only' },
+  '/section-8-grounds/how-to-evict-a-tenant-using-ground-16': {
+    primaryHref: '/products/notice-only',
+    secondaryHref: '/products/complete-pack',
+  },
+  '/section-8-notice-assisted-prep': { primaryHref: '/products/notice-only' },
   '/tenancy-agreement-england-2026': { primaryHref: '/products/ast' },
   '/tenancy-agreement-template-uk': { primaryHref: '/products/ast' },
 };

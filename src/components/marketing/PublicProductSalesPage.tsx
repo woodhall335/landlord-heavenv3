@@ -300,7 +300,7 @@ function BreakdownList({
             <article
               key={item.name}
               className={`overflow-hidden rounded-2xl border border-[#E8E1F8] bg-white shadow-[0_14px_34px_rgba(41,25,78,0.07)] ${
-                item.imageSrc ? 'sm:grid sm:grid-cols-[minmax(0,1fr)_11rem]' : ''
+                item.imageSrc ? 'sm:grid sm:grid-cols-[minmax(0,1fr)_13rem]' : ''
               }`}
             >
               <div className="p-5 sm:p-6">
@@ -313,27 +313,27 @@ function BreakdownList({
                 <p className="mt-3 text-sm leading-6 text-[#4B5565]">{item.plainEnglish}</p>
                 <dl className="mt-4 space-y-3 text-sm leading-6 text-[#4B5565]">
                   <div>
-                    <dt className="font-semibold text-[#17142B]">Function</dt>
+                    <dt className="font-semibold text-[#17142B]">Why it matters</dt>
                     <dd>{item.function}</dd>
                   </div>
                   <div>
-                    <dt className="font-semibold text-[#17142B]">Risk if missing</dt>
+                    <dt className="font-semibold text-[#17142B]">What can go wrong</dt>
                     <dd>{item.riskIfMissing}</dd>
                   </div>
                   <div>
-                    <dt className="font-semibold text-[#17142B]">Landlord outcome</dt>
+                    <dt className="font-semibold text-[#17142B]">What it gives you</dt>
                     <dd>{item.landlordOutcome}</dd>
                   </div>
                 </dl>
               </div>
               {item.imageSrc ? (
-                <div className="relative min-h-48 border-t border-[#EEE8FA] bg-[#FCFAFF] sm:min-h-full sm:border-l sm:border-t-0">
+                <div className="relative aspect-[4/3] overflow-hidden border-t border-[#EEE8FA] bg-[#F6F0FF] sm:aspect-auto sm:min-h-full sm:border-l sm:border-t-0">
                   <Image
                     src={item.imageSrc}
                     alt={item.imageAlt || ''}
                     fill
-                    sizes="(max-width: 639px) 100vw, 176px"
-                    className="object-contain p-3 sm:p-2"
+                    sizes="(max-width: 639px) 100vw, 208px"
+                    className="object-cover object-center"
                   />
                 </div>
               ) : null}

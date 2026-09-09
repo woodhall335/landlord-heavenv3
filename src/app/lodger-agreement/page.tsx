@@ -193,7 +193,7 @@ export default function LodgerAgreementEnglandPage() {
               },
             ],
           },
-          ctaTitle: 'Build the validated Lodger pack',
+    ctaTitle: 'Create your Lodger agreement pack',
           ctaBody:
             "Use this option when you live at the property and want review-ready document preparation for the room-let agreement, shared-home rules, and extra paperwork together.",
         }}
@@ -244,7 +244,7 @@ export default function LodgerAgreementEnglandPage() {
               'Yes - when completed and signed correctly. This template follows current England rules, and the checklist helps you avoid common lodger agreement mistakes. Lodger rules are not the same as assured periodic tenancy rules.',
           },
         ]}
-        finalCtaBody="Use the Lodger workflow when the landlord lives at the property and the occupier is sharing the home. If you want the agreement to reflect the practical reality of a room let, shared facilities, and house rules in a resident-landlord setup, this validated pack is usually the right fit. If that is not the arrangement, compare the other England tenancy products instead."
+      finalCtaBody="Use the Lodger workflow when the landlord lives at the property and the occupier is sharing the home. If you want the agreement to reflect the practical reality of a room let, shared facilities, and house rules in a resident-landlord setup, this specialist pack is usually the right fit. If that is not the arrangement, compare the other England tenancy products instead."
       />
     </div>
   );

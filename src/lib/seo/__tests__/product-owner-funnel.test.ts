@@ -22,27 +22,27 @@ const productOwnerPages = [
   {
     path: '/products/notice-only',
     sku: 'notice_only',
-    source: 'src/app/(marketing)/products/notice-only/page.tsx',
+    source: 'src/app/products/notice-only/page.tsx',
   },
   {
     path: '/products/complete-pack',
     sku: 'complete_pack',
-    source: 'src/app/(marketing)/products/complete-pack/page.tsx',
+    source: 'src/app/products/complete-pack/page.tsx',
   },
   {
     path: '/products/money-claim',
     sku: 'money_claim',
-    source: 'src/app/(marketing)/products/money-claim/page.tsx',
+    source: 'src/app/products/money-claim/page.tsx',
   },
   {
     path: '/products/section-13-standard',
     sku: 'section13_standard',
-    source: 'src/app/(marketing)/products/section-13-standard/page.tsx',
+    source: 'src/app/products/section-13-standard/page.tsx',
   },
   {
     path: '/products/section-13-defence',
     sku: 'section13_defensive',
-    source: 'src/app/(marketing)/products/section-13-defence/page.tsx',
+    source: 'src/app/products/section-13-defence/page.tsx',
   },
   {
     path: '/standard-tenancy-agreement',
@@ -121,7 +121,7 @@ const earlyInternalLinks = [
   {
     source: 'src/app/assured-periodic-tenancy-agreement/page.tsx',
     href: '/standard-tenancy-agreement',
-    anchor: 'Create a validated assured periodic tenancy agreement',
+    anchor: 'Create an assured periodic tenancy agreement',
   },
 ];
 
@@ -150,17 +150,17 @@ const expectedProductMetaDescriptions = {
 
 const pageCommercialPhraseExpectations = [
   {
-    source: 'src/app/(marketing)/products/notice-only/page.tsx',
+    source: 'src/app/products/notice-only/page.tsx',
     phrases: ['review-ready section 8 notice file', 'N215 certificate of service'],
     faq: 'Does this use court approved Section 8 documents?',
   },
   {
-    source: 'src/app/(marketing)/products/complete-pack/page.tsx',
+    source: 'src/app/products/complete-pack/page.tsx',
     phrases: ['review-ready Section 8 court file', 'N5 N119 forms'],
     faq: 'Does this use court approved possession claim forms?',
   },
   {
-    source: 'src/app/(marketing)/products/money-claim/page.tsx',
+    source: 'src/app/products/money-claim/page.tsx',
     phrases: ['MCOL pack for landlords', 'particulars of claim template'],
     faq: 'Is this a court approved money claim?',
   },
@@ -240,8 +240,8 @@ describe('product owner SEO funnel', () => {
       expect(source, page.source).toContain(page.faq);
       expect(source, page.source).toContain('Is this legally binding?');
       if (
-        page.source === 'src/app/(marketing)/products/notice-only/page.tsx' ||
-        page.source === 'src/app/(marketing)/products/complete-pack/page.tsx'
+        page.source === 'src/app/products/notice-only/page.tsx' ||
+        page.source === 'src/app/products/complete-pack/page.tsx'
       ) {
         expect(source, page.source).toContain('court-approved');
       } else {
@@ -377,11 +377,11 @@ describe('product owner SEO funnel', () => {
 
   it('links each product page to its dedicated sample page near the golden-pack preview', () => {
     const sourceByPack = new Map([
-      ['notice_only', 'src/app/(marketing)/products/notice-only/page.tsx'],
-      ['complete_pack', 'src/app/(marketing)/products/complete-pack/page.tsx'],
-      ['money_claim', 'src/app/(marketing)/products/money-claim/page.tsx'],
-      ['section13_standard', 'src/app/(marketing)/products/section-13-standard/page.tsx'],
-      ['section13_defensive', 'src/app/(marketing)/products/section-13-defence/page.tsx'],
+      ['notice_only', 'src/app/products/notice-only/page.tsx'],
+      ['complete_pack', 'src/app/products/complete-pack/page.tsx'],
+      ['money_claim', 'src/app/products/money-claim/page.tsx'],
+      ['section13_standard', 'src/app/products/section-13-standard/page.tsx'],
+      ['section13_defensive', 'src/app/products/section-13-defence/page.tsx'],
       ['england_standard_tenancy_agreement', 'src/app/standard-tenancy-agreement/page.tsx'],
       ['england_premium_tenancy_agreement', 'src/app/premium-tenancy-agreement/page.tsx'],
       ['england_student_tenancy_agreement', 'src/app/student-tenancy-agreement/page.tsx'],
@@ -416,7 +416,7 @@ describe('product owner SEO funnel', () => {
   });
 
   it('keeps the AST hub routing to all five tenancy product owner pages', () => {
-    const source = readSource('src/app/(marketing)/products/ast/page.tsx');
+    const source = readSource('src/app/products/ast/page.tsx');
     const tenancyRoutes = [
       '/standard-tenancy-agreement',
       '/premium-tenancy-agreement',
@@ -433,7 +433,7 @@ describe('product owner SEO funnel', () => {
   });
 
   it('keeps the AST hub focused on post-May 2026 periodic tenancy search intent', () => {
-    const source = readSource('src/app/(marketing)/products/ast/page.tsx');
+    const source = readSource('src/app/products/ast/page.tsx');
 
     expect(source).toContain("Renters' Rights Act compliant tenancy agreement");
     expect(source).toContain('assured periodic tenancy agreement');

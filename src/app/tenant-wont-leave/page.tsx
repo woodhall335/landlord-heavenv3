@@ -41,7 +41,7 @@ const faqs = [
   {
     question: 'What if my Section 21 notice has expired and the tenant is still there?',
     answer:
-      'If the notice period has expired and the tenant remains in occupation, landlords usually need to apply for possession through the court. Before doing that, check that the notice was validly served and that any preconditions for relying on it were met.',
+      'The deadline to start a Section 21 court claim was 31 July 2026. A claim started by that deadline may continue, but a landlord who did not start proceedings in time must use an applicable current possession ground.',
   },
   {
     question: 'Do I need a possession order before bailiffs can remove the tenant?',
@@ -516,10 +516,10 @@ export default function TenantWontLeavePage() {
                   Use section 8 if arrears are involved
                 </Link>
                 <Link
-                  href="/section-21-notice-template"
+                  href="/section-21-ban-uk"
                   className="rounded-lg border border-gray-200 bg-white p-3 hover:border-red-600 transition-colors"
                 >
-                  Use section 21 for the notice route
+                  Understand what replaced Section 21
                 </Link>
               </div>
             </div>

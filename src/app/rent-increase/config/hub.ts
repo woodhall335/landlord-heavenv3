@@ -36,7 +36,7 @@ export const rentIncreaseHubPage: RentIncreaseGuidePage = {
     ],
     legalRules: [
       'The detailed process on this page is for England. From 1 May 2026, the prescribed notice form for the Section 13 route is Form 4A. The form is not the whole job. The timing, dates, and service record still need to be clear.',
-      'Searches like "rent increase rules UK" are broad, but the legal process is not. Scotland, Wales, and Northern Ireland use different frameworks, so this page stays focused on England.',
+      'This process is for property in England. Scotland, Wales and Northern Ireland use different rent-increase rules and forms.',
     ],
     stepByStep: [
       'For most landlords, the best order is simple. Confirm the tenancy facts and recent rent history. Calculate the earliest valid date. Check local comparables. Choose a figure you can explain. Then complete Form 4A and prepare service.',

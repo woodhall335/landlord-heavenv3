@@ -194,7 +194,7 @@ export default function EvictionGuidesPage() {
 
             <article className="rounded-2xl border border-[#CAB6FF] bg-[#F8F4FF] p-6 md:p-8">
               <h2 className="text-2xl font-semibold text-charcoal">Tools</h2>
-              <p className="mt-2 text-gray-700">Use landlord tools and live commercial routes to move from research into action without dead-end validators or free-generator pages.</p>
+              <p className="mt-2 text-gray-700">Use the calculators and guides to understand your position, then continue to the notice or court-document pack that fits the case.</p>
               <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
                 {TOOLS.map((guide) => (
                   <Link key={guide.href} href={guide.href} className="rounded-xl border border-[#CDBBFF] bg-white p-4 text-primary font-medium hover:underline">

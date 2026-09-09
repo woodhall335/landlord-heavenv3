@@ -87,7 +87,7 @@ export function Section21PopupModal() {
 
           {/* Headline */}
           <h2 className="text-2xl font-bold text-primary mb-4">
-            Section 21 Ends 1 May 2026
+            Section 21 Has Ended
           </h2>
 
           {/* Countdown */}
@@ -95,8 +95,8 @@ export function Section21PopupModal() {
 
           {/* Description */}
           <p className="text-gray-600 mb-6">
-            No-fault evictions are being banned forever. This is your last chance
-            to serve a Section 21 notice without proving grounds.
+            New England possession cases must use an applicable current ground,
+            supported by the correct notice and evidence.
           </p>
 
           {/* Primary CTA */}
@@ -105,7 +105,7 @@ export function Section21PopupModal() {
             onClick={handleClose}
             className="block w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg transition-colors mb-3"
           >
-            Serve Your Notice Now →
+            Check the Current Notice →
           </Link>
 
           {/* Secondary CTA */}
@@ -122,7 +122,7 @@ export function Section21PopupModal() {
             onClick={handleClose}
             className="block w-full text-gray-400 hover:text-gray-600 text-sm mt-4 transition-colors"
           >
-            I&apos;ll do this later
+            Close
           </button>
         </div>
       </div>

@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     'N119 particulars of claim',
     'rent arrears possession claim',
     'complete eviction pack england',
-    'court-ready eviction documents',
+    'eviction court document pack',
     'section 8 witness statement',
     'possession claim evidence bundle',
   ],
@@ -182,103 +182,119 @@ export default function CompleteEvictionPackPage() {
     whatYouGet: {
       title: 'What you get in the combined pack',
       intro:
-        'You get the notice and service file plus the possession claim papers in one file. You can inspect the Form 3A notice, N215, N5 claim form, N119 particulars, arrears record, evidence support, and hearing preparation before buying.',
+        'The pack keeps the notice, service evidence, claim forms, and court preparation together. Here is what each part contributes to the case.',
       items: [
         {
           name: 'Form 3A (Section 8 Notice)',
           plainEnglish:
-            'The official notice that starts the current England Section 8 possession route, carried over from the Stage 1 notice file.',
+            'The formal notice telling the tenant which possession grounds you rely on and how much notice they have.',
           function:
-            'Gives the tenant formal notice of the grounds relied on before the case moves into court.',
+            'It creates the legal starting point for the claim before N5 and N119 are filed.',
           riskIfMissing:
-            'If the notice is wrong or invalid, the possession claim can fail before the court forms even matter.',
+            'Incorrect grounds, dates, or supporting details can delay or undermine the claim before the court reaches the main facts.',
           landlordOutcome:
-            'Helps the court case start from a valid notice instead of an avoidable defect.',
+            'A current Form 3A that stays aligned with the later court paperwork.',
           includedByDefault: true,
+          imageSrc: '/images/illustrations/product-cards/section8-form3a-card-v1.webp',
+          imageAlt: 'Portrait watercolour illustration of a Form 3A notice, calendar, rental home and key',
         },
         {
           name: 'Stage 1 Notice and Service File',
           plainEnglish:
-            'The full Stage 1 file: Form 3A Section 8 notice, N215 certificate of service, service instructions, validity checklist, compliance declaration, case summary, and what-happens-next guide.',
+            'The Form 3A notice, N215 service record, arrears schedule, pre-service checks, case summary, and next-step guide.',
           function:
-            'Keeps the notice and service record aligned before the court claim is issued.',
+            'It preserves the facts, figures, and service evidence the court forms will later rely on.',
           riskIfMissing:
-            'If the notice and service record are weak, the later court forms can be undermined before the main evidence is considered.',
+            'Weak notice or service records cannot be repaired simply by completing the court forms well.',
           landlordOutcome:
-            'Gives the possession file a cleaner foundation before N5 and N119 are used.',
+            'One continuous file from notice preparation through to the possession claim.',
           includedByDefault: true,
+          imageSrc: '/images/illustrations/product-cards/stage1-notice-service-file-card-v1.webp',
+          imageAlt: 'Portrait watercolour illustration of an organised notice and service case file',
         },
         {
           name: 'Form N5 (Claim for Possession)',
           plainEnglish:
-            'The official court form used to start possession proceedings.',
+            'The court form that formally opens the possession claim.',
           function:
-            'Formally opens the possession claim and tells the court what order the landlord is seeking.',
+            'It identifies the parties, property, claim type, and order you are asking the court to make.',
           riskIfMissing:
-            'If the claim form is incomplete or wrong, the court can delay or reject the case before it properly starts.',
+            'Missing or inconsistent claim details can cause rejection, questions from the court, or avoidable delay.',
           landlordOutcome:
-            'Lets you move from notice stage into a possession claim with the correct court form in place.',
+            'A completed claim form that matches the notice and the rest of the possession file.',
           includedByDefault: true,
+          imageSrc: '/images/illustrations/product-cards/form-n5-possession-claim-card-v1.webp',
+          imageAlt: 'Portrait watercolour illustration of an N5 possession claim entering the court process',
         },
         {
           name: 'Form N119 (Particulars of Claim)',
           plainEnglish:
-            'The statement that explains the possession case to the court.',
+            'The detailed statement explaining the tenancy, grounds, arrears, notice, and claim to the court.',
           function:
-            'Sets out the rent arrears, the grounds relied on, and the facts behind the possession claim.',
+            'It gives the judge the factual account behind the shorter N5 claim form.',
           riskIfMissing:
-            "If the particulars are weak or unclear, the case loses force because the court cannot see the landlord's position properly.",
+            'Unclear particulars force the court to piece the case together and can expose inconsistencies in the claim.',
           landlordOutcome:
-            'Helps the judge understand the claim and see how the facts support the order you want.',
+            'A structured explanation that connects the evidence to the possession order you are seeking.',
           includedByDefault: true,
+          imageSrc: '/images/illustrations/product-cards/form-n119-particulars-card-v1.webp',
+          imageAlt: 'Portrait watercolour illustration of N119 particulars linked to supporting evidence',
         },
         {
           name: 'Schedule of Arrears and Arrears Engagement Letter',
           plainEnglish:
-            'A running rent breakdown showing exactly what is owed, supported by an arrears engagement letter for the file.',
+            'A month-by-month rent record, paired with a letter showing how you raised the arrears with the tenant.',
           function:
-            'Supports both the notice and the court forms with a clear financial record.',
+            'Together they show the amount outstanding and the steps taken to address it before court.',
           riskIfMissing:
-            'If the arrears evidence is vague or inconsistent, the credibility of the possession case drops immediately.',
+            'Vague figures or no engagement record make the arrears history harder to verify and explain.',
           landlordOutcome:
-            'Gives the claim a clear rent record from notice stage through to court.',
+            'A consistent financial record that follows the case from notice to hearing.',
           includedByDefault: true,
+          imageSrc: '/images/illustrations/product-cards/arrears-engagement-card-v1.webp',
+          imageAlt: 'Portrait watercolour illustration of a rent ledger, engagement letter, calculator and coins',
         },
         {
           name: 'Witness Statement',
           plainEnglish:
-            'A structured witness statement setting out the landlord evidence in a court-readable way.',
+            'A structured account of the case written for the court and supported by the documents in the file.',
           function:
-            'Connects the tenancy, breach, arrears, notice, service, and claim forms into one account.',
+            'It explains the chronology and connects the tenancy, breach, notice, service, and arrears evidence.',
           riskIfMissing:
-            'A possession claim can look thin if the court forms are not supported by a clear witness narrative.',
+            'Forms and exhibits without a clear account can leave the judge to work out how the evidence fits together.',
           landlordOutcome:
-            'Helps the judge follow the landlord position without piecing the case together.',
+            'A coherent narrative you can review against the evidence before filing or a hearing.',
           includedByDefault: true,
+          imageSrc: '/images/illustrations/product-cards/witness-statement-card-v1.webp',
+          imageAlt: 'Portrait watercolour illustration of a signed witness statement with organised evidence',
         },
         {
           name: 'Court Readiness Status and Evidence Collection Checklist',
           plainEnglish:
-            'A readiness check and evidence list covering the tenancy, notice, service record, arrears history, and other papers the court may need.',
+            'A status review showing what is ready, what evidence is present, and what still needs attention.',
           function:
-            'Keeps the claim papers consistent and ready to present together instead of leaving key evidence scattered across separate files.',
+            'It checks the tenancy, notice, service, arrears, and claim documents as one connected case.',
           riskIfMissing:
-            'If the evidence is incomplete or scattered, even a sound possession claim can look weaker and become harder to follow.',
+            'A missing exhibit or inconsistency may only surface after the claim has been filed.',
           landlordOutcome:
-            'Makes the possession case easier to follow and prepare for court.',
+            'A practical view of the case’s strengths, gaps, and documents still to collect.',
           includedByDefault: true,
+          imageSrc: '/images/illustrations/product-cards/court-readiness-evidence-card-v1.webp',
+          imageAlt: 'Portrait watercolour illustration of a court-readiness checklist and organised evidence',
         },
         {
           name: 'Court Bundle Index, Court Filing Guide, and Hearing Checklist',
           plainEnglish:
-            'A document bundle index, filing guide, and hearing checklist for the possession stage.',
+            'An ordered bundle list with practical filing instructions and a checklist for hearing day.',
           function:
-            'Explains the filing route, what goes with the claim, and the practical steps after the notice stage.',
+            'It shows how to arrange the papers, submit the claim, and prepare the documents you may need in court.',
           riskIfMissing:
-            'If the filing stage is handled badly, delays and rework can creep in even after the forms have been generated correctly.',
+            'Correct forms can still be slowed down by disorganised filing, missing copies, or poor hearing preparation.',
           landlordOutcome:
-            'Helps you submit the case properly and avoid avoidable filing-stage delays.',
+            'A clearer route from completed forms to an organised filing and hearing file.',
           includedByDefault: true,
+          imageSrc: '/images/illustrations/product-cards/court-bundle-filing-hearing-card-v1.webp',
+          imageAlt: 'Portrait watercolour illustration of an indexed court bundle, filing papers and hearing calendar',
         },
       ],
       sampleProof: sampleProof ? (
@@ -286,7 +302,7 @@ export default function CompleteEvictionPackPage() {
       ) : undefined,
     },
     comparisonBlock: {
-      title: 'Stage 2 is the full court route',
+      title: 'Stage 2 includes the notice and court claim',
       intro:
         'Stage 2 is for landlords who want the eviction notice and possession claim built together, instead of serving first and deciding about court later.',
       routeCards: [
@@ -326,7 +342,7 @@ export default function CompleteEvictionPackPage() {
     objectionBlock: {
       title: 'Common questions before you start the Complete Pack',
       intro:
-        'These are the questions most landlords ask before choosing the full court route.',
+        'These are the questions most landlords ask before choosing the full court pack.',
       items: [
         {
           question: 'Do I need Stage 1 first?',
@@ -351,7 +367,7 @@ export default function CompleteEvictionPackPage() {
       ],
     },
     midPageCta: {
-      title: 'Ready to start the full Section 8 court route?',
+      title: 'Ready to prepare your Section 8 court pack?',
       body:
         'Choose the Complete Pack if you want the notice, claim forms, evidence, and hearing support prepared together.',
       primary: {
@@ -399,9 +415,9 @@ export default function CompleteEvictionPackPage() {
       ],
     },
     howThisHelps: {
-      title: 'How the full pack improves the landlord outcome',
+      title: 'How the full pack helps',
       intro:
-        'The review-ready Section 8 court and possession claim file keeps the route clear from notice through issue, evidence, and hearing preparation.',
+        'The Section 8 court and possession file keeps the notice, claim details, evidence and hearing preparation together for review.',
       cards: [
         {
           title: 'It keeps the notice and court paperwork aligned',

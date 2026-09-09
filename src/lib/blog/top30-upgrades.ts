@@ -39,24 +39,24 @@ const ranking = new Map(TOP_30_UPGRADE_SLUGS.map((slug, index) => [slug, index +
 
 const titleAndMetaBySlug: Partial<Record<Top30Slug, { title: string; metaDescription: string }>> = {
   'renters-reform-bill-what-landlords-need-to-know': {
-    title: 'Renters’ Rights Act 2025: Landlord Action Plan Before Section 21 Ends',
-    metaDescription: 'Understand the Renters’ Rights Act timeline, Section 21 sunset, and the practical possession steps landlords should take now.',
+    title: 'Renters’ Rights Act 2025: What England Landlords Must Do Now',
+    metaDescription: 'Understand the Renters’ Rights Act changes now in force, including the end of Section 21 and the current possession steps for landlords.',
   },
   'what-is-section-21-notice': {
-    title: 'What Is a Section 21 Notice? Rules, Notice Period, and Validity Checks',
-    metaDescription: 'Clear Section 21 explanation for landlords: when it applies, how long notice lasts, and what invalidates Form 6A.',
+    title: 'What Was a Section 21 Notice? Current England Rules Explained',
+    metaDescription: 'Section 21 ended for new England notices on 1 May 2026. Learn what changed, why the term remains familiar and what landlords use now.',
   },
   'section-21-vs-section-8': {
     title: 'Section 21 vs Section 8: Which Eviction Route Fits Your Case?',
     metaDescription: 'Compare Section 21 and Section 8 by evidence, speed, court risk, and outcomes so you choose the right possession strategy.',
   },
   'section-21-validity-checklist': {
-    title: 'Section 21 Validity Checklist (England): 12 Checks Before You Serve',
-    metaDescription: 'Use this Section 21 checklist to verify EPC, gas safety, deposit, and service prerequisites before you issue Form 6A.',
+    title: 'Section 21 Validity Checklist: Historical England Guidance',
+    metaDescription: 'Historical Section 21 checklist for England, with the transition deadlines and the current grounds-based possession process explained.',
   },
   'serve-section-21-notice': {
-    title: 'How to Serve a Section 21 Notice Correctly (Proof, Timing, and Method)',
-    metaDescription: 'Step-by-step Section 21 service guide: compliant methods, evidence trail, and what to do if the tenant disputes service.',
+    title: 'Can You Still Serve a Section 21 Notice? England Rules After May 2026',
+    metaDescription: 'You cannot serve a new Section 21 notice in England. Learn the dates that ended the process and how to use the current possession grounds.',
   },
   'tenant-ignores-section-21': {
     title: 'Tenant Ignored Section 21? Your Next Court Steps in England',
@@ -93,9 +93,9 @@ const questionLed = new Set<Top30Slug>([
 
 const faqByIntent: Record<'section21' | 'section8' | 'arrears' | 'court', FAQItem[]> = {
   section21: [
-    { question: 'What makes a Section 21 notice invalid?', answer: 'Common failures include missing deposit protection rules, absent prescribed documents, incorrect notice dates, and weak proof of service.' },
-    { question: 'Can I use Section 21 after the notice period ends?', answer: 'Yes, but you must issue the possession claim within the legal window and keep evidence that the original notice was validly served.' },
-    { question: 'Should I use notice-only or complete-pack support?', answer: 'Use notice-only if you only need compliant notice preparation. Use complete-pack if you want end-to-end support through court filing.' },
+    { question: 'Can I serve a new Section 21 notice in England?', answer: 'No. Section 21 ended for new private-rented possession notices on 1 May 2026, and the deadline for starting a claim with a qualifying older notice has passed.' },
+    { question: 'What should landlords use instead?', answer: 'A new possession case must rely on an applicable statutory ground, supported by the correct notice and evidence.' },
+    { question: 'Should I use Notice Only or Complete Pack?', answer: 'Use Notice Only if you know the ground and only need the notice stage. Use Complete Pack if you also need court-stage documents and continuity.' },
   ],
   section8: [
     { question: 'Which Section 8 grounds are strongest for arrears?', answer: 'Ground 8 is mandatory if thresholds are met; Grounds 10 and 11 are commonly pleaded alongside it to strengthen the claim.' },
@@ -138,9 +138,9 @@ export function getTop30QuickAnswer(post: BlogPost): { question: string; answer:
 
   if (post.slug.includes('section-21')) {
     return {
-      question: 'What is the fastest safe next step for this Section 21 scenario?',
-      answer: 'Validate compliance first, then issue or progress the correct possession step without breaking evidence continuity.',
-      steps: ['Confirm Form 6A validity + prerequisites.', 'Keep proof of service and key dates in one file.', 'Move to notice-only or complete-pack route based on court readiness.'],
+      question: 'Can a landlord start a Section 21 case now?',
+      answer: 'No. Section 21 and its transitional court-claim window have ended. A new England case must use an applicable current possession ground.',
+      steps: ['Identify the possession reason and supporting evidence.', 'Check the current notice and notice period for that ground.', 'Choose Notice Only or Complete Pack based on the stage of the case.'],
     };
   }
 
@@ -170,7 +170,7 @@ export function getTop30QuickAnswer(post: BlogPost): { question: string; answer:
 export function getIntentRoutedLinks(slug: string) {
   if (slug.includes('section-21')) {
     return [
-      { href: '/section-21-notice-guide', label: 'Section 21 notice guide' },
+      { href: '/section-21-ban-uk', label: 'What replaced Section 21' },
       { href: '/products/notice-only', label: 'Create my Section 8 notice' },
       { href: '/products/complete-pack', label: 'Prepare my court pack' },
     ];

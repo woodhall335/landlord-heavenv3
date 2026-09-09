@@ -8,6 +8,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdmin } from '@/lib/auth';
 import { buildGrowthReport, normalizeGrowthReportDays } from '@/lib/marketing/growth-report';
+import { collectAllReportRows } from '@/lib/marketing/paginated-report-query';
 import { createAdminClient, requireServerAuth } from '@/lib/supabase/server';
 
 export async function GET(request: NextRequest) {
@@ -25,14 +26,22 @@ export async function GET(request: NextRequest) {
     const adminClient = createAdminClient();
 
     const [ordersResult, eventsResult] = await Promise.all([
-      adminClient
-        .from('orders')
-        .select('id, product_type, total_amount, payment_status, fulfillment_status, created_at, paid_at, landing_path, utm_source, utm_medium, referrer, marketing_session_id')
-        .gte('created_at', since.toISOString()),
-      adminClient
-        .from('marketing_events')
-        .select('event_name, marketing_session_id, source_page, page_path, page_type, intent, cta_position, destination, recommended_product, product_clicked, user_type, tool_name, event_payload, created_at')
-        .gte('created_at', since.toISOString()),
+      collectAllReportRows((from, to) =>
+        adminClient
+          .from('orders')
+          .select('id, product_type, total_amount, payment_status, fulfillment_status, created_at, paid_at, landing_path, utm_source, utm_medium, referrer, marketing_session_id')
+          .gte('created_at', since.toISOString())
+          .order('created_at', { ascending: true })
+          .range(from, to)
+      ),
+      collectAllReportRows((from, to) =>
+        adminClient
+          .from('marketing_events')
+          .select('event_name, marketing_session_id, source_page, page_path, page_type, intent, cta_position, destination, recommended_product, product_clicked, user_type, tool_name, event_payload, created_at')
+          .gte('created_at', since.toISOString())
+          .order('created_at', { ascending: true })
+          .range(from, to)
+      ),
     ]);
 
     if (ordersResult.error) {

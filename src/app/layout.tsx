@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Header, Footer } from "@/components/layout";
 import { tryGetServerUser } from "@/lib/supabase/server";
@@ -17,11 +17,16 @@ import { SmoothAnchorScroll } from "@/components/browser/SmoothAnchorScroll";
 import { OrganicLandingTracker } from "@/components/analytics/OrganicLandingTracker";
 import { AttributionInitializer } from "@/components/analytics/AttributionInitializer";
 import { CommercialLinkTracker } from "@/components/analytics/CommercialLinkTracker";
+import { UNIVERSAL_HERO_THEME_COLOR } from "@/lib/seo/hero-theme";
 
 
 export const metadata: Metadata = {
   ...defaultMetadata,
   metadataBase: new URL(SITE_ORIGIN),
+};
+
+export const viewport: Viewport = {
+  themeColor: UNIVERSAL_HERO_THEME_COLOR,
 };
 
 export default async function RootLayout({

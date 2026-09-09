@@ -212,10 +212,9 @@ const buildProductReformBlogPost = (spec: ProductReformBlogSpec): BlogPost => ({
         ))}
       </ul>
       <p>
-        This matters because landlords are searching under pressure. Many arrive from old search terms, old templates,
-        or advice written before the Renters Rights Act changed the operating landscape. The article and product journey
-        should therefore do two jobs at once: explain the change clearly, then give the landlord a safe route into the
-        correct paperwork.
+        Landlords are often acting under pressure and may be relying on old templates or advice written before the
+        Renters Rights Act changed the rules. Check the current position first, then prepare paperwork that matches the
+        case you are dealing with.
       </p>
 
       <h2 id="landlord-next-step" className="scroll-mt-24">The safest next step</h2>

@@ -31,7 +31,7 @@ Use the real page and the real repo inputs before rewriting anything.
 
 Key public page families and shared systems already in this repo include:
 
-- product pages in `src/app/(marketing)/products/*/page.tsx`
+- product pages in `src/app/products/*/page.tsx`
 - public marketing and utility pages in `src/app/(marketing)/**`
 - blog pages in `src/app/(marketing)/blog/**`
 - high-intent public pages in `src/app/*/page.tsx`
@@ -301,7 +301,7 @@ These rules are additive. Apply the relevant family on top of the master prompt.
 
 Use for:
 
-- `src/app/(marketing)/products/*/page.tsx`
+- `src/app/products/*/page.tsx`
 - product-led tenancy, notice, eviction, or money-claim pages
 - product-led public landing pages outside the `(marketing)` folder
 

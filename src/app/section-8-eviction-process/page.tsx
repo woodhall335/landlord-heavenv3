@@ -11,7 +11,6 @@ import {
   StructuredData,
   articleSchema,
   breadcrumbSchema,
-  faqPageSchema,
 } from '@/lib/seo/structured-data';
 
 const canonical = 'https://landlordheaven.co.uk/section-8-eviction-process';
@@ -331,7 +330,7 @@ export default function Page() {
                 follow from documents, dates, statements, and a consistent chronology.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
-                Section 8 is especially common in high-intent landlord scenarios such as
+                Section 8 is commonly used for
                 serious rent arrears cases, repeated non-payment patterns, anti-social
                 behaviour affecting neighbours, or situations where the landlord wants the
                 court to deal directly with the breach rather than simply recover

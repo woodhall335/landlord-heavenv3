@@ -678,10 +678,9 @@ export default function HowToEvictTenantPage() {
                   property and case in question.
                 </p>
                 <p className="leading-7">
-                  Where an NI landlord needs possession, the key commercial value of this page
-                  is not pretending to be the final source of every detail. It is helping the
-                  user recognise that Northern Ireland needs its own route and moving them to
-                  the correct agreement or guidance page rather than leaving them on a generic
+                  Where a Northern Ireland landlord needs possession, this guide first helps them
+                  recognise that Northern Ireland has its own rules, then points them to
+                  the correct agreement or detailed guidance rather than leaving them on a generic
                   UK article that is really about England.
                 </p>
               </div>

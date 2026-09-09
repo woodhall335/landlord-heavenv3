@@ -36,11 +36,11 @@ describe('SALES-003C final corrections', () => {
 
   it('keeps canonical product copy free of joined-word regressions across all certified routes', () => {
     const productSources = [
-      'src/app/(marketing)/products/notice-only/page.tsx',
-      'src/app/(marketing)/products/complete-pack/page.tsx',
-      'src/app/(marketing)/products/money-claim/page.tsx',
-      'src/app/(marketing)/products/ast/page.tsx',
-      'src/app/(marketing)/products/section-13-standard/page.tsx',
+      'src/app/products/notice-only/page.tsx',
+      'src/app/products/complete-pack/page.tsx',
+      'src/app/products/money-claim/page.tsx',
+      'src/app/products/ast/page.tsx',
+      'src/app/products/section-13-standard/page.tsx',
     ].map(read);
     const heroSource = read('src/components/landing/UniversalHero.tsx');
 
