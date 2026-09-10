@@ -103,7 +103,9 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
                         isSelected ? 'mt-2 text-sm text-[#5E498E]' : 'mt-2 text-sm text-[#E7E0FF]'
                       }
                     >
-                      {entry.pageCount ? `${entry.pageCount} pages in sample` : 'Sample document'}
+                      {entry.pageCount
+                        ? `${entry.pageCount} ${entry.pageCount === 1 ? 'page' : 'pages'} in sample`
+                        : 'Sample document'}
                     </p>
                     {entry.description ? (
                       <p

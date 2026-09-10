@@ -127,6 +127,23 @@ export default function MoneyClaimPage() {
       showTrustPositioningBar: true,
       trustPositioningPreset: 'money_claim',
     },
+    conversionPanel: {
+      eyebrow: 'Money claim pack',
+      productName: 'Money Claim',
+      decisionTitle: 'Choose this if the tenant owes money.',
+      decisionBody:
+        'Use it for rent arrears, property damage, unpaid bills, or other tenancy debt. If you need the property back, choose the Section 8 possession route instead.',
+      artworkSrc: '/images/illustrations/product-banners/money-claim-panel-v1.webp',
+      artworkAlt: 'Illustration of a debt schedule, calculator, pound symbol and claim letter',
+      features: [
+        { title: 'Tenant debt', body: 'Rent, damage and bills', icon: 'debt' },
+        { title: 'Fixed price', body: 'No hidden charges', icon: 'price' },
+        { title: 'Guided builder', body: 'Step-by-step questions', icon: 'builder' },
+      ],
+      previewText: 'Preview available before payment where shown.',
+      reassuranceTitle: 'One connected debt-recovery file',
+      reassuranceBody: 'Demand letter, debt figures, claim papers, and filing guidance kept together.',
+    },
     afterPostHeroContent: (
       <>
         <div className="bg-white px-4 pb-10">

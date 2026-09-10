@@ -10,12 +10,21 @@ vi.mock('next/image', () => ({
   default: ({
     src,
     alt,
+    fill,
+    unoptimized,
     ...rest
   }: {
     src: string | { src: string };
     alt: string;
+    fill?: boolean;
+    unoptimized?: boolean;
     [key: string]: unknown;
-  }) => <img src={typeof src === 'string' ? src : src.src} alt={alt} {...rest} />,
+  }) => {
+    void fill;
+    void unoptimized;
+    // eslint-disable-next-line @next/next/no-img-element -- test-only Next Image stand-in
+    return <img src={typeof src === 'string' ? src : src.src} alt={alt} {...rest} />;
+  },
 }));
 
 vi.mock('next/link', () => ({
@@ -100,16 +109,18 @@ type TenancyPageContract = {
   howTitle: string;
   ctaTitle: string;
   requiredItems: string[];
+  includesMultipleJurisdictions?: boolean;
 };
 
 const tenancyPageContracts: TenancyPageContract[] = [
   {
     name: 'standard agreement',
     load: () => import('@/app/standard-tenancy-agreement/page'),
-    h1: /Standard Tenancy Agreement for England Landlords/i,
-    whyTitle: 'Why a standard periodic agreement still needs proper setup',
-    howTitle: 'How this helps you',
-    ctaTitle: 'Build the validated Standard tenancy pack',
+    h1: /Choose the right standard tenancy agreement for your property/i,
+    whyTitle: 'Why a straightforward tenancy still needs a proper setup',
+    howTitle: 'How the Standard pack helps you start clearly',
+    ctaTitle: 'Create your Standard tenancy pack',
+    includesMultipleJurisdictions: true,
     requiredItems: [
       'standard periodic tenancy agreement',
       'supporting paperwork',
@@ -121,10 +132,10 @@ const tenancyPageContracts: TenancyPageContract[] = [
   {
     name: 'premium agreement',
     load: () => import('@/app/premium-tenancy-agreement/page'),
-    h1: /Premium Periodic Tenancy Agreement for England Landlords/i,
+    h1: /Create a premium England tenancy agreement pack/i,
     whyTitle: 'Why landlords choose Premium',
     howTitle: 'How this helps you',
-    ctaTitle: 'Build the validated Premium tenancy pack',
+    ctaTitle: 'Create your Premium tenancy pack',
     requiredItems: [
       'premium tenancy agreement',
       'inspections',
@@ -136,10 +147,10 @@ const tenancyPageContracts: TenancyPageContract[] = [
   {
     name: 'student agreement',
     load: () => import('@/app/student-tenancy-agreement/page'),
-    h1: /Student Tenancy Agreement for England Landlords/i,
+    h1: /Create a student tenancy agreement pack/i,
     whyTitle: 'Why student lets need their own pack',
     howTitle: 'How this helps you',
-    ctaTitle: 'Build the validated Student tenancy pack',
+    ctaTitle: 'Create your Student tenancy pack',
     requiredItems: [
       'student tenancy agreement',
       'Student Move-Out & Guarantor Schedule',
@@ -151,10 +162,10 @@ const tenancyPageContracts: TenancyPageContract[] = [
   {
     name: 'hmo agreement',
     load: () => import('@/app/hmo-shared-house-tenancy-agreement/page'),
-    h1: /HMO \/ Shared House Tenancy Agreement for England Landlords/i,
+    h1: /Create an HMO or shared-house tenancy agreement pack/i,
     whyTitle: 'Why shared houses need fuller paperwork',
     howTitle: 'How this helps you',
-    ctaTitle: 'Build the validated HMO / Shared House pack',
+    ctaTitle: 'Create your HMO / Shared House pack',
     requiredItems: [
       'HMO tenancy agreement',
       'house rules',
@@ -166,10 +177,10 @@ const tenancyPageContracts: TenancyPageContract[] = [
   {
     name: 'lodger agreement',
     load: () => import('@/app/lodger-agreement/page'),
-    h1: /Lodger Agreement for Resident Landlords/i,
+    h1: /Create a lodger agreement pack for a resident landlord/i,
     whyTitle: 'Why a lodger arrangement needs its own paperwork',
     howTitle: 'How this helps you',
-    ctaTitle: 'Build the validated Lodger pack',
+    ctaTitle: 'Create your Lodger agreement pack',
     requiredItems: [
       'Lodger Agreement',
       'Lodger Checklist',
@@ -185,6 +196,20 @@ async function renderPage(
   const pageModule = await load();
   return render(await pageModule.default());
 }
+
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: vi.fn().mockImplementation((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  })),
+});
 
 describe('exact tenancy product sales pages', () => {
   afterEach(() => {
@@ -228,9 +253,11 @@ describe('exact tenancy product sales pages', () => {
       expect(text).not.toContain('What it is');
       expect(text).not.toContain('What it does');
       expect(text).not.toContain('Why it is needed');
-      expect(text).not.toContain('Wales');
-      expect(text).not.toContain('Scotland');
-      expect(text).not.toContain('Northern Ireland');
+      if (!contract.includesMultipleJurisdictions) {
+        expect(text).not.toContain('Wales');
+        expect(text).not.toContain('Scotland');
+        expect(text).not.toContain('Northern Ireland');
+      }
 
       const faqSchemas = Array.from(
         document.querySelectorAll('script[type="application/ld+json"]')

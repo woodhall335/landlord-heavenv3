@@ -198,6 +198,31 @@ export default function HmoSharedHouseTenancyAgreementPage() {
     ctaTitle: 'Create your HMO / Shared House pack',
           ctaBody:
             'Use this option when the property is being shared and you want review-ready document preparation for the agreement, communal rules, and supporting records from the start.',
+          ctaVisual: {
+            eyebrow: 'HMO / Shared House',
+            highlightedText: 'HMO / Shared House pack',
+            artworkSrc:
+              '/images/illustrations/tenancy-cta/hmo-shared-house-pack-v1.webp',
+            artworkAlt:
+              'HMO and shared-house pack with house rules, communal areas, room schedule and safety records',
+            features: [
+              {
+                icon: 'home',
+                title: 'Shared property',
+                body: 'Built for HMO and sharer setups',
+              },
+              {
+                icon: 'rules',
+                title: 'House rules',
+                body: 'Shared expectations in writing',
+              },
+              {
+                icon: 'shield',
+                title: 'Supporting records',
+                body: 'Rooms, communal areas and safety',
+              },
+            ],
+          },
         }}
         faqs={[
           {

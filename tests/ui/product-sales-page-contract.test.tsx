@@ -10,12 +10,20 @@ vi.mock('next/image', () => ({
   default: ({
     src,
     alt,
+    fill,
+    unoptimized,
     ...rest
   }: {
     src: string | { src: string };
     alt: string;
+    fill?: boolean;
+    unoptimized?: boolean;
     [key: string]: unknown;
-  }) => <img src={typeof src === 'string' ? src : src.src} alt={alt} {...rest} />,
+  }) => {
+    void fill;
+    void unoptimized;
+    return <img src={typeof src === 'string' ? src : src.src} alt={alt} {...rest} />;
+  },
 }));
 
 vi.mock('next/link', () => ({

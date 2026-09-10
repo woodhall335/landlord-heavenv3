@@ -197,6 +197,31 @@ export default function StudentTenancyAgreementPage() {
     ctaTitle: 'Create your Student tenancy pack',
           ctaBody:
             'Use this option when the occupiers are students and you want review-ready document preparation for the agreement, student hand-back wording, guarantor support, and extra paperwork as one coherent pack.',
+          ctaVisual: {
+            eyebrow: 'Student tenancy',
+            highlightedText: 'Student tenancy pack',
+            artworkSrc:
+              '/images/illustrations/tenancy-cta/student-tenancy-pack-v1.webp',
+            artworkAlt:
+              'Student tenancy pack with guarantor, joint tenant, move-out and replacement documents',
+            features: [
+              {
+                icon: 'graduation',
+                title: 'Student household',
+                body: 'Built around the way students let',
+              },
+              {
+                icon: 'users',
+                title: 'Guarantor support',
+                body: 'Joint-tenant details kept clear',
+              },
+              {
+                icon: 'calendar',
+                title: 'Move-out clarity',
+                body: 'Hand-back and replacement steps',
+              },
+            ],
+          },
         }}
         faqs={[
           {

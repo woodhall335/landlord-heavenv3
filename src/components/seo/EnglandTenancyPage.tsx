@@ -1,6 +1,21 @@
 import type { ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import {
+  ArrowRight,
+  CalendarCheck2,
+  FileCheck2,
+  FileText,
+  GraduationCap,
+  Home,
+  KeyRound,
+  ListChecks,
+  MapPin,
+  Settings2,
+  ShieldCheck,
+  UsersRound,
+  Wrench,
+} from 'lucide-react';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -37,6 +52,32 @@ interface EnglandTenancyRouteCard {
   }>;
 }
 
+type EnglandTenancyCtaIcon =
+  | 'calendar'
+  | 'document'
+  | 'graduation'
+  | 'home'
+  | 'key'
+  | 'location'
+  | 'management'
+  | 'rules'
+  | 'shield'
+  | 'users'
+  | 'validation'
+  | 'repairs';
+
+interface EnglandTenancyCtaVisual {
+  eyebrow: string;
+  highlightedText: string;
+  artworkSrc: string;
+  artworkAlt: string;
+  features: Array<{
+    icon: EnglandTenancyCtaIcon;
+    title: string;
+    body: string;
+  }>;
+}
+
 interface EnglandTenancySalesContent {
   packIntro?: ReactNode;
   defaultPackItems?: ProductSalesBreakdownItem[];
@@ -64,6 +105,7 @@ interface EnglandTenancySalesContent {
   };
   ctaTitle: string;
   ctaBody: ReactNode;
+  ctaVisual?: EnglandTenancyCtaVisual;
 }
 
 interface EnglandTenancyPageProps {
@@ -123,6 +165,21 @@ const tenancyPositioningCards = [
       'The builder checks the agreement type, core tenancy facts, deposit and guarantor inputs where relevant, product fit, and setup details before the pack moves to preview.',
   },
 ] as const;
+
+const tenancyCtaIcons: Record<EnglandTenancyCtaIcon, typeof FileText> = {
+  calendar: CalendarCheck2,
+  document: FileText,
+  graduation: GraduationCap,
+  home: Home,
+  key: KeyRound,
+  location: MapPin,
+  management: Settings2,
+  repairs: Wrench,
+  rules: ListChecks,
+  shield: ShieldCheck,
+  users: UsersRound,
+  validation: FileCheck2,
+};
 
 function RouteComparisonGrid({ routes }: { routes: EnglandTenancyRouteCard[] }) {
   const hasRichCards = routes.some(
@@ -202,6 +259,134 @@ function RouteComparisonGrid({ routes }: { routes: EnglandTenancyRouteCard[] }) 
         </article>
       ))}
     </div>
+  );
+}
+
+function EnglandTenancyVisualCta({
+  content,
+  primaryCtaHref,
+  primaryCtaLabel,
+  secondaryCtaHref,
+  secondaryCtaLabel,
+  routes,
+}: {
+  content: EnglandTenancySalesContent;
+  primaryCtaHref: string;
+  primaryCtaLabel: string;
+  secondaryCtaHref?: string;
+  secondaryCtaLabel?: string;
+  routes: EnglandTenancyRouteCard[];
+}) {
+  const visual = content.ctaVisual;
+
+  if (!visual) return null;
+
+  const highlightIndex = content.ctaTitle.indexOf(visual.highlightedText);
+  const titleLead =
+    highlightIndex >= 0 ? content.ctaTitle.slice(0, highlightIndex).trim() : content.ctaTitle;
+  const titleHighlight = highlightIndex >= 0 ? visual.highlightedText : '';
+
+  return (
+    <section
+      className="relative mt-12 isolate overflow-hidden rounded-[2.2rem] bg-[radial-gradient(circle_at_78%_36%,rgba(124,58,237,0.62),transparent_32%),linear-gradient(135deg,#170B35_0%,#281052_48%,#4514A1_100%)] text-white shadow-[0_30px_80px_rgba(46,29,86,0.34)]"
+      data-tenancy-visual-cta
+    >
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(135deg,transparent_0%,transparent_48%,rgba(150,105,255,0.16)_48%,rgba(150,105,255,0.16)_62%,transparent_62%)]" />
+
+      <div className="grid lg:min-h-[34rem] lg:grid-cols-[1.02fr_0.98fr] lg:items-stretch">
+        <div className="relative z-10 px-6 pb-8 pt-8 sm:px-9 sm:pt-10 lg:px-12 lg:py-12">
+          <p className="inline-flex rounded-full border border-[#8D68E5]/60 bg-[#5C2DB2]/25 px-5 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#EEE7FF]">
+            {visual.eyebrow}
+          </p>
+          <h2 className="mt-5 text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-[3.4rem] lg:leading-[1.03]">
+            <span className="block">{titleLead}</span>{' '}
+            {titleHighlight ? (
+              <span className="block bg-gradient-to-r from-[#E8D7FF] to-[#C49BFF] bg-clip-text text-transparent">
+                {titleHighlight}
+              </span>
+            ) : null}
+          </h2>
+          <div className="mt-5 max-w-2xl text-base leading-7 text-[#E1DBF8] sm:text-lg sm:leading-8">
+            {content.ctaBody}
+          </div>
+
+          <div className="mt-6 grid gap-3 sm:grid-cols-3">
+            {visual.features.map((feature) => {
+              const Icon = tenancyCtaIcons[feature.icon];
+              return (
+                <div
+                  key={feature.title}
+                  className="flex min-h-20 items-center gap-3 rounded-2xl border border-white/20 bg-white/[0.07] p-3.5 backdrop-blur-sm"
+                >
+                  <Icon aria-hidden="true" className="h-7 w-7 shrink-0 text-[#B88BFF]" />
+                  <span>
+                    <strong className="block text-sm font-bold leading-5 text-white">
+                      {feature.title}
+                    </strong>
+                    <span className="block text-xs leading-5 text-[#D8D0F2]">{feature.body}</span>
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            <Link
+              href={primaryCtaHref}
+              className="hero-btn-primary relative inline-flex min-h-14 items-center justify-center rounded-xl px-5 py-3 pr-12 text-center text-sm font-semibold sm:text-base"
+            >
+              {primaryCtaLabel}
+              <ArrowRight
+                aria-hidden="true"
+                className="absolute right-5 h-5 w-5 shrink-0"
+              />
+            </Link>
+            {secondaryCtaHref && secondaryCtaLabel ? (
+              <Link
+                href={secondaryCtaHref}
+                className="inline-flex min-h-14 items-center justify-center rounded-xl border border-[#C9AEFF] bg-white/[0.06] px-5 py-3 text-center text-sm font-semibold text-white transition hover:border-white hover:bg-white/10 sm:text-base"
+              >
+                {secondaryCtaLabel}
+              </Link>
+            ) : null}
+          </div>
+        </div>
+
+        <div className="relative min-h-[23rem] overflow-hidden sm:min-h-[29rem] lg:min-h-full">
+          <Image
+            src={visual.artworkSrc}
+            alt={visual.artworkAlt}
+            fill
+            unoptimized
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            className="object-contain object-center p-3 sm:p-5 lg:p-2"
+          />
+        </div>
+      </div>
+
+      {routes.length ? (
+        <div className="relative z-10 border-t border-white/15 px-6 py-6 sm:px-9 lg:px-12">
+          <div className="flex items-center gap-5">
+            <span className="h-px flex-1 bg-white/15" />
+            <p className="text-center text-xs font-semibold uppercase tracking-[0.16em] text-[#D8CDF5] sm:text-sm">
+              Compare other England tenancy agreements
+            </p>
+            <span className="h-px flex-1 bg-white/15" />
+          </div>
+          <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-5">
+            {routes.map((route) => (
+              <Link
+                key={route.href}
+                href={route.href}
+                className="inline-flex min-h-11 items-center justify-center rounded-full border border-white/20 bg-white/[0.08] px-4 py-2 text-center text-sm font-medium leading-5 text-white transition hover:border-white/40 hover:bg-white/[0.14]"
+              >
+                {route.ctaLabel || route.title}
+              </Link>
+            ))}
+          </div>
+        </div>
+      ) : null}
+    </section>
   );
 }
 
@@ -831,55 +1016,66 @@ export function EnglandTenancyPage({
           />
         ) : null}
 
-        <section className="mt-12 rounded-[2.2rem] bg-gradient-to-br from-[#201739] via-[#31205B] to-[#5641A4] p-8 text-center text-white shadow-[0_28px_72px_rgba(46,29,86,0.28)] md:p-10">
-          <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
-            {salesContent?.ctaTitle || 'Choose the England agreement that fits the let'}
-          </h2>
-          <div className="mx-auto mt-3 max-w-2xl text-base leading-8 text-[#E1DBF8] md:text-lg">
-            {salesContent?.ctaBody ||
-              finalCtaBody || (
-                <>
-                  Start with the agreement that matches the property and the occupiers now, not the
-                  label you may have used years ago. England now has separate options for Standard,
-                  Premium, Student, HMO / Shared House, and Lodger agreements.
-                </>
-              )}
-          </div>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
-            <Link
-              href={primaryCtaHref}
-              className="hero-btn-primary inline-flex items-center rounded-xl px-6 py-3 font-semibold"
-            >
-              {primaryCtaLabel}
-            </Link>
-            {secondaryCtaHref && secondaryCtaLabel ? (
-              <Link
-                href={secondaryCtaHref}
-                className="inline-flex items-center rounded-xl border border-white/20 bg-white/10 px-6 py-3 font-semibold text-white transition hover:border-white/40 hover:bg-white/15"
-              >
-                {secondaryCtaLabel}
-              </Link>
-            ) : null}
-          </div>
-          {isSalesMode && routeComparison.length ? (
-            <div className="mt-8 border-t border-white/15 pt-6">
-              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#D5CCF6]">
-                Compare other England tenancy agreements
-              </p>
-              <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
-                {routeComparison.map((route) => (
-                <Link
-                  key={route.href}
-                  href={route.href}
-                  className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:border-white/30 hover:bg-white/15"
-                >
-                    {route.ctaLabel || route.title}
-                  </Link>
-                ))}
-              </div>
+        {salesContent?.ctaVisual ? (
+          <EnglandTenancyVisualCta
+            content={salesContent}
+            primaryCtaHref={primaryCtaHref}
+            primaryCtaLabel={primaryCtaLabel}
+            secondaryCtaHref={secondaryCtaHref}
+            secondaryCtaLabel={secondaryCtaLabel}
+            routes={isSalesMode ? routeComparison : []}
+          />
+        ) : (
+          <section className="mt-12 rounded-[2.2rem] bg-gradient-to-br from-[#201739] via-[#31205B] to-[#5641A4] p-8 text-center text-white shadow-[0_28px_72px_rgba(46,29,86,0.28)] md:p-10">
+            <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
+              {salesContent?.ctaTitle || 'Choose the England agreement that fits the let'}
+            </h2>
+            <div className="mx-auto mt-3 max-w-2xl text-base leading-8 text-[#E1DBF8] md:text-lg">
+              {salesContent?.ctaBody ||
+                finalCtaBody || (
+                  <>
+                    Start with the agreement that matches the property and the occupiers now, not
+                    the label you may have used years ago. England now has separate options for
+                    Standard, Premium, Student, HMO / Shared House, and Lodger agreements.
+                  </>
+                )}
             </div>
-          ) : null}
-        </section>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
+              <Link
+                href={primaryCtaHref}
+                className="hero-btn-primary inline-flex items-center rounded-xl px-6 py-3 font-semibold"
+              >
+                {primaryCtaLabel}
+              </Link>
+              {secondaryCtaHref && secondaryCtaLabel ? (
+                <Link
+                  href={secondaryCtaHref}
+                  className="inline-flex items-center rounded-xl border border-white/20 bg-white/10 px-6 py-3 font-semibold text-white transition hover:border-white/40 hover:bg-white/15"
+                >
+                  {secondaryCtaLabel}
+                </Link>
+              ) : null}
+            </div>
+            {isSalesMode && routeComparison.length ? (
+              <div className="mt-8 border-t border-white/15 pt-6">
+                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#D5CCF6]">
+                  Compare other England tenancy agreements
+                </p>
+                <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+                  {routeComparison.map((route) => (
+                    <Link
+                      key={route.href}
+                      href={route.href}
+                      className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:border-white/30 hover:bg-white/15"
+                    >
+                      {route.ctaLabel || route.title}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </section>
+        )}
       </Container>
     </main>
   );

@@ -455,6 +455,31 @@ export default function StandardTenancyAgreementPage() {
     ctaTitle: 'Create your Standard tenancy pack',
           ctaBody:
             'Use this option when the let is straightforward and you want review-ready document preparation with validation checks instead of a wording-only form for an ordinary whole-property home in England.',
+          ctaVisual: {
+            eyebrow: 'Standard tenancy',
+            highlightedText: 'tenancy pack',
+            artworkSrc:
+              '/images/illustrations/tenancy-cta/standard-tenancy-pack-v1.webp',
+            artworkAlt:
+              'Standard tenancy pack with tenancy terms, England guide, checklist and validation documents',
+            features: [
+              {
+                icon: 'document',
+                title: 'Review-ready',
+                body: 'Guided document preparation',
+              },
+              {
+                icon: 'location',
+                title: 'England only',
+                body: 'Whole-property let',
+              },
+              {
+                icon: 'validation',
+                title: 'Validation checks',
+                body: 'Built into the flow',
+              },
+            ],
+          },
         }}
         faqs={[
           {

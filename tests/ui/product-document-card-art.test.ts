@@ -10,6 +10,22 @@ const CARD_ASSET_ROOT = path.join(
   'product-cards'
 );
 
+const PANEL_ASSET_ROOT = path.join(
+  process.cwd(),
+  'public',
+  'images',
+  'illustrations',
+  'product-panels'
+);
+
+const BANNER_ASSET_ROOT = path.join(
+  process.cwd(),
+  'public',
+  'images',
+  'illustrations',
+  'product-banners',
+);
+
 const NOTICE_ONLY_ASSETS = [
   'section8-form3a-card-v1.webp',
   'rent-arrears-schedule-card-v1.webp',
@@ -65,5 +81,53 @@ describe('product document-card artwork', () => {
     expect(component).toContain('>Why it matters</dt>');
     expect(component).toContain('>What can go wrong</dt>');
     expect(component).toContain('>What it gives you</dt>');
+  });
+
+  it('uses bespoke artwork and a tracked conversion panel for both eviction products', () => {
+    const component = read('src/components/marketing/PublicProductSalesPage.tsx');
+    const noticePage = read('src/app/products/notice-only/page.tsx');
+    const completePage = read('src/app/products/complete-pack/page.tsx');
+    const assets = [
+      'notice-only-document-v1.webp',
+      'complete-pack-court-papers-v1.webp',
+    ];
+
+    expect(component).toContain('function ProductConversionPanel');
+    expect(component).toContain('ctaPosition="decision_panel"');
+    expect(component).toContain("data-product-decision-details");
+    expect(noticePage).toContain(`/images/illustrations/product-panels/${assets[0]}`);
+    expect(completePage).toContain(`/images/illustrations/product-panels/${assets[1]}`);
+    for (const asset of assets) {
+      expect(fs.existsSync(path.join(PANEL_ASSET_ROOT, asset))).toBe(true);
+    }
+  });
+
+  it('uses Lucide icons and bespoke commercial artwork across the requested conversion sections', () => {
+    const component = read('src/components/marketing/PublicProductSalesPage.tsx');
+    const noticePage = read('src/app/products/notice-only/page.tsx');
+    const completePage = read('src/app/products/complete-pack/page.tsx');
+    const moneyPage = read('src/app/products/money-claim/page.tsx');
+    const rentIncreasePage = read('src/app/rent-increase/page.tsx');
+    const assets = [
+      'money-claim-panel-v1.webp',
+      'notice-only-conversion-v1.webp',
+      'complete-pack-conversion-v1.webp',
+      'rent-increase-conversion-v1.webp',
+    ];
+
+    expect(component).toContain("from 'lucide-react'");
+    expect(component).not.toContain("from 'react-icons/ri'");
+    expect(component).toContain('data-visual-cta');
+    expect(component).toContain('max-w-6xl divide-y');
+    expect(noticePage).toContain('alignImageToSteps: true');
+    expect(completePage).toContain('alignImageToSteps: true');
+    expect(completePage).not.toContain('objectionBlock:');
+    expect(moneyPage).toContain(`/images/illustrations/product-banners/${assets[0]}`);
+    expect(noticePage).toContain(`/images/illustrations/product-banners/${assets[1]}`);
+    expect(completePage).toContain(`/images/illustrations/product-banners/${assets[2]}`);
+    expect(rentIncreasePage).toContain(`/images/illustrations/product-banners/${assets[3]}`);
+    for (const asset of assets) {
+      expect(fs.existsSync(path.join(BANNER_ASSET_ROOT, asset))).toBe(true);
+    }
   });
 });

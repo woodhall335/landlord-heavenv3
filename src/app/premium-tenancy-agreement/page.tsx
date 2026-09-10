@@ -201,6 +201,31 @@ export default function PremiumTenancyAgreementPage() {
     ctaTitle: 'Create your Premium tenancy pack',
           ctaBody:
             'Use this option when the tenancy is still an ordinary residential let, but the paperwork needs review-ready drafting depth, validation checks, and stronger day-to-day management support than Standard provides.',
+          ctaVisual: {
+            eyebrow: 'Premium tenancy',
+            highlightedText: 'tenancy pack',
+            artworkSrc:
+              '/images/illustrations/tenancy-cta/premium-tenancy-pack-v1.webp',
+            artworkAlt:
+              'Premium tenancy pack with management, repairs, handover, keys and inventory documents',
+            features: [
+              {
+                icon: 'management',
+                title: 'Stronger management',
+                body: 'More detailed day-to-day terms',
+              },
+              {
+                icon: 'repairs',
+                title: 'Access and repairs',
+                body: 'Clearer practical wording',
+              },
+              {
+                icon: 'key',
+                title: 'Handover records',
+                body: 'Keys and inventory support',
+              },
+            ],
+          },
         }}
         faqs={[
           {

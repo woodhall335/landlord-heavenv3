@@ -351,6 +351,19 @@ export default function RentIncreaseLandingPage() {
         { label: 'Section 13 notice guide', href: '/rent-increase/section-13-notice' },
         { label: 'Form 4A guide', href: '/rent-increase/form-4a-guide' },
       ],
+      visual: {
+        eyebrow: 'Rent increase',
+        highlightedText: 'that fits this rent increase',
+        artworkSrc: '/images/illustrations/product-banners/rent-increase-conversion-v1.webp',
+        artworkAlt: 'Illustration of a rent increase notice, comparable rents, evidence and tribunal preparation',
+        features: [
+          { title: 'Supported pack', body: 'Guided Section 13 flow', icon: 'document' },
+          { title: 'Tribunal-ready', body: 'Built for challenge preparation', icon: 'scale' },
+          { title: 'Clear next steps', body: 'Notice, evidence and guidance', icon: 'steps' },
+        ],
+        reassuranceTitle: 'Choose the route with confidence',
+        reassuranceBody: 'Normal rent increase or challenge preparation in one guided flow.',
+      },
     },
     faq: {
       title: 'Rent increase FAQs',

@@ -132,6 +132,23 @@ export default function NoticeOnlyPage() {
       showTrustPositioningBar: true,
       trustPositioningPreset: 'notice_only',
     },
+    conversionPanel: {
+      eyebrow: 'Eviction notices',
+      productName: 'Notice Only',
+      decisionTitle: 'Choose this if your next step is serving notice.',
+      decisionBody:
+        'Prepare the England Form 3A notice and service file. If you also need N5 and N119 possession claim papers, choose the Complete Pack instead.',
+      artworkSrc: '/images/illustrations/product-panels/notice-only-document-v1.webp',
+      artworkAlt: 'Illustration of a prepared Section 8 notice and service envelope',
+      features: [
+        { title: 'England only', body: 'For English tenancies', icon: 'location' },
+        { title: 'Fixed price', body: 'No hidden charges', icon: 'price' },
+        { title: 'Guided builder', body: 'Step-by-step questions', icon: 'builder' },
+      ],
+      previewText: 'Preview available before payment where shown.',
+      reassuranceTitle: 'A clear, reviewable notice file',
+      reassuranceBody: 'Form 3A, the service record, and practical checks kept together.',
+    },
     postHeroContent: (
       <>
         <AssistedPrepServicesShowcase
@@ -448,6 +465,7 @@ export default function NoticeOnlyPage() {
       imageAlt: 'Waterbrush illustration of how the Section 8 notice-only pack works',
       imageHref: descriptor.wizardHref,
       mobileImageFirstFullBleed: true,
+      alignImageToSteps: true,
       steps: [
         {
           step: 'Step 01',
@@ -499,6 +517,19 @@ export default function NoticeOnlyPage() {
           href: guideLinks.form3aSection8.href,
         },
       ],
+      visual: {
+        eyebrow: 'Notice Only',
+        highlightedText: 'without guessing',
+        artworkSrc: '/images/illustrations/product-banners/notice-only-conversion-v1.webp',
+        artworkAlt: 'Illustration of a Section 8 notice, service record and arrears documents',
+        features: [
+          { title: 'Form 3A', body: 'Prepared from your answers', icon: 'document' },
+          { title: 'Service file', body: 'N215 and service guidance', icon: 'shield' },
+          { title: 'Arrears checks', body: 'Figures and supporting record', icon: 'chart' },
+        ],
+        reassuranceTitle: 'One connected notice and service file',
+        reassuranceBody: 'Review the notice, supporting records, and next steps together.',
+      },
     },
     faq: {
       title: 'Stage 1 Notice & Service FAQs',

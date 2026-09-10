@@ -81,6 +81,39 @@ export interface ProductSalesEarlyProofBand {
   mobileImageFirstFullBleed?: boolean;
 }
 
+export type ProductSalesIconName =
+  | 'location'
+  | 'price'
+  | 'builder'
+  | 'court'
+  | 'debt'
+  | 'document'
+  | 'folder'
+  | 'hearing'
+  | 'scale'
+  | 'chart'
+  | 'steps'
+  | 'shield';
+
+export interface ProductSalesConversionPanelFeature {
+  title: string;
+  body: string;
+  icon: ProductSalesIconName;
+}
+
+export interface ProductSalesConversionPanel {
+  eyebrow: string;
+  productName: string;
+  decisionTitle: string;
+  decisionBody: string;
+  artworkSrc: string;
+  artworkAlt: string;
+  features: ProductSalesConversionPanelFeature[];
+  previewText: string;
+  reassuranceTitle: string;
+  reassuranceBody: string;
+}
+
 export interface ProductSalesStep {
   step: string;
   title: string;
@@ -92,12 +125,23 @@ export interface ProductSalesCtaLink {
   href: string;
 }
 
+export interface ProductSalesCtaVisual {
+  eyebrow: string;
+  highlightedText: string;
+  artworkSrc: string;
+  artworkAlt: string;
+  features: ProductSalesConversionPanelFeature[];
+  reassuranceTitle: string;
+  reassuranceBody: string;
+}
+
 export interface ProductSalesCta {
   title: string;
   body: ReactNode;
   primary: ProductSalesCtaLink;
   secondary?: ProductSalesCtaLink;
   guideLinks?: ProductSalesCtaLink[];
+  visual?: ProductSalesCtaVisual;
 }
 
 export type ProductSalesHero = Omit<UniversalHeroProps, 'children'> & {
@@ -115,6 +159,7 @@ export interface ProductSalesPageContent {
   postHeroContent?: ReactNode;
   afterPostHeroContent?: ReactNode;
   earlyProofBand?: ProductSalesEarlyProofBand;
+  conversionPanel?: ProductSalesConversionPanel;
   decisionBlock?: ProductSalesDecisionBlock;
   whatYouGet: {
     hideSection?: boolean;
@@ -151,6 +196,7 @@ export interface ProductSalesPageContent {
     imageAlt?: string;
     imageHref?: string;
     mobileImageFirstFullBleed?: boolean;
+    alignImageToSteps?: boolean;
   };
   cta: ProductSalesCta;
   faq: {

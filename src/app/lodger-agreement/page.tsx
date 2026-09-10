@@ -196,6 +196,31 @@ export default function LodgerAgreementEnglandPage() {
     ctaTitle: 'Create your Lodger agreement pack',
           ctaBody:
             "Use this option when you live at the property and want review-ready document preparation for the room-let agreement, shared-home rules, and extra paperwork together.",
+          ctaVisual: {
+            eyebrow: 'Lodger agreement',
+            highlightedText: 'agreement pack',
+            artworkSrc:
+              '/images/illustrations/tenancy-cta/lodger-agreement-pack-v1.webp',
+            artworkAlt:
+              'Lodger agreement pack with house rules, live-in home, room checklist and extra paperwork',
+            features: [
+              {
+                icon: 'home',
+                title: 'Live-in landlord',
+                body: 'Designed for shared homes',
+              },
+              {
+                icon: 'document',
+                title: 'Room-let agreement',
+                body: 'Terms for the resident setup',
+              },
+              {
+                icon: 'users',
+                title: 'House rules included',
+                body: 'Shared-home expectations recorded',
+              },
+            ],
+          },
         }}
         faqs={[
           {

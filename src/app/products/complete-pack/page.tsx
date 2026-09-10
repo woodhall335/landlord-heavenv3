@@ -83,6 +83,16 @@ const faqs: FAQItem[] = [
     answer:
       'Yes - when completed and filed correctly. This pack follows post-May 2026 England rules, and the checklist helps you avoid common possession claim mistakes.',
   },
+  {
+    question: 'Do I need to buy the Stage 1 pack first?',
+    answer:
+      'No. The Complete Pack already includes the Stage 1 Section 8 notice and service file, so you do not need to buy Notice Only separately.',
+  },
+  {
+    question: 'Is this legal advice?',
+    answer:
+      'No. This is a procedural document pack prepared from the information you provide. Take legal advice before filing if the tenancy facts are unusual, the claim is disputed, or you expect a defence.',
+  },
 ];
 
 export const runtime = 'nodejs';
@@ -127,6 +137,23 @@ export default function CompleteEvictionPackPage() {
       mediaAlt: 'Waterbrush illustration of the England Stage 2 court and possession pack',
       showTrustPositioningBar: true,
       trustPositioningPreset: 'complete_pack',
+    },
+    conversionPanel: {
+      eyebrow: 'Eviction notices',
+      productName: 'Complete Pack',
+      decisionTitle: 'Choose this if court is likely.',
+      decisionBody:
+        'Prepare the Form 3A notice and service file, then carry the same case into N5, N119, evidence, filing, and hearing preparation.',
+      artworkSrc: '/images/illustrations/product-panels/complete-pack-court-papers-v1.webp',
+      artworkAlt: 'Illustration of a prepared possession claim file and courthouse',
+      features: [
+        { title: 'Notice to court', body: 'One connected case file', icon: 'court' },
+        { title: 'Fixed price', body: 'No hidden charges', icon: 'price' },
+        { title: 'Guided builder', body: 'Step-by-step questions', icon: 'builder' },
+      ],
+      previewText: 'Preview available before payment where shown.',
+      reassuranceTitle: 'Notice-to-court preparation support',
+      reassuranceBody: 'Connected notice, claim, evidence, filing, and hearing documents.',
     },
     postHeroContent: (
       <>
@@ -339,33 +366,6 @@ export default function CompleteEvictionPackPage() {
         },
       ],
     },
-    objectionBlock: {
-      title: 'Common questions before you start the Complete Pack',
-      intro:
-        'These are the questions most landlords ask before choosing the full court pack.',
-      items: [
-        {
-          question: 'Do I need Stage 1 first?',
-          answer:
-            'No. The Complete Pack already includes the Stage 1 Section 8 notice and service file, so you do not need to buy that pack separately.',
-        },
-        {
-          question: 'Is this only court forms?',
-          answer:
-            'No. It includes the Section 8 notice, service record, and notice-stage file as well as N5, N119, witness statement, court readiness status, evidence collection checklist, court bundle index, filing guide, hearing checklist, eviction case summary, and arrears engagement letter.',
-        },
-        {
-          question: 'Does this include the Section 8 notice and service record too?',
-          answer:
-            'Yes. The Complete Pack keeps the notice stage and court stage aligned in one possession file.',
-        },
-        {
-          question: 'Is this legal advice?',
-          answer:
-            'No. This is a procedural document pack that prepares possession claim paperwork from the information you provide. For complex disputes, unusual tenancy facts, or expected defences, take legal advice before filing.',
-        },
-      ],
-    },
     midPageCta: {
       title: 'Ready to prepare your Section 8 court pack?',
       body:
@@ -444,6 +444,7 @@ export default function CompleteEvictionPackPage() {
       imageAlt: 'Waterbrush illustration of how the complete Section 8 pack works from notice to court',
       imageHref: descriptor.wizardHref,
       mobileImageFirstFullBleed: true,
+      alignImageToSteps: true,
       steps: [
         {
           step: 'Step 01',
@@ -470,7 +471,7 @@ export default function CompleteEvictionPackPage() {
       body:
         'Choose this if you want the notice, service record, claim forms, evidence, and hearing support prepared together without buying Stage 1 separately first.',
       primary: {
-        label: 'Prepare my court pack',
+        label: 'Prepare and preview my court pack — £69.99',
         href: descriptor.wizardHref,
       },
       secondary: {
@@ -495,6 +496,19 @@ export default function CompleteEvictionPackPage() {
           href: guideLinks.evictionProcessEngland.href,
         },
       ],
+      visual: {
+        eyebrow: 'Complete Pack',
+        highlightedText: 'without piecing them together',
+        artworkSrc: '/images/illustrations/product-banners/complete-pack-conversion-v1.webp',
+        artworkAlt: 'Illustration of connected Section 8 notice, claim, evidence and court documents',
+        features: [
+          { title: 'Form 3A + N5/N119', body: 'Notice and claim documents', icon: 'document' },
+          { title: 'Evidence and filing', body: 'Bundle and submission guidance', icon: 'folder' },
+          { title: 'Hearing support', body: 'Checklist and next steps', icon: 'hearing' },
+        ],
+        reassuranceTitle: 'Built for the full court route',
+        reassuranceBody: 'Keep the notice, claim forms, evidence, and next steps in one guided flow.',
+      },
     },
     faq: {
       title: 'Stage 2 Court & Possession FAQs',
