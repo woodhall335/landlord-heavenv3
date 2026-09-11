@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { TenancyConversionBanner } from '@/components/marketing/TenancyConversionBanner';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { TenancyPackSection } from '@/components/value-proposition';
 import { getCanonicalUrl } from '@/lib/seo/urls';
@@ -813,34 +814,22 @@ export default function WalesOccupationContractPage() {
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="container mx-auto px-4 py-16">
-          <div className="mx-auto max-w-5xl rounded-2xl bg-gradient-to-br from-[#5b21b6] via-[#6d28d9] to-[#7c3aed] p-12 text-center text-white shadow-2xl">
-            <h2 className="text-4xl font-bold text-white mb-4">
-              Ready to create your Wales Occupation Contract?
-            </h2>
-            <p className="mb-8 text-xl text-[#f5f1ff]">
-              Designed around the Renting Homes (Wales) Act 2016. Instant download.
-            </p>
-            <div className="flex gap-6 justify-center flex-wrap">
-              <Link
-                href={fixedContractHref}
-                className="rounded-lg bg-white px-8 py-4 text-lg font-semibold text-[#6d28d9] shadow-lg transition-colors hover:bg-[#f5f1ff]"
-              >
-                {`Fixed-Term - ${standardPrice}`}
-              </Link>
-              <Link
-                href={periodicContractHref}
-                className="rounded-lg bg-white px-8 py-4 text-lg font-semibold text-[#6d28d9] shadow-lg transition-colors hover:bg-[#f5f1ff]"
-              >
-                {`Periodic - ${standardPrice}`}
-              </Link>
-            </div>
-            <p className="mt-6 text-sm text-[#ece4ff]">
-              Instant download • Jurisdiction-specific wording • No subscription required
-            </p>
-          </div>
-        </section>
+        <TenancyConversionBanner
+          eyebrow="Wales occupation contract"
+          title="Create the Wales contract that fits the tenancy"
+          highlightedText="that fits the tenancy"
+          description="Choose a fixed-term or periodic Standard Occupation Contract built around the Renting Homes (Wales) Act 2016 and the information you provide."
+          artworkSrc="/images/illustrations/tenancy-jurisdictions/wales-occupation-contract-pack-v1.webp"
+          artworkAlt="Wales occupation contract pack with fixed-term, periodic, deposit and inventory documents"
+          features={[
+            { icon: 'jurisdiction', title: 'Wales-specific', body: 'Renting Homes Act route' },
+            { icon: 'calendar', title: 'Choose the term', body: 'Fixed-term or periodic' },
+            { icon: 'download', title: 'Ready together', body: 'Contract and supporting records' },
+          ]}
+          primary={{ label: `Create fixed-term contract — ${standardPrice}`, href: fixedContractHref }}
+          secondary={{ label: `Create periodic contract — ${standardPrice}`, href: periodicContractHref }}
+          footnote="Answer the guided questions, check the contract details, then download your completed Wales paperwork. No subscription required."
+        />
       </main>
     </>
   );

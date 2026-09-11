@@ -3,9 +3,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { TenancyConversionBanner } from '@/components/marketing/TenancyConversionBanner';
 import { FAQSection } from '@/components/seo/FAQSection';
-import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
+import { SeoCtaBlock } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { TenancyPackSection } from '@/components/value-proposition';
@@ -15,7 +15,6 @@ import {
   breadcrumbSchema,
 } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo/urls';
-import { tenancyAgreementScotlandLinks } from '@/lib/seo/internal-links';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { isNonEnglandStandardTenancyPubliclyEnabled } from '@/lib/tenancy/non-england-rollout';
 import { getReleasedStandardTenancyEntry } from '@/lib/tenancy/agreement-registry';
@@ -985,62 +984,21 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
           variant="gray"
         />
 
-        <section className="py-16 lg:py-20">
-          <div className="container mx-auto px-6 lg:px-8">
-            <div className="mx-auto max-w-4xl">
-              <SeoCtaBlock
-                pageType="tenancy"
-                variant="final"
-                pagePath={PAGE_PATH}
-                jurisdiction="scotland"
-                title="Ready to create your Scotland PRT?"
-                description={`Choose the Scottish tenancy agreement route that fits your let and generate the document online from ${standardPrice}.`}
-              />
-              <SeoDisclaimer className="mx-auto max-w-4xl" />
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-[#f7f5fb] py-16 lg:py-20">
-          <div className="container mx-auto px-6 lg:px-8">
-            <div className="mx-auto max-w-4xl">
-              <RelatedLinks
-                title="Related Scotland tenancy resources"
-                links={tenancyAgreementScotlandLinks}
-              />
-            </div>
-          </div>
-        </section>
-
-        <section className="border-t border-[#e8e1f8] bg-white py-10">
-          <div className="container mx-auto px-6 lg:px-8">
-            <div className="mx-auto max-w-4xl">
-              <h3 className="mb-4 text-xl font-semibold text-gray-900">
-                Other UK jurisdictions
-              </h3>
-              <div className="flex flex-wrap gap-6">
-                <Link
-                  href="/assured-shorthold-tenancy-agreement-template"
-                  className="font-semibold text-[#6d28d9] hover:underline"
-                >
-                  England tenancy agreements -&gt;
-                </Link>
-                <Link
-                  href="/wales-tenancy-agreement-template"
-                  className="font-semibold text-[#6d28d9] hover:underline"
-                >
-                  Wales occupation contracts -&gt;
-                </Link>
-                <Link
-                  href="/tenancy-agreement-northern-ireland"
-                  className="font-semibold text-[#6d28d9] hover:underline"
-                >
-                  Northern Ireland tenancy agreements -&gt;
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
+        <TenancyConversionBanner
+          eyebrow="Scotland private residential tenancy"
+          title="Create your Scotland PRT with the right terms"
+          highlightedText="with the right terms"
+          description="Build the standard open-ended Private Residential Tenancy agreement for a Scottish let, with the property, parties and practical setup recorded in one guided route."
+          artworkSrc="/images/illustrations/tenancy-jurisdictions/scotland-prt-pack-v1.webp"
+          artworkAlt="Scotland PRT pack with model terms, deposit, inventory and landlord duties documents"
+          features={[
+            { icon: 'jurisdiction', title: 'Scotland-specific', body: 'Private Housing Act route' },
+            { icon: 'file', title: 'Model terms', body: 'Clear PRT paperwork' },
+            { icon: 'check', title: 'Setup checks', body: 'Deposit and landlord details' },
+          ]}
+          primary={{ label: `Create my Scotland PRT — ${standardPrice}`, href: standardWizardHref }}
+          footnote="Answer the guided questions, preview the agreement where available, then continue to payment and download."
+        />
       </main>
     </>
   );

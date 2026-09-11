@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { TenancyConversionBanner } from '@/components/marketing/TenancyConversionBanner';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { TenancyPackSection } from '@/components/value-proposition';
 import { getCanonicalUrl } from '@/lib/seo/urls';
@@ -1009,71 +1010,21 @@ export default function NorthernIrelandTenancyPage() {
           variant="gray"
         />
 
-        {/* Related Links */}
-        <section className="container mx-auto px-4 py-12">
-          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Related Links</h2>
-            <div className="grid md:grid-cols-2 gap-4">
-              <Link href="/northern-ireland-tenancy-agreement-template" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                NI Tenancy Agreement Template 2026
-              </Link>
-              <Link href="/ni-private-tenancy-agreement" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                Private Tenancy Agreement Guide
-              </Link>
-              <Link href="/notice-to-quit-northern-ireland-guide" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                Notice to Quit NI Guide
-              </Link>
-              <Link href="/ni-tenancy-agreement-template-free" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                Free NI Templates Comparison
-              </Link>
-              <Link href="/how-to-evict-tenant#northern-ireland" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                Northern Ireland eviction guide
-              </Link>
-              <Link href="/ask-heaven" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                Ask Heaven (free landlord Q&amp;A)
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* Final CTA Section */}
-        <section className="container mx-auto px-4 py-16">
-          <div className="max-w-4xl mx-auto bg-primary rounded-2xl shadow-2xl p-12 text-center text-white">
-            <h2 className="text-4xl font-bold mb-4">Ready to Create Your Tenancy Agreement?</h2>
-            <p className="text-xl mb-8 opacity-90">
-              Create a professional Northern Ireland agreement from your property, party, payment, deposit, inventory, and safety answers.
-            </p>
-            <div className="flex gap-6 justify-center flex-wrap">
-              <Link
-                href={standardWizardHref}
-                className="bg-white text-red-600 px-8 py-4 rounded-lg font-semibold hover:bg-red-50 transition-colors text-lg shadow-lg"
-              >
-                {`Standard - ${standardPrice}`}
-              </Link>
-            </div>
-            <p className="mt-6 text-sm opacity-75">
-              Instant download • Northern Ireland-specific questions • No subscription required
-            </p>
-          </div>
-        </section>
-
-        {/* SEO Internal Links Section */}
-        <section className="container mx-auto px-4 py-8 border-t border-gray-200">
-          <div className="max-w-4xl mx-auto">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">Other UK Jurisdictions</h3>
-            <div className="flex gap-6 flex-wrap">
-              <Link href="/assured-shorthold-tenancy-agreement-template" className="text-red-600 hover:underline font-semibold">
-                England tenancy agreements
-              </Link>
-              <Link href="/wales-tenancy-agreement-template" className="text-red-600 hover:underline font-semibold">
-                Wales Standard Occupation Contracts
-              </Link>
-              <Link href="/private-residential-tenancy-agreement-template" className="text-red-600 hover:underline font-semibold">
-                Scotland Private Residential Tenancy Agreement
-              </Link>
-            </div>
-          </div>
-        </section>
+        <TenancyConversionBanner
+          eyebrow="Northern Ireland tenancy agreement"
+          title="Create your Northern Ireland tenancy pack"
+          highlightedText="tenancy pack"
+          description="Prepare a Northern Ireland agreement from the property, parties, rent, deposit, inventory and safety information you provide."
+          artworkSrc="/images/illustrations/tenancy-jurisdictions/northern-ireland-tenancy-pack-v1.webp"
+          artworkAlt="Northern Ireland tenancy agreement pack with property, deposit, inventory and safety documents"
+          features={[
+            { icon: 'jurisdiction', title: 'NI-specific', body: 'Local tenancy questions' },
+            { icon: 'shield', title: 'Key checks', body: 'Deposit and safety details' },
+            { icon: 'download', title: 'One clear pack', body: 'Agreement and records together' },
+          ]}
+          primary={{ label: `Create my NI agreement — ${standardPrice}`, href: standardWizardHref }}
+          footnote="Answer the guided questions, check the completed details, then download your Northern Ireland agreement. No subscription required."
+        />
       </main>
     </>
   );

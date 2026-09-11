@@ -393,7 +393,7 @@ export default function StandardTenancyAgreementPage() {
               {
                 title: 'Older AST wording is no longer the right starting point',
                 body:
-      'For new private assured tenancies in England, fixed-term AST wording is no longer the usual starting point. A clear assured periodic agreement is a better fit for a new straightforward let.',
+                  'For new private assured tenancies in England, fixed-term AST wording is no longer the usual starting point. A clear assured periodic agreement is a better fit for a new straightforward let.',
                 imageSrc: '/images/illustrations/landlord-documents/site-tenancy-england.webp',
                 imageAlt: 'Watercolour illustration of England tenancy paperwork',
               },
@@ -408,22 +408,28 @@ export default function StandardTenancyAgreementPage() {
                 title: 'It keeps the agreement proportionate',
                 body:
                   'The Standard route is designed for an ordinary whole-property let, so the agreement remains easier for you and the tenants to read and use.',
-                imageSrc: '/images/generated/product-cards/standard-tenancy-agreement.webp',
-                imageAlt: 'Standard tenancy agreement pack preview',
+                imageSrc:
+                  '/images/illustrations/tenancy-standard/proportionate-standard-agreement-v1.webp',
+                imageAlt:
+                  'Standard agreement, England home, checklist and keys in the Landlord Heaven document style',
               },
               {
                 title: 'It gives you one guided starting point',
                 body:
                   'The wizard gathers the property, tenants, rent, deposit, guarantor and setup details in one flow, helping the documents feel joined-up rather than pieced together.',
-                imageSrc: '/images/wizard-standard-tenancy-agreement.webp',
-                imageAlt: 'Standard tenancy agreement wizard preview',
+                imageSrc:
+                  '/images/illustrations/tenancy-standard/guided-standard-setup-v1.webp',
+                imageAlt:
+                  'Guided setup connecting the property, tenants and rent details used to prepare the agreement',
               },
               {
                 title: 'It helps you avoid the wrong product',
                 body:
                   'If the let is student, shared-house, lodger or needs fuller management wording, the comparison cards point you to a more suitable route before you generate the wrong pack.',
-                imageSrc: '/images/tenancy-agreement-selector.webp',
-                imageAlt: 'Tenancy agreement selector illustration',
+                imageSrc:
+                  '/images/illustrations/tenancy-standard/standard-agreement-selector-v1.webp',
+                imageAlt:
+                  'Standard agreement selected from Premium, Student, HMO and Lodger alternatives',
               },
             ],
           },
@@ -451,8 +457,12 @@ export default function StandardTenancyAgreementPage() {
                   'Review the generated pack before payment, then download the agreement and supporting paperwork together when you are happy with the details.',
               },
             ],
+            imageSrc:
+              '/images/illustrations/tenancy-standard/standard-how-it-works-v1.webp',
+            imageAlt:
+              'Three-step Standard tenancy workflow from adding details and checking the setup to previewing the completed pack',
           },
-    ctaTitle: 'Create your Standard tenancy pack',
+          ctaTitle: 'Create your Standard tenancy pack',
           ctaBody:
             'Use this option when the let is straightforward and you want review-ready document preparation with validation checks instead of a wording-only form for an ordinary whole-property home in England.',
           ctaVisual: {

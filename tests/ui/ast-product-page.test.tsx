@@ -119,7 +119,10 @@ describe('/products/ast page', () => {
     ).toBeInTheDocument();
 
     const orderedHeadings = [
-      screen.getByRole('heading', { level: 2, name: 'Choose the agreement before you start' }),
+      screen.getByRole('heading', {
+        level: 2,
+        name: "Choose the Renters' Rights Act compliant agreement that fits the let",
+      }),
       screen.getByRole('heading', { level: 2, name: 'Why you need the right agreement first' }),
       screen.getByRole('heading', { level: 2, name: 'How this helps' }),
       screen.getByRole('heading', { level: 2, name: 'How it works' }),
@@ -128,6 +131,10 @@ describe('/products/ast page', () => {
     ];
 
     expectHeadingOrder(orderedHeadings);
+    expect(
+      screen.queryByRole('heading', { level: 2, name: 'Choose the agreement before you start' })
+    ).not.toBeInTheDocument();
+    expect(document.querySelector('[data-product-decision-details]')).not.toBeInTheDocument();
   });
 
   it('links to the five exact England agreement owners and does not duplicate their breakdowns', () => {

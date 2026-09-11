@@ -155,6 +155,8 @@ export interface ProductSalesPageContent {
     routeIntent?: string;
   };
   hero: ProductSalesHero;
+  /** Hide the generic post-hero price/preview strip on comparison hubs. */
+  showProductDecisionDetails?: boolean;
   earlyDecisionContent?: ReactNode;
   postHeroContent?: ReactNode;
   afterPostHeroContent?: ReactNode;

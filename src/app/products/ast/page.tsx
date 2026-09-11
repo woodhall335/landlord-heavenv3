@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { astHeroConfig } from '@/components/landing/heroConfigs';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
-import { EnglandAgreementChooser } from '@/components/tenancy/EnglandAgreementChooser';
 import type { FAQItem } from '@/components/seo/FAQSection';
 import type {
   ProductSalesPageContent,
@@ -194,7 +193,7 @@ export default function EnglandTenancyHubPage() {
         href: '/premium-tenancy-agreement',
       },
     },
-    earlyDecisionContent: <EnglandAgreementChooser />,
+    showProductDecisionDetails: false,
     postHeroContent: (
       <div className="rounded-[2.25rem] border border-[#E8E1F8] bg-[#FCFAFF] p-6 shadow-[0_18px_46px_rgba(24,11,49,0.06)] md:p-8">
         <div className="grid gap-5 lg:grid-cols-3">
@@ -246,35 +245,6 @@ export default function EnglandTenancyHubPage() {
         </p>
       </div>
     ),
-    decisionBlock: {
-      title: 'Choose the agreement before you start',
-      intro:
-        "Start with the facts of the let. The right Renters' Rights Act compliant tenancy agreement depends on who will live there, whether the property is shared, and how much management detail you want in the paperwork.",
-      cards: [
-        {
-          eyebrow: 'Most common choice',
-          title: 'Start with Standard or Premium for an ordinary assured periodic tenancy',
-          body:
-            'If the property is being let as a normal residential home in England, Standard is the simple assured periodic option and Premium is the fuller management option.',
-          tone: 'positive',
-        },
-        {
-          eyebrow: 'Specialist products',
-          title: 'Use Student, HMO / Shared House, or Lodger only when the facts really point there',
-          body:
-            'If the occupiers are students, the property is a shared house, or the landlord lives there and is taking in a lodger, use the dedicated product.',
-          tone: 'warning',
-        },
-      ],
-      primary: {
-        label: 'Choose Standard agreement',
-        href: '/standard-tenancy-agreement',
-      },
-      secondary: {
-        label: 'Choose Premium agreement',
-        href: '/premium-tenancy-agreement',
-      },
-    },
     whatYouGet: {
       title: "Choose the Renters' Rights Act compliant agreement that fits the let",
       intro:
@@ -369,8 +339,11 @@ export default function EnglandTenancyHubPage() {
       title: 'How it works',
       intro:
         'Compare the options first, then open the product page that matches the tenancy.',
-      imageSrc: '/images/illustrations/tenancy-regions/england-agreement-selection-waterbrush-v1.webp',
-      imageAlt: 'Waterbrush illustration of choosing between England tenancy agreement routes',
+      imageSrc:
+        '/images/illustrations/tenancy-jurisdictions/england-tenancy-selection-steps-v1.webp',
+      imageAlt:
+        'Three aligned steps for matching the let, opening the right product page and starting the agreement',
+      alignImageToSteps: true,
       steps: [
         {
           step: 'Step 01',
@@ -419,6 +392,22 @@ export default function EnglandTenancyHubPage() {
         },
         ...descriptor.defaultGuideLinks,
       ],
+      visual: {
+        eyebrow: 'England tenancy agreements',
+        highlightedText: 'that fits the let',
+        artworkSrc:
+          '/images/illustrations/tenancy-jurisdictions/england-tenancy-options-v1.webp',
+        artworkAlt:
+          'England tenancy agreement family showing Standard, Premium, Student, HMO and Lodger routes',
+        features: [
+          { icon: 'document', title: 'Five clear routes', body: 'Choose by property and occupiers' },
+          { icon: 'shield', title: 'Current wording', body: 'Built for the England framework' },
+          { icon: 'steps', title: 'Guided next step', body: 'Open the exact product page' },
+        ],
+        reassuranceTitle: 'Choose once, then build the right pack.',
+        reassuranceBody:
+          'Compare the tenancy setup before entering the detailed agreement information.',
+      },
     },
     faq: {
       title: 'England tenancy agreement FAQs',

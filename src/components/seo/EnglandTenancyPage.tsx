@@ -789,13 +789,13 @@ export function EnglandTenancyPage({
                     className="overflow-hidden rounded-[1.8rem] border border-[#E8E1D7] bg-[#FCFAFF] shadow-[0_14px_32px_rgba(31,41,55,0.05)]"
                   >
                     {card.imageSrc ? (
-                      <div className="relative h-40 border-b border-[#E8E1D7] bg-white">
+                      <div className="relative h-40 border-b border-[#E8E1D7] bg-gradient-to-br from-white via-[#FBF9FF] to-[#F0E9FF]">
                         <Image
                           src={card.imageSrc}
                           alt={card.imageAlt || card.title}
                           fill
                           sizes="(min-width: 768px) 33vw, 100vw"
-                          className="object-cover object-center"
+                          className="object-contain object-center p-2"
                         />
                       </div>
                     ) : null}
@@ -838,13 +838,13 @@ export function EnglandTenancyPage({
                     </article>
                   ))}
                 </div>
-                <div className="relative min-h-[360px] overflow-hidden rounded-[1.8rem] border border-[#E8E1D7] bg-white shadow-[0_16px_38px_rgba(31,41,55,0.08)] md:min-h-[440px] lg:min-h-full">
+                <div className="relative min-h-[360px] overflow-hidden rounded-[1.8rem] border border-[#D8C8FF] bg-[radial-gradient(circle_at_50%_50%,rgba(167,139,250,0.18),transparent_55%),linear-gradient(145deg,#FFFFFF,#F4EFFF)] shadow-[0_16px_38px_rgba(91,33,182,0.1)] md:min-h-[440px] lg:min-h-full">
                   <Image
                     src={salesContent.howItWorks.imageSrc ?? '/tenancy-how-it-works.webp'}
                     alt={salesContent.howItWorks.imageAlt ?? 'Tenancy agreement steps preview'}
                     fill
                     sizes="(min-width: 1024px) 66vw, 100vw"
-                    className="object-cover"
+                    className="object-contain p-4 sm:p-6"
                   />
                 </div>
               </div>

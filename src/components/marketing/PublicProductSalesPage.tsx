@@ -176,17 +176,25 @@ function SmartImage({
   alt,
   className = '',
   sizes = '(min-width: 1024px) 33vw, 100vw',
+  fit = 'cover',
 }: {
   src?: string;
   alt?: string;
   className?: string;
   sizes?: string;
+  fit?: 'cover' | 'contain';
 }) {
   if (!src) return null;
 
   return (
     <div className={`relative overflow-hidden rounded-lg bg-[#F7F4FF] ${className}`}>
-      <Image src={src} alt={alt || ''} fill sizes={sizes} className="object-cover" />
+      <Image
+        src={src}
+        alt={alt || ''}
+        fill
+        sizes={sizes}
+        className={fit === 'contain' ? 'object-contain p-4 sm:p-6' : 'object-cover'}
+      />
     </div>
   );
 }
@@ -620,6 +628,7 @@ function HowItWorks({ content }: { content: ProductSalesPageContent['howItWorks'
           alt={content.imageAlt}
           className={content.alignImageToSteps ? 'h-full min-h-[28rem]' : 'aspect-[4/3]'}
           sizes="(min-width: 1024px) 50vw, 100vw"
+          fit={content.alignImageToSteps ? 'contain' : 'cover'}
         />
       </Link>
     ) : (
@@ -628,6 +637,7 @@ function HowItWorks({ content }: { content: ProductSalesPageContent['howItWorks'
         alt={content.imageAlt}
         className={content.alignImageToSteps ? 'h-full min-h-[28rem]' : 'aspect-[4/3]'}
         sizes="(min-width: 1024px) 50vw, 100vw"
+        fit={content.alignImageToSteps ? 'contain' : 'cover'}
       />
     )
   ) : null;
@@ -900,7 +910,7 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
         {analytics?.pageType === 'product_page' ? null : content.hero.children}
       </UniversalHero>
 
-      {analytics?.pageType === 'product_page' ? (
+      {analytics?.pageType === 'product_page' && content.showProductDecisionDetails !== false ? (
         <section
           className="border-b border-[#E8E1F8] bg-[linear-gradient(180deg,#FCFAFF_0%,#FFFFFF_100%)] px-4 py-6 sm:px-6 sm:py-9"
           data-product-decision-details
