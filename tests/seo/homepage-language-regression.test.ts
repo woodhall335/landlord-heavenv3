@@ -16,12 +16,16 @@ describe('Homepage language regression', () => {
     expect(homepage).not.toContain('The same rating and review count shown in the hero trust pill.');
     expect(homepage).not.toContain('A live count pulled from the same review counter used across the rest of the site.');
     expect(homepage).not.toContain('Good trust copy should reassure landlords quickly');
+    expect(homepage).not.toContain('Choose the job and get the paperwork moving');
+    expect(homepage).not.toContain('Check the scope before you commit');
+    expect(homepage).not.toContain('See-the-product-before-you-commit2.webp');
 
     expect(homepage).toContain('Create my Section 8 notice');
-    expect(homepage).toContain('Prepare my court pack');
+    expect(homepage).toContain('Prepare my court papers');
     expect(homepage).toContain('Prepare my money claim');
-    expect(homepage).toContain('Average landlord rating across the product.');
-    expect(homepage).toContain('Reviews left by landlords who have used the product.');
+    expect(homepage).toContain('Choose the landlord job');
+    expect(homepage).toContain('homepage-route-selector-conversion-v1.webp');
+    expect(homepage).toContain('data-visual-cta');
     expect(homepage).not.toContain('{reviewCount}+');
   });
 });

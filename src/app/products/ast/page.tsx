@@ -377,21 +377,6 @@ export default function EnglandTenancyHubPage() {
         label: 'Choose Premium agreement',
         href: '/premium-tenancy-agreement',
       },
-      guideLinks: [
-        {
-          label: 'Not sure which agreement? Compare all England options',
-          href: '/compare/tenancy-agreement-options-england',
-        },
-        {
-          label: "Read the Renters' Rights Act tenancy guide",
-          href: '/tenancy-agreement-england-2026',
-        },
-        {
-          label: 'Assured periodic tenancy agreement guide',
-          href: '/assured-periodic-tenancy-agreement',
-        },
-        ...descriptor.defaultGuideLinks,
-      ],
       visual: {
         eyebrow: 'England tenancy agreements',
         highlightedText: 'that fits the let',

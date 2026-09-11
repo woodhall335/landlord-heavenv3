@@ -1,4 +1,7 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
+import { ArrowRight, FileCheck2 } from 'lucide-react';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { EnglandTenancyPage } from '@/components/seo/EnglandTenancyPage';
@@ -15,6 +18,119 @@ const standardWizardHref =
   '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=england_standard_tenancy_agreement&src=standard_tenancy_page&topic=tenancy';
 const standardSampleProof = getGoldenPackProofData('england_standard_tenancy_agreement');
 const standardSamplePage = getProductSamplePageByPackKey('england_standard_tenancy_agreement');
+
+const standardWorkflowFeatures = [
+  {
+    title: 'Agreement built from your answers',
+    body: 'Property, occupier, rent and tenancy details flow into one current England agreement.',
+    imageSrc:
+      '/images/illustrations/tenancy-standard/answers-to-agreement-watercolour-v2.webp',
+    imageAlt:
+      'Illustrated tenancy agreement, English rental property, key and connected tenancy details',
+  },
+  {
+    title: 'Setup records kept together',
+    body: 'The relevant deposit, guarantor, inventory and handover records stay with the main agreement.',
+    imageSrc:
+      '/images/illustrations/tenancy-standard/joined-tenancy-file-watercolour-v2.webp',
+    imageAlt:
+      'Illustrated property folder holding joined-up tenancy, rent, deposit and handover records',
+  },
+  {
+    title: 'Checks before checkout',
+    body: 'Review the key details and inspect your generated preview before deciding whether to pay.',
+    imageSrc: '/images/illustrations/tenancy-standard/check-preview-watercolour-v2.webp',
+    imageAlt:
+      'Illustrated validation checklist, magnifying glass, calendar and shield check',
+  },
+] as const;
+
+function StandardPackWorkflowSection() {
+  return (
+    <section
+      aria-labelledby="standard-pack-workflow-heading"
+      data-standard-pack-workflow="true"
+      className="mb-12 overflow-hidden rounded-[2rem] border border-[#D9D2F2] bg-[linear-gradient(135deg,#F8F5FF_0%,#FFFFFF_48%,#F2EDFF_100%)] shadow-[0_20px_55px_rgba(54,35,103,0.11)]"
+    >
+      <div className="grid lg:grid-cols-[minmax(0,1.02fr)_minmax(420px,0.98fr)] lg:items-stretch">
+        <div className="p-6 sm:p-8 lg:p-10">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#6D28D9]">
+            Inside the Standard pack
+          </p>
+          <h2
+            id="standard-pack-workflow-heading"
+            className="mt-3 max-w-2xl text-3xl font-bold tracking-tight text-[#17142B] sm:text-4xl"
+          >
+            Build the tenancy file in one guided flow
+          </h2>
+          <p className="mt-4 max-w-2xl text-base leading-8 text-[#56506A] md:text-lg">
+            Add the facts once, check how they appear across the pack, and preview the finished
+            documents before payment. Each record is prepared to work with the agreement rather
+            than sitting in a separate, disconnected template.
+          </p>
+
+          <div className="mt-7 grid gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+            {standardWorkflowFeatures.map((feature) => (
+                <article
+                  key={feature.title}
+                  className="overflow-hidden rounded-2xl border border-[#E3DCF5] bg-white/90 shadow-[0_10px_24px_rgba(61,42,102,0.06)]"
+                >
+                  <div className="relative h-32 border-b border-[#EEE8FA] bg-[radial-gradient(circle_at_50%_42%,#FFFFFF_0%,#F3EEFF_68%,#E9E0FF_100%)]">
+                    <Image
+                      src={feature.imageSrc}
+                      alt={feature.imageAlt}
+                      fill
+                      className="object-cover object-center"
+                      sizes="(min-width: 1280px) 190px, (min-width: 640px) 30vw, 100vw"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="text-base font-semibold leading-6 text-[#17142B]">
+                      {feature.title}
+                    </h3>
+                    <p className="mt-1 text-sm leading-6 text-[#625A73]">{feature.body}</p>
+                  </div>
+                </article>
+              ))}
+          </div>
+
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Link
+              href={standardWizardHref}
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#6D28D9] px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(109,40,217,0.24)] transition hover:bg-[#5B21B6]"
+            >
+              Build and preview my Standard pack
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+            <span className="inline-flex items-center gap-2 text-sm font-medium text-[#5E5570]">
+              <FileCheck2 className="h-4 w-4 text-[#6D28D9]" aria-hidden="true" />
+              Preview before payment
+            </span>
+          </div>
+        </div>
+
+        <div className="relative min-h-[390px] overflow-hidden border-t border-[#DDD5F3] bg-[radial-gradient(circle_at_55%_40%,#FFFFFF_0%,#EEE8FF_48%,#DDD2FF_100%)] p-6 sm:min-h-[460px] sm:p-8 lg:min-h-full lg:border-l lg:border-t-0">
+          <div className="absolute -right-20 -top-24 h-72 w-72 rounded-full bg-[#8B5CF6]/15 blur-3xl" />
+          <div className="absolute -bottom-28 -left-20 h-72 w-72 rounded-full bg-white/80 blur-3xl" />
+          <Image
+            src="/images/illustrations/tenancy-standard/standard-agreement-watercolour-v2.webp"
+            alt="Standard tenancy agreement, England property, checklist and keys"
+            width={1536}
+            height={1024}
+            className="relative z-10 mx-auto h-full max-h-[430px] w-full object-contain"
+            sizes="(min-width: 1024px) 46vw, 100vw"
+          />
+          <div className="absolute inset-x-6 bottom-6 z-20 rounded-2xl border border-white/80 bg-white/90 p-4 shadow-[0_16px_36px_rgba(49,32,91,0.14)] backdrop-blur sm:inset-x-8 sm:bottom-8">
+            <p className="font-semibold text-[#24184B]">One joined-up tenancy file</p>
+            <p className="mt-1 text-sm leading-6 text-[#5F5671]">
+              Agreement, relevant supporting records and validation checks prepared from the same answers.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -87,83 +203,11 @@ export default function StandardTenancyAgreementPage() {
         heroMediaSrc="/images/illustrations/tenancy-jurisdictions/england-assured-periodic-waterbrush-v2.webp"
         heroMediaAlt="Waterbrush illustration of an England assured periodic tenancy agreement, calendar and property keys"
         showHeroTrustPositioningBar={false}
-        afterHero={
-          <>
-            <TenancyJurisdictionSelector />
-            <section
-              aria-labelledby="jurisdiction-explainer-heading"
-              className="border-b border-[#E8E1F8] bg-white py-12 md:py-16"
-            >
-              <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="max-w-4xl">
-                  <p className="text-sm font-bold uppercase tracking-[0.12em] text-[#6D28D9]">
-                    The correct agreement depends on location
-                  </p>
-                  <h2
-                    id="jurisdiction-explainer-heading"
-                    className="mt-3 text-3xl font-bold tracking-tight text-[#17142B] md:text-4xl"
-                  >
-                    One UK selector, four different legal frameworks
-                  </h2>
-                  <p className="mt-4 text-base leading-8 text-[#56506A] md:text-lg">
-                    “Tenancy agreement” is a useful general description, but the document name,
-                    legal framework and wizard questions change with the location of the rental
-                    property. Choose the property jurisdiction above before entering any case
-                    details.
-                  </p>
-                </div>
-
-                <div className="mt-8 grid gap-5 md:grid-cols-2">
-                  {[
-                    {
-                      title: 'England',
-                      body:
-                        'For a straightforward private whole-property let, start with the Standard Assured Periodic Tenancy Agreement route. New England assured tenancies no longer use an AST fixed term.',
-                    },
-                    {
-                      title: 'Wales',
-                      body:
-                        'Choose a Fixed-Term or Periodic Standard Occupation Contract under the Welsh framework. The written-statement rules and terminology are different from England.',
-                    },
-                    {
-                      title: 'Scotland',
-                      body:
-                        'Use a Private Residential Tenancy agreement for the open-ended Scottish PRT framework, rather than an England-style agreement.',
-                    },
-                    {
-                      title: 'Northern Ireland',
-                      body:
-                        'Use the Northern Ireland Private Tenancy Agreement route, with its own jurisdiction-specific support documents and workflow.',
-                    },
-                  ].map((item) => (
-                    <article
-                      key={item.title}
-                      className="rounded-2xl border border-[#E5DDF7] bg-[#FCFBFF] p-5"
-                    >
-                      <h3 className="text-xl font-semibold text-[#241C38]">{item.title}</h3>
-                      <p className="mt-2 leading-7 text-[#655D75]">{item.body}</p>
-                    </article>
-                  ))}
-                </div>
-
-                <div className="mt-8 rounded-2xl border border-[#DDD4F4] bg-[#F7F2FF] p-5 text-[#3F3652]">
-                  <strong>The detailed comparison below is for England.</strong> Wales, Scotland
-                  and Northern Ireland currently offer one standard agreement route (with Wales
-                  split into fixed-term and periodic choices). Regional Premium products are not
-                  offered.
-                </div>
-              </div>
-            </section>
-          </>
-        }
-        workflowImageLink={{
-          href: standardWizardHref,
-          desktopSrc: '/images/standard-tenancy-desktop.webp',
-          mobileSrc: '/images/standard-tenancy-mobile.webp',
-          alt: 'Standard tenancy agreement workflow',
-          width: 1086,
-          height: 1448,
-        }}
+        afterHero={<TenancyJurisdictionSelector />}
+        workflowSection={<StandardPackWorkflowSection />}
+        showFitGuidance={false}
+        showCoverageSummary={false}
+        showVisualCtaPrimaryArrow={false}
         legacyNotice="Searching for an AST replacement, basic tenancy agreement or standard tenancy agreement for England? For a new straightforward whole-property let, this is the assured periodic route. It is not the right route for Wales, Scotland, Northern Ireland, a resident landlord, a shared house or a specialist student let."
         introTitle="England Standard Tenancy Agreement: clear, current paperwork for a straightforward let"
         introBody={[
@@ -409,27 +453,30 @@ export default function StandardTenancyAgreementPage() {
                 body:
                   'The Standard route is designed for an ordinary whole-property let, so the agreement remains easier for you and the tenants to read and use.',
                 imageSrc:
-                  '/images/illustrations/tenancy-standard/proportionate-standard-agreement-v1.webp',
+                  '/images/illustrations/tenancy-standard/standard-agreement-watercolour-v2.webp',
                 imageAlt:
-                  'Standard agreement, England home, checklist and keys in the Landlord Heaven document style',
+                  'Watercolour illustration of a Standard agreement, England home, checklist and keys',
+                imageFit: 'cover',
               },
               {
                 title: 'It gives you one guided starting point',
                 body:
                   'The wizard gathers the property, tenants, rent, deposit, guarantor and setup details in one flow, helping the documents feel joined-up rather than pieced together.',
                 imageSrc:
-                  '/images/illustrations/tenancy-standard/guided-standard-setup-v1.webp',
+                  '/images/illustrations/tenancy-standard/guided-setup-watercolour-v2.webp',
                 imageAlt:
-                  'Guided setup connecting the property, tenants and rent details used to prepare the agreement',
+                  'Watercolour illustration of a guided setup connecting the property, tenants and rent details',
+                imageFit: 'cover',
               },
               {
                 title: 'It helps you avoid the wrong product',
                 body:
                   'If the let is student, shared-house, lodger or needs fuller management wording, the comparison cards point you to a more suitable route before you generate the wrong pack.',
                 imageSrc:
-                  '/images/illustrations/tenancy-standard/standard-agreement-selector-v1.webp',
+                  '/images/illustrations/tenancy-standard/agreement-selector-watercolour-v2.webp',
                 imageAlt:
-                  'Standard agreement selected from Premium, Student, HMO and Lodger alternatives',
+                  'Watercolour comparison with Standard selected from Premium, Student, HMO and Lodger agreements',
+                imageFit: 'cover',
               },
             ],
           },
@@ -458,9 +505,10 @@ export default function StandardTenancyAgreementPage() {
               },
             ],
             imageSrc:
-              '/images/illustrations/tenancy-standard/standard-how-it-works-v1.webp',
+              '/images/illustrations/tenancy-standard/standard-how-it-works-watercolour-v3.webp',
             imageAlt:
-              'Three-step Standard tenancy workflow from adding details and checking the setup to previewing the completed pack',
+              'Vertical watercolour workflow from adding tenancy details and checking the setup to previewing the completed Standard pack',
+            imagePadding: false,
           },
           ctaTitle: 'Create your Standard tenancy pack',
           ctaBody:

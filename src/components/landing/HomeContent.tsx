@@ -7,10 +7,11 @@
 'use client';
 
 import Image from 'next/image';
+import { ArrowRight, Check, House, PoundSterling, Scale } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
-import { PremiumImageFrame, Reveal, StaggerReveal } from '@/components/marketing/PremiumMotion';
+import { Reveal, StaggerReveal } from '@/components/marketing/PremiumMotion';
 import { Container } from '@/components/ui';
 import { Hero, TrustBar } from '@/components/landing';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
@@ -72,14 +73,6 @@ type PreviewCard = {
   product: string;
 };
 
-type ProcessStep = {
-  step: string;
-  title: string;
-  body: string;
-  imageSrc: string;
-  imageAlt: string;
-};
-
 type JurisdictionCard = {
   name: string;
   agreement: string;
@@ -125,8 +118,9 @@ const routeSelectionCards: RouteCard[] = [
       'Updated for the England possession rules from 1 May 2026, including notice wording, timing, and service checks.',
     ctaLabel: 'Create my Section 8 notice',
     href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.landingHref,
-    imageSrc: '/images/generated/homepage-situations/section-8-notice.webp',
-    imageAlt: 'Tenant not paying rent situation card',
+    imageSrc: '/images/illustrations/homepage-routes/section-8-notice-watercolour-v2.webp',
+    imageAlt:
+      'Watercolour Section 8 notice file labelled Form 3A, N215 and arrears record',
     accent: 'amethyst',
     routeIntent: 'tenant_not_paying_rent',
     product: 'notice_only',
@@ -148,8 +142,10 @@ const routeSelectionCards: RouteCard[] = [
       'Keeps the notice, service details, and court forms consistent with the England process from 1 May 2026.',
     ctaLabel: 'Prepare my court papers',
     href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.landingHref,
-    imageSrc: '/images/generated/homepage-situations/section-8-rent-arrears.webp',
-    imageAlt: 'Tenant will not leave situation card',
+    imageSrc:
+      '/images/illustrations/homepage-routes/complete-eviction-pack-watercolour-v2.webp',
+    imageAlt:
+      'Watercolour Complete Eviction Pack labelled Form 3A, N5, N119 and evidence file',
     accent: 'plum',
     routeIntent: 'tenant_will_not_leave',
     product: 'complete_pack',
@@ -171,8 +167,9 @@ const routeSelectionCards: RouteCard[] = [
       'Helps keep rent, damage, bills, and other tenant debt clear before you make a claim.',
     ctaLabel: 'Prepare my money claim',
     href: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.landingHref,
-    imageSrc: '/images/generated/homepage-situations/money-claim.webp',
-    imageAlt: 'Recover unpaid rent bills or damage situation card',
+    imageSrc: '/images/illustrations/homepage-routes/money-claim-watercolour-v2.webp',
+    imageAlt:
+      'Watercolour Money Claim file labelled letter before claim, debt schedule and MCOL or N1',
     accent: 'emerald',
     routeIntent: 'recover_debt',
     product: 'money_claim',
@@ -194,8 +191,9 @@ const routeSelectionCards: RouteCard[] = [
       'Updated for the England assured tenancy rent increase process in force from 1 May 2026.',
     ctaLabel: 'Create my rent increase notice',
     href: '/rent-increase',
-    imageSrc: '/images/generated/homepage-situations/rent-increase.webp',
-    imageAlt: 'Increase the rent situation card',
+    imageSrc: '/images/illustrations/homepage-routes/rent-increase-watercolour-v2.webp',
+    imageAlt:
+      'Watercolour Increase Rent file labelled Form 4A, rent evidence and notice dates',
     accent: 'amber',
     routeIntent: 'increase_rent',
     product: 'section13_standard',
@@ -210,8 +208,10 @@ const routeSelectionCards: RouteCard[] = [
       'This fits when you need the right agreement before the tenancy starts, rather than a generic template that may not match the let.',
     ctaLabel: 'Choose my tenancy agreement',
     href: '/standard-tenancy-agreement#choose-jurisdiction',
-    imageSrc: '/images/generated/homepage-situations/tenancy-agreement.webp',
-    imageAlt: 'Need a tenancy agreement situation card',
+    imageSrc:
+      '/images/illustrations/homepage-routes/tenancy-agreement-watercolour-v2.webp',
+    imageAlt:
+      'Watercolour Tenancy Agreement selector for England, Wales, Scotland and Northern Ireland',
     accent: 'lavender',
     routeIntent: 'tenancy_agreement',
     product: 'ast',
@@ -231,8 +231,9 @@ const routeSelectionCards: RouteCard[] = [
     ],
     ctaLabel: 'Ask a question',
     href: '/ask-heaven',
-    imageSrc: '/images/generated/homepage-situations/ask-heaven.webp',
-    imageAlt: 'Ask Heaven landlord guidance assistant',
+    imageSrc: '/images/illustrations/homepage-routes/ask-heaven-watercolour-v2.webp',
+    imageAlt:
+      'Watercolour Ask Heaven landlord helper with question and clear next steps cards',
     accent: 'lavender',
     routeIntent: 'ask_heaven',
     product: 'ask_heaven',
@@ -302,33 +303,6 @@ const previewCards: PreviewCard[] = [
     ctaLabel: 'Prepare my money claim',
     routeIntent: 'recover_debt',
     product: 'money_claim',
-  },
-];
-
-const processSteps: ProcessStep[] = [
-  {
-    step: '01',
-    title: 'Pick the landlord job you need done',
-    body:
-      'Start with the thing you need to do now: serve notice, go to court, recover money, raise rent, or set up a tenancy.',
-    imageSrc: '/images/illustrations/money-claim/money-claim-debt-recovery-waterbrush-v1.webp',
-    imageAlt: 'Recover unpaid rent process step',
-  },
-  {
-    step: '02',
-    title: 'Answer the key details',
-    body:
-      'We ask for the details needed to prepare the right documents and flag issues before you pay or print.',
-    imageSrc: '/images/illustrations/products/section8-notice-preparation-waterbrush-v1.webp',
-    imageAlt: 'Answer the key details process step',
-  },
-  {
-    step: '03',
-    title: 'Review and download the paperwork',
-    body:
-      'You get documents that match the task in front of you and are ready to review, save, and print.',
-    imageSrc: '/images/illustrations/tenancy-jurisdictions/england-assured-periodic-waterbrush-v2.webp',
-    imageAlt: 'Landlord documents and agreements',
   },
 ];
 
@@ -762,165 +736,92 @@ export default function HomeContent() {
         </Container>
       </section>
 
-      <section className="pb-16 pt-4 md:pb-20">
-        <Container>
-          <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-            <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'px-6 py-8 md:px-8')}>
-              <span className="public-eyebrow">How it works</span>
-              <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
-                Choose the job and get the paperwork moving
-              </h2>
-              <StaggerReveal className="mt-8 space-y-5">
-                {processSteps.map((step) => (
-                  <div
-                    key={step.step}
-                    className="standalone-premium-hover-lift grid gap-4 rounded-[1.8rem] border border-[#efe5ff] bg-white/85 p-4 md:grid-cols-[0.28fr_0.72fr]"
-                  >
-                    <div className="relative aspect-[4/3] overflow-hidden rounded-[1.3rem] public-image-frame">
-                      <Image
-                        src={step.imageSrc}
-                        alt={step.imageAlt}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 30vw"
-                        className="object-cover"
-                      />
-                    </div>
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6b3fd1]">
-                        Step {step.step}
-                      </p>
-                      <h3 className="mt-2 text-xl font-semibold text-[#1d1532]">
-                        {step.title}
-                      </h3>
-                      <p className="mt-3 text-[15px] leading-7 text-[#5a516d]">{step.body}</p>
-                    </div>
-                  </div>
-                ))}
-              </StaggerReveal>
-            </div>
-
-            <div className={clsx(PUBLIC_LAYOUT_CLASSES.darkPanel, 'overflow-hidden px-6 py-8 md:px-8 md:py-10')}>
-              <div className="mx-auto max-w-6xl">
-                <div className="max-w-3xl">
-                  <span className="inline-flex rounded-full border border-white/15 bg-white/8 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/85">
-                    England documents. UK tenancy routes.
-                  </span>
-                  <h2 className="mt-5 text-3xl font-bold tracking-tight text-white">
-                    Made to help landlords act quickly
-                  </h2>
-                  <p className="mt-4 text-base leading-8 text-white/78">
-                    When something needs dealing with, you should be able to find the
-                    right next step quickly, understand what it covers, and move forward
-                    without digging through legal jargon.
-                  </p>
-                </div>
-                <div className="mt-8 grid gap-4 md:grid-cols-3">
-                  {[
-                    'England Section 8 notices, court papers, money claims, and rent increases in one place',
-                    'Tenancy agreement routes for England, Wales, Scotland, and Northern Ireland',
-                    'Guidance and documents that are easy to review, download, and print',
-                  ].map((item) => (
-                    <div key={item} className="rounded-[1.4rem] border border-white/10 bg-white/7 px-4 py-4">
-                      <div className="flex items-start gap-3 text-white">
-                        <RiCheckLine className="mt-1 h-5 w-5 shrink-0 text-[#d7c2ff]" />
-                        <span className="text-sm leading-6 text-white/82">{item}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      <section className="pb-16 pt-4 md:pb-20">
-        <Container>
-          <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
-            <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'px-6 py-8 md:px-8')}>
-              <span className="public-eyebrow">Product assurance</span>
-              <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-4xl">
-                Check the scope before you commit
-              </h2>
-                <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                  <div className="public-stat-card px-5 py-5">
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6b3fd1]">
-                      Transparent pricing
-                    </p>
-                    <p className="mt-3 text-2xl font-bold text-[#1c1431] md:text-3xl">One-time price</p>
-                    <p className="mt-2 text-sm text-[#5d5672]">
-                      Product scope and price are shown before checkout.
-                    </p>
-                  </div>
-                <div className="public-stat-card px-5 py-5">
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6b3fd1]">
-                    Preview and checks
-                  </p>
-                  <p className="mt-3 text-2xl font-bold text-[#1c1431] md:text-3xl">Review before payment</p>
-                  <p className="mt-2 text-sm text-[#5d5672]">
-                    See the available output and suitability checks before paying.
-                  </p>
-                </div>
-              </div>
-              <p className="mt-6 text-[15px] leading-7 text-[#5d5672]">
-                When something has gone wrong, landlords want a product that feels
-                clear, current, and worth paying for.
-              </p>
-            </div>
-
-              <Reveal className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'overflow-hidden px-6 py-8 md:px-8')}>
-                <PremiumImageFrame className="rounded-[2rem]">
-                  <Image
-                    src="/images/See-the-product-before-you-commit2.webp"
-                    alt="See the product before you commit"
-                    width={160}
-                    height={158}
-                    sizes="(max-width: 768px) 100vw, 80vw"
-                    className="h-auto w-full"
-                  />
-                </PremiumImageFrame>
-              </Reveal>
-          </div>
-        </Container>
-      </section>
-
-      <section className="pb-18 pt-4 md:pb-24">
-        <Container>
-          <div className={clsx(PUBLIC_LAYOUT_CLASSES.darkPanel, 'px-6 py-10 text-center md:px-12 md:py-12')}>
-            <span className="inline-flex rounded-full border border-white/15 bg-white/8 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/85">
-              Start now
-            </span>
-            <h2 className="mt-5 text-3xl font-bold tracking-tight text-white md:text-5xl">
-              Choose the next step and keep the paperwork moving
+      <section
+        className="relative overflow-hidden border-y border-[#E8E1F8] bg-[radial-gradient(circle_at_78%_42%,rgba(176,132,255,0.28),transparent_30%),linear-gradient(135deg,#FFFFFF_0%,#F6F1FF_55%,#EEE7FF_100%)] px-4 py-12 sm:px-6 lg:px-8 lg:py-16"
+        data-visual-cta
+      >
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(145deg,transparent_0%,transparent_48%,rgba(255,255,255,0.45)_48%,rgba(255,255,255,0.45)_62%,transparent_62%)] opacity-50" />
+        <div className="relative mx-auto grid max-w-[94rem] gap-10 lg:grid-cols-[1fr_1.05fr] lg:items-center">
+          <div>
+            <p className="inline-flex rounded-full bg-[#EEE7FF] px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] text-[#6D28D9]">
+              Landlord documents
+            </p>
+            <h2 className="mt-5 text-4xl font-bold tracking-tight text-[#11102A] sm:text-5xl lg:text-[3.35rem] lg:leading-[1.04]">
+              <span className="block">Choose the landlord job</span>{' '}
+              <span className="block text-[#6D28D9]">and get the right paperwork moving</span>
             </h2>
-            <p className="mx-auto mt-4 max-w-3xl text-lg leading-8 text-white/78">
-              The job should be obvious before the jargon starts. Start with the
-              situation you are dealing with, then move into the right paperwork.
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-[#536078]">
+              Start with the situation you need to deal with. We will take you to the matching
+              notice, court, debt, rent-increase, or tenancy-agreement route.
             </p>
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <TrackedLink
-                href="#homepage-route-selector"
-                pagePath="/"
-                pageType="homepage"
-                ctaLabel="Choose the right next step"
-                ctaPosition="final"
-                eventName="homepage_primary_cta_click"
-                className="hero-btn-primary"
-                onClick={(event) => {
-                  if (smoothScrollToHash('#homepage-route-selector')) {
-                    event.preventDefault();
-                  }
-                }}
-              >
-                Choose the right next step
-              </TrackedLink>
+
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              <div className="flex min-h-20 items-center gap-3 rounded-2xl border border-white/80 bg-white/55 p-3.5 shadow-[0_10px_30px_rgba(83,49,138,0.06)] backdrop-blur-sm">
+                <Scale aria-hidden="true" className="h-7 w-7 shrink-0 text-[#6D28D9]" />
+                <span>
+                  <strong className="block text-sm font-bold leading-5 text-[#17142B]">Possession</strong>
+                  <span className="block text-xs leading-5 text-[#5E6A80]">Notice and court routes</span>
+                </span>
+              </div>
+              <div className="flex min-h-20 items-center gap-3 rounded-2xl border border-white/80 bg-white/55 p-3.5 shadow-[0_10px_30px_rgba(83,49,138,0.06)] backdrop-blur-sm">
+                <PoundSterling aria-hidden="true" className="h-7 w-7 shrink-0 text-[#6D28D9]" />
+                <span>
+                  <strong className="block text-sm font-bold leading-5 text-[#17142B]">Recover money</strong>
+                  <span className="block text-xs leading-5 text-[#5E6A80]">Debt-claim paperwork</span>
+                </span>
+              </div>
+              <div className="flex min-h-20 items-center gap-3 rounded-2xl border border-white/80 bg-white/55 p-3.5 shadow-[0_10px_30px_rgba(83,49,138,0.06)] backdrop-blur-sm">
+                <House aria-hidden="true" className="h-7 w-7 shrink-0 text-[#6D28D9]" />
+                <span>
+                  <strong className="block text-sm font-bold leading-5 text-[#17142B]">Tenancy and rent</strong>
+                  <span className="block text-xs leading-5 text-[#5E6A80]">Agreements and increases</span>
+                </span>
+              </div>
             </div>
-            <p className="mt-5 text-sm text-white/66">
-              England notices and court paperwork, plus tenancy-agreement routes across the UK.
-              Clear next steps, strong checks, and documents ready to review and print.
+
+            <TrackedLink
+              href="#homepage-route-selector"
+              pagePath="/"
+              pageType="homepage"
+              ctaLabel="Choose the right next step"
+              ctaPosition="final"
+              eventName="homepage_primary_cta_click"
+              className="mt-6 inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#5B21B6] to-[#7C3AED] px-5 py-3 text-center text-sm font-bold text-white shadow-[0_14px_30px_rgba(91,33,182,0.24)] transition hover:-translate-y-0.5 hover:brightness-110 sm:w-auto sm:min-w-80"
+              onClick={(event) => {
+                if (smoothScrollToHash('#homepage-route-selector')) {
+                  event.preventDefault();
+                }
+              }}
+            >
+              Choose the right next step
+              <ArrowRight aria-hidden="true" className="h-4 w-4" />
+            </TrackedLink>
+            <p className="mt-4 flex items-start gap-2 text-sm leading-6 text-[#536078]">
+              <Check aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-[#6D28D9]" />
+              Choose the situation first, then review the exact scope and price before payment.
             </p>
           </div>
-        </Container>
+
+          <div className="relative min-h-[24rem] sm:min-h-[30rem]">
+            <Image
+              src="/images/illustrations/product-banners/homepage-route-selector-conversion-v1.webp"
+              alt="Landlord document routes for notices, money claims, tenancy agreements and rent increases"
+              fill
+              unoptimized
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-contain object-center"
+            />
+            <div className="absolute inset-x-4 bottom-0 mx-auto flex max-w-xl items-center gap-4 rounded-2xl border border-[#D7C7FF] bg-white/80 p-5 text-left shadow-[0_18px_50px_rgba(91,33,182,0.14)] backdrop-blur-md sm:inset-x-10">
+              <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-[#7C3AED] to-[#5B21B6] text-white shadow-lg">
+                <Check aria-hidden="true" className="h-8 w-8" />
+              </span>
+              <span>
+                <strong className="block text-base font-bold text-[#5B21B6]">One clear route for the job in front of you</strong>
+                <span className="mt-1 block text-sm leading-5 text-[#38455D]">Choose the landlord task, then move into the matching paperwork.</span>
+              </span>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   );

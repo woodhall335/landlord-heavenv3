@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import sharp from 'sharp';
 import { describe, expect, it } from 'vitest';
 
 const CARD_ASSET_ROOT = path.join(
@@ -123,11 +124,32 @@ describe('product document-card artwork', () => {
     expect(completePage).toContain('alignImageToSteps: true');
     expect(completePage).not.toContain('objectionBlock:');
     expect(moneyPage).toContain(`/images/illustrations/product-banners/${assets[0]}`);
+    expect(moneyPage).toContain('/images/illustrations/product-banners/money-claim-conversion-v2.webp');
+    expect(moneyPage).not.toContain('guideLinks: descriptor.defaultGuideLinks');
     expect(noticePage).toContain(`/images/illustrations/product-banners/${assets[1]}`);
     expect(completePage).toContain(`/images/illustrations/product-banners/${assets[2]}`);
     expect(rentIncreasePage).toContain(`/images/illustrations/product-banners/${assets[3]}`);
     for (const asset of assets) {
       expect(fs.existsSync(path.join(BANNER_ASSET_ROOT, asset))).toBe(true);
+    }
+  });
+
+  it('keeps the new homepage and money-claim banner illustrations genuinely transparent', async () => {
+    const assets = [
+      'homepage-route-selector-conversion-v1.webp',
+      'money-claim-conversion-v2.webp',
+    ];
+
+    for (const asset of assets) {
+      const assetPath = path.join(BANNER_ASSET_ROOT, asset);
+      const metadata = await sharp(assetPath).metadata();
+      const stats = await sharp(assetPath).stats();
+
+      expect(fs.existsSync(assetPath)).toBe(true);
+      expect(metadata.width).toBe(1536);
+      expect(metadata.height).toBe(1024);
+      expect(metadata.hasAlpha).toBe(true);
+      expect(stats.channels[3]?.min).toBe(0);
     }
   });
 });

@@ -18,6 +18,16 @@ const TRANSPARENT_ASSETS = [
   ['tenancy-jurisdictions/england-tenancy-selection-steps-v1.webp', 1200, 900],
 ] as const;
 
+const STANDARD_WATERCOLOUR_ASSETS = [
+  ['tenancy-standard/answers-to-agreement-watercolour-v2.webp', 1536, 1024],
+  ['tenancy-standard/joined-tenancy-file-watercolour-v2.webp', 1536, 1024],
+  ['tenancy-standard/check-preview-watercolour-v2.webp', 1536, 1024],
+  ['tenancy-standard/standard-agreement-watercolour-v2.webp', 1536, 1024],
+  ['tenancy-standard/guided-setup-watercolour-v2.webp', 1536, 1024],
+  ['tenancy-standard/agreement-selector-watercolour-v2.webp', 1536, 1024],
+  ['tenancy-standard/standard-how-it-works-watercolour-v3.webp', 1122, 1402],
+] as const;
+
 describe('tenancy page visual refresh', () => {
   it.each(TRANSPARENT_ASSETS)('keeps %s genuinely transparent', async (asset, width, height) => {
     const assetPath = join(ROOT, 'public/images/illustrations', asset);
@@ -32,13 +42,31 @@ describe('tenancy page visual refresh', () => {
     expect(stats.channels[3]?.max).toBeGreaterThanOrEqual(254);
   });
 
-  it('uses the four bespoke Standard tenancy illustrations', () => {
+  it.each(STANDARD_WATERCOLOUR_ASSETS)('keeps %s at its intended crop', async (asset, width, height) => {
+    const assetPath = join(ROOT, 'public/images/illustrations', asset);
+    expect(existsSync(assetPath)).toBe(true);
+
+    const metadata = await sharp(assetPath).metadata();
+    expect(metadata.width).toBe(width);
+    expect(metadata.height).toBe(height);
+  });
+
+  it('uses the complete Standard tenancy watercolour set', () => {
     const page = read('src/app/standard-tenancy-agreement/page.tsx');
-    for (const [asset] of TRANSPARENT_ASSETS.slice(0, 4)) {
+    for (const [asset] of STANDARD_WATERCOLOUR_ASSETS) {
       expect(page).toContain(`/images/illustrations/${asset}`);
     }
     expect(page).not.toContain('/images/wizard-standard-tenancy-agreement.webp');
     expect(page).not.toContain('/images/tenancy-agreement-selector.webp');
+    expect(page).not.toContain('/images/standard-tenancy-desktop.webp');
+    expect(page).not.toContain('jurisdiction-explainer-heading');
+    expect(page).toContain('data-standard-pack-workflow="true"');
+    expect(page).not.toContain('agreement-built-from-answers-v1.png');
+    expect(page).not.toContain('joined-up-setup-records-v1.png');
+    expect(page).not.toContain('validation-checks-v1.png');
+    expect(page).toContain('showFitGuidance={false}');
+    expect(page).toContain('showCoverageSummary={false}');
+    expect(page).toContain('showVisualCtaPrimaryArrow={false}');
   });
 
   it('uses the shared jurisdiction banner on Wales, Scotland and Northern Ireland', () => {
@@ -73,6 +101,7 @@ describe('tenancy page visual refresh', () => {
     expect(page).toContain('england-tenancy-options-v1.webp');
     expect(page).toContain('england-tenancy-selection-steps-v1.webp');
     expect(page).toContain('alignImageToSteps: true');
+    expect(page).not.toContain('Not sure which agreement? Compare all England options');
   });
 
   it('uses the full sales-page rhythm for FAQs by default', () => {

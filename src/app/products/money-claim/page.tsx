@@ -359,7 +359,33 @@ export default function MoneyClaimPage() {
         label: 'Need possession instead?',
         href: '/products/complete-pack',
       },
-      guideLinks: descriptor.defaultGuideLinks,
+      visual: {
+        eyebrow: 'Money Claim Pack',
+        highlightedText: 'without piecing it together',
+        artworkSrc: '/images/illustrations/product-banners/money-claim-conversion-v2.webp',
+        artworkAlt:
+          'Money claim pack with letter before claim, debt schedule, MCOL and N1 paperwork',
+        features: [
+          {
+            title: 'Letter before claim',
+            body: 'Begin with a clear demand',
+            icon: 'document',
+          },
+          {
+            title: 'Debt schedule',
+            body: 'Set out rent, damage and bills',
+            icon: 'chart',
+          },
+          {
+            title: 'Claim guidance',
+            body: 'Follow the MCOL or N1 route',
+            icon: 'scale',
+          },
+        ],
+        reassuranceTitle: 'One connected debt-recovery file',
+        reassuranceBody:
+          'Keep the demand letter, figures, claim papers and next steps together.',
+      },
     },
     faq: {
       title: 'Money Claim Pack FAQs',

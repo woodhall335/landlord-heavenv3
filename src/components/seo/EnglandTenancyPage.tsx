@@ -102,6 +102,8 @@ interface EnglandTenancySalesContent {
     steps: ProductSalesStep[];
     imageSrc?: string;
     imageAlt?: string;
+    imageFit?: 'cover' | 'contain';
+    imagePadding?: boolean;
   };
   ctaTitle: string;
   ctaBody: ReactNode;
@@ -137,6 +139,10 @@ interface EnglandTenancyPageProps {
     width: number;
     height: number;
   };
+  workflowSection?: ReactNode;
+  showFitGuidance?: boolean;
+  showCoverageSummary?: boolean;
+  showVisualCtaPrimaryArrow?: boolean;
   heroPreTitleLabel?: string;
   heroBadge?: string;
   heroTrustText?: string;
@@ -269,6 +275,7 @@ function EnglandTenancyVisualCta({
   secondaryCtaHref,
   secondaryCtaLabel,
   routes,
+  showPrimaryCtaArrow,
 }: {
   content: EnglandTenancySalesContent;
   primaryCtaHref: string;
@@ -276,6 +283,7 @@ function EnglandTenancyVisualCta({
   secondaryCtaHref?: string;
   secondaryCtaLabel?: string;
   routes: EnglandTenancyRouteCard[];
+  showPrimaryCtaArrow: boolean;
 }) {
   const visual = content.ctaVisual;
 
@@ -333,13 +341,15 @@ function EnglandTenancyVisualCta({
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
             <Link
               href={primaryCtaHref}
-              className="hero-btn-primary relative inline-flex min-h-14 items-center justify-center rounded-xl px-5 py-3 pr-12 text-center text-sm font-semibold sm:text-base"
+              className={`hero-btn-primary relative inline-flex min-h-14 items-center justify-center rounded-xl px-5 py-3 text-center text-sm font-semibold sm:text-base ${showPrimaryCtaArrow ? 'pr-12' : ''}`}
             >
               {primaryCtaLabel}
-              <ArrowRight
-                aria-hidden="true"
-                className="absolute right-5 h-5 w-5 shrink-0"
-              />
+              {showPrimaryCtaArrow ? (
+                <ArrowRight
+                  aria-hidden="true"
+                  className="absolute right-5 h-5 w-5 shrink-0"
+                />
+              ) : null}
             </Link>
             {secondaryCtaHref && secondaryCtaLabel ? (
               <Link
@@ -412,6 +422,10 @@ export function EnglandTenancyPage({
   finalCtaBody,
   salesContent,
   workflowImageLink,
+  workflowSection,
+  showFitGuidance = true,
+  showCoverageSummary = true,
+  showVisualCtaPrimaryArrow = true,
   heroPreTitleLabel = 'Landlord document preparation',
   heroBadge = 'England tenancy agreements',
   heroTrustText = 'Current England tenancy setup packs for landlords, updated for the post-May 2026 rules.',
@@ -485,7 +499,9 @@ export function EnglandTenancyPage({
               </div>
             </section>
 
-            {workflowImageLink ? (
+            {workflowSection ? (
+              workflowSection
+            ) : workflowImageLink ? (
               <section className="mb-12">
                 <Link href={workflowImageLink.href} className="block w-full">
                   <picture>
@@ -525,6 +541,7 @@ export function EnglandTenancyPage({
                   </div>
                 </section>
 
+                {showFitGuidance ? (
                 <section className="mb-12 grid gap-8 lg:grid-cols-2">
                   <div className="rounded-[2rem] border border-[#D9EAD7] bg-[#F5FBF2] p-6 shadow-[0_14px_32px_rgba(29,92,54,0.06)]">
                     <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
@@ -554,10 +571,11 @@ export function EnglandTenancyPage({
                     </ul>
                   </div>
                 </section>
+                ) : null}
               </>
             )}
 
-            {workflowImageLink && (idealFor.length || notFor.length) ? (
+            {(workflowImageLink || workflowSection) && showFitGuidance && (idealFor.length || notFor.length) ? (
               <section className="mb-12 grid gap-8 lg:grid-cols-2">
                 <div className="rounded-[2rem] border border-[#D9EAD7] bg-[#F5FBF2] p-6 shadow-[0_14px_32px_rgba(29,92,54,0.06)]">
                   <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
@@ -589,6 +607,7 @@ export function EnglandTenancyPage({
               </section>
             ) : null}
 
+            {showCoverageSummary ? (
             <section className="mb-12 grid gap-8 lg:grid-cols-2">
               <div className="rounded-[2rem] border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]">
                 <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
@@ -618,6 +637,7 @@ export function EnglandTenancyPage({
                 </ul>
               </div>
             </section>
+            ) : null}
 
             {salesContent.sampleProof ? (
               <section className="mb-12">
@@ -795,7 +815,11 @@ export function EnglandTenancyPage({
                           alt={card.imageAlt || card.title}
                           fill
                           sizes="(min-width: 768px) 33vw, 100vw"
-                          className="object-contain object-center p-2"
+                          className={
+                            card.imageFit === 'cover'
+                              ? 'object-cover object-center'
+                              : 'object-contain object-center p-2'
+                          }
                         />
                       </div>
                     ) : null}
@@ -844,7 +868,13 @@ export function EnglandTenancyPage({
                     alt={salesContent.howItWorks.imageAlt ?? 'Tenancy agreement steps preview'}
                     fill
                     sizes="(min-width: 1024px) 66vw, 100vw"
-                    className="object-contain p-4 sm:p-6"
+                    className={
+                      salesContent.howItWorks.imageFit === 'cover'
+                        ? 'object-cover object-center'
+                        : salesContent.howItWorks.imagePadding === false
+                          ? 'object-contain object-center'
+                          : 'object-contain object-center p-4 sm:p-6'
+                    }
                   />
                 </div>
               </div>
@@ -1024,6 +1054,7 @@ export function EnglandTenancyPage({
             secondaryCtaHref={secondaryCtaHref}
             secondaryCtaLabel={secondaryCtaLabel}
             routes={isSalesMode ? routeComparison : []}
+            showPrimaryCtaArrow={showVisualCtaPrimaryArrow}
           />
         ) : (
           <section className="mt-12 rounded-[2.2rem] bg-gradient-to-br from-[#201739] via-[#31205B] to-[#5641A4] p-8 text-center text-white shadow-[0_28px_72px_rgba(46,29,86,0.28)] md:p-10">

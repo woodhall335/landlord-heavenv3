@@ -32,6 +32,7 @@ export interface ProductSalesCard {
   body: string;
   imageSrc?: string;
   imageAlt?: string;
+  imageFit?: 'cover' | 'contain';
 }
 
 export interface ProductSalesDecisionCard {

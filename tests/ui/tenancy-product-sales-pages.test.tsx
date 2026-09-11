@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
 
 vi.mock('next/image', () => ({
@@ -212,6 +212,23 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 describe('exact tenancy product sales pages', () => {
+  beforeEach(() => {
+    Object.defineProperty(window, 'matchMedia', {
+      configurable: true,
+      writable: true,
+      value: vi.fn().mockImplementation((query: string) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })),
+    });
+  });
+
   afterEach(() => {
     cleanup();
     document.body.innerHTML = '';
@@ -266,4 +283,44 @@ describe('exact tenancy product sales pages', () => {
       expect(faqSchemas).toHaveLength(1);
     });
   }
+
+  it('renders the Standard workflow as real content without the removed duplicate sections', async () => {
+    await renderPage(() => import('@/app/standard-tenancy-agreement/page'));
+
+    expect(
+      screen.getByRole('heading', {
+        level: 2,
+        name: 'Build the tenancy file in one guided flow',
+      })
+    ).toBeInTheDocument();
+    expect(screen.getByText('Agreement built from your answers')).toBeInTheDocument();
+    expect(screen.getByText('Setup records kept together')).toBeInTheDocument();
+    expect(screen.getByText('Checks before checkout')).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: /Build and preview my Standard pack/i })
+    ).toHaveAttribute(
+      'href',
+      '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=england_standard_tenancy_agreement&src=standard_tenancy_page&topic=tenancy'
+    );
+    expect(
+      screen.queryByRole('heading', { name: 'One UK selector, four different legal frameworks' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', { name: 'Choose this agreement if' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', { name: 'Choose a different agreement if' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', { name: 'What this agreement covers' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', { name: 'How this fits the current England rules' })
+    ).not.toBeInTheDocument();
+
+    const finalCta = document.querySelector('[data-tenancy-visual-cta]');
+    const jurisdictionCta = finalCta?.querySelector('a[href="#choose-jurisdiction"]');
+    expect(jurisdictionCta).toBeInTheDocument();
+    expect(jurisdictionCta?.querySelector('svg')).toBeNull();
+  });
 });
