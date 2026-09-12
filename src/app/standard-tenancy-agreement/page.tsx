@@ -109,15 +109,12 @@ function StandardPackWorkflowSection() {
           </div>
         </div>
 
-        <div className="relative min-h-[390px] overflow-hidden border-t border-[#DDD5F3] bg-[radial-gradient(circle_at_55%_40%,#FFFFFF_0%,#EEE8FF_48%,#DDD2FF_100%)] p-6 sm:min-h-[460px] sm:p-8 lg:min-h-full lg:border-l lg:border-t-0">
-          <div className="absolute -right-20 -top-24 h-72 w-72 rounded-full bg-[#8B5CF6]/15 blur-3xl" />
-          <div className="absolute -bottom-28 -left-20 h-72 w-72 rounded-full bg-white/80 blur-3xl" />
+        <div className="relative min-h-[460px] overflow-hidden border-t border-[#DDD5F3] bg-[#EEE8FF] sm:min-h-[560px] lg:min-h-full lg:border-l lg:border-t-0">
           <Image
-            src="/images/illustrations/tenancy-standard/standard-agreement-watercolour-v2.webp"
-            alt="Standard tenancy agreement, England property, checklist and keys"
-            width={1536}
-            height={1024}
-            className="relative z-10 mx-auto h-full max-h-[430px] w-full object-contain"
+            src="/images/illustrations/tenancy-standard/standard-pack-panel-watercolour-v3.webp"
+            alt="Standard Tenancy Pack for England with agreement, supporting records and validation checks"
+            fill
+            className="object-cover object-center"
             sizes="(min-width: 1024px) 46vw, 100vw"
           />
           <div className="absolute inset-x-6 bottom-6 z-20 rounded-2xl border border-white/80 bg-white/90 p-4 shadow-[0_16px_36px_rgba(49,32,91,0.14)] backdrop-blur sm:inset-x-8 sm:bottom-8">

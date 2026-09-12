@@ -313,8 +313,9 @@ const jurisdictionCards: JurisdictionCard[] = [
     description: 'For a standard England let, with specialist options for student, shared-house and lodger arrangements.',
     href: '/products/ast',
     flagSrc: '/gb-eng.svg',
-    imageSrc: '/images/illustrations/tenancy-jurisdictions/england-assured-periodic-waterbrush-v2.webp',
-    imageAlt: 'Watercolour illustration of an England tenancy agreement and property keys',
+    imageSrc:
+      '/images/illustrations/tenancy-jurisdictions/homepage-england-tenancy-labelled-v3.webp',
+    imageAlt: 'England Assured Periodic Tenancy agreement with property keys and checklist',
   },
   {
     name: 'Wales',
@@ -322,8 +323,9 @@ const jurisdictionCards: JurisdictionCard[] = [
     description: 'Choose the Welsh fixed-term or periodic occupation-contract route before entering the tenancy details.',
     href: '/wales-tenancy-agreement-template',
     flagSrc: '/gb-wls.svg',
-    imageSrc: '/images/illustrations/tenancy-jurisdictions/wales-occupation-contract-waterbrush-v2.webp',
-    imageAlt: 'Watercolour illustration of a Wales occupation contract and landlord paperwork',
+    imageSrc:
+      '/images/illustrations/tenancy-jurisdictions/homepage-wales-contract-labelled-v3.webp',
+    imageAlt: 'Wales Standard Occupation Contract with fixed-term or periodic choice',
   },
   {
     name: 'Scotland',
@@ -331,8 +333,9 @@ const jurisdictionCards: JurisdictionCard[] = [
     description: 'Use the Scotland-specific PRT workflow for the open-ended private residential tenancy framework.',
     href: '/private-residential-tenancy-agreement-template',
     flagSrc: '/gb-sct.svg',
-    imageSrc: '/images/illustrations/tenancy-jurisdictions/scotland-prt-waterbrush-v2.webp',
-    imageAlt: 'Watercolour illustration of a Scotland private residential tenancy agreement',
+    imageSrc:
+      '/images/illustrations/tenancy-jurisdictions/homepage-scotland-prt-labelled-v3.webp',
+    imageAlt: 'Scotland Private Residential Tenancy agreement labelled open-ended PRT',
   },
   {
     name: 'Northern Ireland',
@@ -340,8 +343,9 @@ const jurisdictionCards: JurisdictionCard[] = [
     description: 'Start with the Northern Ireland wording and supporting setup route for the property location.',
     href: '/northern-ireland-tenancy-agreement-template',
     flagSrc: '/gb-nir.svg',
-    imageSrc: '/images/illustrations/tenancy-jurisdictions/northern-ireland-private-tenancy-waterbrush-v2.webp',
-    imageAlt: 'Watercolour illustration of a Northern Ireland tenancy agreement and keys',
+    imageSrc:
+      '/images/illustrations/tenancy-jurisdictions/homepage-northern-ireland-tenancy-labelled-v3.webp',
+    imageAlt: 'Northern Ireland Private Tenancy Agreement with property keys and checklist',
   },
 ];
 

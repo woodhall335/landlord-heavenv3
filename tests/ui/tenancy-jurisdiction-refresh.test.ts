@@ -28,6 +28,16 @@ const STANDARD_WATERCOLOUR_ASSETS = [
   ['tenancy-standard/standard-how-it-works-watercolour-v3.webp', 1122, 1402],
 ] as const;
 
+const LABELLED_CONVERSION_ASSETS = [
+  ['tenancy-standard/standard-pack-panel-watercolour-v3.webp', 1024, 1536],
+  ['services/section8-assisted-service-watercolour-v3.webp', 1536, 961],
+  ['services/full-eviction-assisted-service-watercolour-v3.webp', 1536, 961],
+  ['tenancy-jurisdictions/homepage-england-tenancy-labelled-v3.webp', 1536, 767],
+  ['tenancy-jurisdictions/homepage-wales-contract-labelled-v3.webp', 1536, 768],
+  ['tenancy-jurisdictions/homepage-scotland-prt-labelled-v3.webp', 1536, 768],
+  ['tenancy-jurisdictions/homepage-northern-ireland-tenancy-labelled-v3.webp', 1536, 768],
+] as const;
+
 describe('tenancy page visual refresh', () => {
   it.each(TRANSPARENT_ASSETS)('keeps %s genuinely transparent', async (asset, width, height) => {
     const assetPath = join(ROOT, 'public/images/illustrations', asset);
@@ -51,6 +61,18 @@ describe('tenancy page visual refresh', () => {
     expect(metadata.height).toBe(height);
   });
 
+  it.each(LABELLED_CONVERSION_ASSETS)(
+    'keeps labelled conversion asset %s at its intended crop',
+    async (asset, width, height) => {
+      const assetPath = join(ROOT, 'public/images/illustrations', asset);
+      expect(existsSync(assetPath)).toBe(true);
+
+      const metadata = await sharp(assetPath).metadata();
+      expect(metadata.width).toBe(width);
+      expect(metadata.height).toBe(height);
+    }
+  );
+
   it('uses the complete Standard tenancy watercolour set', () => {
     const page = read('src/app/standard-tenancy-agreement/page.tsx');
     for (const [asset] of STANDARD_WATERCOLOUR_ASSETS) {
@@ -67,6 +89,22 @@ describe('tenancy page visual refresh', () => {
     expect(page).toContain('showFitGuidance={false}');
     expect(page).toContain('showCoverageSummary={false}');
     expect(page).toContain('showVisualCtaPrimaryArrow={false}');
+    expect(page).toContain('standard-pack-panel-watercolour-v3.webp');
+    expect(page).toContain('className="object-cover object-center"');
+  });
+
+  it('uses labelled service and jurisdiction artwork on the homepage', () => {
+    const homepage = read('src/components/landing/HomeContent.tsx');
+    const assistedShowcase = read(
+      'src/components/assisted-prep/AssistedPrepServicesShowcase.tsx'
+    );
+
+    for (const [asset] of LABELLED_CONVERSION_ASSETS.slice(3)) {
+      expect(homepage).toContain(`/images/illustrations/${asset}`);
+    }
+    expect(assistedShowcase).toContain('section8-assisted-service-watercolour-v3.webp');
+    expect(assistedShowcase).toContain('full-eviction-assisted-service-watercolour-v3.webp');
+    expect(assistedShowcase).toContain('className="object-cover object-center');
   });
 
   it('uses the shared jurisdiction banner on Wales, Scotland and Northern Ireland', () => {

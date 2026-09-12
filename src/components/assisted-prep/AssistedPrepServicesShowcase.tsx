@@ -40,8 +40,9 @@ const assistedPrepCards: AssistedPrepShowcaseCard[] = [
     product: 'notice_only',
     priceLabel: getAssistedPrepConfig('section8').priceLabel,
     ctaLabel: 'Book free consultation',
-    imageSrc: '/images/illustrations/services/section8-service-evidence-waterbrush-v2.webp',
-    imageAlt: 'Waterbrush illustration of a landlord checking a Section 8 notice and service file',
+    imageSrc: '/images/illustrations/services/section8-assisted-service-watercolour-v3.webp',
+    imageAlt:
+      'Section 8 Notice Assistance with Form 3A, grounds and dates, service plan and rent ledger',
     routeIntent: 'section8_assisted_prep',
   },
   {
@@ -53,8 +54,10 @@ const assistedPrepCards: AssistedPrepShowcaseCard[] = [
     product: 'complete_pack',
     priceLabel: getAssistedPrepConfig('possession').priceLabel,
     ctaLabel: 'Book free consultation',
-    imageSrc: '/images/illustrations/services/possession-court-evidence-waterbrush-v2.webp',
-    imageAlt: 'Waterbrush illustration of a landlord preparing a possession claim bundle',
+    imageSrc:
+      '/images/illustrations/services/full-eviction-assisted-service-watercolour-v3.webp',
+    imageAlt:
+      'Full Eviction Assistance from Form 3A through N5 and N119 to the court bundle',
     routeIntent: 'possession_assisted_prep',
   },
   {
@@ -132,7 +135,7 @@ export function AssistedPrepServicesShowcase({
                 alt={card.imageAlt}
                 fill
                 sizes="(max-width: 1024px) 100vw, 31vw"
-                className="object-contain object-center transition duration-500 group-hover:scale-[1.025]"
+                className="object-cover object-center transition duration-500 group-hover:scale-[1.025]"
               />
             </div>
             <div className="flex min-h-[18rem] flex-col p-5">
