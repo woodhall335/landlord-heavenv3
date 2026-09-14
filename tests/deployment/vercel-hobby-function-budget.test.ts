@@ -31,11 +31,15 @@ describe('Vercel Hobby function budget', () => {
     expect(explicitlyConfiguredNodeRoutes).toEqual([]);
   });
 
-  it('does not split Next.js routes with per-route vercel.json function overrides', () => {
+  it('uses one common function configuration so App Router routes remain bundle-compatible', () => {
     const vercelConfig = JSON.parse(
       fs.readFileSync(path.join(repositoryRoot, 'vercel.json'), 'utf8'),
-    ) as { functions?: unknown };
+    ) as { functions?: Record<string, { maxDuration?: number }> };
 
-    expect(vercelConfig.functions).toBeUndefined();
+    expect(vercelConfig.functions).toEqual({
+      'src/app/**/*.{ts,tsx}': {
+        maxDuration: 300,
+      },
+    });
   });
 });
