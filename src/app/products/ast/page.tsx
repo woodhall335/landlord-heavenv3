@@ -150,14 +150,24 @@ const faqs: FAQItem[] = [
       'Because each option solves a different tenancy risk. The public pages now match the setup more honestly instead of pretending one agreement suits every kind of let.',
   },
   {
-    question: 'Should I still use this if I searched for AST?',
+    question: 'I searched for an AST or periodic tenancy agreement. Where should I start?',
     answer:
-      'Yes, but AST wording is now legacy for new England lets from 1 May 2026. Use this page to choose the current assured periodic tenancy agreement that fits the property and occupiers.',
+      'Start with Standard or Premium for an ordinary whole-property let in England. Both follow the current assured periodic framework: Standard is the simpler option, while Premium adds fuller management wording. If you searched for an AST, treat that as legacy terminology for a new England tenancy from 1 May 2026.',
   },
   {
-    question: 'What if I searched for periodic tenancy agreement or assured periodic tenancy agreement?',
+    question: "Are these tenancy agreements Renters' Rights Act compliant?",
     answer:
-      "You are in the right place. Standard and Premium are the current England assured periodic options. Compare them here, or read the assured periodic guide first if you want the terminology explained.",
+      "Yes. The England agreement routes are designed around the post-May 2026 assured periodic framework and address the written-information, rent increase, possession, pets and management points relevant to the product you choose.",
+  },
+  {
+    question: 'How do I know if I need a specialist agreement?',
+    answer:
+      'Choose Student for a student household and guarantor arrangements, HMO / Shared House for communal living and house rules, and Lodger when the landlord lives in the property. Standard and Premium are for ordinary whole-property lets.',
+  },
+  {
+    question: 'What if I choose the wrong agreement type?',
+    answer:
+      'Compare the property and occupier setup on this page before starting the builder. Each option has a dedicated product page and pack breakdown, helping you check that the paperwork matches the way the property will actually be let before you enter detailed information or pay.',
   },
   {
     question: 'Where do I get the full pack breakdown for each agreement?',
@@ -249,33 +259,6 @@ export default function EnglandTenancyHubPage() {
       intro:
         'Compare the five England agreement options. Standard is the usual assured periodic tenancy agreement for ordinary lets, Premium adds fuller management wording, and the specialist options cover student, shared-house, and lodger setups.',
       routeCards,
-    },
-    objectionBlock: {
-      title: 'Common landlord questions before choosing an England tenancy agreement',
-      intro:
-        'Most mistakes happen before the agreement is generated. These are the points landlords usually check first.',
-      items: [
-        {
-          question: 'I searched for AST or periodic tenancy agreement. Where should I start?',
-          answer:
-            "Usually with Standard or Premium. Those are the England whole-property assured periodic tenancy agreement options, and this page helps you choose between the simpler pack and the fuller management pack. If you searched for AST, treat that as legacy wording for new England lets.",
-        },
-        {
-          question: "Is this Renters' Rights Act compliant?",
-          answer:
-            "Yes. The England routes are positioned around the post-May 2026 assured periodic framework, including the written-information, rent increase, possession, pets, and management wording landlords need to consider.",
-        },
-        {
-          question: 'How do I know if I need a specialist product?',
-          answer:
-            'Use Student for student occupation and guarantors, HMO / Shared House for communal living and house rules, and Lodger when the landlord lives in the property.',
-        },
-        {
-          question: 'What if I buy the wrong agreement type?',
-          answer:
-            'This comparison page is meant to prevent that. It helps the paperwork match the way the property is actually being let before you start answering detailed questions.',
-        },
-      ],
     },
     midPageCta: {
       title: 'Ready to choose the agreement?',

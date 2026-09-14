@@ -12,8 +12,11 @@ describe('tenancy product pages', () => {
 
     expect(source).toContain('Choose by how the property is let');
     expect(source).toContain('Compare the five England agreement options.');
-    expect(source).toContain('Choose the agreement before you start');
-    expect(source).toContain('Common landlord questions before choosing an England tenancy agreement');
+    expect(source).toContain("Choose the Renters' Rights Act compliant agreement that fits the let");
+    expect(source).toContain('England tenancy agreement FAQs');
+    expect(source).toContain('I searched for an AST or periodic tenancy agreement. Where should I start?');
+    expect(source).not.toContain('objectionBlock:');
+    expect(source).not.toContain('Clarity first. Legal detail second.');
     expect(source).toContain('Standard, Premium, Student, HMO, and Lodger');
     expect(source).toContain('pricingItemListSchema');
   });
@@ -77,8 +80,8 @@ describe('tenancy product pages', () => {
 
     expect(standardSource).toContain('PRODUCT_OWNER_METADATA.standardTenancy.description');
     expect(standardSource).toContain('England, Wales, Scotland and Northern Ireland');
-    expect(standardSource).toContain('One UK selector, four different legal frameworks');
-    expect(standardSource).toContain('The detailed comparison below is for England.');
+    expect(standardSource).not.toContain('One UK selector, four different legal frameworks');
+    expect(standardSource).not.toContain('The detailed comparison below is for England.');
     expect(standardSource).toContain('Standard Periodic Tenancy Agreement');
     expect(standardSource).toContain('assured periodic');
     expect(standardSource).toContain('Renters Rights Act tenancy agreement');
