@@ -31,15 +31,11 @@ describe('Vercel Hobby function budget', () => {
     expect(explicitlyConfiguredNodeRoutes).toEqual([]);
   });
 
-  it('uses one common function configuration so App Router routes remain bundle-compatible', () => {
+  it('does not turn static App Router pages into configured serverless functions', () => {
     const vercelConfig = JSON.parse(
       fs.readFileSync(path.join(repositoryRoot, 'vercel.json'), 'utf8'),
     ) as { functions?: Record<string, { maxDuration?: number }> };
 
-    expect(vercelConfig.functions).toEqual({
-      'src/app/**/*.{ts,tsx}': {
-        maxDuration: 300,
-      },
-    });
+    expect(vercelConfig.functions).toBeUndefined();
   });
 });

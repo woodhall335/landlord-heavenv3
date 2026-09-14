@@ -2,11 +2,6 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "corepack enable && pnpm install --no-frozen-lockfile --prod=false",
   "buildCommand": "pnpm run build",
-  "functions": {
-    "src/app/**/*.{ts,tsx}": {
-      "maxDuration": 300
-    }
-  },
   "crons": [
     {
       "path": "/api/cron/legal-change-check?key=$CRON_SECRET",

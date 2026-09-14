@@ -33,6 +33,9 @@ const section8GroundRedirects = [
 const apiStaticImageTraceExcludes = [
   './public/images/wizard-icons/**/*',
   './public/images/blog/**/*',
+  './public/images/generated/**/*',
+  './public/images/illustrations/**/*',
+  './public/images/heroes/**/*',
   './public/images/whyitmatters/**/*',
   './public/images/mascots/**/*',
   './public/images/previews/**/*',
@@ -417,7 +420,11 @@ const nextConfig = {
   },
   devIndicators: false,
   outputFileTracingExcludes: {
-    '/app/api/**': apiStaticImageTraceExcludes,
+    // Route keys match request paths, even when App Router lives under src/app.
+    // Using /app/api/** here did not match any route, so visual-only public assets
+    // were copied into every API function trace and prevented Vercel from bundling
+    // the application within the Hobby function limit.
+    '/api/*': apiStaticImageTraceExcludes,
     '/money-claim': apiStaticImageTraceExcludes,
     '/api/admin/test-artifacts/**': ['artifacts/**/*'],
     '/api/admin/test-artifacts/complete-pack/england/section21': ['artifacts/**/*'],
