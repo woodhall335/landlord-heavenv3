@@ -47,7 +47,6 @@ import { assertCaseReadAccess } from '@/lib/auth/case-access';
 import { assertPreviewAllowed } from '@/lib/payments/entitlement';
 
 // Force Node.js runtime - Puppeteer cannot run on Edge
-export const runtime = 'nodejs';
 
 // Disable static optimization
 export const dynamic = 'force-dynamic';

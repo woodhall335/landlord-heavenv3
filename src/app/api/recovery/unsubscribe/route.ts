@@ -6,7 +6,6 @@ import {
 } from '@/lib/recovery/unsubscribe';
 import { createAdminClient } from '@/lib/supabase/server';
 
-export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 function htmlResponse(title: string, message: string, status = 200): NextResponse {

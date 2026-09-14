@@ -10,7 +10,6 @@ import type { QuestionDefinition } from '@/lib/validators/question-schema';
 import { isLevelAFactKey, FACT_QUESTIONS, normalizeLevelAFactsToCanonical } from '@/lib/validators/facts/factKeys';
 import { assertCaseWriteAccess } from '@/lib/auth/case-access';
 
-export const runtime = 'nodejs';
 
 type AnswerValidationError = { factKey: string; message: string };
 

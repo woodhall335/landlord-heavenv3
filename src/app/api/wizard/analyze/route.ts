@@ -26,7 +26,6 @@ import { enrichEnglandSection8SupportContext } from '@/lib/england-possession/su
 import { validateEnglandPost2026WizardFacts } from '@/lib/england-possession/post-2026-validation';
 import { assertCaseReadAccess } from '@/lib/auth/case-access';
 
-export const runtime = 'nodejs';
 
 const analyzeSchema = z.object({
   case_id: z.string().uuid(),

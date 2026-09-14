@@ -12,7 +12,6 @@ import {
   saveSection13State,
 } from '@/lib/section13';
 
-export const runtime = 'nodejs';
 
 const payloadSchema = z.object({
   caseId: z.string().uuid(),

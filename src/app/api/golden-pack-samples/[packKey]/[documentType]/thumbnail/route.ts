@@ -3,7 +3,6 @@ import { NextResponse } from 'next/server';
 import { pdfBytesToPreviewThumbnail } from '@/lib/documents/generator';
 import { getGoldenPackAsset, isGoldenPackKey } from '@/lib/marketing/golden-pack-proof';
 
-export const runtime = 'nodejs';
 
 export async function GET(
   _request: Request,

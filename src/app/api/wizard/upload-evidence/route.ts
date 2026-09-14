@@ -20,7 +20,6 @@ import {
   generateConfirmationQuestions,
 } from '@/lib/evidence/merge-extracted-facts';
 
-export const runtime = 'nodejs';
 
 /**
  * Structured error response format for tracing

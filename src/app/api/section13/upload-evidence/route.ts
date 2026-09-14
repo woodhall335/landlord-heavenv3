@@ -7,7 +7,6 @@ import { getSection13EvidenceUploads } from '@/lib/section13/server';
 import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
 import { getServerUser } from '@/lib/supabase/server';
 
-export const runtime = 'nodejs';
 
 const MAX_FILES = 15;
 const MAX_FILE_BYTES = 10 * 1024 * 1024;

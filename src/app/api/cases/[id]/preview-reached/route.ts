@@ -4,7 +4,6 @@ import { z } from 'zod';
 import { assertCaseWriteAccess } from '@/lib/auth/case-access';
 import { createAdminClient, getServerUser } from '@/lib/supabase/server';
 
-export const runtime = 'nodejs';
 
 const payloadSchema = z.object({
   product: z.string().min(1).optional(),

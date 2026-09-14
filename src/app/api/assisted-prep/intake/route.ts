@@ -11,7 +11,6 @@ import {
 } from '@/lib/email/resend';
 import { logger } from '@/lib/logger';
 
-export const runtime = 'nodejs';
 
 const intakeSchema = z.object({
   service: z.enum(['section8', 'possession']),

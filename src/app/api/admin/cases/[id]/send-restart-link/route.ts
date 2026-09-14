@@ -13,7 +13,6 @@ import { sendCasePreviewRecoveryEmail } from '@/lib/email/resend';
 import { RECOVERY_UNSUBSCRIBED_EVENT, buildRecoveryUnsubscribeUrl } from '@/lib/recovery/unsubscribe';
 import { createAdminClient, requireServerAuth } from '@/lib/supabase/server';
 
-export const runtime = 'nodejs';
 
 type RouteContext = {
   params: Promise<{ id: string }>;

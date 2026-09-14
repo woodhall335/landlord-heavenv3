@@ -7,7 +7,6 @@ const seedSchema = z.object({
   jurisdiction: z.enum(['england', 'wales', 'scotland', 'northern_ireland']),
 });
 
-export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {

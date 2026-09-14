@@ -89,7 +89,6 @@ const faqs: FAQItem[] = [
   },
 ];
 
-export const runtime = 'nodejs';
 
 export default function NoticeOnlyPage() {
   const sampleProof = getGoldenPackProofData('notice_only');

@@ -5,7 +5,6 @@ import { buildPrefilledFacts, type PrefillProduct } from '@/lib/cases/prefill';
 import { isValidProductSku } from '@/lib/pricing/products';
 import { isResidentialLettingProductSku } from '@/lib/residential-letting/products';
 
-export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 function resolveCaseType(destinationProduct: string): 'eviction' | 'money_claim' | 'tenancy_agreement' | 'rent_increase' {

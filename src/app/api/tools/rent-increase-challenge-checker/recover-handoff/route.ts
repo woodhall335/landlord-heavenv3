@@ -8,7 +8,6 @@ import {
   hashRentCheckerEmailHandoffToken,
 } from '@/lib/section13/rent-checker-email-handoff';
 
-export const runtime = 'nodejs';
 
 type HandoffEventRow = {
   id: string;

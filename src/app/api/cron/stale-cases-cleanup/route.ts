@@ -15,7 +15,6 @@ import {
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-export const runtime = 'nodejs';
 
 const JOB_NAME = 'cases:cleanup-stale-unclaimed' as const;
 const DEFAULT_RETENTION_DAYS = 14;

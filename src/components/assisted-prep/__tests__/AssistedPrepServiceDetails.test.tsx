@@ -22,12 +22,12 @@ describe('AssistedPrepServiceDetails', () => {
     [
       'section8',
       'section8-service-evidence-waterbrush-v2.webp',
-      'section8-notice-preparation-waterbrush-v1.webp',
+      'section8-assisted-service-watercolour-v3.webp',
     ],
     [
       'possession',
       'possession-court-evidence-waterbrush-v2.webp',
-      'possession-court-pack-waterbrush-v1.webp',
+      'full-eviction-assisted-service-watercolour-v3.webp',
     ],
   ] as const)('keeps only the %s process illustration with the service explanation', (service, primaryImage, processImage) => {
     render(<AssistedPrepServiceDetails service={service} showCta={false} />);

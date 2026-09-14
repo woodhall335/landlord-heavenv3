@@ -3,7 +3,6 @@ import { requireServerAuth } from '@/lib/supabase/server';
 import { isAdmin } from '@/lib/auth';
 import { createSupabaseAdminQuestionRepository } from '@/lib/ask-heaven/questions';
 
-export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {

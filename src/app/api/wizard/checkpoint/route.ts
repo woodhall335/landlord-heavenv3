@@ -22,7 +22,6 @@ import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/t
 import { validateFlow, create422Response } from '@/lib/validation/validateFlow';
 import { getEnglandCanonicalTenancyProduct } from '@/lib/tenancy/england-product-model';
 
-export const runtime = 'nodejs';
 
 const checkpointSchema = z.object({
   case_id: z.string().uuid(),

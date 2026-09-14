@@ -2,7 +2,6 @@ import { readFile } from 'fs/promises';
 import { NextResponse } from 'next/server';
 import { getGoldenPackAsset, isGoldenPackKey } from '@/lib/marketing/golden-pack-proof';
 
-export const runtime = 'nodejs';
 
 export async function GET(
   _request: Request,

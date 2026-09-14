@@ -13,7 +13,6 @@ import {
 } from '@/lib/supabase/admin';
 import { serializeError } from '@/lib/errors/serializeError';
 
-export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function GET(

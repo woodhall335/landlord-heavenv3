@@ -7,7 +7,6 @@ import { createSection13RecoveryToken } from '@/lib/section13/server';
 import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
 import { getServerUser } from '@/lib/supabase/server';
 
-export const runtime = 'nodejs';
 
 const payloadSchema = z.object({
   caseId: z.string().uuid(),

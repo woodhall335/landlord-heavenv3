@@ -18,7 +18,6 @@ import { isAdmin } from '@/lib/auth';
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { getSessionTokenFromRequest } from '@/lib/session-token';
 
-export const runtime = 'nodejs';
 
 // Signed URL expiration time in seconds (15 minutes)
 const SIGNED_URL_EXPIRY_SECONDS = 900;

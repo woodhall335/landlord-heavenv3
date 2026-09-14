@@ -15,8 +15,8 @@ vi.mock('next/image', () => ({
 describe('AssistedPrepVisualExplainer', () => {
   it.each([
     ['overview', '/images/illustrations/services/assisted-prep-consultation-waterbrush-v2.webp'],
-    ['section8', '/images/illustrations/services/section8-service-evidence-waterbrush-v2.webp'],
-    ['possession', '/images/illustrations/services/possession-court-evidence-waterbrush-v2.webp'],
+    ['section8', '/images/illustrations/services/section8-assisted-service-watercolour-v3.webp'],
+    ['possession', '/images/illustrations/services/full-eviction-assisted-service-watercolour-v3.webp'],
   ] as const)('uses the bespoke %s waterbrush illustration', (service, assetPath) => {
     render(<AssistedPrepVisualExplainer service={service} />);
 

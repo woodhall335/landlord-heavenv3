@@ -60,7 +60,6 @@ function isResidentialStandaloneProduct(product: string): product is Residential
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-export const runtime = 'nodejs';
 
 const startWizardSchema = z.object({
   product: z.enum([

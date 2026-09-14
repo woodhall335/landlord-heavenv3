@@ -14,7 +14,6 @@ import {
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-export const runtime = 'nodejs';
 
 function verifyCronAuth(request: NextRequest): { authorized: boolean; source: string } {
   const cronSecret = process.env.CRON_SECRET;

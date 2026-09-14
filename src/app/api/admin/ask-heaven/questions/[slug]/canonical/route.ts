@@ -13,7 +13,6 @@ import {
 import { runAskHeavenParityCheck } from '@/lib/ask-heaven/admin-parity';
 import { serializeError } from '@/lib/errors/serializeError';
 
-export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function POST(

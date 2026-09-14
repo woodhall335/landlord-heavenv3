@@ -22,7 +22,6 @@ import { resolveTenancyPreviewDocumentHtml } from '@/lib/previews/tenancyPreview
 import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
 import { assertPreviewAllowed } from '@/lib/payments/entitlement';
 
-export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const isDev = process.env.NODE_ENV === 'development';

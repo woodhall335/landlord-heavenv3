@@ -14,7 +14,6 @@ import { createAdminClient, tryGetServerUser } from '@/lib/supabase/server';
 import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
 import { assertPreviewAllowed } from '@/lib/payments/entitlement';
 
-export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 function errorResponse(

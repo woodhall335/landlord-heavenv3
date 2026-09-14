@@ -84,7 +84,6 @@ const faqs: FAQItem[] = [
   },
 ];
 
-export const runtime = 'nodejs';
 
 export default function MoneyClaimPage() {
   const sampleProof = getGoldenPackProofData('money_claim');

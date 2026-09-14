@@ -21,7 +21,6 @@ import { assertPreviewAllowed } from '@/lib/payments/entitlement';
 import { createAdminClient, tryGetServerUser } from '@/lib/supabase/server';
 import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 
-export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 function errorResponse(

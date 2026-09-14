@@ -13,7 +13,6 @@ import {
   scrapeLiveComparables,
 } from '@/lib/section13';
 
-export const runtime = 'nodejs';
 
 const payloadSchema = z.object({
   caseId: z.string().uuid(),

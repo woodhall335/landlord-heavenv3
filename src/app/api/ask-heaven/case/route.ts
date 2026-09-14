@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { createAdminClient, getServerUser } from '@/lib/supabase/server';
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 
-export const runtime = 'nodejs';
 
 export async function GET(request: Request) {
   try {

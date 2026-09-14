@@ -52,7 +52,6 @@ function isNonEnglandPublicDiscoveryPath(path: string): boolean {
 }
 
 // Force this metadata route to run dynamically (avoids static render + fetch cache issues).
-export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 // Revalidate hourly (keeps things stable, avoids “revalidate: 0” noise / static warnings).
 export const revalidate = 3600;

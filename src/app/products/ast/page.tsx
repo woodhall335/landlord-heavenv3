@@ -166,7 +166,6 @@ const faqs: FAQItem[] = [
   },
 ];
 
-export const runtime = 'nodejs';
 
 export default function EnglandTenancyHubPage() {
   const content: ProductSalesPageContent = {

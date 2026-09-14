@@ -13,7 +13,6 @@ import {
   getRentCheckerEmailHandoffExpiry,
 } from '@/lib/section13/rent-checker-email-handoff';
 
-export const runtime = 'nodejs';
 
 const resultSchema = z.object({
   resultId: z.string().uuid().nullable().optional(),

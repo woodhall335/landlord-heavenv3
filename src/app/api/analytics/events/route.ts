@@ -3,7 +3,6 @@ import { z } from 'zod';
 import { createAdminClient } from '@/lib/supabase/server';
 import { normalizeMarketingGrowthEvent } from '@/lib/analytics/growth-events';
 
-export const runtime = 'nodejs';
 
 const LEGACY_STORAGE_EVENT_NAMES: Record<string, string> = {
   contextual_offer_view: 'commercial_bridge_viewed',

@@ -14,7 +14,6 @@ import {
   type NoticeToLeaveDateParams,
 } from '@/lib/documents/notice-date-calculator';
 
-export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 // ============================================================================

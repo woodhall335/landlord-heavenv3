@@ -95,7 +95,6 @@ const faqs: FAQItem[] = [
   },
 ];
 
-export const runtime = 'nodejs';
 
 export default function CompleteEvictionPackPage() {
   const sampleProof = getGoldenPackProofData('complete_pack');

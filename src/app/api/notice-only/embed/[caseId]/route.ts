@@ -30,7 +30,6 @@ import {
 import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
 import { assertPreviewAllowed } from '@/lib/payments/entitlement';
 
-export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 function errorResponse(code: string, message: string, status: number, details?: Record<string, unknown>) {

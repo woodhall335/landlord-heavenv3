@@ -31,7 +31,6 @@ const sourcePage = '/paid/section-8-notice';
 const noticeHref =
   '/wizard/flow?type=eviction&product=notice_only&src=google_ads&topic=eviction';
 
-export const runtime = 'nodejs';
 
 export const metadata: Metadata = {
   title: 'Section 8 Notice Generator & Form 3A Pack | £39.99',

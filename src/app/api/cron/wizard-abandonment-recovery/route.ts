@@ -4,7 +4,6 @@ import { GET as orchestratorGet, POST as orchestratorPost } from '../recovery-or
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-export const runtime = 'nodejs';
 
 export function GET(request: NextRequest) {
   return orchestratorGet(request);

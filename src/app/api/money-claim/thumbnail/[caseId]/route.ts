@@ -40,7 +40,6 @@ import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
 import { assertPreviewAllowed } from '@/lib/payments/entitlement';
 
 // Force Node.js runtime - Puppeteer/@sparticuz/chromium cannot run on Edge
-export const runtime = 'nodejs';
 
 // Disable static optimization
 export const dynamic = 'force-dynamic';

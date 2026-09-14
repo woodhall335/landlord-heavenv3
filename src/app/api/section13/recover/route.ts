@@ -7,7 +7,6 @@ import { getSessionTokenFromRequest } from '@/lib/auth/case-access';
 import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
 import { getServerUser } from '@/lib/supabase/server';
 
-export const runtime = 'nodejs';
 
 const payloadSchema = z.object({
   caseId: z.string().uuid(),

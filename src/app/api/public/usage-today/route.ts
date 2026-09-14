@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/server';
 
-export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 function londonDayStart(now = new Date()): Date {

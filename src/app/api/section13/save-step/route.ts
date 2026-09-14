@@ -16,7 +16,6 @@ import {
   type Section13State,
 } from '@/lib/section13';
 
-export const runtime = 'nodejs';
 
 const payloadSchema = z.object({
   caseId: z.string().uuid(),
@@ -113,4 +112,3 @@ export async function POST(request: Request) {
     );
   }
 }
-

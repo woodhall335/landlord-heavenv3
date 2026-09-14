@@ -8,7 +8,6 @@ import {
   type RentCheckerInput,
 } from '@/lib/section13';
 
-export const runtime = 'nodejs';
 
 const payloadSchema = z.object({
   sessionId: z.string().optional().nullable(),

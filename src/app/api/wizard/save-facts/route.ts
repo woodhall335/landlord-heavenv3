@@ -21,7 +21,6 @@ import {
 } from '@/lib/tenancy/product-tier';
 import { assertCaseWriteAccess, getSessionTokenFromRequest } from '@/lib/auth/case-access';
 
-export const runtime = 'nodejs';
 
 /**
  * Deep merge helper for wizard facts.

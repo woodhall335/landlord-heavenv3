@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { isGoldenPackKey, getGoldenPackAsset } from '@/lib/marketing/golden-pack-proof';
 
-export const runtime = 'nodejs';
 
 function escapeHtml(value: string): string {
   return value

@@ -13,7 +13,6 @@ import { createAdminClient, tryGetServerUser } from '@/lib/supabase/server';
 import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
 import { assertPreviewAllowed } from '@/lib/payments/entitlement';
 
-export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const isVercel = process.env.VERCEL === '1' || !!process.env.AWS_LAMBDA_FUNCTION_NAME;

@@ -12,7 +12,6 @@ import {
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { getServerUser } from '@/lib/supabase/server';
 
-export const runtime = 'nodejs';
 
 const payloadSchema = z.object({
   caseId: z.string().uuid(),

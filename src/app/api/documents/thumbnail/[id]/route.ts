@@ -21,7 +21,6 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 // Force Node.js runtime - Puppeteer/@sparticuz/chromium cannot run on Edge
-export const runtime = 'nodejs';
 
 // Disable static optimization to ensure fresh thumbnail generation
 export const dynamic = 'force-dynamic';

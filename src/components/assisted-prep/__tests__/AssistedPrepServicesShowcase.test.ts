@@ -58,4 +58,17 @@ describe('getGroundCodeFromPath', () => {
     expect(screen.getByText(/Free consultation.*£149\.00 only if we confirm we can help/)).toBeInTheDocument();
     expect(screen.getByText(/Free consultation.*£399\.00 only if we confirm we can help/)).toBeInTheDocument();
   });
+
+  it('uses labelled service-specific waterbrush artwork in both cards', () => {
+    render(createElement(AssistedPrepServicesShowcase));
+
+    expect(screen.getByRole('img', { name: /Section 8 Notice Assistance/i })).toHaveAttribute(
+      'src',
+      '/images/illustrations/services/section8-assisted-service-watercolour-v3.webp'
+    );
+    expect(screen.getByRole('img', { name: /Full Eviction Assistance/i })).toHaveAttribute(
+      'src',
+      '/images/illustrations/services/full-eviction-assisted-service-watercolour-v3.webp'
+    );
+  });
 });

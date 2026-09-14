@@ -10,7 +10,6 @@ import { z } from 'zod';
 import { requireServerAuth } from '@/lib/supabase/server';
 import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
 
-export const runtime = 'nodejs';
 
 const claimSchema = z.object({
   caseId: z.string().uuid(),

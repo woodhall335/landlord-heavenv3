@@ -1,7 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 
-export const runtime = 'nodejs';
 
 const filePath = path.join(
   process.cwd(),
