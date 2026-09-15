@@ -705,6 +705,41 @@ export async function POST(request: Request) {
       );
     }
 
+    const paymentStatus = await getCasePaymentStatus(case_id);
+    const entitlementProducts = paymentStatus.paidProducts;
+    const lockedTenancySku = entitlementProducts.includes('ast_premium')
+      ? 'ast_premium'
+      : entitlementProducts.includes('ast_standard')
+      ? 'ast_standard'
+      : null;
+    const purchasedProduct = paymentStatus.latestOrder?.product_type || lockedTenancySku || null;
+
+    // Enforce a paid product lock before generic answer validation. Otherwise an
+    // attempted tier change can be reported as a malformed answer instead of the
+    // actionable upgrade/product-lock response.
+    if (caseRow.case_type === 'tenancy_agreement' && lockedTenancySku) {
+      const tierQuestionId = getTenancyTierQuestionId(canonicalJurisdiction as TenancyJurisdiction);
+      if (question_id === tierQuestionId) {
+        const requestedSku = inferTenancySkuFromTierLabel(String(answer));
+        if (requestedSku && requestedSku !== lockedTenancySku) {
+          const isUpgradeAttempt = requestedSku === 'ast_premium' && !entitlementProducts.includes('ast_premium');
+          return NextResponse.json(
+            {
+              code: isUpgradeAttempt ? 'UPGRADE_REQUIRED' : 'PRODUCT_LOCKED',
+              error: isUpgradeAttempt ? 'UPGRADE_REQUIRED' : 'PRODUCT_LOCKED',
+              message: isUpgradeAttempt
+                ? 'Upgrade required to access Premium tenancy agreement features.'
+                : 'This case is locked to the purchased product.',
+              purchased_product: purchasedProduct,
+              requested_product: requestedSku,
+              entitlements: entitlementProducts,
+            },
+            { status: isUpgradeAttempt ? 402 : 409 },
+          );
+        }
+      }
+    }
+
     // ---------------------------------------
     // 1b. Runtime validation for critical WizardFacts fields
     //      (only for structured flows; eviction is skipped)
@@ -730,16 +765,6 @@ export async function POST(request: Request) {
     }
 
     const isEnglandOrWales = canonicalJurisdiction === 'england' || canonicalJurisdiction === 'wales';
-    const paymentStatus = await getCasePaymentStatus(case_id);
-    const entitlementProducts = paymentStatus.paidProducts;
-    const lockedTenancySku = entitlementProducts.includes('ast_premium')
-      ? 'ast_premium'
-      : entitlementProducts.includes('ast_standard')
-      ? 'ast_standard'
-      : null;
-    const purchasedProduct =
-      paymentStatus.latestOrder?.product_type || lockedTenancySku || null;
-
     // ---------------------------------------
     // 2. Load MQS and question
     // ---------------------------------------

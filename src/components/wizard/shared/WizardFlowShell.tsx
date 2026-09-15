@@ -20,6 +20,7 @@ export interface WizardFlowShellProps {
   completedCount: number;
   totalCount: number;
   progress: number;
+  completionLabel?: string;
   tabs: WizardTab[];
   sectionTitle: string;
   sectionDescription?: string;
@@ -35,6 +36,7 @@ export function WizardFlowShell({
   completedCount,
   totalCount,
   progress,
+  completionLabel: completionLabelOverride,
   tabs,
   sectionTitle,
   sectionDescription,
@@ -45,7 +47,7 @@ export function WizardFlowShell({
   stickyTopClass = 'top-0',
 }: WizardFlowShellProps) {
   const hasMountedRef = useRef(false);
-  const completionLabel = `${completedCount} of ${totalCount} sections complete`;
+  const completionLabel = completionLabelOverride || `${completedCount} of ${totalCount} sections complete`;
   const currentTabIndex = tabs.findIndex((tab) => tab.isCurrent);
   const activeStep = currentTabIndex >= 0 ? currentTabIndex + 1 : 1;
 

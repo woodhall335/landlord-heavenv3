@@ -1,0 +1,5614 @@
+{
+  "england": [
+    {
+      "id": "england_tenancy_purpose",
+      "label": "What are you doing today?",
+      "inputType": "select",
+      "section": "tenancy",
+      "options": [
+        "new_agreement",
+        "existing_written_tenancy",
+        "existing_verbal_tenancy"
+      ],
+      "required": true,
+      "helperText": "Use the new agreement flow for a fresh England Assured Periodic Tenancy Agreement. Existing written tenancies usually auto-roll on 1 May 2026 and need transition information rather than a full replacement.",
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "property_address_line1",
+      "label": "Building and street",
+      "inputType": "text",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "property_address_town",
+      "label": "Town / City",
+      "inputType": "text",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "property_address_postcode",
+      "label": "Postcode",
+      "inputType": "text",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "property_type",
+      "label": "Property type",
+      "inputType": "select",
+      "section": "property",
+      "options": [
+        "house",
+        "flat",
+        "maisonette",
+        "bungalow",
+        "studio"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "number_of_bedrooms",
+      "label": "Number of bedrooms",
+      "inputType": "number",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "furnished_status",
+      "label": "Furnishing",
+      "inputType": "select",
+      "section": "property",
+      "options": [
+        "furnished",
+        "part-furnished",
+        "unfurnished"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "parking_available",
+      "label": "Is parking included?",
+      "inputType": "yes_no",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "has_garden",
+      "label": "Is there a garden or outdoor space?",
+      "inputType": "yes_no",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_full_name",
+      "label": "Full name",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_email",
+      "label": "Email",
+      "inputType": "email",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_phone",
+      "label": "Phone",
+      "inputType": "tel",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_address_line1",
+      "label": "Building and street",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_address_town",
+      "label": "Town / City",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_address_postcode",
+      "label": "Postcode",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "agent_usage",
+      "label": "Are you using a letting agent?",
+      "inputType": "yes_no",
+      "section": "landlord",
+      "required": true,
+      "helperText": "If yes, their details can appear on the Assured Periodic Tenancy Agreement for rent collection and management.",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "agent_name",
+      "label": "Agent name",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "agent_address",
+      "label": "Agent address",
+      "inputType": "textarea",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "agent_email",
+      "label": "Agent email",
+      "inputType": "email",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "agent_phone",
+      "label": "Agent phone",
+      "inputType": "tel",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "agent_signs",
+      "label": "Should the agent sign on your behalf?",
+      "inputType": "yes_no",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "tenancy_start_date",
+      "label": "Start date",
+      "inputType": "date",
+      "section": "tenancy",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "tenant_notice_period",
+      "label": "Tenant notice period",
+      "inputType": "select",
+      "section": "tenancy",
+      "options": [
+        "2 months",
+        "1 month",
+        "6 weeks"
+      ],
+      "required": true,
+      "helperText": "The default Renters' Rights Act position is 2 months. You can agree a shorter written notice period, but not a longer one.",
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "existing_written_tenancy_transition",
+      "label": "Existing written tenancy: will you give every named tenant the exact 'Renters' Rights Act Information Sheet 2026' PDF by 31 May 2026?",
+      "inputType": "yes_no",
+      "section": "tenancy",
+      "required": true,
+      "helperText": "Choose Yes only if you will provide the exact local PDF to every named tenant for the pre-1 May 2026 written tenancy transition.",
+      "dependsOn": {
+        "questionId": "england_tenancy_purpose",
+        "value": "existing_written_tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "existing_verbal_tenancy_summary",
+      "label": "Existing verbal tenancy: will you give the tenant the required written information about the key terms by 31 May 2026?",
+      "inputType": "yes_no",
+      "section": "tenancy",
+      "required": true,
+      "helperText": "Choose Yes only if you will provide the written information needed for the pre-1 May 2026 verbal tenancy transition.",
+      "dependsOn": {
+        "questionId": "england_tenancy_purpose",
+        "value": "existing_verbal_tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "tenancy_regime_confirmation",
+      "label": "England tenancy structure",
+      "inputType": "select",
+      "section": "tenancy",
+      "options": [
+        "Assured periodic residential tenancy"
+      ],
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "rent_amount",
+      "label": "Rent amount",
+      "inputType": "currency",
+      "section": "rent",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "rent_period",
+      "label": "Rent period",
+      "inputType": "select",
+      "section": "rent",
+      "options": [
+        "month",
+        "week",
+        "quarter",
+        "year"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "rent_due_day",
+      "label": "Payment due day",
+      "inputType": "select",
+      "section": "rent",
+      "options": [
+        "1st",
+        "2nd",
+        "3rd",
+        "4th",
+        "5th",
+        "6th",
+        "7th",
+        "8th",
+        "9th",
+        "10th",
+        "11th",
+        "12th",
+        "13th",
+        "14th",
+        "15th",
+        "16th",
+        "17th",
+        "18th",
+        "19th",
+        "20th",
+        "21st",
+        "22nd",
+        "23rd",
+        "24th",
+        "25th",
+        "26th",
+        "27th",
+        "28th",
+        "29th",
+        "30th",
+        "Last day of month"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "payment_method",
+      "label": "Preferred payment method",
+      "inputType": "select",
+      "section": "rent",
+      "options": [
+        "Standing Order",
+        "Bank Transfer",
+        "Cash"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "payment_details",
+      "label": "Payment details",
+      "inputType": "textarea",
+      "section": "rent",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_amount",
+      "label": "Deposit amount",
+      "inputType": "currency",
+      "section": "deposit",
+      "required": true,
+      "helperText": "⚠️ TENANT FEES ACT 2019: Maximum deposit is 5 weeks' rent (or 6 weeks if annual rent exceeds £50,000). Excess deposits are unlawful.",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_scheme_name",
+      "label": "Deposit protection scheme",
+      "inputType": "select",
+      "section": "deposit",
+      "options": [
+        "DPS",
+        "MyDeposits",
+        "TDS",
+        "Other"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_paid_date",
+      "label": "Date deposit will be paid",
+      "inputType": "date",
+      "section": "deposit",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_protection_date",
+      "label": "Date you will protect the deposit",
+      "inputType": "date",
+      "section": "deposit",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_reference_number",
+      "label": "Deposit protection reference number (if already protected)",
+      "inputType": "text",
+      "section": "deposit",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "prescribed_information_served",
+      "label": "Prescribed information compliance",
+      "inputType": "yes_no",
+      "section": "deposit",
+      "required": true,
+      "helperText": "Statutory requirement: you must give the tenant the prescribed deposit information within 30 days of receiving the deposit. If you do not, a court can order you to repay or protect the deposit and pay compensation of up to 3 times the deposit. Keep evidence that this was done.",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "prescribed_information_date",
+      "label": "When was/will prescribed information be served?",
+      "inputType": "date",
+      "section": "deposit",
+      "required": true,
+      "helperText": "Must be within 30 days of receiving the deposit. Keep this date for compliance records.",
+      "dependsOn": {
+        "questionId": "prescribed_information_served",
+        "value": true
+      },
+      "parentDependsOn": {
+        "questionId": "prescribed_information_served",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "council_tax_responsibility",
+      "label": "Council tax",
+      "inputType": "select",
+      "section": "bills",
+      "options": [
+        "Tenant",
+        "Landlord",
+        "Included in rent"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "utilities_responsibility",
+      "label": "Gas/Electric/Water",
+      "inputType": "select",
+      "section": "bills",
+      "options": [
+        "Tenant",
+        "Landlord",
+        "Included in rent"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "internet_responsibility",
+      "label": "Internet/Broadband",
+      "inputType": "select",
+      "section": "bills",
+      "options": [
+        "Tenant",
+        "Landlord",
+        "Included in rent"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "utility_transfer_responsibility",
+      "label": "Who arranges utility account transfers?",
+      "inputType": "select",
+      "section": "bills",
+      "options": [
+        "Tenant",
+        "Landlord",
+        "Agent"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "epc_rating",
+      "label": "EPC rating",
+      "inputType": "select",
+      "section": "compliance",
+      "options": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "epc_certificate_date",
+      "label": "EPC certificate date",
+      "inputType": "date",
+      "section": "compliance",
+      "required": true,
+      "helperText": "EPCs are valid for 10 years from issue date",
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "right_to_rent_check_date",
+      "label": "Date right-to-rent checks completed (England only)",
+      "inputType": "date",
+      "section": "compliance",
+      "required": true,
+      "helperText": "MANDATORY: Must be completed BEFORE the tenancy starts",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "gas_safety_certificate",
+      "label": "Current gas safety certificate provided?",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "gas_safety_certificate_date",
+      "label": "Gas safety certificate date",
+      "inputType": "date",
+      "section": "compliance",
+      "required": true,
+      "helperText": "Gas certificates are valid for 12 months from issue date",
+      "dependsOn": {
+        "questionId": "gas_safety_certificate",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "gas_safety_certificate_expiry",
+      "label": "Gas safety certificate expiry",
+      "inputType": "date",
+      "section": "compliance",
+      "required": true,
+      "helperText": "Enter the expiry date shown on the certificate",
+      "dependsOn": {
+        "questionId": "gas_safety_certificate",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "electrical_safety_certificate",
+      "label": "Electrical safety (EICR) provided?",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "helperText": "MANDATORY since April 2020: EICR required for all new tenancies",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "eicr_certificate_date",
+      "label": "EICR certificate date",
+      "inputType": "date",
+      "section": "compliance",
+      "required": true,
+      "helperText": "EICRs are typically valid for 5 years",
+      "dependsOn": {
+        "questionId": "electrical_safety_certificate",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "smoke_alarms_fitted",
+      "label": "Smoke alarms fitted and tested?",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "carbon_monoxide_alarms",
+      "label": "CO alarms where required?",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "how_to_rent_guide_provided",
+      "label": "England written information or government guidance recorded? (new agreements)",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "helperText": "Record whether you have given any England written information or government guidance you plan to rely on for this new tenancy, and keep proof of delivery on file.",
+      "dependsOn": {
+        "questionId": "england_tenancy_purpose",
+        "value": "new_agreement"
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "how_to_rent_guide_date",
+      "label": "Date written information or guidance provided",
+      "inputType": "date",
+      "section": "compliance",
+      "required": true,
+      "helperText": "Record the date you gave the information or guidance for the tenancy file.",
+      "dependsOn": {
+        "questionId": "how_to_rent_guide_provided",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "england_rent_in_advance_compliant",
+      "label": "Will you avoid asking for more than one month's rent in advance? (new agreements)",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "helperText": "For a new England tenancy from 1 May 2026, do not require more than one month's rent in advance.",
+      "dependsOn": {
+        "questionId": "england_tenancy_purpose",
+        "value": "new_agreement"
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "england_no_bidding_confirmed",
+      "label": "Will you avoid inviting or accepting rental bids above the advertised rent? (new agreements)",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "helperText": "For a new England tenancy from 1 May 2026, keep the advertised rent fixed and do not ask tenants to outbid each other.",
+      "dependsOn": {
+        "questionId": "england_tenancy_purpose",
+        "value": "new_agreement"
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "england_no_discrimination_confirmed",
+      "label": "Will you avoid refusing applicants because they have children or receive benefits? (new agreements)",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "helperText": "For a new England tenancy from 1 May 2026, do not reject applicants on this basis.",
+      "dependsOn": {
+        "questionId": "england_tenancy_purpose",
+        "value": "new_agreement"
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "repairs_reporting_method",
+      "label": "How should tenants report repairs?",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        "Email",
+        "Phone",
+        "Online portal"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "inventory_attached",
+      "label": "Will you attach an inventory schedule?",
+      "inputType": "yes_no",
+      "section": "terms",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "professional_cleaning_required",
+      "label": "Require return to the same standard of cleanliness at the end?",
+      "inputType": "yes_no",
+      "section": "terms",
+      "required": true,
+      "helperText": "Use this to record the expected cleaning standard, not to require a paid cleaning service in every case.",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "decoration_condition",
+      "label": "Decoration/alterations policy",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        "No general alterations without written permission",
+        "With written permission only",
+        "Minor non-structural alterations allowed"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_access_notice",
+      "label": "Notice before non-emergency access",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        "24 hours",
+        "48 hours",
+        "72 hours"
+      ],
+      "required": true,
+      "helperText": "24 hours is the usual minimum for routine access unless there is an emergency.",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "inspection_frequency",
+      "label": "Inspection frequency",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        "Quarterly",
+        "Every 6 months",
+        "Annually",
+        "As needed"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "end_of_tenancy_viewings",
+      "label": "Allow viewings once the tenancy is ending?",
+      "inputType": "yes_no",
+      "section": "terms",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "pets_allowed",
+      "label": "Will any pets be authorised at the start?",
+      "inputType": "yes_no",
+      "section": "terms",
+      "required": true,
+      "helperText": "A tenant can still ask for written pet consent later, and requests should be considered reasonably.",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "smoking_allowed",
+      "label": "Smoking allowed inside?",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        "No",
+        "Yes",
+        "Vaping only"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "subletting_allowed",
+      "label": "Subletting / Airbnb policy",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        "Not allowed",
+        "Only with written consent",
+        "Allowed"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "rent_increase_clause",
+      "label": "Include section 13 rent increase guidance?",
+      "inputType": "yes_no",
+      "section": "terms",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "rent_increase_method",
+      "label": "Process",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        "Section 13 rent increase process (Housing Act 1988)"
+      ],
+      "dependsOn": {
+        "questionId": "rent_increase_clause",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_required",
+      "label": "Is a guarantor required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "dependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_name",
+      "label": "Guarantor name",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_address",
+      "label": "Guarantor address",
+      "inputType": "textarea",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_email",
+      "label": "Guarantor email",
+      "inputType": "email",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_phone",
+      "label": "Guarantor phone",
+      "inputType": "tel",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_dob",
+      "label": "Guarantor date of birth",
+      "inputType": "date",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_relationship",
+      "label": "Relationship to tenant",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "is_hmo",
+      "label": "Is the property an HMO or room-by-room let?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "late_payment_interest_applicable",
+      "label": "Apply interest on late payments?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "number_of_front_door_keys",
+      "label": "Front door keys (quantity)",
+      "inputType": "number",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "key_replacement_cost",
+      "label": "Key replacement cost (£ per key)",
+      "inputType": "number",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "contractor_access_notice_period",
+      "label": "Notice period for contractor access",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "24 hours",
+        "48 hours",
+        "72 hours"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "emergency_access_allowed",
+      "label": "Allow emergency access without notice?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "contractor_access_hours",
+      "label": "Permitted access hours",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "tenant_presence_required",
+      "label": "Must tenant be present?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "emergency_landlord_phone",
+      "label": "Emergency landlord contact number",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "water_shutoff_location",
+      "label": "Water main shutoff valve location",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "electricity_fuse_box_location",
+      "label": "Electricity fuse box location",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "gas_shutoff_location",
+      "label": "Gas meter/shutoff location",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "boiler_service_frequency",
+      "label": "Boiler/heating service frequency",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Annual",
+        "Bi-annual",
+        "As required"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "boiler_service_responsibility",
+      "label": "Who arranges boiler service?",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Landlord",
+        "Tenant",
+        "Agent"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "gutter_cleaning_frequency",
+      "label": "Gutter cleaning frequency",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Annual",
+        "Bi-annual",
+        "As required"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "gutter_cleaning_responsibility",
+      "label": "Who arranges gutter cleaning?",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Landlord",
+        "Tenant",
+        "Agent"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "pre_tenancy_meeting_required",
+      "label": "Pre-tenancy property viewing required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "move_in_inspection_required",
+      "label": "Joint move-in inspection required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "photographic_inventory_provided",
+      "label": "Photographic inventory provided?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "tenant_handbook_provided",
+      "label": "Tenant handbook provided?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "utility_accounts_transfer_deadline",
+      "label": "Utility transfer deadline",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Day 1 of tenancy",
+        "Within 7 days",
+        "Within 14 days"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "council_tax_registration_deadline",
+      "label": "Council tax registration deadline",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Day 1 of tenancy",
+        "Within 7 days",
+        "Within 14 days"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "checkout_inspection_required",
+      "label": "Joint checkout inspection required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "professional_cleaning_standard",
+      "label": "Detailed checkout cleaning checklist required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "helperText": "Do not require a paid professional cleaning service in every case.",
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "carpet_cleaning_required",
+      "label": "Mention specialist carpet cleaning only if reasonably needed?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "oven_cleaning_required",
+      "label": "Mention specialist oven cleaning only if reasonably needed?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "key_return_deadline",
+      "label": "Key return deadline",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Last day of tenancy by noon",
+        "Last day of tenancy by 5pm",
+        "Within 24 hours of tenancy end",
+        "Within 48 hours of tenancy end"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "forwarding_address_required",
+      "label": "Forwarding address required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "deposit_return_timeline",
+      "label": "Deposit return timeline",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Within 10 days (if no disputes)",
+        "Within 14 days (if no disputes)",
+        "Within 30 days (if no disputes)"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "regular_cleaning_expectations",
+      "label": "Regular cleaning expectations",
+      "inputType": "textarea",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "cleaning_checklist_provided",
+      "label": "Detailed cleaning checklist provided?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ast_tier",
+        "value": "Premium Assured Periodic Tenancy Agreement"
+      },
+      "renderedInSectionFlow": false
+    }
+  ],
+  "wales": [
+    {
+      "id": "property_address_line1",
+      "label": "Building and street",
+      "inputType": "text",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "property_address_town",
+      "label": "Town / City",
+      "inputType": "text",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "property_address_postcode",
+      "label": "Postcode",
+      "inputType": "text",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "property_type",
+      "label": "Property type",
+      "inputType": "select",
+      "section": "property",
+      "options": [
+        "house",
+        "flat",
+        "maisonette",
+        "bungalow",
+        "studio"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "number_of_bedrooms",
+      "label": "Number of bedrooms",
+      "inputType": "number",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "furnished_status",
+      "label": "Furnishing",
+      "inputType": "select",
+      "section": "property",
+      "options": [
+        "furnished",
+        "part-furnished",
+        "unfurnished"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "parking_available",
+      "label": "Is parking included?",
+      "inputType": "yes_no",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "has_garden",
+      "label": "Is there a garden or outdoor space?",
+      "inputType": "yes_no",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_full_name",
+      "label": "Full name",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_email",
+      "label": "Email",
+      "inputType": "email",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_phone",
+      "label": "Phone",
+      "inputType": "tel",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_address_line1",
+      "label": "Building and street",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_address_town",
+      "label": "Town / City",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_address_postcode",
+      "label": "Postcode",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "rent_smart_wales_registered",
+      "label": "Are you registered with Rent Smart Wales?",
+      "inputType": "yes_no",
+      "section": "landlord",
+      "required": true,
+      "helperText": "Registration is a legal requirement - it is a criminal offence to let without registration",
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "rent_smart_wales_number",
+      "label": "Rent Smart Wales registration number",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "dependsOn": {
+        "questionId": "rent_smart_wales_registered",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "rent_smart_wales_expiry",
+      "label": "Registration expiry date",
+      "inputType": "date",
+      "section": "landlord",
+      "required": true,
+      "dependsOn": {
+        "questionId": "rent_smart_wales_registered",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "rent_smart_wales_licensed",
+      "label": "Does the landlord hold the required Rent Smart Wales licence?",
+      "inputType": "yes_no",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "rent_smart_wales_licence_number",
+      "label": "Landlord licence number",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "dependsOn": {
+        "questionId": "rent_smart_wales_licensed",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "rent_smart_wales_licence_expiry",
+      "label": "Landlord licence expiry date",
+      "inputType": "date",
+      "section": "landlord",
+      "required": true,
+      "dependsOn": {
+        "questionId": "rent_smart_wales_licensed",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "managing_agent_rsw_licensed",
+      "label": "Is the managing agent licensed by Rent Smart Wales?",
+      "inputType": "yes_no",
+      "section": "landlord",
+      "required": true,
+      "helperText": "Choose No if no managing agent is appointed.",
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "managing_agent_rsw_licence_number",
+      "label": "Managing-agent licence number",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "dependsOn": {
+        "questionId": "managing_agent_rsw_licensed",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "joint_landlord",
+      "label": "Is there a second landlord?",
+      "inputType": "yes_no",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "landlord_2_full_name",
+      "label": "Full name",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "joint_landlord",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "landlord_2_address",
+      "label": "Address",
+      "inputType": "textarea",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "joint_landlord",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "landlord_2_email",
+      "label": "Email",
+      "inputType": "email",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "joint_landlord",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "landlord_2_phone",
+      "label": "Phone",
+      "inputType": "tel",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "joint_landlord",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "agent_usage",
+      "label": "Are you using a letting agent?",
+      "inputType": "yes_no",
+      "section": "landlord",
+      "required": true,
+      "helperText": "If yes, their details can appear on the occupation contract for rent collection and management.",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "agent_name",
+      "label": "Agent name",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "agent_address",
+      "label": "Agent address",
+      "inputType": "textarea",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "agent_email",
+      "label": "Agent email",
+      "inputType": "email",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "agent_phone",
+      "label": "Agent phone",
+      "inputType": "tel",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "agent_signs",
+      "label": "Should the agent sign on your behalf?",
+      "inputType": "yes_no",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "tenancy_start_date",
+      "label": "Start date",
+      "inputType": "date",
+      "section": "tenancy",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "is_fixed_term",
+      "label": "Is this a fixed-term occupation contract?",
+      "inputType": "yes_no",
+      "section": "tenancy",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "term_length",
+      "label": "Fixed term length",
+      "inputType": "text",
+      "section": "tenancy",
+      "required": true,
+      "helperText": "This standard model is for a fixed term of less than seven years.",
+      "dependsOn": {
+        "questionId": "is_fixed_term",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "tenancy_end_date",
+      "label": "End date (if fixed term)",
+      "inputType": "date",
+      "section": "tenancy",
+      "dependsOn": {
+        "questionId": "is_fixed_term",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "occupation_exclusion_applies",
+      "label": "Does an excluded occupation period apply?",
+      "inputType": "yes_no",
+      "section": "tenancy",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "occupation_exclusion_start_date",
+      "label": "Excluded period starts",
+      "inputType": "date",
+      "section": "tenancy",
+      "required": true,
+      "dependsOn": {
+        "questionId": "occupation_exclusion_applies",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "occupation_exclusion_end_date",
+      "label": "Excluded period ends",
+      "inputType": "date",
+      "section": "tenancy",
+      "required": true,
+      "dependsOn": {
+        "questionId": "occupation_exclusion_applies",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "written_statement_provided",
+      "label": "Will you provide a written statement of the occupation contract?",
+      "inputType": "yes_no",
+      "section": "tenancy",
+      "required": true,
+      "helperText": "This is a legal requirement - you cannot proceed without providing this",
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "written_statement_date",
+      "label": "Date written statement will be/was provided",
+      "inputType": "date",
+      "section": "tenancy",
+      "required": true,
+      "helperText": "Must be within 14 days of occupation date",
+      "dependsOn": {
+        "questionId": "written_statement_provided",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "rent_amount",
+      "label": "Rent amount",
+      "inputType": "currency",
+      "section": "rent",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "rent_period",
+      "label": "Rent period",
+      "inputType": "select",
+      "section": "rent",
+      "options": [
+        "month",
+        "week",
+        "quarter",
+        "year"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "rent_due_day",
+      "label": "Payment due day",
+      "inputType": "select",
+      "section": "rent",
+      "options": [
+        "1st",
+        "2nd",
+        "3rd",
+        "4th",
+        "5th",
+        "6th",
+        "7th",
+        "8th",
+        "9th",
+        "10th",
+        "11th",
+        "12th",
+        "13th",
+        "14th",
+        "15th",
+        "16th",
+        "17th",
+        "18th",
+        "19th",
+        "20th",
+        "21st",
+        "22nd",
+        "23rd",
+        "24th",
+        "25th",
+        "26th",
+        "27th",
+        "28th",
+        "29th",
+        "30th",
+        "Last day of month"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "first_payment",
+      "label": "First payment amount",
+      "inputType": "currency",
+      "section": "rent",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "first_payment_date",
+      "label": "First payment date",
+      "inputType": "date",
+      "section": "rent",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "payment_method",
+      "label": "Preferred payment method",
+      "inputType": "select",
+      "section": "rent",
+      "options": [
+        "Standing Order",
+        "Bank Transfer",
+        "Cash"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "payment_details",
+      "label": "Payment details",
+      "inputType": "textarea",
+      "section": "rent",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_amount",
+      "label": "Deposit amount",
+      "inputType": "currency",
+      "section": "deposit",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_scheme_name",
+      "label": "Deposit protection scheme",
+      "inputType": "select",
+      "section": "deposit",
+      "options": [
+        "DPS",
+        "MyDeposits",
+        "TDS",
+        "Other"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_paid_date",
+      "label": "Date deposit will be paid",
+      "inputType": "date",
+      "section": "deposit",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_protection_date",
+      "label": "Date you will protect the deposit",
+      "inputType": "date",
+      "section": "deposit",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_reference_number",
+      "label": "Deposit protection reference number (if already protected)",
+      "inputType": "text",
+      "section": "deposit",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "prescribed_information_served",
+      "label": "Prescribed information compliance",
+      "inputType": "yes_no",
+      "section": "deposit",
+      "required": true,
+      "helperText": "STATUTORY REQUIREMENT: You MUST serve prescribed information to the contract holder within 30 days of receiving the deposit. Failure to comply invalidates Section 173 notices.",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "prescribed_information_date",
+      "label": "When was/will prescribed information be served?",
+      "inputType": "date",
+      "section": "deposit",
+      "required": true,
+      "helperText": "CRITICAL: Must be within 30 days of receiving the deposit. This date is required to validate Section 173 eligibility.",
+      "dependsOn": {
+        "questionId": "prescribed_information_served",
+        "value": true
+      },
+      "parentDependsOn": {
+        "questionId": "prescribed_information_served",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "council_tax_responsibility",
+      "label": "Council tax",
+      "inputType": "select",
+      "section": "bills",
+      "options": [
+        {
+          "value": "Tenant",
+          "label": "Contract-holder"
+        },
+        "Landlord",
+        "Included in rent"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "utilities_responsibility",
+      "label": "Gas/Electric/Water",
+      "inputType": "select",
+      "section": "bills",
+      "options": [
+        {
+          "value": "Tenant",
+          "label": "Contract-holder"
+        },
+        "Landlord",
+        "Included in rent"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "internet_responsibility",
+      "label": "Internet/Broadband",
+      "inputType": "select",
+      "section": "bills",
+      "options": [
+        {
+          "value": "Tenant",
+          "label": "Contract-holder"
+        },
+        "Landlord",
+        "Included in rent"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "utility_transfer_responsibility",
+      "label": "Who arranges utility account transfers?",
+      "inputType": "select",
+      "section": "bills",
+      "options": [
+        {
+          "value": "Tenant",
+          "label": "Contract-holder"
+        },
+        "Landlord",
+        "Agent"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "property_fit_for_habitation",
+      "label": "Do you confirm the property is fit for human habitation?",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "helperText": "This is a legal requirement - the property must meet fitness standards including structure, water supply, drainage, heating, ventilation, and freedom from damp",
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "ffhh_inspection_date",
+      "label": "Date of last fitness inspection",
+      "inputType": "date",
+      "section": "compliance",
+      "required": true,
+      "helperText": "When did you last inspect/confirm the property meets fitness standards?",
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "epc_rating",
+      "label": "EPC rating",
+      "inputType": "select",
+      "section": "compliance",
+      "options": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "epc_certificate_date",
+      "label": "EPC certificate date",
+      "inputType": "date",
+      "section": "compliance",
+      "required": true,
+      "helperText": "EPCs are valid for 10 years from issue date",
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "gas_safety_certificate",
+      "label": "Current gas safety certificate provided?",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "gas_safety_certificate_date",
+      "label": "Gas safety certificate date",
+      "inputType": "date",
+      "section": "compliance",
+      "required": true,
+      "helperText": "Gas certificates are valid for 12 months from issue date",
+      "dependsOn": {
+        "questionId": "gas_safety_certificate",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "gas_safety_certificate_expiry",
+      "label": "Gas safety certificate expiry",
+      "inputType": "date",
+      "section": "compliance",
+      "required": true,
+      "dependsOn": {
+        "questionId": "gas_safety_certificate",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "electrical_safety_certificate",
+      "label": "Electrical safety (EICR) provided?",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "helperText": "EICR is required for all rental properties in Wales",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "eicr_certificate_date",
+      "label": "EICR certificate date",
+      "inputType": "date",
+      "section": "compliance",
+      "required": true,
+      "helperText": "EICRs are typically valid for 5 years",
+      "dependsOn": {
+        "questionId": "electrical_safety_certificate",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "smoke_alarms_fitted",
+      "label": "Smoke alarms fitted and tested?",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "carbon_monoxide_alarms",
+      "label": "CO alarms where required?",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "repairs_reporting_method",
+      "label": "How should contract-holders report repairs?",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        "Email",
+        "Phone",
+        "Online portal"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "inventory_delivery_method",
+      "label": "When will the completed inventory be supplied?",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        {
+          "value": "later",
+          "label": "Separately, by the date stated below"
+        }
+      ],
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "inventory_due_date",
+      "label": "Date the completed inventory will be supplied",
+      "inputType": "date",
+      "section": "terms",
+      "required": true,
+      "dependsOn": {
+        "questionId": "inventory_delivery_method",
+        "value": "later"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "professional_cleaning_required",
+      "label": "Require professional cleaning at end?",
+      "inputType": "yes_no",
+      "section": "terms",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "decoration_condition",
+      "label": "Decoration/alterations policy",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        "No alterations allowed",
+        "With written permission only",
+        "Minor alterations allowed"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_access_notice",
+      "label": "Notice before access",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        "24 hours",
+        "48 hours",
+        "72 hours"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "inspection_frequency",
+      "label": "Inspection frequency",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        "Quarterly",
+        "Every 6 months",
+        "Annually",
+        "As needed"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "end_of_tenancy_viewings",
+      "label": "Allow viewings near the end of the occupation contract?",
+      "inputType": "yes_no",
+      "section": "terms",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_required",
+      "label": "Is a guarantor required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "dependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_name",
+      "label": "Guarantor name",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_address",
+      "label": "Guarantor address",
+      "inputType": "textarea",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_email",
+      "label": "Guarantor email",
+      "inputType": "email",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_phone",
+      "label": "Guarantor phone",
+      "inputType": "tel",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_dob",
+      "label": "Guarantor date of birth",
+      "inputType": "date",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_relationship",
+      "label": "Relationship to contract-holder",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "is_hmo",
+      "label": "Is the property an HMO or room-by-room let?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "late_payment_interest_applicable",
+      "label": "Apply interest on late payments?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "number_of_front_door_keys",
+      "label": "Front door keys (quantity)",
+      "inputType": "number",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "key_replacement_cost",
+      "label": "Key replacement cost (£ per key)",
+      "inputType": "number",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "contractor_access_notice_period",
+      "label": "Notice period for contractor access",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "24 hours",
+        "48 hours",
+        "72 hours"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "emergency_access_allowed",
+      "label": "Allow emergency access without notice?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "contractor_access_hours",
+      "label": "Permitted access hours",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "tenant_presence_required",
+      "label": "Must the contract-holder be present?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "emergency_landlord_phone",
+      "label": "Emergency landlord contact number",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "water_shutoff_location",
+      "label": "Water main shutoff valve location",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "electricity_fuse_box_location",
+      "label": "Electricity fuse box location",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "gas_shutoff_location",
+      "label": "Gas meter/shutoff location",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "boiler_service_frequency",
+      "label": "Boiler/heating service frequency",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Annual",
+        "Bi-annual",
+        "As required"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "boiler_service_responsibility",
+      "label": "Who arranges boiler service?",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Landlord",
+        {
+          "value": "Tenant",
+          "label": "Contract-holder"
+        },
+        "Agent"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "gutter_cleaning_frequency",
+      "label": "Gutter cleaning frequency",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Annual",
+        "Bi-annual",
+        "As required"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "gutter_cleaning_responsibility",
+      "label": "Who arranges gutter cleaning?",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Landlord",
+        {
+          "value": "Tenant",
+          "label": "Contract-holder"
+        },
+        "Agent"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "pre_tenancy_meeting_required",
+      "label": "Pre-contract property viewing required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "move_in_inspection_required",
+      "label": "Joint move-in inspection required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "photographic_inventory_provided",
+      "label": "Photographic inventory provided?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "tenant_handbook_provided",
+      "label": "Contract-holder handbook provided?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "utility_accounts_transfer_deadline",
+      "label": "Utility transfer deadline",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        {
+          "value": "Day 1 of tenancy",
+          "label": "Occupation date"
+        },
+        "Within 7 days",
+        "Within 14 days"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "council_tax_registration_deadline",
+      "label": "Council tax registration deadline",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        {
+          "value": "Day 1 of tenancy",
+          "label": "Occupation date"
+        },
+        "Within 7 days",
+        "Within 14 days"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "checkout_inspection_required",
+      "label": "Joint checkout inspection required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "professional_cleaning_standard",
+      "label": "Professional cleaning standard required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "carpet_cleaning_required",
+      "label": "Professional carpet cleaning required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "oven_cleaning_required",
+      "label": "Professional oven cleaning required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "key_return_deadline",
+      "label": "Key return deadline",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        {
+          "value": "Last day of tenancy by noon",
+          "label": "Last day of the occupation contract by noon"
+        },
+        {
+          "value": "Last day of tenancy by 5pm",
+          "label": "Last day of the occupation contract by 5pm"
+        },
+        {
+          "value": "Within 24 hours of tenancy end",
+          "label": "Within 24 hours after the occupation contract ends"
+        },
+        {
+          "value": "Within 48 hours of tenancy end",
+          "label": "Within 48 hours after the occupation contract ends"
+        }
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "forwarding_address_required",
+      "label": "Forwarding address required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "deposit_return_timeline",
+      "label": "Deposit return timeline",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Within 10 days (if no disputes)",
+        "Within 14 days (if no disputes)",
+        "Within 30 days (if no disputes)"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "regular_cleaning_expectations",
+      "label": "Regular cleaning expectations",
+      "inputType": "textarea",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "cleaning_checklist_provided",
+      "label": "Detailed cleaning checklist provided?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "occupation_contract_tier",
+        "value": "Premium Occupation Contract"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "landlord_2_email",
+      "label": "Second landlord email",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "dependsOn": {
+        "questionId": "joint_landlord",
+        "value": true
+      }
+    },
+    {
+      "id": "landlord_2_phone",
+      "label": "Second landlord phone",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "dependsOn": {
+        "questionId": "joint_landlord",
+        "value": true
+      }
+    }
+  ],
+  "scotland": [
+    {
+      "id": "property_address_line1",
+      "label": "Building and street",
+      "inputType": "text",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "property_address_town",
+      "label": "Town / City",
+      "inputType": "text",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "property_address_postcode",
+      "label": "Postcode",
+      "inputType": "text",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "property_type",
+      "label": "Property type",
+      "inputType": "select",
+      "section": "property",
+      "options": [
+        "house",
+        "flat",
+        "maisonette",
+        "bungalow",
+        "studio"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "number_of_bedrooms",
+      "label": "Number of bedrooms",
+      "inputType": "number",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "furnished_status",
+      "label": "Furnishing",
+      "inputType": "select",
+      "section": "property",
+      "options": [
+        "furnished",
+        "part-furnished",
+        "unfurnished"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "parking_available",
+      "label": "Is parking included?",
+      "inputType": "yes_no",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "included_areas",
+      "label": "Other areas or facilities included",
+      "inputType": "textarea",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "shared_areas",
+      "label": "Shared areas or facilities",
+      "inputType": "textarea",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "excluded_areas",
+      "label": "Excluded areas or facilities",
+      "inputType": "textarea",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "has_garden",
+      "label": "Is there a garden or outdoor space?",
+      "inputType": "yes_no",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_full_name",
+      "label": "Full name",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_email",
+      "label": "Email",
+      "inputType": "email",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_phone",
+      "label": "Phone",
+      "inputType": "tel",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_address_line1",
+      "label": "Building and street",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_address_town",
+      "label": "Town / City",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_address_postcode",
+      "label": "Postcode",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_registration_number",
+      "label": "Registration number",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_registration_authority",
+      "label": "Registering local authority",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "joint_landlord",
+      "label": "Is there a second landlord?",
+      "inputType": "yes_no",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "landlord_2_full_name",
+      "label": "Full name",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "joint_landlord",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "landlord_2_address",
+      "label": "Address",
+      "inputType": "textarea",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "joint_landlord",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "landlord_2_email",
+      "label": "Email",
+      "inputType": "email",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "joint_landlord",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "landlord_2_phone",
+      "label": "Phone",
+      "inputType": "tel",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "joint_landlord",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "landlord_2_registration_number",
+      "label": "Scottish landlord registration number",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "joint_landlord",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "agent_usage",
+      "label": "Are you using a letting agent?",
+      "inputType": "yes_no",
+      "section": "landlord",
+      "required": true,
+      "helperText": "If yes, their details can appear on the PRT for rent collection and management.",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "agent_name",
+      "label": "Agent name",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "agent_address",
+      "label": "Agent address",
+      "inputType": "textarea",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "agent_email",
+      "label": "Agent email",
+      "inputType": "email",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "agent_phone",
+      "label": "Agent phone",
+      "inputType": "tel",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "agent_registration_number",
+      "label": "Letting agent registration number",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "agent_services",
+      "label": "Services the agent will provide",
+      "inputType": "textarea",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "agent_contact_matters",
+      "label": "When should the tenant contact the agent first?",
+      "inputType": "textarea",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "agent_signs",
+      "label": "Should the agent sign on your behalf?",
+      "inputType": "yes_no",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "tenancy_start_date",
+      "label": "Start date",
+      "inputType": "date",
+      "section": "tenancy",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "communication_method",
+      "label": "How will formal tenancy communications be sent?",
+      "inputType": "select",
+      "section": "tenancy",
+      "options": [
+        {
+          "value": "hard_copy",
+          "label": "Personal delivery or recorded post"
+        },
+        {
+          "value": "email",
+          "label": "Email using the addresses in the agreement"
+        }
+      ],
+      "required": true,
+      "helperText": "This selects the communication option in clause 4 of the Scottish Government model.",
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "rent_amount",
+      "label": "Rent amount",
+      "inputType": "currency",
+      "section": "rent",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "rent_period",
+      "label": "Rent period",
+      "inputType": "select",
+      "section": "rent",
+      "options": [
+        {
+          "value": "week",
+          "label": "Weekly"
+        },
+        {
+          "value": "fortnight",
+          "label": "Fortnightly"
+        },
+        {
+          "value": "four_weeks",
+          "label": "Every four weeks"
+        },
+        {
+          "value": "month",
+          "label": "Calendar monthly"
+        },
+        {
+          "value": "quarter",
+          "label": "Quarterly"
+        },
+        {
+          "value": "six_months",
+          "label": "Every six months"
+        }
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "rent_due_day",
+      "label": "Payment due day",
+      "inputType": "select",
+      "section": "rent",
+      "options": [
+        "1st",
+        "2nd",
+        "3rd",
+        "4th",
+        "5th",
+        "6th",
+        "7th",
+        "8th",
+        "9th",
+        "10th",
+        "11th",
+        "12th",
+        "13th",
+        "14th",
+        "15th",
+        "16th",
+        "17th",
+        "18th",
+        "19th",
+        "20th",
+        "21st",
+        "22nd",
+        "23rd",
+        "24th",
+        "25th",
+        "26th",
+        "27th",
+        "28th",
+        "29th",
+        "30th",
+        "Last day of month"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "rent_payment_timing",
+      "label": "Is rent paid in advance or arrears?",
+      "inputType": "select",
+      "section": "rent",
+      "options": [
+        {
+          "value": "advance",
+          "label": "In advance"
+        },
+        {
+          "value": "arrears",
+          "label": "In arrears"
+        }
+      ],
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "first_payment",
+      "label": "First payment amount",
+      "inputType": "currency",
+      "section": "rent",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "first_payment_date",
+      "label": "First payment date",
+      "inputType": "date",
+      "section": "rent",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "first_payment_period_from",
+      "label": "First payment covers from",
+      "inputType": "date",
+      "section": "rent",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "first_payment_period_to",
+      "label": "First payment covers to",
+      "inputType": "date",
+      "section": "rent",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "rent_includes",
+      "label": "Services included in the rent, with prices",
+      "inputType": "textarea",
+      "section": "rent",
+      "required": true,
+      "helperText": "The official model requires included services to be listed together with their prices.",
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "payment_method",
+      "label": "Preferred payment method",
+      "inputType": "select",
+      "section": "rent",
+      "options": [
+        "Standing Order",
+        "Bank Transfer",
+        "Cash"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "payment_details",
+      "label": "Payment details",
+      "inputType": "textarea",
+      "section": "rent",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_amount",
+      "label": "Deposit amount",
+      "inputType": "currency",
+      "section": "deposit",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_scheme_name",
+      "label": "Deposit protection scheme",
+      "inputType": "select",
+      "section": "deposit",
+      "options": [
+        "SafeDeposits Scotland",
+        "MyDeposits Scotland",
+        "Letting Protection Service Scotland"
+      ],
+      "required": true,
+      "helperText": "Only these 3 schemes are approved in Scotland",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_paid_date",
+      "label": "Date deposit was received (leave blank if not yet paid)",
+      "inputType": "date",
+      "section": "deposit",
+      "helperText": "Protection deadline is 30 WORKING DAYS from this date",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_protection_date",
+      "label": "Actual date protected",
+      "inputType": "date",
+      "section": "deposit",
+      "helperText": "Only enter a completed date shown by the scheme; do not enter a planned date",
+      "dependsOn": {
+        "questionId": "deposit_already_protected",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_already_protected",
+      "label": "Is the deposit already protected?",
+      "inputType": "yes_no",
+      "section": "deposit",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_reference_number",
+      "label": "Deposit protection reference number (if already protected)",
+      "inputType": "text",
+      "section": "deposit",
+      "required": true,
+      "dependsOn": {
+        "questionId": "deposit_already_protected",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_payer",
+      "label": "Who paid or will pay the deposit?",
+      "inputType": "text",
+      "section": "deposit",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "deposit_scheme_type",
+      "label": "Scheme status/type",
+      "inputType": "select",
+      "section": "deposit",
+      "options": [
+        {
+          "value": "custodial",
+          "label": "Custodial / scheme holds the deposit"
+        },
+        {
+          "value": "insurance",
+          "label": "Insurance-backed / landlord holds the deposit"
+        },
+        {
+          "value": "pending",
+          "label": "Pending receipt or protection"
+        }
+      ],
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "deposit_scheme_address",
+      "label": "Scheme postal address",
+      "inputType": "textarea",
+      "section": "deposit",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "deposit_scheme_contact_details",
+      "label": "Scheme contact details and website",
+      "inputType": "textarea",
+      "section": "deposit",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "deposit_deduction_circumstances",
+      "label": "Circumstances in which deductions may be sought",
+      "inputType": "textarea",
+      "section": "deposit",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "deposit_repayment_dispute_information",
+      "label": "Repayment and dispute information",
+      "inputType": "textarea",
+      "section": "deposit",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "prescribed_information_served",
+      "label": "Prescribed information compliance",
+      "inputType": "yes_no",
+      "section": "deposit",
+      "required": true,
+      "helperText": "MANDATORY: You must serve prescribed information within 30 WORKING DAYS of receiving the deposit. This includes details about the protection scheme and how to apply for deposit release.",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "prescribed_information_date",
+      "label": "When was/will prescribed information be served?",
+      "inputType": "date",
+      "section": "deposit",
+      "required": true,
+      "helperText": "CRITICAL: Must be within 30 WORKING DAYS of receiving the deposit.",
+      "dependsOn": {
+        "questionId": "prescribed_information_served",
+        "value": true
+      },
+      "parentDependsOn": {
+        "questionId": "prescribed_information_served",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "council_tax_responsibility",
+      "label": "Council tax",
+      "inputType": "select",
+      "section": "bills",
+      "options": [
+        "Tenant",
+        "Landlord",
+        "Included in rent"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "utilities_responsibility",
+      "label": "Gas/Electric/Water",
+      "inputType": "select",
+      "section": "bills",
+      "options": [
+        "Tenant",
+        "Landlord",
+        "Included in rent"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "internet_responsibility",
+      "label": "Internet/Broadband",
+      "inputType": "select",
+      "section": "bills",
+      "options": [
+        "Tenant",
+        "Landlord",
+        "Included in rent"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "tenant_utility_accounts",
+      "label": "Which utility accounts must the tenant place in their name?",
+      "inputType": "textarea",
+      "section": "bills",
+      "required": true,
+      "helperText": "This completes the selectable list in clause 27 of the official model.",
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "utility_transfer_responsibility",
+      "label": "Who arranges utility account transfers?",
+      "inputType": "select",
+      "section": "bills",
+      "options": [
+        "Tenant",
+        "Landlord",
+        "Agent"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "epc_rating",
+      "label": "EPC rating",
+      "inputType": "select",
+      "section": "compliance",
+      "options": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "epc_certificate_date",
+      "label": "EPC certificate date",
+      "inputType": "date",
+      "section": "compliance",
+      "required": true,
+      "helperText": "EPCs are valid for 10 years from issue date",
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "gas_safety_certificate",
+      "label": "Current gas safety certificate provided?",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "gas_safety_certificate_date",
+      "label": "Gas safety certificate date",
+      "inputType": "date",
+      "section": "compliance",
+      "required": true,
+      "helperText": "Gas certificates are valid for 12 months from issue date",
+      "dependsOn": {
+        "questionId": "gas_safety_certificate",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "gas_safety_certificate_expiry",
+      "label": "Gas safety certificate expiry",
+      "inputType": "date",
+      "section": "compliance",
+      "required": true,
+      "dependsOn": {
+        "questionId": "gas_safety_certificate",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "electrical_safety_certificate",
+      "label": "Electrical safety (EICR) provided?",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "helperText": "EICR is required for all rental properties in Scotland",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "eicr_certificate_date",
+      "label": "EICR certificate date",
+      "inputType": "date",
+      "section": "compliance",
+      "required": true,
+      "helperText": "EICRs are typically valid for 5 years",
+      "dependsOn": {
+        "questionId": "electrical_safety_certificate",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "smoke_alarms_fitted",
+      "label": "Smoke alarms fitted and tested?",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "helperText": "Scotland requires interlinked fire, smoke and heat alarms in all rental properties",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "smoke_alarm_test_date",
+      "label": "Smoke/heat alarm last test date",
+      "inputType": "date",
+      "section": "compliance",
+      "required": true,
+      "dependsOn": {
+        "questionId": "smoke_alarms_fitted",
+        "value": true
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "carbon_monoxide_alarms",
+      "label": "CO alarms where required?",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "repairing_standard_compliance",
+      "label": "Property meets Scottish Repairing Standard?",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "helperText": "The property must meet the Repairing Standard at the start of and throughout the tenancy",
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "repairs_reporting_method",
+      "label": "How should tenants report repairs?",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        "Email",
+        "Phone",
+        "Online portal"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "permitted_residents",
+      "label": "Permitted residents who are not tenants",
+      "inputType": "textarea",
+      "section": "terms",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "maximum_occupancy",
+      "label": "Maximum number of occupants",
+      "inputType": "number",
+      "section": "terms",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "inventory_delivery_method",
+      "label": "When will the completed inventory be supplied?",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        {
+          "value": "later",
+          "label": "Separately, no later than the tenancy start date"
+        }
+      ],
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "inventory_due_date",
+      "label": "Date the completed inventory will be supplied",
+      "inputType": "date",
+      "section": "terms",
+      "required": true,
+      "dependsOn": {
+        "questionId": "inventory_delivery_method",
+        "value": "later"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "professional_cleaning_required",
+      "label": "Require professional cleaning at end?",
+      "inputType": "yes_no",
+      "section": "terms",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "decoration_condition",
+      "label": "Decoration/alterations policy",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        "No alterations allowed",
+        "With written permission only",
+        "Minor alterations allowed"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_access_notice",
+      "label": "Notice before access",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        "24 hours",
+        "48 hours",
+        "72 hours"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "inspection_frequency",
+      "label": "Inspection frequency",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        "Quarterly",
+        "Every 6 months",
+        "Annually",
+        "As needed"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "end_of_tenancy_viewings",
+      "label": "Allow end-of-tenancy viewings?",
+      "inputType": "yes_no",
+      "section": "terms",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "scotland_rent_control_area_status",
+      "label": "Rent control area status on the tenancy start date",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        {
+          "value": "not_designated",
+          "label": "Not in a designated rent control area"
+        },
+        {
+          "value": "designated",
+          "label": "In a designated rent control area"
+        },
+        {
+          "value": "unknown",
+          "label": "Not yet checked"
+        }
+      ],
+      "required": true,
+      "helperText": "Check the current Scottish Government designation position for the property and the tenancy start date. Do not rely on the former Rent Pressure Zone label.",
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "guarantor_required",
+      "label": "Is a guarantor required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "dependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_name",
+      "label": "Guarantor name",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_address",
+      "label": "Guarantor address",
+      "inputType": "textarea",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_email",
+      "label": "Guarantor email",
+      "inputType": "email",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_phone",
+      "label": "Guarantor phone",
+      "inputType": "tel",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_dob",
+      "label": "Guarantor date of birth",
+      "inputType": "date",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_relationship",
+      "label": "Relationship to tenant",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "is_hmo",
+      "label": "Is the property an HMO or room-by-room let?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "late_payment_interest_applicable",
+      "label": "Apply interest on late payments?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "number_of_front_door_keys",
+      "label": "Front door keys (quantity)",
+      "inputType": "number",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "key_replacement_cost",
+      "label": "Key replacement cost (£ per key)",
+      "inputType": "number",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "contractor_access_notice_period",
+      "label": "Notice period for contractor access",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "24 hours",
+        "48 hours",
+        "72 hours"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "emergency_access_allowed",
+      "label": "Allow emergency access without notice?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "contractor_access_hours",
+      "label": "Permitted access hours",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "tenant_presence_required",
+      "label": "Must tenant be present?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "emergency_landlord_phone",
+      "label": "Emergency landlord contact number",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "water_shutoff_location",
+      "label": "Water main shutoff valve location",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "electricity_fuse_box_location",
+      "label": "Electricity fuse box location",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "gas_shutoff_location",
+      "label": "Gas meter/shutoff location",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "boiler_service_frequency",
+      "label": "Boiler/heating service frequency",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Annual",
+        "Bi-annual",
+        "As required"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "boiler_service_responsibility",
+      "label": "Who arranges boiler service?",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Landlord",
+        "Tenant",
+        "Agent"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "gutter_cleaning_frequency",
+      "label": "Gutter cleaning frequency",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Annual",
+        "Bi-annual",
+        "As required"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "gutter_cleaning_responsibility",
+      "label": "Who arranges gutter cleaning?",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Landlord",
+        "Tenant",
+        "Agent"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "pre_tenancy_meeting_required",
+      "label": "Pre-tenancy property viewing required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "move_in_inspection_required",
+      "label": "Joint move-in inspection required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "photographic_inventory_provided",
+      "label": "Photographic inventory provided?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "tenant_handbook_provided",
+      "label": "Tenant handbook provided?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "utility_accounts_transfer_deadline",
+      "label": "Utility transfer deadline",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Day 1 of tenancy",
+        "Within 7 days",
+        "Within 14 days"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "council_tax_registration_deadline",
+      "label": "Council tax registration deadline",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Day 1 of tenancy",
+        "Within 7 days",
+        "Within 14 days"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "checkout_inspection_required",
+      "label": "Joint checkout inspection required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "professional_cleaning_standard",
+      "label": "Professional cleaning standard required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "carpet_cleaning_required",
+      "label": "Professional carpet cleaning required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "oven_cleaning_required",
+      "label": "Professional oven cleaning required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "key_return_deadline",
+      "label": "Key return deadline",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Last day of tenancy by noon",
+        "Last day of tenancy by 5pm",
+        "Within 24 hours of tenancy end",
+        "Within 48 hours of tenancy end"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "forwarding_address_required",
+      "label": "Forwarding address required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "deposit_return_timeline",
+      "label": "Deposit return timeline",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Within 10 days (if no disputes)",
+        "Within 14 days (if no disputes)",
+        "Within 30 days (if no disputes)"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "regular_cleaning_expectations",
+      "label": "Regular cleaning expectations",
+      "inputType": "textarea",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "cleaning_checklist_provided",
+      "label": "Detailed cleaning checklist provided?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "prt_tier",
+        "value": "Premium PRT"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "landlord_2_email",
+      "label": "Second landlord email",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "dependsOn": {
+        "questionId": "joint_landlord",
+        "value": true
+      }
+    },
+    {
+      "id": "landlord_2_phone",
+      "label": "Second landlord phone",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "dependsOn": {
+        "questionId": "joint_landlord",
+        "value": true
+      }
+    }
+  ],
+  "northern-ireland": [
+    {
+      "id": "property_address_line1",
+      "label": "Building and street",
+      "inputType": "text",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "property_address_town",
+      "label": "Town / City",
+      "inputType": "text",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "property_address_postcode",
+      "label": "Postcode",
+      "inputType": "text",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "property_type",
+      "label": "Property type",
+      "inputType": "select",
+      "section": "property",
+      "options": [
+        "house",
+        "flat",
+        "maisonette",
+        "bungalow",
+        "studio"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "number_of_bedrooms",
+      "label": "Number of bedrooms",
+      "inputType": "number",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "furnished_status",
+      "label": "Furnishing",
+      "inputType": "select",
+      "section": "property",
+      "options": [
+        "furnished",
+        "part-furnished",
+        "unfurnished"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "parking_available",
+      "label": "Is parking included?",
+      "inputType": "yes_no",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "has_garden",
+      "label": "Is there a garden or outdoor space?",
+      "inputType": "yes_no",
+      "section": "property",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_full_name",
+      "label": "Full name",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_email",
+      "label": "Email",
+      "inputType": "email",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_phone",
+      "label": "Phone",
+      "inputType": "tel",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_address_line1",
+      "label": "Building and street",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_address_town",
+      "label": "Town / City",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_address_postcode",
+      "label": "Postcode",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_registration_number",
+      "label": "Registration number",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "agent_usage",
+      "label": "Are you using a letting agent?",
+      "inputType": "yes_no",
+      "section": "landlord",
+      "required": true,
+      "helperText": "If yes, their details can appear on the agreement for rent collection and management.",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "agent_name",
+      "label": "Agent name",
+      "inputType": "text",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "agent_address",
+      "label": "Agent address",
+      "inputType": "textarea",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "agent_email",
+      "label": "Agent email",
+      "inputType": "email",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "agent_phone",
+      "label": "Agent phone",
+      "inputType": "tel",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "agent_signs",
+      "label": "Should the agent sign on your behalf?",
+      "inputType": "yes_no",
+      "section": "landlord",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "agent_usage",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "tenancy_start_date",
+      "label": "Start date",
+      "inputType": "date",
+      "section": "tenancy",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "is_fixed_term",
+      "label": "Is this a fixed term tenancy?",
+      "inputType": "yes_no",
+      "section": "tenancy",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "term_length",
+      "label": "Fixed term length",
+      "inputType": "select",
+      "section": "tenancy",
+      "options": [
+        "6 months",
+        "12 months",
+        "18 months",
+        "24 months"
+      ],
+      "dependsOn": {
+        "questionId": "is_fixed_term",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "tenancy_end_date",
+      "label": "End date (if fixed term)",
+      "inputType": "date",
+      "section": "tenancy",
+      "dependsOn": {
+        "questionId": "is_fixed_term",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "rent_amount",
+      "label": "Rent amount",
+      "inputType": "currency",
+      "section": "rent",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "rent_period",
+      "label": "Rent period",
+      "inputType": "select",
+      "section": "rent",
+      "options": [
+        "month",
+        "week",
+        "quarter",
+        "year"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "rent_due_day",
+      "label": "Payment due day",
+      "inputType": "select",
+      "section": "rent",
+      "options": [
+        "1st",
+        "2nd",
+        "3rd",
+        "4th",
+        "5th",
+        "6th",
+        "7th",
+        "8th",
+        "9th",
+        "10th",
+        "11th",
+        "12th",
+        "13th",
+        "14th",
+        "15th",
+        "16th",
+        "17th",
+        "18th",
+        "19th",
+        "20th",
+        "21st",
+        "22nd",
+        "23rd",
+        "24th",
+        "25th",
+        "26th",
+        "27th",
+        "28th",
+        "29th",
+        "30th",
+        "Last day of month"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "payment_method",
+      "label": "Preferred payment method",
+      "inputType": "select",
+      "section": "rent",
+      "options": [
+        "Standing Order",
+        "Bank Transfer",
+        "Cash"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "payment_details",
+      "label": "Payment details",
+      "inputType": "textarea",
+      "section": "rent",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "ni_capital_value",
+      "label": "Capital value of the dwelling-house",
+      "inputType": "text",
+      "section": "rent",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "ni_rates_payable",
+      "label": "Amount of rates payable",
+      "inputType": "text",
+      "section": "rent",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "ni_rates_liability",
+      "label": "Who is responsible for domestic rates?",
+      "inputType": "select",
+      "section": "rent",
+      "options": [
+        {
+          "value": "landlord_included",
+          "label": "Landlord pays - included in the rent"
+        },
+        {
+          "value": "tenant",
+          "label": "Tenant pays the full rates separately"
+        },
+        {
+          "value": "apportioned",
+          "label": "Rates are shared or apportioned"
+        }
+      ],
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "ni_rates_explanation",
+      "label": "Explain exactly how the rates are shared",
+      "inputType": "textarea",
+      "section": "rent",
+      "required": true,
+      "dependsOn": {
+        "questionId": "ni_rates_liability",
+        "value": "apportioned"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "ni_other_required_payments",
+      "label": "Other payments required in addition to rent and rates",
+      "inputType": "textarea",
+      "section": "rent",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "deposit_lifecycle",
+      "label": "What is the deposit's current status?",
+      "inputType": "select",
+      "section": "deposit",
+      "options": [
+        {
+          "value": "no_deposit",
+          "label": "No deposit is required"
+        },
+        {
+          "value": "expected",
+          "label": "Deposit is expected but has not been received"
+        },
+        {
+          "value": "received_awaiting_protection",
+          "label": "Received and awaiting protection"
+        },
+        {
+          "value": "protected",
+          "label": "Protected, prescribed information not yet supplied"
+        },
+        {
+          "value": "prescribed_information_supplied",
+          "label": "Protected and prescribed information supplied"
+        }
+      ],
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "deposit_amount",
+      "label": "Deposit amount",
+      "inputType": "currency",
+      "section": "deposit",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_paid_date",
+      "label": "Date the deposit was actually received",
+      "inputType": "date",
+      "section": "deposit",
+      "helperText": "Leave blank until money has actually been received",
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_scheme_name",
+      "label": "Approved Northern Ireland deposit scheme",
+      "inputType": "select",
+      "section": "deposit",
+      "options": [
+        "Tenancy Deposit Scheme Northern Ireland (TDS NI)",
+        "MyDeposits Northern Ireland"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "deposit_lifecycle",
+        "value": "protected"
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_protection_date",
+      "label": "Actual protection date",
+      "inputType": "date",
+      "section": "deposit",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "deposit_lifecycle",
+        "value": "protected"
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_reference_number",
+      "label": "Protection reference number",
+      "inputType": "text",
+      "section": "deposit",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "deposit_lifecycle",
+        "value": "protected"
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_scheme_name",
+      "label": "Approved Northern Ireland deposit scheme",
+      "inputType": "select",
+      "section": "deposit",
+      "options": [
+        "Tenancy Deposit Scheme Northern Ireland (TDS NI)",
+        "MyDeposits Northern Ireland"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "deposit_lifecycle",
+        "value": "prescribed_information_supplied"
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_protection_date",
+      "label": "Actual protection date",
+      "inputType": "date",
+      "section": "deposit",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "deposit_lifecycle",
+        "value": "prescribed_information_supplied"
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "deposit_reference_number",
+      "label": "Protection reference number",
+      "inputType": "text",
+      "section": "deposit",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "deposit_lifecycle",
+        "value": "prescribed_information_supplied"
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "prescribed_information_date",
+      "label": "Date prescribed information was supplied",
+      "inputType": "date",
+      "section": "deposit",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "deposit_lifecycle",
+        "value": "prescribed_information_supplied"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "council_tax_responsibility",
+      "label": "Domestic rates",
+      "inputType": "select",
+      "section": "bills",
+      "options": [
+        "Tenant",
+        "Landlord",
+        "Included in rent"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "utilities_responsibility",
+      "label": "Gas/Electric/Water",
+      "inputType": "select",
+      "section": "bills",
+      "options": [
+        "Tenant",
+        "Landlord",
+        "Included in rent"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "internet_responsibility",
+      "label": "Internet/Broadband",
+      "inputType": "select",
+      "section": "bills",
+      "options": [
+        "Tenant",
+        "Landlord",
+        "Included in rent"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "utility_transfer_responsibility",
+      "label": "Who arranges utility account transfers?",
+      "inputType": "select",
+      "section": "bills",
+      "options": [
+        "Tenant",
+        "Landlord",
+        "Agent"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "epc_rating",
+      "label": "EPC rating",
+      "inputType": "select",
+      "section": "compliance",
+      "options": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "gas_safety_certificate",
+      "label": "Current gas safety certificate provided?",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "electrical_safety_certificate",
+      "label": "Electrical safety (EICR) provided?",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "smoke_alarms_fitted",
+      "label": "Required smoke alarms fitted?",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "carbon_monoxide_alarms",
+      "label": "CO alarms where required?",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "smoke_alarm_locations",
+      "label": "Smoke alarm locations",
+      "inputType": "textarea",
+      "section": "compliance",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "heat_alarm_locations",
+      "label": "Heat alarm locations",
+      "inputType": "textarea",
+      "section": "compliance",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "fixed_combustion_appliances",
+      "label": "Fixed combustion appliances and flues",
+      "inputType": "textarea",
+      "section": "compliance",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "carbon_monoxide_alarm_locations",
+      "label": "Carbon monoxide alarm locations",
+      "inputType": "textarea",
+      "section": "compliance",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "carbon_monoxide_alarm_exclusions",
+      "label": "CO-alarm exclusions or not-applicable explanation",
+      "inputType": "textarea",
+      "section": "compliance",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "alarms_tested",
+      "label": "Were all required alarms tested before the tenancy began?",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "alarms_tested_date",
+      "label": "Actual date alarms were tested",
+      "inputType": "date",
+      "section": "compliance",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "fitness_standard_compliance",
+      "label": "Property meets NI fitness standards?",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "repairs_reporting_method",
+      "label": "How should tenants report repairs?",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        "Email",
+        "Phone",
+        "Online portal"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "inventory_delivery_method",
+      "label": "How will the inventory be supplied?",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        {
+          "value": "later",
+          "label": "Supply a completed inventory separately by a stated date"
+        }
+      ],
+      "required": true,
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "inventory_due_date",
+      "label": "Date the separate inventory will be supplied",
+      "inputType": "date",
+      "section": "terms",
+      "required": true,
+      "dependsOn": {
+        "questionId": "inventory_delivery_method",
+        "value": "later"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "professional_cleaning_required",
+      "label": "Require professional cleaning at end?",
+      "inputType": "yes_no",
+      "section": "terms",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "decoration_condition",
+      "label": "Decoration/alterations policy",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        "No alterations allowed",
+        "With written permission only",
+        "Minor alterations allowed"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "landlord_access_notice",
+      "label": "Notice before access",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        "24 hours",
+        "48 hours",
+        "72 hours"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "inspection_frequency",
+      "label": "Inspection frequency",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        "Quarterly",
+        "Every 6 months",
+        "Annually",
+        "As needed"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "end_of_tenancy_viewings",
+      "label": "Allow end-of-tenancy viewings?",
+      "inputType": "yes_no",
+      "section": "terms",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "pets_allowed",
+      "label": "Are pets allowed?",
+      "inputType": "yes_no",
+      "section": "terms",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "smoking_allowed",
+      "label": "Smoking allowed inside?",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        "No",
+        "Yes",
+        "Vaping only"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "subletting_allowed",
+      "label": "Subletting / Airbnb policy",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        "Not allowed",
+        "Only with written consent",
+        "Allowed"
+      ],
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "rent_increase_clause",
+      "label": "Include a rent increase clause?",
+      "inputType": "yes_no",
+      "section": "terms",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "rent_increase_method",
+      "label": "Method",
+      "inputType": "select",
+      "section": "terms",
+      "options": [
+        "RPI",
+        "CPI",
+        "Market review",
+        "Fixed review"
+      ],
+      "dependsOn": {
+        "questionId": "rent_increase_clause",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "break_clause",
+      "label": "Include a break clause?",
+      "inputType": "yes_no",
+      "section": "terms",
+      "required": true,
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_required",
+      "label": "Is a guarantor required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "dependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_name",
+      "label": "Guarantor name",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_address",
+      "label": "Guarantor address",
+      "inputType": "textarea",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_email",
+      "label": "Guarantor email",
+      "inputType": "email",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_phone",
+      "label": "Guarantor phone",
+      "inputType": "tel",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_dob",
+      "label": "Guarantor date of birth",
+      "inputType": "date",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "guarantor_relationship",
+      "label": "Relationship to tenant",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "guarantor_required",
+        "value": true
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "is_hmo",
+      "label": "Is the property an HMO or room-by-room let?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": true
+    },
+    {
+      "id": "late_payment_interest_applicable",
+      "label": "Apply interest on late payments?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "number_of_front_door_keys",
+      "label": "Front door keys (quantity)",
+      "inputType": "number",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "key_replacement_cost",
+      "label": "Key replacement cost (£ per key)",
+      "inputType": "number",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "contractor_access_notice_period",
+      "label": "Notice period for contractor access",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "24 hours",
+        "48 hours",
+        "72 hours"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "emergency_access_allowed",
+      "label": "Allow emergency access without notice?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "contractor_access_hours",
+      "label": "Permitted access hours",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "tenant_presence_required",
+      "label": "Must tenant be present?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "emergency_landlord_phone",
+      "label": "Emergency landlord contact number",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "water_shutoff_location",
+      "label": "Water main shutoff valve location",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "electricity_fuse_box_location",
+      "label": "Electricity fuse box location",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "gas_shutoff_location",
+      "label": "Gas meter/shutoff location",
+      "inputType": "text",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "boiler_service_frequency",
+      "label": "Boiler/heating service frequency",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Annual",
+        "Bi-annual",
+        "As required"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "boiler_service_responsibility",
+      "label": "Who arranges boiler service?",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Landlord",
+        "Tenant",
+        "Agent"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "gutter_cleaning_frequency",
+      "label": "Gutter cleaning frequency",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Annual",
+        "Bi-annual",
+        "As required"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "gutter_cleaning_responsibility",
+      "label": "Who arranges gutter cleaning?",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Landlord",
+        "Tenant",
+        "Agent"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "pre_tenancy_meeting_required",
+      "label": "Pre-tenancy property viewing required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "move_in_inspection_required",
+      "label": "Joint move-in inspection required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "photographic_inventory_provided",
+      "label": "Photographic inventory provided?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "tenant_handbook_provided",
+      "label": "Tenant handbook provided?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "utility_accounts_transfer_deadline",
+      "label": "Utility transfer deadline",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Day 1 of tenancy",
+        "Within 7 days",
+        "Within 14 days"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "council_tax_registration_deadline",
+      "label": "Domestic rates registration deadline",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Day 1 of tenancy",
+        "Within 7 days",
+        "Within 14 days"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "checkout_inspection_required",
+      "label": "Joint checkout inspection required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "professional_cleaning_standard",
+      "label": "Professional cleaning standard required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "carpet_cleaning_required",
+      "label": "Professional carpet cleaning required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "oven_cleaning_required",
+      "label": "Professional oven cleaning required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "key_return_deadline",
+      "label": "Key return deadline",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Last day of tenancy by noon",
+        "Last day of tenancy by 5pm",
+        "Within 24 hours of tenancy end",
+        "Within 48 hours of tenancy end"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "forwarding_address_required",
+      "label": "Forwarding address required?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "deposit_return_timeline",
+      "label": "Deposit return timeline",
+      "inputType": "select",
+      "section": "premium",
+      "options": [
+        "Within 10 days (if no disputes)",
+        "Within 14 days (if no disputes)",
+        "Within 30 days (if no disputes)"
+      ],
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "regular_cleaning_expectations",
+      "label": "Regular cleaning expectations",
+      "inputType": "textarea",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "cleaning_checklist_provided",
+      "label": "Detailed cleaning checklist provided?",
+      "inputType": "yes_no",
+      "section": "premium",
+      "required": true,
+      "parentDependsOn": {
+        "questionId": "ni_tier",
+        "value": "Premium NI Private Tenancy"
+      },
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "tenancy_information_notice_acknowledged",
+      "label": "Will you complete, sign and give the official Tenancy Information Notice to the tenant within 28 days?",
+      "inputType": "yes_no",
+      "section": "compliance",
+      "required": true,
+      "helperText": "The purchased pack includes the official Department for Communities form and guidance. The tenancy agreement does not replace this prescribed notice. It must be completed, signed and supplied free of charge within 28 days of granting the tenancy.",
+      "renderedInSectionFlow": false
+    },
+    {
+      "id": "agreement_date",
+      "label": "Agreement date",
+      "inputType": "date",
+      "section": "tenancy",
+      "required": true
+    }
+  ]
+}

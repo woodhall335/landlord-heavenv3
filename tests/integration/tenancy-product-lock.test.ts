@@ -101,7 +101,7 @@ const { mockSupabase, mockDb } = vi.hoisted(() => {
       },
     }),
     auth: {
-      getUser: async () => ({ data: { user: null }, error: null }),
+      getUser: async () => ({ data: { user: { id: 'user-1' } }, error: null }),
     },
   } as unknown as SupabaseClient<Database>;
 
@@ -161,6 +161,7 @@ describe('Tenancy product lock enforcement', () => {
 
     mockDb.cases.set(caseId, {
       id: caseId,
+      user_id: 'user-1',
       case_type: 'tenancy_agreement',
       jurisdiction: 'england',
       collected_facts: {},
@@ -194,6 +195,7 @@ describe('Tenancy product lock enforcement', () => {
 
     mockDb.cases.set(caseId, {
       id: caseId,
+      user_id: 'user-1',
       case_type: 'tenancy_agreement',
       jurisdiction: 'england',
       collected_facts: {},

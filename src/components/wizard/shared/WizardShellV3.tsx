@@ -30,6 +30,7 @@ export interface WizardShellV3Props {
   completedCount: number;
   totalCount: number;
   progress: number;
+  completionLabel?: string;
   tabs: WizardTab[];
   sectionTitle: string;
   sectionDescription?: string;

@@ -59,6 +59,8 @@ import { PremiumRecommendationBanner } from '@/components/tenancy/PremiumRecomme
 import { ClauseDiffPreview } from '@/components/tenancy/ClauseDiffPreview';
 import { validateTenancyRequiredFacts } from '@/lib/validation/tenancy-details-validator';
 import { calculateDepositCap } from '@/lib/validation/mqs-field-validator';
+import supplementalFields from '@/lib/wizard/tenancy-supplemental-fields.json';
+import { getIncompleteTenancyQuestionnaireFields, getTenancyQuestionProgress, tenancyFieldSection, tenancyFieldLabel, supplementalFieldApplies, tenancyQuestionnaireSectionComplete } from '@/lib/wizard/tenancy-review-fields';
 import {
   getEnglandTenancyPurpose,
   isEnglandPostReformTenancy,
@@ -138,6 +140,14 @@ function isEnglandPostReformNewAgreementCase(
   jurisdictionOverride?: Jurisdiction
 ) {
   const jurisdiction = jurisdictionOverride ?? facts.__meta?.jurisdiction;
+
+  if (
+    jurisdiction === 'england' &&
+    getEnglandTenancyPurpose(facts.england_tenancy_purpose) === 'new_agreement' &&
+    !facts.tenancy_start_date
+  ) {
+    return true;
+  }
 
   return isEnglandPostReformTenancy({
     jurisdiction,
@@ -230,13 +240,70 @@ function getSectionPresentation(section: WizardSection, jurisdiction: Jurisdicti
   return section;
 }
 
+export function findTenancyFieldTarget(
+  field: string,
+  jurisdiction: Jurisdiction,
+  root: ParentNode = document,
+): HTMLElement | null {
+  const rootField = field.split(/[.\[]/)[0];
+  let target = root.querySelector<HTMLElement>(`[id="tenancy-field-${rootField}"]`);
+
+  if (!target) {
+    const tenantMatch = field.match(/^tenants\[(\d+)\]\.(full_name|dob|email|phone|address)$/);
+    if (tenantMatch) {
+      const tenantLabels: Record<string, string> = {
+        full_name: 'Full name',
+        dob: 'Date of birth',
+        email: 'Email',
+        phone: 'Phone',
+        address: 'Tenant current address',
+      };
+      const matchingLabels = [...root.querySelectorAll('label')].filter(label =>
+        label.textContent?.trim().startsWith(tenantLabels[tenantMatch[2]])
+      );
+      target = matchingLabels[Number(tenantMatch[1])]?.parentElement || null;
+    }
+  }
+
+  if (!target) {
+    if (field === 'tenants') {
+      const firstTenantName = [...root.querySelectorAll('label')].find(label =>
+        label.textContent?.trim().startsWith('Full name')
+      );
+      target = firstTenantName?.parentElement || null;
+    } else if (rootField === 'number_of_tenants') {
+      target = [...root.querySelectorAll('label')].find(label =>
+        label.textContent?.trim().startsWith('How many')
+      )?.parentElement || null;
+    } else if (rootField === 'product_tier') {
+      target = [...root.querySelectorAll('label')].find(label =>
+        label.textContent?.trim().startsWith('Which')
+      )?.parentElement || null;
+    } else if (rootField === 'inventory_rooms') {
+      target = [...root.querySelectorAll<HTMLElement>('button')].find(button =>
+        button.textContent?.trim() === 'Add inventory room'
+      )?.parentElement || null;
+    }
+  }
+
+  if (!target) {
+    const labelText = tenancyFieldLabel(rootField, jurisdiction);
+    const label = [...root.querySelectorAll('label')].find(candidate =>
+      candidate.textContent?.trim().startsWith(labelText)
+    );
+    target = label?.parentElement || null;
+  }
+
+  return target;
+}
+
 
 function getTenancyValidationBlockers(facts: Record<string, unknown>, jurisdiction: Jurisdiction): string[] {
   const validation = validateTenancyRequiredFacts(facts, { jurisdiction });
   const blockers: string[] = [];
 
   if (validation.missing_fields.length > 0) {
-    blockers.push(`Missing required tenancy facts: ${validation.missing_fields.join(', ')}`);
+    blockers.push('Complete the required answers listed below.');
   }
 
   const invalidFields = [...validation.invalid_fields];
@@ -273,16 +340,16 @@ function getTenancyValidationBlockers(facts: Record<string, unknown>, jurisdicti
     );
   }
 
-  const genericInvalidFields = invalidFields.filter(
-    (field) =>
-      field !== 'is_fixed_term' &&
-      field !== 'deposit_amount' &&
-      field !== 'england_rent_in_advance_compliant' &&
-      field !== 'england_no_bidding_confirmed' &&
-      field !== 'england_no_discrimination_confirmed'
-  );
+  const genericInvalidFields = invalidFields.filter((field) => {
+    if (jurisdiction !== 'england') return true;
+    if (field === 'is_fixed_term') return !isEnglandPostReformNewAgreementCase(facts as Record<string, any>, jurisdiction);
+    if (field === 'deposit_amount') return !getEnglandDepositCapResult(facts as Record<string, any>)?.exceeds;
+    return !['england_rent_in_advance_compliant', 'england_no_bidding_confirmed', 'england_no_discrimination_confirmed'].includes(field);
+  });
   if (genericInvalidFields.length > 0) {
-    blockers.push(`Invalid tenancy facts: ${genericInvalidFields.join(', ')}`);
+    genericInvalidFields.forEach(field => {
+      blockers.push(`Check ${tenancyFieldLabel(field, jurisdiction)}. The current answer is not valid.`);
+    });
   }
 
   return blockers;
@@ -349,8 +416,14 @@ const SECTIONS: WizardSection[] = [
       if (!facts.number_of_tenants) return false;
       const numTenants = parseInt(facts.number_of_tenants, 10);
       if (numTenants === 0) return false;
-      // Check if at least the first tenant has details
-      return tenants.length > 0 && Boolean(tenants[0]?.full_name);
+      if (tenants.length < numTenants) return false;
+      return tenants.slice(0, numTenants).every((tenant: Record<string, unknown>) =>
+        Boolean(tenant?.full_name) &&
+        Boolean(tenant?.dob) &&
+        Boolean(tenant?.email) &&
+        Boolean(tenant?.phone) &&
+        (facts.__meta?.jurisdiction !== 'scotland' || Boolean(tenant?.address))
+      );
     },
   },
   {
@@ -528,7 +601,7 @@ const SECTIONS: WizardSection[] = [
 
       if (facts.how_to_rent_guide_provided === false) {
         blockers.push(
-          'Record any England written information or government guidance you give the tenant, and keep proof that it was provided.',
+          'England written information or any government guidance you provide should be recorded for the tenancy file',
         );
       }
       if (facts.england_rent_in_advance_compliant === false) {
@@ -651,6 +724,8 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
     __meta: { product: product, jurisdiction },
   });
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+  const [pendingFocusField, setPendingFocusField] = useState<string | null>(null);
+  const [attemptedSections, setAttemptedSections] = useState<Set<string>>(() => new Set());
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle');
@@ -660,6 +735,8 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pendingFactsRef = useRef<any>(null);
   const saveResetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const hasResumedRef = useRef(false);
+  const draftStorageKey = `tenancy-wizard-draft:${caseId}`;
 
   // Load existing facts on mount
   useEffect(() => {
@@ -667,13 +744,21 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
       try {
         setLoading(true);
         const loadedFacts = await getCaseFacts(caseId);
-        if (loadedFacts && Object.keys(loadedFacts).length > 0) {
+        let localDraft: Record<string, any> | null = null;
+        try {
+          const savedDraft = window.localStorage.getItem(draftStorageKey);
+          localDraft = savedDraft ? JSON.parse(savedDraft) : null;
+        } catch (draftError) {
+          console.warn('[Wizard] Could not restore the local draft:', draftError);
+        }
+        const restoredFacts = { ...(loadedFacts || {}), ...(localDraft || {}) };
+        if (Object.keys(restoredFacts).length > 0) {
           setFacts((prev: any) => ({
             ...prev,
-            ...normalizeLegacyEnglandFacts(loadedFacts, jurisdiction),
+            ...normalizeLegacyEnglandFacts(restoredFacts, jurisdiction),
             __meta: {
               ...prev.__meta,
-              ...loadedFacts.__meta,
+              ...restoredFacts.__meta,
               product: product,
               jurisdiction,
             },
@@ -687,7 +772,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
     };
 
     void loadFacts();
-  }, [caseId, jurisdiction, product]);
+  }, [caseId, draftStorageKey, jurisdiction, product]);
 
   // Filter sections based on premium status (jurisdiction-agnostic check)
   const isProductLocked = Boolean(
@@ -727,7 +812,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
 
   // Save facts to backend
   const saveFactsToServer = useCallback(
-    async (updatedFacts: any) => {
+    async (updatedFacts: any): Promise<boolean> => {
       try {
         setSaving(true);
         setSaveState('saving');
@@ -738,24 +823,36 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
           caseType: 'tenancy_agreement',
           product: saveProduct,
         });
+        try {
+          const serializedFacts = JSON.stringify(updatedFacts);
+          if (window.localStorage.getItem(draftStorageKey) === serializedFacts) {
+            window.localStorage.removeItem(draftStorageKey);
+          }
+        } catch (draftError) {
+          console.warn('[Wizard] Could not clear the saved local draft:', draftError);
+        }
         setSaveState('saved');
         if (saveResetTimeoutRef.current) clearTimeout(saveResetTimeoutRef.current);
         saveResetTimeoutRef.current = setTimeout(() => setSaveState('idle'), 1600);
+        return true;
       } catch (err) {
         console.error('Failed to save facts:', err);
         setError('Failed to save. Please try again.');
         setSaveState('idle');
+        if (!pendingFactsRef.current) pendingFactsRef.current = updatedFacts;
+        return false;
       } finally {
         setSaving(false);
       }
     },
-    [caseId, jurisdiction, saveProduct]
+    [caseId, draftStorageKey, jurisdiction, saveProduct]
   );
 
   // P0-2 FIX: Retry save handler - allows users to retry failed saves
-  const handleRetrySave = useCallback(() => {
-    // Retry with current facts state
-    saveFactsToServer(facts);
+  const handleRetrySave = useCallback(async () => {
+    const factsToSave = pendingFactsRef.current || facts;
+    const saved = await saveFactsToServer(factsToSave);
+    if (saved && pendingFactsRef.current === factsToSave) pendingFactsRef.current = null;
   }, [facts, saveFactsToServer]);
 
   // Update facts and save with debouncing to prevent excessive API calls
@@ -779,6 +876,12 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
 
       setFacts(normalizedFacts);
 
+      try {
+        window.localStorage.setItem(draftStorageKey, JSON.stringify(normalizedFacts));
+      } catch (draftError) {
+        console.warn('[Wizard] Could not keep a local draft:', draftError);
+      }
+
       // Store the latest facts to save
       pendingFactsRef.current = normalizedFacts;
 
@@ -791,12 +894,12 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
       // Debounce the save by 500ms
       saveTimeoutRef.current = setTimeout(() => {
         if (pendingFactsRef.current) {
-          saveFactsToServer(pendingFactsRef.current);
+          void saveFactsToServer(pendingFactsRef.current);
           pendingFactsRef.current = null;
         }
       }, 500);
     },
-    [facts, jurisdiction, saveFactsToServer]
+    [draftStorageKey, facts, jurisdiction, saveFactsToServer]
   );
 
   // Cleanup debounce timeout on unmount and flush pending saves
@@ -806,7 +909,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
         clearTimeout(saveTimeoutRef.current);
         // Flush any pending changes before unmount to prevent data loss
         if (pendingFactsRef.current) {
-          saveFactsToServer(pendingFactsRef.current);
+          void saveFactsToServer(pendingFactsRef.current);
         }
       }
       if (saveResetTimeoutRef.current) {
@@ -826,7 +929,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
         }
         // Flush any pending changes when tab is hidden
         if (pendingFactsRef.current) {
-          saveFactsToServer(pendingFactsRef.current);
+          void saveFactsToServer(pendingFactsRef.current);
           pendingFactsRef.current = null;
         }
       }
@@ -838,12 +941,73 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
     };
   }, [saveFactsToServer]);
 
+  const { requiredIssues, visibleSectionIds, allFixIssues } = useMemo(() => {
+    const validation = validateTenancyRequiredFacts(facts, { jurisdiction });
+    const validatorIssues = [...new Set([...validation.missing_fields, ...validation.invalid_fields])];
+    const sectionIds = new Set(visibleSections.map(section => section.id));
+    const questionnaireIssues = getIncompleteTenancyQuestionnaireFields(jurisdiction, facts)
+      .filter(issue => sectionIds.has(issue.section));
+    const tenantCount = Number.parseInt(facts.number_of_tenants || '0', 10);
+    const tenantIssues = Number.isFinite(tenantCount) && tenantCount > 0
+      ? Array.from({ length: Math.min(tenantCount, 6) }, (_, index) => {
+          const tenant = facts.tenants?.[index] || {};
+          return [
+            ['full_name', tenant.full_name],
+            ['dob', tenant.dob],
+            ['email', tenant.email],
+            ['phone', tenant.phone],
+            ...(jurisdiction === 'scotland' ? [['address', tenant.address]] : []),
+          ].filter(([, value]) => !String(value || '').trim()).map(([field]) => `tenants[${index}].${field}`);
+        }).flat()
+      : [];
+    const issues = [...new Set([
+      ...validatorIssues.filter(field => field !== 'tenants'),
+      ...questionnaireIssues.map(issue => issue.id),
+      ...tenantIssues,
+      ...(!facts.number_of_tenants && sectionIds.has('tenants') ? ['number_of_tenants'] : []),
+      ...(sectionIds.has('product') && !facts.product_tier ? ['product_tier'] : []),
+    ])];
+    return { requiredIssues: validatorIssues, visibleSectionIds: sectionIds, allFixIssues: issues };
+  }, [facts, jurisdiction, visibleSections]);
+  const currentSectionIssues = useMemo(
+    () => currentSection ? allFixIssues.filter(field => tenancyFieldSection(field) === currentSection.id) : [],
+    [allFixIssues, currentSection],
+  );
+  const currentSectionReady = Boolean(
+    currentSection &&
+    currentSection.id !== 'review' &&
+    currentSection.isComplete(facts) &&
+    tenancyQuestionnaireSectionComplete(jurisdiction, currentSection.id, facts) &&
+    currentSectionIssues.length === 0 &&
+    (currentSection.hasBlockers?.(facts) || []).length === 0
+  );
+
+  useEffect(() => {
+    if (loading || hasResumedRef.current || highlightedSectionSet.size > 0 || visibleSections.length === 0) return;
+    hasResumedRef.current = true;
+    const firstUnfinishedIndex = visibleSections.findIndex(section =>
+      section.id !== 'review' && (
+        !section.isComplete(facts) ||
+        !tenancyQuestionnaireSectionComplete(jurisdiction, section.id, facts) ||
+        allFixIssues.some(field => tenancyFieldSection(field) === section.id) ||
+        (section.hasBlockers?.(facts) || []).length > 0
+      )
+    );
+    const reviewIndex = visibleSections.findIndex(section => section.id === 'review');
+    setCurrentSectionIndex(firstUnfinishedIndex >= 0 ? firstUnfinishedIndex : Math.max(reviewIndex, 0));
+  }, [allFixIssues, facts, highlightedSectionSet, jurisdiction, loading, visibleSections]);
+
   // Navigate to next section with step completion tracking
   const handleNext = useCallback(() => {
     if (currentSectionIndex < visibleSections.length - 1) {
-      // Track step completion if the current section is complete
       const current = visibleSections[currentSectionIndex];
-      if (current && current.isComplete(facts)) {
+      if (!currentSectionReady) {
+        setAttemptedSections(previous => new Set(previous).add(current.id));
+        setPendingFocusField(currentSectionIssues[0] || null);
+        return;
+      }
+
+      if (current) {
         const normalizedStep = normalizeWizardStep(current.id);
         // Only fire if not already tracked for this step
         const shouldTrack = markStepCompleted(current.id, {
@@ -874,7 +1038,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
 
       setCurrentSectionIndex(currentSectionIndex + 1);
     }
-  }, [caseId, currentSectionIndex, visibleSections, facts, jurisdiction, product]);
+  }, [caseId, currentSectionIndex, visibleSections, jurisdiction, product, currentSectionIssues, currentSectionReady]);
 
   // Navigate to previous section
   const handleBack = useCallback(() => {
@@ -892,27 +1056,17 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
       saveTimeoutRef.current = null;
     }
 
-    // If there are pending facts to save, save them now and wait for completion
-    if (pendingFactsRef.current) {
-      try {
-        await saveCaseFacts(caseId, pendingFactsRef.current, {
-          jurisdiction,
-          caseType: 'tenancy_agreement',
-          product: saveProduct,
-        });
-        pendingFactsRef.current = null;
-      } catch (err) {
-        console.error('[Wizard] Failed to flush pending facts before navigation:', err);
-        // Continue with navigation even if save fails - user can retry from review page
-      }
-    }
+    const factsToSave = pendingFactsRef.current || facts;
+    const saved = await saveFactsToServer(factsToSave);
+    if (!saved) return;
+    if (pendingFactsRef.current === factsToSave) pendingFactsRef.current = null;
 
     router.push(`/wizard/review?case_id=${caseId}&product=${product}`);
-  }, [caseId, jurisdiction, product, router, saveProduct]);
+  }, [caseId, facts, product, router, saveFactsToServer]);
 
-  // Calculate progress
-  const completedCount = visibleSections.filter((s) => s.isComplete(facts)).length;
-  const progress = Math.round((completedCount / visibleSections.length) * 100);
+  const questionProgress = getTenancyQuestionProgress(jurisdiction, facts, visibleSectionIds, allFixIssues);
+  const completedCount = questionProgress.completed;
+  const progress = questionProgress.percent;
 
   // Get blockers and warnings for current section
   const currentBlockers = [
@@ -920,6 +1074,36 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
     ...(currentSection?.id === 'review' ? getTenancyValidationBlockers(facts, jurisdiction) : []),
   ];
   const currentWarnings = currentSection?.hasWarnings?.(facts) || [];
+  const incompleteRequiredSections = visibleSections.filter(section =>
+    section.id !== 'review' &&
+    (!section.isComplete(facts) || !tenancyQuestionnaireSectionComplete(jurisdiction, section.id, facts))
+  );
+  if (currentSection?.id === 'review' && incompleteRequiredSections.length > 0) {
+    currentBlockers.push(`Incomplete required sections: ${incompleteRequiredSections.map(section => getSectionPresentation(section, jurisdiction).label).join(', ')}`);
+  }
+  const navigateToSection = (id: string, field?: string) => {
+    setPendingFocusField(field || null);
+    const index = visibleSections.findIndex(section => section.id === id);
+    if (index >= 0) setCurrentSectionIndex(index);
+  };
+
+  useEffect(() => {
+    if (!pendingFocusField || loading) return;
+
+    const timer = window.setTimeout(() => {
+      const target = findTenancyFieldTarget(pendingFocusField, jurisdiction);
+
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.querySelector<HTMLElement>('input, select, textarea, button')?.focus({ preventScroll: true });
+        target.classList.add('ring-4', 'ring-violet-300', 'rounded-lg');
+        window.setTimeout(() => target?.classList.remove('ring-4', 'ring-violet-300', 'rounded-lg'), 2400);
+      }
+      setPendingFocusField(null);
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+  }, [currentSectionIndex, jurisdiction, loading, pendingFocusField]);
 
   // Jurisdiction label
   const jurisdictionLabel = useMemo(() => {
@@ -965,7 +1149,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
       case 'premium':
         return <PremiumSection facts={facts} onUpdate={handleUpdate} jurisdiction={jurisdiction} />;
       case 'review':
-        return <PremiumReviewSection facts={facts} onUpdate={handleUpdate} caseId={caseId} jurisdiction={jurisdiction} />;
+        return <PremiumReviewSection facts={facts} onUpdate={handleUpdate} caseId={caseId} jurisdiction={jurisdiction} onNavigate={navigateToSection} />;
       default:
         return <div>Unknown section: {currentSection.id}</div>;
     }
@@ -988,13 +1172,14 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
     <ShellComponent
       title={jurisdiction === 'england' ? 'Tenancy Agreement Generator' : `${jurisdictionLabel} Pack`}
       completedCount={completedCount}
-      totalCount={visibleSections.length}
+      totalCount={questionProgress.total}
       progress={progress}
+      completionLabel={`${completedCount} of ${questionProgress.total} required questions complete`}
       tabs={visibleSections.map((section, index) => ({
         id: section.id,
         label: getSectionPresentation(section, jurisdiction).label,
         isCurrent: index === currentSectionIndex,
-        isComplete: section.isComplete(facts),
+        isComplete: section.isComplete(facts) && tenancyQuestionnaireSectionComplete(jurisdiction, section.id, facts) && !requiredIssues.some(field => tenancyFieldSection(field) === section.id),
         hasIssue:
           (section.hasBlockers?.(facts) || []).length > 0 ||
           (highlightedSectionSet.has(section.id) && !section.isComplete(facts)),
@@ -1012,6 +1197,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
       jurisdiction={jurisdiction}
       currentStepId={currentSection?.id}
       saveState={saveState}
+      saveStatusLabel={saveState === 'idle' && questionProgress.remaining > 0 ? `${questionProgress.remaining} questions remaining` : undefined}
       banner={
         <>
           {highlightedSections.length > 0 && (
@@ -1020,7 +1206,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
             </div>
           )}
           {error ? (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg" role="alert" aria-live="assertive">
               <div className="flex items-center justify-between">
                 <span className="text-red-700">{error}</span>
                 <button
@@ -1094,14 +1280,60 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
         </>
       )}
     >
-      {currentBlockers.length > 0 && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <h3 className="text-sm font-medium text-red-800 mb-2">Cannot Proceed - Blockers:</h3>
+      {attemptedSections.has(currentSection.id) && currentSection.id !== 'review' && !currentSectionReady && (
+        <div className="mb-6 rounded-lg border border-red-300 bg-red-50 p-4" role="alert" aria-labelledby="section-errors-title">
+          <h3 id="section-errors-title" className="text-sm font-semibold text-red-900">Complete this section to continue</h3>
+          <p className="mt-1 text-sm text-red-800">
+            {currentSectionIssues.length > 0 ? `${currentSectionIssues.length} ${currentSectionIssues.length === 1 ? 'answer needs' : 'answers need'} attention.` : 'Check the required answers below.'}
+          </p>
+          {currentSectionIssues.length > 0 && (
+            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-red-800">
+              {currentSectionIssues.map(field => (
+                <li key={field}>
+                  <button type="button" className="font-medium underline" onClick={() => setPendingFocusField(field)}>
+                    {tenancyFieldLabel(field, jurisdiction)}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+          {(currentSection.hasBlockers?.(facts) || []).map((blocker, index) => (
+            <p key={index} className="mt-2 text-sm font-medium text-red-900">{blocker}</p>
+          ))}
+        </div>
+      )}
+
+      {currentBlockers.length > 0 && (currentSection.id === 'review' || !attemptedSections.has(currentSection.id)) && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg" role="alert">
+          <h3 className="text-sm font-medium text-red-800 mb-2">
+            {currentSection.id === 'review' ? `${allFixIssues.length} ${allFixIssues.length === 1 ? 'question needs' : 'questions need'} attention` : 'Cannot proceed'}
+          </h3>
           <ul className="list-disc list-inside text-sm text-red-700 space-y-1">
             {currentBlockers.map((blocker, i) => (
               <li key={i}>{blocker}</li>
             ))}
           </ul>
+          {currentSection.id === 'review' && allFixIssues.length > 0 && (
+            <button type="button" className="mt-3 rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white hover:bg-red-800" onClick={() => navigateToSection(tenancyFieldSection(allFixIssues[0]), allFixIssues[0])}>
+              Fix next issue
+            </button>
+          )}
+          {currentSection.id === 'review' && allFixIssues.map(field => (
+            <div key={field} className="mt-2">
+              <button type="button" className="text-sm text-red-800 underline" onClick={() => navigateToSection(tenancyFieldSection(field), field)}>
+                Fix {tenancyFieldLabel(field, jurisdiction)} — open {getSectionPresentation(visibleSections.find(s => s.id === tenancyFieldSection(field)) || currentSection, jurisdiction).label}
+              </button>
+            </div>
+          ))}
+          {currentSection.id === 'review' && incompleteRequiredSections.filter(section =>
+            !allFixIssues.some(field => tenancyFieldSection(field) === section.id)
+          ).map(section => (
+            <div key={`section-${section.id}`} className="mt-2">
+              <button type="button" className="text-sm text-red-800 underline" onClick={() => navigateToSection(section.id)}>
+                Open {getSectionPresentation(section, jurisdiction).label}
+              </button>
+            </div>
+          ))}
         </div>
       )}
 
@@ -1117,6 +1349,9 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
       )}
 
       {renderSection()}
+      {currentSection.id !== 'review' && !getResidentialStandaloneProduct(facts) && (
+        <SupplementalTenancyFields section={currentSection.id} facts={facts} onUpdate={handleUpdate} jurisdiction={jurisdiction} />
+      )}
     </ShellComponent>
   );
 };
@@ -1130,7 +1365,65 @@ interface SectionProps {
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
   jurisdiction?: Jurisdiction;
   caseId?: string;
+  onNavigate?: (section: string) => void;
 }
+
+export const SupplementalTenancyFields: React.FC<SectionProps & { section: string }> = ({ section, facts, onUpdate, jurisdiction = 'england' }) => {
+  const fields = supplementalFields[jurisdiction].filter(field => !field.renderedInSectionFlow && field.section === section && supplementalFieldApplies(field, facts));
+  if (!fields.length) return null;
+  const groups = Array.from({ length: Math.ceil(fields.length / 6) }, (_, index) => fields.slice(index * 6, index * 6 + 6));
+  return <div className="mt-6 space-y-5 border-t border-gray-200 pt-6">
+    <p className="text-sm text-gray-600">These questions are shown because they apply to the answers you have given.</p>
+    {groups.map((group, groupIndex) => (
+      <section key={groupIndex} className="rounded-xl border border-violet-100 bg-violet-50/30 p-4">
+        {groups.length > 1 && <h3 className="mb-4 text-sm font-semibold text-violet-950">Additional details {groupIndex + 1} of {groups.length}</h3>}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {group.map((field: any) => {
+            const props = { label: field.label, value: facts[field.id], required: field.required, helperText: field.helperText, onChange: (value: any) => onUpdate({ [field.id]: value }) };
+            return <div key={field.id} id={`tenancy-field-${field.id}`}>
+              {field.inputType === 'yes_no' ? <YesNoField {...props} /> :
+                field.inputType === 'select' ? <SelectField {...props} options={field.options || []} /> :
+                field.inputType === 'currency' ? <CurrencyField {...props} /> :
+                field.inputType === 'textarea' ? <TextareaField {...props} /> :
+                <TextField {...props} type={field.inputType === 'date' ? 'date' : field.inputType === 'number' ? 'number' : field.inputType === 'email' ? 'email' : field.inputType === 'tel' ? 'tel' : 'text'} />}
+              {field.id === 'first_payment' && !facts.first_payment && facts.rent_amount && (
+                <button type="button" className="mt-2 text-sm font-medium text-violet-800 underline" onClick={() => onUpdate({ [field.id]: facts.rent_amount })}>
+                  Use regular rent amount ({GBP_SYMBOL}{facts.rent_amount})
+                </button>
+              )}
+              {field.id === 'first_payment_date' && !facts.first_payment_date && facts.tenancy_start_date && (
+                <button type="button" className="mt-2 text-sm font-medium text-violet-800 underline" onClick={() => onUpdate({ [field.id]: facts.tenancy_start_date })}>
+                  Use tenancy start date ({facts.tenancy_start_date})
+                </button>
+              )}
+            </div>;
+          })}
+        </div>
+      </section>
+    ))}
+    {section === 'terms' && jurisdiction !== 'wales' && facts.inventory_delivery_method === 'attached' && (
+      <div>
+        <p className="text-sm mb-3">Record rooms and their items for the completed inventory.</p>
+        {(facts.inventory_rooms || []).map((room: any, index: number) => {
+          const updateRoom = (updates: any) => onUpdate({ inventory_rooms: facts.inventory_rooms.map((r: any, i: number) => i === index ? { ...r, ...updates } : r) });
+          return <div key={index} className="border rounded-lg p-4 mb-3 space-y-3">
+            <TextField label="Room name" value={room.name} onChange={name => updateRoom({ name })} required />
+            {(room.items || []).map((item: any, itemIndex: number) => {
+              const updateItem = (updates: any) => updateRoom({ items: room.items.map((entry: any, i: number) => i === itemIndex ? { ...entry, ...updates } : entry) });
+              return <div key={itemIndex} className="grid grid-cols-2 gap-3">
+                <TextField label="Item" value={item.name} onChange={name => updateItem({ name })} required />
+                <TextField label="Condition" value={item.condition} onChange={condition => updateItem({ condition })} required />
+              </div>;
+            })}
+            <button type="button" className="underline text-sm" onClick={() => updateRoom({ items: [...(room.items || []), { name: '', condition: '' }] })}>Add inventory item</button>
+            <button type="button" className="underline text-sm ml-4" onClick={() => onUpdate({ inventory_rooms: facts.inventory_rooms.filter((_: any, i: number) => i !== index) })}>Remove room</button>
+          </div>;
+        })}
+        <button type="button" className="underline text-sm" onClick={() => onUpdate({ inventory_rooms: [...(facts.inventory_rooms || []), { name: '', items: [{ name: '', condition: '' }] }] })}>Add inventory room</button>
+      </div>
+    )}
+  </div>;
+};
 
 // Product Section - jurisdiction-aware terminology with Premium recommendation
 const ProductSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction = 'england' }) => {
@@ -1178,10 +1471,10 @@ const ProductSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
         />
       )}
 
-      <div>
-        <label className={LEGACY_TENANCY_LABEL_CLASS}>
+      <fieldset>
+        <legend className={LEGACY_TENANCY_LABEL_CLASS}>
           Which {jurisdiction === 'wales' ? 'occupation contract' : 'tenancy agreement'} do you need? <RequiredPill required />
-        </label>
+        </legend>
         <p className="text-sm text-gray-500 mb-4">
           {isEngland
             ? 'Standard covers straightforward ordinary residential lets. Premium adds fuller drafting, guarantor support, rent review, and tighter controls. Student, HMO / Shared House, and Lodger now have dedicated England products.'
@@ -1189,7 +1482,9 @@ const ProductSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
         </p>
         <div className={`grid grid-cols-1 gap-4 ${isEngland ? 'md:grid-cols-2' : ''}`}>
           <button
+            type="button"
             onClick={() => handleTierSelect(terms.standardTier)}
+            aria-pressed={facts.product_tier === terms.standardTier}
             className={`p-4 rounded-lg border-2 text-left transition-colors ${
               facts.product_tier === terms.standardTier
                 ? 'border-[#7C3AED] bg-purple-50'
@@ -1203,7 +1498,9 @@ const ProductSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
           </button>
           {isEngland ? (
             <button
+              type="button"
               onClick={() => handleTierSelect(terms.premiumTier)}
+              aria-pressed={facts.product_tier === terms.premiumTier}
               className={`p-4 rounded-lg border-2 text-left transition-colors relative ${
                 facts.product_tier === terms.premiumTier
                   ? 'border-[#7C3AED] bg-purple-50'
@@ -1224,7 +1521,7 @@ const ProductSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
             </button>
           ) : null}
         </div>
-      </div>
+      </fieldset>
 
       {/* Clause Diff Preview - Compact version for wizard */}
       {isEngland && facts.product_tier !== terms.premiumTier && (
@@ -1637,6 +1934,7 @@ const TenantsSection: React.FC<SectionProps> = ({
               type="tel"
               required
             />
+            {jurisdiction === 'scotland' && <TextField label="Tenant current address" value={tenants[i]?.address} onChange={(v) => updateTenant(i, 'address', v)} required />}
           </div>
         </div>
       ))}
@@ -2344,12 +2642,12 @@ const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate, caseId, jurisdi
           }
         />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <YesNoField
+          {isEngland && <YesNoField
             label="Will you attach an inventory schedule?"
             value={facts.inventory_attached}
             onChange={(v) => onUpdate({ inventory_attached: v })}
             required
-          />
+          />}
           <YesNoField
             label={
               isEngland
@@ -3503,8 +3801,8 @@ const ReviewSection: React.FC<SectionProps> = ({ facts }) => {
   );
 };
 
-const PremiumReviewSection: React.FC<SectionProps> = ({ facts }) => {
-  const reviewJurisdiction = (facts.__meta?.jurisdiction || 'england') as Jurisdiction;
+const PremiumReviewSection: React.FC<SectionProps> = ({ facts, onNavigate, jurisdiction = 'england' }) => {
+  const reviewJurisdiction = jurisdiction;
   const isProductLocked = Boolean(
     facts.__meta?.purchased_product || (facts.__meta?.entitlements || []).length > 0
   );
@@ -3513,10 +3811,16 @@ const PremiumReviewSection: React.FC<SectionProps> = ({ facts }) => {
   const terminology = getJurisdictionTerminology(reviewJurisdiction);
   const allComplete = visibleSections
     .filter((section) => section.id !== 'review')
-    .every((section) => section.isComplete(facts));
+    .every((section) => section.isComplete(facts) && tenancyQuestionnaireSectionComplete(reviewJurisdiction, section.id, facts)) && (() => {
+      const result = validateTenancyRequiredFacts(facts, { jurisdiction: reviewJurisdiction });
+      return result.missing_fields.length === 0 && result.invalid_fields.length === 0;
+    })();
   const incompleteSections = visibleSections
-    .filter((section) => section.id !== 'review' && !section.isComplete(facts))
-    .map((section) => getSectionPresentation(section, reviewJurisdiction).label);
+    .filter((section) => section.id !== 'review' && (!section.isComplete(facts) || !tenancyQuestionnaireSectionComplete(reviewJurisdiction, section.id, facts) || (() => {
+      const result = validateTenancyRequiredFacts(facts, { jurisdiction: reviewJurisdiction });
+      return [...result.missing_fields, ...result.invalid_fields].some(field => tenancyFieldSection(field) === section.id);
+    })()))
+    .map((section) => section);
   const includedDocuments = residentialProduct
     ? [
         RESIDENTIAL_LETTING_PRODUCTS[residentialProduct].label,
@@ -3624,8 +3928,8 @@ const PremiumReviewSection: React.FC<SectionProps> = ({ facts }) => {
         {incompleteSections.length > 0 ? (
           <div className="mt-4 space-y-3">
             {incompleteSections.map((section) => (
-              <div key={section} className="rounded-2xl border border-white/70 bg-white/75 px-4 py-4">
-                <p className="text-sm font-semibold text-amber-950">{section}</p>
+              <div key={section.id} className="rounded-2xl border border-white/70 bg-white/75 px-4 py-4">
+                <button type="button" className="text-sm font-semibold text-amber-950 underline" onClick={() => onNavigate?.(section.id)}>Open {getSectionPresentation(section, reviewJurisdiction).label}</button>
                 <p className="mt-1 text-sm leading-6 text-amber-800">
                   This section still needs answers before the document preview can be prepared properly.
                 </p>
@@ -3711,21 +4015,26 @@ const TextField: React.FC<FieldProps> = ({
   required,
   helperText,
   type = 'text',
-}) => (
-  <div>
-    <label className={LEGACY_TENANCY_LABEL_CLASS}>
+}) => {
+  const inputId = React.useId();
+  const helperId = `${inputId}-help`;
+  return <div>
+    <label htmlFor={inputId} className={LEGACY_TENANCY_LABEL_CLASS}>
       {label} <RequiredPill required={required} />
     </label>
-    {helperText && <p className={LEGACY_TENANCY_HELPER_CLASS}>{helperText}</p>}
+    {helperText && <p id={helperId} className={LEGACY_TENANCY_HELPER_CLASS}>{helperText}</p>}
     <Input
+      id={inputId}
       type={type}
       value={value || ''}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
+      required={required}
+      aria-describedby={helperText ? helperId : undefined}
       className="england-tenancy-input w-full rounded-xl border border-[#ddd6fe] bg-[#f5f3ff] focus:border-[#7c3aed] focus:ring-2 focus:ring-[#ede9fe] focus:ring-offset-0"
     />
   </div>
-);
+};
 
 const TextareaField: React.FC<FieldProps> = ({
   label,
@@ -3734,21 +4043,26 @@ const TextareaField: React.FC<FieldProps> = ({
   placeholder,
   required,
   helperText,
-}) => (
-  <div>
-    <label className={LEGACY_TENANCY_LABEL_CLASS}>
+}) => {
+  const inputId = React.useId();
+  const helperId = `${inputId}-help`;
+  return <div>
+    <label htmlFor={inputId} className={LEGACY_TENANCY_LABEL_CLASS}>
       {label} <RequiredPill required={required} />
     </label>
-    {helperText && <p className={LEGACY_TENANCY_HELPER_CLASS}>{helperText}</p>}
+    {helperText && <p id={helperId} className={LEGACY_TENANCY_HELPER_CLASS}>{helperText}</p>}
     <textarea
+      id={inputId}
       value={value || ''}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
+      required={required}
+      aria-describedby={helperText ? helperId : undefined}
       className={LEGACY_TENANCY_TEXTAREA_CLASS}
       rows={3}
     />
   </div>
-);
+};
 
 const NumberField: React.FC<FieldProps> = ({
   label,
@@ -3759,23 +4073,28 @@ const NumberField: React.FC<FieldProps> = ({
   helperText,
   min,
   max,
-}) => (
-  <div>
-    <label className={LEGACY_TENANCY_LABEL_CLASS}>
+}) => {
+  const inputId = React.useId();
+  const helperId = `${inputId}-help`;
+  return <div>
+    <label htmlFor={inputId} className={LEGACY_TENANCY_LABEL_CLASS}>
       {label} <RequiredPill required={required} />
     </label>
-    {helperText && <p className={LEGACY_TENANCY_HELPER_CLASS}>{helperText}</p>}
+    {helperText && <p id={helperId} className={LEGACY_TENANCY_HELPER_CLASS}>{helperText}</p>}
     <Input
+      id={inputId}
       type="number"
       value={value || ''}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
       min={min}
       max={max}
+      required={required}
+      aria-describedby={helperText ? helperId : undefined}
       className="england-tenancy-input w-full rounded-xl border border-[#ddd6fe] bg-[#f5f3ff] focus:border-[#7c3aed] focus:ring-2 focus:ring-[#ede9fe] focus:ring-offset-0"
     />
   </div>
-);
+};
 
 const CurrencyField: React.FC<FieldProps> = ({
   label,
@@ -3784,24 +4103,29 @@ const CurrencyField: React.FC<FieldProps> = ({
   placeholder,
   required,
   helperText,
-}) => (
-  <div>
-    <label className={LEGACY_TENANCY_LABEL_CLASS}>
+}) => {
+  const inputId = React.useId();
+  const helperId = `${inputId}-help`;
+  return <div>
+    <label htmlFor={inputId} className={LEGACY_TENANCY_LABEL_CLASS}>
       {label} <RequiredPill required={required} />
     </label>
-    {helperText && <p className={LEGACY_TENANCY_HELPER_CLASS}>{helperText}</p>}
+    {helperText && <p id={helperId} className={LEGACY_TENANCY_HELPER_CLASS}>{helperText}</p>}
     <div className="relative">
       <span className="absolute left-3 top-3 text-gray-500">£</span>
       <Input
+        id={inputId}
         type="number"
         value={value || ''}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
+        required={required}
+        aria-describedby={helperText ? helperId : undefined}
         className="england-tenancy-input pl-8 w-full rounded-xl border border-[#ddd6fe] bg-[#f5f3ff] focus:border-[#7c3aed] focus:ring-2 focus:ring-[#ede9fe] focus:ring-offset-0"
       />
     </div>
   </div>
-);
+};
 
 const SelectField: React.FC<FieldProps> = ({
   label,
@@ -3810,15 +4134,20 @@ const SelectField: React.FC<FieldProps> = ({
   required,
   helperText,
   options = [],
-}) => (
-  <div>
-    <label className={LEGACY_TENANCY_LABEL_CLASS}>
+}) => {
+  const inputId = React.useId();
+  const helperId = `${inputId}-help`;
+  return <div>
+    <label htmlFor={inputId} className={LEGACY_TENANCY_LABEL_CLASS}>
       {label} <RequiredPill required={required} />
     </label>
-    {helperText && <p className={LEGACY_TENANCY_HELPER_CLASS}>{helperText}</p>}
+    {helperText && <p id={helperId} className={LEGACY_TENANCY_HELPER_CLASS}>{helperText}</p>}
     <select
+      id={inputId}
       value={value || ''}
       onChange={(e) => onChange(e.target.value)}
+      required={required}
+      aria-describedby={helperText ? helperId : undefined}
       className={LEGACY_TENANCY_SELECT_CLASS}
     >
       <option value="">-- Select --</option>
@@ -3832,7 +4161,7 @@ const SelectField: React.FC<FieldProps> = ({
       ))}
     </select>
   </div>
-);
+};
 
 const YesNoField: React.FC<FieldProps> = ({
   label,
@@ -3840,17 +4169,19 @@ const YesNoField: React.FC<FieldProps> = ({
   onChange,
   required,
   helperText,
-}) => (
-  <div>
-    <label className={LEGACY_TENANCY_LABEL_CLASS}>
+}) => {
+  const helperId = `${React.useId()}-help`;
+  return <fieldset aria-describedby={helperText ? helperId : undefined}>
+    <legend className={LEGACY_TENANCY_LABEL_CLASS}>
       {label} <RequiredPill required={required} />
-    </label>
-    {helperText && <p className={LEGACY_TENANCY_HELPER_CLASS}>{helperText}</p>}
+    </legend>
+    {helperText && <p id={helperId} className={LEGACY_TENANCY_HELPER_CLASS}>{helperText}</p>}
     <div className="flex gap-4">
       <Button
         onClick={() => onChange(true)}
         variant={value === true ? 'primary' : 'secondary'}
         type="button"
+        aria-pressed={value === true}
       >
         Yes
       </Button>
@@ -3858,11 +4189,12 @@ const YesNoField: React.FC<FieldProps> = ({
         onClick={() => onChange(false)}
         variant={value === false ? 'primary' : 'secondary'}
         type="button"
+        aria-pressed={value === false}
       >
         No
       </Button>
     </div>
-  </div>
-);
+  </fieldset>
+};
 
 export default TenancySectionFlow;
