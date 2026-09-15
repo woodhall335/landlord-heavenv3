@@ -1,6 +1,16 @@
 import type { BlogPost } from './types';
 
 const BLOG_POST_KEYWORD_TOP_UPS: Record<string, string[]> = {
+  'new-landlord-registration-requirements-england-uk-regions': [
+    'England landlord registration 2026',
+    'private rented sector database registration',
+    'West Midlands landlord registration deadline',
+    'how to register a rental property England',
+    'UK landlord registration by region',
+    'landlord register Wales Scotland Northern Ireland',
+    'Renters Rights Act landlord database',
+    'landlord registration compliance checklist',
+  ],
   'renters-reform-bill-what-landlords-need-to-know': [
     'renters rights act landlords',
     'section 21 abolition guidance',

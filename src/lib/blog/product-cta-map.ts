@@ -70,6 +70,21 @@ const AST_MATCHERS = [/tenancy agreement/i, /ast/i, /prt/i, /occupation contract
 const COMPLETE_PACK_MATCHERS = [/eviction process/i, /possession claim/i, /n5b/i, /court hearing/i, /bailiff/i];
 
 const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
+  'new-landlord-registration-requirements-england-uk-regions': {
+    primaryProductHref: BLOG_PRODUCT_ROUTES.ast,
+    eyebrow: 'Registration-ready paperwork',
+    heading: 'Keep the landlord, property and tenancy details aligned',
+    intro:
+      'Build the current England tenancy paperwork from one guided property record, then keep it with the registration and safety evidence for the home.',
+    ctaLabel: 'Create my tenancy agreement',
+    bullets: [
+      'Record the legal landlord and property details consistently.',
+      'Use current questions for a new England letting.',
+      'Preview the completed agreement before payment.',
+    ],
+    iconKey: 'ast',
+    usedDefault: false,
+  },
   'england-form-3a-eviction-notice-generator-after-renters-rights-act': {
     primaryProductHref: BLOG_PRODUCT_ROUTES.noticeOnly,
     secondaryProductHref: BLOG_PRODUCT_ROUTES.completePack,

@@ -178,6 +178,32 @@ export default function BlogPage() {
           </div>
         </section>
 
+        <section className="border-b border-violet-100 bg-violet-50/70 py-8">
+          <div className="container mx-auto px-4">
+            <Link
+              href="/blog/new-landlord-registration-requirements-england-uk-regions"
+              className="group mx-auto flex max-w-5xl flex-col gap-4 rounded-2xl border border-violet-200 bg-white p-6 shadow-sm transition hover:border-violet-400 hover:shadow-md md:flex-row md:items-center md:justify-between"
+            >
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.14em] text-violet-700">
+                  New legal update · 15 September 2026
+                </p>
+                <h2 className="mt-2 text-xl font-bold text-gray-950 md:text-2xl">
+                  England landlord registration starts regionally in December 2026
+                </h2>
+                <p className="mt-2 max-w-3xl text-gray-600">
+                  See the confirmed West Midlands launch, the England rollout deadline, what to
+                  prepare, and how the rules differ in Wales, Scotland and Northern Ireland.
+                </p>
+              </div>
+              <span className="inline-flex shrink-0 items-center font-semibold text-violet-700">
+                Read the registration guide
+                <ArrowRight className="ml-2 h-4 w-4 transition group-hover:translate-x-1" />
+              </span>
+            </Link>
+          </div>
+        </section>
+
         <section
           id="blog-jurisdictions"
           className="border-b border-gray-100 bg-white py-10 lg:py-14"
