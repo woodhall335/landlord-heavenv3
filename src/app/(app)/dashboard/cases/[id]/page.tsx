@@ -43,6 +43,7 @@ import {
   isAssistedPrepSku,
   normalizeAssistedPrepService,
 } from '@/lib/assisted-prep';
+import { shouldTrackPurchaseOnCheckoutReturn } from '@/lib/analytics/purchase-gating';
 
 interface CaseDetails {
   id: string;
@@ -588,13 +589,20 @@ export default function CaseDetailPage() {
 
   // Track purchase conversion when payment is confirmed via DB
   useEffect(() => {
-    if (orderStatus?.paid && caseDetails) {
-      const paidProductType = orderStatus.product_type || caseDetails.case_type;
-      const transactionId = orderStatus.order_id || caseId;
+    const shouldTrackPurchase = shouldTrackPurchaseOnCheckoutReturn({
+      arrivedFromCheckout,
+      paid: orderStatus?.paid === true,
+      paidAt: orderStatus?.paid_at,
+    });
 
-      // Prevent duplicate tracking by checking sessionStorage
+    if (shouldTrackPurchase && caseDetails) {
+      const paidProductType = orderStatus?.product_type || caseDetails.case_type;
+      const transactionId = orderStatus?.order_id || caseId;
+
+      // Persist the order-level marker across browser sessions. GA4 also
+      // receives the stable transaction_id as its own deduplication key.
       const purchaseKey = `purchase_tracked_${transactionId}`;
-      if (sessionStorage.getItem(purchaseKey)) return;
+      if (sessionStorage.getItem(purchaseKey) || localStorage.getItem(purchaseKey)) return;
 
       // Get product info from the paid order first; case type is only a fallback for older orders.
       const productName = getCaseTypeLabel(paidProductType);
@@ -602,8 +610,8 @@ export default function CaseDetailPage() {
         paidProductType in PRODUCTS
           ? PRODUCTS[paidProductType as keyof typeof PRODUCTS]
           : null;
-      const amount = orderStatus.total_amount || fallbackProduct?.price || 0;
-      const currency = orderStatus.currency || 'GBP';
+      const amount = orderStatus?.total_amount || fallbackProduct?.price || 0;
+      const currency = orderStatus?.currency || 'GBP';
 
       // Get attribution data from session/local storage
       const attributionData = getAttributionForAnalytics();
@@ -667,9 +675,12 @@ export default function CaseDetailPage() {
       }
 
       sessionStorage.setItem(purchaseKey, 'true');
+      localStorage.setItem(purchaseKey, 'true');
     }
   }, [
+    arrivedFromCheckout,
     orderStatus?.paid,
+    orderStatus?.paid_at,
     orderStatus?.order_id,
     orderStatus?.product_type,
     orderStatus?.total_amount,

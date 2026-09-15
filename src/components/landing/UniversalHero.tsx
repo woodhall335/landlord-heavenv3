@@ -115,6 +115,7 @@ export type UniversalHeroProps = {
   verticalAlign?: 'center' | 'top';
   contentWidth?: 'standard' | 'wide';
   mobileTopPadding?: keyof typeof MOBILE_TOP_PADDING_CLASSES;
+  titleSize?: 'standard' | 'compact';
 };
 
 const warnedMessages = new Set<string>();
@@ -169,6 +170,7 @@ export function UniversalHero({
   verticalAlign = 'center',
   contentWidth = 'standard',
   mobileTopPadding = 'standard',
+  titleSize = 'standard',
 }: UniversalHeroProps) {
   const pathname = usePathname() ?? '/';
   const isValidHeading = headingAs === 'h1' || headingAs === 'h2';
@@ -393,8 +395,11 @@ export function UniversalHero({
               <HeadingTag
                 className={clsx(
                   preTitleLabel
-                    ? 'mt-3 text-[2.125rem] font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl'
-                    : 'mt-5 text-[2.125rem] font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl',
+                    ? 'mt-3 font-bold leading-[1.1] tracking-tight'
+                    : 'mt-5 font-bold leading-[1.1] tracking-tight',
+                  titleSize === 'compact'
+                    ? 'text-[2rem] sm:text-4xl lg:text-5xl'
+                    : 'text-[2.125rem] sm:text-5xl lg:text-6xl',
                   isPastel ? 'text-[#17112f]' : 'text-white',
                   'max-w-[18ch] lg:max-w-none'
                 )}

@@ -23,7 +23,7 @@ import {
   isPublicBlogRegion,
   BlogRegion,
 } from '@/lib/blog/categories';
-import { Calendar, Clock, Tag, ChevronLeft, Share2, RefreshCw, CheckCircle } from 'lucide-react';
+import { Calendar, Clock, ChevronLeft, Share2, RefreshCw, CheckCircle } from 'lucide-react';
 import {
   buildBrandedTitle,
   getCanonicalUrl,
@@ -633,6 +633,8 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
   const quickAnswer = getTop30QuickAnswer(post);
   const intentLinks = getIntentRoutedLinks(post.slug);
+  const isBespokeRegistrationGuide =
+    slug === 'new-landlord-registration-requirements-england-uk-regions';
 
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -741,7 +743,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
         <UniversalHero
           id="blog-hero"
           preset="product_owner"
-          title={seoConfig.metaTitle}
+          title={post.title}
           subtitle={seoConfig.heroIntro}
           hideMedia
           align="left"
@@ -751,8 +753,12 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
           variant="pastel"
           backgroundImageSrc={heroSrc}
           backgroundImageAlt="Watercolour illustration for this landlord guide"
+          reviewPillLayout="inline"
+          verticalAlign="top"
+          mobileTopPadding="compact"
+          titleSize="compact"
         >
-          <div className="mt-6 max-w-4xl space-y-4 text-left">
+          <div className="mt-5 max-w-4xl space-y-3 text-left">
             <nav className="flex flex-wrap items-center gap-1.5 text-xs text-[#746d82] sm:text-sm">
               <Link href="/" className="text-[#5b3bb5] transition-colors hover:text-[#3e197e]">Home</Link>
               <span>/</span>
@@ -805,42 +811,19 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               </span>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide">
-              <span className="rounded-full border border-[#ddd2f4] bg-white/80 px-3 py-1 text-[#4d2b92]">Landlord guide</span>
-              <span className="rounded-full border border-[#ddd2f4] bg-white/70 px-3 py-1 text-[#5f5871]">{post.author.role}</span>
-            </div>
-
-            {post.reviewer && (
-              <div className="flex items-center gap-2 text-sm text-[#5f5871]">
-                <CheckCircle className="w-4 h-4 text-emerald-600" />
-                <span>
-                  Reviewed: <span className="font-medium text-[#2b2045]">{post.reviewer.name}</span>
-                  {post.reviewer.role && <span className="text-[#746d82]"> ({post.reviewer.role})</span>}
+            <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
+              <span className="rounded-full border border-[#ddd2f4] bg-white/80 px-3 py-1 uppercase tracking-wide text-[#4d2b92]">
+                Landlord guide
+              </span>
+              <span className="rounded-full border border-[#ddd2f4] bg-white/70 px-3 py-1 uppercase tracking-wide text-[#5f5871]">
+                {post.author.role}
+              </span>
+              {post.reviewer && (
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50/90 px-3 py-1 text-emerald-800">
+                  <CheckCircle className="h-3.5 w-3.5" />
+                  Reviewed by {post.reviewer.name}
                 </span>
-              </div>
-            )}
-
-            <div className="flex flex-wrap gap-2">
-              {post.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="inline-flex items-center gap-1 rounded-full border border-[#ddd2f4] bg-white/70 px-3 py-1 text-sm text-[#5f5871]"
-                >
-                  <Tag className="w-3 h-3" />
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            <div className="rounded-2xl border border-[#ddd2f4] bg-white/78 p-4 text-[#2b2045] shadow-sm backdrop-blur-sm sm:p-5">
-              <p className="text-xs font-semibold uppercase tracking-wide text-[#7040d1]">
-                What this guide will help with
-              </p>
-              <p className="mt-2 text-sm text-[#5f5871]">
-                For landlords searching for {post.targetKeyword}, this guide gives the short answer first,
-                explains the evidence or compliance checks, and points you toward the next sensible
-                document, tool, or guide.
-              </p>
+              )}
             </div>
           </div>
         </UniversalHero>
@@ -883,7 +866,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
               <BlogAssistedPrepSidebar slug={slug} className="mt-8 lg:hidden" />
 
-              {quickAnswer && (
+              {quickAnswer && !isBespokeRegistrationGuide && (
                 <Reveal as="section" className="mt-8 rounded-2xl border border-[#e9dcff] bg-white p-5 shadow-[0_14px_34px_rgba(105,46,212,0.08)] md:p-6" aria-label="Quick answer">
                   <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">Short answer</p>
                   <h2 className="mt-2 text-xl font-bold text-gray-900">{quickAnswer.question}</h2>
@@ -896,15 +879,17 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 </Reveal>
               )}
 
-              <Reveal as="section" className="mt-8 rounded-2xl border border-[#e9dcff] bg-[#fbf8ff] p-5 shadow-[0_14px_34px_rgba(105,46,212,0.08)] md:p-6" aria-label="Use this guide when">
-                <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">Use this guide when</p>
-                <h2 className="mt-2 text-xl font-bold text-gray-900">You need a practical landlord answer, not just a definition</h2>
-                <p className="mt-3 text-sm leading-7 text-gray-700">
-                  Use this page when you need to understand {post.targetKeyword} in landlord terms, check
-                  the evidence or compliance points that matter, and decide whether the next step is a guide,
-                  free tool, notice pack, court pack, tenancy agreement, rent increase pack, or money claim route.
-                </p>
-              </Reveal>
+              {!isBespokeRegistrationGuide && (
+                <Reveal as="section" className="mt-8 rounded-2xl border border-[#e9dcff] bg-[#fbf8ff] p-5 shadow-[0_14px_34px_rgba(105,46,212,0.08)] md:p-6" aria-label="Use this guide when">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">Use this guide when</p>
+                  <h2 className="mt-2 text-xl font-bold text-gray-900">You need a practical landlord answer, not just a definition</h2>
+                  <p className="mt-3 text-sm leading-7 text-gray-700">
+                    Use this page when you need to understand {post.targetKeyword} in landlord terms, check
+                    the evidence or compliance points that matter, and decide whether the next step is a guide,
+                    free tool, notice pack, court pack, tenancy agreement, rent increase pack, or money claim route.
+                  </p>
+                </Reveal>
+              )}
 
               {isTop30UpgradedPost(post.slug) && (
                 <Reveal as="section" className="mt-8 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-5 shadow-[0_14px_34px_rgba(105,46,212,0.08)] md:p-6" aria-label="Recommended next routes">
@@ -936,6 +921,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                   cta={productCta}
                   postSlug={slug}
                   category={post.category}
+                  preserveOpeningParagraph={isBespokeRegistrationGuide}
                 >
                   {post.content}
                 </BlogProse>

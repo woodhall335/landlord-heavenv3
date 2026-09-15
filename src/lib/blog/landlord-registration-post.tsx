@@ -7,7 +7,7 @@ const productLinkClass = 'font-semibold text-primary hover:underline';
 
 export const landlordRegistrationPost: BlogPost = {
   slug: 'new-landlord-registration-requirements-england-uk-regions',
-  title: 'New Landlord Registration Requirements: England Rollout and UK Regional Rules',
+  title: 'New Landlord Registration Requirements: 2026 UK Guide',
   description: 'A practical guide to England’s new regional landlord registration rollout and the separate registration systems in Wales, Scotland and Northern Ireland.',
   metaDescription: 'England landlord registration starts regionally in December 2026. Learn the deadlines, information required and different rules across all four UK nations.',
   date: '2026-09-15',
@@ -26,7 +26,7 @@ export const landlordRegistrationPost: BlogPost = {
   },
   heroImage: '/images/blog/england-landlord-registration-preparation-2026.webp',
   heroImageAlt: 'Landlord preparing property and safety records for registration',
-  showUrgencyBanner: true,
+  showUrgencyBanner: false,
   targetKeyword: 'new landlord registration requirements',
   secondaryKeywords: [
     'register your rental property England',
@@ -46,7 +46,6 @@ export const landlordRegistrationPost: BlogPost = {
     { id: 'cross-border', title: 'Landlords with cross-border portfolios', level: 2 },
     { id: 'preparation-checklist', title: 'Registration preparation checklist', level: 2 },
     { id: 'documents', title: 'Keep registration and documents aligned', level: 2 },
-    { id: 'faq', title: 'Frequently asked questions', level: 2 },
   ],
   relatedPosts: [
     'renters-reform-bill-what-landlords-need-to-know',
@@ -112,6 +111,10 @@ export const landlordRegistrationPost: BlogPost = {
       question: 'Will an unregistered England landlord be unable to regain possession?',
       answer: 'Once the relevant database duties apply, the Renters’ Rights Act can prevent a court from making a possession order while the required landlord and dwelling entries are inactive, subject to limited exceptions including specified antisocial-behaviour grounds. Landlords should check registration status before starting possession action.',
     },
+    {
+      question: 'Does landlord registration replace HMO or selective licensing?',
+      answer: 'No. Registration, property licensing, HMO licensing and letting-agent regulation are separate controls. A property may fall within more than one regime, so landlords should check both national registration duties and local-authority licensing requirements.',
+    },
   ],
   content: (
     <>
@@ -157,6 +160,21 @@ export const landlordRegistrationPost: BlogPost = {
         are granting a new letting, use a current <Link href="/products/ast" className={productLinkClass}>England tenancy agreement</Link>
         {' '}rather than carrying forward old fixed-term AST assumptions.
       </p>
+
+      <div className="not-prose my-8 grid gap-4 sm:grid-cols-2">
+        {[
+          ['England', 'Regional rollout from 15 December 2026', 'Annual registration planned'],
+          ['Wales', 'Register with Rent Smart Wales', 'Renew every five years'],
+          ['Scotland', 'Register with each relevant council', 'Renew every three years'],
+          ['Northern Ireland', 'Register before a new tenancy', 'Renew every three years'],
+        ].map(([nation, action, renewal]) => (
+          <div key={nation} className="rounded-2xl border border-violet-200 bg-white p-5 shadow-sm">
+            <p className="text-sm font-bold uppercase tracking-[0.12em] text-violet-700">{nation}</p>
+            <p className="mt-2 font-semibold text-slate-900">{action}</p>
+            <p className="mt-1 text-sm text-slate-600">{renewal}</p>
+          </div>
+        ))}
+      </div>
 
       <ImagePlaceholder
         src="/images/blog/england-landlord-registration-preparation-2026.webp"
@@ -259,13 +277,6 @@ export const landlordRegistrationPost: BlogPost = {
         aspectRatio="hero"
       />
 
-      <ImagePlaceholder
-        src="/images/blog/landlord-registration-uk-regions-2026.webp"
-        alt="Illustrated comparison of landlord registration across England, Wales, Scotland and Northern Ireland"
-        caption="Each UK nation has its own registration framework. Compliance follows the location of the rental property."
-        aspectRatio="hero"
-      />
-
       <h2 id="wales" className="scroll-mt-24">Wales: Rent Smart Wales registration and licensing</h2>
       <p>
         Wales already has compulsory landlord registration through Rent Smart Wales. The immediate landlord of a
@@ -286,6 +297,13 @@ export const landlordRegistrationPost: BlogPost = {
         <Link href="/tenancy-agreements/wales" className={productLinkClass}>Wales occupation contract</Link> that records the
         landlord, contract-holder, dwelling, payment and inventory details consistently with the property file.
       </p>
+
+      <ImagePlaceholder
+        src="/images/blog/landlord-registration-uk-regions-2026.webp"
+        alt="Illustrated comparison of landlord registration across England, Wales, Scotland and Northern Ireland"
+        caption="Each UK nation has its own registration framework. Compliance follows the location of the rental property."
+        aspectRatio="hero"
+      />
 
       <h2 id="scotland" className="scroll-mt-24">Scotland: registration with the local authority</h2>
       <p>
@@ -381,34 +399,6 @@ export const landlordRegistrationPost: BlogPost = {
         description="Choose the property location and build a guided agreement using the questions and terminology for that jurisdiction."
       />
 
-      <h2 id="faq" className="scroll-mt-24">Frequently asked questions</h2>
-      <h3>Is England landlord registration open now?</h3>
-      <p>
-        The announced service launches on 15 December 2026 in the West Midlands and then rolls out region by region.
-        Follow the call-forward notice for the region containing your property; do not use 14 November 2027 as a reason
-        to ignore an earlier regional deadline.
-      </p>
-      <h3>Will the England registration fee be annual?</h3>
-      <p>
-        The government roadmap says landlords will pay an annual fee. The amount was not confirmed when this article was
-        updated, so budget for a fee but verify the figure in the official launch guidance.
-      </p>
-      <h3>Do Wales, Scotland and Northern Ireland join the England database?</h3>
-      <p>
-        No. Each nation has its own housing system. Existing registration duties continue in Wales, Scotland and Northern
-        Ireland, with their own administrators, fees, renewal cycles and enforcement rules.
-      </p>
-      <h3>Does registration replace HMO or selective licensing?</h3>
-      <p>
-        No. Registration, property licensing, HMO licensing and letting-agent regulation are separate controls. A property
-        may fall within more than one regime. Check the national rules and the local authority requirements for each home.
-      </p>
-      <h3>What should I do before serving a possession notice?</h3>
-      <p>
-        Confirm that the landlord and property registration requirements applying at that time have been met, then check
-        the possession ground, notice period, evidence and service method. Registration compliance cannot repair an
-        incorrect notice, and a correct notice may still face difficulty if a required database entry is inactive.
-      </p>
     </>
   ),
 };

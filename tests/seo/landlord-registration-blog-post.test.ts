@@ -17,6 +17,8 @@ describe('new landlord registration requirements article', () => {
     expect(post?.wordCount).toBeGreaterThanOrEqual(2000);
     expect(post?.tableOfContents.length).toBeGreaterThanOrEqual(10);
     expect(post?.sources?.length).toBeGreaterThanOrEqual(7);
+    expect(post?.title).toBe('New Landlord Registration Requirements: 2026 UK Guide');
+    expect(post?.showUrgencyBanner).toBe(false);
     expect(post?.metaDescription.length).toBeGreaterThanOrEqual(120);
     expect(post?.metaDescription.length).toBeLessThanOrEqual(160);
     expect(getBlogPostManualSeoKeywords(post!)).toEqual(
@@ -71,5 +73,10 @@ describe('new landlord registration requirements article', () => {
     const articlePage = fs.readFileSync(path.join(process.cwd(), 'src/app/(marketing)/blog/[slug]/page.tsx'), 'utf8');
     expect(articlePage).toContain('<UniversalHero');
     expect(articlePage).toContain('backgroundImageSrc={heroSrc}');
+    expect(articlePage).toContain('title={post.title}');
+    expect(articlePage).toContain('verticalAlign="top"');
+    expect(articlePage).toContain('titleSize="compact"');
+    expect(articlePage).toContain('Reviewed by {post.reviewer.name}');
+    expect(articlePage).toContain('preserveOpeningParagraph={isBespokeRegistrationGuide}');
   });
 });
