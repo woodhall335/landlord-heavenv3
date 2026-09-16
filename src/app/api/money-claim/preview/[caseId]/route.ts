@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { createAdminClient, tryGetServerUser } from '@/lib/supabase/server';
-import { buildMoneyClaimGenerationInput } from '@/lib/documents/money-claim-generation-facts';
+import {
+  buildMoneyClaimGenerationInput,
+  resolveMoneyClaimStoredFacts,
+} from '@/lib/documents/money-claim-generation-facts';
 import { generateMoneyClaimPack } from '@/lib/documents/money-claim-pack-generator';
 import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 import { validateForPreview } from '@/lib/validation/previewValidation';
@@ -49,12 +52,7 @@ export async function GET(
       );
     }
 
-    const wizardFacts =
-      caseRow.wizard_facts ||
-      caseRow.collected_facts ||
-      caseRow.facts ||
-      caseRow.case_facts ||
-      {};
+    const wizardFacts = resolveMoneyClaimStoredFacts(caseRow);
 
     // ============================================================================
     // JURISDICTION VALIDATION & NI BLOCKING

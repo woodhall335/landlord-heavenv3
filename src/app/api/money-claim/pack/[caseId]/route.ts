@@ -4,7 +4,10 @@ import {
   tryGetServerUser,
 } from '@/lib/supabase/server';
 import type { CaseFacts } from '@/lib/case-facts/schema';
-import { buildMoneyClaimGenerationInput } from '@/lib/documents/money-claim-generation-facts';
+import {
+  buildMoneyClaimGenerationInput,
+  resolveMoneyClaimStoredFacts,
+} from '@/lib/documents/money-claim-generation-facts';
 import { generateMoneyClaimPack } from '@/lib/documents/money-claim-pack-generator';
 import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 import { validateForGenerate } from '@/lib/validation/previewValidation';
@@ -70,12 +73,7 @@ export async function GET(
   let caseFacts: CaseFacts;
   let moneyClaimCase;
   try {
-    const wizardFacts =
-      caseRow.wizard_facts ||
-      caseRow.collected_facts ||
-      caseRow.facts ||
-      caseRow.case_facts ||
-      {};
+    const wizardFacts = resolveMoneyClaimStoredFacts(caseRow);
 
     if (!wizardFacts || Object.keys(wizardFacts).length === 0) {
       return NextResponse.json(

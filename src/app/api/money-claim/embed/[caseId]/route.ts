@@ -3,7 +3,10 @@ import { NextResponse } from 'next/server';
 import {
   generateDocument,
 } from '@/lib/documents/generator';
-import { buildMoneyClaimGenerationInput } from '@/lib/documents/money-claim-generation-facts';
+import {
+  buildMoneyClaimGenerationInput,
+  resolveMoneyClaimStoredFacts,
+} from '@/lib/documents/money-claim-generation-facts';
 import {
   assertMoneyClaimFinancialsReady,
   buildMoneyClaimFinancialTemplateData,
@@ -207,7 +210,7 @@ export async function GET(
       userId: user?.id,
     });
 
-    const wizardFacts = caseRow.wizard_facts || caseRow.collected_facts || caseRow.facts || {};
+    const wizardFacts = resolveMoneyClaimStoredFacts(caseRow);
     const jurisdiction = deriveCanonicalJurisdiction(
       caseRow.jurisdiction,
       wizardFacts

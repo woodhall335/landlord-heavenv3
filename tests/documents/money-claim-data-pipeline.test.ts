@@ -1,6 +1,10 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
+import { buildMoneyClaimGenerationInput } from '@/lib/documents/money-claim-generation-facts';
 import { mapCaseFactsToMoneyClaimCase } from '@/lib/documents/money-claim-wizard-mapper';
+import { generateDocument } from '@/lib/documents/generator';
+import { fillN1Form } from '@/lib/documents/official-forms-filler';
+import { getPackContents } from '@/lib/products';
 
 // Mock the document generator
 vi.mock('@/lib/documents/generator', () => ({
@@ -45,6 +49,77 @@ vi.mock('@/lib/documents/money-claim-askheaven', () => ({
 import { generateMoneyClaimPack } from '@/lib/documents/money-claim-pack-generator';
 
 describe('Money claim data pipeline (wizard → caseFacts → pack)', () => {
+  beforeEach(() => {
+    vi.mocked(generateDocument).mockClear();
+    vi.mocked(fillN1Form).mockClear();
+    vi.mocked(fillN1Form).mockResolvedValue(Buffer.from('PDF_CONTENT'));
+  });
+
+  it('uses a company claimant consistently in every generated output', async () => {
+    const companyName = 'Example Property Holdings Ltd';
+    const { caseFacts, moneyClaimCase } = buildMoneyClaimGenerationInput({
+      facts: {
+        landlord_is_company: true,
+        company_name: companyName,
+        landlord_full_name: 'Stale Individual Name',
+        claimant_email: 'claims@example.test',
+        claimant_phone: '01234567890',
+        'claimant_address.address_line1': '1 High Street',
+        'claimant_address.city': 'London',
+        'claimant_address.postcode': 'N1 1AA',
+        defendant_full_name: 'Tom Tenant',
+        'property_address.address_line1': '2 Rental Road',
+        'property_address.city': 'London',
+        'property_address.postcode': 'N2 2BB',
+        tenancy_start_date: '2024-01-01',
+        rent_amount: 750,
+        rent_frequency: 'monthly',
+        claim_type: ['rent_arrears'],
+        arrears_total: 1200,
+        charge_interest: false,
+      },
+      caseId: 'company-output-parity',
+      jurisdiction: 'england',
+    });
+
+    const pack = await generateMoneyClaimPack(moneyClaimCase, caseFacts);
+
+    expect(pack.documents.map((document) => document.document_type)).toEqual([
+      'particulars_of_claim',
+      'arrears_schedule',
+      'interest_calculation',
+      'letter_before_claim',
+      'defendant_info_sheet',
+      'reply_form',
+      'financial_statement_form',
+      'court_filing_guide',
+      'enforcement_guide',
+      'n1_claim',
+    ]);
+
+    const requiredCatalogKeys = getPackContents({
+      product: 'money_claim',
+      jurisdiction: 'england',
+    })
+      .filter((item) => item.required !== false)
+      .map((item) => item.key);
+    const generatedKeys = pack.documents.map((document) => document.document_type);
+    expect(requiredCatalogKeys.filter((key) => !generatedKeys.includes(key))).toEqual([]);
+
+    const templateCalls = vi.mocked(generateDocument).mock.calls;
+    expect(templateCalls).toHaveLength(9);
+    for (const [request] of templateCalls) {
+      expect(request.data.landlord_full_name).toBe(companyName);
+      expect(request.data.claimant_display_name).toBe(companyName);
+    }
+
+    expect(fillN1Form).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(fillN1Form).mock.calls[0]?.[0]).toMatchObject({
+      landlord_full_name: companyName,
+      signatory_name: companyName,
+    });
+  });
+
   it(
     'should correctly map wizard facts through the entire pipeline',
     async () => {

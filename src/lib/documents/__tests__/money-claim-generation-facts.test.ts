@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   buildMoneyClaimGenerationFacts,
   buildMoneyClaimGenerationInput,
+  resolveMoneyClaimStoredFacts,
 } from '../money-claim-generation-facts';
 import { assertValidMoneyClaimData } from '../money-claim-validator';
 
@@ -19,6 +20,25 @@ const baseMoneyClaimWizardFacts = {
 };
 
 describe('money claim generation facts', () => {
+  it('does not let an empty wizard facts object mask populated collected facts', () => {
+    expect(
+      resolveMoneyClaimStoredFacts({
+        wizard_facts: {},
+        collected_facts: { company_name: 'Recovered Claimant Ltd' },
+        facts: { company_name: 'Older Claimant Ltd' },
+      })
+    ).toEqual({ company_name: 'Recovered Claimant Ltd' });
+  });
+
+  it('keeps populated wizard facts ahead of legacy fact containers', () => {
+    expect(
+      resolveMoneyClaimStoredFacts({
+        wizard_facts: { company_name: 'Current Claimant Ltd' },
+        collected_facts: { company_name: 'Older Claimant Ltd' },
+      })
+    ).toEqual({ company_name: 'Current Claimant Ltd' });
+  });
+
   it('injects row-level context used by preview and final pack generation', () => {
     const facts = buildMoneyClaimGenerationFacts({
       facts: {

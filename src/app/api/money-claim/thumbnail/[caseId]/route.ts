@@ -29,7 +29,10 @@ import { NextResponse } from 'next/server';
 import { createAdminClient, tryGetServerUser } from '@/lib/supabase/server';
 import { htmlToPdf, pdfBytesToPreviewThumbnail, compileTemplate, loadTemplate } from '@/lib/documents/generator';
 import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
-import { buildMoneyClaimGenerationInput } from '@/lib/documents/money-claim-generation-facts';
+import {
+  buildMoneyClaimGenerationInput,
+  resolveMoneyClaimStoredFacts,
+} from '@/lib/documents/money-claim-generation-facts';
 import {
   assertMoneyClaimFinancialsReady,
   buildMoneyClaimFinancialTemplateData,
@@ -228,7 +231,7 @@ export async function GET(
       userId: user?.id,
     });
 
-    const wizardFacts = caseRow.wizard_facts || caseRow.collected_facts || caseRow.facts || {};
+    const wizardFacts = resolveMoneyClaimStoredFacts(caseRow);
 
     // Determine jurisdiction - Money Claim is ENGLAND-ONLY
     const jurisdiction = deriveCanonicalJurisdiction(caseRow.jurisdiction, wizardFacts) as CanonicalJurisdiction;

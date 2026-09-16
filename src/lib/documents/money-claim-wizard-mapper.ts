@@ -7,6 +7,7 @@ import {
   buildMoneyClaimEvidenceSummary,
   normalizeMoneyClaimEvidenceItems,
 } from '@/lib/money-claim/evidence-checklist';
+import { computeEvictionArrears } from '@/lib/eviction/arrears/computeArrears';
 
 /**
  * Build address string from components, with deduplication.
@@ -72,12 +73,27 @@ function buildCanonicalMoneyClaimArrears(facts: CaseFacts): {
     };
   }
 
-  const schedule = formatArrearsItems(items, facts.tenancy.rent_due_day);
-  const totalFromRows = schedule.reduce((total, entry) => total + (Number(entry.arrears) || 0), 0);
+  const lastPeriodEnd = items
+    .map((item) => item.period_end)
+    .filter((value): value is string => typeof value === 'string' && value.length > 0)
+    .sort()
+    .at(-1);
+  const canonicalArrears = computeEvictionArrears({
+    arrears_items: items,
+    total_arrears: fallbackTotal,
+    rent_amount: rentAmount,
+    rent_frequency: facts.tenancy.rent_frequency,
+    rent_due_day: facts.tenancy.rent_due_day,
+    schedule_end_date: lastPeriodEnd,
+  });
+  const totalFromRows = canonicalArrears.schedule.reduce(
+    (total, entry) => total + (Number(entry.arrears) || 0),
+    0
+  );
 
   return {
     arrears_total: totalFromRows > 0 ? Number(totalFromRows.toFixed(2)) : fallbackTotal,
-    arrears_schedule: schedule,
+    arrears_schedule: canonicalArrears.schedule,
   };
 }
 

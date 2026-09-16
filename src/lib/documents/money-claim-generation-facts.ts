@@ -6,6 +6,39 @@ import { mapCaseFactsToMoneyClaimCase } from './money-claim-wizard-mapper';
 
 type WizardFacts = Record<string, any>;
 
+type MoneyClaimStoredFactContainers = {
+  wizard_facts?: unknown;
+  collected_facts?: unknown;
+  facts?: unknown;
+  case_facts?: unknown;
+};
+
+function isNonEmptyFactRecord(value: unknown): value is WizardFacts {
+  return Boolean(
+    value &&
+      typeof value === 'object' &&
+      !Array.isArray(value) &&
+      Object.keys(value as Record<string, unknown>).length > 0
+  );
+}
+
+/**
+ * Select the first populated facts container in the same priority order used by
+ * the wizard. Empty JSON objects must not mask a populated legacy container.
+ */
+export function resolveMoneyClaimStoredFacts(
+  row: MoneyClaimStoredFactContainers
+): WizardFacts {
+  const candidates = [
+    row.wizard_facts,
+    row.collected_facts,
+    row.facts,
+    row.case_facts,
+  ];
+
+  return candidates.find(isNonEmptyFactRecord) || {};
+}
+
 function readNonBlankString(...values: unknown[]): string | undefined {
   for (const value of values) {
     if (typeof value === 'string' && value.trim()) return value.trim();
