@@ -64,6 +64,18 @@ describe('new landlord registration requirements article', () => {
     const hub = fs.readFileSync(path.join(process.cwd(), 'src/app/(marketing)/blog/page.tsx'), 'utf8');
     expect(hub).toContain(`/blog/${slug}`);
     expect(hub).toContain('Read the registration guide');
+    expect(hub).toContain('const postsForFilter = publicPosts.map');
+    expect(hub).toContain('Landlord Guides by Region');
+    expect(hub).toContain('REGION_ILLUSTRATIONS');
+    for (const illustration of [
+      'blog-hub-guidance-watercolour-2026.webp',
+      'blog-region-scotland-watercolour-2026.webp',
+      'blog-region-wales-watercolour-2026.webp',
+      'blog-region-northern-ireland-watercolour-2026.webp',
+    ]) {
+      expect(hub).toContain(`/images/blog/${illustration}`);
+      expect(fs.existsSync(path.join(process.cwd(), 'public/images/blog', illustration))).toBe(true);
+    }
 
     const paths = (await sitemap()).map((entry) => new URL(entry.url).pathname);
     expect(paths).toContain(`/blog/${slug}`);
@@ -73,6 +85,7 @@ describe('new landlord registration requirements article', () => {
     const articlePage = fs.readFileSync(path.join(process.cwd(), 'src/app/(marketing)/blog/[slug]/page.tsx'), 'utf8');
     expect(articlePage).toContain('<UniversalHero');
     expect(articlePage).toContain('backgroundImageSrc={heroSrc}');
+    expect(articlePage).not.toContain('blog-full-bleed-hero-wrapper');
     expect(articlePage).toContain('title={post.title}');
     expect(articlePage).toContain('verticalAlign="top"');
     expect(articlePage).toContain('titleSize="compact"');

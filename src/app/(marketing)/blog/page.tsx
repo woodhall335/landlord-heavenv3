@@ -22,6 +22,29 @@ import { PRODUCTS } from '@/lib/pricing/products';
 import { getBlogImagesForPost } from '@/lib/blog/image-manifest';
 import { BLOG_TOPIC_HUBS, getPublicTopicHubs } from '@/lib/blog/topic-hubs';
 
+const REGION_ILLUSTRATIONS: Record<BlogRegion, { src: string; alt: string }> = {
+  england: {
+    src: '/images/blog/england-registration-regional-rollout-2026.webp',
+    alt: 'Illustrated map and property records for landlords in England',
+  },
+  scotland: {
+    src: '/images/blog/blog-region-scotland-watercolour-2026.webp',
+    alt: 'Illustrated Scottish landlord registration guide',
+  },
+  wales: {
+    src: '/images/blog/blog-region-wales-watercolour-2026.webp',
+    alt: 'Illustrated Rent Smart Wales landlord guide',
+  },
+  'northern-ireland': {
+    src: '/images/blog/blog-region-northern-ireland-watercolour-2026.webp',
+    alt: 'Illustrated Northern Ireland landlord registration guide',
+  },
+  uk: {
+    src: '/images/blog/landlord-registration-uk-regions-2026.webp',
+    alt: 'Illustrated comparison of landlord requirements across the UK',
+  },
+};
+
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 type BlogSearchParams = Record<string, string | string[] | undefined>;
@@ -66,7 +89,6 @@ export default function BlogPage() {
     isPublicBlogDiscoveryRegion(getPostRegion(post.slug))
   );
   const featuredPost = publicPosts[0] ?? blogPosts[0];
-  const remainingPosts = publicPosts.slice(1);
   const postCounts = getPostCountsByRegion(publicPosts);
   const publicTopicHubs = getPublicTopicHubs().map((slug) => BLOG_TOPIC_HUBS[slug]);
 
@@ -101,7 +123,7 @@ export default function BlogPage() {
 
   const categories = [...new Set(publicPosts.map((post) => post.category))].sort();
 
-  const postsForFilter = remainingPosts.map((post) => {
+  const postsForFilter = publicPosts.map((post) => {
     const manifestImages = getBlogImagesForPost({
       slug: post.slug,
       title: post.title,
@@ -137,7 +159,8 @@ export default function BlogPage() {
 
         <section className="border-b border-[#ede2ff] bg-[#f8f1ff]/70 py-8 lg:py-11">
           <div className="container mx-auto px-4">
-            <div className="max-w-3xl">
+            <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1.25fr)_minmax(320px,0.75fr)] lg:gap-12">
+              <div>
               <p className="mb-3 inline-flex rounded-full border border-[#e3d3ff] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#692ed4]">
                 LandlordHeaven Blog
               </p>
@@ -172,6 +195,18 @@ export default function BlogPage() {
                   <p className="mt-2 leading-6">
                     Move into Notice Only, Complete Pack, Money Claim, rent increase, or tenancy agreement support when the guide shows a clear fit.
                   </p>
+                </div>
+              </div>
+              </div>
+              <div className="relative overflow-hidden rounded-3xl border border-[#e3d3ff] bg-white p-3 shadow-[0_18px_50px_rgba(105,46,212,0.12)]">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#f8f1ff]">
+                  <Image
+                    src="/images/blog/blog-hub-guidance-watercolour-2026.webp"
+                    alt="Illustrated collection of practical support resources for landlords"
+                    fill
+                    sizes="(min-width: 1024px) 420px, 100vw"
+                    className="object-contain"
+                  />
                 </div>
               </div>
             </div>
@@ -210,40 +245,55 @@ export default function BlogPage() {
         >
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">
-              England Landlord Guides
+              Landlord Guides by Region
             </h2>
             <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
-              These guides are written for landlords dealing with property in England. Older
-              non-England matters can still be supported through existing direct-account links.
+              Choose the region where the property is located to see the registration, tenancy
+              and possession guidance that applies there.
             </p>
 
-            <div className="grid grid-cols-1 gap-4 max-w-sm mx-auto">
+            <div className="mx-auto grid max-w-6xl grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
               {getPublicBlogRegions().map((region) => {
                 const config = BLOG_CATEGORIES[region];
                 const count = postCounts[region as BlogRegion];
+                const illustration = REGION_ILLUSTRATIONS[region as BlogRegion];
 
                 return (
                   <Link
                     key={region}
                     href={`/blog/${region}`}
-                    className="group bg-gray-50 rounded-xl border border-gray-200 p-6 hover:border-primary hover:bg-white hover:shadow-lg transition-all text-center"
+                    className="group overflow-hidden rounded-2xl border border-[#e3d3ff] bg-white shadow-sm transition-all hover:-translate-y-1 hover:border-primary hover:shadow-lg"
                   >
-                    <Image
-                      src={config.flag}
-                      alt={config.name}
-                      width={40}
-                      height={30}
-                      className="w-10 h-7 mx-auto mb-3 rounded shadow-sm"
-                    />
-                    <span className="block font-semibold text-gray-900 group-hover:text-primary transition-colors mb-1">
-                      {config.name}
+                    <span className="relative block aspect-[16/9] overflow-hidden border-b border-[#eee5fb] bg-[#f8f1ff]">
+                      <Image
+                        src={illustration.src}
+                        alt={illustration.alt}
+                        fill
+                        sizes="(min-width: 1280px) 360px, (min-width: 768px) 50vw, 100vw"
+                        className="object-cover object-center transition duration-300 group-hover:scale-[1.02]"
+                      />
                     </span>
-                    <span className="text-sm text-gray-500 block mb-3">
-                      {count} guide{count !== 1 ? 's' : ''}
-                    </span>
-                    <span className="inline-flex items-center text-sm text-primary font-medium">
-                      View
-                      <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                    <span className="block p-5 text-left">
+                      <span className="flex items-center gap-3">
+                        <Image
+                          src={config.flag}
+                          alt=""
+                          aria-hidden
+                          width={40}
+                          height={30}
+                          className="h-7 w-10 rounded shadow-sm"
+                        />
+                        <span className="font-semibold text-gray-900 transition-colors group-hover:text-primary">
+                          {config.name}
+                        </span>
+                      </span>
+                      <span className="mt-3 block text-sm text-gray-500">
+                        {count} guide{count !== 1 ? 's' : ''}
+                      </span>
+                      <span className="mt-3 inline-flex items-center text-sm font-medium text-primary">
+                        View guides
+                        <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </span>
                     </span>
                   </Link>
                 );
@@ -291,7 +341,7 @@ export default function BlogPage() {
           </div>
         </section>
 
-        {remainingPosts.length > 0 && (
+        {publicPosts.length > 0 && (
           <section className="bg-white py-10 lg:py-14">
             <div className="container mx-auto px-4">
               <h2 className="mb-2 text-2xl font-bold text-gray-900">All Guides</h2>

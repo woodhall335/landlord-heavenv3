@@ -35,7 +35,6 @@ import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 import { BlogAskHeavenPanel } from '@/components/blog/BlogAskHeavenPanel';
 import type { AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
 import { FAQInline } from '@/components/seo/FAQSection';
-import Image from 'next/image';
 import { BlogReadingProgress } from '@/components/blog/BlogReadingProgress';
 import { BlogBackToTop } from '@/components/blog/BlogBackToTop';
 import { BlogAssistedPrepSidebar } from '@/components/blog/BlogAssistedPrepSidebar';
@@ -846,15 +845,6 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
         {/* Content */}
         <div className="container mx-auto min-w-0 px-4 py-7 lg:py-9">
           <BlogReadingProgress />
-          <Reveal className="blog-full-bleed-hero-wrapper relative mb-8 aspect-[16/9] w-full overflow-hidden rounded-3xl border border-[#e8ddfb] bg-[#f8f1ff] shadow-[0_18px_50px_rgba(105,46,212,0.12)] lg:mb-10">
-            <Image
-              src={heroSrc}
-              alt={post.heroImageAlt}
-              fill
-              sizes="(min-width: 1280px) 1120px, 100vw"
-              className="object-cover object-center"
-            />
-          </Reveal>
           <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,760px)_300px] lg:gap-12 lg:justify-center">
             {/* Main Content */}
             <div className="min-w-0 max-w-[760px] overflow-x-clip pb-20 lg:pb-0">
