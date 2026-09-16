@@ -324,10 +324,11 @@ describe('getPackContents', () => {
       };
       const items = getPackContents(args);
 
-      expect(items.length).toBe(5);
+      expect(items.length).toBe(6);
       expect(items.find(i => i.key === 'private_tenancy_agreement')).toBeDefined();
       expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
       expect(items.find(i => i.key === 'pre_tenancy_checklist_northern_ireland')).toBeDefined();
+      expect(items.find(i => i.key === 'rent_book_northern_ireland')).toBeDefined();
       expect(items.find(i => i.key === 'tenancy_information_notice_northern_ireland')).toBeDefined();
       expect(items.find(i => i.key === 'tenancy_information_notice_guidance_northern_ireland')).toBeDefined();
     });
@@ -403,10 +404,11 @@ describe('getPackContents', () => {
       };
       const items = getPackContents(args);
 
-      expect(items.length).toBe(8);
+      expect(items.length).toBe(9);
       expect(items.find(i => i.key === 'private_tenancy_agreement_hmo')).toBeDefined();
       expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
       expect(items.find(i => i.key === 'pre_tenancy_checklist_northern_ireland')).toBeDefined();
+      expect(items.find(i => i.key === 'rent_book_northern_ireland')).toBeDefined();
       expect(items.find(i => i.key === 'tenancy_information_notice_northern_ireland')).toBeDefined();
       expect(items.find(i => i.key === 'tenancy_information_notice_guidance_northern_ireland')).toBeDefined();
       expect(items.find(i => i.key === 'key_schedule')).toBeDefined();
@@ -456,8 +458,11 @@ describe('getPackContents', () => {
           expect(standardItems.find(i => i.key === 'prt_statutory_terms_supporting_notes_scotland')).toBeDefined();
           expect(premiumItems.find(i => i.key === 'prt_statutory_terms_supporting_notes_scotland')).toBeDefined();
         } else if (jur === 'northern-ireland') {
-          expect(standardItems.length).toBe(5);
-          expect(premiumItems.length).toBe(8);
+          expect(standardItems.length).toBe(6);
+          expect(premiumItems.length).toBe(9);
+          expect(
+            standardItems.find(i => i.key === 'rent_book_northern_ireland')
+          ).toBeDefined();
           expect(
             standardItems.find(i => i.key === 'tenancy_information_notice_northern_ireland')
           ).toBeDefined();

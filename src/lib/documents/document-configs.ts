@@ -806,6 +806,35 @@ export function getASTDocuments(
     });
   }
 
+  if (jurisdiction === 'northern-ireland') {
+    documents.push(
+      {
+        id: 'rent-book-northern-ireland',
+        title: 'Northern Ireland Rent Book',
+        description: 'Rent book containing the prescribed tenancy particulars and payment-record pages.',
+        icon: 'schedule',
+        pages: '8-12 pages',
+        category: 'Schedule',
+      },
+      {
+        id: 'tenancy-information-notice-northern-ireland',
+        title: 'Official Northern Ireland Tenancy Information Notice',
+        description: 'Prescribed notice to complete, sign, and give to the tenant within 28 days.',
+        icon: 'notice',
+        pages: '4-6 pages',
+        category: 'Guidance',
+      },
+      {
+        id: 'tenancy-information-notice-guidance-northern-ireland',
+        title: 'Official Tenancy Information Notice Completion Guidance',
+        description: 'Department for Communities guidance for completing the prescribed notice.',
+        icon: 'guidance',
+        pages: '4-8 pages',
+        category: 'Guidance',
+      }
+    );
+  }
+
   if (tier === 'premium') {
     documents.push(
       {

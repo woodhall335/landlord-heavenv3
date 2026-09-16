@@ -780,7 +780,8 @@ async function appendTenancyPackageManifest(
 export function validateGeneratedTenancyPackage(
   documents: ASTPackDocument[],
   jurisdiction: TenancyJurisdiction,
-  inventoryState: CanonicalInventoryState
+  inventoryState: CanonicalInventoryState,
+  tier: 'standard' | 'premium' = 'standard'
 ): string[] {
   const errors: string[] = [];
   const agreement = documents.find((document) => document.category === 'agreement');
@@ -789,7 +790,33 @@ export function validateGeneratedTenancyPackage(
   );
   if (!agreement?.pdf) errors.push('PACKAGE_AGREEMENT_MISSING');
   if (!inventory?.pdf) errors.push('PACKAGE_INVENTORY_MISSING');
+  if (!documents.some((document) => document.category === 'checklist' && document.pdf)) {
+    errors.push('PACKAGE_COMPLIANCE_CHECKLIST_MISSING');
+  }
   errors.push(...inventoryState.blockingErrors);
+
+  if (jurisdiction === 'england') {
+    for (const requiredType of [
+      'deposit_protection_certificate',
+      'tenancy_deposit_information',
+    ]) {
+      if (!documents.some((document) => document.document_type === requiredType && document.pdf)) {
+        errors.push('PACKAGE_ENGLAND_DEPOSIT_DOCUMENT_MISSING');
+      }
+    }
+  }
+
+  if (tier === 'premium') {
+    for (const requiredType of [
+      'key_schedule',
+      'property_maintenance_guide',
+      'checkout_procedure',
+    ]) {
+      if (!documents.some((document) => document.document_type === requiredType && document.pdf)) {
+        errors.push('PACKAGE_PREMIUM_SUPPORT_DOCUMENT_MISSING');
+      }
+    }
+  }
 
   const agreementText = agreement?.html || '';
   if (
@@ -2306,6 +2333,10 @@ export async function generatePremiumASTDocuments(
 
   const generationTimestamp = new Date().toISOString();
   const documentId = `${jurisdiction.toUpperCase()}-HMO-${Date.now()}`;
+  const premiumInventoryState = deriveCanonicalInventoryState(
+    data as unknown as Record<string, unknown>,
+    { documentSeed: data.document_id || documentId }
+  );
   const renderedAgreementTitle = getRenderedAgreementTitle(
     config,
     jurisdiction,
@@ -2339,6 +2370,16 @@ export async function generatePremiumASTDocuments(
     current_date: new Date().toISOString().split('T')[0],
     // Flag for inventory template to know if wizard data is present
     inventory_wizard_completed: hasInventoryData,
+    inventory_lifecycle_state: premiumInventoryState.lifecycleState,
+    inventory_signature_state: premiumInventoryState.signatureState,
+    inventory_included_in_agreement: premiumInventoryState.includedInAgreement,
+    inventory_separate_file_included:
+      premiumInventoryState.separateInventoryFileIncluded,
+    inventory_document_id: premiumInventoryState.inventoryDocumentId,
+    inventory_content_hash: premiumInventoryState.inventoryContentHash,
+    inventory_due_date: premiumInventoryState.dueDeliveryDate,
+    inventory_customer_status: inventoryCustomerStatus(premiumInventoryState),
+    inventory_structured_data_complete: premiumInventoryState.structuredDataComplete,
   };
 
   const documents: ASTPackDocument[] = [];
@@ -2469,10 +2510,17 @@ export async function generatePremiumASTDocuments(
     caseId || documentId,
     documentId
   );
-  const premiumInventoryState = deriveCanonicalInventoryState(
-    data as unknown as Record<string, unknown>,
-    { documentSeed: data.document_id || documentId }
+  const packageErrors = validateGeneratedTenancyPackage(
+    documents,
+    jurisdiction,
+    premiumInventoryState,
+    'premium'
   );
+  if (packageErrors.length) {
+    throw new Error(
+      `[AST Generator] Package consistency validation failed: ${packageErrors.join(', ')}`
+    );
+  }
   await appendTenancyPackageManifest(
     documents,
     config,

@@ -20,8 +20,11 @@ vi.mock('@/lib/documents/generator', async () => {
     ...actual,
     htmlToPdf: vi.fn(async (html: string) => Buffer.from(html)),
     generateDocument: vi.fn(async ({ templatePath, data }) => ({
-      html: `<html><body>Template: ${templatePath} - Data: ${JSON.stringify(data).slice(0, 100)}</body></html>`,
-      pdf: Buffer.from(`PDF for ${templatePath}`),
+      html: `<html><body>Template: ${templatePath} - Data: ${JSON.stringify(data)}</body></html>`,
+      pdf: Buffer.from(
+        'JVBERi0xLjcKJYGBgYEKCjUgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL1R5cGUgL09ialN0bQovTiA0Ci9GaXJzdCAyMAovTGVuZ3RoIDI1OQo+PgpzdHJlYW0KeJzVUk1LxDAQvedXzFFPmU7TpJVS0H5cRFgWT8oewjYsBdlI2oL+eyfNqngQzxIeyeS9ySR5kwECgVKQgylBQZET1LWQj++vDuTOntws5P00zvDMLMIeDkK2fj0vkImmEd/a1i72xZ9ESoIsij8Vu+DH9egC1EM/DIgGEbViaETqeG4ZFYM4Zo5KXjOMuoD3TI6Y3zI3JGiTciK/aYtLfs8za3XUdEmryhR/1Y21+nQG/XWfqhHywY+dXRxcdTeEpNFQRahUoZ+u+TuCs4v/v4/b7j/5868v/OFztDeaHFzsgc1luXezX8ORbWddE//LjZO982/cNcgjw4RDJD8AS/iN4AplbmRzdHJlYW0KZW5kb2JqCgo2IDAgb2JqCjw8Ci9TaXplIDcKL1Jvb3QgMiAwIFIKL0luZm8gMyAwIFIKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL1R5cGUgL1hSZWYKL0xlbmd0aCAzNAovVyBbIDEgMiAyIF0KL0luZGV4IFsgMCA3IF0KPj4Kc3RyZWFtCnicFcQxDgAgCASwHsbd7/p6CB2K7nLZstV24pF8BkOGAq0KZW5kc3RyZWFtCmVuZG9iagoKc3RhcnR4cmVmCjM3NwolJUVPRg==',
+        'base64'
+      ),
     })),
   };
 });
@@ -48,6 +51,30 @@ describe('AST Pack - Unbundled Document Generation', () => {
     payment_details: 'Sort code 00-00-00 / Account 12345678',
     deposit_amount: 1200,
     deposit_scheme_name: 'DPS',
+    inventory_delivery_method: 'later',
+    inventory_due_date: '2025-01-01',
+    rent_smart_wales_registered: true,
+    rent_smart_wales_registration_number: 'RSW-TEST-123',
+    deposit_payer: 'Test Tenant',
+    deposit_scheme_address: 'The Deposit Scheme, London',
+    deposit_scheme_contact_details: 'support@example.com',
+    ni_capital_value: '£100,000',
+    ni_rates_payable: '£1,000 per year',
+    ni_rates_liability: 'landlord_included',
+    ni_rates_landlord_included: true,
+    ni_rates_included_in_rent: 'Landlord pays the rates; they are included in the rent.',
+    ni_other_required_payments: 'None',
+    deposit_lifecycle: 'expected',
+    deposit_is_expected: true,
+    smoke_alarms_fitted: true,
+    smoke_alarm_locations: 'Living room and hall',
+    heat_alarm_locations: 'Kitchen',
+    fixed_combustion_appliances: 'Gas boiler in utility room',
+    carbon_monoxide_alarms: true,
+    carbon_monoxide_alarm_locations: 'Utility room',
+    carbon_monoxide_alarm_exclusions: 'Gas cooker excluded by the Regulations',
+    alarms_tested: true,
+    alarms_tested_date: '2024-12-31',
     tenants: {
       0: {
         full_name: 'Test Tenant',
@@ -82,7 +109,7 @@ describe('AST Pack - Unbundled Document Generation', () => {
       // Document 2: Inventory Schedule
       const inventory = pack.documents.find((d) => d.document_type === 'inventory_schedule');
       expect(inventory).toBeDefined();
-      expect(inventory?.title).toBe('Inventory & Schedule of Condition');
+      expect(inventory?.title).toBe('Inventory Template & Schedule of Condition');
       expect(inventory?.category).toBe('schedule');
       expect(inventory?.file_name).toBe('inventory_schedule.pdf');
 
@@ -124,7 +151,7 @@ describe('AST Pack - Unbundled Document Generation', () => {
       expect(informationSheet?.pdf).toBeInstanceOf(Buffer);
     }, 20000);
 
-    it('generates 3 separate documents for Wales Standard pack', async () => {
+    it('generates the complete Wales Standard pack', async () => {
       const astData = {
         ...mapWizardToASTData(baseWizardFacts),
         jurisdiction_wales: true,
@@ -133,17 +160,17 @@ describe('AST Pack - Unbundled Document Generation', () => {
 
       const pack = await generateStandardASTDocuments(astData, 'test-case-id');
 
-      expect(pack.documents).toHaveLength(3);
+      expect(pack.documents).toHaveLength(4);
 
       const agreement = pack.documents.find((d) => d.category === 'agreement');
       expect(agreement?.document_type).toBe('soc_agreement');
-      expect(agreement?.title).toBe('Standard Occupation Contract');
+      expect(agreement?.title).toBe('Fixed Term Standard Occupation Contract');
 
       const checklist = pack.documents.find((d) => d.category === 'checklist');
       expect(checklist?.document_type).toBe('pre_tenancy_checklist_wales');
     }, 20000);
 
-    it('generates 4 separate documents for Scotland Standard pack', async () => {
+    it('generates the complete Scotland Standard pack', async () => {
       const astData = {
         ...mapWizardToASTData(baseWizardFacts),
         jurisdiction_england: false,
@@ -154,7 +181,7 @@ describe('AST Pack - Unbundled Document Generation', () => {
 
       const pack = await generateStandardASTDocuments(astData, 'test-case-id');
 
-      expect(pack.documents).toHaveLength(4);
+      expect(pack.documents).toHaveLength(5);
 
       const agreement = pack.documents.find((d) => d.category === 'agreement');
       expect(agreement?.document_type).toBe('prt_agreement');
@@ -164,7 +191,7 @@ describe('AST Pack - Unbundled Document Generation', () => {
       expect(checklist?.document_type).toBe('pre_tenancy_checklist_scotland');
     }, 20000);
 
-    it('generates 3 separate documents for Northern Ireland Standard pack', async () => {
+    it('generates the complete Northern Ireland Standard pack', async () => {
       const astData = {
         ...mapWizardToASTData(baseWizardFacts),
         jurisdiction_england: false,
@@ -174,7 +201,7 @@ describe('AST Pack - Unbundled Document Generation', () => {
 
       const pack = await generateStandardASTDocuments(astData, 'test-case-id');
 
-      expect(pack.documents).toHaveLength(3);
+      expect(pack.documents).toHaveLength(7);
 
       const agreement = pack.documents.find((d) => d.category === 'agreement');
       expect(agreement?.document_type).toBe('private_tenancy_agreement');
@@ -272,7 +299,7 @@ describe('AST Pack - Unbundled Document Generation', () => {
       ).toBe(true);
     }, 20000);
 
-    it('generates 6 separate documents for Wales Premium pack', async () => {
+    it('generates the complete Wales Premium pack', async () => {
       const astData = {
         ...mapWizardToASTData(premiumWizardFacts),
         jurisdiction_wales: true,
@@ -281,14 +308,14 @@ describe('AST Pack - Unbundled Document Generation', () => {
 
       const pack = await generatePremiumASTDocuments(astData, 'test-case-id');
 
-      expect(pack.documents).toHaveLength(6);
+      expect(pack.documents).toHaveLength(7);
 
       const agreement = pack.documents.find((d) => d.category === 'agreement');
       expect(agreement?.document_type).toBe('soc_agreement_hmo');
       expect(agreement?.title).toContain('HMO');
     }, 20000);
 
-    it('generates 7 separate documents for Scotland Premium pack', async () => {
+    it('generates the complete Scotland Premium pack', async () => {
       const astData = {
         ...mapWizardToASTData(premiumWizardFacts),
         jurisdiction_england: false,
@@ -298,13 +325,13 @@ describe('AST Pack - Unbundled Document Generation', () => {
 
       const pack = await generatePremiumASTDocuments(astData, 'test-case-id');
 
-      expect(pack.documents).toHaveLength(7);
+      expect(pack.documents).toHaveLength(8);
 
       const agreement = pack.documents.find((d) => d.category === 'agreement');
       expect(agreement?.document_type).toBe('prt_agreement_hmo');
     }, 20000);
 
-    it('generates 6 separate documents for Northern Ireland Premium pack', async () => {
+    it('generates the complete Northern Ireland Premium pack', async () => {
       const astData = {
         ...mapWizardToASTData(premiumWizardFacts),
         jurisdiction_england: false,
@@ -314,7 +341,7 @@ describe('AST Pack - Unbundled Document Generation', () => {
 
       const pack = await generatePremiumASTDocuments(astData, 'test-case-id');
 
-      expect(pack.documents).toHaveLength(6);
+      expect(pack.documents).toHaveLength(10);
 
       const agreement = pack.documents.find((d) => d.category === 'agreement');
       expect(agreement?.document_type).toBe('private_tenancy_agreement_hmo');
@@ -340,9 +367,15 @@ describe('AST Pack - Unbundled Document Generation', () => {
       const astDataWithInventory = {
         ...mapWizardToASTData({
           ...premiumWizardFacts,
-          inventory_attached: true,
+          inventory: {
+            rooms: [
+              {
+                name: 'Kitchen',
+                items: [{ name: 'Worktop', condition: 'Good' }],
+              },
+            ],
+          },
         }),
-        inventory_attached: true,
         jurisdiction_england: true,
         jurisdiction_wales: false,
       };

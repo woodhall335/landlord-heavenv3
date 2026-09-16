@@ -21,6 +21,7 @@ import {
 import { resolveTenancyPreviewDocumentHtml } from '@/lib/previews/tenancyPreviewDocuments';
 import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
 import { assertPreviewAllowed } from '@/lib/payments/entitlement';
+import { resolveStoredTenancyFacts } from '@/lib/tenancy/stored-facts';
 
 export const dynamic = 'force-dynamic';
 
@@ -108,7 +109,7 @@ export async function GET(
       });
     }
 
-    const facts = caseRow.collected_facts || caseRow.wizard_facts || caseRow.facts || {};
+    const facts = resolveStoredTenancyFacts(caseRow);
     const modernEnglandProduct = [
       requestedProduct,
       facts.__meta?.canonical_product,

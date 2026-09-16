@@ -1451,6 +1451,13 @@ function getNorthernIrelandTenancyContents(tier: 'standard' | 'premium', hasInve
 
   items.push(
     {
+      key: 'rent_book_northern_ireland',
+      title: 'Northern Ireland Rent Book',
+      description: 'Rent book containing the prescribed tenancy particulars and payment-record pages required for the tenancy file',
+      category: 'Other',
+      required: true,
+    },
+    {
       key: 'tenancy_information_notice_northern_ireland',
       title: 'Official Northern Ireland Tenancy Information Notice',
       description: 'Prescribed notice to complete, sign, and give to the tenant free of charge within 28 days',

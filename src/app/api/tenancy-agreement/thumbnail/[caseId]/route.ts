@@ -19,6 +19,7 @@ import {
 import { resolveTenancyPreviewDocumentHtml } from '@/lib/previews/tenancyPreviewDocuments';
 import { getPreviewCaseAccessDenial } from '@/lib/previews/case-preview-access';
 import { assertPreviewAllowed } from '@/lib/payments/entitlement';
+import { resolveStoredTenancyFacts } from '@/lib/tenancy/stored-facts';
 
 export const dynamic = 'force-dynamic';
 
@@ -85,14 +86,14 @@ export async function GET(
       });
     }
 
-    const facts = caseRow.collected_facts || caseRow.wizard_facts || caseRow.facts || {};
+    const facts = resolveStoredTenancyFacts(caseRow);
     const jurisdiction = deriveCanonicalJurisdiction(caseRow.jurisdiction, facts) as TenancyJurisdiction;
 
     if (!jurisdiction) {
       return errorResponse('INVALID_JURISDICTION', 'Invalid or missing jurisdiction', 422);
     }
 
-    const generationFacts = {
+    const generationFacts: Record<string, any> = {
       ...facts,
       id: caseId,
       case_id: caseId,

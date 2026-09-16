@@ -57,6 +57,7 @@ import {
   toTenancyOutputSnapshotJurisdiction,
   type TenancyOutputSnapshot,
 } from '@/lib/tenancy/output-snapshot.server';
+import { resolveStoredTenancyFacts } from '@/lib/tenancy/stored-facts';
 
 // =============================================================================
 // TYPES
@@ -1004,7 +1005,7 @@ export async function fulfillOrder({
     (sku) => isTenancyOutputProductSku(sku)
   );
   let tenancyOutputSnapshot: TenancyOutputSnapshot | null = null;
-  let wizardFacts = ((caseData as any).collected_facts || {}) as Record<string, any>;
+  let wizardFacts = resolveStoredTenancyFacts(caseData as any);
   if (tenancyProductRequested) {
     tenancyOutputSnapshot = tenancyOutputSnapshotId
       ? await getTenancyOutputSnapshotById(supabase, tenancyOutputSnapshotId)

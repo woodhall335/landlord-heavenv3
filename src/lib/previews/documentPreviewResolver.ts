@@ -97,6 +97,10 @@ export const DOCUMENT_PREVIEW_TYPE_MAPPING: Record<string, string[]> = {
     'private_tenancy_inventory_schedule',
   ],
   'compliance-checklist': [
+    'pre_tenancy_checklist_england',
+    'pre_tenancy_checklist_wales',
+    'pre_tenancy_checklist_scotland',
+    'pre_tenancy_checklist_northern_ireland',
     'pre_tenancy_compliance_checklist',
     'ast_compliance_checklist',
     'soc_compliance_checklist',
@@ -111,6 +115,13 @@ export const DOCUMENT_PREVIEW_TYPE_MAPPING: Record<string, string[]> = {
   'easy-read-notes-scotland': [
     'prt_statutory_terms_supporting_notes_scotland',
     'easy_read_notes_scotland',
+  ],
+  'rent-book-northern-ireland': ['rent_book_northern_ireland'],
+  'tenancy-information-notice-northern-ireland': [
+    'tenancy_information_notice_northern_ireland',
+  ],
+  'tenancy-information-notice-guidance-northern-ireland': [
+    'tenancy_information_notice_guidance_northern_ireland',
   ],
   'key-schedule': ['key_schedule'],
   'property-maintenance-guide': ['property_maintenance_guide'],

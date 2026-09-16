@@ -29,6 +29,7 @@ import {
 import { mapWizardToASTData } from './ast-wizard-mapper';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import { resolveEffectiveJurisdiction } from '@/lib/tenancy/jurisdiction';
+import { resolveStoredTenancyFacts } from '@/lib/tenancy/stored-facts';
 import { buildPreviewLockSummary, type PreviewLockState } from '@/lib/previews/preview-lock-policy';
 import { applyPreviewLockToImageBuffer } from '@/lib/previews/preview-lock-rendering';
 import crypto from 'crypto';
@@ -701,7 +702,7 @@ export async function generateTenancyPreview(
 
       // Cast to any for dynamic property access (Supabase returns generic types)
       const caseRow = caseData as any;
-      const facts = caseRow.collected_facts || caseRow.wizard_facts || caseRow.facts || {};
+      const facts = resolveStoredTenancyFacts(caseRow);
       const factsHash = hashFacts(facts);
 
       // Check if cached version matches current facts hash

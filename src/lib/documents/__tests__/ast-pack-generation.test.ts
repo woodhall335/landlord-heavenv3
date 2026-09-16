@@ -39,6 +39,7 @@ vi.mock('../generator', async () => {
 
 import type { ASTData, TenancyJurisdiction } from '../ast-generator';
 import { generatePremiumASTDocuments, generateStandardASTDocuments } from '../ast-generator';
+import { getPackContents } from '@/lib/products';
 
 function createBaseASTData(jurisdiction: TenancyJurisdiction): ASTData {
   const data = {
@@ -189,5 +190,38 @@ describe('AST document pack generation', () => {
 
     expect(standardPack.documents.map((document) => document.document_type)).toContain('prt_statutory_terms_supporting_notes_scotland');
     expect(premiumPack.documents.map((document) => document.document_type)).toContain('prt_statutory_terms_supporting_notes_scotland');
+  });
+
+  it('generates every required tenancy catalog output in every jurisdiction and tier', async () => {
+    const jurisdictions: TenancyJurisdiction[] = [
+      'england',
+      'wales',
+      'scotland',
+      'northern-ireland',
+    ];
+
+    for (const jurisdiction of jurisdictions) {
+      for (const tier of ['standard', 'premium'] as const) {
+        const product = tier === 'standard' ? 'ast_standard' : 'ast_premium';
+        const pack = tier === 'standard'
+          ? await generateStandardASTDocuments(
+              createBaseASTData(jurisdiction),
+              `${jurisdiction}-${tier}-parity`
+            )
+          : await generatePremiumASTDocuments(
+              createBaseASTData(jurisdiction),
+              `${jurisdiction}-${tier}-parity`
+            );
+        const generatedTypes = pack.documents.map((document) => document.document_type);
+        const requiredTypes = getPackContents({ product, jurisdiction })
+          .filter((item) => item.required !== false)
+          .map((item) => item.key);
+
+        expect(
+          requiredTypes.filter((requiredType) => !generatedTypes.includes(requiredType)),
+          `${jurisdiction} ${tier} is missing required catalog outputs`
+        ).toEqual([]);
+      }
+    }
   });
 });

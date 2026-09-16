@@ -102,4 +102,25 @@ describe('regional tenancy package consistency validator', () => {
       validateGeneratedTenancyPackage(documents, 'scotland', templateState())
     ).toContain('PACKAGE_SCOTLAND_SUPPORTING_NOTES_MISSING');
   });
+
+  it('blocks publication when a required compliance checklist is absent', () => {
+    const documents = coreDocuments().filter(
+      (document) => document.category !== 'checklist'
+    );
+
+    expect(
+      validateGeneratedTenancyPackage(documents, 'scotland', templateState())
+    ).toContain('PACKAGE_COMPLIANCE_CHECKLIST_MISSING');
+  });
+
+  it('blocks a premium pack when a promised support document is absent', () => {
+    expect(
+      validateGeneratedTenancyPackage(
+        coreDocuments(),
+        'scotland',
+        templateState(),
+        'premium'
+      )
+    ).toContain('PACKAGE_PREMIUM_SUPPORT_DOCUMENT_MISSING');
+  });
 });

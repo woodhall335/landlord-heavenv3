@@ -70,7 +70,14 @@ describe('non-England standard tenancy release', () => {
     expect(detectInventoryData({ inventory_attached: true })).toBe(false);
     expect(
       detectInventoryData({
-        inventory: { rooms: [{ room: 'Kitchen', condition: 'Good' }] },
+        inventory: {
+          rooms: [
+            {
+              name: 'Kitchen',
+              items: [{ name: 'Worktop', condition: 'Good' }],
+            },
+          ],
+        },
       })
     ).toBe(true);
   });

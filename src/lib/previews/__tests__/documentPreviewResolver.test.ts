@@ -9,6 +9,7 @@ import {
 } from '@/lib/documents/document-configs';
 import { getResidentialDocumentList } from '@/lib/residential-letting/document-config';
 import type { ResidentialLettingProductSku } from '@/lib/residential-letting/products';
+import { getPackContents } from '@/lib/products';
 import {
   getPreviewDocumentTypes,
   resolveDocumentPreview,
@@ -147,14 +148,51 @@ describe('resolveDocumentPreview', () => {
   });
 
   it('resolves legacy tenancy agreement documents through the tenancy preview endpoints', () => {
-    expectPreviewRoutes(
-      'ast_standard',
-      getASTDocuments('england', 'standard', { englandTenancyPurpose: 'new_tenancy' })
-    );
-    expectPreviewRoutes(
-      'ast_premium',
-      getASTDocuments('england', 'premium', { hasInventoryData: true })
-    );
+    for (const jurisdiction of ['england', 'wales', 'scotland', 'northern-ireland']) {
+      expectPreviewRoutes(
+        'ast_standard',
+        getASTDocuments(jurisdiction, 'standard', { englandTenancyPurpose: 'new_tenancy' })
+      );
+      expectPreviewRoutes(
+        'ast_premium',
+        getASTDocuments(jurisdiction, 'premium', { hasInventoryData: true })
+      );
+    }
+  });
+
+  it('maps every Northern Ireland statutory pack card to its generated document type', () => {
+    const documents = getASTDocuments('northern-ireland', 'standard');
+    const expectedTypes: Record<string, string> = {
+      'rent-book-northern-ireland': 'rent_book_northern_ireland',
+      'tenancy-information-notice-northern-ireland':
+        'tenancy_information_notice_northern_ireland',
+      'tenancy-information-notice-guidance-northern-ireland':
+        'tenancy_information_notice_guidance_northern_ireland',
+    };
+
+    for (const [documentId, documentType] of Object.entries(expectedTypes)) {
+      const document = documents.find((item) => item.id === documentId);
+      expect(document, `missing Northern Ireland preview card for ${documentId}`).toBeTruthy();
+      expect(getPreviewDocumentTypes(document!)).toContain(documentType);
+    }
+  });
+
+  it('lists every required legacy tenancy pack output in preview across all jurisdictions', () => {
+    for (const jurisdiction of ['england', 'wales', 'scotland', 'northern-ireland']) {
+      for (const tier of ['standard', 'premium'] as const) {
+        const product = tier === 'standard' ? 'ast_standard' : 'ast_premium';
+        const documents = getASTDocuments(jurisdiction, tier, { hasInventoryData: true });
+        const previewTypes = new Set(documents.flatMap(getPreviewDocumentTypes));
+        const requiredTypes = getPackContents({ product, jurisdiction })
+          .filter((item) => item.required !== false)
+          .map((item) => item.key);
+
+        expect(
+          requiredTypes.filter((requiredType) => !previewTypes.has(requiredType)),
+          `${jurisdiction} ${tier} preview omits required pack outputs`
+        ).toEqual([]);
+      }
+    }
   });
 
   it('resolves modern England tenancy products per listed document', () => {

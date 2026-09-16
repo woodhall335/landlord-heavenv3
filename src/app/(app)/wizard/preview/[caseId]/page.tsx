@@ -74,6 +74,7 @@ import {
   hasPreviewProductMismatch,
   resolveWizardPreviewProduct,
 } from '@/lib/previews/preview-product';
+import { resolveStoredTenancyFacts } from '@/lib/tenancy/stored-facts';
 
 interface CaseData {
   id: string;
@@ -954,7 +955,7 @@ export default function WizardPreviewPage() {
   const getDocuments = (): DocumentInfo[] => {
     if (!caseData) return [];
 
-    const facts = caseData.collected_facts as any || {};
+    const facts = resolveStoredTenancyFacts(caseData as any);
     const section13State = facts.section13 || {};
     const section13SelectedPlan =
       section13State.selectedPlan ||
@@ -1196,7 +1197,7 @@ export default function WizardPreviewPage() {
   // Get product metadata
   const getProduct = (): string => {
     if (!caseData) return 'notice_only';
-    const facts = caseData.collected_facts as any || {};
+    const facts = resolveStoredTenancyFacts(caseData as any);
     const section13State = facts.section13 || {};
     const section13SelectedPlan =
       section13State.selectedPlan ||
