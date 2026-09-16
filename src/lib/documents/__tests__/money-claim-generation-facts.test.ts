@@ -65,6 +65,46 @@ describe('money claim generation facts', () => {
     expect(moneyClaimCase.claimant_reference).toBe('MC-2026-001');
   });
 
+  it('uses the registered company name as the N1 claimant name', () => {
+    const { facts, moneyClaimCase } = buildMoneyClaimGenerationInput({
+      facts: {
+        ...baseMoneyClaimWizardFacts,
+        landlord_is_company: true,
+        company_name: 'Example Property Holdings Ltd',
+        landlord_full_name: '',
+      },
+      caseId: 'case-company-claimant',
+      jurisdiction: 'england',
+    });
+
+    expect(facts.landlord_full_name).toBe('Example Property Holdings Ltd');
+    expect(facts.parties.landlord.name).toBe('Example Property Holdings Ltd');
+    expect(moneyClaimCase.landlord_full_name).toBe('Example Property Holdings Ltd');
+    expect(moneyClaimCase.signatory_name).toBe('Example Property Holdings Ltd');
+  });
+
+  it('does not let a stale personal name override the selected company claimant', () => {
+    const { moneyClaimCase } = buildMoneyClaimGenerationInput({
+      facts: {
+        ...baseMoneyClaimWizardFacts,
+        landlord_is_company: true,
+        company_name: 'Current Claimant Ltd',
+        landlord_full_name: 'Previous Individual Name',
+        parties: {
+          landlord: {
+            name: 'Previous Individual Name',
+            company_name: 'Current Claimant Ltd',
+            is_company: true,
+          },
+        },
+      },
+      caseId: 'case-company-overrides-stale-person',
+      jurisdiction: 'england',
+    });
+
+    expect(moneyClaimCase.landlord_full_name).toBe('Current Claimant Ltd');
+  });
+
   it('uses a saved flat total claim amount when no itemised schedule exists', () => {
     const { moneyClaimCase } = buildMoneyClaimGenerationInput({
       facts: {

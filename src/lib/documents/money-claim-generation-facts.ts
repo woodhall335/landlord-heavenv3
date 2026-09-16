@@ -6,6 +6,43 @@ import { mapCaseFactsToMoneyClaimCase } from './money-claim-wizard-mapper';
 
 type WizardFacts = Record<string, any>;
 
+function readNonBlankString(...values: unknown[]): string | undefined {
+  for (const value of values) {
+    if (typeof value === 'string' && value.trim()) return value.trim();
+  }
+  return undefined;
+}
+
+function resolveMoneyClaimClaimantName(facts: WizardFacts): string | undefined {
+  const landlord = facts.parties?.landlord || {};
+  const canonicalLandlord = facts.case_facts?.parties?.landlord || {};
+  const companyName = readNonBlankString(
+    facts.company_name,
+    landlord.company_name,
+    canonicalLandlord.company_name,
+  );
+  const individualName = readNonBlankString(
+    facts.landlord_full_name,
+    facts.landlord_name,
+    facts.claimant_full_name,
+    landlord.name,
+    landlord.full_name,
+    canonicalLandlord.name,
+  );
+  const isCompany =
+    facts.landlord_is_company === true ||
+    landlord.is_company === true ||
+    canonicalLandlord.is_company === true;
+  const isExplicitlyIndividual =
+    facts.landlord_is_company === false ||
+    landlord.is_company === false ||
+    canonicalLandlord.is_company === false;
+
+  if (isCompany) return companyName;
+  if (individualName) return individualName;
+  return isExplicitlyIndividual ? undefined : companyName;
+}
+
 interface MoneyClaimGenerationInput {
   facts: WizardFacts;
   caseId: string;
@@ -28,9 +65,35 @@ export function buildMoneyClaimGenerationFacts({
   }
 
   const meta = facts.__meta || {};
+  const claimantName = resolveMoneyClaimClaimantName(facts);
+  const landlord = facts.parties?.landlord || {};
+  const canonicalParties = facts.case_facts?.parties;
+  const canonicalLandlord = canonicalParties?.landlord || {};
 
   return {
     ...facts,
+    landlord_full_name: claimantName,
+    parties: {
+      ...(facts.parties || {}),
+      landlord: {
+        ...landlord,
+        name: claimantName,
+      },
+    },
+    ...(facts.case_facts && typeof facts.case_facts === 'object'
+      ? {
+          case_facts: {
+            ...facts.case_facts,
+            parties: {
+              ...(canonicalParties || {}),
+              landlord: {
+                ...canonicalLandlord,
+                name: claimantName,
+              },
+            },
+          },
+        }
+      : {}),
     id: caseId,
     case_id: caseId,
     jurisdiction,
