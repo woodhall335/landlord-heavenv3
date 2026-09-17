@@ -490,7 +490,7 @@ export default function HelpPage() {
                   question: "How do I request a refund?",
                   answer: (
                     <>
-                      <p>Email us at refunds@landlordheaven.co.uk with:</p>
+                      <p>Email us at support@landlordheaven.co.uk with:</p>
                       <ul className="mt-3 space-y-1">
                         <li>- Your email address (registered account)</li>
                         <li>- Order number or product name</li>
