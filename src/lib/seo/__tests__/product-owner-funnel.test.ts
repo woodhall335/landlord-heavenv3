@@ -445,7 +445,7 @@ describe('product owner SEO funnel', () => {
   it('keeps the rent increase hub focused on broad rent increase and Section 13 intent', () => {
     const source = readSource('src/app/rent-increase/page.tsx');
 
-    expect(source).toContain('Rent Increase Guide for England Landlords | Section 13 Form 4A');
+    expect(source).toContain('Rent Increase Pack England | Form 4A from £24.99');
     expect(source).toContain('how to increase rent');
     expect(source).toContain('market rent evidence');
     expect(source).toContain('tenant challenge');
@@ -466,5 +466,39 @@ describe('product owner SEO funnel', () => {
     expect(trackedLinkSource).toContain("href.includes('/wizard')");
     expect(previewLayoutSource).toContain('trackBeginCheckout');
     expect(dashboardSource).toContain('trackPurchase');
+  });
+
+  it('tracks each England tenancy product page with its canonical SKU and price', () => {
+    const tenancyProducts = [
+      ['src/app/standard-tenancy-agreement/page.tsx', 'england_standard_tenancy_agreement'],
+      ['src/app/premium-tenancy-agreement/page.tsx', 'england_premium_tenancy_agreement'],
+      ['src/app/student-tenancy-agreement/page.tsx', 'england_student_tenancy_agreement'],
+      ['src/app/hmo-shared-house-tenancy-agreement/page.tsx', 'england_hmo_shared_house_tenancy_agreement'],
+      ['src/app/lodger-agreement/page.tsx', 'england_lodger_agreement'],
+    ] as const;
+
+    const sharedPageSource = readSource('src/components/seo/EnglandTenancyPage.tsx');
+    expect(sharedPageSource).toContain('<ProductPageTracker');
+    expect(sharedPageSource).toContain('<TrackedLink');
+
+    for (const [sourcePath, sku] of tenancyProducts) {
+      const source = readSource(sourcePath);
+      expect(source).toContain('productAnalytics={{');
+      expect(source).toContain(`PRODUCTS.${sku}.sku`);
+      expect(source).toContain(`PRODUCTS.${sku}.displayPrice`);
+    }
+  });
+
+  it('gives generic England tenancy intent a priced Standard-first route', () => {
+    const source = readSource('src/app/tenancy-agreement-template/page.tsx');
+    const standardIndex = source.indexOf("sku: 'england_standard_tenancy_agreement'");
+    const premiumIndex = source.indexOf("sku: 'england_premium_tenancy_agreement'");
+
+    expect(source).toContain('Tenancy Agreement Template England | From £14.99');
+    expect(source).toContain('Create Standard agreement — £14.99');
+    expect(source).toContain('Compare agreement options');
+    expect(standardIndex).toBeGreaterThan(-1);
+    expect(premiumIndex).toBeGreaterThan(standardIndex);
+    expect(source).not.toContain('Build my validated Premium pack');
   });
 });

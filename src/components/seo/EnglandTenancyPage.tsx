@@ -18,6 +18,8 @@ import {
 } from 'lucide-react';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { ProductPageTracker } from '@/components/analytics/ProductPageTracker';
+import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { Container } from '@/components/ui/Container';
@@ -152,6 +154,12 @@ interface EnglandTenancyPageProps {
   showHeroTrustPositioningBar?: boolean;
   heroTrustPositioningHeadline?: string;
   afterHero?: ReactNode;
+  productAnalytics?: {
+    productId: string;
+    productName: string;
+    priceLabel: string;
+    routeIntent?: string;
+  };
 }
 
 const tenancyPositioningCards = [
@@ -435,6 +443,7 @@ export function EnglandTenancyPage({
   showHeroTrustPositioningBar = true,
   heroTrustPositioningHeadline = 'Build the agreement from your facts, check the setup, preview before payment, and keep the pack together.',
   afterHero,
+  productAnalytics,
 }: EnglandTenancyPageProps) {
   const isSalesMode = Boolean(salesContent);
   const shouldShowPackBreakdown =
@@ -447,17 +456,70 @@ export function EnglandTenancyPage({
 
   return (
     <main className="min-h-screen bg-[#FCFBF8]">
+      {pagePath && productAnalytics ? (
+        <ProductPageTracker
+          pagePath={pagePath}
+          productId={productAnalytics.productId}
+          productName={productAnalytics.productName}
+          priceLabel={productAnalytics.priceLabel}
+          routeIntent={productAnalytics.routeIntent}
+        />
+      ) : null}
       <UniversalHero
         badge={heroBadge}
         preTitleLabel={heroPreTitleLabel}
         trustText={heroTrustText}
         title={title}
         subtitle={subtitle}
-        primaryCta={{ label: primaryCtaLabel, href: primaryCtaHref }}
+        actionsSlot={
+          pagePath && productAnalytics ? (
+            <>
+              <div className="w-full sm:w-auto">
+                <TrackedLink
+                  href={primaryCtaHref}
+                  pagePath={pagePath}
+                  pageType="product_page"
+                  ctaLabel={primaryCtaLabel}
+                  ctaPosition="hero"
+                  eventName="entry_page_primary_cta_click"
+                  routeIntent={productAnalytics.routeIntent || productAnalytics.productId}
+                  product={productAnalytics.productId}
+                  className="hero-btn-primary flex w-full justify-center text-center sm:w-auto"
+                >
+                  {primaryCtaLabel}
+                </TrackedLink>
+              </div>
+              {secondaryCtaLabel && secondaryCtaHref ? (
+                <div className="w-full sm:w-auto">
+                  <TrackedLink
+                    href={secondaryCtaHref}
+                    pagePath={pagePath}
+                    pageType="product_page"
+                    ctaLabel={secondaryCtaLabel}
+                    ctaPosition="hero"
+                    eventName="entry_page_secondary_cta_click"
+                    routeIntent={productAnalytics.routeIntent || productAnalytics.productId}
+                    product={productAnalytics.productId}
+                    className="hero-btn-secondary flex w-full justify-center text-center sm:w-auto"
+                  >
+                    {secondaryCtaLabel}
+                  </TrackedLink>
+                </div>
+              ) : null}
+            </>
+          ) : undefined
+        }
+        primaryCta={
+          pagePath && productAnalytics
+            ? undefined
+            : { label: primaryCtaLabel, href: primaryCtaHref }
+        }
         secondaryCta={
-          secondaryCtaLabel && secondaryCtaHref
-            ? { label: secondaryCtaLabel, href: secondaryCtaHref }
-            : undefined
+          pagePath && productAnalytics
+            ? undefined
+            : secondaryCtaLabel && secondaryCtaHref
+              ? { label: secondaryCtaLabel, href: secondaryCtaHref }
+              : undefined
         }
         feature={heroFeature}
         mediaSrc={heroMediaSrc}

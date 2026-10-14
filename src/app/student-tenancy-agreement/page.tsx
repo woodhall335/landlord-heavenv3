@@ -64,10 +64,16 @@ export default function StudentTenancyAgreementPage() {
         pagePath="/student-tenancy-agreement"
         title="Create a student tenancy agreement pack"
         subtitle="Use this England student tenancy agreement pack when the occupiers are students and you want guarantor wording, clearer wording on joint tenants, replacement requests, and end-of-term move-out under the post-May 2026 England rules."
-        primaryCtaLabel="Create my Student agreement"
+        primaryCtaLabel="Create Student agreement — £24.99"
         primaryCtaHref={studentWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
+        productAnalytics={{
+          productId: PRODUCTS.england_student_tenancy_agreement.sku,
+          productName: PRODUCTS.england_student_tenancy_agreement.label,
+          priceLabel: PRODUCTS.england_student_tenancy_agreement.displayPrice,
+          routeIntent: 'student_tenancy_agreement',
+        }}
         heroMediaSrc="/images/illustrations/tenancy-specialists/student-tenancy-agreement-waterbrush-v1.webp"
         heroMediaAlt="Waterbrush illustration of a student tenancy agreement, household checklist and keys"
         workflowImageLink={{

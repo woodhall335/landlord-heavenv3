@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { astHeroConfig } from '@/components/landing/heroConfigs';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
@@ -241,6 +242,16 @@ export default function EnglandTenancyHubPage() {
           </article>
         </div>
         <p className="mt-5 max-w-4xl text-sm leading-7 text-[#4B5565]">
+           Need a side-by-side view first?{' '}
+           <Link
+             href="/compare/tenancy-agreement-options-england"
+             className="font-semibold text-[#6D28D9] underline-offset-4 hover:underline"
+           >
+             Compare all England tenancy agreement options
+           </Link>
+           .
+         </p>
+         <p className="mt-5 max-w-4xl text-sm leading-7 text-[#4B5565]">
           If you run a letting agency or property business with staff, keep tenancy paperwork
           separate from employment documents. For the staffing side of the operation, HRHeaven
           has{' '}

@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, type ReactNode } from 'react';
 
-import { trackEvent } from '@/lib/analytics';
+import { trackAddToCart, trackEvent } from '@/lib/analytics';
+import { PRODUCTS, type ProductSku } from '@/lib/pricing/products';
 
 type CtaVariant = 'primary' | 'secondary';
 
@@ -53,6 +54,11 @@ function inferProduct(href: string) {
 function pagePathFromBrowser() {
   if (typeof window === 'undefined') return undefined;
   return `${window.location.pathname}${window.location.search}`;
+}
+
+function getTrackableProduct(product?: string) {
+  if (!product || !(product in PRODUCTS)) return null;
+  return PRODUCTS[product as ProductSku];
 }
 
 export function CommercialSeoTrackedCta({
@@ -144,6 +150,12 @@ export function CommercialSeoTrackedCta({
       data-commercial-tracked="true"
       data-testid={variant === 'primary' ? 'guide-primary-cta' : undefined}
       onClick={() => {
+        if (pageType === 'product_page' && variant === 'primary' && href.includes('/wizard')) {
+          const trackedProduct = getTrackableProduct(resolvedRecommendedProduct);
+          if (trackedProduct) {
+            trackAddToCart(trackedProduct.sku, trackedProduct.label, trackedProduct.price);
+          }
+        }
         trackEvent('journey_cta_click', payload);
         if (pageType === 'product_page' && variant === 'primary') {
           trackEvent('product_primary_cta_click', payload);

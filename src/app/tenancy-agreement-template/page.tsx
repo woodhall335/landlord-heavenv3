@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
 import { Container } from '@/components/ui/Container';
@@ -18,10 +19,9 @@ import {
   ENGLAND_TENANCY_PRODUCT_IMAGES,
   type EnglandModernTenancyProductSku,
 } from '@/lib/tenancy/england-product-model';
+import { PRODUCTS } from '@/lib/pricing/products';
 
 const canonicalUrl = getCanonicalUrl('/tenancy-agreement-template');
-const premiumWizardHref =
-  '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=england_premium_tenancy_agreement&src=tenancy_agreement_template&topic=tenancy';
 const premiumSampleProof = getGoldenPackProofData('england_premium_tenancy_agreement');
 const premiumSamplePage = getProductSamplePageByPackKey('england_premium_tenancy_agreement');
 
@@ -63,22 +63,25 @@ const primaryRoutes: Array<{
   label: string;
   body: string;
   ctaLabel: string;
+  price: string;
 }> = [
-  {
-    sku: 'england_premium_tenancy_agreement',
-    title: 'Premium Tenancy Agreement',
-    href: '/premium-tenancy-agreement',
-    label: 'Featured worked agreement',
-    body: 'Choose Premium when you want the tenancy agreement shown on this page: fuller wording around access, repairs, keys, utilities, hand-back, guarantors, and day-to-day management from day one.',
-    ctaLabel: 'View premium agreement',
-  },
   {
     sku: 'england_standard_tenancy_agreement',
     title: 'Standard Tenancy Agreement',
     href: '/standard-tenancy-agreement',
-    label: 'Simpler ordinary-residential alternative',
+    label: 'Best for a straightforward let',
     body: 'Use Standard when the tenancy is a straightforward ordinary residential let and you want the current England structure without the broader Premium management pack.',
-    ctaLabel: 'View standard agreement',
+    ctaLabel: 'Create Standard agreement — £14.99',
+    price: PRODUCTS.england_standard_tenancy_agreement.displayPrice,
+  },
+  {
+    sku: 'england_premium_tenancy_agreement',
+    title: 'Premium Tenancy Agreement',
+    href: '/premium-tenancy-agreement',
+    label: 'For fuller management wording',
+    body: 'Choose Premium when you want fuller wording around access, repairs, keys, utilities, hand-back, guarantors, and day-to-day management from day one.',
+    ctaLabel: 'Create Premium agreement — £24.99',
+    price: PRODUCTS.england_premium_tenancy_agreement.displayPrice,
   },
 ];
 
@@ -190,19 +193,19 @@ const faqs: FAQItem[] = [
 const webPageSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
-  name: 'Tenancy Agreement Template (England) - Premium Golden Pack Sample',
+  name: 'Tenancy Agreement Template England',
   url: canonicalUrl,
   description:
-    'Review the Premium Tenancy Agreement sample for England, then create your agreement or compare the alternatives.',
+    'Create a current England tenancy agreement from £14.99. Compare Standard, Premium, Student, HMO and Lodger packs, with a preview before payment.',
   inLanguage: 'en-GB',
 };
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Tenancy Agreement Template (England) - Premium Sample',
+  title: 'Tenancy Agreement Template England | From £14.99',
   description:
-    'See the Premium Tenancy Agreement sample for England, including the agreement and supporting management records, before creating your own.',
+    'Create a current England tenancy agreement from £14.99. Compare Standard, Premium, Student, HMO and Lodger packs and preview before payment.',
   keywords: [
     'tenancy agreement',
     'tenancy agreement template',
@@ -217,9 +220,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Tenancy Agreement Template (England) - Premium Sample',
+    title: 'Tenancy Agreement Template England | From £14.99',
     description:
-      'Review the Premium Tenancy Agreement sample for England, then create your agreement or compare the alternatives.',
+      'Compare current England tenancy agreements from £14.99 and preview the completed pack before payment.',
     url: canonicalUrl,
     type: 'website',
     locale: 'en_GB',
@@ -227,9 +230,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Tenancy Agreement Template (England) - Premium Sample',
+    title: 'Tenancy Agreement Template England | From £14.99',
     description:
-      'See the Premium Tenancy Agreement sample for England before creating your own.',
+      'Compare current England tenancy agreements from £14.99 and preview before payment.',
   },
   robots: {
     index: true,
@@ -244,6 +247,7 @@ function LeadRouteCard({
   label,
   body,
   ctaLabel,
+  price,
 }: (typeof primaryRoutes)[number]) {
   const image = ENGLAND_TENANCY_PRODUCT_IMAGES[sku];
 
@@ -260,15 +264,27 @@ function LeadRouteCard({
       </div>
       <div className="p-6 md:p-7">
         <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">{label}</p>
-        <h3 className="mt-3 text-2xl font-bold tracking-tight text-[#141B2D]">{title}</h3>
+        <div className="mt-3 flex items-start justify-between gap-4">
+          <h3 className="text-2xl font-bold tracking-tight text-[#141B2D]">{title}</h3>
+          <span className="rounded-full bg-[#F1EAFE] px-3 py-1 text-sm font-bold text-[#5B21B6]">
+            {price}
+          </span>
+        </div>
         <p className="mt-4 text-base leading-7 text-[#556177]">{body}</p>
         <div className="mt-6">
-          <Link
+          <TrackedLink
             href={href}
+            pagePath="/tenancy-agreement-template"
+            pageType="entry_page"
+            ctaLabel={ctaLabel}
+            ctaPosition="mid"
+            eventName="product_route_chosen"
+            routeIntent="tenancy_agreement"
+            product={sku}
             className="inline-flex items-center justify-center rounded-xl border border-[#D1C4F8] bg-[#F5F0FF] px-5 py-3 text-sm font-semibold text-[#432B87] transition hover:border-[#B69BF4] hover:bg-[#EEE6FF]"
           >
             {ctaLabel}
-          </Link>
+          </TrackedLink>
         </div>
       </div>
     </article>
@@ -342,29 +358,81 @@ export default function TenancyAgreementTemplatePage() {
       <main>
         <UniversalHero
           preset="content_index"
-          trustText="Premium golden-pack sample | real England tenancy agreement preview"
+          trustText="Current England tenancy agreements | preview before payment"
           mediaSrc="/images/generated/product-cards/premium-tenancy-agreement.webp"
-          mediaAlt="Preview of Premium Tenancy Agreement documents"
-          title="Premium Tenancy Agreement Sample"
-          highlightTitle="(England)"
+          mediaAlt="Preview of an England tenancy agreement and supporting documents"
+          title="Create the right tenancy agreement"
+          highlightTitle="for your England property"
           subtitle={
             <>
-              See the <strong>Premium golden-pack tenancy agreement</strong> and supporting
-              management records before you create an agreement from your own details.
+              Start with the <strong>Standard agreement from £14.99</strong> for a straightforward
+              let, or compare Premium and specialist packs. Answer guided questions and preview
+              the completed documents before payment.
             </>
           }
-          primaryCta={{
-            label: 'Build my validated Premium pack',
-            href: premiumWizardHref,
-          }}
-          secondaryCta={{
-            label: 'View full premium sample',
-            href: premiumSamplePage?.samplePath ?? '/premium-tenancy-agreement',
-          }}
-          feature="Preview the Premium pack first, then move into the fixed-price, review-ready workflow with the same richer management wording."
+          actionsSlot={
+            <>
+              <div className="w-full sm:w-auto">
+                <TrackedLink
+                  href="/standard-tenancy-agreement#choose-jurisdiction"
+                  pagePath="/tenancy-agreement-template"
+                  pageType="entry_page"
+                  ctaLabel="Create Standard agreement — £14.99"
+                  ctaPosition="hero"
+                  eventName="entry_page_primary_cta_click"
+                  routeIntent="tenancy_agreement"
+                  product="england_standard_tenancy_agreement"
+                  className="hero-btn-primary flex w-full justify-center text-center sm:w-auto"
+                >
+                  Create Standard agreement — £14.99
+                </TrackedLink>
+              </div>
+              <div className="w-full sm:w-auto">
+                <TrackedLink
+                  href="/compare/tenancy-agreement-options-england"
+                  pagePath="/tenancy-agreement-template"
+                  pageType="entry_page"
+                  ctaLabel="Compare agreement options"
+                  ctaPosition="hero"
+                  eventName="entry_page_secondary_cta_click"
+                  routeIntent="tenancy_agreement_comparison"
+                  className="hero-btn-secondary flex w-full justify-center text-center sm:w-auto"
+                >
+                  Compare agreement options
+                </TrackedLink>
+              </div>
+            </>
+          }
+          feature="One-off pricing, product-fit guidance and a full preview before checkout."
         />
 
-        <section className="py-12 md:py-16">
+        <section className="py-10 md:py-14">
+          <Container>
+            <div className="rounded-[2.3rem] border border-[#E5DED2] bg-white p-6 shadow-[0_18px_46px_rgba(31,41,55,0.05)] md:p-8">
+              <div className="max-w-3xl">
+                <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#7C3AED]">
+                  Choose your agreement
+                </p>
+                <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
+                  Standard for a straightforward let; Premium for fuller management detail
+                </h2>
+                <p className="mt-4 text-base leading-7 text-[#556177]">
+                  Both routes use guided questions and let you review the completed pack before
+                  payment. Start with Standard unless the property or management arrangements need
+                  the additional Premium wording.
+                </p>
+              </div>
+
+              <div className="mt-8 grid gap-6 xl:grid-cols-2">
+                {primaryRoutes.map((route) => (
+                  <LeadRouteCard key={route.title} {...route} />
+                ))}
+              </div>
+            </div>
+          </Container>
+        </section>
+
+        <section className="pb-12 md:pb-16">
           <Container>
             <div className="rounded-[2.3rem] border border-[#E7E0F6] bg-white p-6 shadow-[0_22px_60px_rgba(43,37,61,0.08)] md:p-8">
               <div className="max-w-4xl">
@@ -451,28 +519,6 @@ export default function TenancyAgreementTemplatePage() {
                   </div>
                   <div className="px-5 py-4">{row.guidedAgreement}</div>
                 </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="mt-12 rounded-[2.3rem] border border-[#E5DED2] bg-white p-6 shadow-[0_18px_46px_rgba(31,41,55,0.05)] md:p-8">
-            <div className="max-w-3xl">
-              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#7C3AED]">
-                Default next step after the preview
-              </p>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
-                Create the Premium agreement shown above
-              </h2>
-              <p className="mt-4 text-base leading-7 text-[#556177]">
-                The sample on this page is the Premium golden pack. Use it when you want the
-                fuller agreement and management records; Standard remains available for simpler
-                ordinary residential lets.
-              </p>
-            </div>
-
-            <div className="mt-8 grid gap-6 xl:grid-cols-2">
-              {primaryRoutes.map((route) => (
-                <LeadRouteCard key={route.title} {...route} />
               ))}
             </div>
           </section>

@@ -63,10 +63,16 @@ export default function LodgerAgreementEnglandPage() {
         pagePath="/lodger-agreement"
         title="Create a lodger agreement pack for a resident landlord"
         subtitle="Use this lodger agreement pack when you live in the property and are taking in a lodger, so the room let contract, notice wording, house rules, and shared-home expectations are set out clearly from the start."
-        primaryCtaLabel="Create my Lodger agreement"
+        primaryCtaLabel="Create Lodger agreement — £14.99"
         primaryCtaHref={lodgerWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
+        productAnalytics={{
+          productId: PRODUCTS.england_lodger_agreement.sku,
+          productName: PRODUCTS.england_lodger_agreement.label,
+          priceLabel: PRODUCTS.england_lodger_agreement.displayPrice,
+          routeIntent: 'lodger_agreement',
+        }}
         heroMediaSrc="/images/illustrations/tenancy-specialists/lodger-agreement-waterbrush-v1.webp"
         heroMediaAlt="Waterbrush illustration of a resident-landlord home, lodger agreement and checklist"
         workflowImageLink={{

@@ -64,10 +64,16 @@ export default function HmoSharedHouseTenancyAgreementPage() {
         pagePath="/hmo-shared-house-tenancy-agreement"
         title="Create an HMO or shared-house tenancy agreement pack"
         subtitle="Use this England HMO tenancy agreement pack when the property is being shared and you want house rules, communal-area wording, and day-to-day paperwork to match how the house is actually run."
-        primaryCtaLabel="Create my HMO agreement"
+        primaryCtaLabel="Create HMO agreement — £34.99"
         primaryCtaHref={hmoWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
+        productAnalytics={{
+          productId: PRODUCTS.england_hmo_shared_house_tenancy_agreement.sku,
+          productName: PRODUCTS.england_hmo_shared_house_tenancy_agreement.label,
+          priceLabel: PRODUCTS.england_hmo_shared_house_tenancy_agreement.displayPrice,
+          routeIntent: 'hmo_shared_house_tenancy_agreement',
+        }}
         heroMediaSrc="/images/illustrations/tenancy-specialists/hmo-shared-house-waterbrush-v1.webp"
         heroMediaAlt="Waterbrush illustration of a shared-house plan, tenancy paperwork and multiple keys"
         workflowImageLink={{

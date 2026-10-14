@@ -132,9 +132,8 @@ function StandardPackWorkflowSection() {
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Standard Tenancy Agreement by UK Jurisdiction',
-  description:
-    'Choose the right standard tenancy agreement for your rental property. Build a current England assured periodic agreement or select the correct Wales, Scotland or Northern Ireland route.',
+  title: PRODUCT_OWNER_METADATA.standardTenancy.title,
+  description: PRODUCT_OWNER_METADATA.standardTenancy.description,
   keywords: [
     'standard periodic tenancy agreement',
     'standard periodic tenancy agreement england',
@@ -187,9 +186,9 @@ export default function StandardTenancyAgreementPage() {
       />
       <EnglandTenancyPage
         pagePath="/standard-tenancy-agreement"
-        title="Choose the right standard tenancy agreement for your property"
-        subtitle="Start with the rental property’s location. England, Wales, Scotland and Northern Ireland use different tenancy frameworks, so the wizard asks the right questions and builds the right agreement route for the property."
-        primaryCtaLabel="Choose property jurisdiction"
+        title="Create a Standard Tenancy Agreement — £14.99"
+        subtitle="Choose the rental property’s location, answer the guided questions and review the completed agreement before payment. England, Wales, Scotland and Northern Ireland each use a different tenancy framework."
+        primaryCtaLabel="Choose jurisdiction — £14.99"
         primaryCtaHref="#choose-jurisdiction"
         secondaryCtaLabel="Compare England agreements"
         secondaryCtaHref="/tenancy-agreements/england"
@@ -197,6 +196,12 @@ export default function StandardTenancyAgreementPage() {
         heroBadge="England, Wales, Scotland and Northern Ireland"
         heroTrustText="Current tenancy-agreement routes for England, Wales, Scotland and Northern Ireland."
         heroFeature="For England, new straightforward private residential lets use the assured periodic route introduced on 1 May 2026."
+        productAnalytics={{
+          productId: PRODUCTS.england_standard_tenancy_agreement.sku,
+          productName: PRODUCTS.england_standard_tenancy_agreement.label,
+          priceLabel: PRODUCTS.england_standard_tenancy_agreement.displayPrice,
+          routeIntent: 'standard_tenancy_agreement',
+        }}
         heroMediaSrc="/images/illustrations/tenancy-jurisdictions/england-assured-periodic-waterbrush-v2.webp"
         heroMediaAlt="Waterbrush illustration of an England assured periodic tenancy agreement, calendar and property keys"
         showHeroTrustPositioningBar={false}

@@ -61,11 +61,17 @@ export default function PremiumTenancyAgreementPage() {
       <EnglandTenancyPage
         pagePath="/premium-tenancy-agreement"
         title="Create a premium England tenancy agreement pack"
-        subtitle="Use this premium periodic tenancy agreement pack when the let is still an ordinary residential tenancy, but you want stronger management wording around access, repairs, handover, keys, and day-to-day control than the Standard route provides."
-        primaryCtaLabel="Create my Premium agreement"
+        subtitle="Use this premium periodic tenancy agreement pack when the let is still an ordinary residential tenancy, but you want stronger management wording. Create the full England pack for £24.99 and review it before payment."
+        primaryCtaLabel="Create Premium agreement — £24.99"
         primaryCtaHref={premiumWizardHref}
         secondaryCtaLabel="Read assured periodic guide"
         secondaryCtaHref="/assured-periodic-tenancy-agreement"
+        productAnalytics={{
+          productId: PRODUCTS.england_premium_tenancy_agreement.sku,
+          productName: PRODUCTS.england_premium_tenancy_agreement.label,
+          priceLabel: PRODUCTS.england_premium_tenancy_agreement.displayPrice,
+          routeIntent: 'premium_tenancy_agreement',
+        }}
         heroMediaSrc="/images/illustrations/tenancy-specialists/premium-tenancy-management-waterbrush-v1.webp"
         heroMediaAlt="Waterbrush illustration of a premium tenancy management file, checklist and keys"
         workflowImageLink={{

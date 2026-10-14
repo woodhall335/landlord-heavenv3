@@ -20,9 +20,9 @@ const supportedRentIncreaseWizardHref =
   '/wizard/flow?type=rent_increase&product=section13_standard&src=product_page&topic=general';
 
 export const metadata: Metadata = {
-  title: 'Rent Increase Guide for England Landlords | Section 13 Form 4A',
+  title: 'Rent Increase Pack England | Form 4A from £24.99',
   description:
-    'England landlord rent increase guide covering Section 13, Form 4A, notice periods, market rent evidence, tenant challenge risk, and the right pack to serve.',
+    'Prepare an England Section 13 Form 4A rent increase from £24.99. Compare Supported and Tribunal-Ready packs with market evidence and preview before payment.',
   keywords: [
     'rent increase',
     'rent increase guide',
@@ -40,9 +40,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Rent Increase Guide for England Landlords | Section 13 Form 4A',
+    title: 'Rent Increase Pack England | Form 4A from £24.99',
     description:
-      'Learn how to increase rent in England with Section 13 and Form 4A, then choose the Supported or Tribunal-Ready rent increase pack.',
+      'Compare Supported and Tribunal-Ready Section 13 rent increase packs with market evidence and preview before payment.',
     url: canonicalUrl,
   },
 };
@@ -123,7 +123,7 @@ export default function RentIncreaseLandingPage() {
       trustText: 'England rent increase guide | Section 13 Form 4A | market rent evidence | tenant challenge risk',
       title: 'Increase rent in England with the right Section 13 route',
       subtitle:
-        'Before serving a rent increase, check when Section 13 applies, what notice period is needed, whether the proposed rent is supported by market evidence, and what to do if the tenant challenges it.',
+        'Start with the Supported Rent Increase Pack for £24.99, or choose the £34.99 Tribunal-Ready Pack when challenge risk is already clear. Check the figure, dates and evidence, then preview before payment.',
       feature:
         'Prepare a market-supported rent increase file, not just a Form 4A notice.',
       mediaSrc: '/images/illustrations/rent-increase/rent-increase-notice-waterbrush-v1.webp',
@@ -139,14 +139,14 @@ export default function RentIncreaseLandingPage() {
               href={standardDescriptor.landingHref}
               pagePath="/rent-increase"
               pageType="entry_page"
-              ctaLabel="Check my rent increase"
+              ctaLabel="Start Supported pack — £24.99"
               ctaPosition="hero"
               eventName="entry_page_primary_cta_click"
               routeIntent="rent_increase"
               product="section13_standard"
               className="hero-btn-primary flex w-full justify-center text-center sm:w-auto"
             >
-              Create my rent increase notice
+              Start Supported pack — £24.99
             </TrackedLink>
           </div>
           <div className="w-full sm:w-auto">
@@ -154,14 +154,14 @@ export default function RentIncreaseLandingPage() {
               href={defenceDescriptor.landingHref}
               pagePath="/rent-increase"
               pageType="entry_page"
-              ctaLabel="Compare the packs"
+              ctaLabel="Compare Tribunal-Ready — £34.99"
               ctaPosition="hero"
               eventName="entry_page_secondary_cta_click"
               routeIntent="rent_increase"
               product="section13_defensive"
               className="hero-btn-secondary flex w-full justify-center text-center sm:w-auto"
             >
-              Compare the packs
+              Compare Tribunal-Ready — £34.99
             </TrackedLink>
           </div>
         </>
@@ -212,6 +212,68 @@ export default function RentIncreaseLandingPage() {
               Example preview only. The generated file uses the landlord's property details and current comparable advertised rents.
             </p>
           </div>
+        </div>
+        <div className="mt-8 grid gap-4 md:grid-cols-2">
+          <article className="flex flex-col rounded-2xl border border-[#CFC0F4] bg-white p-5">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#6D28D9]">
+                  Recommended for most increases
+                </p>
+                <h3 className="mt-2 text-xl font-bold text-[#17142B]">Supported Rent Increase Pack</h3>
+              </div>
+              <span className="rounded-full bg-[#F1EAFE] px-3 py-1 text-sm font-bold text-[#5B21B6]">
+                {PRODUCTS.section13_standard.displayPrice}
+              </span>
+            </div>
+            <p className="mt-3 flex-1 text-sm leading-6 text-[#5B5470]">
+              Form 4A, current market comparables, rent summary, cover letter and service record for
+              a normal evidence-supported increase.
+            </p>
+            <TrackedLink
+              href={standardDescriptor.landingHref}
+              pagePath="/rent-increase"
+              pageType="entry_page"
+              ctaLabel="Choose Supported pack"
+              ctaPosition="mid"
+              eventName="product_route_chosen"
+              routeIntent="rent_increase"
+              product="section13_standard"
+              className="mt-5 inline-flex min-h-12 items-center justify-center rounded-xl bg-[#6D28D9] px-5 py-3 text-sm font-semibold text-white"
+            >
+              Choose Supported pack — £24.99
+            </TrackedLink>
+          </article>
+          <article className="flex flex-col rounded-2xl border border-[#CFC0F4] bg-white p-5">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#6D28D9]">
+                  When challenge risk is clear
+                </p>
+                <h3 className="mt-2 text-xl font-bold text-[#17142B]">Tribunal-Ready Rent Increase Pack</h3>
+              </div>
+              <span className="rounded-full bg-[#F1EAFE] px-3 py-1 text-sm font-bold text-[#5B21B6]">
+                {PRODUCTS.section13_defensive.displayPrice}
+              </span>
+            </div>
+            <p className="mt-3 flex-1 text-sm leading-6 text-[#5B5470]">
+              Adds response wording, legal briefing, condition comparison and indexed
+              tribunal-bundle support when pushback is likely.
+            </p>
+            <TrackedLink
+              href={defenceDescriptor.landingHref}
+              pagePath="/rent-increase"
+              pageType="entry_page"
+              ctaLabel="Choose Tribunal-Ready pack"
+              ctaPosition="mid"
+              eventName="product_route_chosen"
+              routeIntent="rent_increase"
+              product="section13_defensive"
+              className="mt-5 inline-flex min-h-12 items-center justify-center rounded-xl border border-[#8B5CF6] bg-[#F7F2FF] px-5 py-3 text-sm font-semibold text-[#4F2A96]"
+            >
+              Choose Tribunal-Ready pack — £34.99
+            </TrackedLink>
+          </article>
         </div>
       </div>
     ),

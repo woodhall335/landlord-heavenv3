@@ -71,6 +71,7 @@ export default function Section13StandardProductPage() {
       ),
     },
     earlyProofBand: {
+      priceLabel: product.displayPrice,
       preview: (
         <GoldenPackProof
           data={sampleProof}
