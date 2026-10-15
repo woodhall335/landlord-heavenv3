@@ -79,6 +79,22 @@ export interface GrowthRateMetric {
   rate: number | null;
 }
 
+export interface GrowthLandingJourneyMetric {
+  key: string;
+  label: string;
+  landings: number;
+  ctaClicks: number;
+  builderStarts: number;
+  previews: number;
+  checkoutStarts: number;
+  sales: number;
+  landingToCtaRate: number | null;
+  landingToBuilderRate: number | null;
+  landingToPreviewRate: number | null;
+  landingToCheckoutRate: number | null;
+  landingToSaleRate: number | null;
+}
+
 export interface GrowthReportResponse {
   success: true;
   days: 7 | 30;
@@ -98,6 +114,7 @@ export interface GrowthReportResponse {
   revenueBySourceMedium: GrowthMetricGroup[];
   funnelStages: Array<{ event: string; label: string; count: number }>;
   journeyRates: Array<{ key: string; label: string; numerator: number; denominator: number; rate: number | null }>;
+  landingPageJourney: GrowthLandingJourneyMetric[];
   funnelRates: {
     ctaClickRateByPage: GrowthRateMetric[];
     toolStartRate: GrowthRateMetric[];
@@ -551,6 +568,68 @@ export function buildGrowthReport(params: {
   const attributedPaidOrders = paidOrders.filter((order) => Boolean(order.marketing_session_id));
   const organicLandingSessionIds = eventSessionIds(eventsForStage('organic_landing_view'));
 
+  const landingPageJourney = (() => {
+    const landingSessionsByPage = new Map<string, Map<string, number>>();
+    eventsForStage('organic_landing_view').forEach((event) => {
+      const sessionId = event.marketing_session_id?.trim();
+      if (!sessionId) return;
+      const page = eventPage(event);
+      const eventAt = parseDate(event.created_at)?.getTime() ?? 0;
+      const sessions = landingSessionsByPage.get(page) || new Map<string, number>();
+      const current = sessions.get(sessionId);
+      if (current === undefined || eventAt < current) sessions.set(sessionId, eventAt);
+      landingSessionsByPage.set(page, sessions);
+    });
+
+    const sessionsReachingStage = (stageEvents: GrowthMarketingEventRow[]) => {
+      const reached = new Map<string, number>();
+      stageEvents.forEach((event) => {
+        const sessionId = event.marketing_session_id?.trim();
+        if (!sessionId) return;
+        const eventAt = parseDate(event.created_at)?.getTime() ?? 0;
+        const current = reached.get(sessionId);
+        if (current === undefined || eventAt < current) reached.set(sessionId, eventAt);
+      });
+      return reached;
+    };
+    const ctaBySession = sessionsReachingStage(bridgeClicks);
+    const builderBySession = sessionsReachingStage(eventsForStage('builder_started'));
+    const previewBySession = sessionsReachingStage(eventsForStage('preview_generated'));
+    const checkoutBySession = sessionsReachingStage(eventsForStage('checkout_opened'));
+
+    const countAfterLanding = (sessions: Map<string, number>, reached: Map<string, number>) =>
+      [...sessions].filter(([sessionId, landingAt]) => (reached.get(sessionId) ?? -1) >= landingAt)
+        .length;
+
+    return [...landingSessionsByPage]
+      .map(([page, sessions]) => {
+        const landings = sessions.size;
+        const ctaClicks = countAfterLanding(sessions, ctaBySession);
+        const builderStarts = countAfterLanding(sessions, builderBySession);
+        const previews = countAfterLanding(sessions, previewBySession);
+        const pageCheckoutStarts = countAfterLanding(sessions, checkoutBySession);
+        const sales = [...sessions].filter(
+          ([sessionId, landingAt]) => (paidOrderAtBySession.get(sessionId) ?? -1) >= landingAt
+        ).length;
+        return {
+          key: page,
+          label: page,
+          landings,
+          ctaClicks,
+          builderStarts,
+          previews,
+          checkoutStarts: pageCheckoutStarts,
+          sales,
+          landingToCtaRate: pct(ctaClicks, landings),
+          landingToBuilderRate: pct(builderStarts, landings),
+          landingToPreviewRate: pct(previews, landings),
+          landingToCheckoutRate: pct(pageCheckoutStarts, landings),
+          landingToSaleRate: pct(sales, landings),
+        };
+      })
+      .sort((left, right) => right.landings - left.landings || left.key.localeCompare(right.key));
+  })();
+
   const rolling7DayTargetRevenue = DAILY_REVENUE_TARGET_GBP * 7;
 
   const report: GrowthReportResponse = {
@@ -608,6 +687,7 @@ export function buildGrowthReport(params: {
       paidTransition('checkout_to_payment', 'Checkout to payment', eventsForStage('checkout_opened')),
       paidTransition('landing_to_sale', 'Organic landing to sale', eventsForStage('organic_landing_view')),
     ],
+    landingPageJourney,
     funnelRates: {
       ctaClickRateByPage: buildRateRows(
         bridgeRateCounts.denominator,

@@ -8,11 +8,13 @@ import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
 import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { StructuredData, articleSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { enhanceSection8GroundMetadata } from '@/lib/seo/section8-ground-guide';
+import { PRODUCTS } from '@/lib/pricing/products';
 
 const canonical = "https://landlordheaven.co.uk/section-8-grounds/how-to-evict-a-tenant-using-ground-11";
 const groundCode = "11";
 const groundLabel = "Ground 11";
-const noticeOnlyHref = "/products/notice-only?route=section-8&ground=11&src=seo_ground_11";
+const noticeOnlyHref = "/wizard/flow?type=eviction&product=notice_only&ground=11&src=seo_ground_11&topic=eviction";
+const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 const completePackHref = "/products/complete-pack?route=section-8&ground=11&src=seo_ground_11_complete";
 const checklistImage = "/checklists/ground-11.png";
 const checklistPdf = "/checklists/ground-11.pdf";
@@ -162,7 +164,7 @@ export default function Page() {
           <SectionCard title="Post-May 2026 compliance note"><p>For post-May 2026 England cases, use Form 3A or a form substantially to the same effect, give the right notice period, and write out the ground and reasons clearly. Keep deposit compliance, prescribed information, notice service, and court proof ready unless a ground-specific exception applies.</p><p>Current GOV.UK guidance says the court can dismiss or delay a claim if the notice is incomplete, inaccurate, or unsupported by evidence. Treat the notice, checklist, and evidence bundle as one consistent file from the start.</p></SectionCard>
           <SectionCard title={"Ground 11 evidence checklist"}><div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start"><div><p>Ground 11 evidence should prove the pattern, not just the latest arrears figure.</p><BulletList items={evidenceItems} /></div><ChecklistPreview imageSrc={checklistImage} pdfHref={checklistPdf} pdfText={checklistPdfText} alt={checklistAlt} /></div></SectionCard>
           <SectionCard title={"Common mistakes with Ground 11"}><BulletList items={mistakes} /></SectionCard>
-          <SectionCard title="If your tenant does not leave"><p>For the court stage, you need a claim form, particulars of claim, a copy of the notice, proof of service and evidence that proves this ground.</p><BulletList items={courtPoints} /><div className="mt-5 flex flex-wrap gap-3"><Link href={noticeOnlyHref} className="rounded-lg bg-primary px-5 py-3 font-semibold text-white hover:bg-[#5424aa]">Create my Section 8 notice</Link><Link href={completePackHref} className="rounded-lg border border-primary px-5 py-3 font-semibold text-primary hover:bg-[#F8F4FF]">Prepare my court papers</Link></div></SectionCard>
+          <SectionCard title="If your tenant does not leave"><p>For the court stage, you need a claim form, particulars of claim, a copy of the notice, proof of service and evidence that proves this ground.</p><BulletList items={courtPoints} /><p className="font-semibold text-[#2a2161]">Using Ground 11? Prepare the Form 3A and service file for {noticeOnlyPrice}, with a preview before payment.</p><div className="mt-5 flex flex-wrap gap-3"><Link href={noticeOnlyHref} className="rounded-lg bg-primary px-5 py-3 font-semibold text-white hover:bg-[#5424aa]">Create Ground 11 Form 3A — {noticeOnlyPrice}</Link><Link href={completePackHref} className="rounded-lg border border-primary px-5 py-3 font-semibold text-primary hover:bg-[#F8F4FF]">Prepare my court papers</Link></div></SectionCard>
           {relatedGrounds.length > 0 ? (<SectionCard title="Related grounds"><div className="grid gap-3 sm:grid-cols-2">{relatedGrounds.map((ground) => (<Link key={ground.href} href={ground.href} className="rounded-lg border border-[#E6DBFF] bg-[#FCFAFF] p-4 font-semibold text-primary hover:bg-[#F8F4FF]">Ground {ground.code}: {ground.label}</Link>))}</div></SectionCard>) : null}
         </div></Container></section>
         <FAQSection id="faqs" title={"Ground 11 FAQs"} intro={"Answers to common landlord questions about using Ground 11 in England."} faqs={faqs} variant="white" showContactCTA={false} contentWidth="wide" />

@@ -373,6 +373,13 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         'If you already know where your case stands, go straight to the right tool. If you are still checking the rules, continue through the guide and use the links as you go.',
       cards: [
         {
+          title: 'Not sure which ground to investigate',
+          body:
+            'Use the free ground finder to match the factual reason for possession with the relevant ground guides and evidence questions before preparing Form 3A.',
+          ctaLabel: 'Use the Section 8 ground finder',
+          href: '/tools/section-8-ground-finder',
+        },
+        {
           title: 'Need to check the notice date first',
           body:
             'Use the free Section 8 notice date calculator when you want to check the likely notice period, deemed service date, and earliest court-paper date before you generate anything.',
@@ -533,6 +540,13 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
       },
     ],
     relatedLinks: [
+      {
+        href: '/tools/section-8-ground-finder',
+        title: 'Section 8 Ground Finder',
+        description: 'Choose the factual reason for possession and identify the ground guides and evidence questions worth investigating.',
+        icon: 'calculator',
+        type: 'tool',
+      },
       {
         href: '/tools/section-8-notice-date-calculator',
         title: 'Section 8 Notice Date Calculator',

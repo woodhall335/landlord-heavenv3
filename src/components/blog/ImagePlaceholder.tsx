@@ -7,6 +7,7 @@ interface ImagePlaceholderProps {
   priority?: boolean;
   className?: string;
   aspectRatio?: 'hero' | 'inline' | 'square';
+  objectFit?: 'cover' | 'contain';
 }
 
 export function ImagePlaceholder({
@@ -16,6 +17,7 @@ export function ImagePlaceholder({
   priority = false,
   className = '',
   aspectRatio = 'inline',
+  objectFit = 'cover',
 }: ImagePlaceholderProps) {
   const aspectClasses = {
     hero: 'aspect-[16/9]',
@@ -33,7 +35,7 @@ export function ImagePlaceholder({
               src={src}
               alt={alt}
               fill
-              className={isSvg ? 'object-contain p-2 sm:p-3' : 'object-cover object-center'}
+              className={isSvg || objectFit === 'contain' ? 'object-contain p-2 sm:p-3' : 'object-cover object-center'}
               sizes="(min-width: 1024px) 760px, 100vw"
               priority={priority}
             />

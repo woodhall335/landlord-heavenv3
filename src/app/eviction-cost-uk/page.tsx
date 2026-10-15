@@ -12,6 +12,7 @@ import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { PRODUCTS } from '@/lib/pricing/products';
 import {
   CheckCircle,
@@ -27,13 +28,15 @@ const moneyClaimProductHref = '/products/money-claim';
 const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 const completePackPrice = PRODUCTS.complete_pack.displayPrice;
 const moneyClaimPrice = PRODUCTS.money_claim.displayPrice;
+const section8NoticeBuilderHref =
+  '/wizard/flow?type=eviction&product=notice_only&src=eviction_cost_section8&topic=eviction';
 
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'How Much Does Eviction Cost UK? Full Breakdown (2026)',
-  description: 'Plain-English landlord guide to eviction costs in 2026, including court fees, bailiff costs, solicitor costs, DIY options, and the hidden cost of delay.',
+  title: 'How Much Does a Section 8 Notice Cost? UK Eviction Costs',
+  description: `A Section 8 Notice Only Pack costs ${noticeOnlyPrice}. Compare guided notice preparation, court-stage packs, solicitor costs, court fees and the cost of delay.`,
   keywords: [
     'eviction cost uk',
     'how much does eviction cost',
@@ -148,6 +151,69 @@ export default function EvictionCostUkPage() {
                   Notice Only, Complete Pack, or Money Claim is the next practical product route
                   before you spend more on the wrong stage.
                 </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="section-8-notice-cost" className="border-y border-emerald-100 bg-emerald-50/60 py-12">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-4xl rounded-2xl border border-emerald-200 bg-white p-6 shadow-sm md:p-8">
+              <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">
+                Section 8 notice cost
+              </p>
+              <h2 className="mt-2 text-3xl font-bold text-gray-900">
+                How much does it cost to serve a Section 8 notice?
+              </h2>
+              <p className="mt-4 leading-7 text-gray-700">
+                Landlord Heaven&apos;s guided Notice Only Pack is {noticeOnlyPrice}. It prepares the
+                current Form 3A notice, ground and date checks, a service record, and an arrears
+                schedule where relevant. You can preview the generated paperwork before payment.
+                The price does not include court fees, enforcement fees, legal advice or a solicitor.
+              </p>
+              <div className="mt-6 grid gap-4 md:grid-cols-3">
+                <div className="rounded-xl border border-gray-200 p-4">
+                  <h3 className="font-semibold text-gray-900">Blank-form DIY</h3>
+                  <p className="mt-2 text-sm leading-6 text-gray-600">
+                    Lowest document cost, but you select the grounds, calculate dates and create the
+                    service evidence yourself.
+                  </p>
+                </div>
+                <div className="rounded-xl border-2 border-emerald-500 bg-emerald-50 p-4">
+                  <h3 className="font-semibold text-gray-900">Guided notice preparation</h3>
+                  <p className="mt-2 text-sm leading-6 text-gray-700">
+                    Fixed price {noticeOnlyPrice}, with a guided Form 3A workflow, supporting file and
+                    preview before payment.
+                  </p>
+                </div>
+                <div className="rounded-xl border border-gray-200 p-4">
+                  <h3 className="font-semibold text-gray-900">Solicitor support</h3>
+                  <p className="mt-2 text-sm leading-6 text-gray-600">
+                    Bespoke advice may be appropriate for defended, unusual or high-risk cases; ask
+                    the adviser what notice, court and hearing work their quote includes.
+                  </p>
+                </div>
+              </div>
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <TrackedLink
+                  href={section8NoticeBuilderHref}
+                  pagePath="/eviction-cost-uk"
+                  pageType="entry_page"
+                  ctaLabel={`Create and preview Form 3A — ${noticeOnlyPrice}`}
+                  ctaPosition="mid"
+                  eventName="entry_page_primary_cta_click"
+                  routeIntent="section8_notice_cost"
+                  product="notice_only"
+                  className="inline-flex min-h-12 items-center justify-center rounded-lg bg-emerald-700 px-5 py-3 font-semibold text-white transition hover:bg-emerald-800"
+                >
+                  Create and preview Form 3A — {noticeOnlyPrice}
+                </TrackedLink>
+                <Link
+                  href="/form-3-section-8"
+                  className="inline-flex min-h-12 items-center justify-center rounded-lg border border-gray-300 px-5 py-3 font-semibold text-gray-900 hover:bg-gray-50"
+                >
+                  See what the Form 3A file includes
+                </Link>
               </div>
             </div>
           </div>

@@ -25,7 +25,7 @@ describe('commercial SEO rescue pages', () => {
     expect(form3.groundIntents?.every((intent) => intent.ctaHref.includes('/wizard/flow?'))).toBe(
       true
     );
-    expect(section8TemplateMetadata.title).toContain('Without Date or Service Mistakes');
+    expect(section8TemplateMetadata.title).toContain('Template vs Guided Form 3A');
 
     const currentFrameworkRenderer = readFileSync('src/components/seo/CurrentFrameworkGuidePage.tsx', 'utf8');
     const section8TemplatePage = readFileSync('src/app/section-8-notice-template/page.tsx', 'utf8');
@@ -44,7 +44,7 @@ describe('commercial SEO rescue pages', () => {
 
     const howToRentPage = readFileSync('src/app/how-to-rent-guide/page.tsx', 'utf8');
     expect(howToRentPage).toContain("const tenancyProductHref = '/products/ast'");
-    expect(howToRentPage).toContain('Create the right tenancy agreement');
+    expect(howToRentPage).toContain('Create tenancy agreement');
   });
 
   it('positions Form 4A around evidence and tenant challenge risk', () => {

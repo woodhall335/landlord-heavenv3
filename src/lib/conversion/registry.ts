@@ -51,16 +51,22 @@ const moneyClaim = (sourceRoute: string, problem: string, trackingId: string): C
   price: PRODUCTS.money_claim.displayPrice, previewAvailable: true, trackingId,
 });
 
-const notice = (sourceRoute: string, problem: string, trackingId: string, ground?: string): ConversionMapping => ({
-  sourceRoute, sourceCategory: 'eviction_notice', visitorProblem: problem,
-  primaryProduct: 'notice_only', secondaryProduct: 'complete_pack',
-  headline: 'Need to serve a notice for this tenancy problem?',
-  supportingCopy: 'Use the guided Form 3A builder to keep the grounds, dates, service steps and evidence checks aligned. Preview the paperwork before paying.',
-  ctaLabel: `Create and preview my Form 3A — ${PRODUCTS.notice_only.displayPrice}`, destinationRoute: '/products/notice-only',
-  builderPreselection: { type: 'eviction', product: 'notice_only', topic: 'eviction', ...(ground ? { ground } : {}) },
-  benefits: ['Use the current notice route for the facts entered.', 'Check dates and service requirements before serving.', 'Preview the available paperwork before payment.'],
-  price: PRODUCTS.notice_only.displayPrice, previewAvailable: true, trackingId,
-});
+const notice = (sourceRoute: string, problem: string, trackingId: string, ground?: string): ConversionMapping => {
+  const destinationRoute = ground
+    ? `/wizard/flow?type=eviction&product=notice_only&topic=eviction&src=${trackingId}&ground=${encodeURIComponent(ground)}`
+    : '/products/notice-only';
+
+  return {
+    sourceRoute, sourceCategory: 'eviction_notice', visitorProblem: problem,
+    primaryProduct: 'notice_only', secondaryProduct: 'complete_pack',
+    headline: 'Need to serve a notice for this tenancy problem?',
+    supportingCopy: 'Use the guided Form 3A builder to keep the grounds, dates, service steps and evidence checks aligned. Preview the paperwork before paying.',
+    ctaLabel: `Create and preview my Form 3A — ${PRODUCTS.notice_only.displayPrice}`, destinationRoute,
+    builderPreselection: { type: 'eviction', product: 'notice_only', topic: 'eviction', ...(ground ? { ground } : {}) },
+    benefits: ['Use the current notice route for the facts entered.', 'Check dates and service requirements before serving.', 'Preview the available paperwork before payment.'],
+    price: PRODUCTS.notice_only.displayPrice, previewAvailable: true, trackingId,
+  };
+};
 
 const courtPack = (sourceRoute: string, problem: string, trackingId: string): ConversionMapping => ({
   sourceRoute, sourceCategory: 'possession_court', visitorProblem: problem,

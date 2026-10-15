@@ -151,7 +151,7 @@ const pageContracts: PageContract[] = [
   {
     name: 'notice only',
     load: () => import('@/app/products/notice-only/page'),
-    h1: /Create a Section 8 eviction notice and service file/i,
+    h1: /Notice Only: your guided Section 8 notice and service file/i,
     sectionTitles: [
       'Why a blank notice is risky',
       'How this puts you in a stronger position',

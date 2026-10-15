@@ -412,6 +412,8 @@ export default function RentIncreaseLandingPage() {
         { label: 'Read the long-form guide', href: '/products/rent-increase' },
         { label: 'Section 13 notice guide', href: '/rent-increase/section-13-notice' },
         { label: 'Form 4A guide', href: '/rent-increase/form-4a-guide' },
+        { label: 'Section 13 evidence checklist', href: '/blog/england-section-13-rent-increase-evidence-checklist' },
+        { label: 'What happens if a tenant challenges?', href: '/blog/england-tenant-challenges-section-13-rent-increase' },
       ],
       visual: {
         eyebrow: 'Rent increase',

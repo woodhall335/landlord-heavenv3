@@ -145,8 +145,8 @@ export default function Page() {
       <UniversalHero
         title="Section 8 Grounds Explained"
         subtitle="Understand the legal eviction grounds landlords rely on when a tenant breaches the tenancy."
-        primaryCta={{ label: 'Start Section 8 Notice', href: '/products/notice-only' }}
-        secondaryCta={{ label: 'Prepare my court pack', href: '/products/complete-pack' }}
+        primaryCta={{ label: 'Find the ground to investigate', href: '/tools/section-8-ground-finder' }}
+        secondaryCta={{ label: 'Start Section 8 Notice', href: '/products/notice-only' }}
         mediaSrc="/images/wizard-icons/09-court.png"
         mediaAlt="Section 8 eviction guide icon"
         showReviewPill

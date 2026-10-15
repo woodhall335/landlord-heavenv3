@@ -63,7 +63,8 @@ describe('Section 8 ground guides', () => {
     const hero = readFileSync(join(root, 'src', 'components', 'seo', 'Section8GroundUniversalHero.tsx'), 'utf8');
 
     expect(layout).toContain('<Section8GroundDecisionPath />');
-    expect(hero).toContain("label: 'Book a free consultation'");
-    expect(hero).toContain('Start my Section 8 notice');
+    expect(hero).toContain('ctaLabel="Book a free consultation"');
+    expect(hero).toContain('Create Ground {ground.code} Form 3A');
+    expect(hero).toContain('eventName="entry_page_primary_cta_click"');
   });
 });

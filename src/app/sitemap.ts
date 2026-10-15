@@ -386,6 +386,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Add main tools page
   toolPagesList.push({ path: '/tools', priority: 0.7, changeFrequency: 'monthly' as const });
+  toolPagesList.push({ path: '/tools/section-8-ground-finder', priority: 0.86, changeFrequency: 'weekly' as const });
   toolPaths.add('/tools');
 
   // Add individual free tools (excluding duplicates)

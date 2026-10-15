@@ -70,6 +70,54 @@ const AST_MATCHERS = [/tenancy agreement/i, /ast/i, /prt/i, /occupation contract
 const COMPLETE_PACK_MATCHERS = [/eviction process/i, /possession claim/i, /n5b/i, /court hearing/i, /bailiff/i];
 
 const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
+  'england-section-13-rent-increase-evidence-checklist': {
+    primaryProductHref: BLOG_PRODUCT_ROUTES.section13Standard,
+    secondaryProductHref: BLOG_PRODUCT_ROUTES.section13Defence,
+    eyebrow: 'Evidence-backed increase',
+    heading: 'Build Form 4A and the supporting evidence together',
+    intro:
+      'Check the timing, review comparable properties and keep the notice, proposed rent and explanation in one organised route.',
+    ctaLabel: 'Build my supported rent increase',
+    bullets: [
+      'Check the supportable rent against current local listings.',
+      'Keep Form 4A, dates and service details together.',
+      'Step up to Tribunal-Ready when challenge risk is visible.',
+    ],
+    iconKey: 'notice',
+    usedDefault: false,
+  },
+  'england-tenant-challenges-section-13-rent-increase': {
+    primaryProductHref: BLOG_PRODUCT_ROUTES.section13Defence,
+    secondaryProductHref: BLOG_PRODUCT_ROUTES.section13Standard,
+    eyebrow: 'Tenant challenge',
+    heading: 'Turn the rent increase into a coherent evidence file',
+    intro:
+      'Prepare the notice, comparable evidence, challenge response and rent justification before tribunal deadlines make the file harder to organise.',
+    ctaLabel: 'Prepare my tribunal-ready file',
+    bullets: [
+      'Preserve the exact notice and service record.',
+      'Connect comparable evidence to the property facts.',
+      'Keep the landlord response calm, factual and consistent.',
+    ],
+    iconKey: 'notice',
+    usedDefault: false,
+  },
+  'do-landlords-need-a-new-tenancy-agreement-after-1-may-2026': {
+    primaryProductHref: BLOG_PRODUCT_ROUTES.standardTenancy,
+    secondaryProductHref: BLOG_PRODUCT_ROUTES.premiumTenancy,
+    eyebrow: 'Current tenancy paperwork',
+    heading: 'Replace stale wording with the right agreement route',
+    intro:
+      'Use Standard for a straightforward England let, or Premium where the tenancy needs broader, more detailed protection.',
+    ctaLabel: 'Create my tenancy agreement',
+    bullets: [
+      'Record the property, parties, rent and responsibilities clearly.',
+      'Use wording shaped around the current England framework.',
+      'Preview the completed agreement before payment.',
+    ],
+    iconKey: 'ast',
+    usedDefault: false,
+  },
   'new-landlord-registration-requirements-england-uk-regions': {
     primaryProductHref: BLOG_PRODUCT_ROUTES.ast,
     eyebrow: 'Registration-ready paperwork',

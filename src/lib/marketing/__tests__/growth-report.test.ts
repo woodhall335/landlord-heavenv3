@@ -319,6 +319,57 @@ describe('growth report builder', () => {
     });
   });
 
+  it('reports the complete organic funnel separately for each landing page', () => {
+    const report = buildGrowthReport({
+      days: 7,
+      now: new Date('2026-05-05T12:00:00.000Z'),
+      orders: [
+        {
+          id: 'section-8-sale',
+          payment_status: 'paid',
+          product_type: 'notice_only',
+          total_amount: 39.99,
+          paid_at: '2026-05-05T10:00:00.000Z',
+          landing_path: '/form-3-section-8',
+          marketing_session_id: 'mkt_section8',
+        },
+      ],
+      events: [
+        { event_name: 'organic_landing_view', marketing_session_id: 'mkt_section8', source_page: '/form-3-section-8', created_at: '2026-05-05T09:00:00.000Z' },
+        { event_name: 'journey_cta_click', marketing_session_id: 'mkt_section8', source_page: '/form-3-section-8', created_at: '2026-05-05T09:01:00.000Z' },
+        { event_name: 'builder_started', marketing_session_id: 'mkt_section8', source_page: '/wizard/flow', created_at: '2026-05-05T09:02:00.000Z' },
+        { event_name: 'preview_generated', marketing_session_id: 'mkt_section8', source_page: '/wizard/flow', created_at: '2026-05-05T09:10:00.000Z' },
+        { event_name: 'checkout_opened', marketing_session_id: 'mkt_section8', source_page: '/checkout', created_at: '2026-05-05T09:15:00.000Z' },
+        { event_name: 'organic_landing_view', marketing_session_id: 'mkt_cost', source_page: '/eviction-cost-uk', created_at: '2026-05-05T09:00:00.000Z' },
+      ],
+    });
+
+    expect(report.landingPageJourney).toContainEqual({
+      key: '/form-3-section-8',
+      label: '/form-3-section-8',
+      landings: 1,
+      ctaClicks: 1,
+      builderStarts: 1,
+      previews: 1,
+      checkoutStarts: 1,
+      sales: 1,
+      landingToCtaRate: 100,
+      landingToBuilderRate: 100,
+      landingToPreviewRate: 100,
+      landingToCheckoutRate: 100,
+      landingToSaleRate: 100,
+    });
+    expect(report.landingPageJourney).toContainEqual(
+      expect.objectContaining({
+        key: '/eviction-cost-uk',
+        landings: 1,
+        ctaClicks: 0,
+        sales: 0,
+        landingToSaleRate: 0,
+      })
+    );
+  });
+
   it('counts canonical funnel stages when a legacy database event name is used', () => {
     const report = buildGrowthReport({
       days: 7,

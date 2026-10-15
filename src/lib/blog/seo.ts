@@ -33,6 +33,30 @@ const BLOG_SEO_PRODUCT_OVERRIDES: Record<
   string,
   { href: string; label: string; anchorText: string; description: string; secondaryHref?: string; secondaryLabel?: string }
 > = {
+  'england-section-13-rent-increase-evidence-checklist': {
+    href: '/products/section-13-standard',
+    label: 'Supported Rent Increase Pack',
+    anchorText: 'Build my evidence-backed rent increase',
+    description: 'Build Form 4A with current local comparables, a rent summary and a clear evidence file.',
+    secondaryHref: '/products/section-13-defence',
+    secondaryLabel: 'Tribunal-Ready Rent Increase Pack',
+  },
+  'england-tenant-challenges-section-13-rent-increase': {
+    href: '/products/section-13-defence',
+    label: 'Tribunal-Ready Rent Increase Pack',
+    anchorText: 'Prepare my rent challenge evidence',
+    description: 'Organise Form 4A, comparable evidence and the landlord response for a higher-risk rent increase.',
+    secondaryHref: '/products/section-13-standard',
+    secondaryLabel: 'Supported Rent Increase Pack',
+  },
+  'do-landlords-need-a-new-tenancy-agreement-after-1-may-2026': {
+    href: '/standard-tenancy-agreement',
+    label: 'Standard Tenancy Agreement',
+    anchorText: 'Create my current Standard agreement',
+    description: 'Build a current England tenancy agreement for a straightforward let.',
+    secondaryHref: '/premium-tenancy-agreement',
+    secondaryLabel: 'Premium Tenancy Agreement',
+  },
   'england-form-3a-eviction-notice-generator-after-renters-rights-act': {
     href: '/products/notice-only',
     label: 'Eviction Notice Generator for England landlords',

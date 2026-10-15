@@ -6,11 +6,11 @@ import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { Section8TimelinePlanner } from '@/components/eviction/Section8TimelinePlanner';
 import {
   StructuredData,
   articleSchema,
   breadcrumbSchema,
-  faqPageSchema,
 } from '@/lib/seo/structured-data';
 
 const canonical = 'https://landlordheaven.co.uk/eviction-timeline-uk';
@@ -18,16 +18,16 @@ const canonical = 'https://landlordheaven.co.uk/eviction-timeline-uk';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Eviction Timeline UK | How Long It Takes',
+  title: 'How Long Does a Section 8 Eviction Take? 2026 Timeline',
   description:
-    'Plain-English landlord guide to how long eviction usually takes in England, where delays happen, and what you can do to keep the case moving.',
+    'See the Section 8 eviction timeline from Form 3A and its notice period through court, possession order and enforcement, including common causes of delay.',
   alternates: {
     canonical,
   },
   openGraph: {
-    title: 'Eviction Timeline UK | How Long It Takes',
+    title: 'How Long Does a Section 8 Eviction Take? 2026 Timeline',
     description:
-      'Understand how long the eviction process usually takes, what delays landlords most often face, and how to plan from notice to enforcement.',
+      'Understand the Section 8 timeline from notice through court and enforcement, and plan the remaining stages without treating estimates as guarantees.',
     url: canonical,
     siteName: 'LandlordHeaven',
     type: 'article',
@@ -182,9 +182,9 @@ export default function Page() {
       />
 
       <UniversalHero
-        title="Eviction Timeline UK"
-        subtitle="If you need the property back, this guide shows how long the notice, court, possession order, and enforcement stages usually take and where landlords most often lose time."
-        primaryCta={{ label: 'Start Complete Eviction Pack', href: '/products/complete-pack' }}
+        title="How long does a Section 8 eviction take?"
+        subtitle="Follow the England timeline from Form 3A and its ground-specific notice period through court, a possession order and enforcement if the tenant remains."
+        primaryCta={{ label: 'Plan my Section 8 timeline', href: '#section-8-timeline-planner' }}
         secondaryCta={{
           label: 'Still at notice stage? Start Notice Only',
           href: '/products/notice-only',
@@ -195,8 +195,7 @@ export default function Page() {
         showTrustPositioningBar
       >
         <p className="mt-6 text-sm text-white/90 md:text-base">
-          Understand the real eviction timeline in England, including notice periods,
-          court processing, possession orders, and enforcement.
+          Timings depend on the grounds, service, evidence, court workload and whether the tenant leaves. Treat every range as planning information, not a guaranteed completion date.
         </p>
       </UniversalHero>
 
@@ -228,6 +227,21 @@ export default function Page() {
         <Container>
           <div className="mx-auto max-w-5xl">
             <SeoPageContextPanel pathname="/eviction-timeline-uk" className="border border-[#CAB6FF] bg-[#FBF8FF]" />
+          </div>
+        </Container>
+      </section>
+
+      <section id="section-8-timeline-planner" className="scroll-mt-24 border-y border-[#E6DBFF] bg-[#FCFAFF] py-12">
+        <Container>
+          <div className="mx-auto max-w-5xl">
+            <div className="mb-6 max-w-3xl">
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-primary">Interactive planning tool</p>
+              <h2 className="mt-2 text-3xl font-semibold text-[#2a2161]">See the remaining Section 8 stages</h2>
+              <p className="mt-3 leading-7 text-gray-700">
+                Select a commonly researched ground and your current stage. The planner uses the maintained notice-period label and shows what normally comes next without promising a court or enforcement date.
+              </p>
+            </div>
+            <Section8TimelinePlanner />
           </div>
         </Container>
       </section>

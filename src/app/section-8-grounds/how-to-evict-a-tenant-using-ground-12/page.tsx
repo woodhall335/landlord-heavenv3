@@ -8,11 +8,13 @@ import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
 import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { StructuredData, articleSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { enhanceSection8GroundMetadata } from '@/lib/seo/section8-ground-guide';
+import { PRODUCTS } from '@/lib/pricing/products';
 
 const canonical = "https://landlordheaven.co.uk/section-8-grounds/how-to-evict-a-tenant-using-ground-12";
 const groundCode = "12";
 const groundLabel = "Ground 12";
-const noticeOnlyHref = "/products/notice-only?route=section-8&ground=12&src=seo_ground_12";
+const noticeOnlyHref = "/wizard/flow?type=eviction&product=notice_only&ground=12&src=seo_ground_12&topic=eviction";
+const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 const completePackHref = "/products/complete-pack?route=section-8&ground=12&src=seo_ground_12_complete";
 const checklistImage = "/checklists/ground-12.png";
 const checklistPdf = "/checklists/ground-12.pdf";
@@ -20,8 +22,8 @@ const checklistAlt = "Ground 12 evidence checklist preview";
 const checklistPdfText = "Download the ungated Ground 12 PDF checklist.";
 
 export const metadata: Metadata = enhanceSection8GroundMetadata({
-  title: "Ground 12 Eviction: Breach of Tenancy | LandlordHeaven",
-  description: "Evict using Ground 12 for breach of tenancy. Check the 2-week notice, breach evidence, court discretion, mistakes, and court-stage next steps.",
+  title: "Section 8 Ground 12: Breach of Tenancy (2026)",
+  description: "Using Section 8 Ground 12 for a tenancy breach? Check the clause, evidence, maintained 2-week notice-period label and guided Form 3A route.",
   keywords: [
     "ground 12 eviction",
     "section 8 ground 12",
@@ -38,8 +40,8 @@ export const metadata: Metadata = enhanceSection8GroundMetadata({
   ],
   alternates: { canonical },
   openGraph: {
-    title: "Ground 12 Eviction: Breach of Tenancy | LandlordHeaven",
-    description: "Evict using Ground 12 for breach of tenancy. Check the 2-week notice, breach evidence, court discretion, mistakes, and court-stage next steps.",
+    title: "Section 8 Ground 12: Breach of Tenancy (2026)",
+    description: "Check how Ground 12 links the tenancy clause, the breach evidence, court discretion and the Form 3A route.",
     url: canonical,
     siteName: 'LandlordHeaven',
     type: 'article',
@@ -146,12 +148,22 @@ export default function Page() {
         <Container>
           <nav aria-label="Breadcrumb" className="mb-6 text-sm text-white/80"><Link href="/" className="hover:text-white">Home</Link><span className="mx-2">/</span><Link href="/section-8-grounds-explained" className="hover:text-white">Section 8 grounds</Link><span className="mx-2">/</span><span>{groundLabel}</span></nav>
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#d9c9ff]">England Form 3A full guide</p>
-          <h2 className="mt-4 max-w-4xl text-4xl font-bold leading-tight md:text-5xl">How to Evict a Tenant Using Ground 12 - Breach of Tenancy</h2>
+          <h1 className="mt-4 max-w-4xl text-4xl font-bold leading-tight md:text-5xl">Section 8 Ground 12: breach of tenancy</h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-white/85">Use this landlord guide to check what {groundLabel} means, the current post-May 2026 notice period, the evidence to gather, the mistakes to avoid, and the safest next document step before serving Form 3A.</p>
-          <div className="mt-8 flex flex-wrap gap-3"><Link href={noticeOnlyHref} className="rounded-lg bg-white px-5 py-3 font-semibold text-[#2a2161] shadow-sm hover:bg-[#f3edff]">Create my Section 8 notice for {groundLabel}</Link><Link href={completePackHref} className="rounded-lg border border-white/40 px-5 py-3 font-semibold text-white hover:bg-white/10">Prepare my court pack</Link></div>
+          <div className="mt-8 flex flex-wrap gap-3"><Link href={noticeOnlyHref} className="rounded-lg bg-white px-5 py-3 font-semibold text-[#2a2161] shadow-sm hover:bg-[#f3edff]">Prepare Ground 12 Form 3A — {noticeOnlyPrice}</Link><Link href={completePackHref} className="rounded-lg border border-white/40 px-5 py-3 font-semibold text-white hover:bg-white/10">Prepare my court pack</Link></div>
         </Container>
       </header>
       <main>
+        <section className="border-b border-[#E6DBFF] bg-[#F8F4FF] py-7">
+          <Container>
+            <div className="rounded-2xl border border-[#CAB6FF] bg-white p-5 md:p-6">
+              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-primary">Ground 12 quick answer</p>
+              <p className="mt-2 max-w-5xl text-lg leading-8 text-gray-800">
+                Ground 12 is the discretionary ground to investigate where a tenant has broken a tenancy obligation other than paying rent. The notice should identify the actual clause, what happened and the supporting evidence. The maintained notice-period label is <strong>2 weeks</strong>; proving a breach does not remove the court&apos;s reasonableness assessment.
+              </p>
+            </div>
+          </Container>
+        </section>
         <section className="border-b border-[#E6DBFF] bg-white py-6"><Container><div className="grid gap-4 md:grid-cols-3"><div className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-4"><p className="text-sm font-semibold text-primary">Ground meaning</p><p className="mt-2 text-sm text-gray-700">Ground 12 is the general discretionary breach of tenancy ground. It covers tenancy obligations other than rent payment where the tenant has breached the agreement.</p></div><div className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-4"><p className="text-sm font-semibold text-primary">Mandatory or discretionary status</p><p className="mt-2 text-sm text-gray-700">{groundLabel} is <strong>discretionary</strong>.</p></div><div className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-4"><p className="text-sm font-semibold text-primary">Current notice period</p><p className="mt-2 text-sm text-gray-700">The current post-May 2026 notice period is <strong>2 weeks</strong>.</p></div></div></Container></section>
         <section className="border-b border-[#E6DBFF] bg-[#FCFAFF] py-8"><Container><AssistedPrepServicesShowcase pagePath={new URL(canonical).pathname} pageType="entry_page" src="seo_ground_assisted_cta" /></Container></section>
         <section className="py-12"><Container size="large"><div className="space-y-8">
@@ -162,7 +174,7 @@ export default function Page() {
           <SectionCard title="Post-May 2026 compliance note"><p>For post-May 2026 England cases, use Form 3A or a form substantially to the same effect, give the right notice period, and write out the ground and reasons clearly. Keep deposit compliance, prescribed information, notice service, and court proof ready unless a ground-specific exception applies.</p><p>Current GOV.UK guidance says the court can dismiss or delay a claim if the notice is incomplete, inaccurate, or unsupported by evidence. Treat the notice, checklist, and evidence bundle as one consistent file from the start.</p></SectionCard>
           <SectionCard title={"Ground 12 evidence checklist"}><div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start"><div><p>Ground 12 evidence should connect the tenant conduct to a specific tenancy clause.</p><BulletList items={evidenceItems} /></div><ChecklistPreview imageSrc={checklistImage} pdfHref={checklistPdf} pdfText={checklistPdfText} alt={checklistAlt} /></div></SectionCard>
           <SectionCard title={"Common mistakes with Ground 12"}><BulletList items={mistakes} /></SectionCard>
-          <SectionCard title="If your tenant does not leave"><p>For the court stage, you need a claim form, particulars of claim, a copy of the notice, proof of service and evidence that proves this ground.</p><BulletList items={courtPoints} /><div className="mt-5 flex flex-wrap gap-3"><Link href={noticeOnlyHref} className="rounded-lg bg-primary px-5 py-3 font-semibold text-white hover:bg-[#5424aa]">Create my Section 8 notice</Link><Link href={completePackHref} className="rounded-lg border border-primary px-5 py-3 font-semibold text-primary hover:bg-[#F8F4FF]">Prepare my court papers</Link></div></SectionCard>
+          <SectionCard title="If your tenant does not leave"><p>For the court stage, you need a claim form, particulars of claim, a copy of the notice, proof of service and evidence that proves this ground.</p><BulletList items={courtPoints} /><p className="font-semibold text-[#2a2161]">Using Ground 12? Prepare the Form 3A and service file for {noticeOnlyPrice}, with a preview before payment.</p><div className="mt-5 flex flex-wrap gap-3"><Link href={noticeOnlyHref} className="rounded-lg bg-primary px-5 py-3 font-semibold text-white hover:bg-[#5424aa]">Create Ground 12 Form 3A — {noticeOnlyPrice}</Link><Link href={completePackHref} className="rounded-lg border border-primary px-5 py-3 font-semibold text-primary hover:bg-[#F8F4FF]">Prepare my court papers</Link></div></SectionCard>
           {relatedGrounds.length > 0 ? (<SectionCard title="Related grounds"><div className="grid gap-3 sm:grid-cols-2">{relatedGrounds.map((ground) => (<Link key={ground.href} href={ground.href} className="rounded-lg border border-[#E6DBFF] bg-[#FCFAFF] p-4 font-semibold text-primary hover:bg-[#F8F4FF]">Ground {ground.code}: {ground.label}</Link>))}</div></SectionCard>) : null}
         </div></Container></section>
         <FAQSection id="faqs" title={"Ground 12 FAQs"} intro={"Answers to common landlord questions about using Ground 12 in England."} faqs={faqs} variant="white" showContactCTA={false} contentWidth="wide" />

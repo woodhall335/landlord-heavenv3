@@ -5,6 +5,7 @@ import { BlogCTA } from '@/components/blog/BlogCTA';
 import { AlertTriangle, BadgeCheck, Clock3, FileText } from 'lucide-react';
 import { productReformBlogPosts } from './product-reform-posts';
 import { landlordRegistrationPost } from './landlord-registration-post';
+import { section13GrowthPosts } from './section13-growth-posts';
 import { BlogPost } from './types';
 
 const section21TemplateCta = (
@@ -148,6 +149,7 @@ const scotlandEvictionCta = (
 const allBlogPosts: BlogPost[] = [
   landlordRegistrationPost,
   ...productReformBlogPosts,
+  ...section13GrowthPosts,
   // ============================================
   // POST 0: Renters Reform Bill (FEATURED - URGENT)
   // Target: 2,000+ words
@@ -39540,26 +39542,27 @@ const allBlogPosts: BlogPost[] = [
   // Article: England tenancy agreement review after 1 May 2026
   {
     slug: 'do-landlords-need-a-new-tenancy-agreement-after-1-may-2026',
-    title: 'New Tenancy Agreement After 1 May 2026? England Guide',
-    description: 'England landlords should review whether older tenancy agreements still reflect the assured periodic framework from 1 May 2026 and whether outdated clauses may now be weaker than expected.',
-    metaDescription: 'Do landlords need a new tenancy agreement after 1 May 2026? England guide to outdated clauses, assured periodic wording, and when to review or replace old templates.',
+    title: 'Why an Up-to-Date Tenancy Agreement Matters in England',
+    description: 'Why England landlords should keep tenancy agreements current, review older wording and record the property, rent, responsibilities and current assured periodic terms clearly.',
+    metaDescription: 'Why an up-to-date tenancy agreement matters for England landlords: clearer terms, current assured periodic wording, fewer disputes and a stronger property file.',
     date: '2026-03-22',
-    updatedDate: '2026-03-22',
-    readTime: '10 min read',
-    wordCount: 1540,
+    updatedDate: '2026-10-15',
+    readTime: '11 min read',
+    wordCount: 1690,
     category: 'Tenancy Agreements',
-    tags: ['England tenancy agreement', 'Renters Rights Act', 'assured periodic tenancy', 'landlord guide', 'AST legacy search'],
+    tags: ['Up-to-date tenancy agreement', 'England tenancy agreement', 'Renters Rights Act', 'assured periodic tenancy', 'landlord guide'],
     author: {
       name: 'Landlord Heaven Editorial Team',
       role: 'Housing document specialists',
     },
-    heroImage: '/images/heroes/library/hero-tenancy-england-standard-v2.webp',
-    heroImageAlt: 'England landlord reviewing tenancy agreement after 1 May 2026',
+    heroImage: '/images/heroes/library/hero-tenancy-agreement-review-watercolour-v1.webp',
+    heroImageAlt: 'Watercolour illustration of an up-to-date tenancy agreement, review checklist, calendar and property keys',
     showUrgencyBanner: false,
-    targetKeyword: 'new tenancy agreement after 1 May 2026',
-    secondaryKeywords: ['England tenancy agreement 2026', 'assured periodic tenancy agreement', 'old tenancy agreement outdated', 'review tenancy agreement England'],
+    targetKeyword: 'importance of up to date tenancy agreement',
+    secondaryKeywords: ['up-to-date tenancy agreement', 'England tenancy agreement 2026', 'assured periodic tenancy agreement', 'old tenancy agreement outdated', 'review tenancy agreement England'],
     tableOfContents: [
       { id: 'what-changed', title: 'What Changed on 1 May 2026', level: 2 },
+      { id: 'why-current-agreement-matters', title: 'Why a Current Agreement Matters', level: 2 },
       { id: 'do-you-need-new-agreement', title: 'Do You Always Need a New Agreement?', level: 2 },
       { id: 'signs-old-agreement-outdated', title: 'Signs an Old Agreement May Be Outdated', level: 2 },
       { id: 'review-vs-replace', title: 'Review vs Replace', level: 2 },
@@ -39596,17 +39599,20 @@ const allBlogPosts: BlogPost[] = [
     content: (
       <>
         <p className="lead">
-          The short answer is <strong>not always</strong>, but many England landlords should review what they are using.
+          An up-to-date tenancy agreement gives the landlord and tenant one clear record of the rent, property, payment
+          dates, responsibilities and current terms. Not every historic agreement must automatically be replaced, but
+          every landlord should know whether the document they are relying on still describes the arrangement accurately.
           From <strong>1 May 2026</strong>, new England tenancy agreements generally move into the assured periodic framework.
           If your paperwork is old, generic, lightly edited, or still built around fixed-term AST assumptions, it may no
           longer reflect the current position and may not give you the protection you expect.
         </p>
 
         <ImagePlaceholder
-          src="/images/heroes/library/hero-tenancy-england-standard-v2.webp"
-          alt="England tenancy agreement review after 1 May 2026"
-          caption="A current tenancy agreement review is often safer than relying on an old template with familiar wording"
-          aspectRatio="hero"
+          src="/images/illustrations/blog-growth/tenancy-agreement-refresh-watercolour-v1.webp"
+          alt="Transparent watercolour illustration showing old tenancy papers being replaced by an organised current agreement file"
+          caption="Reviewing the agreement before the next tenancy is cleaner than discovering stale wording after a dispute starts."
+          aspectRatio="inline"
+          objectFit="contain"
         />
 
         <div className="grid gap-4 md:grid-cols-2 my-8">
@@ -39654,6 +39660,21 @@ const allBlogPosts: BlogPost[] = [
           position as clearly as a landlord would want.
         </p>
 
+        <h2 id="why-current-agreement-matters" className="scroll-mt-24">Why a Current Agreement Matters</h2>
+
+        <p>
+          A current agreement is not valuable merely because it has a recent date. It should accurately record the
+          parties, property, rent period, payment arrangements, permitted use, responsibilities and the notices or
+          information relevant to the tenancy. Clear terms give both sides a common reference point and make later
+          correspondence, rent changes, deposit discussions or possession decisions easier to understand.
+        </p>
+
+        <p>
+          Current paperwork also reduces avoidable contradiction. Problems arise when the agreement says one thing,
+          emails say another and the landlord&apos;s actual practice follows a third version. Reviewing the document before
+          signature helps the complete property file tell the same story from the start.
+        </p>
+
         <h2 id="do-you-need-new-agreement" className="scroll-mt-24">Do You Always Need a New Agreement?</h2>
 
         <p>
@@ -39681,10 +39702,11 @@ const allBlogPosts: BlogPost[] = [
         </ul>
 
         <ImagePlaceholder
-          src="/images/blog/tenancy-essential-terms.svg"
-          alt="Checklist for reviewing old England tenancy agreement wording"
-          caption="A tenancy agreement review should focus on whether the wording still reflects the current England framework"
-          aspectRatio="hero"
+          src="/images/illustrations/blog-growth/tenancy-agreement-file-watercolour-v1.webp"
+          alt="Transparent watercolour illustration of an organised tenancy file, inventory, safety records, calendar and keys"
+          caption="The agreement works best as part of a coherent landlord file with the inventory, prescribed information and safety records."
+          aspectRatio="inline"
+          objectFit="contain"
         />
 
         <h2 id="review-vs-replace" className="scroll-mt-24">Review vs Replace</h2>
@@ -39704,8 +39726,8 @@ const allBlogPosts: BlogPost[] = [
         <h2 id="standard-vs-premium" className="scroll-mt-24">Should You Choose Standard or Premium?</h2>
 
         <p>
-          For straightforward lets, the <Link href="/products/ast" className="text-primary font-semibold hover:underline">Standard tenancy agreement route</Link>
-          will often be enough. For more complex or higher-risk lets, the <Link href="/products/ast" className="text-primary font-semibold hover:underline">Premium route</Link>
+          For straightforward lets, the <Link href="/standard-tenancy-agreement" className="text-primary font-semibold hover:underline">Standard tenancy agreement route</Link>
+          will often be enough. For more complex or higher-risk lets, the <Link href="/premium-tenancy-agreement" className="text-primary font-semibold hover:underline">Premium route</Link>
           is usually the stronger choice.
         </p>
 
@@ -39744,8 +39766,9 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Where should I start if I want the current England route?</h3>
         <p>
-          Use the <Link href="/products/ast" className="text-primary font-semibold hover:underline">Landlord Heaven tenancy agreement page</Link>
-          and compare the Standard and Premium routes.
+          Use the <Link href="/products/ast" className="text-primary font-semibold hover:underline">Landlord Heaven tenancy agreement page</Link>,
+          then compare the <Link href="/standard-tenancy-agreement" className="text-primary font-semibold hover:underline">Standard</Link>{' '}
+          and <Link href="/premium-tenancy-agreement" className="text-primary font-semibold hover:underline">Premium</Link> routes.
         </p>
       </>
     ),

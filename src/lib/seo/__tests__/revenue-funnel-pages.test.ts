@@ -47,7 +47,7 @@ describe('revenue-focused SEO funnels', () => {
     expect(landing).not.toContain('href="#rent-increase-checker"');
     expect(landing).not.toContain('Check rent increase risk');
     expect(landing).not.toContain('Use the free rent checker first');
-    expect(landing).toContain('Check my rent increase');
+    expect(landing).toContain('Start Supported pack');
     expect(landing).toContain('Compare the packs');
     expect(landing).not.toContain('Why this converts better than a guide-first page');
     expect(landing).not.toContain('Broad intent still needs a concrete next step');
@@ -144,7 +144,7 @@ describe('revenue-focused SEO funnels', () => {
 
     expect(form3).toContain('NoticeOnlyBridge');
     expect(section8Template).toContain('NoticeOnlyBridge');
-    expect(section8Template).toContain('Serve a Section 8 Notice Without Date or Service Mistakes');
+    expect(section8Template).toContain('Section 8 Notice Template vs Guided Form 3A');
     expect(n5).toContain('CourtClaimBridge');
     expect(n5).toContain('Prepare my court papers');
     expect(n5).toContain('Prepare N5 and N119 together');

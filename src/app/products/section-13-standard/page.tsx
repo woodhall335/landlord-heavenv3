@@ -188,6 +188,10 @@ export default function Section13StandardProductPage() {
           label: 'Not sure which pack? Compare Section 13 options',
           href: '/compare/section-13-standard-vs-defence',
         },
+        {
+          label: 'Use the Section 13 evidence checklist',
+          href: '/blog/england-section-13-rent-increase-evidence-checklist',
+        },
         ...descriptor.defaultGuideLinks,
       ],
     },

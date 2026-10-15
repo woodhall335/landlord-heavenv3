@@ -5,6 +5,8 @@ type GroundGuideProfile = {
   label: string;
   searchLead: string;
   image: string;
+  metadataTitle?: string;
+  metadataDescription?: string;
 };
 
 export const SECTION8_GROUND_GUIDES: Record<string, GroundGuideProfile> = {
@@ -13,6 +15,9 @@ export const SECTION8_GROUND_GUIDES: Record<string, GroundGuideProfile> = {
     label: 'Landlord or family moving in',
     searchLead: 'Need to move back into your rental property, or house a close family member?',
     image: '/images/heroes/library/hero-guide-possession-claim-v2.webp',
+    metadataTitle: 'Section 8 Ground 1: Landlord Moving In (2026)',
+    metadataDescription:
+      'Using Section 8 Ground 1 because you or qualifying family need the home? Check the 4-month notice, occupation evidence and guided Form 3A route.',
   },
   '1a': {
     code: '1A',
@@ -55,6 +60,9 @@ export const SECTION8_GROUND_GUIDES: Record<string, GroundGuideProfile> = {
     label: 'Breach of tenancy',
     searchLead: 'Has your tenant broken a term of the tenancy agreement and not put it right?',
     image: '/images/heroes/library/hero-guide-tenancy-breach-v2.webp',
+    metadataTitle: 'Section 8 Ground 12: Breach of Tenancy (2026)',
+    metadataDescription:
+      'Using Section 8 Ground 12 for a tenancy breach? Check the clause, evidence, maintained 2-week notice period and guided Form 3A route.',
   },
   '13': {
     code: '13',
@@ -94,8 +102,8 @@ export function getSection8GroundGuide(code: string) {
 
 export function enhanceSection8GroundMetadata(base: Metadata, groundCode: string): Metadata {
   const guide = getSection8GroundGuide(groundCode);
-  const title = `Section 8 Ground ${guide.code}: ${guide.label} | Landlord Heaven`;
-  const description = `${guide.searchLead} Check whether Section 8 Ground ${guide.code} fits, the Form 3A notice requirements, evidence to keep, and what happens if your tenant stays.`;
+  const title = guide.metadataTitle ?? `Section 8 Ground ${guide.code}: ${guide.label} | Landlord Heaven`;
+  const description = guide.metadataDescription ?? `${guide.searchLead} Check whether Section 8 Ground ${guide.code} fits, the Form 3A notice requirements, evidence to keep, and what happens if your tenant stays.`;
   const existingKeywords = Array.isArray(base.keywords) ? base.keywords : [];
 
   return {

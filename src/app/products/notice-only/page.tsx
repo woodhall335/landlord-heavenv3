@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { AssistedPrepServicesShowcase } from '@/components/assisted-prep/AssistedPrepServicesShowcase';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
+import { MobileStickyProductCta } from '@/components/marketing/MobileStickyProductCta';
 import type { FAQItem } from '@/components/seo/FAQSection';
 import { Section8JourneyTimeline } from '@/components/eviction/Section8JourneyTimeline';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
@@ -104,7 +106,7 @@ export default function NoticeOnlyPage() {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
       trustText: `England-only Form 3A | N215 and service checks | Preview before paying | Fixed price ${PRODUCTS.notice_only.displayPrice}`,
-      title: 'Create a Section 8 eviction notice and service file',
+      title: 'Notice Only: your guided Section 8 notice and service file',
       subtitle:
         'Use this when the next job is serving notice. Prepare the England Form 3A notice, N215 service record, arrears schedule, service instructions, checks before service, case summary, and next-step guide in one file you can preview before paying.',
       primaryCta: {
@@ -198,6 +200,17 @@ export default function NoticeOnlyPage() {
         'You need to serve correctly first and want the service record ready before deciding about court.',
       notFor:
         'You already expect to issue a possession claim and want the notice plus court forms prepared together.',
+      preview: samplePage ? (
+        <div className="rounded-2xl border border-[#D9CBFF] bg-white p-4">
+          <p className="font-semibold text-[#2a2161]">See what the finished pack looks like</p>
+          <p className="mt-1 text-sm leading-6 text-gray-600">
+            Open the redacted sample before starting. Your own generated documents remain available to review before payment.
+          </p>
+          <Link href={samplePage.samplePath} className="mt-3 inline-flex font-semibold text-primary hover:underline">
+            Open the Section 8 sample pack →
+          </Link>
+        </div>
+      ) : undefined,
     },
     whatYouGet: {
       title: 'What you get in Stage 1',
@@ -555,6 +568,13 @@ export default function NoticeOnlyPage() {
         ])}
       />
       <PublicProductSalesPage content={content} />
+      <MobileStickyProductCta
+        href={descriptor.wizardHref}
+        label={descriptor.primaryCtaLabel}
+        price={product.displayPrice}
+        pagePath={descriptor.landingHref}
+        product="notice_only"
+      />
     </div>
   );
 }

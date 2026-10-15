@@ -11,7 +11,6 @@ import {
   StructuredData,
   articleSchema,
   breadcrumbSchema,
-  faqPageSchema,
 } from '@/lib/seo/structured-data';
 import { generateMetadata } from '@/lib/seo';
 
@@ -23,9 +22,9 @@ const completePackProductLink = '/products/complete-pack';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = generateMetadata({
-  title: 'Serve a Section 8 Notice 2026 | England Landlord Guide',
+  title: 'How to Serve a Section 8 Notice | Methods & Proof 2026',
   description:
-    'Learn how to serve a Section 8 notice in England, choose the right grounds, preserve service evidence, and prepare arrears or breach records.',
+    'Learn how to serve Form 3A in England, choose a service method, record the service date, preserve proof and prepare the file if the case later reaches court.',
   path: '/serve-section-8-notice',
   type: 'article',
   keywords: [

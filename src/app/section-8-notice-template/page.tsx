@@ -52,9 +52,9 @@ const noticeOnlyProductHref = '/products/notice-only';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Serve a Section 8 Notice Without Date or Service Mistakes',
+  title: 'Section 8 Notice Template vs Guided Form 3A | England',
   description:
-    'England landlords: use the Section 8 Form 3A template guide to choose the right grounds, dates, service proof, and Notice Only next step before serving.',
+    'Compare a blank Section 8 notice template with guided Form 3A preparation, including ground, date, evidence and service-file checks before serving.',
   keywords: [
     'section 8 notice',
     'section 8 notice template',
@@ -77,9 +77,9 @@ export const metadata: Metadata = {
     canonical: canonicalUrl,
   },
   openGraph: {
-    title: 'Serve a Section 8 Notice Without Date or Service Mistakes',
+    title: 'Section 8 Notice Template vs Guided Form 3A | England',
     description:
-      'Learn how Section 8 Form 3A works, what the notice should include, and when to use guided Notice Only paperwork before service.',
+      'Compare blank-template risks with guided Section 8 Form 3A preparation, service records and pre-service checks.',
     type: 'article',
     url: canonicalUrl,
     siteName: 'Landlord Heaven',
@@ -87,7 +87,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Serve a Section 8 Notice Without Date or Service Mistakes',
+    title: 'Section 8 Notice Template vs Guided Form 3A | England',
     description:
       'Form 3A guidance, notice dates, service rules, and guided Section 8 paperwork for landlords.',
   },

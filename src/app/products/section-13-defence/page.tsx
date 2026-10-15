@@ -191,6 +191,10 @@ export default function Section13DefenceProductPage() {
           label: 'Not sure which pack? Compare Section 13 options',
           href: '/compare/section-13-standard-vs-defence',
         },
+        {
+          label: 'Read what happens when a tenant challenges',
+          href: '/blog/england-tenant-challenges-section-13-rent-increase',
+        },
         ...descriptor.defaultGuideLinks,
       ],
     },

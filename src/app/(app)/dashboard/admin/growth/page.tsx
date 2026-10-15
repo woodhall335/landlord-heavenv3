@@ -7,7 +7,12 @@ import { RiArrowLeftLine, RiBarChart2Line, RiRefreshLine } from 'react-icons/ri'
 import { Card } from '@/components/ui/Card';
 import { Container } from '@/components/ui/Container';
 import { NOTICE_ONLY_GOOGLE_ADS_CAMPAIGN } from '@/lib/marketing/google-ads-campaigns';
-import type { GrowthMetricGroup, GrowthRateMetric, GrowthReportResponse } from '@/lib/marketing/growth-report';
+import type {
+  GrowthLandingJourneyMetric,
+  GrowthMetricGroup,
+  GrowthRateMetric,
+  GrowthReportResponse,
+} from '@/lib/marketing/growth-report';
 
 const currencyFormatter = new Intl.NumberFormat('en-GB', {
   style: 'currency',
@@ -127,6 +132,49 @@ function RateTable({
                 </tr>
               ))
             )}
+          </tbody>
+        </table>
+      </div>
+    </Card>
+  );
+}
+
+function LandingJourneyTable({ rows }: { rows: GrowthLandingJourneyMetric[] }) {
+  return (
+    <Card padding="medium" className="rounded-lg">
+      <h2 className="text-lg font-semibold text-charcoal">Organic funnel by landing page</h2>
+      <p className="mt-1 text-sm text-gray-500">
+        First-touch organic sessions followed through CTA, builder, preview, checkout and paid order.
+      </p>
+      <div className="mt-4 overflow-x-auto">
+        <table className="min-w-full text-left text-sm">
+          <thead className="border-b border-gray-200 text-xs uppercase tracking-wide text-gray-500">
+            <tr>
+              <th className="py-2 pr-4">Landing page</th>
+              <th className="py-2 pr-4">Landings</th>
+              <th className="py-2 pr-4">CTA</th>
+              <th className="py-2 pr-4">Builder</th>
+              <th className="py-2 pr-4">Preview</th>
+              <th className="py-2 pr-4">Checkout</th>
+              <th className="py-2 pr-4">Sales</th>
+              <th className="py-2 pr-4">Sale rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.length === 0 ? (
+              <tr><td className="py-4 text-gray-500" colSpan={8}>No organic landing journeys yet.</td></tr>
+            ) : rows.map((row) => (
+              <tr key={row.key} className="border-b border-gray-100 last:border-0">
+                <td className="py-3 pr-4 font-medium text-charcoal">{row.label}</td>
+                <td className="py-3 pr-4 text-gray-700">{row.landings}</td>
+                <td className="py-3 pr-4 text-gray-700">{row.ctaClicks} ({formatPercent(row.landingToCtaRate)})</td>
+                <td className="py-3 pr-4 text-gray-700">{row.builderStarts} ({formatPercent(row.landingToBuilderRate)})</td>
+                <td className="py-3 pr-4 text-gray-700">{row.previews} ({formatPercent(row.landingToPreviewRate)})</td>
+                <td className="py-3 pr-4 text-gray-700">{row.checkoutStarts} ({formatPercent(row.landingToCheckoutRate)})</td>
+                <td className="py-3 pr-4 text-gray-700">{row.sales}</td>
+                <td className="py-3 pr-4 font-semibold text-charcoal">{formatPercent(row.landingToSaleRate)}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -367,6 +415,8 @@ export default function AdminGrowthPage() {
                 ))}
               </div>
             </Card>
+
+            <LandingJourneyTable rows={report.landingPageJourney} />
 
             <Card padding="medium" className="rounded-lg">
               <h2 className="text-lg font-semibold text-charcoal">Funnel filters</h2>

@@ -85,6 +85,20 @@ const heroesByTemplateKey = new Map(manifest.heroes.map((entry) => [entry.templa
 const ogByTemplateKey = new Map(manifest.og.map((entry) => [entry.templateKey, toPublicPath(entry.path)]));
 const SLUG_IMAGE_OVERRIDES = new Map([
   [
+    'england-section-13-rent-increase-evidence-checklist',
+    {
+      hero: '/images/heroes/library/hero-section-13-evidence-checklist-watercolour-v1.webp',
+      og: '/images/heroes/library/hero-section-13-evidence-checklist-watercolour-v1.webp',
+    },
+  ],
+  [
+    'england-tenant-challenges-section-13-rent-increase',
+    {
+      hero: '/images/heroes/library/hero-section-13-tenant-challenge-watercolour-v1.webp',
+      og: '/images/heroes/library/hero-section-13-tenant-challenge-watercolour-v1.webp',
+    },
+  ],
+  [
     'england-section-8-ground-14',
     {
       hero: '/images/heroes/library/hero-guide-antisocial-behaviour-v2.webp',
@@ -101,8 +115,8 @@ const SLUG_IMAGE_OVERRIDES = new Map([
   [
     'do-landlords-need-a-new-tenancy-agreement-after-1-may-2026',
     {
-      hero: '/images/heroes/library/hero-tenancy-england-standard-v2.webp',
-      og: '/images/heroes/library/hero-tenancy-england-standard-v2.webp',
+      hero: '/images/heroes/library/hero-tenancy-agreement-review-watercolour-v1.webp',
+      og: '/images/heroes/library/hero-tenancy-agreement-review-watercolour-v1.webp',
     },
   ],
 ]);

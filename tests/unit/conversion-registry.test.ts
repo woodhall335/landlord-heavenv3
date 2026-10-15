@@ -24,4 +24,15 @@ describe('SALES-001 conversion registry', () => {
       expect(typeof mapping.previewAvailable).toBe('boolean');
     }
   });
+
+  it('sends evidence-backed ground articles into a preselected Form 3A builder', () => {
+    const ground10And11 = getConversionMapping('/blog/england-section-8-ground-10-11');
+    const ground14 = getConversionMapping('/blog/england-section-8-ground-14');
+
+    expect(ground10And11?.destinationRoute).toContain('/wizard/flow?');
+    expect(ground10And11?.destinationRoute).toContain('product=notice_only');
+    expect(ground10And11?.destinationRoute).toContain('ground=10%2C11');
+    expect(ground14?.destinationRoute).toContain('ground=14');
+    expect(ground10And11?.builderPreselection).toMatchObject({ ground: '10,11' });
+  });
 });

@@ -3,9 +3,9 @@ import { SEO_PRICES } from '@/lib/pricing/products';
 export const PRODUCT_OWNER_METADATA = {
   noticeOnly: {
     path: '/products/notice-only',
-    title: `Serve a Section 8 Form 3A Notice | ${SEO_PRICES.evictionNotice.display}`,
+    title: `Section 8 Notice & Service File | Guided Pack | ${SEO_PRICES.evictionNotice.display}`,
     description:
-      'Create an England Section 8 Form 3A notice file with ground selection, notice dates, N215 service proof, and pre-service checks before the tenant receives it.',
+      'Prepare an England notice-stage pack with Form 3A, ground and date checks, N215 service record, arrears schedule where relevant, and preview before payment.',
   },
   completePack: {
     path: '/products/complete-pack',

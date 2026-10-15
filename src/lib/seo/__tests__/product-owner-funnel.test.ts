@@ -127,7 +127,7 @@ const earlyInternalLinks = [
 
 const expectedProductMetaDescriptions = {
   noticeOnly:
-    'Create an England Section 8 Form 3A notice file with ground selection, notice dates, N215 service proof, and pre-service checks before the tenant receives it.',
+    'Prepare an England notice-stage pack with Form 3A, ground and date checks, N215 service record, arrears schedule where relevant, and preview before payment.',
   completePack:
     'Prepare England Section 8 court papers after notice, including N5 and N119, evidence prompts, witness statement support, and hearing preparation.',
   moneyClaim:
