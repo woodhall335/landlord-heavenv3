@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { PRODUCTS } from '@/lib/pricing/products';
@@ -21,6 +22,8 @@ const REASONS: Array<{
   summary: string;
   grounds: string[];
   guidanceHref: string;
+  imageSrc: string;
+  imageAlt: string;
 }> = [
   {
     key: 'arrears',
@@ -29,6 +32,8 @@ const REASONS: Array<{
       'Grounds 8, 10 and 11 are the usual starting points to investigate. They have different tests, so the rent ledger and payment history need to support every ground used.',
     grounds: ['8', '10', '11'],
     guidanceHref: '/section-8-rent-arrears-eviction',
+    imageSrc: '/images/illustrations/section8-ground-finder/rent-arrears.webp',
+    imageAlt: 'Rent arrears records and payment history illustration',
   },
   {
     key: 'occupation',
@@ -37,6 +42,8 @@ const REASONS: Array<{
       'Ground 1 is the starting point to investigate. The proposed occupation, tenancy timing and supporting evidence all matter.',
     grounds: ['1'],
     guidanceHref: '/section-8-grounds/how-to-evict-a-tenant-using-ground-1',
+    imageSrc: '/images/illustrations/section8-ground-finder/landlord-occupation.webp',
+    imageAlt: 'Landlord occupation and home illustration',
   },
   {
     key: 'sale',
@@ -45,6 +52,8 @@ const REASONS: Array<{
       'Ground 1A is the starting point to investigate. A genuine sale intention and the timing rules need to be supported by evidence.',
     grounds: ['1A'],
     guidanceHref: '/section-8-grounds/how-to-evict-a-tenant-using-ground-1a',
+    imageSrc: '/images/illustrations/section8-ground-finder/property-sale.webp',
+    imageAlt: 'Property sale evidence illustration',
   },
   {
     key: 'tenancy_breach',
@@ -53,6 +62,8 @@ const REASONS: Array<{
       'Ground 12 is the general breach starting point. The notice should identify the actual tenancy clause, the conduct and the evidence rather than use a generic allegation.',
     grounds: ['12'],
     guidanceHref: '/section-8-grounds/how-to-evict-a-tenant-using-ground-12',
+    imageSrc: '/images/illustrations/section8-ground-finder/tenancy-breach.webp',
+    imageAlt: 'Tenancy obligation and evidence illustration',
   },
   {
     key: 'property_condition',
@@ -61,6 +72,8 @@ const REASONS: Array<{
       'Ground 13 may be relevant to deterioration caused by the tenant or someone living at the property. Inspection records, dated photographs and repair evidence are important.',
     grounds: ['13'],
     guidanceHref: '/section-8-grounds/how-to-evict-a-tenant-using-ground-13',
+    imageSrc: '/images/illustrations/section8-ground-finder/property-damage.webp',
+    imageAlt: 'Property damage and condition evidence illustration',
   },
   {
     key: 'antisocial_behaviour',
@@ -69,6 +82,8 @@ const REASONS: Array<{
       'Ground 14 is the usual starting point to investigate. Specific incidents, dates, witnesses and official records are more useful than general descriptions.',
     grounds: ['14'],
     guidanceHref: '/section-8-grounds/how-to-evict-a-tenant-using-ground-14',
+    imageSrc: '/images/illustrations/section8-ground-finder/antisocial-behaviour.webp',
+    imageAlt: 'Anti-social behaviour incident evidence illustration',
   },
   {
     key: 'false_statement',
@@ -77,6 +92,8 @@ const REASONS: Array<{
       'Ground 17 may be relevant where a tenancy was granted because of a knowingly or recklessly false statement. Preserve the application and evidence showing why the statement mattered.',
     grounds: ['17'],
     guidanceHref: '/section-8-grounds/how-to-evict-a-tenant-using-ground-17',
+    imageSrc: '/images/illustrations/section8-ground-finder/false-statement.webp',
+    imageAlt: 'False statement and tenancy application illustration',
   },
   {
     key: 'unsure',
@@ -85,6 +102,8 @@ const REASONS: Array<{
       'Review the complete grounds guide before preparing a notice. Do not select a ground merely because it appears close to the situation.',
     grounds: [],
     guidanceHref: '/section-8-grounds-explained',
+    imageSrc: '/images/illustrations/section8-ground-finder/grounds-guidance.webp',
+    imageAlt: 'Section 8 grounds guide illustration',
   },
 ];
 
@@ -109,59 +128,86 @@ export function Section8GroundFinder() {
           {REASONS.map((item) => (
             <label
               key={item.key}
-              className={`cursor-pointer rounded-2xl border p-4 transition ${
+              className={`grid cursor-pointer grid-cols-[minmax(0,1fr)_88px] items-center gap-3 rounded-2xl border p-3 transition md:grid-cols-[minmax(0,1fr)_104px] md:p-4 ${
                 reason === item.key
                   ? 'border-primary bg-[#F5F0FF] ring-2 ring-primary/20'
                   : 'border-[#E6DBFF] bg-white hover:bg-[#FCFAFF]'
               }`}
             >
-              <input
-                type="radio"
-                name="section8-reason"
-                value={item.key}
-                checked={reason === item.key}
-                onChange={() => setReason(item.key)}
-                className="mr-3 align-middle"
-              />
-              <span className="font-semibold text-[#2a2161]">{item.label}</span>
+              <span className="flex min-w-0 items-start gap-3">
+                <input
+                  type="radio"
+                  name="section8-reason"
+                  value={item.key}
+                  checked={reason === item.key}
+                  onChange={() => setReason(item.key)}
+                  className="mt-1 shrink-0"
+                />
+                <span className="font-semibold leading-6 text-[#2a2161]">{item.label}</span>
+              </span>
+              <span className="overflow-hidden rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] shadow-sm">
+                <Image
+                  src={item.imageSrc}
+                  alt=""
+                  aria-hidden="true"
+                  width={208}
+                  height={208}
+                  className="aspect-square h-auto w-full object-contain p-1"
+                />
+              </span>
             </label>
           ))}
         </div>
       </fieldset>
 
       {result ? (
-        <section aria-live="polite" className="mt-6 rounded-2xl bg-[#F8F4FF] p-5 md:p-6">
-          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-primary">
-            Suggested research route
-          </p>
-          <h2 className="mt-2 text-2xl font-semibold text-[#2a2161]">
-            {result.grounds.length > 0
-              ? `Investigate Ground${result.grounds.length > 1 ? 's' : ''} ${result.grounds.join(', ')}`
-              : 'Review all Section 8 grounds'}
-          </h2>
-          <p className="mt-3 leading-7 text-gray-700">{result.summary}</p>
-          <div className="mt-5 flex flex-wrap gap-3">
-            <Link
-              href={result.guidanceHref}
-              className="rounded-xl border border-primary bg-white px-5 py-3 font-semibold text-primary hover:bg-[#FCFAFF]"
-            >
-              Read the relevant ground guide
-            </Link>
-            {result.grounds.length > 0 ? (
-              <TrackedLink
-                href={wizardHref}
-                pagePath="/tools/section-8-ground-finder"
-                pageType="entry_page"
-                ctaLabel={`Continue with suggested grounds — ${PRODUCTS.notice_only.displayPrice}`}
-                ctaPosition="section"
-                eventName="entry_page_primary_cta_click"
-                routeIntent="section8_ground_finder"
-                product="notice_only"
-                className="rounded-xl bg-primary px-5 py-3 font-semibold text-white hover:bg-[#5424aa]"
+        <section
+          aria-live="polite"
+          className="mt-6 grid items-center gap-5 rounded-2xl bg-[#F8F4FF] p-5 md:grid-cols-[minmax(0,1fr)_190px] md:p-6"
+        >
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-primary">
+              Suggested research route
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold text-[#2a2161]">
+              {result.grounds.length > 0
+                ? `Investigate Ground${result.grounds.length > 1 ? 's' : ''} ${result.grounds.join(', ')}`
+                : 'Review all Section 8 grounds'}
+            </h2>
+            <p className="mt-3 leading-7 text-gray-700">{result.summary}</p>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <Link
+                href={result.guidanceHref}
+                className="rounded-xl border border-primary bg-white px-5 py-3 font-semibold text-primary hover:bg-[#FCFAFF]"
               >
-                Continue to Form 3A — {PRODUCTS.notice_only.displayPrice}
-              </TrackedLink>
-            ) : null}
+                Read the relevant ground guide
+              </Link>
+              {result.grounds.length > 0 ? (
+                <TrackedLink
+                  href={wizardHref}
+                  pagePath="/tools/section-8-ground-finder"
+                  pageType="entry_page"
+                  ctaLabel={`Continue with suggested grounds — ${PRODUCTS.notice_only.displayPrice}`}
+                  ctaPosition="section"
+                  eventName="entry_page_primary_cta_click"
+                  routeIntent="section8_ground_finder"
+                  product="notice_only"
+                  className="rounded-xl bg-primary px-5 py-3 font-semibold text-white hover:bg-[#5424aa]"
+                >
+                  Continue to Form 3A — {PRODUCTS.notice_only.displayPrice}
+                </TrackedLink>
+              ) : null}
+            </div>
+          </div>
+          <div className="w-full max-w-[240px] justify-self-center overflow-hidden rounded-2xl border border-[#D9CBFF] bg-white shadow-sm md:max-w-none">
+            <Image
+              src={result.imageSrc}
+              alt={result.imageAlt}
+              width={400}
+              height={400}
+              className="aspect-square h-auto w-full object-contain p-3"
+              priority={false}
+            />
           </div>
         </section>
       ) : null}
