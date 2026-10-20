@@ -1,0 +1,10 @@
+These August documents are retained as historical working papers and source material.
+
+For the current client review copy, use:
+- 00_READ_FIRST_CASE_SUMMARY_AND_INDEX\07-client-start-here-readiness-and-next-actions.pdf
+- 03_COURT_FORMS_FOR_ISSUE_ON_OR_AFTER_06_JULY_2026\01-draft-n5-england-current-05-26-unsigned.pdf
+- 03_COURT_FORMS_FOR_ISSUE_ON_OR_AFTER_06_JULY_2026\02-draft-n119-england-current-05-26-unsigned.pdf
+- 07_FORMAL_APPENDIX_BUNDLE\01-formal-appendix-index.pdf
+- 07_FORMAL_APPENDIX_BUNDLE\02-formal-appendix-bundle-draft.pdf
+
+The historical papers may mention former 10.20 form drafts. Do not use those old drafts.
