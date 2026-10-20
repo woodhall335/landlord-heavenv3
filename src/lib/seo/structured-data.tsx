@@ -10,6 +10,7 @@ import {
   PRODUCT_PRICE_AMOUNT_STRINGS,
   type ProductSku,
 } from '@/lib/pricing/products';
+import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://landlordheaven.co.uk";
 const DIGITAL_PRODUCT_RETURN_POLICY_URL = '/refunds';
@@ -205,6 +206,22 @@ function getStructuredDataProductImage(sku: ProductSku): string {
 }
 
 /**
+ * Keep review structured data in lockstep with the site-wide review pill.
+ */
+export function buildAggregateRating() {
+  const reviewCount = getDynamicReviewCount();
+
+  return {
+    '@type': 'AggregateRating',
+    ratingValue: REVIEW_RATING,
+    reviewCount,
+    ratingCount: reviewCount,
+    bestRating: 5,
+    worstRating: 1,
+  };
+}
+
+/**
  * Organization structured data
  * Use this on the homepage and footer
  */
@@ -241,7 +258,8 @@ export function organizationSchema() {
         "@type": "Country",
         "name": "United Kingdom"
       }
-    ]
+    ],
+    "aggregateRating": buildAggregateRating()
   };
 }
 
@@ -259,6 +277,7 @@ export function productSchema(product: Product) {
     "url": product.url,
     "image": product.image || `${SITE_URL}/og-image.png`,
     "brand": LANDLORD_HEAVEN_BRAND,
+    "aggregateRating": buildAggregateRating(),
     "offers": buildMerchantOffer({
       price: product.price,
       currency: product.currency,
@@ -287,6 +306,7 @@ export function pricingItemListSchema(items: PricingItemListEntry[]) {
           url: toStructuredDataUrl(item.url),
           image: getStructuredDataProductImage(item.sku),
           brand: LANDLORD_HEAVEN_BRAND,
+          aggregateRating: buildAggregateRating(),
           offers: buildMerchantOffer({
             price: PRODUCT_PRICE_AMOUNT_STRINGS[item.sku],
             url: item.url,
@@ -309,6 +329,7 @@ export function subscriptionProductSchema(product: Product) {
     "url": product.url,
     "image": product.image || `${SITE_URL}/og-image.png`,
     "brand": LANDLORD_HEAVEN_BRAND,
+    "aggregateRating": buildAggregateRating(),
     "offers": {
       ...buildMerchantOffer({
         price: product.price,
@@ -469,6 +490,7 @@ export function softwareApplicationSchema() {
     "name": "Landlord Heaven",
     "applicationCategory": "BusinessApplication",
     "operatingSystem": "Web",
+    "aggregateRating": buildAggregateRating(),
     "offers": {
       "@type": "AggregateOffer",
       "lowPrice": lowPrice,

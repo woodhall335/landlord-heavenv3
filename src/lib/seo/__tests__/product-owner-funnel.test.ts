@@ -9,6 +9,7 @@ import {
   PRODUCT_OWNER_METADATA_LIST,
 } from '@/lib/seo/product-owner-metadata';
 import {
+  buildAggregateRating,
   productSchema,
 } from '@/lib/seo/structured-data';
 
@@ -290,7 +291,7 @@ describe('product owner SEO funnel', () => {
       expect(Number.isFinite(Number(schema.offers.price)), page.path).toBe(true);
       expect(schema.offers.priceCurrency, page.path).toBe('GBP');
       expect(schema.offers.availability, page.path).toBe('https://schema.org/InStock');
-      expect(schema, page.path).not.toHaveProperty('aggregateRating');
+      expect(schema.aggregateRating, page.path).toEqual(buildAggregateRating());
     }
   });
 
