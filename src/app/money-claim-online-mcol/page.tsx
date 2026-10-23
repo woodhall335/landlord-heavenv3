@@ -32,7 +32,7 @@ import {
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Money Claim Online (MCOL) for Landlords: Rent Arrears Guide',
+  title: 'Prepare an MCOL Rent Arrears Claim | Landlord Guide',
   description:
     'Money Claim Online (MCOL) guide for landlords recovering rent arrears. Prepare figures, particulars, evidence, and next steps before issuing a claim.',
   keywords: [
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     'MCOL process',
   ],
   openGraph: {
-    title: 'Money Claim Online (MCOL) for Landlords: Rent Arrears Guide',
+    title: 'Prepare an MCOL Rent Arrears Claim | Landlord Guide',
     description:
       'Landlord guide to using Money Claim Online for rent arrears and preparing the file behind the claim.',
     type: 'article',

@@ -157,7 +157,7 @@ describe('revenue-focused SEO funnels', () => {
     const alias = readRepoFile('src', 'app', 'products', 'money-claim-pack', 'page.tsx');
 
     expect(mcol).toContain('MoneyClaimBridge');
-    expect(mcol).toContain('Money Claim Online (MCOL) for Landlords: Rent Arrears Guide');
+    expect(mcol).toContain('Prepare an MCOL Rent Arrears Claim | Landlord Guide');
     expect(blog).toContain("slug === 'england-money-claim-online'");
     expect(blog).toContain('MoneyClaimBridge');
     expect(alias).toContain("permanentRedirect('/products/money-claim')");

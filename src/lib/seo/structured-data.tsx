@@ -384,6 +384,7 @@ export function websiteSchema() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Landlord Heaven",
+    "alternateName": "LandlordHeaven",
     "url": SITE_URL,
     // SearchAction removed - no search page exists
   };

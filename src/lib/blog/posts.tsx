@@ -1720,11 +1720,11 @@ const allBlogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'how-long-does-eviction-take-uk',
-    title: 'How Long Does Eviction Take in the UK? Complete Timeline (2026)',
+    title: 'How Long Does Eviction Take? England Landlord Timeline',
     description: 'Realistic eviction timelines for England landlords after the Renters Rights Act changes. Learn how long Form 3A, Section 8, court, and bailiff stages take.',
-    metaDescription: 'England eviction timeline after 1 May 2026. Form 3A notice periods, Section 8 court stages, possession orders, and bailiff enforcement explained.',
+    metaDescription: 'How long does eviction take in England? Compare Form 3A notice periods, court stages, possession orders and bailiff enforcement timelines.',
     date: '2026-01-02',
-    updatedDate: '2026-01-02',
+    updatedDate: '2026-10-23',
     readTime: '9 min read',
     wordCount: 1180,
     category: 'Eviction Guides',
@@ -1748,6 +1748,18 @@ const allBlogPosts: BlogPost[] = [
       { id: 'eviction-timeline-faq', title: 'FAQ', level: 2 },
     ],
     relatedPosts: ['what-is-section-21-notice', 'section-21-vs-section-8', 'how-to-serve-eviction-notice'],
+    sources: [
+      {
+        title: 'GOV.UK: Evicting tenants in England',
+        url: 'https://www.gov.uk/evicting-tenants',
+        type: 'government',
+      },
+      {
+        title: 'GOV.UK: Standard possession orders',
+        url: 'https://www.gov.uk/evicting-tenants/standard-possession-orders',
+        type: 'government',
+      },
+    ],
     content: (
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
@@ -4990,11 +5002,11 @@ const allBlogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'england-section-8-ground-10-11',
-    title: 'Section 8 Grounds 10 and 11 | Rent Arrears Guide',
+    title: 'Section 8 Grounds 10 and 11: Rent Arrears Evidence Guide',
     description: 'Grounds 10 and 11 are discretionary rent arrears grounds. Learn when to use them, how they differ from Ground 8, and how to convince the court possession is reasonable.',
-    metaDescription: 'Section 8 Ground 10 and 11 explained for England landlords. Discretionary rent arrears eviction when Ground 8 fails. Court considerations and success strategies.',
+    metaDescription: 'Section 8 Grounds 10 and 11 explained for England landlords: when each applies, evidence the court considers and how they support an arrears claim.',
     date: '2026-01-03',
-    updatedDate: '2026-01-03',
+    updatedDate: '2026-10-23',
     readTime: '12 min read',
     wordCount: 1650,
     category: 'Eviction Grounds',
@@ -5020,6 +5032,13 @@ const allBlogPosts: BlogPost[] = [
       { id: 'ground-10-11-faq', title: 'FAQ', level: 2 },
     ],
     relatedPosts: ['england-section-8-ground-8', 'england-section-8-process', 'england-standard-possession'],
+    sources: [
+      {
+        title: 'GOV.UK: Giving notice to evict tenants',
+        url: 'https://www.gov.uk/evicting-tenants/giving-notice-to-evict-tenants',
+        type: 'government',
+      },
+    ],
     content: (
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
@@ -6218,11 +6237,11 @@ const allBlogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'england-section-8-ground-1',
-    title: 'Section 8 Ground 1 Explained: Landlord Returning to Property (England)',
+    title: 'Section 8 Ground 1: Moving Back Into Your Property',
     description: 'Ground 1 lets landlords recover property for landlord or family occupation under the post-May 2026 England rules. Learn the 12-month timing rule, evidence, and 4-month notice period.',
-    metaDescription: 'Section 8 Ground 1 explained after the Renters Rights Act. Landlord or family occupation, 12-month timing rule, 4-month Form 3A notice, and evidence guide.',
+    metaDescription: 'Section 8 Ground 1 explained for England landlords moving back in: eligibility, the 12-month timing rule, Form 3A notice and evidence needed.',
     date: '2026-01-03',
-    updatedDate: '2026-01-03',
+    updatedDate: '2026-10-23',
     readTime: '11 min read',
     wordCount: 1600,
     category: 'Eviction Grounds',
@@ -6245,6 +6264,13 @@ const allBlogPosts: BlogPost[] = [
       { id: 'ground-1-faq', title: 'FAQ', level: 2 },
     ],
     relatedPosts: ['england-section-8-ground-2', 'england-section-8-process', 'england-standard-possession'],
+    sources: [
+      {
+        title: 'GOV.UK: Giving notice to evict tenants',
+        url: 'https://www.gov.uk/evicting-tenants/giving-notice-to-evict-tenants',
+        type: 'government',
+      },
+    ],
     content: (
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
@@ -7200,11 +7226,11 @@ const allBlogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'england-section-8-ground-12',
-    title: 'Section 8 Ground 12 Explained: Breach of Tenancy Terms (2026)',
+    title: 'Section 8 Ground 12: Breach of Tenancy Terms Explained',
     description: 'Ground 12 allows eviction when tenants breach any obligation of the tenancy agreement. Learn what counts as a breach, evidence requirements, and how to use this discretionary ground.',
-    metaDescription: 'Section 8 Ground 12 explained. Evict tenants for breach of tenancy terms in England. Evidence needed, notice periods, and step-by-step court process guide.',
+    metaDescription: 'Section 8 Ground 12 explained for England landlords: qualifying tenancy breaches, evidence, notice requirements and the possession court process.',
     date: '2026-01-03',
-    updatedDate: '2026-01-03',
+    updatedDate: '2026-10-23',
     readTime: '12 min read',
     wordCount: 1650,
     category: 'Eviction Grounds',
@@ -7228,6 +7254,13 @@ const allBlogPosts: BlogPost[] = [
       { id: 'ground-12-faq', title: 'FAQ', level: 2 },
     ],
     relatedPosts: ['england-section-8-process', 'england-section-8-ground-14', 'england-standard-possession'],
+    sources: [
+      {
+        title: 'GOV.UK: Giving notice to evict tenants',
+        url: 'https://www.gov.uk/evicting-tenants/giving-notice-to-evict-tenants',
+        type: 'government',
+      },
+    ],
     content: (
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
@@ -8083,11 +8116,11 @@ const allBlogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'bailiff-eviction-day-what-to-expect',
-    title: 'Bailiff Eviction Day - What to Expect (England Guide 2026)',
+    title: 'Bailiff Eviction Day: What Landlords Should Expect',
     description: 'The final step in eviction: bailiff enforcement. Learn what happens on eviction day, your responsibilities, what bailiffs can and cannot do, and how to prepare.',
-    metaDescription: 'Bailiff eviction day explained. What happens when bailiffs enforce possession, your responsibilities as landlord, changing locks, tenant belongings. England guide.',
+    metaDescription: 'What happens on bailiff eviction day? An England landlord guide to attendance, locksmiths, changing locks, tenant belongings and the bailiff’s role.',
     date: '2026-01-03',
-    updatedDate: '2026-01-03',
+    updatedDate: '2026-10-23',
     readTime: '13 min read',
     wordCount: 1680,
     category: 'Eviction Process',
@@ -8111,6 +8144,13 @@ const allBlogPosts: BlogPost[] = [
       { id: 'bailiff-faq', title: 'FAQ', level: 2 },
     ],
     relatedPosts: ['england-possession-hearing', 'england-section-21-process', 'england-county-court-forms'],
+    sources: [
+      {
+        title: 'GOV.UK: If tenants do not follow a possession order',
+        url: 'https://www.gov.uk/evicting-tenants/if-tenants-do-not-follow-a-possession-order',
+        type: 'government',
+      },
+    ],
     content: (
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
@@ -8471,11 +8511,11 @@ const allBlogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'england-county-court-forms',
-    title: 'County Court Eviction Forms Explained - N5, N5B, N119 (England 2026)',
+    title: 'Eviction Court Forms: N5, N5B, N119 and N325 Explained',
     description: 'Confused by eviction court forms? This guide explains N5, N5B, N119, N325 and other key forms you need for possession proceedings in England.',
-    metaDescription: 'County court eviction forms explained. N5, N5B, N119, N325 forms for landlord possession claims. Which form to use and how to complete them correctly.',
+    metaDescription: 'Which eviction court form do you need? Compare N5, N5B, N119 and N325 for England possession claims and avoid choosing the wrong route.',
     date: '2026-01-03',
-    updatedDate: '2026-01-03',
+    updatedDate: '2026-10-23',
     readTime: '14 min read',
     wordCount: 1720,
     category: 'Eviction Process',
@@ -8499,6 +8539,18 @@ const allBlogPosts: BlogPost[] = [
       { id: 'forms-faq', title: 'FAQ', level: 2 },
     ],
     relatedPosts: ['england-possession-hearing', 'england-section-21-process', 'england-section-8-process'],
+    sources: [
+      {
+        title: 'GOV.UK: Standard possession orders',
+        url: 'https://www.gov.uk/evicting-tenants/standard-possession-orders',
+        type: 'government',
+      },
+      {
+        title: 'GOV.UK: Possession Claim Online',
+        url: 'https://www.gov.uk/possession-claim-online-recover-property',
+        type: 'government',
+      },
+    ],
     content: (
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
@@ -9764,10 +9816,11 @@ const allBlogPosts: BlogPost[] = [
   // Article 19: Money Claim Online (MCOL) Guide
   {
     slug: 'england-money-claim-online',
-    title: 'Money Claim Online (MCOL) for Landlords: Rent Arrears Guide 2026',
+    title: 'MCOL Process, Fees and Evidence for Landlords',
     description: 'Complete landlord guide to using Money Claim Online (MCOL) for rent arrears. Learn the MCOL claim process, fees, timescales, and enforcement options.',
-    metaDescription: 'Money Claim Online (MCOL) guide for landlords recovering rent arrears from tenants. Covers claims, fees, evidence, and enforcement in 2026.',
+    metaDescription: 'Researching Money Claim Online? Understand the MCOL process, court fees, evidence, response deadlines and enforcement before starting a landlord claim.',
     date: '2026-01-03',
+    updatedDate: '2026-10-23',
     readTime: '14 min read',
     wordCount: 1720,
     category: 'Money Claims',

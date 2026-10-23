@@ -77,6 +77,13 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // Consolidate every www request onto the canonical host in one hop.
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.landlordheaven.co.uk' }],
+        destination: 'https://landlordheaven.co.uk/:path*',
+        permanent: true,
+      },
       ...retiredPublicRedirects,
       ...section8GroundRedirects,
       {
@@ -117,6 +124,16 @@ const nextConfig = {
       {
         source: '/\\$',
         destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/&',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/blog/how-long-',
+        destination: '/blog/how-long-does-eviction-take-uk',
         permanent: true,
       },
       {

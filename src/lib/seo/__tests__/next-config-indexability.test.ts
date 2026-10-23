@@ -83,4 +83,48 @@ describe('Next config indexability rules', () => {
       ])
     );
   });
+
+  it('consolidates the www host and GSC redirect-error aliases in one permanent hop', async () => {
+    const nextConfig = (await import('../../../../next.config.mjs')).default;
+    const redirects = await nextConfig.redirects();
+
+    expect(redirects).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          source: '/:path*',
+          has: [{ type: 'host', value: 'www.landlordheaven.co.uk' }],
+          destination: 'https://landlordheaven.co.uk/:path*',
+          permanent: true,
+        }),
+        expect.objectContaining({
+          source: '/products',
+          destination: '/pricing',
+          permanent: true,
+        }),
+        expect.objectContaining({
+          source: '/money-claim-rent-arrears',
+          destination: '/money-claim-unpaid-rent',
+          permanent: true,
+        }),
+        expect.objectContaining({
+          source: '/blog/how-long-',
+          destination: '/blog/how-long-does-eviction-take-uk',
+          permanent: true,
+        }),
+        expect.objectContaining({
+          source: '/&',
+          destination: '/',
+          permanent: true,
+        }),
+      ])
+    );
+
+    expect(redirects).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          source: '/section-8-grounds/how-to-evict-a-tenant-using-ground-16',
+        }),
+      ])
+    );
+  });
 });

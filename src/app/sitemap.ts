@@ -61,6 +61,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Update this quarterly when making significant site-wide changes
   const STABLE_PRODUCT_DATE = new Date('2026-01-01');
   const SEO_RESCUE_RELEASE_DATE = new Date('2026-06-01');
+  const SEO_IMPROVEMENT_RELEASE_DATE = new Date('2026-10-23');
   const phase3SitemapExclusions = new Set(getPhase3SitemapExclusions());
   const publicOwnerPages = [...getPublicCatalogProducts(), ...getPublicTenancyProducts()];
 
@@ -350,7 +351,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/tenant-refusing-access', priority: 0.82, changeFrequency: 'weekly' as const },
     { path: '/tenant-breach-of-tenancy', priority: 0.82, changeFrequency: 'weekly' as const },
     { path: '/tenant-subletting-without-permission', priority: 0.82, changeFrequency: 'weekly' as const },
-    { path: '/tenant-refusing-inspection', priority: 0.82, changeFrequency: 'weekly' as const },
     { path: '/tenant-anti-social-behaviour', priority: 0.82, changeFrequency: 'weekly' as const },
     { path: '/how-long-does-eviction-take', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/eviction-timeline-uk', priority: 0.85, changeFrequency: 'weekly' as const },
@@ -531,8 +531,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/tenancy-agreements/england',
   ]);
 
+  const seoImprovementPaths = new Set<string>([
+    '/tools/hmo-license-checker',
+    '/tools/rent-arrears-calculator',
+    '/blog/landlord-compliance',
+  ]);
+
   const lastModifiedForPath = (path: string) =>
-    commercialSeoRescuePaths.has(path) ? SEO_RESCUE_RELEASE_DATE : STABLE_PRODUCT_DATE;
+    seoImprovementPaths.has(path)
+      ? SEO_IMPROVEMENT_RELEASE_DATE
+      : commercialSeoRescuePaths.has(path)
+        ? SEO_RESCUE_RELEASE_DATE
+        : STABLE_PRODUCT_DATE;
 
   // Build sitemap entries
   const marketingEntries = marketingPages.map((page) => {

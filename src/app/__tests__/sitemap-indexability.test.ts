@@ -58,6 +58,7 @@ describe('sitemap indexability regression', () => {
       '/rent-increase',
       '/rent-increase/form-4a-guide',
       '/rent-increase/section-13-notice',
+      '/common-prt-tenancy-mistakes-scotland',
     ].forEach((path) => {
       expect(paths).toContain(path);
     });
@@ -99,10 +100,23 @@ describe('sitemap indexability regression', () => {
     });
   });
 
+  it('uses the actual improvement date only for pages changed in the current SEO pass', async () => {
+    const entries = await sitemap();
+
+    [
+      '/tools/hmo-license-checker',
+      '/tools/rent-arrears-calculator',
+      '/blog/landlord-compliance',
+    ].forEach((path) => {
+      expect(entryByPath(entries, path)?.lastModified?.toISOString().slice(0, 10)).toBe('2026-10-23');
+    });
+  });
+
   it('keeps retired, private, asset, and non-editorial regional URLs out', async () => {
     const paths = toPathSet(await sitemap());
 
     expect(paths).not.toContain('/products/rent-tracker');
+    expect(paths).not.toContain('/products');
     expect(paths).not.toContain('/section-21-court-pack');
     expect(paths).not.toContain('/dashboard');
     expect(paths).not.toContain('/wizard');
@@ -112,7 +126,9 @@ describe('sitemap indexability regression', () => {
     expect(paths).not.toContain('/blog/wales');
     expect(paths).not.toContain('/blog/scotland');
     expect(paths).not.toContain('/blog/northern-ireland');
-    expect(paths).not.toContain('/common-prt-tenancy-mistakes-scotland');
+    expect(paths).not.toContain('/tenant-refusing-inspection');
+    expect(paths).not.toContain('/money-claim-rent-arrears');
+    expect(paths).toContain('/section-8-grounds/how-to-evict-a-tenant-using-ground-16');
     expect(paths).not.toContain('/tenancy-agreements/wales');
     expect(paths).not.toContain('/tenancy-agreements/scotland');
   });

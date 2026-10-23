@@ -109,8 +109,8 @@ const CURATED_NEXT_STEPS_OVERRIDES: Record<string, NextStepsCTA[]> = {
   ],
   'england-money-claim-online': [
     {
-      href: '/money-claim',
-      label: 'Money Claim Guide',
+      href: '/money-claim-online-mcol',
+      label: 'Prepare an MCOL rent arrears claim',
       priority: 1,
     },
     {

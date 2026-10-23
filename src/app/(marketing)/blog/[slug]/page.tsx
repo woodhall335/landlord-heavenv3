@@ -559,7 +559,39 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
       heroImageAlt: post.heroImageAlt,
     }));
 
+    const topicHubUrl = `${SITE_ORIGIN}/blog/${slug}`;
+    const topicHubSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      name: topicHub.title,
+      description: topicHub.metaDescription,
+      url: topicHubUrl,
+      mainEntity: {
+        '@type': 'ItemList',
+        numberOfItems: postsForDisplay.length,
+        itemListElement: postsForDisplay.map((post, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          name: post.title,
+          url: `${SITE_ORIGIN}/blog/${post.slug}`,
+        })),
+      },
+    };
+
+    const topicHubBreadcrumbSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_ORIGIN },
+        { '@type': 'ListItem', position: 2, name: 'Landlord Guides', item: `${SITE_ORIGIN}/blog` },
+        { '@type': 'ListItem', position: 3, name: topicHub.name, item: topicHubUrl },
+      ],
+    };
+
     return (
+      <>
+      <StructuredData data={topicHubSchema} />
+      <StructuredData data={topicHubBreadcrumbSchema} />
       <main className="bg-white pb-16"> 
         <section className="border-b border-[#ede2ff] bg-[linear-gradient(180deg,#ffffff_0%,#f8f1ff_100%)] py-10 lg:py-14"> 
           <div className="container mx-auto px-4"> 
@@ -588,6 +620,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
           </StaggerReveal>
         </section>
       </main>
+      </>
     );
   }
 

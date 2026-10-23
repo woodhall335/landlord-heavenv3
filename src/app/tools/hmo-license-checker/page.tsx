@@ -60,7 +60,7 @@ export default function HMOLicenseChecker() {
     {
       question: 'How much does an HMO license cost?',
       answer:
-        "HMO license fees vary significantly by council, typically ranging from GBP 500 to GBP 1,500+ per property. The license usually lasts for 5 years. Contact your local council for exact fees. While this may seem expensive, it's far less than the penalties for operating without one.",
+        'HMO licence fees are set by each council, so there is no single national price. A licence is valid for a maximum of 5 years, although a council may issue one for a shorter period. Check the current fee and term directly with the council.',
     },
     {
       question: 'Can I convert my property to an HMO?',
@@ -734,7 +734,7 @@ export default function HMOLicenseChecker() {
               <li>It's occupied by 5 or more people</li>
               <li>They form 2 or more separate households</li>
               <li>They share a toilet, bathroom, or kitchen facilities</li>
-              <li>It's at least 3 storeys high (in England and Wales)</li>
+              <li>At least one tenant pays rent, or their employer pays it for them</li>
             </ul>
 
             <p className="mt-4">
@@ -751,6 +751,17 @@ export default function HMOLicenseChecker() {
 
             <p className="mt-4 text-primary-700 font-semibold">
               Always check with your local council to confirm whether your property requires licensing. Each council has different requirements and schemes.
+            </p>
+            <p className="mt-4 text-sm">
+              <a
+                href="https://www.gov.uk/find-licences/house-in-multiple-occupation-licence"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-primary hover:underline"
+              >
+                Check the current GOV.UK HMO licence rules and find your council
+              </a>
+              .
             </p>
           </div>
         </div>
@@ -774,6 +785,20 @@ export default function HMOLicenseChecker() {
         title="Related Resources"
         links={[
           productLinks.tenancyAgreement,
+          {
+            href: '/hmo-shared-house-tenancy-agreement',
+            title: 'HMO and Shared House Tenancy Agreement',
+            description: 'Use the dedicated England agreement and house-management route for shared occupation.',
+            icon: 'home' as const,
+            type: 'page' as const,
+          },
+          {
+            href: '/blog/landlord-compliance',
+            title: 'Landlord Compliance Guides',
+            description: 'Explore licensing, safety, deposit, EPC and electrical compliance guidance.',
+            icon: 'legal' as const,
+            type: 'guide' as const,
+          },
           toolLinks.rentArrearsCalculator,
           toolLinks.section21Generator,
           toolLinks.section8Generator,

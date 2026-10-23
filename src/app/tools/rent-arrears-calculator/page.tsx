@@ -18,6 +18,7 @@ import { trackToolComplete } from '@/lib/journey/events';
 import { setJourneyState, type StageEstimate } from '@/lib/journey/state';
 import { bucketArrears, bucketMonthsInArrears } from '@/lib/journey/stage';
 import { recordMarketingGrowthEvent } from '@/lib/analytics/growth-events';
+import { calculateRentArrearsTotals } from '@/lib/tools/rent-arrears';
 
 type ScheduleItem = {
   id: string;
@@ -82,36 +83,7 @@ export default function RentArrearsCalculator() {
     );
   }, []);
 
-  const totals = useMemo(() => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    return schedule.reduce(
-      (acc, item) => {
-        const due = Number(item.dueAmount) || 0;
-        const paid = Number(item.paidAmount) || 0;
-        const outstanding = Math.max(due - paid, 0);
-        const dueDate = item.dueDate ? new Date(`${item.dueDate}T00:00:00`) : today;
-        const daysOutstanding = Math.max(
-          0,
-          Math.floor((today.getTime() - dueDate.getTime()) / (1000 * 60 * 60 * 24)),
-        );
-
-        const interest =
-          outstanding > 0 && daysOutstanding > 0
-            ? outstanding * 0.08 * (daysOutstanding / 365)
-            : 0;
-
-        acc.totalDue += due;
-        acc.totalPaid += paid;
-        acc.totalOutstanding += outstanding;
-        acc.totalInterest += interest;
-
-        return acc;
-      },
-      { totalDue: 0, totalPaid: 0, totalOutstanding: 0, totalInterest: 0 },
-    );
-  }, [schedule]);
+  const totals = useMemo(() => calculateRentArrearsTotals(schedule), [schedule]);
 
   const completionTrackedRef = useRef(false);
 
@@ -167,56 +139,9 @@ export default function RentArrearsCalculator() {
     }
   }, [arrearsBand, monthsInArrearsBand, stageHint, totals.totalOutstanding]);
 
-  const calculateEnhancedInterest = () => {
-    if (totals.totalOutstanding <= 0) return { interest: 0, daysOutstanding: 0, fromDate: '' };
-
-    let earliestDueDate: Date | null = null;
-    for (const item of schedule) {
-      const due = Number(item.dueAmount) || 0;
-      const paid = Number(item.paidAmount) || 0;
-      const outstanding = due - paid;
-
-      if (outstanding > 0 && item.dueDate) {
-        const dueDate = new Date(`${item.dueDate}T00:00:00`);
-        if (!earliestDueDate || dueDate < earliestDueDate) {
-          earliestDueDate = dueDate;
-        }
-      }
-    }
-
-    if (!earliestDueDate) return { interest: 0, daysOutstanding: 0, fromDate: '' };
-
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const daysOutstanding = Math.max(
-      0,
-      Math.floor((today.getTime() - earliestDueDate.getTime()) / (1000 * 60 * 60 * 24)),
-    );
-
-    if (daysOutstanding <= 0) {
-      return {
-        interest: 0,
-        daysOutstanding: 0,
-        fromDate: earliestDueDate.toISOString().split('T')[0],
-      };
-    }
-
-    const annualRate = 0.08;
-    const dailyRate = annualRate / 365;
-    const interest = totals.totalOutstanding * dailyRate * daysOutstanding;
-
-    return {
-      interest: Math.max(0, interest),
-      daysOutstanding,
-      fromDate: earliestDueDate.toISOString().split('T')[0],
-    };
-  };
-
-  const enhancedInterestData = calculateEnhancedInterest();
-  const estimatedInterest = enhancedInterestData.interest;
-  const daysOutstanding = enhancedInterestData.daysOutstanding;
-  const interestFromDate = enhancedInterestData.fromDate;
+  const estimatedInterest = totals.totalInterest;
+  const daysOutstanding = totals.maxDaysOutstanding;
+  const interestFromDate = totals.earliestOutstandingDueDate;
 
   const handleScheduleChange = (id: string, key: keyof ScheduleItem, value: string) => {
     setSchedule((prev) =>
@@ -353,7 +278,7 @@ export default function RentArrearsCalculator() {
       y -= 20;
 
       if (estimatedInterest > 0) {
-        page.drawText(`Interest (8% p.a. for ${daysOutstanding} days): £${estimatedInterest.toFixed(2)}`, {
+        page.drawText(`Interest estimate (8% p.a. by due date): £${estimatedInterest.toFixed(2)}`, {
           x: 70,
           y,
           size: 11,
@@ -373,7 +298,7 @@ export default function RentArrearsCalculator() {
 
         y -= 30;
 
-        page.drawText('Note: Interest calculated at 8% per annum simple interest from last payment date.', {
+        page.drawText('Note: Simple interest is calculated separately from each unpaid period due date.', {
           x: 70,
           y,
           size: 9,
@@ -414,7 +339,7 @@ export default function RentArrearsCalculator() {
       console.error('PDF error:', error);
       alert('Failed to generate PDF. Please try again.');
     }
-  }, [schedule, totals, rentAmount, estimatedInterest, daysOutstanding]);
+  }, [schedule, totals, rentAmount, estimatedInterest]);
 
   const gate = useEmailGate({
     source: 'tool:rent-arrears-calculator',
@@ -609,7 +534,7 @@ export default function RentArrearsCalculator() {
                 </div>
                 <div className="space-y-2 text-xs text-gray-700">
                   <p>
-                    <strong>Calculation:</strong> £{totals.totalOutstanding.toFixed(2)} × 8% × ({daysOutstanding} days ÷ 365) = £{estimatedInterest.toFixed(2)}
+                    <strong>Calculation:</strong> Each unpaid rent period × 8% × (its days outstanding ÷ 365), then added together.
                   </p>
                   <p>
                     <strong>From:</strong>{' '}
@@ -716,6 +641,20 @@ export default function RentArrearsCalculator() {
             toolLinks.section8Generator,
             blogLinks.rentArrearsEviction,
             landingPageLinks.rentArrearsTemplate,
+            {
+              href: '/rent-arrears-landlord-guide',
+              title: 'Rent Arrears Landlord Guide',
+              description: 'Move from the figures into evidence, communication, notice and recovery decisions.',
+              icon: 'legal' as const,
+              type: 'guide' as const,
+            },
+            {
+              href: '/money-claim',
+              title: 'Money Claim Guide for Landlords',
+              description: 'Understand pre-action steps, evidence, MCOL and the N1 filing route.',
+              icon: 'legal' as const,
+              type: 'guide' as const,
+            },
           ]}
         />
       </Container>

@@ -19,6 +19,8 @@ export async function GET() {
       'Content-Disposition':
         'attachment; filename="renters-rights-act-information-sheet-2026.pdf"',
       'Cache-Control': 'public, max-age=3600',
+      'X-Robots-Tag': 'noindex, nofollow, noarchive',
+      Link: '<https://landlordheaven.co.uk/renters-rights-act-information-sheet-2026>; rel="canonical"',
     },
   });
 }
