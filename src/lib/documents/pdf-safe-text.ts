@@ -79,6 +79,20 @@ const UNICODE_REPLACEMENTS: Record<string, string> = {
   // Ellipsis
   '\u2026': '...', // … Horizontal Ellipsis
 
+  // CJK and full-width punctuation commonly introduced by mobile keyboards
+  '\u3000': ' ', // Ideographic Space
+  '\u3001': ',', // Ideographic Comma
+  '\u3002': '.', // Ideographic Full Stop
+  '\uFF01': '!', // Fullwidth Exclamation Mark
+  '\uFF08': '(', // Fullwidth Left Parenthesis
+  '\uFF09': ')', // Fullwidth Right Parenthesis
+  '\uFF0C': ',', // Fullwidth Comma
+  '\uFF0D': '-', // Fullwidth Hyphen-Minus
+  '\uFF0E': '.', // Fullwidth Full Stop
+  '\uFF1A': ':', // Fullwidth Colon
+  '\uFF1B': ';', // Fullwidth Semicolon
+  '\uFF1F': '?', // Fullwidth Question Mark
+
   // Currency symbols (most are in WinAnsi, but some aren't)
   '\u20AC': 'EUR', // € Euro Sign (actually in WinAnsi at 0x80, but being safe)
 
@@ -138,6 +152,48 @@ function isWinAnsiSafe(charCode: number): boolean {
   }
 
   return false;
+}
+
+const WIN_ANSI_UNICODE_CODE_POINTS = new Set([
+  0x20ac, 0x201a, 0x0192, 0x201e, 0x2026, 0x2020, 0x2021, 0x02c6,
+  0x2030, 0x0160, 0x2039, 0x0152, 0x017d, 0x2018, 0x2019, 0x201c,
+  0x201d, 0x2022, 0x2013, 0x2014, 0x02dc, 0x2122, 0x0161, 0x203a,
+  0x0153, 0x017e, 0x0178,
+]);
+
+function isWinAnsiUnicodeCodePoint(codePoint: number): boolean {
+  return (
+    codePoint === 0x09 ||
+    codePoint === 0x0a ||
+    codePoint === 0x0d ||
+    (codePoint >= 0x20 && codePoint <= 0x7e) ||
+    (codePoint >= 0x00a0 && codePoint <= 0x00ff) ||
+    WIN_ANSI_UNICODE_CODE_POINTS.has(codePoint)
+  );
+}
+
+/**
+ * Sanitize AcroForm values while preserving every Unicode character that
+ * pdf-lib's WinAnsi standard fonts can encode. Unlike toWinAnsiSafeText(),
+ * this keeps supported smart punctuation used in official statutory wording.
+ */
+export function toWinAnsiFormFieldText(input: string): string {
+  if (!input || typeof input !== 'string') {
+    return '';
+  }
+
+  let sanitized = '';
+  for (const character of input) {
+    const codePoint = character.codePointAt(0);
+    if (codePoint !== undefined && isWinAnsiUnicodeCodePoint(codePoint)) {
+      sanitized += character;
+      continue;
+    }
+
+    sanitized += UNICODE_REPLACEMENTS[character] || '';
+  }
+
+  return sanitized;
 }
 
 /**

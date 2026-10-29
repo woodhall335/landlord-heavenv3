@@ -101,6 +101,29 @@ describe('Form 3A legal wording regression', () => {
     expect(explanationText).not.toContain('Both at the date of the service of the notice');
   });
 
+  it('normalizes unsupported customer punctuation before updating Form 3A appearances', async () => {
+    const pdfBytes = await fillForm3AForm({
+      ...BASE_FORM3A_CASE_DATA,
+      tenant_full_name: 'Sonia。 Shezadi',
+      property_address: '35 Woodhall Park Avenue。\nPudsey\nWest Yorkshire\nLS28 7HF',
+      ground_codes: ['8'],
+      form3a_explanation: 'The tenant owes three months of rent。 Payment remains outstanding。',
+    });
+
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+    const form = pdfDoc.getForm();
+
+    expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.tenantNames).getText()).toBe(
+      'Sonia. Shezadi',
+    );
+    expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.propertyLine1).getText()).toBe(
+      '35 Woodhall Park Avenue.',
+    );
+    expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.explanationText).getText()).toContain(
+      'rent. Payment remains outstanding.',
+    );
+  });
+
   it('enriches Ground 1A question 4.3 with structured sale evidence instead of a stale manual summary', async () => {
     const pdfBytes = await fillForm3AForm({
       ...BASE_FORM3A_CASE_DATA,

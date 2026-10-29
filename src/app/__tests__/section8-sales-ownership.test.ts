@@ -90,6 +90,26 @@ describe('Section 8 search ownership and sales paths', () => {
     expect(groundsHub).toContain("href: '/tools/section-8-ground-finder'");
   });
 
+  it('keeps the broad Section 8 owner current, answer-first and tied to primary sources', () => {
+    const owner = CURRENT_ENGLAND_FRAMEWORK_PAGES['section-8-notice'];
+
+    expect(owner.ownerQueryTheme).toBe('section 8 notice');
+    expect(owner.title.toLowerCase()).toContain('section 8 notice');
+    expect(owner.dateModified).toBe('2026-10-29');
+    expect(owner.reviewedDate).toBe('29 October 2026');
+    expect(owner.noticePeriodGroups).toEqual(expect.arrayContaining([
+      expect.objectContaining({ period: '4 weeks', grounds: expect.stringContaining('8, 10, 11') }),
+      expect.objectContaining({ period: 'No minimum notice period', grounds: '7A and 14' }),
+    ]));
+    expect(owner.officialSources?.map((source) => source.href)).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('gov.uk/guidance/repossessing-your-privately-rented-property'),
+        expect.stringContaining('gov.uk/guidance/assured-tenancy-forms'),
+        expect.stringContaining('legislation.gov.uk/ukpga/2025/26/notes'),
+      ])
+    );
+  });
+
   it('places a preview and delayed mobile CTA on the Notice Only product page', () => {
     const productPage = readFileSync('src/app/products/notice-only/page.tsx', 'utf8');
     expect(productPage).toContain('See what the finished pack looks like');

@@ -23,7 +23,7 @@ import fs from 'fs/promises';
 import path from 'path';
 
 import { PDFDocument, PDFFont, rgb, StandardFonts } from 'pdf-lib';
-import { toWinAnsiSafeText } from './pdf-safe-text';
+import { toWinAnsiFormFieldText, toWinAnsiSafeText } from './pdf-safe-text';
 
 export interface ProofOfServiceData {
   // SAFE to pre-fill (from case data)
@@ -199,7 +199,7 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   const landlordField = form.createTextField('landlord_name');
   landlordField.addToPage(page, { x: margin + 115, y: y - 4, width: width - margin * 2 - 115, height: 18 });
   setFieldTextSize(landlordField);
-  if (data.landlord_name) landlordField.setText(data.landlord_name);
+  if (data.landlord_name) landlordField.setText(toWinAnsiFormFieldText(data.landlord_name));
   y -= 26;
 
   // Tenant field (SAFE TO PRE-FILL)
@@ -207,7 +207,7 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   const tenantField = form.createTextField('tenant_name');
   tenantField.addToPage(page, { x: margin + 115, y: y - 4, width: width - margin * 2 - 115, height: 18 });
   setFieldTextSize(tenantField);
-  if (data.tenant_name) tenantField.setText(data.tenant_name);
+  if (data.tenant_name) tenantField.setText(toWinAnsiFormFieldText(data.tenant_name));
   y -= 26;
 
   // Property address field (SAFE TO PRE-FILL)
@@ -215,7 +215,7 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   const propertyField = form.createTextField('property_address');
   propertyField.addToPage(page, { x: margin + 115, y: y - 4, width: width - margin * 2 - 115, height: 18 });
   setFieldTextSize(propertyField, 9);
-  if (data.property_address) propertyField.setText(data.property_address);
+  if (data.property_address) propertyField.setText(toWinAnsiFormFieldText(data.property_address));
   y -= 32;
 
   // === SECTION 2: DOCUMENT SERVED ===
@@ -227,7 +227,7 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   documentField.addToPage(page, { x: margin, y: y - 4, width: width - margin * 2, height: 28 });
   documentField.enableMultiline();
   setFieldTextSize(documentField, 9);
-  if (data.document_served) documentField.setText(data.document_served);
+  if (data.document_served) documentField.setText(toWinAnsiFormFieldText(data.document_served));
   y -= 40;
 
   // Notice expiry date (SAFE TO PRE-FILL - calculated from wizard)
@@ -330,7 +330,7 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
     serviceAddressField.addToPage(page, { x: -1000, y: -1000, width: 1, height: 1 });
     setFieldTextSize(serviceAddressField, 1);
   }
-  if (serviceAddress) serviceAddressField.setText(serviceAddress);
+  if (serviceAddress) serviceAddressField.setText(toWinAnsiFormFieldText(serviceAddress));
 
   // === SECTION 4: DECLARATION ===
   drawText('4. DECLARATION', margin, y, helveticaBold, sectionHeadingSize);

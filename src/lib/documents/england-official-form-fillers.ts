@@ -13,6 +13,7 @@ import {
   EnglandForm3ALegalWordingError,
   parseEnglandForm3AGroundCodes,
 } from '@/lib/england-possession/legal-wording';
+import { toWinAnsiFormFieldText } from './pdf-safe-text';
 
 const OFFICIAL_FORMS_ROOT = path.join(process.cwd(), 'public', 'official-forms');
 const FORM3A_GROUNDS_TEXT_MAIN_CHAR_LIMIT = 2800;
@@ -440,7 +441,7 @@ function setTextValue(
     if (options.fontSize) {
       field.setFontSize(options.fontSize);
     }
-    field.setText(String(value));
+    field.setText(toWinAnsiFormFieldText(String(value)));
   }
 }
 
@@ -459,7 +460,7 @@ function setExistingTextField(form: PDFForm, fieldName: string, value: string | 
   if (value === undefined || value === null || value === '') return;
   const field = form.getFields().find((candidate) => candidate.getName() === fieldName);
   if (field instanceof PDFTextField) {
-    field.setText(String(value));
+    field.setText(toWinAnsiFormFieldText(String(value)));
   }
 }
 

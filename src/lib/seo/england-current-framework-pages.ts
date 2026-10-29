@@ -17,6 +17,18 @@ export interface CurrentFrameworkSection {
   bullets?: string[];
 }
 
+export interface CurrentFrameworkNoticePeriodGroup {
+  period: string;
+  grounds: string;
+  commonUse: string;
+}
+
+export interface CurrentFrameworkOfficialSource {
+  title: string;
+  description: string;
+  href: string;
+}
+
 export interface CurrentFrameworkPageConfig {
   slug:
     | 'form-3-section-8'
@@ -36,7 +48,11 @@ export interface CurrentFrameworkPageConfig {
   heroBullets: string[];
   pageType: 'guide' | 'notice' | 'court';
   currentFrameworkNote: string;
+  reviewedDate?: string;
+  dateModified?: string;
   introduction: string[];
+  noticePeriodGroups?: CurrentFrameworkNoticePeriodGroup[];
+  officialSources?: CurrentFrameworkOfficialSource[];
   decisionBlock?: {
     title: string;
     intro: string;
@@ -68,8 +84,8 @@ export interface CurrentFrameworkPageConfig {
 const reviewedDate = '13 July 2026';
 const noticeOnlyCtaLabel = `Create and preview my Form 3A — ${PRODUCTS.notice_only.displayPrice}`;
 
-function buildCurrentFrameworkNote(summary: string) {
-  return `England update reviewed ${reviewedDate}. We are aligned with the Renters' Rights Act. ${summary}`;
+function buildCurrentFrameworkNote(summary: string, reviewDate = reviewedDate) {
+  return `England update reviewed ${reviewDate}. We are aligned with the Renters' Rights Act. ${summary}`;
 }
 
 export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
@@ -326,9 +342,9 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
   },
   'section-8-notice': {
     slug: 'section-8-notice',
-    title: 'Section 8 Notice | England Landlord Guide, Grounds & Dates',
+    title: 'Section 8 Notice: Form 3A, Grounds & Notice Periods (2026)',
     description:
-      'Section 8 notice guide for England landlords. Check Form 3A, grounds, notice periods, service, evidence, court dates, and what to do if the tenant does not leave.',
+      'Section 8 notice guide for England landlords, updated October 2026. Check Form 3A, possession grounds, notice periods, service, evidence, and court next steps.',
     keywords: [
       'section 8 notice',
       'section 8 notice england',
@@ -350,9 +366,9 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
       'renters rights act possession',
       'england eviction notice grounds',
     ],
-    heroTitle: 'Section 8 notice for England landlords',
+    heroTitle: 'Section 8 notice: current England landlord guide',
     heroSubtitle:
-      'Use this as the main landlord guide to Section 8 notices in England: what the notice does, which grounds may apply, how dates and service work, and what happens if the tenant does not leave.',
+      'Understand the current Form 3A process, possession grounds, notice periods, service rules, and what happens if the tenant does not leave.',
     heroBullets: [
       'Explains Form 3A, Section 8 grounds, notice periods, service, and court next steps.',
       'Includes the practical checks landlords need before serving a notice.',
@@ -360,12 +376,64 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
     ],
     pageType: 'guide',
     currentFrameworkNote: buildCurrentFrameworkNote(
-      'Current England possession work starts with the facts, the right grounds, and a notice path that still makes sense if the matter reaches court.'
+      'Current England possession work starts with the facts, the right grounds, and a notice path that still makes sense if the matter reaches court.',
+      '29 October 2026'
     ),
+    reviewedDate: '29 October 2026',
+    dateModified: '2026-10-29',
     introduction: [
-      'A Section 8 notice is the landlord notice used in England when you want possession because you are relying on one or more statutory grounds. In plain English, it tells the tenant why you are seeking possession, which ground or grounds you rely on, when the notice period ends, and what facts support your route.',
-      'For current England private-rented cases, landlords normally work from Form 3A. The notice is not just a template. It is the first court-facing part of the file. If the grounds, dates, service method, or evidence are weak, the later possession claim can become slower, more expensive, or easier for the tenant to challenge.',
-      'Use this page as the main Section 8 notice hub. If you need to act, use the date calculator to check timing, the generator to prepare the notice and service file, or the Complete Pack if the case is already likely to move into N5 and N119 court papers.',
+      'A Section 8 notice is the formal notice an England landlord uses to seek possession of an assured tenancy by relying on one or more legal grounds. It tells the tenant why possession is sought, which grounds apply, and the earliest date court proceedings may begin.',
+      'Since 1 May 2026, private landlords normally use the current Form 3A. Section 21 is no longer available for new England possession notices, so the grounds, supporting facts, notice period, and service evidence now carry even more weight.',
+      'A Section 8 notice does not itself end the tenancy or authorise an eviction. If the tenant stays after the notice period, the landlord must obtain a possession order and use the lawful enforcement process. Use this page as the main Section 8 notice hub, then move to the date calculator, ground finder, or guided Form 3A builder when you are ready to act.',
+    ],
+    noticePeriodGroups: [
+      {
+        period: '4 months',
+        grounds: '1, 1A, 1B, 2, 2ZA–2ZD, 4A, 6, 6A and 6B',
+        commonUse: 'Landlord or family occupation, sale, student HMO and other specified mandatory routes',
+      },
+      {
+        period: '2 months',
+        grounds: '5, 5A–5D, 5H, 7 and 9',
+        commonUse: 'Specified employment, supported housing and suitable alternative accommodation routes',
+      },
+      {
+        period: '4 weeks',
+        grounds: '5E–5G, 8, 10, 11 and 18',
+        commonUse: 'Rent arrears, persistent late payment and other specified routes',
+      },
+      {
+        period: '2 weeks',
+        grounds: '4, 7B, 12, 13, 14ZA, 14A, 15 and 17',
+        commonUse: 'Tenancy breach, deterioration, domestic abuse and false statement routes',
+      },
+      {
+        period: 'No minimum notice period',
+        grounds: '7A and 14',
+        commonUse: 'Serious anti-social behaviour or criminal behaviour routes',
+      },
+    ],
+    officialSources: [
+      {
+        title: 'GOV.UK: repossessing a privately rented property after 1 May 2026',
+        description: 'The current government overview of validity, grounds, deposit rules and court action.',
+        href: 'https://www.gov.uk/guidance/repossessing-your-privately-rented-property-after-1-may-2026',
+      },
+      {
+        title: 'GOV.UK: Form 3A and landlord completion guidance',
+        description: 'Download the current prescribed form and check the official completion notes before service.',
+        href: 'https://www.gov.uk/guidance/assured-tenancy-forms',
+      },
+      {
+        title: 'GOV.UK: grounds for possession',
+        description: 'Check every current ground, its conditions, evidence requirements and notice period.',
+        href: 'https://www.gov.uk/government/publications/grounds-for-possession-guidance-for-landlords-and-letting-agents/grounds-for-possession-guidance-for-landlords-and-letting-agents',
+      },
+      {
+        title: 'Legislation.gov.uk: Renters’ Rights Act 2025 grounds table',
+        description: 'Read the statutory explanatory table of amended possession grounds and notice periods.',
+        href: 'https://www.legislation.gov.uk/ukpga/2025/26/notes/division/17/index.htm',
+      },
     ],
     decisionBlock: {
       title: 'Choose the Section 8 route that matches the next job',
@@ -416,6 +484,21 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
           'Use Section 8 when you have grounds for possession, not simply because you want the tenancy to end.',
           'Check the notice period for the actual grounds selected.',
           'Keep the notice, service proof, evidence, and later N5/N119 papers consistent.',
+        ],
+      },
+      {
+        id: 'valid-section-8-notice-checklist',
+        title: 'Section 8 notice validity checklist for 2026',
+        paragraphs: [
+          'For a current private-rented case in England, start with the latest Form 3A or a form substantially to the same effect. State the full substance of every ground relied on, explain why each ground applies to the facts, and give the correct notice period. An incomplete or inaccurate notice can delay the claim or cause it to be dismissed.',
+          'Before service, check the tenancy type, any ground-specific conditions or prior-notice requirements, and the deposit-protection position. Keep a signed and dated copy of the notice and clear proof showing when and how every tenant received it. These records will be needed if the tenant remains and the case proceeds to court.',
+        ],
+        bullets: [
+          'Use the latest private-sector Form 3A and current legal wording for each ground.',
+          'Explain the case-specific facts supporting every ground, not merely the ground number.',
+          'Calculate the period using the longest applicable ground, subject to the special rules for Grounds 7A and 14.',
+          'Check deposit protection, prescribed information, and any conditions specific to the selected ground.',
+          'Retain the completed notice, evidence relied on, and proof of service for the possession claim.',
         ],
       },
       {
@@ -532,6 +615,21 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         question: 'When can court papers start after a Section 8 notice?',
         answer:
           'Court papers should not usually start until the relevant notice period has expired and the service position is clear. If the tenant stays, the landlord may need N5 and N119 possession claim papers supported by the same notice-stage facts.',
+      },
+      {
+        question: 'Does a Section 8 notice end the tenancy?',
+        answer:
+          'No. A Section 8 notice starts the possession process but does not itself end the tenancy or authorise an eviction. If the tenant remains, the landlord must obtain a possession order and use the lawful enforcement process.',
+      },
+      {
+        question: 'How long is a Section 8 notice valid?',
+        answer:
+          'A notice of possession is normally valid for 12 months from the date it was served. Rent-arrears cases affected by a qualifying breathing space can have different timing, so check the current Form 3A landlord guidance before issuing a claim.',
+      },
+      {
+        question: 'Can a landlord serve a Section 8 notice during the first 12 months?',
+        answer:
+          'That depends on the ground. For Grounds 1 and 1A, the date stated in the notice cannot fall before the tenant has occupied the property for 12 months, although the notice may be served earlier if the full four-month period and protected period are respected. Other grounds have their own conditions.',
       },
       {
         question: 'Where should I go if I want to start now?',

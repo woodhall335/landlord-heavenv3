@@ -96,7 +96,7 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
           description: config.description,
           url: canonical,
           datePublished: '2026-04-05',
-          dateModified: '2026-07-13',
+          dateModified: config.dateModified ?? '2026-07-13',
         })}
       />
       <StructuredData data={faqPageSchema(config.faqs)} />
@@ -163,6 +163,11 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
               Current England position
             </p>
+            {config.reviewedDate ? (
+              <p className="mt-3 text-sm font-semibold text-[#514785]">
+                Fact-checked against current government guidance on {config.reviewedDate}
+              </p>
+            ) : null}
             <p className="mt-4 text-lg leading-8 text-slate-700">{config.currentFrameworkNote}</p>
             <div className="mt-6 flex flex-wrap gap-3">
               <TrackedLink
@@ -316,6 +321,50 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
               </div>
             </article>
 
+            {config.noticePeriodGroups?.length ? (
+              <article
+                id="section-8-notice-periods-at-a-glance"
+                className="scroll-mt-24 overflow-hidden rounded-3xl border border-[#e6dbff] bg-white"
+              >
+                <div className="p-6 md:p-8">
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+                    At a glance
+                  </p>
+                  <h2 className="mt-3 text-3xl font-bold text-[#2a2161]">
+                    Section 8 notice periods after 1 May 2026
+                  </h2>
+                  <p className="mt-4 max-w-3xl leading-8 text-gray-700">
+                    The ground or combination of grounds controls the minimum period. If more than
+                    one ground is used, the longest applicable period normally controls, except for
+                    the special immediate court rules for Grounds 7A and 14. Always check the live
+                    Form 3A guidance before service.
+                  </p>
+                </div>
+                <div className="overflow-x-auto border-t border-[#e6dbff]">
+                  <table className="w-full min-w-[760px] border-collapse text-left">
+                    <thead className="bg-[#f7f2ff] text-sm text-[#2a2161]">
+                      <tr>
+                        <th scope="col" className="px-6 py-4 font-bold">Minimum period</th>
+                        <th scope="col" className="px-6 py-4 font-bold">Grounds</th>
+                        <th scope="col" className="px-6 py-4 font-bold">Common use</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#eee8f8] text-gray-700">
+                      {config.noticePeriodGroups.map((row) => (
+                        <tr key={row.period}>
+                          <th scope="row" className="whitespace-nowrap px-6 py-4 font-semibold text-[#2a2161]">
+                            {row.period}
+                          </th>
+                          <td className="px-6 py-4 leading-7">{row.grounds}</td>
+                          <td className="px-6 py-4 leading-7">{row.commonUse}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+            ) : null}
+
             {!config.deferFrameworkLinks ? frameworkLinksBlock : null}
 
             {config.sections.map((section) => (
@@ -343,6 +392,36 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
             ))}
 
             {config.deferFrameworkLinks ? frameworkLinksBlock : null}
+
+            {config.officialSources?.length ? (
+              <aside className="rounded-3xl border border-[#cfe3d5] bg-[#f4fbf6] p-6 md:p-8">
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#24623b]">
+                  Primary sources
+                </p>
+                <h2 className="mt-3 text-3xl font-bold text-[#173d26]">
+                  Check the current official Section 8 guidance
+                </h2>
+                <p className="mt-4 max-w-3xl leading-8 text-gray-700">
+                  This guide is checked against the following government and legislation sources.
+                  Use the live official documents for a case being served now.
+                </p>
+                <ul className="mt-6 grid gap-4 md:grid-cols-2">
+                  {config.officialSources.map((source) => (
+                    <li key={source.href} className="rounded-2xl border border-[#cfe3d5] bg-white p-5">
+                      <a
+                        href={source.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-semibold text-[#1d5a34] underline decoration-[#8dc49e] underline-offset-4 hover:text-[#123b22]"
+                      >
+                        {source.title}
+                      </a>
+                      <p className="mt-2 text-sm leading-6 text-gray-700">{source.description}</p>
+                    </li>
+                  ))}
+                </ul>
+              </aside>
+            ) : null}
           </div>
         </Container>
       </section>

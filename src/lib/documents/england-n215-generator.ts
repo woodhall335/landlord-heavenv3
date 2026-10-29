@@ -9,6 +9,7 @@ import {
   computeEnglandSection8DeemedServiceDate,
   type EnglandSection8CourtPackServiceMethod,
 } from './england-section8-court-pack';
+import { toWinAnsiFormFieldText } from './pdf-safe-text';
 
 export type EnglandProofOfServiceMethod =
   | 'hand_delivery'
@@ -113,8 +114,7 @@ export function normalizeEnglandProofOfServiceMethod(value: unknown): EnglandPro
 }
 
 function sanitizeFormText(value: unknown): string {
-  return String(value || '')
-    .replace(/[^\x20-\x7E\r\n]/g, ' ')
+  return toWinAnsiFormFieldText(String(value || ''))
     .replace(/\s+/g, ' ')
     .trim();
 }

@@ -43,6 +43,7 @@ import {
   buildN119StatutoryGroundsText,
   buildN119StepsTakenText,
 } from '@/lib/england-possession/pack-drafting';
+import { toWinAnsiFormFieldText } from './pdf-safe-text';
 // Note: flattenPdf import removed - official forms should NEVER be flattened
 // to preserve user editability for final adjustments before court submission
 
@@ -1065,7 +1066,7 @@ function setTextRequired(
     );
   }
   const field = getTextFieldStrict(form, fieldName, context);
-  field.setText(value);
+  field.setText(toWinAnsiFormFieldText(value));
   if (fontSize) field.setFontSize(fontSize);
 }
 
@@ -1083,7 +1084,7 @@ function setTextOptional(
 
   try {
     const field = form.getTextField(fieldName);
-    field.setText(value);
+    field.setText(toWinAnsiFormFieldText(value));
     if (fontSize) field.setFontSize(fontSize);
   } catch {
     // Field doesn't exist - this is acceptable for optional fields, but log it
@@ -1113,7 +1114,7 @@ function setTextWithVariants(
   for (const fieldName of fieldNames) {
     try {
       const field = form.getTextField(fieldName);
-      field.setText(value);
+      field.setText(toWinAnsiFormFieldText(value));
       return; // Success
     } catch {
       continue; // Try next variant

@@ -18,6 +18,7 @@
 
 import { describe, expect, test } from 'vitest';
 import {
+  toWinAnsiFormFieldText,
   toWinAnsiSafeText,
   hasUnsafeUnicodeCharacters,
   findUnsafeCharacters,
@@ -70,6 +71,13 @@ describe('pdf-safe-text utility', () => {
       expect(output).toBe('Wait for it...');
     });
 
+    test('converts ideographic and full-width punctuation to ASCII', () => {
+      const input = 'Address。 Next，item！ Ready？';
+      const output = toWinAnsiSafeText(input);
+      expect(output).toBe('Address. Next,item! Ready?');
+      expect(output).not.toContain('。');
+    });
+
     test('removes emoji characters that are outside BMP', () => {
       const input = 'Hello 😀 World';
       const output = toWinAnsiSafeText(input);
@@ -103,6 +111,23 @@ describe('pdf-safe-text utility', () => {
       const output = toWinAnsiSafeText(input);
       // Should be mostly empty or have minimal replacement text
       expect(output.length).toBeLessThan(input.length);
+    });
+  });
+
+  describe('toWinAnsiFormFieldText', () => {
+    test('normalizes the order-breaking ideographic full stop', () => {
+      expect(toWinAnsiFormFieldText('123 Test Street。 London。')).toBe(
+        '123 Test Street. London.',
+      );
+    });
+
+    test('preserves WinAnsi smart punctuation used in statutory wording', () => {
+      const input = 'Ground 8 – thirteen weeks’ rent';
+      expect(toWinAnsiFormFieldText(input)).toBe(input);
+    });
+
+    test('removes unsupported emoji without breaking adjacent text', () => {
+      expect(toWinAnsiFormFieldText('Tenant 😀 Name')).toBe('Tenant  Name');
     });
   });
 
@@ -176,6 +201,19 @@ describe('proof-of-service-generator', () => {
       tenant_name: 'Jane–Doe', // En dash
       property_address: '123 Test Street…', // Ellipsis
       document_served: 'Section 8 Notice',
+    });
+
+    expect(pdfBytes).toBeDefined();
+    expect(pdfBytes.length).toBeGreaterThan(0);
+  });
+
+  test('generates editable fields when customer input contains an ideographic full stop', async () => {
+    const pdfBytes = await generateProofOfServicePDF({
+      landlord_name: 'John Smith。',
+      tenant_name: 'Jane Doe。',
+      property_address: '123 Test Street。 London。',
+      document_served: 'Section 8 Notice。',
+      service_address: '123 Test Street。 London。',
     });
 
     expect(pdfBytes).toBeDefined();
