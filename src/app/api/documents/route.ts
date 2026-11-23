@@ -24,6 +24,7 @@ interface DocumentRow {
   document_type: string;
   is_preview: boolean;
   created_at: string;
+  updated_at?: string | null;
   metadata?: Record<string, any> | null;
   [key: string]: any;
 }
@@ -36,7 +37,9 @@ function deduplicateByType(documents: DocumentRow[]): DocumentRow[] {
 
   for (const doc of documents) {
     const existing = latestByType.get(doc.document_type);
-    if (!existing || new Date(doc.created_at) > new Date(existing.created_at)) {
+    const docTimestamp = doc.updated_at || doc.created_at;
+    const existingTimestamp = existing?.updated_at || existing?.created_at;
+    if (!existing || new Date(docTimestamp) > new Date(existingTimestamp!)) {
       latestByType.set(doc.document_type, doc);
     }
   }

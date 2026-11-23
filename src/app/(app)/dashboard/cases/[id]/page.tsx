@@ -64,6 +64,7 @@ interface Document {
   is_preview: boolean;
   pdf_url: string | null;
   created_at: string;
+  updated_at?: string | null;
   metadata?: Record<string, any> | null;
 }
 
@@ -1987,7 +1988,7 @@ export default function CaseDetailPage() {
                               {doc.document_title || getDashboardDocumentTitle(doc.document_type)}
                             </div>
                             <div className="text-xs text-gray-500">
-                              {formatDate(doc.created_at)}
+                              {formatDate(doc.updated_at || doc.created_at)}
                             </div>
                           </div>
                         </div>
