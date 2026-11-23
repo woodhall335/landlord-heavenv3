@@ -70,6 +70,8 @@ interface FulfillOrderInput {
   addOns?: string[];
   userId?: string | null;
   tenancyOutputSnapshotId?: string | null;
+  /** Rebuild from current facts even when a complete pack already exists. */
+  forceRegenerate?: boolean;
 }
 
 interface FulfillmentValidation {
@@ -105,6 +107,72 @@ interface RequiredAction {
   label: string;
   errorCode: string;
   helpText: string;
+}
+
+function isPositiveAmount(value: unknown): boolean {
+  const amount = typeof value === 'number' ? value : Number.parseFloat(String(value ?? ''));
+  return Number.isFinite(amount) && amount > 0;
+}
+
+function containsArrearsGround(value: unknown): boolean {
+  if (!Array.isArray(value)) return false;
+
+  return value.some((ground) => {
+    const normalized = String(
+      typeof ground === 'object' && ground !== null
+        ? (ground as Record<string, unknown>).code ??
+            (ground as Record<string, unknown>).id ??
+            (ground as Record<string, unknown>).ground
+        : ground
+    )
+      .trim()
+      .toLowerCase()
+      .replace(/^ground[_\s-]*/, '');
+
+    return ['8', '10', '11'].includes(normalized) || normalized.includes('rent_arrears');
+  });
+}
+
+/** Resolve arrears from canonical facts, not only legacy boolean flags. */
+export function hasCanonicalArrearsFacts(wizardFacts: Record<string, any>): boolean {
+  const nestedRentArrears = wizardFacts?.issues?.rent_arrears || wizardFacts?.rent_arrears || {};
+  const schedules = [
+    wizardFacts.arrears_items,
+    wizardFacts.arrears_schedule,
+    nestedRentArrears.arrears_items,
+    nestedRentArrears.arrears_schedule,
+  ];
+  const totals = [
+    wizardFacts.total_arrears,
+    wizardFacts.current_arrears,
+    wizardFacts.arrears_total,
+    nestedRentArrears.total_arrears,
+    nestedRentArrears.current_arrears,
+  ];
+  const groundSelections = [
+    wizardFacts.selected_grounds,
+    wizardFacts.grounds,
+    wizardFacts.ground_codes,
+    wizardFacts.selected_ground_codes,
+    wizardFacts.section8_grounds,
+  ];
+
+  return Boolean(
+    wizardFacts.has_arrears === true ||
+      wizardFacts.arrears_claimed === true ||
+      nestedRentArrears.has_arrears === true ||
+      schedules.some((schedule) => Array.isArray(schedule) && schedule.length > 0) ||
+      totals.some(isPositiveAmount) ||
+      groundSelections.some(containsArrearsGround)
+  );
+}
+
+/** Keep normal fulfilment idempotent while ensuring regeneration always rebuilds. */
+export function shouldReuseExistingFulfillment(
+  validation: Pick<FulfillmentValidation, 'isComplete' | 'actualCount'>,
+  forceRegenerate = false
+): boolean {
+  return !forceRegenerate && validation.isComplete && validation.actualCount > 0;
 }
 
 // =============================================================================
@@ -637,13 +705,23 @@ async function generateSection13DocumentsForSnapshot(params: {
   jurisdiction: string;
   productType: Section13ProductSku;
   wizardFacts: Record<string, any>;
+  forceRegenerate?: boolean;
 }): Promise<{
   generatedCount: number;
   outputSnapshot: Section13OutputSnapshot;
   validation: FulfillmentValidation;
   wasAlreadyComplete: boolean;
 }> {
-  const { supabase, orderId, caseId, userId, jurisdiction, productType, wizardFacts } = params;
+  const {
+    supabase,
+    orderId,
+    caseId,
+    userId,
+    jurisdiction,
+    productType,
+    wizardFacts,
+    forceRegenerate = false,
+  } = params;
   const section13State = getDefaultSection13StateForCase(wizardFacts, productType);
   const comparables = await getSection13Comparables(supabase, caseId);
   section13State.preview = computeSection13Preview(section13State, comparables);
@@ -667,7 +745,7 @@ async function generateSection13DocumentsForSnapshot(params: {
       ? await getSection13EvidenceUploads(supabase, caseId)
       : [];
 
-  if (preValidation.isComplete && preValidation.actualCount > 0) {
+  if (shouldReuseExistingFulfillment(preValidation, forceRegenerate)) {
     if (productType === 'section13_defensive') {
       await queueSection13BundleJob({
         supabase,
@@ -964,6 +1042,7 @@ export async function fulfillOrder({
   addOns = [],
   userId,
   tenancyOutputSnapshotId,
+  forceRegenerate = false,
 }: FulfillOrderInput): Promise<FulfillmentResult> {
   const supabase = createAdminClient();
   const primaryRequestedProductType = getAssistedPrepFulfillmentProduct(productType) || productType;
@@ -1051,7 +1130,7 @@ export async function fulfillOrder({
   const route = isGenericClaimsMoneyClaim
     ? 'generic_small_claim'
     : wizardFacts.selected_notice_route || wizardFacts.eviction_route;
-  const hasArrears = wizardFacts.has_arrears || wizardFacts.arrears_claimed;
+  const hasArrears = hasCanonicalArrearsFacts(wizardFacts);
   const caseType = (caseData as any).case_type || null;
 
   // ===========================================================================
@@ -1194,6 +1273,7 @@ export async function fulfillOrder({
         jurisdiction,
         productType: section13Product,
         wizardFacts: wizardFacts as Record<string, any>,
+        forceRegenerate,
       });
 
       logFulfillmentValidation(orderId, caseId, section13Product, result.validation);
@@ -1280,7 +1360,7 @@ export async function fulfillOrder({
     }
   );
 
-  if (preValidation.isComplete && preValidation.actualCount > 0) {
+  if (shouldReuseExistingFulfillment(preValidation, forceRegenerate)) {
     // All expected documents exist - mark as fulfilled and return
     await safeUpdateOrderWithMetadata(
       supabase,
@@ -1319,6 +1399,13 @@ export async function fulfillOrder({
     console.warn(
       `[fulfillment] Partial fulfillment detected for order ${orderId}: ` +
         `${preValidation.actualCount}/${preValidation.expectedCount} documents. Proceeding to generate missing.`
+    );
+  }
+
+  if (forceRegenerate && preValidation.actualCount > 0) {
+    console.log(
+      `[fulfillment] Forced regeneration requested for order ${orderId}; ` +
+        `rebuilding ${preValidation.actualCount} existing document(s) from current case facts.`
     );
   }
 

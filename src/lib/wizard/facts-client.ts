@@ -123,20 +123,20 @@ export async function saveCaseFacts(
     });
 
     if (res.status === 401) {
-      console.warn(
-        '[wizard] Unauthorized saving wizard facts – likely unauthenticated. ' +
-          'Changes will not be persisted.'
-      );
-      return;
+      throw new Error('Your session has expired. Please sign in and save again.');
     }
 
     if (!res.ok) {
-      console.error(
-        'Failed to save wizard facts:',
-        res.status,
-        res.statusText
+      let detail = '';
+      try {
+        const errorBody = await res.json();
+        detail = errorBody?.error || errorBody?.message || '';
+      } catch {
+        // The status is still sufficient when the response is not JSON.
+      }
+      throw new Error(
+        detail || `Failed to save wizard facts (${res.status} ${res.statusText})`
       );
-      return;
     }
 
     // Consume response to avoid unhandled promise rejections
@@ -147,5 +147,6 @@ export async function saveCaseFacts(
     }
   } catch (err) {
     console.error('Error calling /api/wizard/save-facts:', err);
+    throw err;
   }
 }

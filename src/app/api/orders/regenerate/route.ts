@@ -289,7 +289,13 @@ export async function POST(request: Request) {
         productType: fulfillmentProduct,
         userId: resolvedUserId,
         tenancyOutputSnapshotId,
+        forceRegenerate: true,
       });
+
+      // Regeneration must not be satisfied by merely finding an existing pack.
+      if (result.status === 'already_fulfilled') {
+        throw new Error('Regeneration did not rebuild the existing document pack');
+      }
 
       if (result.status === 'incomplete' || result.status === 'requires_action') {
         if (tenancyOutputSnapshotId && shouldRemoveFailedRevision) {
