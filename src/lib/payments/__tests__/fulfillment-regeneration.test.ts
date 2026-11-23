@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  getExpectedDocumentKeys,
   hasCanonicalArrearsFacts,
   shouldReuseExistingFulfillment,
 } from '../fulfillment';
@@ -29,5 +30,14 @@ describe('paid-pack regeneration safeguards', () => {
 
   it('does not add an arrears schedule to a non-arrears case', () => {
     expect(hasCanonicalArrearsFacts({ selected_grounds: ['12', '14'] })).toBe(false);
+  });
+
+  it('expects the generated arrears schedule for an arrears notice pack', () => {
+    expect(
+      getExpectedDocumentKeys('notice_only', 'england', 'section_8', true)
+    ).toContain('arrears_schedule');
+    expect(
+      getExpectedDocumentKeys('notice_only', 'england', 'section_8', false)
+    ).not.toContain('arrears_schedule');
   });
 });

@@ -197,7 +197,11 @@ export function getExpectedDocumentKeys(
   });
 
   return packContents
-    .filter((item) => item.required !== false)
+    .filter(
+      (item) =>
+        item.required !== false ||
+        (item.key === 'arrears_schedule' && hasArrears === true)
+    )
     .map((item) => item.key);
 }
 
