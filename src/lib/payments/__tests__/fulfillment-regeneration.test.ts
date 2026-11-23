@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  buildFulfillmentPackContext,
   getExpectedDocumentKeys,
   hasCanonicalArrearsFacts,
   shouldReuseExistingFulfillment,
@@ -39,5 +40,62 @@ describe('paid-pack regeneration safeguards', () => {
     expect(
       getExpectedDocumentKeys('notice_only', 'england', 'section_8', false)
     ).not.toContain('arrears_schedule');
+  });
+
+  it('does not expect an arrears schedule for non-arrears grounds merely because a balance was recorded', () => {
+    const facts = {
+      selected_grounds: ['13', '14'],
+      total_arrears: 450,
+    };
+    const context = buildFulfillmentPackContext(facts, 'complete_pack');
+
+    expect(context.has_arrears).toBe(false);
+    expect(
+      getExpectedDocumentKeys('complete_pack', 'england', 'section_8', true, context)
+    ).not.toContain('arrears_schedule');
+  });
+
+  it('uses the written-statement manifest for an existing verbal England tenancy', () => {
+    const context = buildFulfillmentPackContext(
+      { england_tenancy_purpose: 'existing_verbal_tenancy' },
+      'england_standard_tenancy_agreement'
+    );
+    const expected = getExpectedDocumentKeys(
+      'england_standard_tenancy_agreement',
+      'england',
+      undefined,
+      false,
+      context
+    );
+
+    expect(expected).toContain('england_written_statement_of_terms');
+    expect(expected).not.toContain('england_standard_tenancy_agreement');
+    expect(expected).not.toContain('england_tenancy_setup_summary');
+  });
+
+  it('matches generator rules for conditional deposit and guarantor documents', () => {
+    const context = buildFulfillmentPackContext(
+      {
+        deposit_taken: true,
+        deposit_amount: 1200,
+        guarantor_required: 'yes',
+      },
+      'england_student_tenancy_agreement'
+    );
+    const expected = getExpectedDocumentKeys(
+      'england_student_tenancy_agreement',
+      'england',
+      undefined,
+      false,
+      context
+    );
+
+    expect(expected).toEqual(
+      expect.arrayContaining([
+        'deposit_protection_certificate',
+        'tenancy_deposit_information',
+        'guarantor_agreement',
+      ])
+    );
   });
 });

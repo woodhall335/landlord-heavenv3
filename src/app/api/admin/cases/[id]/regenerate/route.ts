@@ -165,7 +165,14 @@ export async function POST(
         productType: fulfillmentProduct || '',
         userId: order.user_id || (caseData as any).user_id,
         tenancyOutputSnapshotId,
+        forceRegenerate: true,
       });
+
+      if (result.status === 'already_fulfilled') {
+        throw new Error(
+          'Forced document regeneration reused an existing pack instead of rebuilding it.'
+        );
+      }
 
       if (result.status === 'incomplete' || result.status === 'requires_action') {
         if (tenancyOutputSnapshotId && shouldRemoveFailedRevision) {

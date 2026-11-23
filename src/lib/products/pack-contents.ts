@@ -593,8 +593,7 @@ function getEnglandNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
 }
 
 function getEnglandCompletePackContents(args: GetPackContentsArgs): PackItem[] {
-  void args;
-  return [
+  const items: PackItem[] = [
     {
       key: 'case_summary',
       title: 'Case Summary — Stage 2 Court & Possession',
@@ -621,13 +620,6 @@ function getEnglandCompletePackContents(args: GetPackContentsArgs): PackItem[] {
       title: 'Form N119 - Particulars of Claim',
       description: 'Particulars of claim to accompany the possession claim.',
       category: 'Court forms',
-      required: true,
-    },
-    {
-      key: 'arrears_schedule',
-      title: 'Schedule of Arrears',
-      description: 'Updated arrears position at claim date, with period-by-period figures and running balance for court.',
-      category: 'Evidence',
       required: true,
     },
     {
@@ -701,6 +693,18 @@ function getEnglandCompletePackContents(args: GetPackContentsArgs): PackItem[] {
       required: true,
     },
   ];
+
+  if (args.has_arrears || args.include_arrears_schedule) {
+    items.splice(4, 0, {
+      key: 'arrears_schedule',
+      title: 'Schedule of Arrears',
+      description: 'Updated arrears position at claim date, with period-by-period figures and running balance for court.',
+      category: 'Evidence',
+      required: true,
+    });
+  }
+
+  return items;
 }
 
 function getEnglandMoneyClaimContents(): PackItem[] {

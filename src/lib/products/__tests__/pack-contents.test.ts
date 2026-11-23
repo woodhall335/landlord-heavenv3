@@ -157,7 +157,7 @@ describe('getPackContents', () => {
         expect(items.find(i => i.key === 'section8_notice')?.title).toContain('Form 3A');
         expect(items.find(i => i.key === 'n5_claim')).toBeDefined();
         expect(items.find(i => i.key === 'n119_particulars')).toBeDefined();
-        expect(items.find(i => i.key === 'arrears_schedule')).toBeDefined();
+        expect(items.find(i => i.key === 'arrears_schedule')).toBeUndefined();
         expect(items.find(i => i.key === 'court_forms_guide')).toBeUndefined();
         expect(items.find(i => i.key === 'service_record_notes')).toBeUndefined();
         expect(items.find(i => i.key === 'proof_of_service')).toBeDefined();
@@ -186,6 +186,24 @@ describe('getPackContents', () => {
         expect(items.find(i => i.key === 'evidence_checklist')).toBeDefined();
         // N5B not included for Section 8
         expect(items.find(i => i.key === 'n5b_claim')).toBeUndefined();
+      });
+
+      it('includes the court arrears schedule only for an arrears case', () => {
+        const withoutArrears = getPackContents({
+          product: 'complete_pack',
+          jurisdiction: 'england',
+          route: 'section_8',
+          has_arrears: false,
+        });
+        const withArrears = getPackContents({
+          product: 'complete_pack',
+          jurisdiction: 'england',
+          route: 'section_8',
+          has_arrears: true,
+        });
+
+        expect(withoutArrears.some((item) => item.key === 'arrears_schedule')).toBe(false);
+        expect(withArrears.some((item) => item.key === 'arrears_schedule')).toBe(true);
       });
     });
 

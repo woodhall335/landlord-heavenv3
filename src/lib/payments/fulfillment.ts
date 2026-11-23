@@ -5,7 +5,7 @@ import { mapCaseFactsToScotlandMoneyClaimCase } from '@/lib/documents/money-clai
 import { mapWizardToASTData } from '@/lib/documents/ast-wizard-mapper';
 import { generateResidentialLettingDocuments } from '@/lib/documents/residential-letting-generator';
 import { getPackContents } from '@/lib/products';
-import type { PackItem } from '@/lib/products';
+import type { GetPackContentsArgs, PackItem } from '@/lib/products';
 import {
   resolveEffectiveJurisdiction,
   JurisdictionResolutionError,
@@ -133,6 +133,76 @@ function containsArrearsGround(value: unknown): boolean {
   });
 }
 
+function getGroundSelections(wizardFacts: Record<string, any>): unknown[] {
+  return [
+    wizardFacts.section8_grounds,
+    wizardFacts.section8_grounds_selection,
+    wizardFacts.selected_grounds,
+    wizardFacts.grounds,
+    wizardFacts.ground_codes,
+    wizardFacts.selected_ground_codes,
+    wizardFacts.wales_fault_grounds,
+  ];
+}
+
+function isTruthySelection(value: unknown): boolean {
+  if (value === true || value === 1) return true;
+  if (typeof value !== 'string') return false;
+  return ['true', 'yes', 'y', '1', 'required', 'expected'].includes(
+    value.trim().toLowerCase()
+  );
+}
+
+/** Build the same conditional pack context used by the generators. */
+export function buildFulfillmentPackContext(
+  wizardFacts: Record<string, any>,
+  productType: string
+): Partial<GetPackContentsArgs> {
+  const groundSelections = getGroundSelections(wizardFacts);
+  const hasExplicitGroundSelection = groundSelections.some(
+    (selection) => Array.isArray(selection) && selection.length > 0
+  );
+  const hasSelectedArrearsGround = groundSelections.some(containsArrearsGround);
+  const isEvictionPack = productType === 'notice_only' || productType === 'complete_pack';
+  const hasArrears = isEvictionPack && hasExplicitGroundSelection
+    ? hasSelectedArrearsGround
+    : hasCanonicalArrearsFacts(wizardFacts);
+  const grounds = groundSelections.find(
+    (selection) => Array.isArray(selection) && selection.length > 0
+  ) as unknown[] | undefined;
+  const includeGuarantorDeed =
+    productType === 'england_student_tenancy_agreement'
+      ? isTruthySelection(wizardFacts.guarantor_required)
+      : productType === 'england_premium_tenancy_agreement'
+        ? isTruthySelection(wizardFacts.guarantor_expected)
+        : false;
+
+  return {
+    grounds: grounds?.map((ground) =>
+      String(
+        typeof ground === 'object' && ground !== null
+          ? (ground as Record<string, unknown>).code ??
+              (ground as Record<string, unknown>).id ??
+              (ground as Record<string, unknown>).ground ??
+              ''
+          : ground
+      )
+    ),
+    has_arrears: hasArrears,
+    include_arrears_schedule: hasArrears,
+    englandTenancyPurpose:
+      wizardFacts.england_tenancy_purpose ?? wizardFacts.tenancy?.england_tenancy_purpose,
+    depositTaken: isPositiveAmount(
+      wizardFacts.deposit_amount ?? wizardFacts.tenancy?.deposit_amount
+    ),
+    includeGuarantorDeed,
+    hasInventoryData: Boolean(
+      wizardFacts.inventory ||
+        (Array.isArray(wizardFacts.inventory_rooms) && wizardFacts.inventory_rooms.length > 0)
+    ),
+  };
+}
+
 /** Resolve arrears from canonical facts, not only legacy boolean flags. */
 export function hasCanonicalArrearsFacts(wizardFacts: Record<string, any>): boolean {
   const nestedRentArrears = wizardFacts?.issues?.rent_arrears || wizardFacts?.rent_arrears || {};
@@ -187,20 +257,23 @@ export function getExpectedDocumentKeys(
   productType: string,
   jurisdiction: string,
   route?: string,
-  hasArrears?: boolean
+  hasArrears?: boolean,
+  packContext: Partial<GetPackContentsArgs> = {}
 ): string[] {
   const packContents: PackItem[] = getPackContents({
+    ...packContext,
     product: productType,
     jurisdiction,
     route,
-    has_arrears: hasArrears,
+    has_arrears: packContext.has_arrears ?? hasArrears,
   });
+  const expectsArrearsSchedule = packContext.has_arrears ?? hasArrears;
 
   return packContents
     .filter(
       (item) =>
         item.required !== false ||
-        (item.key === 'arrears_schedule' && hasArrears === true)
+        (item.key === 'arrears_schedule' && expectsArrearsSchedule === true)
     )
     .map((item) => item.key);
 }
@@ -209,12 +282,19 @@ function getExpectedDocumentKeysForProducts(
   productTypes: string[],
   jurisdiction: string,
   route?: string,
-  hasArrears?: boolean
+  hasArrears?: boolean,
+  wizardFacts: Record<string, any> = {}
 ): string[] {
   return Array.from(
     new Set(
       productTypes.flatMap((productType) =>
-        getExpectedDocumentKeys(productType, jurisdiction, route, hasArrears)
+        getExpectedDocumentKeys(
+          productType,
+          jurisdiction,
+          route,
+          hasArrears,
+          buildFulfillmentPackContext(wizardFacts, productType)
+        )
       )
     )
   );
@@ -248,10 +328,17 @@ async function validateFulfillmentCompleteness(
   jurisdiction: string,
   route?: string,
   hasArrears?: boolean,
+  wizardFacts: Record<string, any> = {},
   scope?: { orderId?: string; tenancyOutputSnapshotId?: string | null }
 ): Promise<FulfillmentValidation> {
   // Get expected documents from pack-contents (single source of truth)
-  const expectedKeys = getExpectedDocumentKeys(productType, jurisdiction, route, hasArrears);
+  const expectedKeys = getExpectedDocumentKeys(
+    productType,
+    jurisdiction,
+    route,
+    hasArrears,
+    buildFulfillmentPackContext(wizardFacts, productType)
+  );
 
   // Get actual documents from database
   let documentsQuery = supabase
@@ -308,9 +395,16 @@ async function validateFulfillmentCompletenessForProducts(
   jurisdiction: string,
   route?: string,
   hasArrears?: boolean,
+  wizardFacts: Record<string, any> = {},
   scope?: { orderId?: string; tenancyOutputSnapshotId?: string | null }
 ): Promise<FulfillmentValidation> {
-  const expectedKeys = getExpectedDocumentKeysForProducts(productTypes, jurisdiction, route, hasArrears);
+  const expectedKeys = getExpectedDocumentKeysForProducts(
+    productTypes,
+    jurisdiction,
+    route,
+    hasArrears,
+    wizardFacts
+  );
 
   let documentsQuery = supabase
     .from('documents')
@@ -1358,6 +1452,7 @@ export async function fulfillOrder({
     jurisdiction,
     route,
     hasArrears,
+    wizardFacts,
     {
       orderId,
       tenancyOutputSnapshotId: tenancyOutputSnapshot?.id || null,
@@ -1521,6 +1616,7 @@ export async function fulfillOrder({
       jurisdiction,
       route,
       hasArrears,
+      wizardFacts,
       {
         orderId,
         tenancyOutputSnapshotId: tenancyOutputSnapshot?.id || null,
@@ -1637,6 +1733,7 @@ export async function fulfillOrder({
         jurisdiction,
         route,
         hasArrears,
+        wizardFacts,
         {
           orderId,
           tenancyOutputSnapshotId: tenancyOutputSnapshot?.id || null,
