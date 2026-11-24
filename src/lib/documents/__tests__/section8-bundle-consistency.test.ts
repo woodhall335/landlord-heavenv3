@@ -165,6 +165,17 @@ describe('Section 8 bundle consistency', () => {
     expect(content).toContain('{{#if (eq pack_stage "stage1")}}');
     expect(content).toContain('If you need to go to court');
     expect(content).toContain('continues the case started with the notice');
+    expect(content).toContain('lh-s8-next-guide');
+    expect(content).toContain('class="s8-page-watermark"');
+  });
+
+  test('service-continuity template uses the lower-page evidence-chain watermark', () => {
+    const templatePath = path.join(TEMPLATES_BASE, 'eviction/service_record_notes.hbs');
+    const content = fs.readFileSync(templatePath, 'utf-8');
+
+    expect(content).toContain('lh-s8-service-continuity');
+    expect(content).toContain('class="s8-page-watermark"');
+    expect(content).toContain('watermark-line');
   });
 
   test.each([

@@ -65,6 +65,11 @@ describe('support document theming', () => {
     expect(themed).toContain('support-001');
     expect(themed).toContain('class="lh-brand-logo"');
     expect(themed).toContain('class="lh-family-artwork"');
+    expect(themed).toContain('class="lh-family-artwork-wash"');
+    expect(themed).toContain('font-family: Georgia, serif;');
+    expect(themed).toContain('font-size: 9.7pt;');
+    expect(themed).toContain('body.lh-support-doc h1 {');
+    expect(themed).toContain('font-size: 20pt;');
     expect(themed).toContain('data:image/png;base64,');
     expect(themed).toContain('.lh-brand-mark {\n  width: 168px;');
     expect(themed).toContain('border-radius: 0;');
@@ -216,6 +221,7 @@ describe('support document theming', () => {
         jurisdiction: 'England',
       });
       expect(themed).toContain(`aria-label="${artworkLabel}"`);
+      expect(themed).toContain('class="lh-family-artwork-wash"');
     }
   });
 

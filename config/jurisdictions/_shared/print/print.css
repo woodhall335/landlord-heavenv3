@@ -346,8 +346,8 @@ em {
 
 body.lh-support-doc {
   font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-  font-size: 10pt;
-  line-height: 1.55;
+  font-size: 9.7pt;
+  line-height: 1.48;
   --lh-surface: #f6f1ff;
   --lh-surface-strong: #ede4ff;
   --lh-panel: #fbfaff;
@@ -372,9 +372,26 @@ body.lh-support-doc h1,
 body.lh-support-doc h2,
 body.lh-support-doc h3,
 body.lh-support-doc h4 {
+  font-family: Georgia, serif;
+  font-weight: 700;
   text-transform: none;
   letter-spacing: 0;
   color: var(--lh-text-strong);
+}
+
+body.lh-support-doc h1 {
+  font-size: 20pt;
+  line-height: 1.08;
+}
+
+body.lh-support-doc h2 {
+  font-size: 12pt;
+  line-height: 1.18;
+}
+
+body.lh-support-doc h3 {
+  font-size: 10.5pt;
+  line-height: 1.22;
 }
 
 .lh-pack-masthead {
@@ -1377,7 +1394,7 @@ body.lh-support-doc.lh-s8-premium.lh-s8-validity .checklist-box .heading {
 }
 
 body.lh-support-doc.lh-s8-premium.lh-s8-compliance {
-  font-size: 9pt;
+  font-size: 9.7pt;
 }
 
 body.lh-support-doc.lh-s8-premium.lh-s8-compliance .items {
@@ -1388,7 +1405,7 @@ body.lh-support-doc.lh-s8-premium.lh-s8-compliance .items {
 body.lh-support-doc.lh-s8-premium.lh-s8-compliance .item {
   margin-bottom: 0.25em;
   padding-top: 0.4em;
-  font-size: 8.35pt;
+  font-size: 8.8pt;
   line-height: 1.32;
 }
 
@@ -1437,12 +1454,60 @@ body.lh-support-doc.lh-s8-premium.lh-s8-one-page .note-box:last-child {
   padding-bottom: 1.05em;
 }
 
+body.lh-support-doc.lh-s8-premium .s8-page-watermark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+body.lh-support-doc.lh-s8-premium .s8-page-watermark svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+body.lh-support-doc.lh-s8-premium .s8-page-watermark .watermark-wash {
+  fill: var(--s8-lavender);
+  opacity: 0.72;
+}
+
+body.lh-support-doc.lh-s8-premium .s8-page-watermark .watermark-line {
+  fill: none;
+  stroke: var(--s8-purple);
+  stroke-width: 1.35;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.2;
+  vector-effect: non-scaling-stroke;
+}
+
+body.lh-support-doc.lh-s8-premium.lh-s8-next-guide .s8-page-watermark {
+  height: 68mm;
+  margin: 5mm 0 3mm;
+}
+
 body.lh-support-doc.lh-s8-premium.lh-s8-next-guide .handoff-box {
-  margin-top: 82mm;
+  margin-top: 0;
+}
+
+body.lh-support-doc.lh-s8-premium.lh-s8-service-continuity .s8-page-watermark {
+  position: fixed;
+  top: auto;
+  bottom: 12mm;
+  left: 0;
+  width: 100%;
+  height: 43mm;
+  margin: 0;
+  pointer-events: none;
 }
 
 body.lh-support-doc.lh-s8-premium.lh-s8-service-continuity .note-box:last-child {
-  margin-top: 20mm;
+  margin-top: 0;
+  position: relative;
+  z-index: 1;
 }
 
 body.lh-support-doc.lh-s8-premium.lh-s8-validity .summary-box,
