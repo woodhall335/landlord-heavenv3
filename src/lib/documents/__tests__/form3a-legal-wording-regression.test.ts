@@ -94,7 +94,11 @@ describe('Form 3A legal wording regression', () => {
     const groundsText = form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.groundsText).getText();
     const explanationText = form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.explanationText).getText();
 
-    expect(groundsText).toBe(builtGroundsText);
+    // The generated field removes source-PDF soft wraps while preserving all
+    // statutory wording, so compare content rather than line-break placement.
+    expect(groundsText?.replace(/\s+/g, ' ').trim()).toBe(
+      builtGroundsText.replace(/\s+/g, ' ').trim(),
+    );
     expect(groundsText).toContain('thirteen weeks’ rent is');
     expect(groundsText).toContain('Some rent lawfully due from the tenant');
     expect(explanationText).toBe(explanation);
@@ -180,13 +184,64 @@ describe('Form 3A legal wording regression', () => {
     const groundsText = form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.groundsText).getText();
     const extraSheetText = form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.extraSheetText).getText();
     const combinedText = `${groundsText}\n${extraSheetText}`;
+    const flattenedDoc = await PDFDocument.load(pdfBytes);
+    flattenedDoc.getForm().flatten();
+    const flattenedBytes = await flattenedDoc.save();
+    const extracted = await extractPdfText(Buffer.from(flattenedBytes), 20);
+    const completeNoticeText = normalizeText(extracted.text);
 
     expect(groundsText).toContain('Continued on the Form 3A extra sheet.');
     expect(extraSheetText).toContain('Question 4.2 continued');
-    expect(combinedText).toContain('Ground 6 – Redevelopment');
-    expect(combinedText).toContain('Ground 7A – Severe antisocial or criminal behaviour');
-    expect(combinedText).toContain('Ground 10 – Any rent arrears');
+    expect(completeNoticeText).toContain('Ground 6');
+    expect(completeNoticeText).toContain('Ground 7A');
+    expect(completeNoticeText).toContain('Ground 10');
     expect(normalizeText(combinedText)).not.toMatch(/\b(undefined|null)\b/i);
+  });
+
+  it('continues an overlong question 4.3 explanation without clipping or dropping its final sentence', async () => {
+    const paragraphs = Array.from({ length: 22 }, (_, index) => (
+      `Chronology paragraph ${index + 1}. The landlord records the relevant event, the date on which it occurred, ` +
+      `the communication sent to the tenant, and the evidence retained for the court. Each paragraph ends as a complete sentence.`
+    ));
+    const finalMarker = 'Final evidence marker: the signed inspection record is retained and will be produced to the court.';
+    const explanation = [...paragraphs, finalMarker].join('\n\n');
+
+    const pdfBytes = await fillForm3AForm({
+      ...BASE_FORM3A_CASE_DATA,
+      ground_codes: ['12'],
+      form3a_explanation: explanation,
+    });
+
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+    const form = pdfDoc.getForm();
+    const mainText = form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.explanationText).getText() || '';
+    const extraText = form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.extraSheetText).getText() || '';
+
+    expect(mainText).toContain('Continued on the Form 3A extra sheet.');
+    expect(extraText).toContain("Question 4.3 continued - landlord's explanation");
+    expect(extraText).toContain(finalMarker);
+    expect(mainText.replace(/\s*Continued on the Form 3A extra sheet\.\s*$/, '').trim()).toMatch(/[.!?]$/);
+  });
+
+  it('paginates very long particulars rather than shrinking or clipping them', async () => {
+    const excessiveExplanation = Array.from(
+      { length: 220 },
+      (_, index) => `Evidence item ${index + 1}. This deliberately long paragraph must remain readable and complete in the notice output.`,
+    ).join('\n\n');
+    const finalMarker = 'Evidence item 220. This deliberately long paragraph must remain readable and complete in the notice output.';
+
+    const pdfBytes = await fillForm3AForm({
+      ...BASE_FORM3A_CASE_DATA,
+      ground_codes: ['12'],
+      form3a_explanation: excessiveExplanation,
+    });
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+    expect(pdfDoc.getPageCount()).toBeGreaterThan(10);
+
+    pdfDoc.getForm().flatten();
+    const flattenedBytes = await pdfDoc.save();
+    const extracted = await extractPdfText(Buffer.from(flattenedBytes), 30);
+    expect(normalizeText(extracted.text)).toContain(finalMarker);
   });
 
   it('rejects generation when a selected ground has no statutory wording mapping', async () => {

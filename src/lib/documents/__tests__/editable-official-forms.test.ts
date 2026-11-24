@@ -24,6 +24,7 @@ import {
   listFormFieldNames,
 } from '../official-forms-filler';
 import { FORM3A_OFFICIAL_FIELD_NAMES } from '../england-official-form-fillers';
+import { extractPdfText } from '@/lib/evidence/extract-pdf-text';
 
 // =============================================================================
 // TEST DATA
@@ -453,7 +454,12 @@ describe('Editable Official Forms - No Flatten', () => {
       });
 
       expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.groundsText).getText()).toContain('Continued on the Form 3A extra sheet.');
-      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.extraSheetText).getText()).toContain('Ground 17');
+      const flattenedDoc = await PDFDocument.load(pdfBytes);
+      flattenedDoc.getForm().flatten();
+      const flattenedBytes = await flattenedDoc.save();
+      const extractedNotice = await extractPdfText(Buffer.from(flattenedBytes), 30);
+      const completeNoticeText = extractedNotice.text.replace(/\s+/g, ' ');
+      expect(completeNoticeText).toContain('Ground 17');
       expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.explanationText).getText()).toContain(
         'the notice needs each official Form 3A checkbox to align'
       );
@@ -480,9 +486,7 @@ describe('Editable Official Forms - No Flatten', () => {
       expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.jointSignatory3).getText()).toBe(
         'Joint Three\n3 Joint Street\nLeeds\nLS1 2AD\nagent'
       );
-    expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.extraSheetText).getText()).toContain(
-      'See attached chronology, exhibit list, and account summary.'
-    );
+      expect(completeNoticeText).toContain('See attached chronology, exhibit list, and account summary.');
       expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.extraSheetSignature).getText()).toBe('Amir Agent');
       expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.extraSheetDate).getText()).toBe('02062026');
     });
