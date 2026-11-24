@@ -721,22 +721,22 @@ function buildSupportDocumentFamilyArtwork(family: SupportDocumentFamily): strin
   const commonStart = '<svg class="lh-family-artwork" viewBox="0 0 64 52" role="img"';
 
   if (family === 'tenancy') {
-    return `${commonStart} aria-label="Tenancy home and key"><path d="M5 27 25 10l20 17v19H10V27"/><path d="M19 46V31h12v15M46 35a7 7 0 1 0 0 14 7 7 0 0 0 0-14Zm7 7h8m-3 0v5"/></svg>`;
+    return `${commonStart} aria-label="Tenancy home and key"><path class="lh-family-artwork-wash" d="M4 11C13 1 36 0 51 8c15 8 17 27 5 37-12 10-37 8-48-3C-1 33-2 19 4 11Z"/><path d="M5 27 25 10l20 17v19H10V27"/><path d="M19 46V31h12v15M46 35a7 7 0 1 0 0 14 7 7 0 0 0 0-14Zm7 7h8m-3 0v5"/></svg>`;
   }
 
   if (family === 'money-claim') {
-    return `${commonStart} aria-label="Money claim ledger"><rect x="7" y="5" width="33" height="42" rx="2"/><path d="M15 15h17M15 24h17M15 33h17M25 8v36"/><circle cx="49" cy="34" r="9"/><path d="M46 30h6m-6 4h5m-4-8v16"/></svg>`;
+    return `${commonStart} aria-label="Money claim ledger"><path class="lh-family-artwork-wash" d="M5 8C17-1 40 0 54 10c13 10 12 29-1 38-14 8-39 4-48-8C-2 30-2 14 5 8Z"/><rect x="7" y="5" width="33" height="42" rx="2"/><path d="M15 15h17M15 24h17M15 33h17M25 8v36"/><circle cx="49" cy="34" r="9"/><path d="M46 30h6m-6 4h5m-4-8v16"/></svg>`;
   }
 
   if (family === 'rent-increase') {
-    return `${commonStart} aria-label="Rent increase home and upward arrow"><path d="M5 29 24 13l19 16v18H10V29M18 47V34h12v13"/><path d="M48 39V10m-8 8 8-8 8 8"/></svg>`;
+    return `${commonStart} aria-label="Rent increase home and upward arrow"><path class="lh-family-artwork-wash" d="M4 12C14 1 35-1 51 7c16 9 18 27 6 38-12 11-37 9-49-1C-2 35-3 20 4 12Z"/><path d="M5 29 24 13l19 16v18H10V29M18 47V34h12v13"/><path d="M48 39V10m-8 8 8-8 8 8"/></svg>`;
   }
 
   if (family === 'possession') {
-    return `${commonStart} aria-label="Possession notice and evidence file"><rect x="6" y="7" width="29" height="38" rx="2"/><path d="M13 17h15M13 25h15M13 33h11"/><path d="M34 27h12l5 5h9v16H34zM45 40l4 4 8-9"/></svg>`;
+    return `${commonStart} aria-label="Possession notice and evidence file"><path class="lh-family-artwork-wash" d="M5 8C16-1 39 0 53 9c14 10 14 29 1 39-14 9-39 5-49-7C-2 31-2 15 5 8Z"/><rect x="6" y="7" width="29" height="38" rx="2"/><path d="M13 17h15M13 25h15M13 33h11"/><path d="M34 27h12l5 5h9v16H34zM45 40l4 4 8-9"/></svg>`;
   }
 
-  return `${commonStart} aria-label="Supporting document"><rect x="8" y="5" width="34" height="42" rx="2"/><path d="M16 16h18M16 25h18M16 34h12"/><circle cx="49" cy="37" r="10"/><path d="m44 37 4 4 7-9"/></svg>`;
+  return `${commonStart} aria-label="Supporting document"><path class="lh-family-artwork-wash" d="M5 8C16-1 40 0 54 10c13 10 12 29-1 38-14 8-39 4-48-8C-2 30-2 14 5 8Z"/><rect x="8" y="5" width="34" height="42" rx="2"/><path d="M16 16h18M16 25h18M16 34h12"/><circle cx="49" cy="37" r="10"/><path d="m44 37 4 4 7-9"/></svg>`;
 }
 
 let supportDocumentLogoDataUri: string | null | undefined;

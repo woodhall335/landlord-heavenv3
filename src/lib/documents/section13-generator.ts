@@ -902,10 +902,12 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
   const imageCache = new Map<string, PDFImage | null>();
   let page = pdfDoc.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
   let cursorY = PAGE_HEIGHT - MARGIN_Y;
-  const titleFontSize = 17;
-  const headingFontSize = 13;
-  const bodyFontSize = 10.25;
-  const bodyLineHeight = 15.2;
+  const compactFrontPage = title === 'Rent Increase Summary';
+  const titleFontSize = compactFrontPage ? 16.5 : 17;
+  const headingFontSize = compactFrontPage ? 12.2 : 13;
+  const bodyFontSize = compactFrontPage ? 9.35 : 10.25;
+  const bodyLineHeight = compactFrontPage ? 13.15 : 15.2;
+  const contentBottom = compactFrontPage ? 43 : MARGIN_Y;
   const brandText = rgb(0.204, 0.141, 0.373);
   const brandTextStrong = rgb(0.141, 0.09, 0.247);
   const brandMuted = rgb(0.424, 0.365, 0.561);
@@ -916,7 +918,7 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
   const brandBorderStrong = rgb(0.776, 0.714, 0.937);
 
   const drawRentIncreaseHeaderArtwork = () => {
-    const originX = PAGE_WIDTH - MARGIN_X - 50;
+    const originX = PAGE_WIDTH - MARGIN_X - 54;
     const originY = PAGE_HEIGHT - MARGIN_Y - 27;
     const line = (x1: number, y1: number, x2: number, y2: number) => {
       page.drawLine({
@@ -926,6 +928,14 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
         color: brandText,
       });
     };
+
+    page.drawEllipse({
+      x: originX + 25,
+      y: originY + 12,
+      xScale: 31,
+      yScale: 27,
+      color: brandSurface,
+    });
 
     line(1, 10, 15, 22);
     line(15, 22, 29, 10);
@@ -938,6 +948,7 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
     line(38, 1, 38, 23);
     line(32, 17, 38, 23);
     line(38, 23, 44, 17);
+    line(31, 1, 45, 1);
   };
 
   const getComparableImage = async (source: string | null): Promise<PDFImage | null> => {
@@ -975,7 +986,7 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
         width: scaled.width,
         height: scaled.height,
       });
-      headerY -= scaled.height + 18;
+      headerY -= scaled.height + (compactFrontPage ? 14 : 18);
     } else {
       page.drawText(safeText(SECTION13_BRAND_LABEL), {
         x: MARGIN_X,
@@ -1006,7 +1017,7 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
       color: brandBorder,
     });
 
-    cursorY = headerY - 20;
+    cursorY = headerY - (compactFrontPage ? 14 : 20);
   };
 
   const addPage = () => {
@@ -1015,7 +1026,7 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
   };
 
   const ensureSpace = (needed: number) => {
-    if (cursorY - needed < MARGIN_Y) {
+    if (cursorY - needed < contentBottom) {
       addPage();
     }
   };
@@ -1212,14 +1223,14 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
         size: headingFontSize,
         color: brandTextStrong,
       });
-      cursorY -= 10;
+      cursorY -= compactFrontPage ? 7 : 10;
       page.drawLine({
         start: { x: MARGIN_X, y: cursorY },
         end: { x: PAGE_WIDTH - MARGIN_X, y: cursorY },
         thickness: 0.7,
         color: brandBorder,
       });
-      cursorY -= 16;
+      cursorY -= compactFrontPage ? 11 : 16;
     }
 
     if (block.variant === 'comparable_cards') {
@@ -1244,7 +1255,7 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
 
     if (block.variant === 'intro' || block.variant === 'callout') {
       const panelPaddingX = 12;
-      const panelPaddingY = block.variant === 'callout' ? 18 : 12;
+      const panelPaddingY = block.variant === 'callout' ? 18 : compactFrontPage ? 9 : 12;
       const headingHeight = block.variant === 'callout' && block.heading ? 26 : 0;
       const panelHeight = totalParagraphHeight + panelPaddingY * 2 + headingHeight;
       ensureSpace(panelHeight + 8);
@@ -1282,9 +1293,9 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
           });
           cursorY -= blockLineHeight;
         }
-        cursorY -= 4;
+        cursorY -= compactFrontPage ? 2.5 : 4;
       }
-      cursorY = panelBottom - 18;
+      cursorY = panelBottom - (compactFrontPage ? 11 : 18);
       continue;
     }
 
@@ -1301,11 +1312,11 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
         });
         cursorY -= blockLineHeight;
       }
-      cursorY -= 4;
+      cursorY -= compactFrontPage ? 2.5 : 4;
     }
 
     if (blockIndex < blocks.length - 1) {
-      cursorY -= 2;
+      cursorY -= compactFrontPage ? 1 : 2;
     }
   }
 
