@@ -21,7 +21,7 @@
     /* ===== @PAGE OVERRIDE ===== */
     @page {
       size: A4;
-      margin: 15mm;
+      margin: 10mm;
     }
 
     body {
@@ -229,12 +229,34 @@
     }
   </style>
 </head>
-<body>
+<body class="lh-s8-premium lh-s8-arrears">
 
 <!-- Document Header -->
-<div class="doc-header">
-  <h1>{{#if arrears_schedule}}Schedule of Rent Arrears{{else}}Schedule of Debt{{/if}}</h1>
-  <span class="doc-badge">{{#if pack_context_label}}{{pack_context_label}}{{else}}Possession support schedule{{/if}}</span>
+<div class="s8-document-intro s8-document-intro--compact">
+  <div>
+    <div class="s8-eyebrow">{{#if pack_context_label}}{{pack_context_label}}{{else}}Possession supporting document{{/if}}</div>
+    <h1>{{#if arrears_schedule}}Rent arrears schedule{{else}}Schedule of debt{{/if}}</h1>
+    <p>A clear record of rent due, payments received and the running balance.</p>
+  </div>
+  <svg class="s8-artwork" viewBox="0 0 150 125" role="img" aria-label="Rent ledger, calculator and property key">
+    <path class="wash" d="M19 19c31-19 82-13 108 13 28 28 22 68-8 88-32 21-81 9-103-23-18-26-17-64 3-78z"/>
+    <rect class="ink" x="17" y="19" width="70" height="81" rx="3" fill="white"/>
+    <line class="accent" x1="29" y1="37" x2="76" y2="37"/>
+    <line class="accent" x1="29" y1="52" x2="76" y2="52"/>
+    <line class="accent" x1="29" y1="67" x2="76" y2="67"/>
+    <line class="accent" x1="29" y1="82" x2="76" y2="82"/>
+    <line class="ink" x1="58" y1="29" x2="58" y2="92"/>
+    <rect class="ink" x="97" y="35" width="39" height="53" rx="4" fill="white"/>
+    <rect class="accent" x="104" y="43" width="25" height="11" rx="1" fill="none"/>
+    <circle class="accent" cx="108" cy="65" r="2" fill="white"/>
+    <circle class="accent" cx="119" cy="65" r="2" fill="white"/>
+    <circle class="accent" cx="129" cy="65" r="2" fill="white"/>
+    <circle class="accent" cx="108" cy="76" r="2" fill="white"/>
+    <circle class="accent" cx="119" cy="76" r="2" fill="white"/>
+    <circle class="accent" cx="129" cy="76" r="2" fill="white"/>
+    <circle class="ink" cx="91" cy="101" r="9" fill="white"/>
+    <path class="ink" d="M100 101h34M124 101v8M132 101v6" fill="none"/>
+  </svg>
 </div>
 
 <!-- Case Details -->
@@ -341,19 +363,16 @@
 </div>
 {{/if}}
 
-<!-- Payment Allocation Note -->
-<div class="info-box">
-  <strong>Payment Allocation Method:</strong>
+<!-- Calculation and evidence notes -->
+<div class="info-box arrears-notes">
+  <p><strong>Payment Allocation Method:</strong>
   {{#if arrears_schedule_is_summary}}
   The pack records the total arrears figure entered by the landlord. If a full ledger is available, check it against this total and attach it before filing.
   {{else}}
   Payments have been allocated using the FIFO (First In, First Out) method, applying payments to the oldest outstanding rent periods first. This is the standard court-accepted method for arrears allocation.
   {{/if}}
-</div>
-
-<!-- Evidence Note -->
-<div class="info-box">
-  <strong>Evidence Requirements:</strong> Attach proof of payments received, bank statements, and rent ledgers behind this schedule. The County Court expects the arrears figure to be supported by clear tenancy and rent-account evidence.
+  </p>
+  <p><strong>Evidence Requirements:</strong> Attach proof of payments received, bank statements, and rent ledgers behind this schedule. The County Court expects the arrears figure to be supported by clear tenancy and rent-account evidence.</p>
 </div>
 
 <!-- Footer -->

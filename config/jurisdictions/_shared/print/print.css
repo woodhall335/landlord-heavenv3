@@ -908,6 +908,434 @@ body.lh-support-doc .lh-fragment-support-doc > p:first-of-type {
 }
 
 /* ============================================================================
+   SECTION 8 EDITORIAL SUPPORT PACK
+   A restrained, illustration-led system for non-prescribed support documents.
+   Official forms are deliberately excluded from this class.
+   ============================================================================ */
+
+body.lh-support-doc.lh-s8-premium {
+  --s8-ink: #231942;
+  --s8-purple: #6d35d8;
+  --s8-lavender: #f5f1fb;
+  --s8-line: #d8ccf1;
+  --s8-muted: #665d76;
+  --s8-sage: #eef6ef;
+  --s8-sage-line: #9eb8a2;
+  --s8-amber: #fff7e8;
+  --s8-amber-line: #d59b36;
+  color: var(--s8-ink);
+  font-size: 9.7pt;
+  line-height: 1.48;
+}
+
+body.lh-support-doc.lh-s8-premium .lh-pack-masthead {
+  align-items: center;
+  margin-bottom: 1.25em;
+  padding-bottom: 0.65em;
+  border-bottom: 1px solid var(--s8-line);
+}
+
+body.lh-support-doc.lh-s8-premium .lh-brand-mark {
+  width: 150px;
+}
+
+body.lh-support-doc.lh-s8-premium .lh-pack-meta-item {
+  min-width: 0;
+  padding: 0 0 0 0.75em;
+  border: 0;
+  border-left: 1px solid var(--s8-line);
+  background: transparent !important;
+}
+
+body.lh-support-doc.lh-s8-premium .lh-pack-meta-item span {
+  font-size: 6.7pt;
+  letter-spacing: 0.11em;
+}
+
+body.lh-support-doc.lh-s8-premium .lh-pack-meta-item strong {
+  font-size: 8pt;
+  font-weight: 600;
+}
+
+body.lh-support-doc.lh-s8-premium h1,
+body.lh-support-doc.lh-s8-premium .hero h1,
+body.lh-support-doc.lh-s8-premium .doc-header h1 {
+  margin: 0 0 0.22em;
+  font-family: Georgia, serif;
+  font-size: 20pt;
+  font-weight: 700;
+  line-height: 1.08;
+  color: var(--s8-ink) !important;
+}
+
+body.lh-support-doc.lh-s8-premium h2,
+body.lh-support-doc.lh-s8-premium h3 {
+  font-family: Georgia, serif;
+  color: var(--s8-ink) !important;
+}
+
+body.lh-support-doc.lh-s8-premium .s8-eyebrow {
+  margin: 0 0 0.42em;
+  font-size: 7.2pt;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--s8-purple);
+}
+
+body.lh-support-doc.lh-s8-premium .s8-document-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 126px;
+  align-items: center;
+  gap: 1.15em;
+  margin: 0 0 1.15em;
+  padding: 0 0 0.95em;
+  border: 0;
+  border-bottom: 1px solid var(--s8-line);
+  background: #fff;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+body.lh-support-doc.lh-s8-premium .s8-document-intro--compact {
+  grid-template-columns: minmax(0, 1fr) 105px;
+}
+
+body.lh-support-doc.lh-s8-premium .s8-document-intro p {
+  margin: 0.25em 0 0;
+  color: var(--s8-muted);
+}
+
+body.lh-support-doc.lh-s8-premium .s8-document-intro h1,
+body.lh-support-doc.lh-s8-premium .section-title,
+body.lh-support-doc.lh-s8-premium .section h2,
+body.lh-support-doc.lh-s8-premium .step-card h3,
+body.lh-support-doc.lh-s8-premium .check-card h2,
+body.lh-support-doc.lh-s8-premium .note-box h2,
+body.lh-support-doc.lh-s8-premium .handoff-box h3 {
+  text-align: left;
+}
+
+body.lh-support-doc.lh-s8-premium .s8-artwork {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--s8-purple);
+}
+
+body.lh-support-doc.lh-s8-premium .s8-artwork .ink {
+  stroke: var(--s8-ink);
+}
+
+body.lh-support-doc.lh-s8-premium .s8-artwork .accent {
+  stroke: var(--s8-purple);
+}
+
+body.lh-support-doc.lh-s8-premium .s8-artwork .wash {
+  fill: var(--s8-lavender);
+  stroke: none;
+}
+
+body.lh-support-doc.lh-s8-premium .s8-artwork path,
+body.lh-support-doc.lh-s8-premium .s8-artwork rect,
+body.lh-support-doc.lh-s8-premium .s8-artwork circle,
+body.lh-support-doc.lh-s8-premium .s8-artwork line,
+body.lh-support-doc.lh-s8-premium .s8-artwork polyline {
+  vector-effect: non-scaling-stroke;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+body.lh-support-doc.lh-s8-premium .hero,
+body.lh-support-doc.lh-s8-premium .doc-header {
+  margin-bottom: 1.15em;
+  padding: 0 0 0.9em;
+  border: 0;
+  border-bottom: 1px solid var(--s8-line) !important;
+  background: #fff !important;
+}
+
+body.lh-support-doc.lh-s8-premium .hero h2,
+body.lh-support-doc.lh-s8-premium .doc-badge,
+body.lh-support-doc.lh-s8-premium .chip {
+  display: block;
+  margin: 0 0 0.45em;
+  padding: 0;
+  border: 0;
+  background: transparent !important;
+  color: var(--s8-purple) !important;
+  font-family: Arial, "Helvetica Neue", sans-serif;
+  font-size: 7.2pt;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+body.lh-support-doc.lh-s8-premium .summary-box,
+body.lh-support-doc.lh-s8-premium .case-details {
+  margin: 0 0 0.75em;
+  padding: 0.7em 0.85em;
+  border: 0;
+  border-top: 1px solid var(--s8-line);
+  border-bottom: 1px solid var(--s8-line);
+  background: var(--s8-lavender) !important;
+}
+
+body.lh-support-doc.lh-s8-premium .summary-grid,
+body.lh-support-doc.lh-s8-premium .case-details-grid {
+  gap: 0.35em 0.8em;
+}
+
+body.lh-support-doc.lh-s8-premium .section-title,
+body.lh-support-doc.lh-s8-premium .section h2,
+body.lh-support-doc.lh-s8-premium .checklist-box .heading {
+  margin: 1.1em 0 0.5em;
+  padding: 0 0 0.35em;
+  border: 0;
+  border-bottom: 1px solid var(--s8-line);
+  background: transparent !important;
+  color: var(--s8-ink) !important;
+  font-family: Georgia, serif;
+  font-size: 11.5pt;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+body.lh-support-doc.lh-s8-premium .step-card,
+body.lh-support-doc.lh-s8-premium .check-card,
+body.lh-support-doc.lh-s8-premium .note-box,
+body.lh-support-doc.lh-s8-premium .handoff-box,
+body.lh-support-doc.lh-s8-premium .item,
+body.lh-support-doc.lh-s8-premium .action-box,
+body.lh-support-doc.lh-s8-premium .legend-item {
+  border: 0;
+  border-top: 1px solid var(--s8-line);
+  background: #fff;
+  box-shadow: none;
+}
+
+body.lh-support-doc.lh-s8-premium .items {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45em;
+}
+
+body.lh-support-doc.lh-s8-premium .item,
+body.lh-support-doc.lh-s8-premium .action-box,
+body.lh-support-doc.lh-s8-premium .legend-item {
+  margin-bottom: 0.45em;
+  padding: 0.65em 0;
+}
+
+body.lh-support-doc.lh-s8-premium .notice-periods ul {
+  columns: 2;
+  column-gap: 1.6em;
+  margin-bottom: 0;
+}
+
+body.lh-support-doc.lh-s8-premium .notice-periods li {
+  break-inside: avoid;
+  margin: 0 0 0.28em;
+}
+
+body.lh-support-doc.lh-s8-premium .steps-grid,
+body.lh-support-doc.lh-s8-premium .steps {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75em 1em;
+}
+
+body.lh-support-doc.lh-s8-premium .step-number {
+  padding: 0;
+  background: transparent;
+  color: var(--s8-purple);
+  font-size: 7.4pt;
+  letter-spacing: 0.1em;
+}
+
+body.lh-support-doc.lh-s8-premium .risk-box,
+body.lh-support-doc.lh-s8-premium .warning-box,
+body.lh-support-doc.lh-s8-premium .callout.warning {
+  padding: 0.75em 0.9em;
+  border: 0;
+  border-left: 3px solid var(--s8-amber-line);
+  background: var(--s8-amber) !important;
+}
+
+body.lh-support-doc.lh-s8-premium .callout,
+body.lh-support-doc.lh-s8-premium .info-box {
+  border: 0;
+  border-left: 3px solid var(--s8-purple);
+  background: var(--s8-lavender) !important;
+}
+
+body.lh-support-doc.lh-s8-premium .arrears-notes p {
+  margin: 0.2em 0 0.45em;
+}
+
+body.lh-support-doc.lh-s8-premium .callout.success,
+body.lh-support-doc.lh-s8-premium .confirmation-box {
+  border-left-color: var(--s8-sage-line);
+  background: var(--s8-sage) !important;
+}
+
+body.lh-support-doc.lh-s8-premium .checklist-box {
+  border: 0;
+  background: #fff;
+}
+
+body.lh-support-doc.lh-s8-premium .checklist-box .content {
+  padding: 0.2em 0 0;
+}
+
+body.lh-support-doc.lh-s8-premium .checklist li {
+  position: relative;
+  margin: 0;
+  padding: 0.48em 0 0.48em 2em;
+  border-bottom: 1px solid #eee8f7;
+  list-style: none;
+}
+
+body.lh-support-doc.lh-s8-premium .checklist li::before {
+  position: absolute;
+  top: 0.58em;
+  left: 0.2em;
+  width: 0.92em;
+  height: 0.92em;
+  border: 1.2px solid var(--s8-purple);
+  content: "";
+}
+
+body.lh-support-doc.lh-s8-premium .two-column-checks {
+  columns: 2;
+  column-gap: 1.4em;
+}
+
+body.lh-support-doc.lh-s8-premium .two-column-checks li {
+  break-inside: avoid;
+}
+
+body.lh-support-doc.lh-s8-premium .arrears-table {
+  margin: 0.7em 0;
+  border: 0;
+  border-top: 1px solid var(--s8-line);
+  border-bottom: 1px solid var(--s8-line);
+  border-collapse: collapse;
+}
+
+body.lh-support-doc.lh-s8-premium .arrears-table th {
+  padding: 0.6em 0.55em;
+  border-width: 0 0 1px;
+  background: var(--s8-lavender) !important;
+  color: var(--s8-ink) !important;
+  font-size: 7.8pt;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+body.lh-support-doc.lh-s8-premium .arrears-table td {
+  padding: 0.55em;
+  border-width: 0 0 1px;
+}
+
+body.lh-support-doc.lh-s8-premium .arrears-table .total-row td {
+  border-top: 3px double var(--s8-purple);
+  border-bottom: 3px double var(--s8-purple);
+  background: #fff !important;
+}
+
+body.lh-support-doc.lh-s8-premium .doc-footer {
+  margin-top: 1.25em;
+  padding-top: 0.55em;
+  border-top: 1px solid var(--s8-line);
+  font-size: 7.5pt;
+}
+
+body.lh-support-doc.lh-s8-premium .info-box {
+  margin: 0.75em 0;
+  padding: 0.75em 0.85em;
+}
+
+body.lh-support-doc.lh-s8-premium.lh-s8-arrears {
+  font-size: 9.1pt;
+}
+
+body.lh-support-doc.lh-s8-premium.lh-s8-arrears .s8-document-intro {
+  grid-template-columns: minmax(0, 1fr) 88px;
+  margin-bottom: 0.65em;
+  padding-bottom: 0.55em;
+}
+
+body.lh-support-doc.lh-s8-premium.lh-s8-arrears .case-details,
+body.lh-support-doc.lh-s8-premium.lh-s8-arrears .summary-box {
+  margin-bottom: 0.45em;
+  padding: 0.45em 0.65em;
+}
+
+body.lh-support-doc.lh-s8-premium.lh-s8-arrears .summary-item {
+  padding: 0.38em 0.55em;
+}
+
+body.lh-support-doc.lh-s8-premium.lh-s8-arrears .arrears-table {
+  margin: 0.45em 0;
+  font-size: 7.8pt;
+}
+
+body.lh-support-doc.lh-s8-premium.lh-s8-arrears .arrears-table th,
+body.lh-support-doc.lh-s8-premium.lh-s8-arrears .arrears-table td {
+  padding: 0.42em 0.45em;
+}
+
+body.lh-support-doc.lh-s8-premium.lh-s8-arrears .info-box {
+  margin: 0.45em 0;
+  padding: 0.55em 0.7em;
+  font-size: 8.4pt;
+}
+
+body.lh-support-doc.lh-s8-premium.lh-s8-arrears .doc-footer {
+  margin-top: 0.65em;
+  padding-top: 0.4em;
+}
+
+body.lh-support-doc.lh-s8-premium.lh-s8-validity .checklist li {
+  padding-top: 0.34em;
+  padding-bottom: 0.34em;
+}
+
+body.lh-support-doc.lh-s8-premium.lh-s8-validity .checklist li::before {
+  top: 0.44em;
+}
+
+body.lh-support-doc.lh-s8-premium.lh-s8-validity .section-title {
+  margin-top: 0.8em;
+}
+
+body.lh-support-doc.lh-s8-premium.lh-s8-validity .summary-box,
+body.lh-support-doc.lh-s8-premium.lh-s8-validity .callout {
+  margin-top: 0.45em;
+  margin-bottom: 0.55em;
+}
+
+body.lh-support-doc.lh-s8-premium.lh-s8-validity .notice-periods {
+  padding: 0.55em 0.7em;
+  font-size: 8.2pt;
+  line-height: 1.28;
+}
+
+body.lh-support-doc.lh-s8-premium.lh-s8-validity .notice-periods ul {
+  column-gap: 1em;
+  margin-top: 0.25em;
+}
+
+@media print {
+  body.lh-support-doc.lh-s8-premium .s8-document-intro,
+  body.lh-support-doc.lh-s8-premium .s8-artwork,
+  body.lh-support-doc.lh-s8-premium .step-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+/* ============================================================================
    SPACING UTILITIES
    ============================================================================ */
 

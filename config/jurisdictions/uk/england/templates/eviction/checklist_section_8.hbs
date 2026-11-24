@@ -98,15 +98,16 @@
     }
 
     .section-header-block,
-    .callout-section,
-    .checklist-section {
+    .callout-section {
       page-break-inside: avoid;
       break-inside: avoid;
     }
 
-    .section {
-      page-break-inside: avoid;
-      break-inside: avoid;
+    .checklist-section,
+    .section,
+    .checklist-box {
+      page-break-inside: auto;
+      break-inside: auto;
     }
 
     .checklist-box .heading {
@@ -163,10 +164,28 @@
     }
   </style>
 </head>
-<body>
-  <div class="doc-header">
-    <h1>Service and Validity Checklist</h1>
-    <span class="doc-badge">{{notice_name}}</span>
+<body class="lh-s8-premium lh-s8-validity">
+  <div class="s8-document-intro s8-document-intro--compact">
+    <div>
+      <div class="s8-eyebrow">Section 8 supporting document</div>
+      <h1>Service &amp; validity checklist</h1>
+      <p>Confirm the {{notice_name}} is complete, internally consistent and ready to serve.</p>
+    </div>
+    <svg class="s8-artwork" viewBox="0 0 150 125" role="img" aria-label="Checklist, envelope and calendar">
+      <path class="wash" d="M21 18c29-17 83-10 109 18 24 26 13 65-18 80-36 18-89 4-105-29-11-23-5-55 14-69z"/>
+      <rect class="ink" x="38" y="18" width="68" height="85" rx="3" fill="white"/>
+      <path class="ink" d="M58 18v-8h27v8" fill="white"/>
+      <path class="accent" d="M51 42l6 6 11-14M51 61l6 6 11-14M51 80l6 6 11-14" fill="none"/>
+      <line class="ink" x1="76" y1="42" x2="95" y2="42"/>
+      <line class="ink" x1="76" y1="61" x2="95" y2="61"/>
+      <line class="ink" x1="76" y1="80" x2="95" y2="80"/>
+      <rect class="ink" x="7" y="74" width="45" height="32" rx="2" fill="white"/>
+      <path class="accent" d="M9 77l21 16 20-16" fill="none"/>
+      <rect class="ink" x="93" y="79" width="48" height="38" rx="2" fill="white"/>
+      <line class="accent" x1="94" y1="90" x2="140" y2="90"/>
+      <line class="accent" x1="104" y1="75" x2="104" y2="85"/>
+      <line class="accent" x1="130" y1="75" x2="130" y2="85"/>
+    </svg>
   </div>
 
   <div class="callout callout-section">
@@ -217,7 +236,7 @@
     </dl>
   </div>
 
-  <div class="callout warning callout-section">
+  <div class="callout warning callout-section notice-periods">
     <p><strong>Current England notice periods after 1 May 2026:</strong> use the longest period that applies where multiple grounds are included.</p>
     <ul>
       <li>4 months minimum: Grounds 1, 1A, 2, 2ZA, 2ZB, 2ZC, 2ZD, 4A, 6, 6B.</li>
@@ -255,7 +274,7 @@
     <div class="checklist-box checklist-section">
       <div class="heading">Before You Rely On The Notice</div>
       <div class="content">
-        <ul class="checklist">
+        <ul class="checklist two-column-checks">
           {{#if drafting_model.validityChecklist.validityItems.length}}
             {{#each drafting_model.validityChecklist.validityItems}}
           <li>{{this}}</li>

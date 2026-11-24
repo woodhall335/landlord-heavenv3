@@ -166,4 +166,21 @@ describe('Section 8 bundle consistency', () => {
     expect(content).toContain('If you need to go to court');
     expect(content).toContain('continues the case started with the notice');
   });
+
+  test.each([
+    'eviction/service_instructions_section_8.hbs',
+    'eviction/checklist_section_8.hbs',
+    'eviction/compliance_checklist.hbs',
+    'eviction/service_record_notes.hbs',
+    'eviction/what_happens_next_section_8.hbs',
+    'money_claims/schedule_of_arrears.hbs',
+  ])('%s retains the premium Section 8 support treatment', (templatePath) => {
+    const fullPath = path.join(TEMPLATES_BASE, templatePath);
+    const content = fs.readFileSync(fullPath, 'utf-8');
+
+    expect(content).toContain('lh-s8-premium');
+    expect(content).toContain('s8-document-intro');
+    expect(content).toContain('class="s8-artwork"');
+    expect(content).toMatch(/<svg[\s\S]*role="img"[\s\S]*aria-label=/);
+  });
 });

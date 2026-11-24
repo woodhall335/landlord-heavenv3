@@ -91,12 +91,29 @@
     }
   </style>
 </head>
-<body>
-  <div class="hero">
-    <h2>{{pack_title}}</h2>
-    <h1>What Happens Next</h1>
-    <p><strong>{{status_label}}</strong></p>
-    <p>{{next_step_text}}</p>
+<body class="lh-s8-premium">
+  <div class="s8-document-intro s8-document-intro--compact">
+    <div>
+      <div class="s8-eyebrow">Section 8 supporting document</div>
+      <h1>What happens next</h1>
+      <p><strong>{{status_label}}</strong></p>
+      <p>{{next_step_text}}</p>
+    </div>
+    <svg class="s8-artwork" viewBox="0 0 150 125" role="img" aria-label="Notice timeline leading to the next stage">
+      <path class="wash" d="M19 18c27-16 75-10 102 12 31 26 30 67 2 88-30 22-81 12-105-17-20-25-19-69 1-83z"/>
+      <line class="ink" x1="20" y1="77" x2="130" y2="77"/>
+      <circle class="accent" cx="30" cy="77" r="10" fill="white"/>
+      <circle class="accent" cx="75" cy="77" r="10" fill="white"/>
+      <circle class="accent" cx="120" cy="77" r="10" fill="white"/>
+      <path class="accent" d="M35 77h30M80 77h30" fill="none"/>
+      <rect class="ink" x="16" y="25" width="43" height="33" rx="2" fill="white"/>
+      <line class="accent" x1="24" y1="36" x2="50" y2="36"/>
+      <line class="accent" x1="24" y1="46" x2="44" y2="46"/>
+      <rect class="ink" x="94" y="23" width="42" height="35" rx="2" fill="white"/>
+      <path class="accent" d="M95 26l20 16 20-16" fill="none"/>
+      <path class="ink" d="M48 104h53" fill="none"/>
+      <path class="accent" d="M94 97l8 7-8 7" fill="none"/>
+    </svg>
   </div>
 
   <div class="steps">
