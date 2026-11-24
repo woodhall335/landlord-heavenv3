@@ -667,10 +667,17 @@ export function isPremiumSupportingDocumentTemplatePath(templatePath: string): b
   return !isOfficialMappedTemplatePath(templatePath);
 }
 
+type SupportDocumentFamily =
+  | 'default'
+  | 'tenancy'
+  | 'money-claim'
+  | 'rent-increase'
+  | 'possession';
+
 function getSupportDocumentFamily(
   templatePath: string,
   data: Record<string, any>
-): 'default' | 'tenancy' {
+): SupportDocumentFamily {
   const normalizedPath = templatePath.replace(/\\/g, '/').toLowerCase();
   const tenancySegments = [
     '/templates/residential/',
@@ -688,7 +695,48 @@ function getSupportDocumentFamily(
     return 'tenancy';
   }
 
+  if (normalizedPath.includes('/templates/money_claims/')) {
+    return 'money-claim';
+  }
+
+  if (
+    normalizedPath.includes('/templates/section13/') ||
+    normalizedPath.includes('/templates/rent_increase/') ||
+    normalizedPath.includes('/templates/rent-increase/')
+  ) {
+    return 'rent-increase';
+  }
+
+  if (
+    normalizedPath.includes('/templates/eviction/') ||
+    normalizedPath.includes('/templates/possession/')
+  ) {
+    return 'possession';
+  }
+
   return tenancySegments.some(segment => normalizedPath.includes(segment)) ? 'tenancy' : 'default';
+}
+
+function buildSupportDocumentFamilyArtwork(family: SupportDocumentFamily): string {
+  const commonStart = '<svg class="lh-family-artwork" viewBox="0 0 64 52" role="img"';
+
+  if (family === 'tenancy') {
+    return `${commonStart} aria-label="Tenancy home and key"><path d="M5 27 25 10l20 17v19H10V27"/><path d="M19 46V31h12v15M46 35a7 7 0 1 0 0 14 7 7 0 0 0 0-14Zm7 7h8m-3 0v5"/></svg>`;
+  }
+
+  if (family === 'money-claim') {
+    return `${commonStart} aria-label="Money claim ledger"><rect x="7" y="5" width="33" height="42" rx="2"/><path d="M15 15h17M15 24h17M15 33h17M25 8v36"/><circle cx="49" cy="34" r="9"/><path d="M46 30h6m-6 4h5m-4-8v16"/></svg>`;
+  }
+
+  if (family === 'rent-increase') {
+    return `${commonStart} aria-label="Rent increase home and upward arrow"><path d="M5 29 24 13l19 16v18H10V29M18 47V34h12v13"/><path d="M48 39V10m-8 8 8-8 8 8"/></svg>`;
+  }
+
+  if (family === 'possession') {
+    return `${commonStart} aria-label="Possession notice and evidence file"><rect x="6" y="7" width="29" height="38" rx="2"/><path d="M13 17h15M13 25h15M13 33h11"/><path d="M34 27h12l5 5h9v16H34zM45 40l4 4 8-9"/></svg>`;
+  }
+
+  return `${commonStart} aria-label="Supporting document"><rect x="8" y="5" width="34" height="42" rx="2"/><path d="M16 16h18M16 25h18M16 34h12"/><circle cx="49" cy="37" r="10"/><path d="m44 37 4 4 7-9"/></svg>`;
 }
 
 let supportDocumentLogoDataUri: string | null | undefined;
@@ -726,7 +774,11 @@ function formatSupportDocumentDateLabel(value: unknown): string {
   });
 }
 
-function buildSupportDocumentChrome(data: Record<string, any>): string {
+function buildSupportDocumentChrome(
+  data: Record<string, any>,
+  family: SupportDocumentFamily,
+  includeArtwork: boolean,
+): string {
   const generatedLabel = sanitizeTextForPdfRendering(
     formatSupportDocumentDateLabel(data.generation_date)
   );
@@ -741,16 +793,20 @@ function buildSupportDocumentChrome(data: Record<string, any>): string {
   const brandMark = logoDataUri
     ? `<img class="lh-brand-logo" src="${logoDataUri}" alt="" />`
     : '<span class="lh-brand-fallback">Landlord Heaven</span>';
+  const familyArtwork = includeArtwork ? buildSupportDocumentFamilyArtwork(family) : '';
 
   return `
     <div class="lh-pack-masthead" aria-hidden="true">
       <div class="lh-brand-lockup">
         <div class="lh-brand-mark">${brandMark}</div>
       </div>
-      <div class="lh-pack-meta">
-        ${caseId ? `<div class="lh-pack-meta-item"><span>Case ID</span><strong>${caseId}</strong></div>` : ''}
-        <div class="lh-pack-meta-item"><span>Jurisdiction</span><strong>${jurisdiction}</strong></div>
-        <div class="lh-pack-meta-item"><span>Generated</span><strong>${generatedLabel}</strong></div>
+      <div class="lh-pack-side">
+        <div class="lh-pack-meta">
+          ${caseId ? `<div class="lh-pack-meta-item"><span>Case ID</span><strong>${caseId}</strong></div>` : ''}
+          <div class="lh-pack-meta-item"><span>Jurisdiction</span><strong>${jurisdiction}</strong></div>
+          <div class="lh-pack-meta-item"><span>Generated</span><strong>${generatedLabel}</strong></div>
+        </div>
+        ${familyArtwork}
       </div>
     </div>
   `.trim();
@@ -812,11 +868,15 @@ export function applyPremiumSupportDocumentTheme(
 
   const supportDocumentFamily = getSupportDocumentFamily(templatePath, data);
   const bodyClasses = ['lh-support-doc'];
-  if (supportDocumentFamily === 'tenancy') {
-    bodyClasses.push('lh-support-doc--tenancy');
+  if (supportDocumentFamily !== 'default') {
+    bodyClasses.push(`lh-support-doc--${supportDocumentFamily}`);
   }
 
-  const chrome = buildSupportDocumentChrome(data);
+  const chrome = buildSupportDocumentChrome(
+    data,
+    supportDocumentFamily,
+    !html.includes('class="s8-artwork"'),
+  );
 
   if (isFullHtmlDocument(html)) {
     let themedHtml = injectSupportDocumentBodyClass(html, bodyClasses);

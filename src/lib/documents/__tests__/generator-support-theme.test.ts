@@ -59,11 +59,12 @@ describe('support document theming', () => {
       { jurisdiction: 'England', case_id: 'support-001' }
     );
 
-    expect(themed).toContain('class="lh-support-doc"');
+    expect(themed).toContain('class="lh-support-doc lh-support-doc--possession"');
     expect(themed).not.toMatch(/<body[^>]*lh-support-doc--tenancy/);
     expect(themed).toContain('lh-pack-masthead');
     expect(themed).toContain('support-001');
     expect(themed).toContain('class="lh-brand-logo"');
+    expect(themed).toContain('class="lh-family-artwork"');
     expect(themed).toContain('data:image/png;base64,');
     expect(themed).toContain('.lh-brand-mark {\n  width: 168px;');
     expect(themed).toContain('border-radius: 0;');
@@ -107,10 +108,11 @@ describe('support document theming', () => {
     );
 
     expect(themed).toContain('<!DOCTYPE html>');
-    expect(themed).toContain('class="lh-support-doc"');
+    expect(themed).toContain('class="lh-support-doc lh-support-doc--money-claim"');
     expect(themed).toContain('lh-fragment-support-doc');
     expect(themed).toContain('Money Claim Pack');
     expect(themed).toContain('class="lh-brand-logo"');
+    expect(themed).toContain('aria-label="Money claim ledger"');
     expect(themed).toContain('.lh-brand-mark {\n  width: 168px;');
     expect(themed).toContain('border-radius: 0;');
     expect(themed).not.toContain('linear-gradient');
@@ -194,8 +196,27 @@ describe('support document theming', () => {
 
     expect(themedTenancy).toContain('<body class="lh-support-doc lh-support-doc--tenancy">');
     expect(themedTenancy).toContain('.lh-brand-mark {\n  width: 168px;');
-    expect(themedEviction).toContain('<body class="lh-support-doc">');
+    expect(themedEviction).toContain(
+      '<body class="lh-support-doc lh-support-doc--possession">'
+    );
     expect(themedEviction).not.toMatch(/<body[^>]*lh-support-doc--tenancy/);
+  });
+
+  it('uses a distinct illustration for each active support-document family', () => {
+    const fragment = '<h1>Supporting document</h1>';
+    const cases = [
+      ['uk/england/templates/residential/pre_tenancy_checklist_england.hbs', 'Tenancy home and key'],
+      ['uk/england/templates/money_claims/filing_guide.hbs', 'Money claim ledger'],
+      ['uk/england/templates/section13/tribunal_defence_guide.hbs', 'Rent increase home and upward arrow'],
+      ['uk/england/templates/eviction/hearing_checklist.hbs', 'Possession notice and evidence file'],
+    ] as const;
+
+    for (const [templatePath, artworkLabel] of cases) {
+      const themed = applyPremiumSupportDocumentTheme(fragment, templatePath, {
+        jurisdiction: 'England',
+      });
+      expect(themed).toContain(`aria-label="${artworkLabel}"`);
+    }
   });
 
   it('treats shared England tenancy support templates as tenancy-family outputs', () => {

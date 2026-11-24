@@ -460,8 +460,8 @@ export const REGIONAL_PRODUCT_AVAILABILITY: Record<
   { available: string[]; badge?: string }
 > = {
   notice_only: {
-    available: ['england', 'wales', 'scotland'],
-    // Not available in Northern Ireland
+    available: ['england'],
+    badge: 'England',
   },
   complete_pack: {
     available: ['england'],

@@ -21,8 +21,8 @@ describe('buildWizardLink support helpers', () => {
 
   it('keeps notice_only available in Wales and Scotland only, not Northern Ireland', () => {
     expect(isProductSupportedInJurisdiction('notice_only', 'england')).toBe(true);
-    expect(isProductSupportedInJurisdiction('notice_only', 'wales')).toBe(true);
-    expect(isProductSupportedInJurisdiction('notice_only', 'scotland')).toBe(true);
+    expect(isProductSupportedInJurisdiction('notice_only', 'wales')).toBe(false);
+    expect(isProductSupportedInJurisdiction('notice_only', 'scotland')).toBe(false);
     expect(isProductSupportedInJurisdiction('notice_only', 'northern-ireland')).toBe(false);
   });
 

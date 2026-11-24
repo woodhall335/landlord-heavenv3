@@ -915,6 +915,31 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
   const brandBorder = rgb(0.847, 0.8, 0.965);
   const brandBorderStrong = rgb(0.776, 0.714, 0.937);
 
+  const drawRentIncreaseHeaderArtwork = () => {
+    const originX = PAGE_WIDTH - MARGIN_X - 50;
+    const originY = PAGE_HEIGHT - MARGIN_Y - 27;
+    const line = (x1: number, y1: number, x2: number, y2: number) => {
+      page.drawLine({
+        start: { x: originX + x1, y: originY + y1 },
+        end: { x: originX + x2, y: originY + y2 },
+        thickness: 1.25,
+        color: brandText,
+      });
+    };
+
+    line(1, 10, 15, 22);
+    line(15, 22, 29, 10);
+    line(5, 13, 5, 0);
+    line(5, 0, 25, 0);
+    line(25, 0, 25, 13);
+    line(12, 0, 12, 8);
+    line(12, 8, 18, 8);
+    line(18, 8, 18, 0);
+    line(38, 1, 38, 23);
+    line(32, 17, 38, 23);
+    line(38, 23, 44, 17);
+  };
+
   const getComparableImage = async (source: string | null): Promise<PDFImage | null> => {
     if (!source) return null;
     if (imageCache.has(source)) return imageCache.get(source) ?? null;
@@ -939,6 +964,8 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
 
   const drawHeader = () => {
     let headerY = PAGE_HEIGHT - MARGIN_Y;
+
+    drawRentIncreaseHeaderArtwork();
 
     if (logoImage) {
       const scaled = logoImage.scaleToFit(148, 30);

@@ -36,7 +36,6 @@ import {
   RESIDENTIAL_LETTING_PRODUCT_SKUS,
   RESIDENTIAL_LETTING_PRODUCTS,
 } from '@/lib/residential-letting/products';
-import { PRODUCTS } from '@/lib/pricing/products';
 import {
   getRetiredPublicSkuRedirectDestination,
   isRetiredPublicSku,
@@ -259,6 +258,32 @@ export async function POST(request: Request) {
 
     if (
       !case_id &&
+      (effectiveJurisdiction === 'wales' || effectiveJurisdiction === 'scotland') &&
+      normalizedProduct === 'notice_only'
+    ) {
+      return NextResponse.json(
+        {
+          code: 'PRODUCT_NOT_AVAILABLE_IN_REGION',
+          error: 'PRODUCT_NOT_AVAILABLE_IN_REGION',
+          user_message:
+            'We do not currently offer eviction notice packs for Wales or Scotland. ' +
+            'Tenancy agreements remain available for properties in these jurisdictions.',
+          supported: {
+            'northern-ireland': ['tenancy_agreement'],
+            england: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+            wales: ['tenancy_agreement'],
+            scotland: ['tenancy_agreement'],
+          },
+          redirect_to: '/standard-tenancy-agreement#choose-jurisdiction',
+          blocking_issues: [],
+          warnings: [],
+        },
+        { status: 400 },
+      );
+    }
+
+    if (
+      !case_id &&
       effectiveJurisdiction !== 'england' &&
       !allowedNonEnglandStandardTenancy
     ) {
@@ -350,8 +375,8 @@ export async function POST(request: Request) {
           supported: {
             'northern-ireland': ['tenancy_agreement'],
             england: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
-            wales: ['notice_only', 'tenancy_agreement'],
-            scotland: ['notice_only', 'tenancy_agreement'],
+            wales: ['tenancy_agreement'],
+            scotland: ['tenancy_agreement'],
           },
           blocking_issues: [],
           warnings: [],
@@ -370,19 +395,18 @@ export async function POST(request: Request) {
           code: 'PRODUCT_NOT_AVAILABLE_IN_REGION',
           error: 'PRODUCT_NOT_AVAILABLE_IN_REGION',
           user_message:
-            'Product not available in your region; use Notice Only instead. ' +
+            'Product not available in your region. ' +
             `The ${
               normalizedProduct === 'complete_pack' ? 'Eviction Pack' : 'Money Claim'
             } is only available for England. ` +
-            `For ${effectiveJurisdiction === 'wales' ? 'Wales' : 'Scotland'}, we offer the Notice Only pack (${PRODUCTS.notice_only.displayPrice}) ` +
-            'and Tenancy Agreements.',
+            `For ${effectiveJurisdiction === 'wales' ? 'Wales' : 'Scotland'}, we offer tenancy agreements.`,
           supported: {
             'northern-ireland': ['tenancy_agreement'],
             england: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
-            wales: ['notice_only', 'tenancy_agreement'],
-            scotland: ['notice_only', 'tenancy_agreement'],
+            wales: ['tenancy_agreement'],
+            scotland: ['tenancy_agreement'],
           },
-          redirect_to: `/wizard?product=notice_only&jurisdiction=${effectiveJurisdiction}`,
+          redirect_to: '/standard-tenancy-agreement#choose-jurisdiction',
           blocking_issues: [],
           warnings: [],
         },

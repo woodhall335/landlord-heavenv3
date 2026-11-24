@@ -19,6 +19,11 @@ describe('Tenancy premium commercial proof points', () => {
     expect(REGIONAL_PRODUCT_AVAILABILITY.ast_standard.available).toEqual(JURISDICTIONS);
   });
 
+  it('offers eviction notice and court packs in England only', () => {
+    expect(REGIONAL_PRODUCT_AVAILABILITY.notice_only.available).toEqual(['england']);
+    expect(REGIONAL_PRODUCT_AVAILABILITY.complete_pack.available).toEqual(['england']);
+  });
+
   it.each(JURISDICTIONS)('legacy premium generation remains materially distinct in %s', (jurisdiction) => {
     const docs = getASTDocuments(jurisdiction, 'premium', { hasInventoryData: true });
     const agreement = docs[0];

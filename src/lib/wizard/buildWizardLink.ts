@@ -129,6 +129,7 @@ export function isProductSupportedInJurisdiction(
   jurisdiction: WizardJurisdiction
 ): boolean {
   const englandOnlyProducts: WizardProduct[] = [
+    'notice_only',
     'complete_pack',
     'money_claim',
     'section13_standard',
@@ -167,7 +168,6 @@ export function isProductSupportedInJurisdiction(
 
   if (jurisdiction === 'wales' || jurisdiction === 'scotland') {
     return (
-      product === 'notice_only' ||
       product === 'tenancy_agreement' ||
       product === 'ast_standard' ||
       product === 'ast_premium'

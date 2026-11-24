@@ -112,6 +112,27 @@ describe('POST /api/wizard/start anonymous resume', () => {
     expect(response.status).toBe(200);
   });
 
+  it.each(['wales', 'scotland'])('does not start a new eviction notice sale in %s', async (jurisdiction) => {
+    const request = new Request('http://localhost/api/wizard/start', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-session-token': 'good-token',
+      },
+      body: JSON.stringify({
+        product: 'notice_only',
+        jurisdiction,
+      }),
+    });
+
+    const response = await POST(request);
+    const body = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(body.code).toBe('PRODUCT_NOT_AVAILABLE_IN_REGION');
+    expect(body.supported[jurisdiction]).toEqual(['tenancy_agreement']);
+  });
+
   it('blocks anonymous case creation without token', async () => {
     const request = new Request('http://localhost/api/wizard/start', {
       method: 'POST',
