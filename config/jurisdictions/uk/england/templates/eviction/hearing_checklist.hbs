@@ -132,7 +132,7 @@
     }
   </style>
 </head>
-<body>
+<body class="lh-possession-hearing-guide">
   <div class="header">
     <h1>Hearing Preparation Guide</h1>
     <h2>Prepare the hearing file, {{#if has_arrears_grounds}}updated arrears position{{else}}evidence for each ground{{/if}}, and speaking points for the possession hearing{{#if (contains groundsReliedUpon "Ground 8")}} - with Ground 8 kept under review at both notice and hearing stage{{/if}}</h2>
@@ -432,6 +432,19 @@
     {{#unless clean_output}}
     <p><strong>Landlord Heaven</strong> | Hearing preparation support document</p>
     {{/unless}}
+  </div>
+
+  <div class="hearing-page-watermark" aria-hidden="true">
+    <svg viewBox="0 0 720 210" role="presentation">
+      <path class="watermark-wash" d="M68 118c37-68 149-99 246-71 70 20 109 43 186 23 73-19 154 1 164 56 10 54-64 74-147 52-83-23-131-4-217 8-103 14-205-2-235-41-9-12-8-17 3-27Z"/>
+      <path class="watermark-line" d="M83 159h238M111 151V91M159 151V91M207 151V91M255 151V91M99 91h172M88 83l97-54 97 54M90 159h192"/>
+      <rect class="watermark-line" x="365" y="57" width="92" height="105" rx="3"/>
+      <path class="watermark-line" d="M385 81h51M385 103h51M385 125h35"/>
+      <path class="watermark-line" d="M518 92h58l20 20h52v58H518zM566 139l13 12 29-38"/>
+      <path class="watermark-line" d="M321 113h44M457 113h61"/>
+      <circle class="watermark-line" cx="343" cy="113" r="8"/>
+      <circle class="watermark-line" cx="487" cy="113" r="8"/>
+    </svg>
   </div>
 </body>
 </html>

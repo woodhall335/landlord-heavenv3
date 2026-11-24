@@ -178,6 +178,15 @@ describe('Section 8 bundle consistency', () => {
     expect(content).toContain('watermark-line');
   });
 
+  test('hearing checklist permits natural section breaks and uses a final-page court watermark', () => {
+    const templatePath = path.join(TEMPLATES_BASE, 'eviction/hearing_checklist.hbs');
+    const content = fs.readFileSync(templatePath, 'utf-8');
+
+    expect(content).toContain('lh-possession-hearing-guide');
+    expect(content).toContain('class="hearing-page-watermark"');
+    expect(content).toContain('watermark-line');
+  });
+
   test.each([
     'eviction/service_instructions_section_8.hbs',
     'eviction/checklist_section_8.hbs',
