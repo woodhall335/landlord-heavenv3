@@ -113,14 +113,30 @@ describe('support document theming', () => {
     );
 
     expect(themed).toContain('<!DOCTYPE html>');
-    expect(themed).toContain('class="lh-support-doc lh-support-doc--money-claim"');
+    expect(themed).toContain(
+      'class="lh-support-doc lh-support-doc--money-claim lh-support-doc--illustrated-fragment"'
+    );
     expect(themed).toContain('lh-fragment-support-doc');
     expect(themed).toContain('Money Claim Pack');
     expect(themed).toContain('class="lh-brand-logo"');
     expect(themed).toContain('aria-label="Money claim ledger"');
+    expect(themed).toContain('class="lh-fragment-end-illustration"');
+    expect(themed).toContain('data:image/webp;base64,');
+    expect(themed).not.toContain('lh-fragment-end-artwork');
     expect(themed).toContain('.lh-brand-mark {\n  width: 168px;');
     expect(themed).toContain('border-radius: 0;');
     expect(themed).not.toContain('linear-gradient');
+  });
+
+  it('does not add a closing illustration to a content-heavy fragment', () => {
+    const fragment = `<h1>Detailed guide</h1><p>${'Evidence and procedure. '.repeat(100)}</p>`;
+    const themed = applyPremiumSupportDocumentTheme(
+      fragment,
+      'uk/england/templates/money_claims/filing_guide.hbs',
+      { jurisdiction: 'England' }
+    );
+
+    expect(themed).not.toContain('<div class="lh-fragment-end-illustration"');
   });
 
   it('leaves official forms unchanged', () => {
@@ -199,10 +215,12 @@ describe('support document theming', () => {
       { jurisdiction: 'England', case_id: 'eviction-001' }
     );
 
-    expect(themedTenancy).toContain('<body class="lh-support-doc lh-support-doc--tenancy">');
+    expect(themedTenancy).toContain(
+      '<body class="lh-support-doc lh-support-doc--tenancy lh-support-doc--illustrated-fragment">'
+    );
     expect(themedTenancy).toContain('.lh-brand-mark {\n  width: 168px;');
     expect(themedEviction).toContain(
-      '<body class="lh-support-doc lh-support-doc--possession">'
+      '<body class="lh-support-doc lh-support-doc--possession lh-support-doc--illustrated-fragment">'
     );
     expect(themedEviction).not.toMatch(/<body[^>]*lh-support-doc--tenancy/);
   });
@@ -246,12 +264,14 @@ describe('support document theming', () => {
       { jurisdiction: 'England', case_id: 'tenancy-info-001' }
     );
 
-    expect(themedChecklist).toContain('<body class="lh-support-doc lh-support-doc--tenancy">');
+    expect(themedChecklist).toContain(
+      '<body class="lh-support-doc lh-support-doc--tenancy lh-support-doc--illustrated-fragment">'
+    );
     expect(themedDepositCertificate).toContain(
-      '<body class="lh-support-doc lh-support-doc--tenancy">'
+      '<body class="lh-support-doc lh-support-doc--tenancy lh-support-doc--illustrated-fragment">'
     );
     expect(themedPrescribedInfo).toContain(
-      '<body class="lh-support-doc lh-support-doc--tenancy">'
+      '<body class="lh-support-doc lh-support-doc--tenancy lh-support-doc--illustrated-fragment">'
     );
   });
 });

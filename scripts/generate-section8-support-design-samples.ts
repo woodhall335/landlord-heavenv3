@@ -123,12 +123,44 @@ const documents = [
     templatePath: 'uk/england/templates/eviction/service_record_notes.hbs',
     data: baseData,
   },
+  {
+    fileName: '07-possession-hearing-checklist.pdf',
+    templatePath: 'uk/england/templates/eviction/hearing_checklist.hbs',
+    data: {
+      ...baseData,
+      court_name: 'Leeds Combined Court Centre',
+      notice_service_date: '2026-11-25',
+      notice_expiry_date: '2026-12-23',
+      earliest_proceedings_date: '2026-12-24',
+      latest_proceedings_date: '2027-11-24',
+      ground8_threshold_label: 'At least two months of rent unpaid where rent is payable monthly.',
+      drafting_model: {
+        ...baseData.drafting_model,
+        hearingChecklist: {
+          overviewParagraphs: [],
+          beforeItems: [],
+          documentItems: [],
+          atHearingItems: [],
+          warningParagraphs: [],
+          contingencyItems: [],
+        },
+      },
+    },
+  },
 ];
 
 async function main() {
   await fs.mkdir(OUTPUT_DIR, { recursive: true });
+  const requestedFile = process.argv[2];
+  const selectedDocuments = requestedFile
+    ? documents.filter(document => document.fileName === requestedFile)
+    : documents;
 
-  for (const document of documents) {
+  if (requestedFile && selectedDocuments.length === 0) {
+    throw new Error(`Unknown sample document: ${requestedFile}`);
+  }
+
+  for (const document of selectedDocuments) {
     const result = await generateDocument({
       templatePath: document.templatePath,
       data: document.data,

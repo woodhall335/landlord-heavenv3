@@ -174,8 +174,8 @@ describe('Section 8 bundle consistency', () => {
     const content = fs.readFileSync(templatePath, 'utf-8');
 
     expect(content).toContain('lh-s8-service-continuity');
-    expect(content).toContain('class="s8-page-watermark"');
-    expect(content).toContain('watermark-line');
+    expect(content).toContain('class="s8-page-watermark service-watermark"');
+    expect(content).toContain('support-illustration:service-continuity');
   });
 
   test('hearing checklist permits natural section breaks and uses a final-page court watermark', () => {
@@ -184,7 +184,7 @@ describe('Section 8 bundle consistency', () => {
 
     expect(content).toContain('lh-possession-hearing-guide');
     expect(content).toContain('class="hearing-page-watermark"');
-    expect(content).toContain('watermark-line');
+    expect(content).toContain('support-illustration:possession-hearing');
   });
 
   test.each([

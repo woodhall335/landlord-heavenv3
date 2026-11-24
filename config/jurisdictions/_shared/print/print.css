@@ -629,6 +629,33 @@ body.lh-support-doc--rent-increase .lh-family-artwork .lh-family-artwork-wash {
   fill: #f6efff;
 }
 
+.lh-fragment-support-doc {
+  position: relative;
+}
+
+.lh-fragment-end-illustration {
+  position: relative;
+  height: 0;
+  overflow: visible;
+  page-break-inside: avoid;
+  break-inside: avoid;
+  pointer-events: none;
+}
+
+.lh-fragment-end-illustration img {
+  position: absolute;
+  top: 8mm;
+  left: -19mm;
+  display: block;
+  width: calc(100% + 38mm);
+  height: 62mm;
+  object-fit: cover;
+  object-position: center;
+  transform: scaleX(1.12);
+  opacity: 0.16;
+  filter: saturate(0.62);
+}
+
 .lh-pack-meta-item {
   min-width: 86px;
   padding: 0.45em 0.65em;
@@ -1454,6 +1481,20 @@ body.lh-support-doc.lh-s8-premium.lh-s8-one-page .note-box:last-child {
   padding-bottom: 1.05em;
 }
 
+@page lh-illustrated-support {
+  size: A4;
+  margin: 0;
+}
+
+body.lh-support-doc.lh-s8-premium,
+body.lh-support-doc.lh-possession-hearing-guide,
+body.lh-support-doc.lh-support-doc--illustrated-fragment {
+  page: lh-illustrated-support;
+  padding: 19mm 19mm 25.4mm;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
 body.lh-support-doc.lh-s8-premium .s8-page-watermark {
   display: flex;
   align-items: center;
@@ -1461,32 +1502,27 @@ body.lh-support-doc.lh-s8-premium .s8-page-watermark {
   overflow: hidden;
   page-break-inside: avoid;
   break-inside: avoid;
+  width: calc(100% + 38mm);
+  margin-left: -19mm;
 }
 
-body.lh-support-doc.lh-s8-premium .s8-page-watermark svg {
+body.lh-support-doc.lh-s8-premium .s8-page-watermark img {
   display: block;
   width: 100%;
   height: 100%;
-}
-
-body.lh-support-doc.lh-s8-premium .s8-page-watermark .watermark-wash {
-  fill: var(--s8-lavender);
-  opacity: 0.72;
-}
-
-body.lh-support-doc.lh-s8-premium .s8-page-watermark .watermark-line {
-  fill: none;
-  stroke: var(--s8-purple);
-  stroke-width: 1.35;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  opacity: 0.2;
-  vector-effect: non-scaling-stroke;
+  object-fit: cover;
+  object-position: center;
+  transform: scaleX(1.12);
+  opacity: 0.16;
+  filter: saturate(0.62);
 }
 
 body.lh-support-doc.lh-s8-premium.lh-s8-next-guide .s8-page-watermark {
   height: 68mm;
-  margin: 5mm 0 3mm;
+  margin-top: 5mm;
+  margin-right: 0;
+  margin-bottom: 3mm;
+  margin-left: -19mm;
 }
 
 body.lh-support-doc.lh-s8-premium.lh-s8-next-guide .handoff-box {
@@ -1497,9 +1533,9 @@ body.lh-support-doc.lh-s8-premium.lh-s8-service-continuity .s8-page-watermark {
   position: fixed;
   top: auto;
   bottom: 12mm;
-  left: 0;
-  width: 100%;
-  height: 43mm;
+  left: -19mm;
+  width: calc(100% + 38mm);
+  height: 48mm;
   margin: 0;
   pointer-events: none;
 }
@@ -1508,6 +1544,38 @@ body.lh-support-doc.lh-s8-premium.lh-s8-service-continuity .note-box:last-child 
   margin-top: 0;
   position: relative;
   z-index: 1;
+}
+
+body.lh-support-doc.lh-s8-premium.lh-s8-service-continuity .s8-page-watermark img {
+  opacity: 0.16;
+}
+
+body.lh-support-doc.lh-s8-premium .s8-closing-illustration {
+  position: relative;
+  height: 0;
+  overflow: visible;
+  page-break-inside: avoid;
+  break-inside: avoid;
+  pointer-events: none;
+}
+
+body.lh-support-doc.lh-s8-premium .s8-closing-illustration img {
+  position: absolute;
+  top: 6mm;
+  left: -19mm;
+  display: block;
+  width: calc(100% + 38mm);
+  height: 68mm;
+  object-fit: cover;
+  object-position: center;
+  transform: scaleX(1.12);
+  opacity: 0.16;
+  filter: saturate(0.62);
+}
+
+body.lh-support-doc.lh-s8-premium.lh-s8-validity .s8-closing-illustration img {
+  top: 5mm;
+  height: 38mm;
 }
 
 body.lh-support-doc.lh-possession-hearing-guide .section {
@@ -1527,31 +1595,22 @@ body.lh-support-doc.lh-possession-hearing-guide .checklist li {
 
 body.lh-support-doc.lh-possession-hearing-guide .hearing-page-watermark {
   height: 54mm;
-  margin: 8mm 0 0;
+  width: calc(100% + 38mm);
+  margin: 8mm 0 0 -19mm;
   overflow: hidden;
   page-break-inside: avoid;
   break-inside: avoid;
 }
 
-body.lh-support-doc.lh-possession-hearing-guide .hearing-page-watermark svg {
+body.lh-support-doc.lh-possession-hearing-guide .hearing-page-watermark img {
   display: block;
   width: 100%;
   height: 100%;
-}
-
-body.lh-support-doc.lh-possession-hearing-guide .hearing-page-watermark .watermark-wash {
-  fill: var(--lh-surface);
-  opacity: 0.86;
-}
-
-body.lh-support-doc.lh-possession-hearing-guide .hearing-page-watermark .watermark-line {
-  fill: none;
-  stroke: var(--lh-brand);
-  stroke-width: 1.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  opacity: 0.2;
-  vector-effect: non-scaling-stroke;
+  object-fit: cover;
+  object-position: center;
+  transform: scaleX(1.12);
+  opacity: 0.16;
+  filter: saturate(0.62);
 }
 
 body.lh-support-doc.lh-s8-premium.lh-s8-validity .summary-box,

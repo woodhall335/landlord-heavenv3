@@ -739,6 +739,79 @@ function buildSupportDocumentFamilyArtwork(family: SupportDocumentFamily): strin
   return `${commonStart} aria-label="Supporting document"><path class="lh-family-artwork-wash" d="M5 8C16-1 40 0 54 10c13 10 12 29-1 38-14 8-39 4-48-8C-2 30-2 14 5 8Z"/><rect x="8" y="5" width="34" height="42" rx="2"/><path d="M16 16h18M16 25h18M16 34h12"/><circle cx="49" cy="37" r="10"/><path d="m44 37 4 4 7-9"/></svg>`;
 }
 
+type SupportIllustrationName =
+  | 'tenancy'
+  | 'money-claim'
+  | 'rent-increase'
+  | 'possession-hearing'
+  | 'service-continuity'
+  | 'service-instructions'
+  | 'validity-review'
+  | 'what-happens-next';
+
+const SUPPORT_ILLUSTRATION_FILES: Record<SupportIllustrationName, string> = {
+  tenancy: 'tenancy-watercolour-print.webp',
+  'money-claim': 'money-claim-watercolour-print.webp',
+  'rent-increase': 'rent-increase-watercolour-print.webp',
+  'possession-hearing': 'possession-hearing-watercolour-print.webp',
+  'service-continuity': 'service-continuity-watercolour-print.webp',
+  'service-instructions': 'service-instructions-watercolour-print.webp',
+  'validity-review': 'validity-review-watercolour-print.webp',
+  'what-happens-next': 'what-happens-next-watercolour-print.webp',
+};
+
+const supportIllustrationDataUris = new Map<SupportIllustrationName, string | null>();
+
+function getSupportIllustrationDataUri(name: SupportIllustrationName): string | null {
+  if (supportIllustrationDataUris.has(name)) {
+    return supportIllustrationDataUris.get(name) ?? null;
+  }
+
+  const illustrationPath = join(
+    process.cwd(),
+    'public',
+    'images',
+    'illustrations',
+    'support-documents',
+    SUPPORT_ILLUSTRATION_FILES[name],
+  );
+
+  try {
+    const dataUri = `data:image/webp;base64,${readFileSync(illustrationPath).toString('base64')}`;
+    supportIllustrationDataUris.set(name, dataUri);
+    return dataUri;
+  } catch {
+    supportIllustrationDataUris.set(name, null);
+    return null;
+  }
+}
+
+function injectSupportIllustrationSources(html: string): string {
+  return html.replace(
+    /src=(["'])support-illustration:([a-z-]+)\1/g,
+    (match, quote: string, rawName: string) => {
+      if (!(rawName in SUPPORT_ILLUSTRATION_FILES)) {
+        return match;
+      }
+
+      const dataUri = getSupportIllustrationDataUri(rawName as SupportIllustrationName);
+      return dataUri ? `src=${quote}${dataUri}${quote}` : `src=${quote}${quote}`;
+    },
+  );
+}
+
+function buildSupportDocumentFamilyEndIllustration(family: SupportDocumentFamily): string {
+  const illustrationName = family === 'possession' ? 'possession-hearing' : family;
+  if (!(illustrationName in SUPPORT_ILLUSTRATION_FILES)) {
+    return '';
+  }
+
+  const dataUri = getSupportIllustrationDataUri(illustrationName as SupportIllustrationName);
+  return dataUri
+    ? `<div class="lh-fragment-end-illustration" aria-hidden="true"><img src="${dataUri}" alt="" /></div>`
+    : '';
+}
+
 let supportDocumentLogoDataUri: string | null | undefined;
 
 function getSupportDocumentLogoDataUri(): string | null {
@@ -886,10 +959,22 @@ export function applyPremiumSupportDocumentTheme(
       themedHtml = themedHtml.replace(/<body\b[^>]*>/i, matched => `${matched}\n${chrome}\n`);
     }
 
-    return themedHtml;
+    return injectSupportIllustrationSources(themedHtml);
   }
 
   const nonFullHtmlPrintCss = loadPrintCss();
+  const visibleTextLength = html
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim().length;
+  const endArtwork = visibleTextLength <= 1400
+    ? buildSupportDocumentFamilyEndIllustration(supportDocumentFamily)
+    : '';
+  const fragmentBodyClasses = endArtwork
+    ? [...bodyClasses, 'lh-support-doc--illustrated-fragment']
+    : bodyClasses;
   return `
 <!DOCTYPE html>
 <html>
@@ -899,10 +984,11 @@ export function applyPremiumSupportDocumentTheme(
       ${nonFullHtmlPrintCss}
     </style>
   </head>
-  <body class="${bodyClasses.join(' ')}">
+  <body class="${fragmentBodyClasses.join(' ')}">
     ${chrome}
     <div class="lh-fragment-support-doc">
       ${html}
+      ${endArtwork}
     </div>
 </body>
 </html>
