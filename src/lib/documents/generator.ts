@@ -769,10 +769,11 @@ function getSupportIllustrationDataUri(name: SupportIllustrationName): string | 
 
   const illustrationPath = join(
     process.cwd(),
-    'public',
-    'images',
+    'config',
+    'jurisdictions',
+    '_shared',
+    'print',
     'illustrations',
-    'support-documents',
     SUPPORT_ILLUSTRATION_FILES[name],
   );
 

@@ -449,7 +449,9 @@ const nextConfig = {
     '/api/admin/test-artifacts/complete-pack/download': ['artifacts/**/*'],
   },
   outputFileTracingIncludes: {
+    '/money-claim': ['./config/jurisdictions/_shared/print/illustrations/*.webp'],
     '/api/**': [
+      './config/jurisdictions/_shared/print/illustrations/*.webp',
       './public/official-forms/**/*',
       './artifacts/update/Form_3A_legal_wording_for_possession_grounds.pdf',
       './artifacts/update/Form_3A_guidance_for_landlords.pdf',

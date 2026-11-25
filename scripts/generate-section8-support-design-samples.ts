@@ -50,6 +50,11 @@ const baseData = {
 
 const documents = [
   {
+    fileName: '08-money-claim-evidence-index.pdf',
+    templatePath: 'uk/england/templates/money_claims/evidence_index.hbs',
+    data: baseData,
+  },
+  {
     fileName: '01-service-instructions.pdf',
     templatePath: 'uk/england/templates/eviction/service_instructions_section_8.hbs',
     data: baseData,
