@@ -119,32 +119,32 @@ describe('MoneyClaimAnimatedReview component', () => {
     sessionStorage.clear();
   });
 
-  it('runs first visit as an animated review and unlocks actions at completion', async () => {
+  it('shows results and enables actions immediately on first visit', async () => {
     render(<MoneyClaimAnimatedReview {...defaultProps} />);
-
-    expect(screen.getByText('Review running...')).toBeDisabled();
-    expect(screen.getAllByText('Reviewing').length).toBeGreaterThan(0);
-
-    act(() => {
-      vi.advanceTimersByTime(MONEY_CLAIM_REVIEW_DURATION_MS);
-    });
 
     expect(screen.getByText('Continue to document preview')).toBeEnabled();
     expect(screen.getByText('£1,775.00')).toBeInTheDocument();
     expect(screen.getByText('£1,810.50')).toBeInTheDocument();
   });
 
-  it('runs the full animation even when the same case is viewed again in the session', () => {
+  it('does not add a delay on repeat visits', () => {
     render(<MoneyClaimAnimatedReview {...defaultProps} />);
 
-    expect(screen.getByText('Review running...')).toBeDisabled();
-    expect(screen.queryByText('Continue to document preview')).not.toBeInTheDocument();
+    expect(screen.getByText('Continue to document preview')).toBeEnabled();
+    expect(vi.getTimerCount()).toBe(0);
   });
 
-  it('runs again for a different case id', () => {
+  it('shows another case immediately', () => {
     render(<MoneyClaimAnimatedReview {...defaultProps} caseId="case-456" />);
 
-    expect(screen.getByText('Review running...')).toBeDisabled();
+    expect(screen.getByText('Continue to document preview')).toBeEnabled();
+  });
+
+  it('keeps checkout blocked and fix actions available when issues exist', () => {
+    render(<MoneyClaimAnimatedReview {...defaultProps} hasBlockingIssues />);
+    expect(screen.getByText('Continue to document preview')).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Fix blocking issues' })).toBeEnabled();
+    expect(screen.getByRole('alert')).toHaveTextContent('Some details need your attention');
   });
 
   it('uses answer-based language rather than fake uploaded-file wording', () => {

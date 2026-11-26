@@ -71,21 +71,16 @@ describe('AnimatedReviewShell', () => {
     vi.restoreAllMocks();
   });
 
-  it('locks detailed review content until the 20 second review completes', () => {
+  it('shows detailed review immediately without timers or forced scrolling', () => {
     render(
       <AnimatedReviewShell {...defaultProps}>
         <button>Continue to document preview</button>
       </AnimatedReviewShell>
     );
 
-    expect(screen.getByText('Detailed review locked')).toBeInTheDocument();
-    expect(screen.queryByText('Continue to document preview')).not.toBeInTheDocument();
-
-    act(() => {
-      vi.advanceTimersByTime(WIZARD_REVIEW_ANIMATION_DURATION_MS);
-    });
-
     expect(screen.getByText('Continue to document preview')).toBeInTheDocument();
+    expect(screen.queryByText('Detailed review locked')).not.toBeInTheDocument();
+    expect(vi.getTimerCount()).toBe(0);
   });
 
   it('renders completed state immediately for reduced motion users', async () => {

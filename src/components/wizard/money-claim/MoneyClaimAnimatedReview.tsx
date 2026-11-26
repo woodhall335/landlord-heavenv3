@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import {
@@ -15,7 +15,6 @@ import {
 } from 'react-icons/ri';
 
 export const MONEY_CLAIM_REVIEW_DURATION_MS = 20000;
-const TICK_MS = 120;
 
 const gbpFormatter = new Intl.NumberFormat('en-GB', {
   style: 'currency',
@@ -110,32 +109,6 @@ function issueMessage(value: unknown) {
   return '';
 }
 
-function prefersReducedMotion() {
-  return (
-    typeof window !== 'undefined' &&
-    typeof window.matchMedia === 'function' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  );
-}
-
-function getInitialElapsed() {
-  return prefersReducedMotion() ? MONEY_CLAIM_REVIEW_DURATION_MS : 0;
-}
-
-function useReducedMotion() {
-  const [reducedMotion, setReducedMotion] = useState(prefersReducedMotion);
-
-  useEffect(() => {
-    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return;
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-    const listener = (event: MediaQueryListEvent) => setReducedMotion(event.matches);
-    mediaQuery.addEventListener?.('change', listener);
-    return () => mediaQuery.removeEventListener?.('change', listener);
-  }, []);
-
-  return reducedMotion;
-}
 
 export interface MoneyClaimAnimatedReviewProps {
   caseId: string;
@@ -156,7 +129,6 @@ export interface MoneyClaimAnimatedReviewProps {
 }
 
 export function MoneyClaimAnimatedReview({
-  caseId,
   analysis,
   jurisdiction,
   caseStrengthBand,
@@ -172,46 +144,13 @@ export function MoneyClaimAnimatedReview({
   isRegenerating,
   isLoadingPaymentStatus,
 }: MoneyClaimAnimatedReviewProps) {
-  const reducedMotion = useReducedMotion();
-  const [elapsed, setElapsed] = useState(getInitialElapsed);
-
-  useEffect(() => {
-    if (reducedMotion) {
-      const syncTimer = window.setTimeout(() => setElapsed(MONEY_CLAIM_REVIEW_DURATION_MS), 0);
-      return () => window.clearTimeout(syncTimer);
-    }
-
-    const startedAt = Date.now();
-    const resetTimer = window.setTimeout(() => setElapsed(0), 0);
-    const completionTimer = window.setTimeout(() => {
-      setElapsed(MONEY_CLAIM_REVIEW_DURATION_MS);
-    }, MONEY_CLAIM_REVIEW_DURATION_MS);
-
-    const timer = window.setInterval(() => {
-      const nextElapsed = Math.min(Date.now() - startedAt, MONEY_CLAIM_REVIEW_DURATION_MS);
-      setElapsed(nextElapsed);
-      if (nextElapsed >= MONEY_CLAIM_REVIEW_DURATION_MS) {
-        window.clearInterval(timer);
-        window.clearTimeout(completionTimer);
-      }
-    }, TICK_MS);
-
-    return () => {
-      window.clearTimeout(resetTimer);
-      window.clearInterval(timer);
-      window.clearTimeout(completionTimer);
-    };
-  }, [caseId, reducedMotion]);
-
-  const progress = getMoneyClaimReviewProgress(elapsed);
-  const phaseIndex = getMoneyClaimReviewPhaseIndex(elapsed);
+  // Analysis has already completed before this component is rendered.
+  const progress = 100;
+  const phaseIndex = reviewPhases.length - 1;
   const visible = getMoneyClaimVisibleSections(progress);
   const complete = visible.actions;
   const activePhase = reviewPhases[phaseIndex];
-  const secondsRemaining = Math.max(
-    0,
-    Math.ceil((MONEY_CLAIM_REVIEW_DURATION_MS - elapsed) / 1000)
-  );
+  const secondsRemaining = 0;
 
   const caseHealth = analysis?.case_health;
   const caseSummary = analysis?.case_summary;
@@ -268,26 +207,13 @@ export function MoneyClaimAnimatedReview({
   const actionDisabled =
     !complete || hasBlockingIssues || isRegenerating === true || isLoadingPaymentStatus === true;
 
-  useEffect(() => {
-    if (!complete) return;
-
-    const frame = window.requestAnimationFrame(() => {
-      window.scrollTo({
-        top: document.documentElement.scrollHeight,
-        behavior: reducedMotion ? 'auto' : 'smooth',
-      });
-    });
-
-    return () => window.cancelAnimationFrame(frame);
-  }, [complete, reducedMotion]);
 
   return (
     <section
-      className="relative min-h-screen w-full overflow-x-hidden bg-[linear-gradient(135deg,#fbf8ff_0%,#ffffff_44%,#f6f0ff_100%)] px-3 py-4 text-charcoal sm:px-5 lg:px-7"
-      aria-label="Money claim animated review"
+      className="relative min-h-screen w-full overflow-x-hidden bg-[#f8f6fc] px-4 py-6 text-charcoal sm:px-6 lg:px-10 lg:py-10"
+      aria-label="Money claim review"
     >
-      <div className="pointer-events-none absolute inset-0 opacity-[0.28] [background-image:linear-gradient(rgba(124,58,237,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(124,58,237,0.12)_1px,transparent_1px)] [background-size:48px_48px] [mask-image:linear-gradient(to_bottom,black,transparent_78%)]" />
-      <div className="relative mx-auto flex min-h-[calc(100vh-2rem)] w-full max-w-[1480px] flex-col">
+      <div className="relative mx-auto flex min-h-[calc(100vh-2rem)] w-full max-w-7xl flex-col">
         <div className="mb-4 flex flex-col gap-3 rounded-2xl border border-primary/15 bg-white/90 p-4 shadow-[0_18px_60px_rgba(76,29,149,0.08)] backdrop-blur md:flex-row md:items-center md:justify-between">
           <div className="flex min-w-0 items-center gap-3">
             <div className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-primary text-lg font-bold text-white shadow-[0_14px_30px_rgba(124,58,237,0.22)]">
@@ -297,7 +223,7 @@ export function MoneyClaimAnimatedReview({
             <div className="min-w-0">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">Landlord Heaven</p>
               <h1 className="truncate text-xl font-bold tracking-tight text-charcoal md:text-2xl">
-                Money Claim Analysis
+                Review your money claim
               </h1>
             </div>
           </div>
@@ -313,14 +239,13 @@ export function MoneyClaimAnimatedReview({
               </span>
               {complete ? 'Review complete' : `Reviewing - ${secondsRemaining}s left`}
             </span>
-            <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700">
-              {analysis?.case_strength_score ?? '--'}/100 {caseStrengthBand}
-            </span>
+            <span className="text-xs text-slate-500">Answers ✓ / Review / Preview</span>
           </div>
         </div>
 
-        <div className="grid flex-1 gap-5 lg:grid-cols-[0.92fr_1.08fr]">
-          <div className="flex min-w-0 flex-col gap-4">
+        {hasBlockingIssues && <div role="alert" className="mb-5 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-amber-950"><h2 className="font-semibold">Some details need your attention</h2><p className="mt-2 text-sm">Resolve the flagged issues before continuing to document preview.</p><Button onClick={onFixIssues} variant="outline" className="mt-3">Review required fixes</Button></div>}
+        <div className="grid flex-1 gap-6 lg:grid-cols-[0.75fr_1.25fr]">
+          <div className="order-2 flex min-w-0 flex-col gap-4 lg:order-1">
             <Card className="overflow-hidden border-primary/15 bg-white/95 p-5 shadow-[0_22px_70px_rgba(76,29,149,0.10)]">
               <div className="flex items-start justify-between gap-4">
                 <div>
@@ -333,17 +258,6 @@ export function MoneyClaimAnimatedReview({
                         'Your money claim review is ready. Check the figures and protocol reminders before continuing to preview.'
                       : activePhase.detail}
                   </p>
-                </div>
-                <div className="shrink-0 rounded-2xl border border-primary/10 bg-primary/10 px-4 py-3 text-2xl font-bold text-primary">
-                  {progress}%
-                </div>
-              </div>
-              <div className="mt-5 h-3 overflow-hidden rounded-full bg-primary/10">
-                <div
-                  className="relative h-full rounded-full bg-primary transition-[width] duration-300 ease-out"
-                  style={{ width: `${progress}%` }}
-                >
-                  {!complete && <span className="absolute inset-0 animate-money-review-shine bg-gradient-to-r from-transparent via-white/45 to-transparent" />}
                 </div>
               </div>
               <div className="mt-4 flex flex-wrap gap-2">
@@ -358,8 +272,11 @@ export function MoneyClaimAnimatedReview({
               </div>
             </Card>
 
-            <Card className="border-primary/15 bg-white/90 p-4 shadow-[0_18px_55px_rgba(76,29,149,0.08)]">
-              <div className="mb-4 flex items-center gap-2">
+            <details className="rounded-2xl border border-primary/15 bg-white p-5">
+              <summary className="cursor-pointer text-sm font-semibold">
+                Checks covered in this review
+              </summary>
+              <div className="mb-4 mt-4 flex items-center gap-2">
                 <RiShieldCheckLine className="h-5 w-5 text-primary" />
                 <h2 className="text-base font-semibold text-charcoal">Review sequence</h2>
               </div>
@@ -397,7 +314,7 @@ export function MoneyClaimAnimatedReview({
                   );
                 })}
               </div>
-            </Card>
+            </details>
 
             {visible.final && (
               <Card className="animate-money-review-rise border-primary/15 bg-white/90 p-5 shadow-[0_18px_55px_rgba(76,29,149,0.08)]">
@@ -421,9 +338,9 @@ export function MoneyClaimAnimatedReview({
             )}
           </div>
 
-          <div className="flex min-w-0 flex-col gap-4 pb-28 lg:pb-0">
-            <div className="grid gap-4 sm:grid-cols-3">
-              <Card className="animate-money-review-rise border-primary/15 bg-white/95 p-4 shadow-[0_18px_55px_rgba(76,29,149,0.08)]">
+          <div className="order-1 flex min-w-0 flex-col gap-4 pb-6 lg:order-2 lg:pb-0">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+              <Card className="col-span-2 border-primary/15 bg-white/95 p-4 sm:col-span-1">
                 <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Route</p>
                 <p className="mt-2 text-lg font-bold text-charcoal">{jurisdictionLabel}</p>
                 <p className="mt-1 text-xs leading-5 text-slate-500">County Court money claim and PAP-Debt checks.</p>
@@ -445,7 +362,7 @@ export function MoneyClaimAnimatedReview({
                 <RiMoneyPoundCircleLine className="h-5 w-5 text-primary" />
                 Claim summary
               </h2>
-              <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
                 <ResultTile
                   label="Rent arrears"
                   value={visible.figures ? formatCurrencyAmount(totalArrears) : 'Reviewing'}
@@ -589,7 +506,7 @@ export function MoneyClaimAnimatedReview({
         </div>
 
         <div
-          className={`fixed inset-x-0 bottom-0 z-20 border-t border-primary/15 bg-white/95 px-3 py-3 shadow-[0_-18px_60px_rgba(76,29,149,0.12)] backdrop-blur lg:static lg:mt-5 lg:rounded-2xl lg:border lg:px-4 ${
+          className={`mt-5 rounded-2xl border border-primary/15 bg-white px-4 py-4 ${
             complete ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-3 opacity-60'
           } transition-all duration-300`}
         >
