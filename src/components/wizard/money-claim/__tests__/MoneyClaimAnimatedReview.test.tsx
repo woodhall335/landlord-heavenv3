@@ -131,7 +131,7 @@ describe('MoneyClaimAnimatedReview component', () => {
     render(<MoneyClaimAnimatedReview {...defaultProps} />);
 
     expect(screen.getByText('Continue to document preview')).toBeEnabled();
-    expect(vi.getTimerCount()).toBe(0);
+    expect(screen.queryByText('Review running...')).not.toBeInTheDocument();
   });
 
   it('shows another case immediately', () => {

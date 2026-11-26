@@ -65,6 +65,7 @@ import {
 import { isComplianceTimingBlock } from '@/lib/documents/compliance-timing-types';
 import { JurisdictionExplainer, ChecksSummaryBox } from '@/components/wizard/ReviewValueComponents';
 import { AnimatedReviewShell, type AnimatedReviewShellProps } from '@/components/wizard/AnimatedReviewShell';
+import { EditorialCaseReview } from '@/components/wizard/EditorialCaseReview';
 import { MoneyClaimAnimatedReview } from '@/components/wizard/money-claim/MoneyClaimAnimatedReview';
 
 // Tenancy product tier utilities - single source of truth for pricing and product resolution
@@ -800,7 +801,7 @@ function ReviewPageInner() {
     return null;
   })();
 
-  const animatedReviewConfig = buildAnimatedReviewConfig({
+  const animatedReviewConfig = { ...buildAnimatedReviewConfig({
     analysis,
     product,
     jurisdiction,
@@ -813,7 +814,7 @@ function ReviewPageInner() {
     readinessSummary,
     redFlags,
     complianceIssues,
-  });
+  }), product, isPaid };
   // Render Money Claim specific content
   if (isMoneyClaimFlow) {
     return (
@@ -2361,10 +2362,11 @@ function NoticeOnlyReviewContent({
     : 'Notice';
 
   return (
-    <div className="w-full space-y-6 p-6">
+    <EditorialCaseReview analysis={analysis} blockingIssues={blockingIssues} warnings={[...redFlags, ...complianceIssues, ...warnings.map(readReviewText)]} hasBlockingIssues={hasBlockingIssues || (includesArrearsGrounds && !arrearsEvidenceStatus.complete)} onFixIssue={onFixIssue || onFixIssues} onFixIssues={onFixIssues} onEdit={onEdit} onProceed={onProceed} isPaid={isPaid} isRegenerating={isRegenerating} isLoadingPaymentStatus={isLoadingPaymentStatus}>
+    <div className="w-full space-y-5">
       {/* Header */}
-      <div className="text-center pb-6 border-b">
-        <h1 className="text-3xl font-bold text-gray-900">Notice Review</h1>
+      <div className="border-b pb-4">
+        <h2 className="text-xl font-semibold text-gray-900">Notice route and timing</h2>
         <p className="text-gray-600 mt-2">
           {jurisdictionLabel} &middot; {recommendedRouteLabel}
         </p>
@@ -2933,6 +2935,7 @@ function NoticeOnlyReviewContent({
         </p>
       )}
     </div>
+    </EditorialCaseReview>
   );
 }
 

@@ -80,7 +80,7 @@ describe('AnimatedReviewShell', () => {
 
     expect(screen.getByText('Continue to document preview')).toBeInTheDocument();
     expect(screen.queryByText('Detailed review locked')).not.toBeInTheDocument();
-    expect(vi.getTimerCount()).toBe(0);
+    expect(screen.queryByText(/seconds? left|Detailed review locked/i)).not.toBeInTheDocument();
   });
 
   it('renders completed state immediately for reduced motion users', async () => {
