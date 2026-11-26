@@ -248,7 +248,7 @@ export function MoneyClaimAnimatedReview({
         {hasBlockingIssues && <div role="alert" className="mb-5 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-amber-950"><h2 className="font-semibold">Some details need your attention</h2><p className="mt-2 text-sm">Resolve the flagged issues before continuing to document preview.</p><Button onClick={onFixIssues} variant="outline" className="mt-3">Review required fixes</Button></div>}
         <div className="grid flex-1 gap-6 lg:grid-cols-[0.75fr_1.25fr]">
           <div className="order-2 flex min-w-0 flex-col gap-4 lg:order-1">
-            <Image src="/images/illustrations/wizard-review/money-claim.webp" alt="" width={420} height={220} className="h-36 w-full object-contain lg:h-48" />
+            <Image src="/images/illustrations/wizard-review/money-claim.webp" alt="" width={640} height={340} sizes="(max-width: 1024px) 90vw, 420px" className="h-52 w-full object-contain lg:h-64" />
             <Card className="overflow-hidden border-primary/15 bg-white/95 p-5 shadow-[0_22px_70px_rgba(76,29,149,0.10)]">
               <div className="flex items-start justify-between gap-4">
                 <div>

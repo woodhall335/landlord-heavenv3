@@ -6,7 +6,16 @@ export function getReviewPresentation(product = '') {
   return { illustration: 'tenancy', title: 'Your landlord documents', heading: 'Review your document details', documents: ['Your selected document', 'Supporting schedules and guidance for your product'] };
 }
 
-export function getReviewIllustrationSrc(product = '') {
+export function getReviewIllustrationSrc(product = '', jurisdiction = 'england') {
+  const tenancyJurisdictions: Record<string, string> = {
+    wales: 'wales-occupation-contract-waterbrush-v2',
+    scotland: 'scotland-prt-waterbrush-v2',
+    'northern-ireland': 'northern-ireland-private-tenancy-waterbrush-v2',
+  };
+  const jurisdictionKey = jurisdiction.replace(/_/g, '-');
+  if (getReviewPresentation(product).illustration === 'tenancy' && tenancyJurisdictions[jurisdictionKey]) {
+    return `/images/illustrations/tenancy-jurisdictions/${tenancyJurisdictions[jurisdictionKey]}.webp`;
+  }
   const variants: Record<string, string> = {
     england_student_tenancy_agreement: 'tenancy-student',
     england_hmo_shared_house_tenancy_agreement: 'tenancy-hmo-shared',

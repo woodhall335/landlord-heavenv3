@@ -814,7 +814,7 @@ function ReviewPageInner() {
     readinessSummary,
     redFlags,
     complianceIssues,
-  }), product, isPaid };
+  }), product, jurisdiction, isPaid };
   // Render Money Claim specific content
   if (isMoneyClaimFlow) {
     return (
