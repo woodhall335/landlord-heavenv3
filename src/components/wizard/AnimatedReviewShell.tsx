@@ -32,7 +32,7 @@ export function getWizardReviewPhaseIndex(elapsedMs: number, phaseCount: number,
 export function AnimatedReviewShell({title, subtitle, routeLabel, product, isPaid, stats, checks, warnings = [], positives = [], children}: AnimatedReviewShellProps) {
   const presentation = getReviewPresentation(product);
   const packTitle = getPublicProductDescriptor(product)?.displayName || presentation.title;
-  const packContents = <><h2 className="mt-4 font-serif text-2xl leading-tight">{packTitle}</h2><ul className="mt-5 space-y-3">{presentation.documents.map(item => <li key={item} className="flex items-start gap-2 text-sm leading-6 text-[#eee5f7]"><RiCheckboxCircleLine aria-hidden="true" className="mt-1 h-4 w-4 shrink-0 text-[#cbb0df]" />{item}</li>)}</ul><p className="mt-5 border-t border-white/20 pt-4 text-xs leading-6 text-[#d7c9e1]">{isPaid ? 'Regenerate your documents using your updated, saved answers.' : 'Next: review your prepared documents before secure payment.'}</p></>;
+  const packContents = <><h2 className="mt-4 text-xl font-semibold leading-tight tracking-tight">{packTitle}</h2><ul className="mt-5 space-y-3">{presentation.documents.map(item => <li key={item} className="flex items-start gap-2 text-sm leading-6 text-[#eee5f7]"><RiCheckboxCircleLine aria-hidden="true" className="mt-1 h-4 w-4 shrink-0 text-[#cbb0df]" />{item}</li>)}</ul><p className="mt-5 border-t border-white/20 pt-4 text-xs leading-6 text-[#d7c9e1]">{isPaid ? 'Regenerate your documents using your updated, saved answers.' : 'Next: review your prepared documents before secure payment.'}</p></>;
   return (
     <main className="min-h-screen bg-[#faf8f5] px-4 py-6 text-[#291d38] sm:px-6 lg:px-10 lg:py-8">
       <div className="mx-auto max-w-7xl">
@@ -47,7 +47,7 @@ export function AnimatedReviewShell({title, subtitle, routeLabel, product, isPai
         <section className="my-5 grid grid-cols-[minmax(0,1fr)_96px] items-center gap-3 sm:grid-cols-[minmax(0,1fr)_200px] lg:grid-cols-[1fr_280px]">
           <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">{routeLabel}</p>
-          <h1 className="mt-3 font-serif text-3xl tracking-tight sm:text-4xl">{product ? presentation.heading : title}</h1>
+          <h1 className="mt-3 text-[1.6rem] font-semibold leading-[1.12] tracking-[-0.035em] sm:text-[1.9rem]">{product ? presentation.heading : title}</h1>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-[#696174]">{product ? `Check your details and resolve any issues before ${isPaid ? 'regenerating your documents' : 'document preview'}.` : subtitle}</p>
           </div>
           <Image src={getReviewIllustrationSrc(product)} alt="" width={420} height={220} priority className="h-24 w-full object-contain sm:h-32 lg:h-36" />

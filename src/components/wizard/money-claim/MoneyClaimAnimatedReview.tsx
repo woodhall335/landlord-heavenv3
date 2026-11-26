@@ -224,7 +224,7 @@ export function MoneyClaimAnimatedReview({
             </div>
             <div className="min-w-0">
               <Link href="/" aria-label="Landlord Heaven home"><Image src="/images/logo.png" alt="Landlord Heaven" width={215} height={32} priority className="mb-3 h-auto w-[175px] sm:w-[215px]" /></Link>
-                <h1 className="font-serif text-2xl tracking-tight text-charcoal md:text-3xl">
+                <h1 className="text-[1.6rem] font-semibold leading-[1.12] tracking-[-0.035em] text-charcoal sm:text-[1.9rem]">
                 Review your money claim
               </h1>
             </div>

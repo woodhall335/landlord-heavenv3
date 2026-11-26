@@ -2602,7 +2602,7 @@ export function Section13WizardFlow({
         return (
           <div className="space-y-5">
             <div className="grid items-center gap-4 rounded-2xl bg-[#faf8f5] p-5 sm:grid-cols-[1fr_220px]">
-              <div><p className="text-xs font-semibold uppercase tracking-widest text-violet-800">Your rent increase file</p><h2 className="mt-2 font-serif text-3xl text-[#291d38]">Review your rent increase</h2><p className="mt-2 text-sm leading-6 text-gray-600">Check your figures, timing and supporting information before document preview.</p></div>
+              <div><p className="text-xs font-semibold uppercase tracking-widest text-violet-800">Your rent increase file</p><h2 className="mt-2 text-[1.6rem] font-semibold leading-[1.12] tracking-[-0.035em] text-[#291d38] sm:text-[1.9rem]">Review your rent increase</h2><p className="mt-2 text-sm leading-6 text-gray-600">Check your figures, timing and supporting information before document preview.</p></div>
               <Image src="/images/illustrations/wizard-review/rent-increase.webp" alt="" width={420} height={220} className="h-28 w-full object-contain sm:h-36" />
             </div>
             <div className="rounded-3xl border border-violet-200 bg-[linear-gradient(180deg,#f8f3ff_0%,#ffffff_100%)] p-5">
