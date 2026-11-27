@@ -26,6 +26,24 @@ vi.mock('next/script', () => ({
 import { TrackingPixels } from '../TrackingPixels';
 
 describe('TrackingPixels', () => {
+  it('loads the supplied Clarity project once without requiring other tracking IDs', () => {
+    vi.stubEnv('NEXT_PUBLIC_GA_MEASUREMENT_ID', '');
+    vi.stubEnv('NEXT_PUBLIC_GOOGLE_ADS_ID', '');
+    vi.stubEnv('NEXT_PUBLIC_FB_PIXEL_ID', '');
+    vi.stubEnv('NEXT_PUBLIC_DISABLE_JOURNEY_ANALYTICS', 'false');
+    const { container } = render(<TrackingPixels />);
+    const scripts = container.querySelectorAll('[data-testid="microsoft-clarity"]');
+    expect(scripts).toHaveLength(1);
+    expect(scripts[0].textContent).toContain('https://www.clarity.ms/tag/');
+    expect(scripts[0].textContent).toContain('v23tn3v249');
+  });
+
+  it('honours the existing analytics disable flag for Clarity', () => {
+    vi.stubEnv('NEXT_PUBLIC_DISABLE_JOURNEY_ANALYTICS', 'true');
+    const { container } = render(<TrackingPixels />);
+    expect(container.querySelector('[data-testid="microsoft-clarity"]')).toBeNull();
+  });
+
   beforeEach(() => {
     vi.unstubAllEnvs();
   });

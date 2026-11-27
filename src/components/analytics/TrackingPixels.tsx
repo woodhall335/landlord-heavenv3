@@ -4,6 +4,7 @@
  * Loads all analytics scripts with optimized loading strategies:
  * - Google (GA4 + Ads): Single gtag.js load with lazyOnload
  * - FB Pixel: lazyOnload (lowest priority)
+ * - Microsoft Clarity: lazyOnload, shared across all pages
  *
  * Key optimizations:
  * - Loads gtag.js ONCE and configures both GA4 and Google Ads
@@ -39,14 +40,24 @@ export function TrackingPixels() {
   const fbPixelId = cleanFacebookPixelId(process.env.NEXT_PUBLIC_FB_PIXEL_ID);
   const googleAdsId = cleanTrackingId(process.env.NEXT_PUBLIC_GOOGLE_ADS_ID, /^AW-\d+$/);
 
-  // Don't render if no tracking IDs configured
-  if (!gaMeasurementId && !fbPixelId && !googleAdsId) return null;
+  const clarityEnabled = process.env.NEXT_PUBLIC_DISABLE_JOURNEY_ANALYTICS !== 'true';
 
   // Use GA4 ID for gtag.js, fall back to Google Ads ID
   const gtagId = gaMeasurementId || googleAdsId;
 
   return (
     <>
+      {clarityEnabled && (
+        <Script id="microsoft-clarity" strategy="lazyOnload">
+          {`
+            (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "v23tn3v249");
+          `}
+        </Script>
+      )}
       {/* Google Analytics 4 + Google Ads - Single gtag.js load */}
       {gtagId && (
         <>
