@@ -7,6 +7,7 @@ import { GuidancePanelV3 } from './GuidancePanelV3';
 import { WizardFooterNavV3 } from './WizardFooterNavV3';
 import { WizardTopBarV3 } from './WizardTopBarV3';
 import { scrollWizardViewportToTop } from './scrollWizardViewportToTop';
+import { useWizardProgressPersistence } from './useWizardProgressPersistence';
 import { WIZARD_JURISDICTION_ARTWORK } from './jurisdictionArtwork';
 import {
   getStepMetadata,
@@ -55,6 +56,7 @@ export interface WizardShellV3Props {
 
 export function WizardShellV3({
   title,
+  progress,
   tabs,
   sectionTitle,
   sectionDescription,
@@ -75,6 +77,7 @@ export function WizardShellV3({
   getStepMetadataForId,
   showStepCarryForwardHint,
 }: WizardShellV3Props) {
+  useWizardProgressPersistence(progress);
   const hasMountedRef = useRef(false);
   const currentMeta: StepMetadata | undefined = currentStepId
     ? (getStepMetadataForId ? getStepMetadataForId(currentStepId) : getStepMetadata(product, jurisdiction, currentStepId))

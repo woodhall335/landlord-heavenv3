@@ -11,6 +11,7 @@
  */
 
 // Re-export Vercel Analytics tracking functions
+import { trackClarityWizardEvent } from './analytics/clarity';
 export {
   trackWizardPreviewViewed,
   trackCheckoutStarted,
@@ -337,9 +338,11 @@ export function trackBeginCheckout(
   caseId?: string
 ): void {
   recordMarketingGrowthEvent('checkout_started', {
+    // Clarity's matching event is emitted below without customer identifiers.
     productClicked: productId,
     userType: 'landlord',
   });
+  trackClarityWizardEvent('wizard_checkout_started', { product: productId });
   recordMarketingGrowthEvent('checkout_opened', {
     pagePath: typeof window !== 'undefined' ? window.location.pathname : undefined,
     productSlug: productId,

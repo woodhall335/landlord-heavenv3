@@ -8,6 +8,7 @@ import userEvent from '@testing-library/user-event';
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { getCaseFacts } from '@/lib/wizard/facts-client';
 
+vi.mock('@/components/assisted-prep/AssistedPrepCTA', () => ({ AssistedPrepCTA: () => null }));
 vi.mock('next/navigation', () => ({
   useRouter: () => ({
     push: vi.fn(),

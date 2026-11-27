@@ -16,6 +16,7 @@ import {
   getAdminJurisdictionLabel,
 } from "@/lib/admin/case-manager";
 import { ADMIN_PRODUCT_OPTIONS } from "@/lib/admin/products";
+import { WizardStartTrend } from '@/components/admin/WizardStartTrend';
 import {
   isAssistedPrepSku,
   type AssistedEvidenceFileSummary,
@@ -611,6 +612,8 @@ export function AdminCasesPage({
           </div>
         )}
 
+        <WizardStartTrend caseType={filterCaseType} product={filterProduct} />
+        <p className="mb-3 text-sm text-gray-600">The cards below count currently retained cases matching your filters. They are not historical start totals.</p>
         <div className="mb-6 grid gap-4 md:grid-cols-3 xl:grid-cols-10">
           <div className="rounded-lg border border-gray-200 bg-white p-5">
             <p className="text-sm text-gray-600">Paid / Generated</p>
@@ -879,6 +882,9 @@ export function AdminCasesPage({
                           {getAdminCaseTypeLabel(caseItem.case_type)} · {getAdminJurisdictionLabel(caseItem.jurisdiction)}
                         </div>
                         <div className="mt-1 text-xs text-gray-500">
+                          Created {new Date(caseItem.created_at).toLocaleDateString("en-GB")}
+                        </div>
+                        <div className="mt-1 text-xs text-gray-500">
                           Updated {new Date(caseItem.updated_at).toLocaleDateString("en-GB")}
                         </div>
                       </td>
@@ -888,7 +894,7 @@ export function AdminCasesPage({
                       </td>
                       <td className="p-4">
                         <div className="text-sm text-charcoal">{caseItem.product_name || "Unknown"}</div>
-                        <div className="mt-1 text-xs text-gray-500">Progress {caseItem.wizard_progress}%</div>
+                        <div className="mt-1 text-xs text-gray-500">{caseItem.wizard_completed_at ? 'Wizard completed' : caseItem.wizard_progress > 0 ? `Progress ${caseItem.wizard_progress}%` : 'Progress not recorded'}</div>
                         {caseItem.is_preview_abandoned && (
                           <div className="mt-2 inline-block rounded-full bg-purple-100 px-2 py-1 text-xs font-semibold text-purple-700">
                             Preview abandoned

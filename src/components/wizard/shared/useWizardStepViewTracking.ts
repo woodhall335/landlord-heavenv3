@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { trackWizardStepViewWithAttribution } from '@/lib/analytics';
 import { normalizeWizardStep } from '@/lib/analytics/wizard-step-taxonomy';
 import { getWizardAttribution, markStepViewed } from '@/lib/wizard/wizardAttribution';
+import { trackClarityWizardEvent } from '@/lib/analytics/clarity';
 
 interface UseWizardStepViewTrackingParams {
   product: string;
@@ -37,6 +38,7 @@ export function useWizardStepViewTracking({
     });
 
     if (!shouldTrack) return;
+    trackClarityWizardEvent('wizard_step_view', { product, jurisdiction, step: stepId });
 
     const attribution = getWizardAttribution();
     trackWizardStepViewWithAttribution({

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import { useWizardProgressPersistence } from './useWizardProgressPersistence';
 import { RiCheckLine, RiErrorWarningLine } from 'react-icons/ri';
 import { clsx } from 'clsx';
 import { isWizardThemeV2 } from './theme';
@@ -46,6 +47,7 @@ export function WizardFlowShell({
   navigation,
   stickyTopClass = 'top-0',
 }: WizardFlowShellProps) {
+  useWizardProgressPersistence(progress);
   const hasMountedRef = useRef(false);
   const completionLabel = completionLabelOverride || `${completedCount} of ${totalCount} sections complete`;
   const currentTabIndex = tabs.findIndex((tab) => tab.isCurrent);

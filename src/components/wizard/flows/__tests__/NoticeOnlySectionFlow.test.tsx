@@ -26,6 +26,7 @@ import {
 } from '@/lib/scotland/notice-utils';
 
 // Mock Next.js router
+vi.mock('@/components/assisted-prep/AssistedPrepCTA', () => ({ AssistedPrepCTA: () => null }));
 vi.mock('next/navigation', () => ({
   useRouter: () => ({
     push: vi.fn(),

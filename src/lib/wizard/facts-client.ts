@@ -1,5 +1,6 @@
 // src/lib/wizard/facts-client.ts
 import { getSessionTokenHeaders } from '@/lib/session-token';
+import { trackClarityWizardEvent } from '@/lib/analytics/clarity';
 
 /**
  * Lightweight client helpers for loading / saving wizard facts
@@ -147,6 +148,7 @@ export async function saveCaseFacts(
     }
   } catch (err) {
     console.error('Error calling /api/wizard/save-facts:', err);
+    trackClarityWizardEvent('wizard_save_failed', { product: product || undefined, jurisdiction: jurisdiction || undefined });
     throw err;
   }
 }
