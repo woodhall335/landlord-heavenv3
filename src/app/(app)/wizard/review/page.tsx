@@ -65,7 +65,7 @@ import {
 import { isComplianceTimingBlock } from '@/lib/documents/compliance-timing-types';
 import { JurisdictionExplainer, ChecksSummaryBox } from '@/components/wizard/ReviewValueComponents';
 import { AnimatedReviewShell, type AnimatedReviewShellProps } from '@/components/wizard/AnimatedReviewShell';
-import { EditorialCaseReview } from '@/components/wizard/EditorialCaseReview';
+import { EditorialCaseReview, getEditorialReviewRequirements } from '@/components/wizard/EditorialCaseReview';
 import { MoneyClaimAnimatedReview } from '@/components/wizard/money-claim/MoneyClaimAnimatedReview';
 
 // Tenancy product tier utilities - single source of truth for pricing and product resolution
@@ -801,6 +801,13 @@ function ReviewPageInner() {
     return null;
   })();
 
+  const tenancyValidation = isTenancyFlow && !isResidentialStandaloneFlow ? buildTenancyValidation(tenancyFacts, jurisdiction) : null;
+  const reviewIncomplete = hasBlockingIssues || (tenancyValidation?.blockers.length ?? 0) > 0 ||
+    (isNoticeOnlyFlow && getEditorialReviewRequirements(analysis, evictionBlockingIssues, hasBlockingIssues).cannotProceed);
+  const needsReview = redFlags.length > 0 || complianceIssues.length > 0 ||
+    (tenancyValidation?.warnings.length ?? 0) > 0 || (analysis?.case_health?.warnings?.length ?? 0) > 0 ||
+    (analysis?.decision_engine?.warnings?.length ?? 0) > 0 || isResidentialStandaloneFlow;
+  const reviewState = reviewIncomplete ? 'incomplete' as const : needsReview ? 'needs-review' as const : 'ready' as const;
   const animatedReviewConfig = { ...buildAnimatedReviewConfig({
     analysis,
     product,
@@ -814,7 +821,7 @@ function ReviewPageInner() {
     readinessSummary,
     redFlags,
     complianceIssues,
-  }), product, jurisdiction, isPaid };
+  }), product, jurisdiction, isPaid, reviewState, generationError: regenerationError, isLoadingPaymentStatus };
   // Render Money Claim specific content
   if (isMoneyClaimFlow) {
     return (
@@ -965,7 +972,7 @@ function ReviewPageInner() {
             <Button variant="outline" onClick={handleEdit}>
               Edit answers
             </Button>
-            <Button onClick={handleProceed} disabled={isLoadingPaymentStatus || isRegenerating}>
+            <Button data-review-primary-action onClick={handleProceed} disabled={isLoadingPaymentStatus || isRegenerating}>
               {isPaid && editWindowOpen ? (isRegenerating ? 'Regenerating...' : 'Regenerate documents') : 'Continue'}
             </Button>
           </div>
@@ -1543,7 +1550,7 @@ function MoneyClaimReviewContent({
           </Button>
         )}
         <Button
-          onClick={onProceed}
+          data-review-primary-action onClick={onProceed}
           className="flex-1"
           disabled={hasBlockingIssues || isRegenerating || isLoadingPaymentStatus}
           aria-disabled={hasBlockingIssues || isRegenerating || isLoadingPaymentStatus}
@@ -2177,7 +2184,7 @@ function EvictionReviewContent({
           </Button>
         )}
         <Button
-          onClick={onProceed}
+          data-review-primary-action onClick={onProceed}
           className="flex-1"
           disabled={hasBlockingIssues || isRegenerating || isLoadingPaymentStatus}
           aria-disabled={hasBlockingIssues || isRegenerating || isLoadingPaymentStatus}
@@ -2909,7 +2916,7 @@ function NoticeOnlyReviewContent({
           </Button>
         )}
         <Button
-          onClick={onProceed}
+          data-review-primary-action onClick={onProceed}
           className="flex-1"
           disabled={hasBlockingIssues || (includesArrearsGrounds && !arrearsEvidenceStatus.complete) || isRegenerating || isLoadingPaymentStatus}
           aria-disabled={hasBlockingIssues || (includesArrearsGrounds && !arrearsEvidenceStatus.complete) || isRegenerating || isLoadingPaymentStatus}
@@ -3604,7 +3611,7 @@ function TenancyReviewContent({
         <Button onClick={onEdit} variant="outline" className="flex-1">
           Go back &amp; edit answers
         </Button>
-        <Button onClick={onProceed} className="flex-1" disabled={hasBlockers || isRegenerating || isLoadingPaymentStatus}>
+        <Button data-review-primary-action onClick={onProceed} className="flex-1" disabled={hasBlockers || isRegenerating || isLoadingPaymentStatus}>
           {isLoadingPaymentStatus
             ? 'Loading...'
             : isRegenerating
@@ -3716,7 +3723,7 @@ function ResidentialLettingReviewContent({
         <Button onClick={onEdit} variant="outline" className="flex-1">
           Go back &amp; edit answers
         </Button>
-        <Button onClick={onProceed} className="flex-1" disabled={isRegenerating || isLoadingPaymentStatus}>
+        <Button data-review-primary-action onClick={onProceed} className="flex-1" disabled={isRegenerating || isLoadingPaymentStatus}>
           {isLoadingPaymentStatus
             ? 'Loading...'
             : isRegenerating
@@ -4086,7 +4093,7 @@ function ResidentialStandaloneReviewContent({
           Go back &amp; edit answers
         </Button>
         <Button
-          onClick={onProceed}
+          data-review-primary-action onClick={onProceed}
           className="flex-1"
           disabled={isRegenerating || isLoadingPaymentStatus}
         >

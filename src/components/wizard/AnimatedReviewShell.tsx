@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import { ReviewStatus, type ReviewState } from './ReviewStatus';
+import { useReviewActionScroll } from './useReviewActionScroll';
 import { getReviewPresentation } from './reviewPresentation';
 import { ReviewIllustration } from './ReviewIllustration';
 import { getPublicProductDescriptor } from '@/lib/public-products';
@@ -17,6 +17,9 @@ export interface AnimatedReviewShellProps {
   product?: string;
   jurisdiction?: string;
   isPaid?: boolean;
+  reviewState?: ReviewState;
+  generationError?: string | null;
+  isLoadingPaymentStatus?: boolean;
   scoreLabel?: string; scoreValue?: string; scoreTone?: string;
   phases: AnimatedReviewPhase[]; stats: AnimatedReviewStat[]; checks: string[];
   warnings?: string[]; positives?: string[]; children: React.ReactNode;
@@ -31,27 +34,21 @@ export function getWizardReviewPhaseIndex(elapsedMs: number, phaseCount: number,
   return Math.min(phaseCount - 1, Math.max(0, Math.floor(elapsedMs / durationMs * phaseCount)));
 }
 
-export function AnimatedReviewShell({title, subtitle, routeLabel, product, jurisdiction, isPaid, stats, checks, warnings = [], positives = [], children}: AnimatedReviewShellProps) {
+export function AnimatedReviewShell({title, subtitle, routeLabel, product, jurisdiction, isPaid, reviewState = 'needs-review', generationError, isLoadingPaymentStatus, stats, checks, warnings = [], positives = [], children}: AnimatedReviewShellProps) {
+  const rootRef = useReviewActionScroll(isLoadingPaymentStatus);
   const presentation = getReviewPresentation(product);
   const packTitle = getPublicProductDescriptor(product)?.displayName || presentation.title;
   const packContents = <><h2 className="mt-4 text-xl font-semibold leading-tight tracking-tight">{packTitle}</h2><ul className="mt-5 space-y-3">{presentation.documents.map(item => <li key={item} className="flex items-start gap-2 text-sm leading-6 text-[#eee5f7]"><RiCheckboxCircleLine aria-hidden="true" className="mt-1 h-4 w-4 shrink-0 text-[#cbb0df]" />{item}</li>)}</ul><p className="mt-5 border-t border-white/20 pt-4 text-xs leading-6 text-[#d7c9e1]">{isPaid ? 'Regenerate your documents using your updated, saved answers.' : 'Next: review your prepared documents before secure payment.'}</p></>;
   return (
-    <main className="min-h-screen bg-[#faf8f5] px-4 py-6 text-[#291d38] sm:px-6 lg:px-10 lg:py-8">
+    <main ref={rootRef} className="min-h-screen bg-white px-4 py-6 text-[#291d38] sm:px-6 lg:px-10 lg:py-8">
       <div className="mx-auto max-w-7xl">
-        <header className="flex flex-wrap items-center justify-between gap-4 border-b border-[#e5deed] pb-5">
-          <Link href="/" aria-label="Landlord Heaven home"><Image src="/images/logo.png" alt="Landlord Heaven" width={215} height={32} priority className="h-auto w-[185px] sm:w-[215px]" /></Link>
-          <nav aria-label="Document preparation progress" className="flex flex-wrap items-center gap-3 text-xs text-[#696174]">
-            <span className="flex items-center gap-1"><RiCheckboxCircleLine aria-hidden="true" /> Answers</span>
-            <span aria-hidden="true">/</span><span aria-current="step" className="font-semibold text-primary">Review</span>
-            <span aria-hidden="true">/</span><span>Preview</span>
-          </nav>
-        </header>
         <section className="my-5 space-y-5">
           <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">{routeLabel}</p>
           <h1 className="mt-3 text-[1.6rem] font-semibold leading-[1.12] tracking-[-0.035em] sm:text-[1.9rem]">{product ? presentation.heading : title}</h1>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-[#696174]">{product ? `Check your details and resolve any issues before ${isPaid ? 'regenerating your documents' : 'document preview'}.` : subtitle}</p>
           </div>
+          <ReviewStatus state={reviewState} isPaid={isPaid} generationError={generationError} />
           <ReviewIllustration product={product || ''} jurisdiction={jurisdiction} />
         </section>
         <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_280px]">

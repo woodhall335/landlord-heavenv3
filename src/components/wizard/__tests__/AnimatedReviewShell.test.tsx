@@ -58,6 +58,44 @@ describe('AnimatedReviewShell helpers', () => {
 });
 
 describe('AnimatedReviewShell', () => {
+  it('removes the inner brand header and uses the white site background', () => {
+    const { container } = render(<AnimatedReviewShell {...defaultProps}><button>Continue</button></AnimatedReviewShell>);
+    expect(screen.queryByRole('link', { name: 'Landlord Heaven home' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('navigation', { name: 'Document preparation progress' })).not.toBeInTheDocument();
+    expect(container.querySelector('main')).toHaveClass('bg-white');
+  });
+
+  it.each([
+    ['ready', 'Ready to preview'],
+    ['needs-review', 'Needs review'],
+    ['incomplete', 'Incomplete — details need fixing'],
+  ] as const)('shows the %s review status', (reviewState, label) => {
+    render(<AnimatedReviewShell {...defaultProps} reviewState={reviewState}><button>Continue</button></AnimatedReviewShell>);
+    expect(screen.getByRole('heading', { name: label })).toBeInTheDocument();
+  });
+
+  it('does not show ready after a regeneration error', () => {
+    render(<AnimatedReviewShell {...defaultProps} reviewState="ready" generationError="Generation failed"><button>Continue</button></AnimatedReviewShell>);
+    expect(screen.getByRole('heading', { name: 'Pack could not be regenerated' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Ready to preview' })).not.toBeInTheDocument();
+  });
+
+  it('scrolls to the actions once after payment checking and respects reduced motion', () => {
+    mockMatchMedia(true);
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation(callback => { callback(0); return 1; });
+    const scroll = vi.fn();
+    Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', { configurable: true, value: scroll });
+    const content = <><details><button data-review-primary-action>Hidden legacy action</button></details><footer data-review-actions><button>Regenerate pack</button></footer></>;
+    const { rerender } = render(<AnimatedReviewShell {...defaultProps} isLoadingPaymentStatus>{content}</AnimatedReviewShell>);
+    expect(scroll).not.toHaveBeenCalled();
+    rerender(<AnimatedReviewShell {...defaultProps} isLoadingPaymentStatus={false}>{content}</AnimatedReviewShell>);
+    expect(scroll).toHaveBeenCalledWith({ behavior: 'auto', block: 'center' });
+    expect(scroll.mock.instances[0]).toHaveAttribute('data-review-actions');
+    rerender(<AnimatedReviewShell {...defaultProps} isPaid>{content}</AnimatedReviewShell>);
+    expect(scroll).toHaveBeenCalledTimes(1);
+    delete (HTMLElement.prototype as any).scrollIntoView;
+  });
+
   beforeEach(() => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date('2026-05-28T10:00:00Z'));

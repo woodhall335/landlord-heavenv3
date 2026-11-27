@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import { ReviewStatus } from '../ReviewStatus';
+import { useReviewActionScroll } from '../useReviewActionScroll';
 import { ReviewIllustration } from '../ReviewIllustration';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -147,6 +147,7 @@ export function MoneyClaimAnimatedReview({
   isRegenerating,
   isLoadingPaymentStatus,
 }: MoneyClaimAnimatedReviewProps) {
+  const rootRef = useReviewActionScroll(isLoadingPaymentStatus);
   // Analysis has already completed before this component is rendered.
   const progress = 100;
   const phaseIndex = reviewPhases.length - 1;
@@ -213,7 +214,8 @@ export function MoneyClaimAnimatedReview({
 
   return (
     <section
-      className="relative min-h-screen w-full overflow-x-hidden bg-[#f8f6fc] px-4 py-6 text-charcoal sm:px-6 lg:px-10 lg:py-10"
+      ref={rootRef}
+      className="relative min-h-screen w-full overflow-x-hidden bg-white px-4 py-6 text-charcoal sm:px-6 lg:px-10 lg:py-10"
       aria-label="Money claim review"
     >
       <div className="relative mx-auto flex min-h-[calc(100vh-2rem)] w-full max-w-7xl flex-col">
@@ -224,7 +226,6 @@ export function MoneyClaimAnimatedReview({
               <span className="relative">£</span>
             </div>
             <div className="min-w-0">
-              <Link href="/" aria-label="Landlord Heaven home"><Image src="/images/logo.png" alt="Landlord Heaven" width={215} height={32} priority className="mb-3 h-auto w-[175px] sm:w-[215px]" /></Link>
                 <h1 className="text-[1.6rem] font-semibold leading-[1.12] tracking-[-0.035em] text-charcoal sm:text-[1.9rem]">
                 Review your money claim
               </h1>
@@ -246,6 +247,7 @@ export function MoneyClaimAnimatedReview({
           </div>
         </div>
 
+        <div className="mb-5"><ReviewStatus state={hasBlockingIssues || blockers.length > 0 ? 'incomplete' : risks.length > 0 || warnings.length > 0 || redFlags.length > 0 || complianceIssues.length > 0 || !preActionComplete ? 'needs-review' : 'ready'} isPaid={isPaid} /></div>
         <div className="mb-5"><ReviewIllustration product="money_claim" jurisdiction={jurisdiction} /></div>
         {hasBlockingIssues && <div role="alert" className="mb-5 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-amber-950"><h2 className="font-semibold">Some details need your attention</h2><p className="mt-2 text-sm">Resolve the flagged issues before continuing to document preview.</p><Button onClick={onFixIssues} variant="outline" className="mt-3">Review required fixes</Button></div>}
         <div className="grid flex-1 gap-6 lg:grid-cols-[0.75fr_1.25fr]">
@@ -530,6 +532,7 @@ export function MoneyClaimAnimatedReview({
               </Button>
             )}
             <Button
+              data-review-primary-action
               onClick={onProceed}
               className="flex-1"
               disabled={actionDisabled}

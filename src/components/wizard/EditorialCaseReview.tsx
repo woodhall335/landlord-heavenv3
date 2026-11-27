@@ -26,6 +26,19 @@ function display(value: unknown): string {
   return 'Not provided';
 }
 
+export function getEditorialReviewRequirements(analysis: any, blockingIssues: any[], hasBlockingIssues: boolean) {
+  const facts = analysis?.case_facts || analysis?.facts || {};
+  const grounds = getSelectedGrounds(facts);
+  const includedGrounds = facts.include_recommended_grounds
+    ? [...grounds, ...(analysis?.decision_engine?.recommended_grounds || []).map((ground: any) => ground.code)]
+    : grounds;
+  const arrearsEvidence = isArrearsEvidenceComplete(includedGrounds, facts.arrears_items || facts.issues?.rent_arrears?.arrears_items || []);
+  return {
+    requiredIssues: arrearsEvidence.complete ? blockingIssues : [...blockingIssues, {description:'Complete the arrears schedule for the selected grounds.', affected_question_id:'arrears_items'}],
+    cannotProceed: hasBlockingIssues || !arrearsEvidence.complete,
+  };
+}
+
 export function EditorialCaseReview({analysis, blockingIssues, warnings, hasBlockingIssues, onFixIssue, onFixIssues, onEdit, onProceed, isPaid, isRegenerating, isLoadingPaymentStatus, children}: Props) {
   const facts = analysis?.case_facts || analysis?.facts || {};
   const landlordNames = [facts.landlord_full_name || facts.landlord_name, ...(facts.has_joint_landlords ? [facts.landlord2_name] : [])].filter(Boolean).join(', ');
@@ -34,14 +47,7 @@ export function EditorialCaseReview({analysis, blockingIssues, warnings, hasBloc
   const currency = (value: unknown) => value !== null && value !== undefined && value !== '' && Number.isFinite(Number(value)) ? new Intl.NumberFormat('en-GB', {style:'currency',currency:'GBP'}).format(Number(value)) : 'Not provided';
   const grounds = getSelectedGrounds(facts);
   const rentFrequencyLabels: Record<string, string> = {monthly:'per month',weekly:'per week',fortnightly:'per fortnight',quarterly:'per quarter',yearly:'per year',annually:'per year'};
-  const includedGrounds = facts.include_recommended_grounds
-    ? [...grounds, ...(analysis?.decision_engine?.recommended_grounds || []).map((ground: any) => ground.code)]
-    : grounds;
-  const arrearsEvidence = isArrearsEvidenceComplete(includedGrounds, facts.arrears_items || facts.issues?.rent_arrears?.arrears_items || []);
-  const requiredIssues = !arrearsEvidence.complete
-    ? [...blockingIssues, {description:'Complete the arrears schedule for the selected grounds.', affected_question_id:'arrears_items'}]
-    : blockingIssues;
-  const cannotProceed = hasBlockingIssues || !arrearsEvidence.complete;
+  const { requiredIssues, cannotProceed } = getEditorialReviewRequirements(analysis, blockingIssues, hasBlockingIssues);
   const uniqueWarnings = Array.from(new Set(warnings.filter(Boolean)));
   return <div className="space-y-5">
     {cannotProceed && <section aria-label="Required fixes" className="rounded-xl border border-amber-300 bg-amber-50 p-4 sm:p-5">
@@ -61,6 +67,6 @@ export function EditorialCaseReview({analysis, blockingIssues, warnings, hasBloc
       {grounds.length>0 && <div className="mt-5 border-t border-[#eee5f2] pt-4"><p className="text-xs text-[#76657f]">Selected grounds</p><div className="mt-2 flex flex-wrap gap-2">{grounds.map(ground=><span key={ground} className="rounded-md bg-[#f1eaf8] px-3 py-1.5 text-xs text-[#673b89]">Ground {normalizeGroundCode(ground)}</span>)}</div></div>}
     </section>
     <details className="rounded-xl border border-[#e5deed] p-4"><summary className="cursor-pointer text-sm font-semibold">Full route, timing and evidence review</summary><div className="mt-4 min-w-0">{children}</div></details>
-    <footer className="border-t border-[#e5deed] pt-5"><div className="flex flex-col gap-3 sm:flex-row"><Button variant="outline" onClick={onEdit} className="sm:flex-1">Edit answers</Button><Button onClick={onProceed} disabled={cannotProceed || isRegenerating || isLoadingPaymentStatus} className="sm:flex-1">{isLoadingPaymentStatus ? 'Checking payment status…' : isRegenerating ? 'Regenerating…' : isPaid ? 'Regenerate pack' : 'Continue to preview'}</Button></div><p className="mt-3 text-center text-xs leading-5 text-[#76657f]">{cannotProceed ? 'Resolve the required fixes to continue.' : isPaid ? 'Your saved answers will be used to regenerate your documents.' : 'Review your prepared documents before secure payment.'}</p></footer>
+    <footer data-review-actions className="scroll-mt-32 border-t border-[#e5deed] pt-5"><div className="flex flex-col gap-3 sm:flex-row"><Button variant="outline" onClick={onEdit} className="sm:flex-1">Edit answers</Button><Button onClick={onProceed} disabled={cannotProceed || isRegenerating || isLoadingPaymentStatus} className="sm:flex-1">{isLoadingPaymentStatus ? 'Checking payment status…' : isRegenerating ? 'Regenerating…' : isPaid ? 'Regenerate pack' : 'Continue to preview'}</Button></div><p className="mt-3 text-center text-xs leading-5 text-[#76657f]">{cannotProceed ? 'Resolve the required fixes to continue.' : isPaid ? 'Your saved answers will be used to regenerate your documents.' : 'Review your prepared documents before secure payment.'}</p></footer>
   </div>;
 }
