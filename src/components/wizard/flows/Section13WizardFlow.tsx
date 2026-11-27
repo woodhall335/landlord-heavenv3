@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Image from 'next/image';
+import { ReviewIllustration } from '../ReviewIllustration';
 import { useRouter } from 'next/navigation';
 import {
   RiAddLine,
@@ -2601,9 +2601,9 @@ export function Section13WizardFlow({
       case 'preview_checkout':
         return (
           <div className="space-y-5">
-            <div className="grid items-center gap-4 rounded-2xl bg-[#faf8f5] p-5 sm:grid-cols-[minmax(0,1fr)_minmax(220px,40%)]">
+            <div className="space-y-4">
               <div><p className="text-xs font-semibold uppercase tracking-widest text-violet-800">Your rent increase file</p><h2 className="mt-2 text-[1.6rem] font-semibold leading-[1.12] tracking-[-0.035em] text-[#291d38] sm:text-[1.9rem]">Review your rent increase</h2><p className="mt-2 text-sm leading-6 text-gray-600">Check your figures, timing and supporting information before document preview.</p></div>
-              <Image src="/images/illustrations/wizard-review/rent-increase.webp" alt="" width={640} height={340} sizes="(max-width: 640px) 90vw, 40vw" className="h-44 w-full object-contain sm:h-52" />
+              <ReviewIllustration product={product} jurisdiction="england" />
             </div>
             <div className="rounded-3xl border border-violet-200 bg-[linear-gradient(180deg,#f8f3ff_0%,#ffffff_100%)] p-5">
               <p className="text-sm font-semibold text-violet-950">Recommended pack</p>

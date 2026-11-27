@@ -3,7 +3,8 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getReviewPresentation, getReviewIllustrationSrc } from './reviewPresentation';
+import { getReviewPresentation } from './reviewPresentation';
+import { ReviewIllustration } from './ReviewIllustration';
 import { getPublicProductDescriptor } from '@/lib/public-products';
 import { RiCheckboxCircleLine, RiErrorWarningLine } from 'react-icons/ri';
 
@@ -45,13 +46,13 @@ export function AnimatedReviewShell({title, subtitle, routeLabel, product, juris
             <span aria-hidden="true">/</span><span>Preview</span>
           </nav>
         </header>
-        <section className="my-5 grid grid-cols-[minmax(0,1fr)_42%] items-center gap-4 sm:grid-cols-[minmax(0,1fr)_45%] lg:grid-cols-[minmax(0,1fr)_420px]">
+        <section className="my-5 space-y-5">
           <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">{routeLabel}</p>
           <h1 className="mt-3 text-[1.6rem] font-semibold leading-[1.12] tracking-[-0.035em] sm:text-[1.9rem]">{product ? presentation.heading : title}</h1>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-[#696174]">{product ? `Check your details and resolve any issues before ${isPaid ? 'regenerating your documents' : 'document preview'}.` : subtitle}</p>
           </div>
-          <Image src={getReviewIllustrationSrc(product, jurisdiction)} alt="" width={640} height={340} priority sizes="(max-width: 640px) 42vw, (max-width: 1024px) 45vw, 420px" className="h-40 w-full object-contain sm:h-48 lg:h-56" />
+          <ReviewIllustration product={product || ''} jurisdiction={jurisdiction} />
         </section>
         <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_280px]">
         <section aria-label="Detailed review" className="min-w-0 rounded-2xl border border-[#e5deed] bg-white p-4 sm:p-6">{children}</section>

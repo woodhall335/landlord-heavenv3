@@ -8,22 +8,22 @@ export function getReviewPresentation(product = '') {
 
 export function getReviewIllustrationSrc(product = '', jurisdiction = 'england') {
   const tenancyJurisdictions: Record<string, string> = {
-    wales: 'wales-occupation-contract-waterbrush-v2',
-    scotland: 'scotland-prt-waterbrush-v2',
-    'northern-ireland': 'northern-ireland-private-tenancy-waterbrush-v2',
+    wales: 'tenancy-wales',
+    scotland: 'tenancy-scotland',
+    'northern-ireland': 'tenancy-northern-ireland',
   };
   const jurisdictionKey = jurisdiction.replace(/_/g, '-');
   if (getReviewPresentation(product).illustration === 'tenancy' && tenancyJurisdictions[jurisdictionKey]) {
-    return `/images/illustrations/tenancy-jurisdictions/${tenancyJurisdictions[jurisdictionKey]}.webp`;
+    return `/images/illustrations/wizard-review/banners-v2/${tenancyJurisdictions[jurisdictionKey]}.webp`;
   }
   const variants: Record<string, string> = {
     england_student_tenancy_agreement: 'tenancy-student',
-    england_hmo_shared_house_tenancy_agreement: 'tenancy-hmo-shared',
+    england_hmo_shared_house_tenancy_agreement: 'tenancy-hmo',
     england_lodger_agreement: 'tenancy-lodger',
-    england_premium_tenancy_agreement: 'tenancy-england-premium',
-    ast_premium: 'tenancy-england-premium',
+    england_premium_tenancy_agreement: 'tenancy-premium',
+    ast_premium: 'tenancy-premium',
   };
-  return variants[product]
-    ? `/images/illustrations/pricing-cards/${variants[product]}.webp`
-    : `/images/illustrations/wizard-review/${getReviewPresentation(product).illustration}.webp`;
+  const illustration = variants[product] || getReviewPresentation(product).illustration;
+  const banner = illustration === 'tenancy' ? 'tenancy-standard' : illustration;
+  return `/images/illustrations/wizard-review/banners-v2/${banner}.webp`;
 }

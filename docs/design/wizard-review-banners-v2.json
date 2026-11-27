@@ -1,0 +1,54 @@
+{
+  "generator": "OpenAI image generation",
+  "style": "Original panoramic watercolour and gouache, fine pencil underdrawing, warm ivory paper, aubergine, lavender, sage and antique brass. Full-width composition, no readable text or branding. Source aspect ratio 3:1. Exported at 1800px wide WebP quality 87.",
+  "assets": [
+    {
+      "file": "public/images/illustrations/wizard-review/banners-v2/notice.webp",
+      "prompt": "An English front-door letterbox, an envelope being delivered by a hand, a neat notice checklist and proof-of-service notebook. Compose a flowing scene with home architecture extending to the left and an organised plum service folder extending to the right."
+    },
+    {
+      "file": "public/images/illustrations/wizard-review/banners-v2/possession.webp",
+      "prompt": "A dignified English county court exterior, a carefully indexed court bundle with coloured tabs, spectacles and a fountain pen. Property papers and brass keys at the left lead towards the court on the right. No gavels, no police, no judge characters."
+    },
+    {
+      "file": "public/images/illustrations/wizard-review/banners-v2/money-claim.webp",
+      "prompt": "An open rent ledger, bank-statement sheets, a few British pound coins, an envelope and a tidy plum claim file, with a rented English home in the background. Visually show careful accounting and evidence preparation."
+    },
+    {
+      "file": "public/images/illustrations/wizard-review/banners-v2/rent-increase.webp",
+      "prompt": "A row of comparable English rental homes, a magnifying glass resting over property comparison cards, a calendar, a rental notice folder and a fountain pen. Convey measured property comparison and fair review. No profit arrows, no money pile."
+    },
+    {
+      "file": "public/images/illustrations/wizard-review/banners-v2/tenancy-standard.webp",
+      "prompt": "A welcoming ordinary English terraced home, a set of brass house keys being handed over, a signed agreement folder and a modest plant. Emphasise a straightforward whole-property tenancy."
+    },
+    {
+      "file": "public/images/illustrations/wizard-review/banners-v2/tenancy-premium.webp",
+      "prompt": "An elegant English residential house, a substantial plum tenancy management portfolio with neatly divided schedules, a fountain pen, inventory checklist and brass keys. Emphasise thorough ongoing landlord management."
+    },
+    {
+      "file": "public/images/illustrations/wizard-review/banners-v2/tenancy-student.webp",
+      "prompt": "A British student rental house, two students' backpacks and university books, a shared tenancy folder and keyring on a desk. Student living and rental paperwork, tasteful, mature rather than cartoonish."
+    },
+    {
+      "file": "public/images/illustrations/wizard-review/banners-v2/tenancy-hmo.webp",
+      "prompt": "An English shared house with several entrance windows, four distinct keyrings, a neatly organised house-rules folder, fire-safety checklist and communal kitchen detail. Emphasise a managed shared home."
+    },
+    {
+      "file": "public/images/illustrations/wizard-review/banners-v2/tenancy-lodger.webp",
+      "prompt": "A warm owner-occupied British home with a comfortable spare bedroom visible through a doorway, two tea mugs, one room key, and a simple lodger agreement on a small table. Welcoming shared living."
+    },
+    {
+      "file": "public/images/illustrations/wizard-review/banners-v2/tenancy-wales.webp",
+      "prompt": "Welsh slate-roofed stone houses in a green valley, an occupation-contract portfolio with blank pages, house keys and a subtle daffodil detail. Emphasise a private rental home in Wales, no flags, no invented legal symbols."
+    },
+    {
+      "file": "public/images/illustrations/wizard-review/banners-v2/tenancy-scotland.webp",
+      "prompt": "An Edinburgh-style sandstone tenement and a Scottish residential street, a private residential tenancy folder, house keys and subtle thistle detail. A Scottish letting scene rather than London architecture."
+    },
+    {
+      "file": "public/images/illustrations/wizard-review/banners-v2/tenancy-northern-ireland.webp",
+      "prompt": "A Belfast-style redbrick residential terrace against soft green hills, a private tenancy agreement folder, house keys and a small flax-flower detail. Northern Ireland rental setting, no political or national symbols."
+    }
+  ]
+}
