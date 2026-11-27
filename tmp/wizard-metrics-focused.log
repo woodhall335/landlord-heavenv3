@@ -1,0 +1,15 @@
+The CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.
+
+ RUN  v2.1.9 C:/Users/t_moh/Documents/GitHub/landlord-heavenv3
+
+ ✓ src/components/analytics/__tests__/TrackingPixels.test.tsx (5 tests) 102ms
+ ✓ src/components/admin/__tests__/WizardStartTrend.test.tsx (3 tests) 233ms
+ ✓ src/lib/analytics/__tests__/clarity.test.ts (3 tests) 6ms
+ ✓ src/app/api/wizard/progress/__tests__/route.test.ts (8 tests) 51ms
+ ✓ src/lib/admin/__tests__/wizard-start-trend.test.ts (3 tests) 15ms
+
+ Test Files  5 passed (5)
+      Tests  22 passed (22)
+   Start at  10:39:43
+   Duration  18.92s (transform 805ms, setup 2.29s, collect 2.16s, tests 408ms, environment 7.20s, prepare 1.96s)
+

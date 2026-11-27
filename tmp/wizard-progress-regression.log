@@ -1,0 +1,20 @@
+The CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.
+
+ RUN  v2.1.9 C:/Users/t_moh/Documents/GitHub/landlord-heavenv3
+
+ ✓ src/components/wizard/flows/__tests__/NoticeOnlySectionFlow.test.tsx (107 tests) 6764ms
+   ✓ NoticeOnlySectionFlow - Wales Jurisdiction > should NOT have Section 21 as a selectable route option for Wales jurisdiction 666ms
+   ✓ NoticeOnlySectionFlow - England Jurisdiction > shows planned service details on the final review instead of inside the notice step 628ms
+   ✓ NoticeOnlySectionFlow - Scotland Jurisdiction > should render Scotland-specific sections (Case Basics, Parties, Property, Tenancy, Grounds, Notice, Review) 399ms
+ ✓ src/components/wizard/flows/__tests__/EvictionSectionFlow.test.tsx (10 tests) 2866ms
+   ✓ EvictionSectionFlow - England complete pack > shows the complete-pack shell title and key court-ready steps 1235ms
+   ✓ EvictionSectionFlow - England complete pack > review step keeps the readiness summary and issue lists for the England court pack 329ms
+   ✓ EvictionSectionFlow - England complete pack > upgrades a Stage 1 case into the first incomplete court-only step instead of restarting the flow 366ms
+ ✓ src/components/wizard/shared/__tests__/useWizardProgressPersistence.test.tsx (2 tests) 119ms
+ ✓ tests/unit/purchase-analytics-gating.test.ts (3 tests) 4ms
+
+ Test Files  4 passed (4)
+      Tests  122 passed (122)
+   Start at  10:38:59
+   Duration  39.13s (transform 7.05s, setup 2.61s, collect 12.22s, tests 9.75s, environment 8.05s, prepare 1.73s)
+
